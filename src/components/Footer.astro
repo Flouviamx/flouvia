@@ -1,0 +1,390 @@
+---
+// Footer Flouvia Elite: Ingeniería Visual de Máxima Precisión
+---
+
+<footer class="footer-premium">
+    <div class="container">
+        
+        <div class="contact-section reveal">
+            <h2 class="footer-heading">Construimos la infraestructura<br>de tu siguiente fase.</h2>
+            
+            <a href="mailto:flouvia.mx@gmail.com" class="btn-correo">
+                <span class="btn-text">flouvia.mx@gmail.com</span>
+                <span class="btn-arrow">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </span>
+            </a>
+        </div>
+
+        <div class="divider reveal"></div>
+
+        <div class="grid-layout reveal">
+            
+            <div class="grid-col brand-info">
+                <a href="/" class="logo">FLOUVIA.</a>
+                <p class="description">
+                    Estudio de ingeniería digital. Diseñamos ecosistemas de alta conversión para marcas B2B y E-commerce.
+                </p>
+            </div>
+
+            <div class="grid-col">
+                <h4 class="col-title">SISTEMAS</h4>
+                <nav class="nav-links">
+                    <a href="/servicios" class="link-item">Infraestructura Web</a>
+                    <a href="/growth" class="link-item">Paid Media & Growth</a>
+                    <a href="/casos" class="link-item">Casos B2B / B2C</a>
+                </nav>
+            </div>
+
+            <div class="grid-col">
+                <h4 class="col-title">ESTUDIO</h4>
+                <nav class="nav-links">
+                    <a href="/nosotros" class="link-item">Nuestra Filosofía</a>
+                    <a href="/login" class="link-item">Portal de Clientes</a>
+                    <a href="#contacto" class="link-item">Contacto Privado</a>
+                </nav>
+            </div>
+
+            <div class="grid-col">
+                <h4 class="col-title">ECOSISTEMA</h4>
+                <div class="social-links">
+                    <a href="#" class="social-icon" aria-label="Instagram">
+                        <div class="icon-box">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </div>
+                        <span class="social-text">Instagram</span>
+                    </a>
+                    
+                    <a href="#" class="social-icon" aria-label="Facebook">
+                        <div class="icon-box">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                            </svg>
+                        </div>
+                        <span class="social-text">Facebook</span>
+                    </a>
+
+                    <a href="#" class="social-icon" aria-label="LinkedIn">
+                        <div class="icon-box">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                                <rect x="2" y="9" width="4" height="12"></rect>
+                                <circle cx="4" cy="4" r="2"></circle>
+                            </svg>
+                        </div>
+                        <span class="social-text">LinkedIn</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom reveal">
+            <div class="copyright">
+                <p>&copy; 2026 Flouvia. Private Growth Boutique.</p>
+                <div class="status">
+                    <span class="dot-online"></span>
+                    <span>CDMX — OP. GLOBAL</span>
+                </div>
+            </div>
+            
+            <div class="legal">
+                <a href="#">Privacidad</a>
+                <a href="#">Términos</a>
+            </div>
+        </div>
+
+    </div>
+</footer>
+
+<style>
+    /* VARIABLES (Azul corporativo profundo y gris pizarra) */
+    :root {
+        --bg-footer: #0a192f; 
+        --text-main: #ffffff;
+        --text-muted: #8892b0;
+        --border-color: rgba(255, 255, 255, 0.08);
+        /* Curva física real para animaciones súper suaves */
+        --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+        --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    .footer-premium {
+        background-color: var(--bg-footer);
+        color: var(--text-main);
+        /* Eliminamos el margin-top y ajustamos el padding para una fusión perfecta */
+        padding: 5rem 0 3rem 0; 
+        margin-top: 0; 
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 5%;
+    }
+
+    /* 1. SECCIÓN DE CONTACTO */
+    .contact-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        padding-bottom: 3rem;
+    }
+
+    .footer-heading {
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        font-weight: 800;
+        line-height: 1.05;
+        letter-spacing: -1.5px;
+        color: #ccd6f6;
+    }
+
+    /* BOTÓN CORREO (Micro-interacción de línea dinámica) */
+    .btn-correo {
+        display: inline-flex;
+        align-items: center;
+        gap: 1.5rem;
+        text-decoration: none;
+        color: var(--text-main);
+        position: relative;
+        padding-bottom: 0.8rem;
+    }
+    
+    /* La línea base opaca */
+    .btn-correo::before {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0;
+        width: 100%; height: 1px;
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* La línea brillante animada */
+    .btn-correo::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0;
+        width: 100%; height: 1px;
+        background-color: #fff;
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 0.8s var(--ease-out-expo);
+    }
+    
+    .btn-text {
+        font-size: 1.3rem;
+        font-weight: 600;
+        letter-spacing: -0.5px;
+        transition: color 0.4s ease;
+    }
+
+    .btn-arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 50%;
+        transition: all 0.6s var(--ease-out-expo);
+    }
+
+    .btn-correo:hover .btn-text { color: #64ffda; }
+    
+    .btn-correo:hover::after {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+
+    .btn-correo:hover .btn-arrow {
+        background: #fff;
+        color: var(--bg-footer);
+        border-color: #fff;
+        transform: translateX(8px);
+    }
+
+    /* DIVISOR */
+    .divider {
+        height: 1px;
+        background-color: var(--border-color);
+        margin-bottom: 4rem;
+        width: 100%;
+    }
+
+    /* 2. GRID ESTRUCTURAL */
+    .grid-layout {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 3rem;
+        margin-bottom: 5rem;
+    }
+
+    .grid-col { display: flex; flex-direction: column; }
+
+    .logo {
+        font-size: 1.4rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        color: var(--text-main);
+        text-decoration: none;
+        margin-bottom: 1.2rem;
+    }
+
+    .description {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        max-width: 90%;
+    }
+
+    .col-title {
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        color: #64ffda; 
+        margin-bottom: 1.8rem;
+        opacity: 0.8;
+    }
+
+    /* LINKS (Animación de Flecha Silenciosa) */
+    .nav-links {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+    }
+
+    .link-item {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.95rem;
+        font-weight: 500;
+        position: relative;
+        transition: all 0.5s var(--ease-out-expo);
+        width: max-content;
+    }
+
+    .link-item::before {
+        content: '→';
+        position: absolute;
+        left: -20px;
+        opacity: 0;
+        color: #64ffda;
+        transition: all 0.5s var(--ease-out-expo);
+    }
+
+    .link-item:hover {
+        color: var(--text-main);
+        transform: translateX(20px);
+    }
+
+    .link-item:hover::before {
+        opacity: 1;
+    }
+
+    /* REDES SOCIALES (Hover de Elevación) */
+    .social-links {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+    }
+
+    .social-icon {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.5s var(--ease-out-expo);
+        width: max-content;
+    }
+
+    .icon-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid transparent;
+        border-radius: 8px;
+        transition: all 0.5s var(--ease-out-expo);
+    }
+
+    .social-icon:hover {
+        color: var(--text-main);
+        transform: translateX(8px);
+    }
+
+    .social-icon:hover .icon-box {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #64ffda; /* El ícono se ilumina */
+        transform: scale(1.05);
+    }
+
+    /* 3. BARRA LEGAL */
+    .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid var(--border-color);
+        padding-top: 2rem;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+    }
+
+    .copyright { display: flex; align-items: center; gap: 2.5rem; }
+
+    .status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 5px 12px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+    }
+
+    .dot-online {
+        width: 6px;
+        height: 6px;
+        background-color: #4ade80;
+        border-radius: 50%;
+        box-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+    }
+
+    .legal { display: flex; gap: 2rem; }
+
+    .legal a {
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: color 0.3s;
+        position: relative;
+    }
+
+    .legal a:hover { color: var(--text-main); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+        .contact-section { flex-direction: column; align-items: flex-start; gap: 2rem; }
+        .grid-layout { grid-template-columns: 1fr 1fr; gap: 4rem; }
+        .copyright { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    }
+    @media (max-width: 600px) {
+        .grid-layout { grid-template-columns: 1fr; gap: 3rem; }
+        .footer-bottom { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+    }
+</style>
