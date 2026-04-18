@@ -1,5 +1,5 @@
 ---
-// Navbar Flouvia Elite: Píldora Asimétrica + Menú Editorial
+// Navbar Flouvia Elite: Píldora Clásica Corregida + Menú Editorial Pro
 ---
 
 <header class="navbar-wrapper" id="navbar">
@@ -123,28 +123,27 @@
     .navbar-wrapper.scrolled .main-logo { opacity: 0; transform: translateY(-10px); }
     .btn-contact { background: var(--color-azul-pro); color: #fff; padding: 8px 18px; border-radius: 100px; text-decoration: none; font-size: 10px; font-weight: 700; }
 
+    /* =========================================
+       MÓVIL: PÍLDORA CORREGIDA
+       ========================================= */
     .mobile-pill-nav { display: none; }
     .mobile-menu-overlay { display: none; }
 
-    /* =========================================
-       MÓVIL
-       ========================================= */
     @media (max-width: 1024px) {
         .desktop-nav, .desktop-only { display: none; }
-        .top-text { font-size: 7px; letter-spacing: 1.5px; }
 
-        .mobile-pill-nav { display: flex; width: 100%; justify-content: center; z-index: 2000; }
+        .mobile-pill-nav { display: flex; width: 100%; justify-content: center; z-index: 11000; } /* Encima de todo */
         .mobile-pill-inner {
             display: flex; align-items: center; justify-content: space-between;
-            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px);
             border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 100px;
             padding: 6px 8px 6px 12px; width: 92%; max-width: 380px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.06); transition: all 0.5s var(--ease-out-expo);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06); transition: all 0.4s var(--ease-out-expo);
         }
         .navbar-wrapper.scrolled .mobile-pill-inner { background: var(--color-azul-pro); border-color: rgba(255,255,255,0.1); }
 
-        /* Grupo Izquierdo (Hamburger + Logo) */
-        .pill-left-group { display: flex; align-items: center; gap: 14px; }
+        /* Hamburguesa + Logo a la IZQ */
+        .pill-left-group { display: flex; align-items: center; gap: 12px; }
 
         .hamburger-btn { background: transparent; border: none; padding: 6px 0; cursor: pointer; display: flex; align-items: center; position: relative; z-index: 2;}
         .burger-lines { width: 18px; height: 12px; position: relative; }
@@ -152,55 +151,51 @@
         .burger-lines .l1 { top: 0; } .burger-lines .l2 { top: 5px; } .burger-lines .l3 { top: 10px; }
         .navbar-wrapper.scrolled .burger-lines span { background: #fff; }
 
-        /* La "X" */
-        .navbar-wrapper.menu-open .burger-lines .l1 { transform: translateY(5px) rotate(45deg); background: #fff !important; }
+        .navbar-wrapper.menu-open .mobile-pill-inner { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.2); box-shadow: none; }
+        .navbar-wrapper.menu-open .burger-lines span { background: #fff !important; }
+        .navbar-wrapper.menu-open .burger-lines .l1 { transform: translateY(5px) rotate(45deg); }
         .navbar-wrapper.menu-open .burger-lines .l2 { opacity: 0; transform: scale(0); }
-        .navbar-wrapper.menu-open .burger-lines .l3 { transform: translateY(-5px) rotate(-45deg); background: #fff !important; }
+        .navbar-wrapper.menu-open .burger-lines .l3 { transform: translateY(-5px) rotate(-45deg); }
 
-        /* Logo pegado a la izquierda */
-        .mobile-logo { 
-            font-size: 13px; font-weight: 800; letter-spacing: 2px; color: var(--color-azul-pro); 
-            text-decoration: none; transition: color 0.4s ease;
-        }
+        .mobile-logo { font-size: 13px; font-weight: 800; letter-spacing: 2px; color: var(--color-azul-pro); text-decoration: none; transition: 0.4s ease; }
         .navbar-wrapper.scrolled .mobile-logo { color: #fff; }
         .navbar-wrapper.menu-open .mobile-logo { color: #fff !important; }
 
-        /* Botón Contacto Derecho */
         .btn-contact-mobile {
-            background: var(--color-azul-pro); color: #fff;
-            width: 36px; height: 36px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            text-decoration: none; transition: 0.4s ease;
+            background: var(--color-azul-pro); color: #fff; width: 36px; height: 36px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.4s ease;
         }
         .navbar-wrapper.scrolled .btn-contact-mobile { background: #fff; color: var(--color-azul-pro); }
         .navbar-wrapper.menu-open .btn-contact-mobile { background: rgba(255,255,255,0.1); color: #fff; }
 
         /* =========================================
-           MENÚ DESPLEGABLE
+           MENÚ DESPLEGABLE (Z-INDEX MASTER)
            ========================================= */
         .mobile-menu-overlay {
             display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: var(--color-azul-dark); z-index: 1500;
+            background-color: var(--color-azul-dark); 
+            z-index: 10001; /* MÁS QUE EL BOTÓN DE WHATSAPP */
             opacity: 0; visibility: hidden; clip-path: circle(0% at 15% 10%); transition: all 0.7s var(--ease-out-expo);
         }
         .navbar-wrapper.menu-open .mobile-menu-overlay { opacity: 1; visibility: visible; clip-path: circle(150% at 15% 10%); }
 
         .mobile-menu-content { 
-            padding: 12vh 8% 6vh 8%; display: flex; flex-direction: column; 
+            /* Bajamos el padding top para que no choquen los botones con la píldora */
+            padding: 16vh 8% 6vh 8%; display: flex; flex-direction: column; 
             justify-content: space-between; height: 100%; width: 100%;
         }
 
         .menu-top-row { display: flex; gap: 10px; opacity: 0; transform: translateY(20px); transition: all 0.6s var(--ease-out-expo) 0.2s; }
         .navbar-wrapper.menu-open .menu-top-row { opacity: 1; transform: translateY(0); }
+        
         .utility-pill {
             background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
             color: #fff; padding: 10px 18px; border-radius: 100px; font-size: 10px; 
-            font-weight: 700; letter-spacing: 1px; text-decoration: none;
-            display: flex; align-items: center; gap: 8px;
+            font-weight: 700; letter-spacing: 1px; text-decoration: none; display: flex; align-items: center; gap: 8px;
         }
         .lang-selector { width: 45px; justify-content: center; }
 
-        .mobile-links { display: flex; flex-direction: column; gap: 1.5rem; }
+        .mobile-links { display: flex; flex-direction: column; gap: 2rem; }
         .m-link { 
             font-size: 2.8rem; font-weight: 400; font-family: 'Instrument Serif', serif; font-style: italic;
             color: #fff; text-decoration: none; letter-spacing: -0.5px;
