@@ -1,7 +1,7 @@
 import { c as createComponent } from "./astro-component_CdEB2w-7.mjs";
 import "piccolore";
 import { Q as createRenderInstruction, B as renderSlot, P as renderTemplate, aY as defineScriptVars, y as maybeRenderHead } from "./sequence_BSVkO_8S.mjs";
-import { r as renderComponent } from "./ssr-function_CzUtYJ7q.mjs";
+import { r as renderComponent } from "./ssr-function_0wDioTTl.mjs";
 import { $ as $$InternalUIComponentRenderer, a as $$Layout } from "./InternalUIComponentRenderer_YtJoguC7.mjs";
 import "clsx";
 async function renderScript(result, id) {

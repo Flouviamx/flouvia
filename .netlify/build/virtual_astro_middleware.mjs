@@ -2,7 +2,7 @@ import { createClerkClient } from "@clerk/backend";
 import { createClerkRequest, constants, AuthStatus, TokenType, signedOutAuthObject, getAuthObjectForAcceptedToken, createRedirect } from "@clerk/backend/internal";
 import { isDevelopmentFromSecretKey } from "@clerk/shared/keys";
 import { handleNetlifyCacheInDevInstance } from "@clerk/shared/netlifyCacheHandler";
-import { isMalformedURLError } from "@clerk/shared/pathMatcher";
+import { createPathMatcher, isMalformedURLError } from "@clerk/shared/pathMatcher";
 import { isHttpOrHttps } from "@clerk/shared/proxy";
 import { isDevelopmentEnvironment, handleValueOrFn } from "@clerk/shared/utils";
 import { getEnvVariable } from "@clerk/shared/getEnvVariable";
@@ -523,7 +523,16 @@ var handleControlFlowErrors = (e, clerkRequest, requestState, context) => {
       throw e;
   }
 };
-const onRequest$1 = clerkMiddleware();
+var createRouteMatcher = (routes) => {
+  const matcher = createPathMatcher(routes);
+  return (req) => matcher(new URL(req.url).pathname);
+};
+const isDashboardRoute = createRouteMatcher(["/portal/dashboard(.*)"]);
+const onRequest$1 = clerkMiddleware((auth, context) => {
+  if (isDashboardRoute(context.request) && !auth().userId) {
+    return auth().redirectToSignIn();
+  }
+});
 const onRequest = sequence(
   onRequest$1
 );
