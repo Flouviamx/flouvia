@@ -1,0 +1,77 @@
+---
+export const prerender = false;
+import Layout from '../../layouts/Layout.astro';
+import { UserButton } from '@clerk/astro/components';
+import { clientProjects } from '../../lib/projects'; // Tu base de datos de proyectos
+
+// 1. EL CADENERO DEL SERVIDOR: Preguntamos quién es
+const { userId, sessionClaims } = await Astro.locals.auth();
+
+// 2. LA REGLA DE ORO: Si no hay un ID, lo pateamos al login inmediatamente
+if (!userId) {
+  return Astro.redirect('/portal/login');
+}
+
+// 3. Si pasó el filtro, sacamos su correo y buscamos su proyecto
+const email = sessionClaims?.email as string;
+const project = clientProjects[email];
+---
+
+<Layout title="Flouvia | Command Center">
+    <div class="dashboard-wrapper">
+        <nav class="dash-nav">
+            <span class="mono-font brand-tag">FLOUVIA // PORTAL</span>
+            <UserButton /> 
+        </nav>
+
+        {project ? (
+            <div class="project-view slide-up">
+                <p class="eyebrow">PROYECTO ACTIVO</p>
+                <h1 class="project-title">{project.name}</h1>
+                
+                <div class="status-card">
+                    <h3>Estatus actual: <span class="highlight">{project.phase}</span></h3>
+                    <p class="next-step">Siguiente meta: {project.nextMilestone}</p>
+                </div>
+            </div>
+        ) : (
+            <div class="error-view">
+                <h1 class="editorial">Acceso Restringido.</h1>
+                <p>El correo <strong>{email}</strong> no tiene un entorno de proyecto asignado en Flouvia.</p>
+                <a href="/" class="return-link">Volver al inicio</a>
+            </div>
+        )}
+    </div>
+</Layout>
+
+<style>
+    .dashboard-wrapper {
+        background: #050b14;
+        min-height: 100vh;
+        color: white;
+        padding: 4rem 5%;
+    }
+    .dash-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 6rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding-bottom: 1.5rem;
+    }
+    .brand-tag { letter-spacing: 2px; color: #94a3b8; font-size: 0.9rem; }
+    .eyebrow { color: var(--color-blue-deep, #3b82f6); letter-spacing: 3px; font-size: 0.8rem; font-weight: 700; }
+    .project-title { font-size: clamp(3rem, 5vw, 5rem); margin: 0.5rem 0 2rem; }
+    .status-card {
+        margin-top: 2rem; padding: 3rem; 
+        border: 1px solid rgba(255,255,255,0.1); 
+        border-radius: 24px; background: rgba(255,255,255,0.02);
+    }
+    .highlight { color: #fff; font-weight: 600; }
+    .next-step { color: #94a3b8; margin-top: 1rem; }
+    .error-view { text-align: center; margin-top: 15vh; }
+    .return-link { color: #fff; text-decoration: underline; margin-top: 2rem; display: inline-block; opacity: 0.7; }
+    .return-link:hover { opacity: 1; }
+    .slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+</style>
