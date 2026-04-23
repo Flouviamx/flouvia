@@ -5,12 +5,20 @@ import netlify from '@astrojs/netlify';
 
 // https://astro.build/config
 export default defineConfig({
-  // 1. Esto le dice a Astro: "Todo es estático (rápido), 
-  // EXCEPTO el portal que es dinámico (seguro)".
-  output: 'hybrid',
+  // En Astro 6, usamos 'server' para habilitar funciones dinámicas,
+  // pero mantendremos tus páginas actuales como estáticas automáticamente.
+  output: 'server',
 
   integrations: [clerk()],
   
-  // 2. Conecta el cerebro de Netlify
-  adapter: netlify()
+  adapter: netlify({
+    // Esto ayuda a Netlify a manejar mejor las funciones divididas
+    edgeMiddleware: true 
+  }),
+
+  // Esto es opcional, pero le dice a Astro que sea agresivo 
+  // con el renderizado estático donde pueda.
+  build: {
+    format: 'directory'
+  }
 });
