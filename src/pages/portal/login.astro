@@ -1,10 +1,33 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { SignIn } from '@clerk/astro/components';
+
+// Verificamos si el usuario ya está logueado. 
+// Si ya lo está, ¿para qué le mostramos el login? Lo mandamos directo al dashboard.
+const { userId } = await Astro.locals.auth();
+
+if (userId) {
+  return Astro.redirect('/portal/dashboard');
+}
 ---
-<Layout title="Flouvia | Login">
-    <main style="background: #050b14; min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column;">
-        <h1 class="editorial" style="color: white; margin-bottom: 2rem;">Acceso exclusivo.</h1>
-        <SignIn />
-    </main>
+
+<Layout title="Flouvia | Acceso a Clientes">
+    <div class="login-container">
+        <SignIn 
+            routing="path" 
+            path="/portal/login" 
+            forceRedirectUrl="/portal/dashboard" 
+        />
+    </div>
 </Layout>
+
+<style>
+    /* Estilos para centrar la caja de forma elegante en tu fondo oscuro */
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #050b14; /* Tu color de lujo */
+    }
+</style>
