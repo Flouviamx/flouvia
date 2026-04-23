@@ -1,19 +1,21 @@
 ---
+// 1. Le decimos a Netlify que esto se procesa en vivo (SSR)
 export const prerender = false;
+
 import Layout from '../../layouts/Layout.astro';
 import { UserButton } from '@clerk/astro/components';
-import { clientProjects } from '../../lib/projects'; // Tu base de datos de proyectos
+import { clientProjects } from '../../lib/projects';
 
-// 1. EL CADENERO DEL SERVIDOR: Preguntamos quién es
+// 2. Seguridad en el servidor
 const { userId, sessionClaims } = await Astro.locals.auth();
 
-// 2. LA REGLA DE ORO: Si no hay un ID, lo pateamos al login inmediatamente
+// 3. Si no está logueado, lo regresamos al login
 if (!userId) {
   return Astro.redirect('/portal/login');
 }
 
-// 3. Si pasó el filtro, sacamos su correo y buscamos su proyecto
-const email = sessionClaims?.email as string;
+// 4. Forzamos el tipado para que TypeScript no marque error
+const email = (sessionClaims as any)?.email as string;
 const project = clientProjects[email];
 ---
 

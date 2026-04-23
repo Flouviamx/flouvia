@@ -1,7 +1,7 @@
 import { c as createComponent } from "./astro-component_CdEB2w-7.mjs";
 import "piccolore";
 import { P as renderTemplate, y as maybeRenderHead } from "./sequence_BSVkO_8S.mjs";
-import { r as renderComponent } from "./ssr-function_Cuqftge2.mjs";
+import { r as renderComponent } from "./ssr-function_CzUtYJ7q.mjs";
 import { $ as $$InternalUIComponentRenderer, a as $$Layout } from "./InternalUIComponentRenderer_YtJoguC7.mjs";
 const $$SignIn = createComponent(($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$props, $$slots);

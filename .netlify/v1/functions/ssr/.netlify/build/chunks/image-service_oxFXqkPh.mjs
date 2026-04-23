@@ -1,7 +1,7 @@
 import "@astrojs/internal-helpers/path";
 import "@astrojs/internal-helpers/remote";
 import { a$ as AstroUserError } from "./sequence_BSVkO_8S.mjs";
-import { b as baseService, v as verifyOptions, i as isESMImportedImage } from "./generic_MuWZlB60.mjs";
+import { b as baseService, v as verifyOptions, i as isESMImportedImage } from "./generic_BEFOVsH8.mjs";
 const SUPPORTED_FORMATS = ["avif", "jpg", "png", "webp"];
 const QUALITY_NAMES = { low: 25, mid: 50, high: 90, max: 100 };
 const FIT_MAP = {
