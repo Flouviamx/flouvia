@@ -1,0 +1,678 @@
+---
+// src/components/PlantillaNosotros.astro
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import WhatsApp from '../components/WhatsApp.astro';
+
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const isEn = lang === 'en';
+
+// Helper intacto: Para parsear la tipografía
+const parseSerifTitle = (title: string) => {
+    return title.split('*').map((part, index) => {
+        if (index % 2 !== 0) { 
+            return `<span class="editorial text-accent">${part}</span>`;
+        }
+        return part;
+    }).join('');
+};
+---
+
+<Layout title={`Flouvia | ${t('about.hero.badge')}`}>
+    <Navbar />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <main class="flouvia-masterpiece">
+        
+        <section class="hero-grand">
+            <div class="container hero-container">
+                <div class="hero-content">
+                    <div class="hero-text-zone" id="hero-parallax">
+                        <p class="eyebrow reveal-blur" style="--delay: 0.1s;">
+                            {t('about.hero.badge')}
+                        </p>
+                        <h1 class="hero-title reveal-blur" style="--delay: 0.2s;">
+                            <span class="title-bold">{t('about.hero.title1')}</span><br>
+                            <span class="editorial title-serif text-accent">{t('about.hero.title2')}</span>
+                        </h1>
+                    </div>
+                    
+                    <div class="hero-bottom reveal-blur" style="--delay: 0.4s;">
+                        <p class="hero-desc">
+                            {t('about.hero.desc')}
+                        </p>
+                        <div class="hero-actions-wrapper">
+                            <a href="/contacto" class="btn-luxe">
+                                <span>{t('about.cta.btn')}</span>
+                                <div class="btn-shimmer"></div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="manifesto-section global-gap-reduced">
+            <div class="container manifesto-grid">
+                
+                <div class="m-visual-side reveal-up" style="--delay: 0.1s;">
+                    <div class="image-frame-luxe squircle">
+                        <img src="/imgs/nosotros1.jpg" alt="Manifesto Flouvia" class="parallax-inner-img" id="manifesto-img" />
+                        <div class="frame-glass-edge"></div>
+                    </div>
+                </div>
+
+                <div class="m-text-side">
+                    <div class="sticky-text-wrapper reveal-fade" style="--delay: 0.2s;">
+                        <p class="eyebrow">{t('about.manifesto.badge')}</p>
+                        
+                        <h2 class="section-heading">
+                            {t('about.manifesto.title')} <br>
+                            <span class="editorial text-accent">{t('about.manifesto.title_ed')}</span>
+                        </h2>
+                        
+                        <div class="m-paragraphs mt-medium">
+                            <p class="m-lead-text">{t('about.manifesto.p1')}</p>
+                            <p class="m-body-text">{t('about.manifesto.p2')}</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="values-monolith-section global-gap-reduced">
+            <div class="container">
+                <div class="section-header reveal-fade" style="--delay: 0s;">
+                    <p class="eyebrow">{t('about.values.badge')}</p>
+                    <h2 class="section-heading">{t('about.values.title')} <span class="editorial">{t('about.values.title_ed')}</span></h2>
+                </div>
+
+                <div class="monolith-grid">
+                    
+                    <div class="monolith-card squircle-math reveal-up" style="--delay: 0.1s;">
+                        <div class="m-watermark">01</div>
+                        <div class="m-card-inner">
+                            <div class="m-top-zone">
+                                <div class="m-progress-line"></div>
+                            </div>
+                            <div class="m-bottom-zone">
+                                <h3>{t('about.v1.title')}</h3>
+                                <p>{t('about.v1.desc')}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="monolith-card squircle-math reveal-up" style="--delay: 0.2s;">
+                        <div class="m-watermark">02</div>
+                        <div class="m-card-inner">
+                            <div class="m-top-zone">
+                                <div class="m-progress-line"></div>
+                            </div>
+                            <div class="m-bottom-zone">
+                                <h3>{t('about.v2.title')}</h3>
+                                <p>{t('about.v2.desc')}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="monolith-card squircle-math reveal-up" style="--delay: 0.3s;">
+                        <div class="m-watermark">03</div>
+                        <div class="m-card-inner">
+                            <div class="m-top-zone">
+                                <div class="m-progress-line"></div>
+                            </div>
+                            <div class="m-bottom-zone">
+                                <h3>{t('about.v3.title')}</h3>
+                                <p>{t('about.v3.desc')}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="thin-metrics-section global-gap-reduced">
+            <div class="container">
+                <div class="metrics-top reveal-fade" style="--delay: 0s;">
+                    <p class="eyebrow">{t('about.metrics.badge')}</p>
+                    <h2 class="section-heading">{t('about.metrics.title')} <span class="editorial">{t('about.metrics.title_ed')}</span></h2>
+                </div>
+
+                <div class="thin-grid">
+                    
+                    <div class="thin-card reveal-up" style="--delay: 0.1s;">
+                        <div class="thin-data">
+                            <span class="thin-num counter editorial" data-target={t('about.m1.num').replace(/\D/g,'')}>0</span>
+                            <span class="thin-sym">{t('about.m1.sym')}</span>
+                        </div>
+                        <p class="thin-desc">{t('about.m1.desc')}</p>
+                    </div>
+
+                    <div class="thin-card reveal-up" style="--delay: 0.15s;">
+                        <div class="thin-data">
+                            <span class="thin-num counter editorial" data-target={t('about.m2.num').replace(/\D/g,'')}>0</span>
+                            <span class="thin-sym">{t('about.m2.sym')}</span>
+                        </div>
+                        <p class="thin-desc">{t('about.m2.desc')}</p>
+                    </div>
+
+                    <div class="thin-card thin-highlight reveal-up" style="--delay: 0.2s;">
+                        <div class="thin-data">
+                            <span class="thin-sym">+</span>
+                            <span class="thin-num counter editorial" data-target={t('about.m3.num').replace(/\D/g,'')}>0</span>
+                            <span class="thin-sym">{t('about.m3.sym')}</span>
+                        </div>
+                        <p class="thin-desc">{t('about.m3.desc')}</p>
+                    </div>
+
+                    <div class="thin-card reveal-up" style="--delay: 0.25s;">
+                        <div class="thin-data">
+                            <span class="thin-sym">+</span>
+                            <span class="thin-num counter editorial" data-target={t('about.m4.num').replace(/\D/g,'')}>0</span>
+                        </div>
+                        <p class="thin-desc">{t('about.m4.desc')}</p>
+                    </div>
+
+                    <div class="thin-card thin-highlight reveal-up" style="--delay: 0.3s;">
+                        <div class="thin-data">
+                            <span class="thin-sym">$</span>
+                            <span class="thin-num counter editorial" data-target={t('about.m5.num').replace(/\D/g,'')}>0</span>
+                            <span class="thin-sym">{t('about.m5.sym')}</span>
+                        </div>
+                        <p class="thin-desc">{t('about.m5.desc')}</p>
+                    </div>
+
+                    <div class="thin-card reveal-up" style="--delay: 0.35s;">
+                        <div class="thin-data">
+                            <span class="thin-num counter editorial" data-target={t('about.m6.num').replace(/\D/g,'')}>0</span>
+                            <span class="thin-sym">{t('about.m6.sym')}</span>
+                        </div>
+                        <p class="thin-desc">{t('about.m6.desc')}</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="advantage-sober-banner global-gap-reduced">
+            <div class="adv-pro-bg"></div>
+            <div class="texture-noise-micro"></div>
+            <div class="container relative-z">
+                <div class="adv-banner-flex reveal-fade" style="--delay: 0.1s;">
+                    
+                    <div class="adv-b-left">
+                        <h2 class="adv-b-title">{t('about.liquid.title')}</h2>
+                    </div>
+
+                    <div class="adv-b-right">
+                        <p class="adv-b-desc">{t('about.liquid.desc')}</p>
+                        
+                        <a href="/contacto" class="btn-contact-sober">
+                            <span class="btn-text">{isEn ? 'Contact Us' : 'Contáctanos'}</span>
+                            <div class="arrow-circle-small">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials-slider-pro global-gap-reduced">
+            <div class="container">
+                <div class="section-header reveal-fade" style="--delay: 0s;">
+                    <div class="header-flex">
+                        <div class="header-title-mobile">
+                            <p class="eyebrow">{t('about.reviews.badge')}</p>
+                            <h2 class="section-heading">{t('about.reviews.title')} <span class="editorial">{t('about.reviews.title_ed')}</span></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="t-track-wrapper reveal-fade" style="--delay: 0.2s;">
+                <div class="t-track">
+                    
+                    <div class="t-card-pro squircle-math">
+                        <div class="t-quote-watermark">“</div>
+                        <div class="t-content-wrapper">
+                            <p class="t-text">{t('about.rev1.text')}</p>
+                            <div class="t-author-strip">
+                                <div class="t-avatar">G</div>
+                                <div class="t-meta">
+                                    <h4>{t('about.rev1.author')}</h4>
+                                    <span>{t('about.rev1.role')}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="t-card-pro squircle-math">
+                        <div class="t-quote-watermark">“</div>
+                        <div class="t-content-wrapper">
+                            <p class="t-text">{t('about.rev2.text')}</p>
+                            <div class="t-author-strip">
+                                <div class="t-avatar bg-dark">D</div>
+                                <div class="t-meta">
+                                    <h4>{t('about.rev2.author')}</h4>
+                                    <span>{t('about.rev2.role')}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-final-clean global-gap-reduced">
+            <div class="container">
+                <div class="cta-box-refined cta-squircle reveal-blur" style="--delay: 0.2s;">
+                    <div class="texture-noise-micro"></div>
+                    <div class="cta-flex relative-z">
+                        <div class="cta-text">
+                            <p class="eyebrow" style="color: rgba(255,255,255,0.6); letter-spacing: 4px;">
+                                {t('about.cta.badge')}
+                            </p>
+                            <h2 class="cta-title">
+                                {t('about.cta.title')} <br>
+                                <span class="editorial" style="color: rgba(255,255,255,0.9);">{t('about.cta.title_ed')}</span>
+                            </h2>
+                        </div>
+                        <div class="cta-action-side">
+                            <a href="/contacto" class="btn-luxe-main">
+                                <span>{t('about.cta.btn')}</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <Footer />
+    <WhatsApp />
+</Layout>
+
+<style is:global>
+    *, *::before, *::after { box-sizing: border-box; } 
+    
+    html, body {
+        width: 100%; 
+        position: relative;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    ::selection { background: #0a192f; color: #ffffff; }
+
+    :root {
+        --color-bg: #ffffff;
+        --color-bg-soft: #fcfcfc; 
+        --color-blue-icy: #f4f6f9; 
+        --color-blue-deep: #0a192f;
+        --color-glass-blue: rgba(10, 25, 47, 0.85);
+        
+        --color-text: #050505;
+        --color-text-muted: #555555;
+        --color-border: rgba(0, 0, 0, 0.08); 
+        
+        --font-sans: 'Inter', system-ui, sans-serif;
+        --font-serif: 'Instrument Serif', serif;
+        
+        --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
+        --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+        --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    body { background-color: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); margin: 0; }
+
+    .flouvia-masterpiece { width: 100%; position: relative; overflow-x: clip; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; }
+    .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: #222; }
+    .eyebrow { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
+    
+    .reveal-blur { 
+        opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(8px); 
+        animation: reveal 1s var(--ease-spring) forwards; animation-play-state: paused; animation-delay: var(--delay, 0s); 
+    }
+    .reveal-blur.active { animation-play-state: running; }
+    @keyframes reveal { to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+
+    .reveal-fade { 
+        opacity: 0; transform: translateY(30px) scale(0.98); 
+        animation: revealFade 1s var(--ease-spring) forwards; animation-play-state: paused; animation-delay: var(--delay, 0s); 
+    }
+    .reveal-fade.active { animation-play-state: running; }
+    @keyframes revealFade { to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    .btn-luxe { 
+        position: relative; display: inline-flex; background: var(--color-text); color: #fff; 
+        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem; 
+        font-weight: 600; transition: all 0.5s var(--ease-spring); overflow: hidden; justify-content: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 10px 20px rgba(0,0,0,0.08);
+    }
+    .btn-luxe span { position: relative; z-index: 2; }
+    .btn-shimmer { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent); transform: skewX(-20deg); transition: 0s; z-index: 1;}
+    .btn-luxe:hover { transform: translateY(-4px); box-shadow: 0 6px 12px rgba(0,0,0,0.08), 0 15px 30px rgba(0,0,0,0.15); }
+    .btn-luxe:active { transform: scale(0.95); box-shadow: 0 2px 4px rgba(0,0,0,0.04); transition: 0.1s;}
+
+    .squircle { border-radius: 24px; transform: translateZ(0); overflow: hidden; }
+    .cta-squircle { border-radius: 32px; transform: translateZ(0); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
+</style>
+
+<style>
+    /* ==========================================================
+       ESTILOS LOCALES 
+       ========================================================== */
+    .text-accent { color: var(--color-blue-deep) !important; }
+    .mono-font { font-family: 'JetBrains Mono', monospace; font-weight: 700; letter-spacing: -1px;}
+    .section-heading { font-size: clamp(2.5rem, 5vw, 3.8rem); font-weight: 800; letter-spacing: -2px; margin: 0 0 0.5rem 0; line-height: 1; color: #000; }
+    .mt-medium { margin-top: 2rem; }
+
+    .reveal-up { opacity: 0; transform: translateY(50px); transition: all 1s var(--ease-spring); transition-delay: var(--delay, 0s); }
+    .reveal-up.active { opacity: 1; transform: translateY(0); }
+
+    .squircle-math { border-radius: 20px; overflow: hidden; transform: translateZ(0); }
+    .squircle-pro { border-radius: 36px; overflow: hidden; transform: translateZ(0); }
+    .texture-noise-micro { position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.04; mix-blend-mode: overlay; pointer-events: none; }
+    .relative-z { position: relative; z-index: 2; }
+    
+    .global-gap-reduced { padding: 6rem 0; }
+
+    /* 1. HERO EXACTO DEL INDEX */
+    .hero-grand { padding: 13rem 0 7rem 0; min-height: 80vh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
+    .hero-text-zone { transition: transform 0.1s ease-out, opacity 0.1s ease-out; }
+    .hero-title { font-size: clamp(3.2rem, 7vw, 6.8rem); line-height: 0.85; font-weight: 800; letter-spacing: -3px; margin-bottom: 4rem; color: var(--color-text); }
+    .title-bold { display: inline; }
+    .title-serif { display: inline; font-size: 105%; }
+
+    .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem; }
+    .hero-desc { font-size: 1.15rem; color: var(--color-text-muted); max-width: 500px; line-height: 1.5; margin: 0; }
+    .hero-actions-wrapper { display: flex; align-items: center; gap: 3rem; }
+
+    /* 2. MANIFIESTO */
+    .manifesto-section { background: var(--color-bg); }
+    .manifesto-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 6rem; align-items: center; }
+
+    .m-visual-side { position: relative; width: 100%; }
+    .image-frame-luxe { width: 100%; aspect-ratio: 4/5; background: #f8fafc; border-radius: 24px; position: relative; overflow: hidden; transform: translateZ(0); border: 1px solid rgba(0,0,0,0.03); box-shadow: 0 20px 40px rgba(0,0,0,0.04); }
+    .parallax-inner-img { width: 100%; height: 120%; position: absolute; top: -10%; left: 0; object-fit: cover; z-index: 2; transition: transform 0.1s linear;}
+    .frame-glass-edge { position: absolute; inset: 0; z-index: 3; pointer-events: none; border-radius: inherit; box-shadow: inset 0 2px 1px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05); }
+
+    .m-text-side { display: flex; flex-direction: column; }
+    .sticky-text-wrapper { position: sticky; top: 140px; }
+    .m-paragraphs { display: flex; flex-direction: column; gap: 1.5rem; max-width: 550px;}
+    .m-lead-text { font-size: 1.5rem; color: var(--color-text); font-weight: 600; line-height: 1.4; margin: 0; letter-spacing: -0.5px;}
+    .m-body-text { font-size: 1.15rem; color: var(--color-text-muted); line-height: 1.6; margin: 0;}
+
+    /* 3. VALORES DE LA MARCA */
+    .values-monolith-section { background: #ffffff; }
+    .values-monolith-section .section-header { margin-bottom: 5rem; }
+    .monolith-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem;}
+    .monolith-card { background: #ffffff; padding: 3.5rem 3rem; display: flex; flex-direction: column; position: relative; transition: all 0.5s var(--ease-spring); box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 4px 20px rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.05); }
+    .monolith-card:hover { transform: translateY(-8px); box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 30px 60px rgba(0,0,0,0.06); }
+    
+    .m-watermark { position: absolute; right: -10px; top: -20px; font-family: var(--font-serif); font-size: 14rem; color: rgba(0,0,0,0.02); line-height: 1; pointer-events: none; transition: transform 0.5s ease, color 0.5s ease; z-index: 0; }
+    .monolith-card:hover .m-watermark { color: rgba(10,25,47,0.04); transform: translateX(-10px); }
+
+    .m-card-inner { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%; justify-content: space-between;}
+    .m-top-zone { margin-bottom: 4rem;}
+    .m-progress-line { width: 0%; height: 2px; background: var(--color-blue-deep); transition: width 0.6s var(--ease-spring);}
+    .monolith-card:hover .m-progress-line { width: 100%; }
+
+    .m-bottom-zone h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 1rem 0; color: #000;}
+    .m-bottom-zone p { font-size: 1.1rem; color: var(--color-text-muted); line-height: 1.6; margin: 0; font-weight: 400;}
+
+    /* 4. RESULTADOS */
+    .thin-metrics-section { background: var(--color-bg); }
+    .metrics-top { text-align: left; margin-bottom: 4rem; }
+    .thin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; border-top: 1px solid var(--color-border); padding-top: 4rem;}
+    .thin-card { display: flex; flex-direction: column; gap: 0.5rem; transition: transform 0.4s ease; }
+    .thin-card:hover { transform: translateY(-5px); }
+
+    .thin-data { display: flex; align-items: baseline; gap: 6px; }
+    .thin-num { font-size: clamp(3rem, 4vw, 4.5rem); font-weight: 400; color: #000; line-height: 0.9; letter-spacing: -1px;}
+    .thin-sym { font-size: 1.8rem; font-weight: 400; color: var(--color-text-muted); font-family: var(--font-serif); font-style: italic;}
+    .thin-desc { font-size: 1.15rem; color: var(--color-text-muted); line-height: 1.5; margin: 0; font-weight: 400; max-width: 250px;}
+    .thin-highlight .thin-num, .thin-highlight .thin-sym { color: var(--color-blue-deep); }
+
+    /* 5. POR QUÉ NOSOTROS */
+    .advantage-sober-banner { position: relative; color: #fff; overflow: hidden; z-index: 1; }
+    .adv-pro-bg { position: absolute; inset: 0; background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%); z-index: -2; }
+    .adv-banner-flex { display: flex; align-items: center; justify-content: space-between; gap: 4rem; position: relative;}
+    .adv-b-left { flex: 0 0 35%; display: flex; flex-direction: column; gap: 1rem;}
+    .adv-b-title { font-size: clamp(2.8rem, 5vw, 4rem); font-weight: 800; letter-spacing: -1.5px; margin: 0; line-height: 1.1; }
+    .adv-b-right { flex: 1; display: flex; align-items: center; justify-content: space-between; gap: 3rem; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 4rem; height: 100%; }
+    .adv-b-desc { font-size: 1.25rem; color: rgba(255,255,255,0.75); line-height: 1.6; margin: 0; max-width: 480px; font-weight: 400;}
+
+    .btn-contact-sober { display: inline-flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); padding: 10px 14px 10px 24px; border-radius: 100px; text-decoration: none; color: #fff; font-weight: 600; font-size: 0.95rem; transition: all 0.4s var(--ease-smooth); white-space: nowrap; }
+    .arrow-circle-small { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; transition: all 0.4s var(--ease-smooth); }
+    .btn-contact-sober:hover { background: #fff; color: var(--color-blue-deep); }
+    .btn-contact-sober:hover .arrow-circle-small { background: var(--color-blue-deep); color: #fff; transform: translateX(3px); }
+
+    /* 6. TESTIMONIOS */
+    .testimonials-slider-pro { padding-bottom: 2rem; }
+    .header-flex { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; }
+    .t-track-wrapper { width: 100%; overflow-x: auto; padding: 2rem max(5%, calc((100vw - 1200px) / 2)); margin-top: -2rem; scroll-snap-type: x mandatory; scrollbar-width: none; }
+    .t-track-wrapper::-webkit-scrollbar { display: none; }
+    .t-track { display: flex; gap: 2.5rem; width: max-content; align-items: stretch; }
+    .t-card-pro { width: 550px; height: auto; min-height: 380px; scroll-snap-align: center; position: relative; background: #ffffff; border: 1px solid rgba(0,0,0,0.04); padding: 4.5rem; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.5s var(--ease-smooth); z-index: 1; box-shadow: 0 10px 30px rgba(0,0,0,0.02), inset 0 1px 0 rgba(255,255,255,1); overflow: hidden; }
+    @media (hover: hover) {
+        .t-track:hover .t-card-pro { transform: scale(0.98); opacity: 0.6; }
+        .t-track .t-card-pro:hover { transform: scale(1.02); opacity: 1; z-index: 10; box-shadow: 0 30px 60px rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.08);}
+    }
+    .t-quote-watermark { position: absolute; top: -10px; left: 30px; font-family: var(--font-serif); font-size: 12rem; color: rgba(10,25,47,0.02); line-height: 1; pointer-events: none;}
+    .t-content-wrapper { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%; justify-content: space-between;}
+    .t-text { font-size: 1.45rem; font-weight: 500; color: #050505; line-height: 1.5; margin: 0 0 3rem 0; letter-spacing: -0.5px;}
+    .t-author-strip { display: flex; align-items: center; gap: 1.2rem; border-top: 1px solid rgba(0,0,0,0.06); padding-top: 2.5rem;}
+    .t-avatar { width: 52px; height: 52px; border-radius: 50%; background: #f8fafc; border: 1px solid rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--color-blue-deep); font-size: 1.1rem;}
+    .bg-dark { background: var(--color-blue-deep); color: #fff; }
+    .t-meta h4 { margin: 0 0 4px 0; font-size: 1.1rem; font-weight: 800; color: #000; letter-spacing: -0.5px;}
+    .t-meta span { font-size: 0.9rem; color: #64748b; font-weight: 500; text-transform: uppercase; letter-spacing: 1px;}
+
+    /* 7. CTA FINAL PREMIUM (REFINADO) */
+    .cta-final-clean { padding-bottom: 6rem; }
+    .cta-box-refined { 
+        background: radial-gradient(100% 100% at 50% 100%, #152744 0%, #0a192f 100%);
+        padding: 5rem 6rem; 
+        position: relative; 
+        overflow: hidden; 
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1); 
+    }
+    .cta-flex { display: flex; justify-content: space-between; align-items: center; gap: 4rem; }
+    .cta-title { font-size: clamp(3rem, 5vw, 4.5rem); font-weight: 700; color: #fff; letter-spacing: -1.5px; line-height: 0.95; margin: 0; }
+    
+    .btn-luxe-main { 
+        background: #fff; color: var(--color-blue-deep); padding: 16px 36px; border-radius: 100px; 
+        text-decoration: none; font-size: 1rem; font-weight: 700; transition: all 0.4s var(--ease-smooth); 
+        display: inline-flex; align-items: center; gap: 12px; border: 1px solid transparent; white-space: nowrap;
+    }
+    .btn-luxe-main svg { transition: transform 0.4s var(--ease-spring); }
+    .btn-luxe-main:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(255,255,255,0.15); background: transparent; color: #fff; border-color: #fff; }
+    .btn-luxe-main:hover svg { transform: translateX(4px); }
+
+
+    /* ==========================================================
+       MEDIA QUERIES RESPONSIVAS
+       ========================================================== */
+    @media (max-width: 1024px) {
+        .hero-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; }
+        .desktop-only { display: none; }
+        .manifesto-grid { grid-template-columns: 1fr; gap: 4rem; }
+        .m-visual-side { order: -1; }
+        .image-frame-luxe { aspect-ratio: 16/9; } 
+        .monolith-grid { grid-template-columns: 1fr; gap: 2rem; }
+        .thin-grid { grid-template-columns: 1fr; gap: 3rem;}
+        .adv-banner-flex { flex-direction: column; align-items: flex-start; gap: 2rem; }
+        .adv-b-right { border-left: none; padding-left: 0; flex-direction: column; align-items: flex-start; gap: 2rem;}
+        .cta-inner-flex { flex-direction: column; align-items: flex-start; gap: 3rem;}
+        .cta-action-side { width: 100%;}
+        .cta-box-refined { padding: 4rem; }
+    }
+
+    @media (max-width: 768px) {
+        .global-gap-reduced { padding: 4rem 0; }
+        .hero-grand { padding-top: 11rem; padding-bottom: 4rem; min-height: auto; text-align: center; }
+        .hero-content { display: flex; flex-direction: column; align-items: center; }
+        .hero-title { display: flex; flex-direction: column; gap: 0; margin-bottom: 2.5rem; }
+        .title-bold { display: block; font-size: 11.5vw; letter-spacing: -1.8px; line-height: 0.95; margin-bottom: -43px; }
+        .title-serif { display: block; font-size: 12.2vw; font-weight: 300; letter-spacing: -0.5px; line-height: 0.95; }
+        .hero-bottom { flex-direction: column; align-items: center; gap: 2.5rem; text-align: center; border-top: none; padding-top: 0;}
+        .hero-desc { font-size: 1.1rem; padding: 0 5%; max-width: 95%; margin: 0 auto; line-height: 1.6;}
+        .hero-actions-wrapper { width: 100%; justify-content: center; flex-direction: column; gap: 2rem; }
+        .btn-luxe { width: 100%; padding: 18px 0; font-size: 1.05rem;}
+        
+        .manifesto-section { padding: 4rem 0; }
+        .m-lead-text { font-size: 1.35rem; }
+        .image-frame-luxe { aspect-ratio: 1/1; }
+
+        .values-monolith-section { padding: 4rem 0; }
+        .monolith-card { padding: 2.5rem; }
+        .m-top-zone { margin-bottom: 2rem;}
+
+        .thin-metrics-section { padding: 4rem 0; }
+        .thin-card { padding: 1.5rem 0;}
+        .thin-num { font-size: 3.5rem; }
+
+        .advantage-sober-banner { padding: 5rem 0; }
+        .adv-b-title { font-size: 2.5rem; }
+        .adv-b-desc { font-size: 1.1rem; }
+
+        .testimonials-slider-pro { padding: 4rem 0; width: 100%; overflow: hidden;}
+        .header-title-mobile h2 { font-size: 2.4rem; margin-bottom: 1.5rem; letter-spacing: -1px;}
+        .t-track-wrapper { padding: 3rem 10vw; scroll-padding-left: 10vw; scroll-behavior: smooth;}
+        .t-track { gap: 16px; }
+        .t-card-pro { width: 85vw; padding: 3rem 2.5rem; transform: scale(0.85); opacity: 0.5; transition: transform 0.5s var(--ease-spring), opacity 0.5s var(--ease-spring); min-height: auto;}
+        .t-card-pro.is-centered { transform: scale(1.05); opacity: 1; box-shadow: 0 20px 40px rgba(0,0,0,0.1); z-index: 2; }
+        .t-quote-watermark { font-size: 8rem; top: -15px; left: 15px;}
+        .t-text { font-size: 1.25rem; margin-bottom: 2rem;}
+
+        .cta-final-clean { padding-bottom: 4rem; }
+        .cta-box-refined { padding: 3rem 2rem; border-radius: 24px; text-align: center; }
+        .cta-flex { flex-direction: column; gap: 2.5rem; }
+        .cta-title { font-size: 2.2rem; }
+        .btn-luxe-main { width: 100%; justify-content: center; }
+    }
+</style>
+
+<script is:inline>
+    document.addEventListener("DOMContentLoaded", () => {
+        
+        // 1. REVEALS GLOBALES
+        if (typeof IntersectionObserver !== 'undefined') {
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.reveal-blur, .reveal-fade, .reveal-up, .reveal-clip').forEach(el => observer.observe(el));
+        }
+
+        // 2. PARALLAX
+        window.addEventListener('scroll', () => {
+            if (window.innerWidth > 1024) {
+                const scrollY = window.scrollY;
+                
+                const heroText = document.getElementById('hero-parallax');
+                if (heroText && scrollY < 600) {
+                    heroText.style.transform = `translateY(${scrollY * 0.4}px)`;
+                    heroText.style.opacity = (1 - (scrollY * 0.0025)).toString();
+                }
+
+                const imgParallax = document.getElementById('manifesto-img');
+                if (imgParallax && imgParallax.parentElement) {
+                    const rect = imgParallax.parentElement.getBoundingClientRect();
+                    if(rect.top < window.innerHeight && rect.bottom > 0) {
+                        const yPos = (rect.top - window.innerHeight/2) * -0.05;
+                        imgParallax.style.transform = `translateY(${yPos}px)`;
+                    }
+                }
+            }
+        });
+
+        // 3. CONTADORES DE MÉTRICAS
+        if (typeof IntersectionObserver !== 'undefined') {
+            const counters = document.querySelectorAll('.counter');
+            const speed = 100; 
+
+            const counterObserver = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = entry.target;
+                        const endValAttr = target.getAttribute('data-target');
+                        if(!endValAttr) return;
+
+                        const endValue = Number(endValAttr);
+                        
+                        const updateCount = () => {
+                            const current = Number(target.innerHTML);
+                            const inc = endValue / speed;
+
+                            if (current < endValue) {
+                                target.innerHTML = Math.ceil(current + inc).toString();
+                                setTimeout(updateCount, 15);
+                            } else {
+                                target.innerHTML = endValue.toString();
+                            }
+                        };
+                        updateCount();
+                        counterObserver.unobserve(target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            counters.forEach(counter => counterObserver.observe(counter));
+        }
+
+        // 4. CARRUSEL MÓVIL
+        const initCarouselPhysics = () => {
+            if (typeof IntersectionObserver === 'undefined') return;
+            const track = document.querySelector('.t-track-wrapper');
+            const cards = document.querySelectorAll('.t-card-pro');
+            
+            if(!track || cards.length === 0) return;
+
+            const carouselObserver = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        cards.forEach(c => c.classList.remove('is-centered'));
+                        entry.target.classList.add('is-centered');
+                    }
+                });
+            }, { 
+                root: track, 
+                threshold: 0.5 
+            });
+
+            cards.forEach(card => carouselObserver.observe(card));
+            
+            setTimeout(() => {
+                if(cards[0]) cards[0].classList.add('is-centered');
+            }, 100);
+        };
+
+        if (window.innerWidth <= 1024) {
+            initCarouselPhysics();
+        }
+    });
+</script>

@@ -1,5 +1,9 @@
 ---
-// Navbar Flouvia Elite: La Obra Maestra Definitiva
+// Navbar Flouvia Elite: Locked Scrolled Profile Colors, iOS Depth & i18n Switch
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <header class="navbar-wrapper" id="navbar">
@@ -15,32 +19,40 @@
         <div class="nav-container">
             
             <div class="nav-left desktop-nav">
-                <div class="glass-pill">
-                    <a href="/" class="pill-logo">FLOUVIA</a>
-                    <a href="/" class="nav-link">TRABAJO</a>
-                    <a href="/servicios" class="nav-link">SERVICIOS</a>
-                    <a href="/nosotros" class="nav-link">NOSOTROS</a>
-                    <a href="/casos" class="nav-link">CASOS</a>
+                <div class="glass-pill staggered-show">
+                    <a href={lang === 'en' ? '/en/' : '/'} class="pill-logo">
+                        <img src="/imgs/logo-flouvia-2.svg" alt="Flouvia" class="logo-pill-img" />
+                    </a>
+                    <a href={lang === 'en' ? '/en/servicios' : '/servicios'} class="nav-link n-link-2">{t('nav.services')}</a>
+                    <a href={lang === 'en' ? '/en/nosotros' : '/nosotros'} class="nav-link n-link-3">{t('nav.about')}</a>
+                    <a href={lang === 'en' ? '/en/casos' : '/casos'} class="nav-link n-link-4">{t('nav.cases')}</a>
                 </div>
             </div>
 
             <div class="nav-center desktop-nav">
-                <a href="/" class="main-logo" id="main-logo">FLOUVIA</a>
+                <a href={lang === 'en' ? '/en/' : '/'} class="main-logo" id="main-logo">
+                    <img src="/imgs/logo-flouvia-3.svg" alt="Flouvia" class="logo-center-img" />
+                </a>
             </div>
 
             <div class="nav-right desktop-nav">
-                <div class="mini-pill"><span class="lang-text">ES</span></div>
-                <a href="/login" class="mini-pill user-link" aria-label="Login">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <div class="lang-switch staggered-show-R">
+                    <a href="/" class="lang-option" class:list={[{ active: lang === 'es' }]}>ES</a>
+                    <a href="/en/" class="lang-option" class:list={[{ active: lang === 'en' }]}>EN</a>
+                </div>
+                
+                <a href={lang === 'en' ? '/en/portal/login' : '/portal/login'} class="mini-pill user-link staggered-show-R" aria-label="Login">
+                    <svg class="login-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
                 </a>
-                <a href="#contacto" class="btn-contact">CONTACTO ↗</a>
+                
+                <a href="/contacto" class="btn-contact">{t('nav.contact')}</a>
             </div>
 
             <div class="mobile-pill-nav">
-                <div class="mobile-pill-inner">
+                <div class="mobile-pill-inner squircle haptic-target">
                     
                     <div class="pill-left-group">
                         <button class="hamburger-btn" id="menu-toggle" aria-label="Menú">
@@ -50,14 +62,18 @@
                                 <span class="l3"></span>
                             </div>
                         </button>
-                        <a href="/" class="mobile-logo">FLOUVIA</a>
+                        
+                        <a href={lang === 'en' ? '/en/' : '/'} class="mobile-logo">
+                            <img src="/imgs/logo-flouvia-3.png" alt="Flouvia" class="logo-mobile-img default-logo" />
+                            <img src="/imgs/logo-flouvia-1.png" alt="Flouvia" class="logo-mobile-img scrolled-logo" />
+                        </a>
                     </div>
 
-                    <a href="#contacto" class="btn-contact-mobile">
-                        <span>CONTACTO</span>
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="7" y1="17" x2="17" y2="7"></line>
-                            <polyline points="7 7 17 7 17 17"></polyline>
+                    <a href="/contacto" class="btn-contact-mobile squircle texture-noise-micro haptic-target">
+                        <span>{t('nav.contact').replace(' ↗', '')}</span>
+                        <svg class="contact-arrow-mobile" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="19" x2="19" y2="5"></line>
+                            <polyline points="9 5 19 5 19 15"></polyline>
                         </svg>
                     </a>
                     
@@ -71,18 +87,21 @@
         <div class="mobile-menu-content">
             
             <div class="menu-top-row">
-                <a href="/login" class="utility-pill">
+                <a href={lang === 'en' ? '/en/login' : '/login'} class="utility-pill squircle haptic-target">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    INICIAR SESIÓN
+                    {t('nav.login')}
                 </a>
-                <div class="utility-pill lang-selector">ES</div>
+                
+                <div class="lang-switch-mobile squircle haptic-target">
+                    <a href="/" class="lang-option-m" class:list={[{ active: lang === 'es' }]}>ES</a>
+                    <a href="/en/" class="lang-option-m" class:list={[{ active: lang === 'en' }]}>EN</a>
+                </div>
             </div>
 
             <nav class="mobile-links">
-                <a href="/" class="m-link">TRABAJO</a>
-                <a href="/servicios" class="m-link">SERVICIOS</a>
-                <a href="/nosotros" class="m-link">NOSOTROS</a>
-                <a href="/casos" class="m-link">CASOS</a>
+                <a href={lang === 'en' ? '/en/servicios' : '/servicios'} class="m-link m-l-2">{t('nav.services')}</a>
+                <a href={lang === 'en' ? '/en/nosotros' : '/nosotros'} class="m-link m-l-3">{t('nav.about')}</a>
+                <a href={lang === 'en' ? '/en/casos' : '/casos'} class="m-link m-l-4">{t('nav.cases')}</a>
             </nav>
             
             <div class="mobile-menu-footer">
@@ -100,8 +119,12 @@
     :root {
         --color-azul-pro: #0a192f;
         --color-azul-dark: #061121;
-        --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
-        --ease-pro: cubic-bezier(0.16, 1, 0.3, 1);
+        
+        /* Físicas iOS Pro */
+        --ease-ios: cubic-bezier(0.165, 0.84, 0.44, 1);
+        --ease-bounce-back: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        --ease-morph: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+        --ease-pro: cubic-bezier(0.19, 1, 0.22, 1);
     }
 
     /* 1. TOP BAR */
@@ -114,7 +137,7 @@
     /* 2. WRAPPER MAESTRO */
     .navbar-wrapper { position: fixed; top: 0; left: 0; width: 100%; z-index: 20000; background: transparent; }
     
-    .main-nav { padding: 25px 0; transition: all 0.5s var(--ease-pro); }
+    .main-nav { padding: 25px 0; transition: padding 0.8s var(--ease-pro); }
     .navbar-wrapper.scrolled .main-nav { padding: 15px 0; }
     .nav-container { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 40px; }
     
@@ -122,33 +145,118 @@
        ESCRITORIO
        ========================================= */
     .desktop-nav { display: flex; align-items: center; }
-    .glass-pill { display: inline-flex; align-items: center; background: rgba(0, 0, 0, 0.04); padding: 4px 6px; border-radius: 100px; border: 1px solid rgba(0, 0, 0, 0.05); transition: all 0.5s var(--ease-pro); }
-    .navbar-wrapper.scrolled .glass-pill { background: rgba(10, 25, 47, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: #fff; border-color: rgba(255,255,255,0.1); }
+    .glass-pill { 
+        display: inline-flex; align-items: center; background: rgba(0, 0, 0, 0.03); 
+        padding: 4px 6px; border-radius: 100px; border: 1px solid rgba(0, 0, 0, 0.05); 
+        transition: all 0.7s var(--ease-pro); box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        position: relative; overflow: hidden;
+    }
     
-    .nav-link { color: #000; text-decoration: none; font-size: 9.5px; font-weight: 700; padding: 8px 14px; letter-spacing: 1px; opacity: 0.6; position: relative; z-index: 1; transition: all 0.3s ease; }
+    .glass-pill:hover { box-shadow: 0 10px 40px rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.1); }
+    
+    .navbar-wrapper.scrolled .glass-pill { 
+        background: rgba(10, 25, 47, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
+        color: #fff; border-color: rgba(255,255,255,0.1); box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    }
+    
+    .nav-link { 
+        color: #000; text-decoration: none; font-size: 9.5px; font-weight: 700; 
+        padding: 8px 14px; letter-spacing: 1px; opacity: 0.6; position: relative; 
+        z-index: 1; transition: all 0.4s var(--ease-pro), opacity 0.5s ease; 
+    }
+    
+    .navbar-wrapper.scrolled .n-link-1 { transition-delay: 0.05s; }
+    .navbar-wrapper.scrolled .n-link-2 { transition-delay: 0.1s; }
+    .navbar-wrapper.scrolled .n-link-3 { transition-delay: 0.15s; }
+    .navbar-wrapper.scrolled .n-link-4 { transition-delay: 0.2s; }
+    
     .navbar-wrapper.scrolled .nav-link { color: #fff; }
-    .nav-link::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.06); border-radius: 100px; z-index: -1; opacity: 0; transform: scale(0.8); transition: all 0.3s var(--ease-pro); }
+
+    .nav-link::before { 
+        content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+        background: rgba(0, 0, 0, 0.06); border-radius: 100px; z-index: -1; 
+        opacity: 0; transform: scale(0.85); transition: all 0.4s var(--ease-bounce-back); 
+    }
     .navbar-wrapper.scrolled .nav-link::before { background: rgba(255, 255, 255, 0.15); }
+    
     .nav-link:hover { opacity: 1; }
     .nav-link:hover::before { opacity: 1; transform: scale(1); }
 
-    .pill-logo { color: #fff; text-decoration: none; font-weight: 800; font-size: 13px; letter-spacing: 1px; width: 0; overflow: hidden; opacity: 0; transition: all 0.5s var(--ease-pro); white-space: nowrap;}
-    .navbar-wrapper.scrolled .pill-logo { width: 75px; opacity: 1; margin-right: 10px; padding-left: 8px; }
+    .logo-center-img { height: 50px; width: auto; display: block; transition: transform 0.6s var(--ease-morph); }
+    .logo-center-img:hover { transform: scale(1.05) rotate(2deg); }
+    .logo-pill-img { height: 40px; width: auto; display: block; }
+
+    .pill-logo { display: flex; align-items: center; max-width: 0; overflow: hidden; opacity: 0; transition: all 0.7s var(--ease-pro); white-space: nowrap;}
+    .navbar-wrapper.scrolled .pill-logo { max-width: 150px; opacity: 1; margin-right: 12px; padding-left: 8px; }
 
     .nav-center { justify-content: center; }
-    .main-logo { color: #000; text-decoration: none; font-size: 24px; font-weight: 800; letter-spacing: 4px; transition: all 0.5s var(--ease-pro); }
-    .navbar-wrapper.scrolled .main-logo { opacity: 0; transform: translateY(-10px); }
+    .main-logo { display: flex; align-items: center; transition: all 0.7s var(--ease-pro); }
+    .navbar-wrapper.scrolled .main-logo { opacity: 0; transform: translateY(-15px) scale(0.95); }
 
     .nav-right { justify-content: flex-end; gap: 10px; }
-    .mini-pill { display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.03); border: 1px solid rgba(0, 0, 0, 0.08); color: #000; border-radius: 100px; padding: 8px 14px; transition: all 0.3s ease; }
-    .navbar-wrapper.scrolled .mini-pill { background: rgba(10, 25, 47, 0.85); border-color: rgba(255, 255, 255, 0.1); color: #fff; }
     
-    .user-link:hover { background: rgba(0, 0, 0, 0.08); transform: translateY(-1px); }
-    .navbar-wrapper.scrolled .user-link:hover { background: #fff; color: var(--color-azul-pro); border-color: #fff; box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2); }
-    .lang-text { font-size: 10px; font-weight: 800; letter-spacing: 1px; }
+    /* =========================================================
+       MINI PILLS (USER) 
+       ========================================================= */
+    .mini-pill { 
+        display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.03); 
+        border: 1px solid rgba(0, 0, 0, 0.08); color: #000; border-radius: 100px; padding: 8px 14px; 
+        transition: all 0.4s var(--ease-pro), transform 0.4s var(--ease-morph); 
+    }
+    
+    .navbar-wrapper.scrolled .mini-pill { 
+        background: rgba(10, 25, 47, 0.85); 
+        backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        border-color: rgba(255, 255, 255, 0.1); 
+        color: #fff; 
+    }
+    
+    .user-link:hover { background: rgba(0, 0, 0, 0.08); transform: translateY(-2px); }
 
-    .btn-contact { background: var(--color-azul-pro); color: #fff; padding: 10px 22px; border-radius: 100px; text-decoration: none; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.1); margin-left: 5px; }
-    .btn-contact:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(10, 25, 47, 0.2); }
+    .navbar-wrapper.scrolled .user-link:hover { 
+        background: rgba(10, 25, 47, 0.95) !important; 
+        border-color: rgba(255, 255, 255, 0.2) !important; 
+        color: #fff !important; 
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important; 
+        transform: translateY(-2px) scale(1.05);
+    }
+    
+    .login-icon { transition: transform 0.5s var(--ease-bounce-back); }
+    .user-link:hover .login-icon { transform: scale(1.1) rotate(5deg); }
+    
+    /* =========================================================
+       SWITCH DE IDIOMAS iOS
+       ========================================================= */
+    .lang-switch {
+        display: flex; align-items: center; background: rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 100px; padding: 3px;
+        position: relative; transition: all 0.4s var(--ease-pro);
+    }
+
+    .lang-option {
+        padding: 5px 10px; font-size: 9px; font-weight: 800; letter-spacing: 1px;
+        color: rgba(0,0,0,0.5); text-decoration: none; border-radius: 100px;
+        transition: all 0.4s var(--ease-spring); z-index: 2;
+    }
+
+    .lang-option.active { color: #000; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    .navbar-wrapper.scrolled .lang-switch {
+        background: rgba(10, 25, 47, 0.85); border-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    }
+    .navbar-wrapper.scrolled .lang-option { color: rgba(255,255,255,0.4); }
+    .navbar-wrapper.scrolled .lang-option.active { background: #fff; color: var(--color-azul-pro); }
+
+    .btn-contact { 
+        background: var(--color-azul-pro); color: #fff; padding: 10px 22px; border-radius: 100px; 
+        text-decoration: none; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; 
+        display: flex; align-items: center; gap: 8px; transition: all 0.4s var(--ease-morph); 
+        border: 1px solid rgba(255,255,255,0.1); margin-left: 5px; 
+    }
+    .contact-arrow { transition: transform 0.4s var(--ease-pro); }
+    .btn-contact:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 30px rgba(10, 25, 47, 0.25), inset 0 0 0 1px rgba(255,255,255,0.2); }
+    .btn-contact:hover .contact-arrow { transform: translate(2px, -2px); }
 
     .mobile-pill-nav { display: none; }
     .mobile-menu-overlay { display: none; }
@@ -164,128 +272,202 @@
 
         .mobile-pill-nav { display: flex; width: 100%; justify-content: center; z-index: 21000; position: relative; }
         
-        /* PÍLDORA (Estado Normal Blanco) */
         .mobile-pill-inner {
             display: flex; align-items: center; justify-content: space-between;
-            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            height: 48px; 
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 100px;
-            padding: 6px 8px 6px 14px; width: 92%; max-width: 380px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.06); transition: all 0.5s var(--ease-pro);
+            padding: 0 10px 0 16px; width: 92%; max-width: 380px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.06); transition: all 0.6s var(--ease-pro);
         }
-        /* PÍLDORA (Estado Scrolled - Azul Glassmorphism idéntico a Desk) */
         .navbar-wrapper.scrolled .mobile-pill-inner { 
-            background: rgba(10, 25, 47, 0.85); border-color: rgba(255,255,255,0.1); 
+            background: rgba(10, 25, 47, 0.85); border-color: rgba(255,255,255,0.15); 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
         }
 
-        .pill-left-group { display: flex; align-items: center; gap: 14px; }
+        .pill-left-group { display: flex; align-items: center; gap: 16px; height: 100%; }
 
-        .hamburger-btn { background: transparent; border: none; padding: 6px 0; cursor: pointer; display: flex; align-items: center; position: relative;}
+        .hamburger-btn { 
+            background: transparent; border: none; padding: 0; margin: 0; cursor: pointer; 
+            display: flex; align-items: center; justify-content: center; height: 100%; 
+        }
         .burger-lines { width: 18px; height: 10px; position: relative; }
         .burger-lines span { 
             display: block; width: 100%; height: 2px; background: var(--color-azul-pro); 
             border-radius: 2px; position: absolute; left: 0; 
-            transition: all 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6); 
+            transition: transform 0.5s var(--ease-morph), background 0.4s ease, opacity 0.4s ease; 
         }
         .burger-lines .l1 { top: 0px; }
         .burger-lines .l2 { top: 4px; }
         .burger-lines .l3 { top: 8px; }
         .navbar-wrapper.scrolled .burger-lines span { background: #fff; }
 
-        .mobile-logo { font-size: 13px; font-weight: 800; letter-spacing: 2px; color: var(--color-azul-pro); text-decoration: none; transition: 0.4s ease; }
-        .navbar-wrapper.scrolled .mobile-logo { color: #fff; }
+        .mobile-logo { 
+            display: block; 
+            position: relative; 
+            flex-shrink: 0; 
+            height: 42px; 
+            width: max-content; 
+        }
+        
+        .logo-mobile-img { 
+            height: 100%; 
+            width: auto; 
+            object-fit: contain; 
+            max-width: none !important; 
+            display: block; 
+            transition: opacity 0.6s var(--ease-pro); 
+        }
+        
+        .default-logo { position: relative; z-index: 1; }
+        .scrolled-logo { position: absolute; left: 0; top: 0; opacity: 0; z-index: 2; }
+        
+        .navbar-wrapper.scrolled .default-logo { opacity: 0; }
+        .navbar-wrapper.scrolled .scrolled-logo { opacity: 1; }
 
-        /* NUEVO: Botón Contacto Móvil con texto */
         .btn-contact-mobile {
             background: var(--color-azul-pro); color: #fff;
-            padding: 8px 14px; border-radius: 100px;
+            height: 32px; 
+            padding: 0 16px; border-radius: 100px;
             display: flex; align-items: center; justify-content: center; gap: 6px;
             text-decoration: none; font-size: 8px; font-weight: 800; letter-spacing: 0.5px;
-            transition: 0.4s var(--ease-pro);
+            transition: all 0.4s var(--ease-spring);
         }
+        .contact-arrow-mobile { transition: transform 0.4s var(--ease-pro); }
+        .btn-contact-mobile:active { transform: scale(0.95); }
+        .btn-contact-mobile:active .contact-arrow-mobile { transform: translate(2px, -2px); }
         .navbar-wrapper.scrolled .btn-contact-mobile { background: #fff; color: var(--color-azul-pro); }
 
-        /* =========================================
-           TRANSICIÓN PERFECTA AL ABRIR EL MENÚ
-           ========================================= */
-        .navbar-wrapper.menu-open .mobile-pill-inner { 
-            background: rgba(255, 255, 255, 0.05) !important; /* Cristal súper sutil oscuro */
-            border-color: rgba(255, 255, 255, 0.1) !important; 
-            box-shadow: none !important; 
-        }
+        .navbar-wrapper.menu-open .mobile-pill-inner { background: rgba(255, 255, 255, 0.05) !important; border-color: rgba(255, 255, 255, 0.1) !important; box-shadow: none !important; }
         .navbar-wrapper.menu-open .burger-lines span { background: #fff !important; }
         .navbar-wrapper.menu-open .burger-lines .l1 { transform: translateY(4px) rotate(45deg); }
-        .navbar-wrapper.menu-open .burger-lines .l2 { opacity: 0; }
+        .navbar-wrapper.menu-open .burger-lines .l2 { opacity: 0; transform: scaleX(0); }
         .navbar-wrapper.menu-open .burger-lines .l3 { transform: translateY(-4px) rotate(-45deg); }
-        .navbar-wrapper.menu-open .mobile-logo { color: #fff !important; }
+        .navbar-wrapper.menu-open .default-logo { opacity: 0 !important; }
+        .navbar-wrapper.menu-open .scrolled-logo { opacity: 1 !important; }
         .navbar-wrapper.menu-open .btn-contact-mobile { background: rgba(255,255,255,0.1) !important; color: #fff !important; }
 
-        /* =========================================
-           MENÚ DESPLEGABLE
-           ========================================= */
         .mobile-menu-overlay {
             display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: var(--color-azul-dark);
+            background-color: rgba(6, 17, 33, 0.85);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             z-index: 15000;
-            opacity: 0; visibility: hidden; clip-path: circle(0% at 15% 10%); transition: all 0.7s var(--ease-pro);
+            opacity: 0; visibility: hidden; 
+            clip-path: circle(0% at 15% 10%); transition: all 0.8s var(--ease-pro);
         }
-        .navbar-wrapper.menu-open .mobile-menu-overlay { opacity: 1; visibility: visible; clip-path: circle(150% at 15% 10%); }
+        .navbar-wrapper.menu-open .mobile-menu-overlay { 
+            opacity: 1; visibility: visible; clip-path: circle(150% at 15% 10%); 
+        }
 
         .mobile-menu-content { 
             padding: 130px 8% 40px 8%; display: flex; flex-direction: column; 
             justify-content: space-between; height: 100%; width: 100%;
         }
 
-        .menu-top-row { display: flex; gap: 10px; opacity: 0; transform: translateY(20px); transition: all 0.6s var(--ease-pro) 0.2s; }
-        .navbar-wrapper.menu-open .menu-top-row { opacity: 1; transform: translateY(0); }
+        .menu-top-row { display: flex; gap: 10px; opacity: 0; transform: translateY(20px); filter: blur(8px); transition: all 0.6s var(--ease-pro) 0.2s; }
+        .navbar-wrapper.menu-open .menu-top-row { opacity: 1; transform: translateY(0); filter: blur(0); }
         
         .utility-pill {
-            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
             color: #fff; padding: 10px 18px; border-radius: 100px; font-size: 10px; 
             font-weight: 700; letter-spacing: 1px; text-decoration: none; display: flex; align-items: center; gap: 8px;
+            transition: all 0.4s var(--ease-bounce-back);
         }
-        .lang-selector { width: 45px; justify-content: center; }
+        .utility-pill:active { background: #fff; color: var(--color-azul-dark); transform: translateY(2px) scale(0.96); }
+        
+        /* SWITCH MÓVIL */
+        .lang-switch-mobile {
+            display: flex; align-items: center; background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 100px; padding: 3px;
+        }
+        .lang-option-m {
+            padding: 7px 12px; font-size: 10px; font-weight: 800; letter-spacing: 1px;
+            color: rgba(255,255,255,0.5); text-decoration: none; border-radius: 100px;
+            transition: all 0.4s var(--ease-spring);
+        }
+        .lang-option-m.active { background: #fff; color: var(--color-azul-dark); }
 
         .mobile-links { display: flex; flex-direction: column; gap: 1.5rem; }
+        
         .m-link { 
             font-size: 2.8rem; font-weight: 400; font-family: 'Instrument Serif', serif; font-style: italic;
             color: #fff; text-decoration: none; letter-spacing: -0.5px;
-            opacity: 0; transform: translateY(40px) skewY(2deg); transition: all 0.7s var(--ease-pro);
+            opacity: 0; transform: translateY(40px) skewY(2deg); filter: blur(12px); 
+            transition: all 0.8s var(--ease-pro); display: inline-block; width: max-content;
         }
-        .navbar-wrapper.menu-open .m-link { opacity: 1; transform: translateY(0) skewY(0); }
-        .m-link:nth-child(1) { transition-delay: 0.25s; }
-        .m-link:nth-child(2) { transition-delay: 0.35s; }
-        .m-link:nth-child(3) { transition-delay: 0.45s; }
-        .m-link:nth-child(4) { transition-delay: 0.55s; }
+        .navbar-wrapper.menu-open .m-link { opacity: 1; transform: translateY(0) skewY(0); filter: blur(0); }
+        .m-link:active { opacity: 0.5; transition: 0.1s; }
+        
+        .m-link:nth-child(1) { transition-delay: 0.2s; }
+        .m-link:nth-child(2) { transition-delay: 0.3s; }
+        .m-link:nth-child(3) { transition-delay: 0.4s; }
+        .m-link:nth-child(4) { transition-delay: 0.5s; }
 
         .mobile-menu-footer { 
             border-top: 1px solid rgba(255,255,255,0.08); padding-top: 2rem; 
-            opacity: 0; transform: translateY(20px); transition: all 0.6s var(--ease-pro) 0.7s; 
+            opacity: 0; transform: translateY(20px); filter: blur(8px); transition: all 0.7s var(--ease-pro) 0.6s; 
         }
-        .navbar-wrapper.menu-open .mobile-menu-footer { opacity: 1; transform: translateY(0); }
+        .navbar-wrapper.menu-open .mobile-menu-footer { opacity: 1; transform: translateY(0); filter: blur(0); }
         .m-eyebrow { font-size: 8px; font-weight: 800; letter-spacing: 2px; color: #64748b; margin-bottom: 1.5rem; }
         .m-legal { display: flex; justify-content: space-between; font-size: 9px; color: #8892b0; letter-spacing: 1px; font-weight: 700; }
         .m-legal a { color: #fff; text-decoration: none; }
     }
+
+    .squircle { border-radius: 100px; overflow: hidden; transform: translateZ(0); }
+    .texture-noise-micro { position: relative; }
+    .texture-noise-micro::before { content: ""; position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.05; mix-blend-mode: overlay; pointer-events: none; }
+    .haptic-target { transition: all 0.4s var(--ease-morph); }
+    .haptic-target:active { box-shadow: 0 4px 10px rgba(0,0,0,0.05); transform: translateY(1px); }
 </style>
 
 <script>
     const navbar = document.getElementById("navbar");
     const menuToggle = document.getElementById("menu-toggle");
 
-    window.addEventListener("scroll", () => {
-        if (window.pageYOffset > 50) navbar.classList.add("scrolled");
-        else navbar.classList.remove("scrolled");
-    });
-
-    menuToggle.addEventListener("click", () => {
-        navbar.classList.toggle("menu-open");
-        document.body.style.overflow = navbar.classList.contains("menu-open") ? "hidden" : "";
-    });
-
-    document.querySelectorAll('.m-link, .utility-pill, .btn-contact-mobile').forEach(l => {
-        l.addEventListener('click', () => {
-            navbar.classList.remove("menu-open");
-            document.body.style.overflow = "";
+    if (navbar && menuToggle) {
+        window.addEventListener("scroll", () => {
+            if (window.pageYOffset > 50) {
+                navbar.classList.add("scrolled");
+            } else {
+                navbar.classList.remove("scrolled");
+            }
         });
-    });
+
+        menuToggle.addEventListener("click", () => {
+            navbar.classList.toggle("menu-open");
+            
+            const mainContent = document.querySelector('main');
+            
+            if (navbar.classList.contains("menu-open")) {
+                document.body.style.overflow = "hidden";
+                if(mainContent) {
+                    mainContent.style.transition = "transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease, border-radius 0.6s ease";
+                    mainContent.style.transform = "scale(0.96) translateY(10px)";
+                    mainContent.style.filter = "blur(4px)";
+                    mainContent.style.borderRadius = "20px";
+                    mainContent.style.overflow = "hidden";
+                }
+            } else {
+                document.body.style.overflow = "";
+                if(mainContent) {
+                    mainContent.style.transform = "scale(1) translateY(0)";
+                    mainContent.style.filter = "blur(0)";
+                    mainContent.style.borderRadius = "0";
+                }
+            }
+        });
+
+        document.querySelectorAll('.m-link, .utility-pill, .btn-contact-mobile').forEach(link => {
+            link.addEventListener('click', () => {
+                navbar.classList.remove("menu-open");
+                document.body.style.overflow = "";
+                const mainContent = document.querySelector('main');
+                if(mainContent) {
+                    mainContent.style.transform = "scale(1) translateY(0)";
+                    mainContent.style.filter = "blur(0)";
+                    mainContent.style.borderRadius = "0";
+                }
+            });
+        });
+    }
 </script>

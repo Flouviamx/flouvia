@@ -12,6 +12,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@clerk/astro": "^3.0.19",
     "astro": "^6.1.7"
   }
 }

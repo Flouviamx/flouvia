@@ -1,103 +1,133 @@
 ---
-// Footer Flouvia Elite: Ingeniería Visual de Máxima Precisión
+// Footer Flouvia Elite: Minimalismo Suizo & Quiet Luxury (Apple Pro Style)
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const isEn = lang === 'en';
 ---
 
 <footer class="footer-premium">
+    <div class="top-hairline"></div>
+
     <div class="container">
         
-        <div class="contact-section reveal">
-            <h2 class="footer-heading">Construimos la infraestructura<br>de tu siguiente fase.</h2>
+        <div class="footer-grid">
             
-            <a href="mailto:flouvia.mx@gmail.com" class="btn-correo">
-                <span class="btn-text">flouvia.mx@gmail.com</span>
-                <span class="btn-arrow">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                        <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
-                </span>
-            </a>
-        </div>
+            <div class="brand-column reveal-stagger">
+                <img src="/imgs/logo-flouvia-1.svg" alt="Flouvia" class="footer-logo-svg" />
+                
+                <div class="statement-box">
+                    <p class="description">
+                        {isEn ? 'Digital engineering studio.' : 'Estudio de ingeniería digital.'}<br>
+                        {isEn ? 'We design high-conversion transactional ecosystems for leading brands in B2B and E-commerce.' : 'Diseñamos ecosistemas transaccionales de alta conversión para marcas líderes en B2B y E-commerce.'}
+                    </p>
+                </div>
 
-        <div class="divider reveal"></div>
-
-        <div class="grid-layout reveal">
-            
-            <div class="grid-col brand-info">
-                <a href="/" class="logo">FLOUVIA.</a>
-                <p class="description">
-                    Estudio de ingeniería digital. Diseñamos ecosistemas de alta conversión para marcas B2B y E-commerce.
-                </p>
-            </div>
-
-            <div class="grid-col">
-                <h4 class="col-title">SISTEMAS</h4>
-                <nav class="nav-links">
-                    <a href="/servicios" class="link-item">Infraestructura Web</a>
-                    <a href="/growth" class="link-item">Paid Media & Growth</a>
-                    <a href="/casos" class="link-item">Casos B2B / B2C</a>
-                </nav>
-            </div>
-
-            <div class="grid-col">
-                <h4 class="col-title">ESTUDIO</h4>
-                <nav class="nav-links">
-                    <a href="/nosotros" class="link-item">Nuestra Filosofía</a>
-                    <a href="/login" class="link-item">Portal de Clientes</a>
-                    <a href="#contacto" class="link-item">Contacto Privado</a>
-                </nav>
-            </div>
-
-            <div class="grid-col">
-                <h4 class="col-title">ECOSISTEMA</h4>
-                <div class="social-links">
-                    <a href="#" class="social-icon" aria-label="Instagram">
-                        <div class="icon-box">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                            </svg>
-                        </div>
-                        <span class="social-text">Instagram</span>
-                    </a>
-                    
-                    <a href="#" class="social-icon" aria-label="Facebook">
-                        <div class="icon-box">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                            </svg>
-                        </div>
-                        <span class="social-text">Facebook</span>
-                    </a>
-
-                    <a href="#" class="social-icon" aria-label="LinkedIn">
-                        <div class="icon-box">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                                <rect x="2" y="9" width="4" height="12"></rect>
-                                <circle cx="4" cy="4" r="2"></circle>
-                            </svg>
-                        </div>
-                        <span class="social-text">LinkedIn</span>
+                <div class="contact-action">
+                    <a href="mailto:flouvia.mx@gmail.com" class="minimal-email-link">
+                        <span class="email-text">flouvia.mx@gmail.com</span>
+                        <svg class="email-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
                     </a>
                 </div>
             </div>
 
+            <div class="navigation-columns">
+                
+                <div class="nav-col reveal-stagger" style="--delay: 0.1s;">
+                    <h4 class="col-title">{isEn ? 'PORTFOLIO' : 'PORTAFOLIO'}</h4>
+                    <nav class="nav-links">
+                        <a href={isEn ? '/en/' : '/'} class="link-item">
+                            <span>{t('nav.work')}</span>
+                            <span class="link-arrow">→</span>
+                        </a>
+                        <a href={isEn ? '/en/servicios' : '/servicios'} class="link-item">
+                            <span>{t('nav.services')}</span>
+                            <span class="link-arrow">→</span>
+                        </a>
+                        <a href={isEn ? '/en/casos' : '/casos'} class="link-item">
+                            <span>{t('nav.cases')}</span>
+                            <span class="link-arrow">→</span>
+                        </a>
+                    </nav>
+                </div>
+
+                <div class="nav-col reveal-stagger" style="--delay: 0.2s;">
+                    <h4 class="col-title">{isEn ? 'STUDIO' : 'ESTUDIO'}</h4>
+                    <nav class="nav-links">
+                        <a href={isEn ? '/en/nosotros' : '/nosotros'} class="link-item">
+                            <span>{t('nav.about')}</span>
+                            <span class="link-arrow">→</span>
+                        </a>
+                        <a href={isEn ? '/en/login' : '/login'} class="link-item">
+                            <span>{isEn ? 'Client Portal' : 'Portal de Clientes'}</span>
+                            <span class="link-arrow">→</span>
+                        </a>
+                        <a href="#contacto" class="link-item">
+                            <span>{isEn ? 'Private Contact' : 'Contacto Privado'}</span>
+                            <span class="link-arrow">→</span>
+                        </a>
+                    </nav>
+                </div>
+
+                <div class="nav-col reveal-stagger" style="--delay: 0.3s;">
+                    <h4 class="col-title">{isEn ? 'SOCIALS' : 'REDES'}</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-item" aria-label="Instagram">
+                            <span class="social-text">Instagram</span>
+                            <div class="s-icon-wrap">
+                                <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                </svg>
+                            </div>
+                        </a>
+                        
+                        <a href="#" class="social-item" aria-label="LinkedIn">
+                            <span class="social-text">LinkedIn</span>
+                            <div class="s-icon-wrap">
+                                <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                                    <rect x="2" y="9" width="4" height="12"></rect>
+                                    <circle cx="4" cy="4" r="2"></circle>
+                                </svg>
+                            </div>
+                        </a>
+
+                        <a href="#" class="social-item" aria-label="X (Twitter)">
+                            <span class="social-text">X (Twitter)</span>
+                            <div class="s-icon-wrap">
+                                <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
+                                    <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
+                                </svg>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="footer-bottom reveal">
-            <div class="copyright">
-                <p>&copy; 2026 Flouvia. Private Growth Boutique.</p>
-                <div class="status">
+        <div class="footer-bottom reveal-stagger" style="--delay: 0.5s;">
+            <div class="legal-left">
+                <p class="copyright">&copy; 2026 Flouvia Boutique.</p>
+                <span class="dot-separator">•</span>
+                <div class="status-indicator">
                     <span class="dot-online"></span>
-                    <span>CDMX — OP. GLOBAL</span>
+                    <span class="status-text">SYSTEMS OPERATIONAL</span>
                 </div>
             </div>
             
-            <div class="legal">
-                <a href="#">Privacidad</a>
-                <a href="#">Términos</a>
+            <div class="legal-right">
+                <a href="#" class="legal-link">{isEn ? 'Privacy Policy' : 'Aviso de Privacidad'}</a>
+                <a href="#" class="legal-link">{isEn ? 'Terms of Service' : 'Términos de Servicio'}</a>
+                <a href="#" class="legal-link">Op. Global — CDMX</a>
             </div>
         </div>
 
@@ -105,286 +135,247 @@
 </footer>
 
 <style>
-    /* VARIABLES (Azul corporativo profundo y gris pizarra) */
+    /* ==========================================================
+       VARIABLES & RESET MAESTRO (Precisión Matemática)
+       ========================================================== */
     :root {
         --bg-footer: #0a192f; 
         --text-main: #ffffff;
         --text-muted: #8892b0;
-        --border-color: rgba(255, 255, 255, 0.08);
-        /* Curva física real para animaciones súper suaves */
-        --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
-        --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+        --text-dim: #64748b;
+        --hairline: rgba(255, 255, 255, 0.08); /* Ligeramente más visible */
+        
+        --ease-apple: cubic-bezier(0.16, 1, 0.3, 1);
+        --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05); /* Física de resorte */
+        --font-sans: 'Inter', system-ui, sans-serif;
     }
+
+    .footer-premium ::selection { background: #ffffff; color: #0a192f; }
 
     .footer-premium {
         background-color: var(--bg-footer);
         color: var(--text-main);
-        /* Eliminamos el margin-top y ajustamos el padding para una fusión perfecta */
-        padding: 5rem 0 3rem 0; 
-        margin-top: 0; 
-        font-family: 'Plus Jakarta Sans', sans-serif;
-    }
-
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 5%;
-    }
-
-    /* 1. SECCIÓN DE CONTACTO */
-    .contact-section {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        padding-bottom: 3rem;
-    }
-
-    .footer-heading {
-        font-size: clamp(2rem, 4vw, 3.2rem);
-        font-weight: 800;
-        line-height: 1.05;
-        letter-spacing: -1.5px;
-        color: #ccd6f6;
-    }
-
-    /* BOTÓN CORREO (Micro-interacción de línea dinámica) */
-    .btn-correo {
-        display: inline-flex;
-        align-items: center;
-        gap: 1.5rem;
-        text-decoration: none;
-        color: var(--text-main);
+        padding: 0 0 3rem 0; 
         position: relative;
-        padding-bottom: 0.8rem;
-    }
-    
-    /* La línea base opaca */
-    .btn-correo::before {
-        content: '';
-        position: absolute;
-        bottom: 0; left: 0;
-        width: 100%; height: 1px;
-        background-color: rgba(255, 255, 255, 0.2);
+        font-family: var(--font-sans);
+        overflow: hidden;
     }
 
-    /* La línea brillante animada */
-    .btn-correo::after {
-        content: '';
-        position: absolute;
-        bottom: 0; left: 0;
-        width: 100%; height: 1px;
-        background-color: #fff;
-        transform: scaleX(0);
-        transform-origin: right;
-        transition: transform 0.8s var(--ease-out-expo);
-    }
-    
-    .btn-text {
-        font-size: 1.3rem;
-        font-weight: 600;
-        letter-spacing: -0.5px;
-        transition: color 0.4s ease;
-    }
+    .container { width: 100%; max-width: 1240px; padding: 0 5%; margin: 0 auto; position: relative;}
 
-    .btn-arrow {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 36px;
-        height: 36px;
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 50%;
-        transition: all 0.6s var(--ease-out-expo);
-    }
+    .top-hairline { width: 100%; height: 1px; background-color: var(--hairline); margin-bottom: 6rem;}
 
-    .btn-correo:hover .btn-text { color: #64ffda; }
-    
-    .btn-correo:hover::after {
-        transform: scaleX(1);
-        transform-origin: left;
+    /* ANIMACIÓN REVEAL SUTIL (Apple Cascading Fade) */
+    .reveal-stagger { 
+        opacity: 0; transform: translateY(20px); 
+        animation: reveal-foot 1s var(--ease-spring) forwards; 
+        animation-play-state: paused; 
+        animation-delay: var(--delay, 0s); 
     }
+    .reveal-stagger.active { animation-play-state: running; }
+    @keyframes reveal-foot { to { opacity: 1; transform: translateY(0); } }
 
-    .btn-correo:hover .btn-arrow {
-        background: #fff;
-        color: var(--bg-footer);
-        border-color: #fff;
-        transform: translateX(8px);
-    }
-
-    /* DIVISOR */
-    .divider {
-        height: 1px;
-        background-color: var(--border-color);
-        margin-bottom: 4rem;
-        width: 100%;
-    }
-
-    /* 2. GRID ESTRUCTURAL */
-    .grid-layout {
+    /* ==========================================================
+       1. GRID ASIMÉTRICO (12 Columnas Editoriales)
+       ========================================================== */
+    .footer-grid {
         display: grid;
-        grid-template-columns: 2fr 1fr 1fr 1fr;
-        gap: 3rem;
-        margin-bottom: 5rem;
+        grid-template-columns: 5fr 7fr; /* 5 columnas izquierda, 7 derecha */
+        gap: 6rem;
+        margin-bottom: 8rem;
     }
 
-    .grid-col { display: flex; flex-direction: column; }
-
-    .logo {
-        font-size: 1.4rem;
-        font-weight: 800;
-        letter-spacing: 2px;
-        color: var(--text-main);
-        text-decoration: none;
-        margin-bottom: 1.2rem;
+    /* BLOQUE IZQUIERDO (Brand & Statement) */
+    .brand-column {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 
-    .description {
-        color: var(--text-muted);
-        font-size: 0.95rem;
-        line-height: 1.6;
+    .footer-logo-svg { width: 130px; height: auto; margin-bottom: 3rem; opacity: 0.9;}
+
+    .statement-box { margin-bottom: 4rem; }
+    
+    .description { 
+        color: var(--text-muted); 
+        font-size: 1.25rem; 
+        line-height: 1.5; 
+        font-weight: 400;
+        letter-spacing: -0.3px;
+        margin: 0; 
         max-width: 90%;
     }
 
+    /* EL BOTÓN DE CORREO SUTIL (Micro-interacción de Resorte) */
+    .minimal-email-link {
+        display: inline-flex; align-items: center; gap: 12px;
+        text-decoration: none; color: var(--text-main);
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--hairline);
+        transition: border-color 0.4s var(--ease-apple);
+    }
+
+    .email-text {
+        font-size: 1.05rem; font-weight: 500; letter-spacing: 0.5px;
+        transition: transform 0.4s var(--ease-spring), color 0.4s var(--ease-apple);
+    }
+
+    .email-arrow {
+        width: 16px; height: 16px; opacity: 0.5; color: var(--text-muted);
+        transition: all 0.4s var(--ease-spring);
+    }
+
+    .minimal-email-link:hover { border-bottom-color: rgba(255,255,255,0.4); }
+    .minimal-email-link:hover .email-text { transform: translateX(4px); }
+    .minimal-email-link:hover .email-arrow { opacity: 1; transform: translateX(8px); color: #fff; }
+    .minimal-email-link:active { transform: scale(0.98); transition: 0.1s; }
+
+    /* BLOQUE DERECHO (Navegación) */
+    .navigation-columns {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 3rem;
+    }
+
+    .nav-col { display: flex; flex-direction: column; }
+
     .col-title {
-        font-size: 0.75rem;
-        font-weight: 800;
-        letter-spacing: 2px;
-        color: #64ffda; 
-        margin-bottom: 1.8rem;
-        opacity: 0.8;
+        font-size: 0.65rem; font-weight: 700; letter-spacing: 1.5px;
+        color: var(--text-dim); margin-bottom: 2rem;
     }
 
-    /* LINKS (Animación de Flecha Silenciosa) */
-    .nav-links {
-        display: flex;
-        flex-direction: column;
-        gap: 1.2rem;
-    }
-
+    /* LINKS LIMPIOS (Física de flechas iOS) */
+    .nav-links { display: flex; flex-direction: column; gap: 1.2rem; }
+    
     .link-item {
-        color: var(--text-muted);
-        text-decoration: none;
-        font-size: 0.95rem;
-        font-weight: 500;
-        position: relative;
-        transition: all 0.5s var(--ease-out-expo);
-        width: max-content;
+        display: inline-flex; align-items: center; gap: 8px;
+        color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 500;
+        transition: color 0.3s var(--ease-apple); width: max-content;
+    }
+    
+    .link-arrow {
+        font-size: 0.8rem; opacity: 0; transform: translateX(-10px);
+        transition: all 0.4s var(--ease-spring); color: #fff;
     }
 
-    .link-item::before {
-        content: '→';
-        position: absolute;
-        left: -20px;
-        opacity: 0;
-        color: #64ffda;
-        transition: all 0.5s var(--ease-out-expo);
+    .link-item:hover { color: #fff; }
+    .link-item:hover .link-arrow { opacity: 1; transform: translateX(0); }
+
+    /* REDES SOCIALES (Hover magnético) */
+    .social-links { display: flex; flex-direction: column; gap: 1.2rem; }
+    
+    .social-item {
+        display: flex; align-items: center; gap: 12px;
+        color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 500;
+        transition: color 0.3s var(--ease-apple);
+        width: max-content; 
     }
 
-    .link-item:hover {
-        color: var(--text-main);
-        transform: translateX(20px);
+    .s-icon-wrap {
+        width: 28px; height: 28px; border-radius: 50%; border: 1px solid transparent;
+        display: flex; align-items: center; justify-content: center;
+        transition: all 0.4s var(--ease-spring);
     }
 
-    .link-item:hover::before {
-        opacity: 1;
-    }
+    .social-icon { width: 14px; height: 14px; opacity: 0.6; transition: all 0.4s var(--ease-apple); }
 
-    /* REDES SOCIALES (Hover de Elevación) */
-    .social-links {
-        display: flex;
-        flex-direction: column;
-        gap: 1.2rem;
-    }
+    .social-item:hover { color: #fff; }
+    .social-item:hover .s-icon-wrap { border-color: rgba(255,255,255,0.2); transform: translateX(4px);}
+    .social-item:hover .social-icon { opacity: 1; }
 
-    .social-icon {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        color: var(--text-muted);
-        text-decoration: none;
-        font-size: 0.95rem;
-        font-weight: 500;
-        transition: all 0.5s var(--ease-out-expo);
-        width: max-content;
-    }
-
-    .icon-box {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 32px;
-        height: 32px;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid transparent;
-        border-radius: 8px;
-        transition: all 0.5s var(--ease-out-expo);
-    }
-
-    .social-icon:hover {
-        color: var(--text-main);
-        transform: translateX(8px);
-    }
-
-    .social-icon:hover .icon-box {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.2);
-        color: #64ffda; /* El ícono se ilumina */
-        transform: scale(1.05);
-    }
-
-    /* 3. BARRA LEGAL */
+    /* ==========================================================
+       2. BARRA INFERIOR (Status Legal Integrado)
+       ========================================================== */
     .footer-bottom {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-top: 1px solid var(--border-color);
-        padding-top: 2rem;
-        font-size: 0.85rem;
-        color: var(--text-muted);
+        display: flex; justify-content: space-between; align-items: center;
+        border-top: 1px solid var(--hairline); padding-top: 2rem;
+        font-size: 0.8rem; color: var(--text-dim); font-weight: 500;
     }
 
-    .copyright { display: flex; align-items: center; gap: 2.5rem; }
+    .legal-left { display: flex; align-items: center; gap: 1rem; }
+    .copyright { margin: 0; }
+    .dot-separator { opacity: 0.5; font-size: 0.6rem;}
 
-    .status {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        background: rgba(255, 255, 255, 0.03);
-        padding: 5px 12px;
-        border-radius: 50px;
-        font-weight: 600;
-        font-size: 0.75rem;
-        letter-spacing: 1px;
+    .status-indicator { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.03); padding: 4px 10px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.05);}
+    .status-text { letter-spacing: 1px; font-weight: 600; color: #94a3b8; font-size: 0.7rem;}
+
+    /* Glow de Apple (Respiración) */
+    .dot-online { 
+        width: 6px; height: 6px; background-color: #10b981; border-radius: 50%; 
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); 
+        animation: pulse-server 2.5s infinite;
+    }
+    @keyframes pulse-server { 
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 
+        70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); } 
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } 
     }
 
-    .dot-online {
-        width: 6px;
-        height: 6px;
-        background-color: #4ade80;
-        border-radius: 50%;
-        box-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+    .legal-right { display: flex; gap: 2rem; }
+    .legal-link { color: var(--text-dim); text-decoration: none; transition: color 0.3s; }
+    .legal-link:hover { color: var(--text-muted); }
+
+
+    /* ==========================================================
+       MÓVIL (Cuadrícula 2x2 Inteligente & Responsive Táctil)
+       ========================================================== */
+    @media (max-width: 1024px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 5rem; margin-bottom: 6rem;}
+        .navigation-columns { gap: 2rem; }
+        .description { max-width: 100%; }
+        .brand-column { gap: 2rem; }
+        .statement-box { margin-bottom: 2rem; }
     }
 
-    .legal { display: flex; gap: 2rem; }
+    @media (max-width: 768px) {
+        .top-hairline { margin-bottom: 4rem; }
+        .footer-logo-svg { width: 110px; margin-bottom: 2rem;}
+        
+        .description { font-size: 1.1rem; line-height: 1.6; }
+        
+        .minimal-email-link { width: 100%; justify-content: space-between; }
+        
+        /* MAGIA MÓVIL: Convertimos la lista en una cuadrícula para que no sea infinita */
+        .navigation-columns { 
+            grid-template-columns: 1fr 1fr; /* 2 Columnas */
+            row-gap: 3rem; column-gap: 1rem; 
+        }
+        
+        /* Forzamos que la columna de Redes abarque las dos columnas al final */
+        .navigation-columns .nav-col:nth-child(3) { grid-column: span 2; }
 
-    .legal a {
-        color: var(--text-muted);
-        text-decoration: none;
-        transition: color 0.3s;
-        position: relative;
-    }
+        /* Ajustes Táctiles (Áreas de toque más grandes) */
+        .link-item { padding: 4px 0; width: 100%; justify-content: space-between;}
+        .link-arrow { opacity: 0.3; transform: translateX(0); } /* En móvil la flecha siempre se ve un poco */
 
-    .legal a:hover { color: var(--text-main); }
+        .social-item { width: 100%; justify-content: space-between; padding: 4px 0;}
+        .s-icon-wrap { border-color: rgba(255,255,255,0.1); }
+        .social-icon { opacity: 0.8; }
 
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
-        .contact-section { flex-direction: column; align-items: flex-start; gap: 2rem; }
-        .grid-layout { grid-template-columns: 1fr 1fr; gap: 4rem; }
-        .copyright { flex-direction: column; align-items: flex-start; gap: 1rem; }
-    }
-    @media (max-width: 600px) {
-        .grid-layout { grid-template-columns: 1fr; gap: 3rem; }
-        .footer-bottom { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+        /* Barra Inferior (Apilada pero estética) */
+        .footer-bottom { flex-direction: column; align-items: flex-start; gap: 2.5rem; }
+        .legal-left { flex-direction: column; align-items: flex-start; gap: 1rem; }
+        .dot-separator { display: none; }
+        .status-indicator { align-self: stretch; justify-content: center; padding: 8px;} /* Botón ancho en móvil */
+        
+        .legal-right { flex-direction: column; gap: 1.5rem; width: 100%; }
+        .legal-link { padding: 8px 0; display: block; border-bottom: 1px solid var(--hairline);}
     }
 </style>
+
+<script>
+    // Reveal de Alta Precisión (Cascada suave)
+    const revealFooter = () => {
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); 
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.footer-premium .reveal-stagger').forEach(el => observer.observe(el));
+    }
+    revealFooter();
+</script>

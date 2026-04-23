@@ -1,0 +1,838 @@
+---
+// src/components/PlantillaServicios.astro
+import Layout from '../layouts/Layout.astro';
+import Navbar from './Navbar.astro';
+import Footer from './Footer.astro';
+import WhatsApp from './WhatsApp.astro';
+
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const isEn = lang === 'en';
+---
+
+<Layout title={`Flouvia | ${t('serv.hero.badge')}`}>
+    <Navbar />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <main class="flouvia-masterpiece page-bg-unified">
+        
+        <section class="hero-grand">
+            <div class="container hero-container">
+                <div class="hero-content">
+                    <div class="hero-text-zone" id="hero-parallax">
+                        <p class="eyebrow reveal-blur" style="--delay: 0.1s;">
+                            {t('serv.hero.badge')}
+                        </p>
+                        <h1 class="hero-title reveal-blur" style="--delay: 0.2s;">
+                            <span class="title-bold">{t('serv.hero.title1')}</span><br>
+                            <span class="editorial title-serif">{t('serv.hero.title2')}</span>
+                        </h1>
+                    </div>
+                    
+                    <div class="hero-bottom reveal-blur" style="--delay: 0.4s;">
+                        <p class="hero-desc">{t('serv.hero.desc')}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="philosophy-blueprint dark-section">
+            <div class="texture-noise-micro"></div>
+            
+            <div class="bp-line-x bp-line-top"></div>
+            <div class="bp-line-x bp-line-bottom"></div>
+
+            <div class="container relative-z">
+                <div class="blueprint-grid blueprint-reveal">
+                    
+                    <div class="bp-col bp-header-col">
+                        <div class="bp-content">
+                            <span class="p-badge">{t('serv.why.badge')}</span>
+                            <h2 class="p-title">{t('serv.why.title')} <br><span class="editorial text-dim">{t('serv.why.title_ed')}</span></h2>
+                            
+                            <a href="/contacto" class="sleek-btn-light bp-fade-up" style="--delay: 0.5s;">
+                                <span>{t('serv.why.btn')}</span>
+                                <div class="m-circle-light">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="bp-line-y"></div>
+                    </div>
+                    
+                    <div class="bp-col">
+                        <div class="bp-content bp-fade-up" style="--delay: 0.6s;">
+                            <span class="bp-num">01</span>
+                            <span class="p-val-title">{t('serv.why.1.title')}</span>
+                            <p>{t('serv.why.1.desc')}</p>
+                        </div>
+                        <div class="bp-line-y"></div>
+                    </div>
+                    
+                    <div class="bp-col">
+                        <div class="bp-content bp-fade-up" style="--delay: 0.7s;">
+                            <span class="bp-num">02</span>
+                            <span class="p-val-title">{t('serv.why.2.title')}</span>
+                            <p>{t('serv.why.2.desc')}</p>
+                        </div>
+                        <div class="bp-line-y"></div>
+                    </div>
+                    
+                    <div class="bp-col bp-last">
+                        <div class="bp-content bp-fade-up" style="--delay: 0.8s;">
+                            <span class="bp-num">03</span>
+                            <span class="p-val-title">{t('serv.why.3.title')}</span>
+                            <p>{t('serv.why.3.desc')}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="services-showcase">
+            <div class="container">
+                
+                <div class="master-service-row" id="s1">
+                    <div class="ms-left">
+                        <div class="ms-sticky-content">
+                            <span class="ms-index">{t('serv.1.cat')}</span>
+                            <div class="ms-progress-track">
+                                <div class="ms-progress-bar"></div>
+                            </div>
+                            <a href="/contacto" class="magnetic-btn-minimal">
+                                <span class="btn-text">{t('serv.1.btn')}</span>
+                                <div class="m-circle">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ms-right">
+                        <div class="ms-content-wrap reveal-up">
+                            <h2 class="ms-massive-title">{t('serv.1.title')}</h2>
+                            <p class="ms-main-desc">{t('serv.1.desc')}</p>
+                            
+                            <div class="bento-modules-grid">
+                                <div class="b-module squircle-math">
+                                    <div class="b-mod-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <rect x="3" y="3" width="18" height="18" rx="4" stroke-opacity="0.3"></rect>
+                                            <path d="M9 3v18M15 3v18" stroke-opacity="1"></path>
+                                            <path d="M3 9h18M3 15h18" stroke-opacity="0.3"></path>
+                                        </svg>
+                                    </div>
+                                    <h3>{t('serv.1.d1.t')}</h3>
+                                    <p>{t('serv.1.d1.d')}</p>
+                                </div>
+                                <div class="b-module squircle-math">
+                                    <div class="b-mod-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <path d="M12 2L2 7l10 5 10-5-10-5z" stroke-opacity="1"></path>
+                                            <path d="M2 17l10 5 10-5" stroke-opacity="0.3"></path>
+                                            <path d="M2 12l10 5 10-5" stroke-opacity="0.6"></path>
+                                        </svg>
+                                    </div>
+                                    <h3>{t('serv.1.d2.t')}</h3>
+                                    <p>{t('serv.1.d2.d')}</p>
+                                </div>
+                                <div class="b-module squircle-math">
+                                    <div class="b-mod-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <rect x="5" y="8" width="14" height="12" rx="2" stroke-opacity="1"></rect>
+                                            <path d="M8 8V6a4 4 0 0 1 8 0v2" stroke-opacity="0.3"></path>
+                                            <circle cx="12" cy="14" r="1" stroke-opacity="1"></circle>
+                                        </svg>
+                                    </div>
+                                    <h3>{t('serv.1.d3.t')}</h3>
+                                    <p>{t('serv.1.d3.d')}</p>
+                                </div>
+                                <div class="b-module squircle-math">
+                                    <div class="b-mod-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <polyline points="16 16 22 12 16 8" stroke-opacity="1"></polyline>
+                                            <line x1="22" y1="12" x2="2" y2="12" stroke-opacity="0.3"></line>
+                                            <path d="M8 4L2 12l6 8" stroke-opacity="0.3"></path>
+                                        </svg>
+                                    </div>
+                                    <h3>{t('serv.1.d4.t')}</h3>
+                                    <p>{t('serv.1.d4.d')}</p>
+                                </div>
+                            </div>
+
+                            <div class="dna-footer">
+                                <span class="dna-label">STACK DNA:</span>
+                                <div class="dna-pills">
+                                    <span>{t('serv.1.t1')}</span>
+                                    <span>{t('serv.1.t2')}</span>
+                                    <span>{t('serv.1.t3')}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="master-service-row" id="s2">
+                    <div class="ms-left">
+                        <div class="ms-sticky-content">
+                            <span class="ms-index">{t('serv.2.cat')}</span>
+                            <div class="ms-progress-track">
+                                <div class="ms-progress-bar"></div>
+                            </div>
+                            <a href="/contacto" class="magnetic-btn-minimal">
+                                <span class="btn-text">{t('serv.2.btn')}</span>
+                                <div class="m-circle">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ms-right">
+                        <div class="ms-content-wrap reveal-up">
+                            <h2 class="ms-massive-title">{t('serv.2.title')}</h2>
+                            <p class="ms-main-desc">{t('serv.2.desc')}</p>
+                            
+                            <div class="bento-modules-grid">
+                                <div class="b-module squircle-math">
+                                    <div class="b-mod-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" stroke-opacity="1"></rect>
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke-opacity="0.3"></path>
+                                            <circle cx="12" cy="16" r="1" stroke-opacity="1"></circle>
+                                        </svg>
+                                    </div>
+                                    <h3>{t('serv.2.d1.t')}</h3>
+                                    <p>{t('serv.2.d1.d')}</p>
+                                </div>
+                                <div class="b-module squircle-math">
+                                    <div class="b-mod-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <line x1="4" y1="21" x2="4" y2="14" stroke-opacity="0.3"></line>
+                                            <line x1="4" y1="10" x2="4" y2="3" stroke-opacity="1"></line>
+                                            <line x1="12" y1="21" x2="12" y2="12" stroke-opacity="0.3"></line>
+                                            <line x1="12" y1="8" x2="12" y2="3" stroke-opacity="1"></line>
+                                            <line x1="20" y1="21" x2="20" y2="16" stroke-opacity="0.3"></line>
+                                            <line x1="20" y1="12" x2="20" y2="3" stroke-opacity="1"></line>
+                                            <circle cx="4" cy="12" r="2" stroke-opacity="1"></circle>
+                                            <circle cx="12" cy="10" r="2" stroke-opacity="1"></circle>
+                                            <circle cx="20" cy="14" r="2" stroke-opacity="1"></circle>
+                                        </svg>
+                                    </div>
+                                    <h3>{t('serv.2.d2.t')}</h3>
+                                    <p>{t('serv.2.d2.d')}</p>
+                                </div>
+                                <div class="b-module squircle-math">
+                                    <div class="b-mod-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" stroke-opacity="1"></polygon>
+                                            <path d="M13 2L3 14h9v8l9-12h-9z" stroke-opacity="0.3"></path>
+                                        </svg>
+                                    </div>
+                                    <h3>{t('serv.2.d3.t')}</h3>
+                                    <p>{t('serv.2.d3.d')}</p>
+                                </div>
+                                <div class="b-module squircle-math">
+                                    <div class="b-mod-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke-opacity="1"></path>
+                                            <polyline points="3.27 6.96 12 12.01 20.73 6.96" stroke-opacity="0.3"></polyline>
+                                            <line x1="12" y1="22.08" x2="12" y2="12" stroke-opacity="0.3"></line>
+                                        </svg>
+                                    </div>
+                                    <h3>{t('serv.2.d4.t')}</h3>
+                                    <p>{t('serv.2.d4.d')}</p>
+                                </div>
+                            </div>
+
+                            <div class="dna-footer">
+                                <span class="dna-label">STACK DNA:</span>
+                                <div class="dna-pills">
+                                    <span>{t('serv.2.t1')}</span>
+                                    <span>{t('serv.2.t2')}</span>
+                                    <span>{t('serv.2.t3')}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="master-service-row" id="s3">
+                    <div class="ms-left">
+                        <div class="ms-sticky-content">
+                            <span class="ms-index">{t('serv.3.cat')}</span>
+                            <div class="ms-progress-track">
+                                <div class="ms-progress-bar"></div>
+                            </div>
+                            <a href="/contacto" class="magnetic-btn-minimal">
+                                <span class="btn-text">{t('serv.3.btn')}</span>
+                                <div class="m-circle">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ms-right">
+                        <div class="ms-content-wrap reveal-up">
+                            <h2 class="ms-massive-title">{t('serv.3.title')}</h2>
+                            <p class="ms-main-desc">{t('serv.3.desc')}</p>
+                            
+                            <div class="bento-modules-grid">
+                                <div class="b-module squircle-math">
+                                    <div class="b-mod-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <ellipse cx="12" cy="5" rx="9" ry="3" stroke-opacity="1"></ellipse>
+                                            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" stroke-opacity="0.3"></path>
+                                            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" stroke-opacity="0.6"></path>
+                                        </svg>
+                                    </div>
+                                    <h3>{t('serv.3.d1.t')}</h3>
+                                    <p>{t('serv.3.d1.d')}</p>
+                                </div>
+                                <div class="b-module squircle-math">
+                                    <div class="b-mod-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <rect x="3" y="3" width="7" height="7" rx="1" stroke-opacity="1"></rect>
+                                            <rect x="14" y="3" width="7" height="7" rx="1" stroke-opacity="0.3"></rect>
+                                            <rect x="14" y="14" width="7" height="7" rx="1" stroke-opacity="1"></rect>
+                                            <rect x="3" y="14" width="7" height="7" rx="1" stroke-opacity="0.3"></rect>
+                                        </svg>
+                                    </div>
+                                    <h3>{t('serv.3.d2.t')}</h3>
+                                    <p>{t('serv.3.d2.d')}</p>
+                                </div>
+                                <div class="b-module squircle-math">
+                                    <div class="b-mod-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke-opacity="1"></path>
+                                            <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke-opacity="0.3"></path>
+                                        </svg>
+                                    </div>
+                                    <h3>{t('serv.3.d3.t')}</h3>
+                                    <p>{t('serv.3.d3.d')}</p>
+                                </div>
+                                <div class="b-module squircle-math">
+                                    <div class="b-mod-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2" stroke-opacity="1"></rect>
+                                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke-opacity="0.3"></path>
+                                        </svg>
+                                    </div>
+                                    <h3>{t('serv.3.d4.t')}</h3>
+                                    <p>{t('serv.3.d4.d')}</p>
+                                </div>
+                            </div>
+
+                            <div class="dna-footer">
+                                <span class="dna-label">STACK DNA:</span>
+                                <div class="dna-pills">
+                                    <span>{t('serv.3.t1')}</span>
+                                    <span>{t('serv.3.t2')}</span>
+                                    <span>{t('serv.3.t3')}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="master-service-row" id="s4" style="border-bottom: none; padding-bottom: 2rem;">
+                    <div class="ms-left">
+                        <div class="ms-sticky-content">
+                            <span class="ms-index">{t('serv.4.cat')}</span>
+                            <div class="ms-progress-track">
+                                <div class="ms-progress-bar"></div>
+                            </div>
+                            <a href="/contacto" class="magnetic-btn-minimal">
+                                <span class="btn-text">{t('serv.4.btn')}</span>
+                                <div class="m-circle">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ms-right">
+                        <div class="ms-content-wrap reveal-up">
+                            <h2 class="ms-massive-title">{t('serv.4.title')}</h2>
+                            <p class="ms-main-desc">{t('serv.4.desc')}</p>
+                            
+                            <div class="bento-modules-grid">
+                                <div class="b-module squircle-math">
+                                    <div class="b-mod-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <circle cx="11" cy="11" r="8" stroke-opacity="1"></circle>
+                                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-opacity="0.3"></line>
+                                            <path d="M11 8v6M8 11h6" stroke-opacity="0.3"></path>
+                                        </svg>
+                                    </div>
+                                    <h3>{t('serv.4.d1.t')}</h3>
+                                    <p>{t('serv.4.d1.d')}</p>
+                                </div>
+                                <div class="b-module squircle-math">
+                                    <div class="b-mod-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <path d="M16 3h5v5" stroke-opacity="1"></path>
+                                            <path d="M8 3H3v5" stroke-opacity="0.3"></path>
+                                            <path d="M12 22v-8.3a4 4 0 0 0-1.17-2.83L3 3" stroke-opacity="0.3"></path>
+                                            <path d="M15 9l6-6" stroke-opacity="1"></path>
+                                        </svg>
+                                    </div>
+                                    <h3>{t('serv.4.d2.t')}</h3>
+                                    <p>{t('serv.4.d2.d')}</p>
+                                </div>
+                                <div class="b-module squircle-math">
+                                    <div class="b-mod-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke-opacity="0.3"></path>
+                                            <circle cx="12" cy="12" r="3" stroke-opacity="1"></circle>
+                                        </svg>
+                                    </div>
+                                    <h3>{t('serv.4.d3.t')}</h3>
+                                    <p>{t('serv.4.d3.d')}</p>
+                                </div>
+                                <div class="b-module squircle-math">
+                                    <div class="b-mod-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <path d="M21 2v6h-6" stroke-opacity="1"></path>
+                                            <path d="M3 12a9 9 0 0 1 15-6.7L21 8" stroke-opacity="1"></path>
+                                            <path d="M3 22v-6h6" stroke-opacity="0.3"></path>
+                                            <path d="M21 12a9 9 0 0 1-15 6.7L3 16" stroke-opacity="0.3"></path>
+                                        </svg>
+                                    </div>
+                                    <h3>{t('serv.4.d4.t')}</h3>
+                                    <p>{t('serv.4.d4.d')}</p>
+                                </div>
+                            </div>
+
+                            <div class="dna-footer">
+                                <span class="dna-label">STACK DNA:</span>
+                                <div class="dna-pills">
+                                    <span>{t('serv.4.t1')}</span>
+                                    <span>{t('serv.4.t2')}</span>
+                                    <span>{t('serv.4.t3')}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="why-flouvia-hardware">
+            <div class="container">
+                <div class="wf-header reveal-fade">
+                    <p class="eyebrow">{t('serv.choose.badge')}</p>
+                    <h2 class="wf-title">
+                        {t('serv.choose.title')} <span class="editorial">{t('serv.choose.title_ed')}</span>
+                    </h2>
+                </div>
+
+                <div class="wf-hardware-grid">
+                    
+                    <div class="hw-card squircle-math reveal-up tilt-card" style="--delay: 0.1s;">
+                        <div class="hw-glow-overlay"></div>
+                        <div class="hw-inner">
+                            <span class="hw-num">/01</span>
+                            <div class="hw-text-zone">
+                                <h3>{t('serv.choose.1.title')}</h3>
+                                <p>{t('serv.choose.1.desc')}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hw-card squircle-math reveal-up tilt-card" style="--delay: 0.2s;">
+                        <div class="hw-glow-overlay"></div>
+                        <div class="hw-inner">
+                            <span class="hw-num">/02</span>
+                            <div class="hw-text-zone">
+                                <h3>{t('serv.choose.2.title')}</h3>
+                                <p>{t('serv.choose.2.desc')}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hw-card squircle-math reveal-up tilt-card" style="--delay: 0.3s;">
+                        <div class="hw-glow-overlay"></div>
+                        <div class="hw-inner">
+                            <span class="hw-num">/03</span>
+                            <div class="hw-text-zone">
+                                <h3>{t('serv.choose.3.title')}</h3>
+                                <p>{t('serv.choose.3.desc')}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-final-clean">
+            <div class="container">
+                <div class="cta-box-refined squircle-pro reveal-blur">
+                    <div class="texture-noise-micro"></div>
+                    <div class="cta-flex relative-z">
+                        <div class="cta-text">
+                            <p class="eyebrow" style="color: rgba(255,255,255,0.6); letter-spacing: 4px;">
+                                {isEn ? 'THE NEXT STEP' : 'EL SIGUIENTE PASO'}
+                            </p>
+                            <h2 class="cta-title">
+                                {isEn ? 'Scale your' : 'Escale su'} <span class="editorial" style="color: #fff;">{isEn ? 'operation.' : 'operación.'}</span>
+                            </h2>
+                        </div>
+                        <a href="/contacto" class="btn-luxe-main">
+                            <span>{isEn ? 'Schedule Diagnostics' : 'Agendar Diagnóstico'}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <Footer />
+    <WhatsApp />
+</Layout>
+
+<style is:global>
+    *, *::before, *::after { box-sizing: border-box; } 
+    
+    html, body {
+        width: 100%; 
+        position: relative;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    ::selection { background: #0a192f; color: #ffffff; }
+
+    :root {
+        --color-bg: #ffffff;
+        --color-bg-soft: #fcfcfc; 
+        --color-blue-icy: #f4f6f9; 
+        --color-blue-deep: #0a192f;
+        --color-glass-blue: rgba(10, 25, 47, 0.85);
+        
+        --color-text: #050505;
+        --color-text-muted: #555555;
+        --color-border: rgba(0, 0, 0, 0.08); 
+        
+        --font-sans: 'Inter', system-ui, sans-serif;
+        --font-serif: 'Instrument Serif', serif;
+        
+        --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
+        --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+        --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    body { background-color: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); margin: 0; }
+
+    .flouvia-masterpiece { width: 100%; position: relative; overflow-x: clip; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; }
+    .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: #222; }
+    .eyebrow { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
+    
+    .reveal-blur { 
+        opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(8px); 
+        animation: reveal 1s var(--ease-spring) forwards; animation-play-state: paused; animation-delay: var(--delay, 0s); 
+    }
+    .reveal-blur.active { animation-play-state: running; }
+    @keyframes reveal { to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+
+    .reveal-fade { 
+        opacity: 0; transform: translateY(30px) scale(0.98); 
+        animation: revealFade 1s var(--ease-spring) forwards; animation-play-state: paused; animation-delay: var(--delay, 0s); 
+    }
+    .reveal-fade.active { animation-play-state: running; }
+    @keyframes revealFade { to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    .btn-luxe { 
+        position: relative; display: inline-flex; background: var(--color-text); color: #fff; 
+        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem; 
+        font-weight: 600; transition: all 0.5s var(--ease-spring); overflow: hidden; justify-content: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 10px 20px rgba(0,0,0,0.08);
+    }
+    .btn-luxe span { position: relative; z-index: 2; }
+    .btn-shimmer { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent); transform: skewX(-20deg); transition: 0s; z-index: 1;}
+    .btn-luxe:hover { transform: translateY(-4px); box-shadow: 0 6px 12px rgba(0,0,0,0.08), 0 15px 30px rgba(0,0,0,0.15); }
+    .btn-luxe:active { transform: scale(0.95); box-shadow: 0 2px 4px rgba(0,0,0,0.04); transition: 0.1s;}
+
+    .squircle { border-radius: 24px; transform: translateZ(0); overflow: hidden; }
+    .cta-squircle { border-radius: 32px; transform: translateZ(0); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
+</style>
+
+<style>
+    /* ==========================================================
+       ESTILOS LOCALES 
+       ========================================================== */
+    .page-bg-unified { background: #fdfdfd; } 
+    .relative-z { position: relative; z-index: 2; }
+
+    .reveal-up { 
+        opacity: 0; transform: translateY(60px); 
+        animation: rev-u 1s var(--ease-smooth) forwards; 
+        animation-play-state: paused; 
+    }
+    .reveal-up.active { animation-play-state: running; }
+    @keyframes rev-u { to { opacity: 1; transform: translateY(0); } }
+
+    .squircle-math { border-radius: 20px; overflow: hidden; transform: translateZ(0); }
+    .squircle-pro { border-radius: 36px; overflow: hidden; transform: translateZ(0); }
+
+    .texture-noise-micro { 
+        position: absolute; inset: 0; 
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); 
+        opacity: 0.04; mix-blend-mode: overlay; pointer-events: none; 
+    }
+
+    /* 1. HERO (INDEX STYLE EXACTO) */
+    .hero-grand { padding: 13rem 0 7rem 0; min-height: 80vh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
+    .hero-text-zone { transition: transform 0.1s ease-out, opacity 0.1s ease-out; }
+    .hero-title { font-size: clamp(3.2rem, 7vw, 6.8rem); line-height: 0.85; font-weight: 800; letter-spacing: -3px; margin-bottom: 4rem; color: var(--color-text); }
+    .title-bold { display: inline; }
+    .title-serif { display: inline; font-size: 105%; color: #94a3b8;}
+    .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem; }
+    .hero-desc { font-size: 1.15rem; color: var(--color-text-muted); max-width: 500px; line-height: 1.5; margin: 0; }
+
+    /* 2. PHILOSOPHY */
+    .dark-section { background: var(--color-blue-deep); color: #fff; padding: 5rem 0; position: relative; overflow: hidden; }
+    .bp-line-x { position: absolute; left: 0; width: 0; height: 1px; background: rgba(255,255,255,0.1); transition: width 1.5s var(--ease-smooth); }
+    .bp-line-top { top: 0; }
+    .bp-line-bottom { bottom: 0; }
+    .blueprint-reveal.active .bp-line-top { width: 100%; }
+    .blueprint-reveal.active .bp-line-bottom { width: 100%; }
+
+    .blueprint-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; }
+    .bp-col { position: relative; padding: 4rem 2.5rem; }
+    .bp-header-col { padding-left: 0; display: flex; flex-direction: column; justify-content: space-between; }
+    .bp-last { padding-right: 0; }
+
+    .bp-line-y { position: absolute; top: 0; right: 0; width: 1px; height: 0; background: rgba(255,255,255,0.1); transition: height 1.5s var(--ease-smooth) 0.3s; }
+    .blueprint-reveal.active .bp-line-y { height: 100%; }
+
+    .p-badge { font-size: 0.6rem; font-weight: 800; letter-spacing: 2px; border: 1px solid rgba(255,255,255,0.15); padding: 5px 12px; border-radius: 100px; margin-bottom: 1.5rem; display: inline-block; background: rgba(255,255,255,0.03); }
+    .p-title { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; margin: 0; line-height: 1; }
+    .text-dim { color: rgba(255,255,255,0.4); }
+
+    .sleek-btn-light { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; font-weight: 700; font-size: 0.8rem; padding: 10px 0; margin-top: 2rem; }
+    .m-circle-light { width: 36px; height: 36px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.4s var(--ease-smooth); background: rgba(255,255,255,0.05); }
+    .sleek-btn-light:hover .m-circle-light { background: #fff; color: var(--color-blue-deep); transform: scale(1.1) translateX(5px); }
+
+    .bp-num { font-family: var(--font-serif); font-style: italic; font-size: 1.2rem; color: rgba(255,255,255,0.3); display: block; margin-bottom: 1.5rem; }
+    .bp-content .p-val-title { display: block; font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 0.8rem; }
+    .bp-content p { font-size: 0.95rem; color: #94a3b8; line-height: 1.5; margin: 0; }
+
+    .bp-fade-up { opacity: 0; transform: translateY(20px); transition: opacity 1s ease, transform 1s var(--ease-smooth); transition-delay: var(--delay, 0s); }
+    .blueprint-reveal.active .bp-fade-up { opacity: 1; transform: translateY(0); }
+
+    /* 3. SERVICES SHOWCASE */
+    .services-showcase { padding: 0; }
+    .master-service-row { display: grid; grid-template-columns: 320px 1fr; gap: 6rem; padding: 6rem 0; border-bottom: 1px solid var(--color-border); }
+    
+    .ms-sticky-content { position: sticky; top: 140px; display: flex; flex-direction: column; gap: 2rem; }
+    .ms-index { font-size: 0.7rem; font-weight: 800; letter-spacing: 2px; color: var(--color-text); }
+    .ms-progress-track { width: 1px; height: 120px; background: rgba(0,0,0,0.08); position: relative; }
+    .ms-progress-bar { width: 100%; height: 0%; background: var(--color-text); position: absolute; top: 0; transition: height 0.1s linear; }
+
+    .magnetic-btn-minimal { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--color-text); font-weight: 700; font-size: 0.8rem; padding: 10px 0; }
+    .m-circle { width: 36px; height: 36px; border: 1.5px solid rgba(0,0,0,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.4s var(--ease-smooth); background: #ffffff; }
+    .magnetic-btn-minimal:hover .m-circle { background: var(--color-text); color: #fff; border-color: var(--color-text); transform: scale(1.1) translateX(5px); }
+
+    .ms-massive-title { font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 800; letter-spacing: -3px; line-height: 0.95; margin: 0 0 2.5rem 0; color: var(--color-text); }
+    .ms-main-desc { font-size: 1.25rem; color: var(--color-text-muted); line-height: 1.6; max-width: 750px; margin: 0 0 4.5rem 0; font-weight: 400; }
+
+    /* BENTO MODULES */
+    .bento-modules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 4rem; }
+    .b-module { background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%); border: 1px solid rgba(0,0,0,0.04); padding: 2.5rem; display: flex; flex-direction: column; transition: all 0.5s var(--ease-smooth); box-shadow: 0 10px 30px rgba(0,0,0,0.02), inset 0 2px 0 rgba(255,255,255,1); position: relative; }
+    .b-module:hover { border-color: rgba(0,0,0,0.08); transform: translateY(-6px) scale(1.01); box-shadow: 0 30px 60px rgba(0,0,0,0.06), inset 0 2px 0 rgba(255,255,255,1); }
+
+    .b-mod-icon { width: 48px; height: 48px; background: #ffffff; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--color-blue-deep); margin-bottom: 2rem; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 12px rgba(0,0,0,0.04); transition: all 0.5s var(--ease-smooth); }
+    .b-module:hover .b-mod-icon { transform: scale(1.08) rotate(-3deg); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+
+    .b-module h3 { font-size: 1.15rem; font-weight: 800; color: var(--color-text); margin: 0 0 0.8rem 0; letter-spacing: -0.5px; }
+    .b-module p { font-size: 0.95rem; color: #64748b; line-height: 1.5; margin: 0; }
+
+    .dna-footer { display: flex; align-items: center; gap: 2rem; border-top: 1px solid var(--color-border); padding-top: 2rem; }
+    .dna-label { font-size: 0.65rem; font-weight: 800; color: #cbd5e1; letter-spacing: 1px; }
+    .dna-pills { display: flex; flex-wrap: wrap; gap: 15px; }
+    .dna-pills span { font-size: 0.75rem; font-weight: 700; color: #94a3b8; }
+
+    /* 4. WHY FLOUVIA HARDWARE */
+    .why-flouvia-hardware { padding: 6rem 0 8rem 0; background: #ffffff; }
+    .wf-header { text-align: center; margin-bottom: 6rem; }
+    .wf-title { font-size: clamp(2.8rem, 5vw, 4.5rem); font-weight: 800; letter-spacing: -2px; margin: 0; line-height: 1; }
+
+    .wf-hardware-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; perspective: 1000px; }
+    .hw-card { position: relative; background: #fcfcfc; border: 1px solid rgba(0,0,0,0.06); padding: 3rem 2.5rem; display: flex; flex-direction: column; transition: transform 0.2s ease-out, box-shadow 0.2s ease-out; box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 10px 20px rgba(0,0,0,0.02); transform-style: preserve-3d; }
+    
+    .hw-glow-overlay { position: absolute; inset: 0; background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.9), transparent 40%); opacity: 0; transition: opacity 0.5s ease; pointer-events: none; z-index: 1; border-radius: inherit; }
+    .hw-card:hover { box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 25px 50px rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.12); background: #ffffff; }
+    .hw-card:hover .hw-glow-overlay { opacity: 1; }
+    .hw-inner { position: relative; z-index: 2; transform: translateZ(30px); }
+
+    .hw-num { font-family: var(--font-serif); font-style: italic; font-size: 2.2rem; color: #cbd5e1; display: block; margin-bottom: 3rem; }
+    .hw-text-zone h3 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 1rem 0; color: var(--color-text); }
+    .hw-text-zone p { font-size: 1.05rem; color: var(--color-text-muted); line-height: 1.6; margin: 0; }
+
+    /* 5. CTA FINAL REFINED */
+    .cta-final-clean { padding: 2rem 0 10rem 0; }
+    .cta-box-refined { background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%); padding: 6rem; position: relative; overflow: hidden; box-shadow: 0 40px 80px rgba(10,25,47,0.25); }
+    .cta-flex { display: flex; justify-content: space-between; align-items: center; gap: 4rem; }
+    .cta-title { font-size: clamp(3rem, 5vw, 4rem); font-weight: 800; color: #fff; letter-spacing: -2px; line-height: 1; margin: 0; }
+    .btn-luxe-main { background: #fff; color: var(--color-blue-deep); padding: 20px 44px; border-radius: 100px; text-decoration: none; font-size: 1.1rem; font-weight: 700; transition: all 0.4s var(--ease-smooth); box-shadow: 0 10px 30px rgba(255,255,255,0.1); display: block; text-align: center; }
+    .btn-luxe-main:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 20px 40px rgba(255,255,255,0.2); }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+        .blueprint-grid { grid-template-columns: 1fr; }
+        .bp-line-y { display: none; }
+        .bp-col { padding: 3rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .bp-last { border-bottom: none; }
+
+        .master-service-row { grid-template-columns: 1fr; gap: 4rem; padding: 5rem 0; }
+        .ms-sticky-content { position: relative; top: 0; flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-border); padding-bottom: 1rem; }
+        .ms-progress-track { display: none; }
+        .wf-hardware-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+        .hero-grand { padding-top: 11rem; padding-bottom: 4rem; min-height: auto; text-align: center; }
+        .hero-content { display: flex; flex-direction: column; align-items: center; }
+        .hero-title { display: flex; flex-direction: column; gap: 0; margin-bottom: 2.5rem; }
+        .title-bold { display: block; font-size: 11.5vw; letter-spacing: -1.8px; line-height: 0.95; margin-bottom: -43px; }
+        .title-serif { display: block; font-size: 12.2vw; font-weight: 300; letter-spacing: -0.5px; line-height: 0.95; }
+        .hero-bottom { flex-direction: column; align-items: center; gap: 2.5rem; text-align: center; border-top: none; padding-top: 0;}
+        .hero-desc { font-size: 1.1rem; padding: 0 5%; max-width: 95%; margin: 0 auto; line-height: 1.6;}
+        .hero-actions-wrapper { width: 100%; padding: 0 5%; justify-content: center; }
+        .btn-luxe { width: 100%; padding: 18px 0; font-size: 1.05rem; display: flex; justify-content: center;}
+
+        .dark-section { padding: 3rem 0; }
+        .bp-col { padding: 2rem 0; }
+        .p-title { font-size: 2rem; }
+        .sleek-btn-light { margin-top: 1rem; }
+
+        .services-showcase { padding: 2rem 0; }
+        .master-service-row { padding: 3rem 0; gap: 2rem; border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .ms-massive-title { font-size: 2.2rem; margin-bottom: 1rem; }
+        .ms-main-desc { font-size: 1.1rem; margin-bottom: 2rem; }
+        
+        .bento-modules-grid { grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2rem; }
+        .b-module { padding: 1.5rem; }
+        .b-mod-icon { width: 36px; height: 36px; margin-bottom: 1rem; }
+        .b-mod-icon svg { width: 16px; height: 16px; }
+        .b-module h3 { font-size: 1.05rem; margin-bottom: 0.5rem; }
+        .b-module p { font-size: 0.9rem; }
+
+        .dna-footer { padding-top: 1.5rem; flex-direction: column; align-items: flex-start; gap: 1rem; }
+
+        .why-flouvia-hardware { padding: 4rem 0; }
+        .wf-header { margin-bottom: 3rem; }
+        .wf-title { font-size: 2.2rem; }
+        .wf-hardware-grid { gap: 1.5rem; }
+        .hw-card { padding: 2rem 1.5rem; }
+        .hw-num { font-size: 1.8rem; margin-bottom: 1.5rem; }
+        .hw-text-zone h3 { font-size: 1.3rem; }
+        .hw-text-zone p { font-size: 1rem; }
+
+        .cta-final-clean { padding: 2rem 0 6rem 0; }
+        .cta-box-refined { padding: 3rem 1.5rem; border-radius: 24px; }
+        .cta-flex { flex-direction: column; text-align: center; gap: 2rem; }
+        .cta-title { font-size: 2rem; }
+        .btn-luxe-main { width: 100%; padding: 16px 32px; font-size: 1rem; }
+    }
+</style>
+
+<script>
+    // 1. REVEALS GLOBALES
+    const reveal = () => {
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.reveal-blur, .reveal-fade, .reveal-up, .blueprint-reveal').forEach(el => observer.observe(el));
+    }
+    reveal();
+
+    // 2. BARRAS DE PROGRESO DE SCROLL
+    window.addEventListener('scroll', () => {
+        const sections = document.querySelectorAll('.master-service-row');
+        
+        sections.forEach(section => {
+            const bar = section.querySelector('.ms-progress-bar') as HTMLElement;
+            if (!bar) return;
+
+            const rect = section.getBoundingClientRect();
+            
+            if (rect.top <= 140 && rect.bottom >= 0) {
+                const totalHeight = (section as HTMLElement).offsetHeight;
+                const progress = Math.abs(rect.top - 140) / (totalHeight - 140);
+                const percent = Math.min(Math.max(progress * 100, 0), 100);
+                bar.style.height = `${percent}%`;
+            } else if (rect.top > 140) {
+                bar.style.height = '0%';
+            } else if (rect.bottom < 140) {
+                bar.style.height = '100%';
+            }
+        });
+    });
+
+    // PARALLAX HERO INYECTADO
+    window.addEventListener('scroll', () => {
+        if (window.innerWidth > 768) { 
+            const scroll = window.scrollY;
+            const heroText = document.getElementById('hero-parallax');
+            if (heroText && scroll < 600) {
+                heroText.style.transform = `translateY(${scroll * 0.4}px)`;
+                heroText.style.opacity = (1 - (scroll * 0.0025)).toString();
+            }
+        }
+    });
+
+    // 3. EFECTO HARDWARE 3D TILT (APPLE GLOW + ROTACIÓN)
+    if (window.innerWidth > 768) {
+        document.querySelectorAll('.tilt-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = (e as MouseEvent).clientX - rect.left;
+                const y = (e as MouseEvent).clientY - rect.top;
+                
+                (card as HTMLElement).style.setProperty('--mouse-x', `${x}px`);
+                (card as HTMLElement).style.setProperty('--mouse-y', `${y}px`);
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -5; 
+                const rotateY = ((x - centerX) / centerX) * 5;
+                
+                (card as HTMLElement).style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                (card as HTMLElement).style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+            });
+        });
+    }
+
+    // 4. BOTONES MAGNÉTICOS
+    if (window.innerWidth > 1024) {
+        document.querySelectorAll('.magnetic-btn-minimal, .sleek-btn-light').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = (e as MouseEvent).clientX - rect.left - rect.width / 2;
+                const y = (e as MouseEvent).clientY - rect.top - rect.height / 2;
+                (btn as HTMLElement).style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+            });
+            
+            btn.addEventListener('mouseleave', () => {
+                (btn as HTMLElement).style.transform = `translate(0, 0)`;
+            });
+        });
+    }
+</script>

@@ -1,101 +1,84 @@
 ---
+import { getLangFromUrl } from '../i18n/utils';
+
 interface Props {
-	title: string;
+    title: string;
 }
 
 const { title } = Astro.props;
+
+// Detecta el idioma basado en la URL (/en/ o /)
+const lang = getLangFromUrl(Astro.url);
 ---
 
 <!doctype html>
-<html lang="es">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Flouvia - Private Growth & Conversion Engineering" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-		<title>{title}</title>
-	</head>
-	<body>
-		<slot /> 
-	</body>
+<html lang={lang}>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="Flouvia Boutique - Engineering & Growth" />
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        
+        <link id="favicon-tag" rel="icon" type="image/svg+xml" href="/favicon-light.svg" />
+<link rel="apple-touch-icon" href="/favicon-light.svg" />
+
+<script is:inline>
+  // Función para cambiar el favicon manualmente
+  function updateFavicon() {
+    const favicon = document.getElementById('favicon-tag');
+    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (isDark) {
+      favicon.href = '/favicon-dark.svg';
+    } else {
+      favicon.href = '/favicon-light.svg';
+    }
+  }
+
+  // Ejecutar al cargar la página
+  updateFavicon();
+
+  // Escuchar si el usuario cambia el modo mientras tiene la página abierta
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateFavicon);
+</script>
+
+<link rel="apple-touch-icon" href="/favicon-light.svg" />
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        
+        <title>{title}</title>
+    </head>
+    <body>
+        <slot /> 
+    </body>
 </html>
 
 <style is:global>
-	:root {
-		--color-primario: #2563eb;
-		--color-fondo: #030712;
-		--color-texto: #f8fafc;
-		--color-subtexto: #94a3b8;
-		--color-borde-glass: rgba(255, 255, 255, 0.05);
-		--anim-curve: cubic-bezier(0.16, 1, 0.3, 1);
-		--anim-duration: 0.8s;
-	}
-
-	* {
-		margin: 0;
-		padding: 0;
-		box-sizing: border-box;
-		font-family: 'Plus Jakarta Sans', sans-serif;
-		scroll-behavior: smooth;
-	}
-
-	body {
-		background-color: var(--color-fondo);
-		color: var(--color-texto);
-		overflow-x: hidden;
-		min-height: 100vh;
-		/* El fondo dinámico profundo */
-		background-image: 
-			radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.2) 0px, transparent 50%),
-			radial-gradient(at 100% 100%, rgba(15, 23, 42, 0.4) 0px, transparent 50%);
-		background-attachment: fixed;
-	}
-
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 5%;
+    /* Reset ultra limpio. El diseño pesado lo maneja tu index.astro */
+    *, *::before, *::after { 
+        box-sizing: border-box; 
+    } 
+    
+    html, body {
+        width: 100%; 
+        margin: 0;
+        padding: 0;
+        position: relative;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        -webkit-tap-highlight-color: transparent;
+        background-color: #ffffff;
     }
 
-	/* INGENIERÍA DE ANIMACIÓN GLOBAL */
-	.reveal {
-		opacity: 0;
-		transform: translateY(40px);
-		transition: all var(--anim-duration) var(--anim-curve);
-	}
-	.reveal.active {
-		opacity: 1;
-		transform: translateY(0);
-	}
+    ::selection { 
+        background: #0a192f; 
+        color: #ffffff; 
+    }
 </style>
-
-<script>
-	// Motor de Intersección de Alto Rendimiento
-	function revealOnScroll() {
-		const reveals = document.querySelectorAll(".reveal");
-		const observerOptions = {
-			root: null, // Ver en el viewport entero
-			threshold: 0.1, // Ejecutar cuando el 10% del elemento sea visible
-			rootMargin: "0px 0px -50px 0px" // Ejecutar un poco antes de llegar
-		};
-
-		const observer = new IntersectionObserver((entries) => {
-			entries.forEach(entry => {
-				if (entry.isIntersecting) {
-					entry.target.classList.add("active");
-					observer.unobserve(entry.target); // Dejar de observar una vez activado
-				}
-			});
-		}, observerOptions);
-
-		reveals.forEach(reveal => {
-			observer.observe(reveal);
-		});
-	}
-
-	// Ejecutar al cargar la página
-	revealOnScroll();
-</script>

@@ -1,0 +1,776 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import WhatsApp from '../components/WhatsApp.astro';
+
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<Layout title={`Flouvia | ${t('hero.badge')}`}>
+    <Navbar />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <main class="flouvia-masterpiece">
+
+        <section class="hero-grand">
+            <div class="container hero-container">
+                <div class="hero-content">
+                    <div class="hero-text-zone" id="hero-parallax">
+                        <p class="eyebrow reveal-blur" style="--delay: 0.1s;">
+                            {t('hero.badge')}
+                        </p>
+                        <h1 class="hero-title reveal-blur" style="--delay: 0.2s;">
+                            <span class="title-bold">{t('hero.title1')}</span>
+                            <span class="editorial title-serif">{t('hero.title2')}</span>
+                        </h1>
+                    </div>
+                    
+                    <div class="hero-bottom reveal-blur" style="--delay: 0.4s;">
+                        <p class="hero-desc">
+                            {t('hero.desc')}
+                        </p>
+                        <div class="hero-action">
+                            <a href="/contacto" class="btn-luxe">
+                                <span>{t('hero.cta')}</span>
+                                <div class="btn-shimmer"></div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tech-spotlight">
+            <div class="container">
+                <div class="partners-header reveal-blur" style="--delay: 0.1s;">
+                    <div class="header-text">
+                        <h2 class="section-heading">{t('tech.title')} <span class="editorial">{t('tech.title_editorial')}</span></h2>
+                        <p class="section-sub">{t('tech.sub')}</p>
+                    </div>
+                </div>
+
+                <div class="spotlight-grid reveal-blur" style="--delay: 0.3s;">
+                    <div class="tech-card">
+                        <div class="card-content">
+                            <span class="cell-label">COMMERCE ENGINE</span>
+                            <div class="logo-wrapper">
+                                <svg viewBox="0 0 140 30" width="130" height="30" fill="currentColor" class="tech-logo"><path d="M21 7.5L12 2.3 3 7.5v9l9 5.2 9-5.2v-9zm-9-3l6.5 3.8-6.5 3.8-6.5-3.8L12 4.5zM4.5 9l6.5 3.8v7.5L4.5 16.5V9zm15 7.5l-6.5 3.8v-7.5L19.5 9v7.5z"/><text x="28" y="19" font-family="Inter" font-weight="800" font-size="18">shopify<tspan font-weight="400">plus</tspan></text></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="card-content">
+                            <span class="cell-label">DATA LOGISTICS</span>
+                            <div class="logo-wrapper">
+                                <svg viewBox="0 0 120 30" width="100" height="30" fill="currentColor" class="tech-logo"><path d="M6.5 4.5l5.5 3 5.5-3-5.5-3-5.5 3zm11 11l-5.5 3-5.5-3v-6l5.5 3 5.5-3v6z"/><text x="28" y="19" font-family="Inter" font-weight="800" font-size="16">Airtable</text></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="card-content">
+                            <span class="cell-label">AUTOMATION</span>
+                            <div class="logo-wrapper">
+                                <svg viewBox="0 0 100 30" width="90" height="30" fill="currentColor" class="tech-logo"><circle cx="6" cy="12" r="3"/><circle cx="18" cy="12" r="3"/><path d="M9 12h6" stroke="currentColor" stroke-width="2"/><text x="30" y="19" font-family="Inter" font-weight="800" font-size="20">make</text></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="card-content">
+                            <span class="cell-label">VISUAL DEV</span>
+                            <div class="logo-wrapper">
+                                <svg viewBox="0 0 140 30" width="130" height="30" fill="currentColor" class="tech-logo">
+                                    <path d="M29.5 8L22 22h-5l-4-9-4 9H4l-4-9h4l2 5 3.5-8h5l4 9 5.5-14zM42 22.5c-4.5 0-8-3-8-7.5s3.5-7.5 8-7.5 7 2.5 7.5 6h-11c.5 2 2.5 3.5 4.5 3.5 2 0 3.5-1 4.5-2.5h4.5c-1.5 4-5 6-8 6zm0-11.5c-2 0-3.5 1.5-4 3.5h7.5c-.5-2-2-3.5-3.5-3.5z"/>
+                                    <text x="40" y="21" font-family="Inter" font-weight="800" font-size="19" letter-spacing="-0.5">webflow</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="card-content">
+                            <span class="cell-label">HEADLESS CMS</span>
+                            <div class="logo-wrapper">
+                                <svg viewBox="0 0 120 30" width="100" height="30" fill="currentColor" class="tech-logo">
+                                    <circle cx="10" cy="15" r="8" fill="none" stroke="currentColor" stroke-width="4"/>
+                                    <text x="26" y="21" font-family="Inter" font-weight="800" font-size="18" letter-spacing="-1">Sanity</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="card-content">
+                            <span class="cell-label">FRONTEND CLOUD</span>
+                            <div class="logo-wrapper">
+                                <svg viewBox="0 0 120 30" width="100" height="30" fill="currentColor" class="tech-logo">
+                                    <polygon points="12,4 24,24 0,24" fill="currentColor"/>
+                                    <text x="32" y="21" font-family="Inter" font-weight="700" font-size="18" letter-spacing="-0.5">Vercel</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="card-content">
+                            <span class="cell-label">FINANCE API</span>
+                            <div class="logo-wrapper">
+                                <svg viewBox="0 0 100 30" width="90" height="30" fill="currentColor" class="tech-logo"><text x="0" y="22" font-family="Inter" font-weight="800" font-size="24" letter-spacing="-1">stripe</text></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="card-content">
+                            <span class="cell-label">RETENTION</span>
+                            <div class="logo-wrapper">
+                                <svg viewBox="0 0 120 30" width="100" height="30" fill="currentColor" class="tech-logo"><text x="0" y="22" font-family="Instrument Serif" font-style="italic" font-weight="400" font-size="28">Klaviyo</text></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="clients-vertical-carousel">
+            <div class="container">
+                <div class="section-header reveal-fade" style="--delay: 0s;">
+                    <div class="header-flex">
+                        <div class="header-title-mobile">
+                            <p class="eyebrow" style="color: #64748b;">{lang === 'en' ? 'OUR SYSTEMS' : 'NUESTROS SISTEMAS'}</p>
+                            <h2 class="section-heading">{lang === 'en' ? 'Engineering' : 'Casos de'} <span class="editorial">{lang === 'en' ? 'Cases.' : 'Ingeniería.'}</span></h2>
+                        </div>
+                        <div class="carousel-nav desktop-only">
+                            <span class="nav-hint">{lang === 'en' ? 'Swipe →' : 'Desliza →'}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-track-wrapper reveal-fade" style="--delay: 0.2s;">
+                <div class="carousel-track">
+                    
+                    <a href="/casos/el-zarco" class="vertical-card squircle">
+                        <div class="card-num-luxury">/01</div>
+                        <div class="card-bg">
+                            <img src="/imgs/el-zarco.svg" alt="El Zarco B2B" class="carousel-image" />
+                        </div>
+                        <div class="card-overlay">
+                            <span class="v-tag">{lang === 'en' ? 'B2B Architecture' : 'Arquitectura B2B'}</span>
+                            <h3>El Zarco</h3>
+                        </div>
+                    </a>
+
+                    <a href="/casos/setnpet" class="vertical-card squircle">
+                        <div class="card-num-luxury">/02</div>
+                        <div class="card-bg">
+                            <img src="/imgs/set-n-pet.svg" alt="Setnpet D2C" class="carousel-image" />
+                        </div>
+                        <div class="card-overlay">
+                            <span class="v-tag">CRO & E-commerce</span>
+                            <h3>Setnpet</h3>
+                        </div>
+                    </a>
+
+                    <a href="/contacto" class="vertical-card cta-vertical squircle">
+                        <div class="cta-inner">
+                            <h3>{lang === 'en' ? 'Your project' : 'Tu proyecto'}<br><span class="editorial" style="color: #bae6fd;">{lang === 'en' ? 'here.' : 'aquí.'}</span></h3>
+                            <span class="btn-text-only">{lang === 'en' ? 'Start architecture' : 'Iniciar arquitectura'}</span>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="services-rows">
+            <div class="container">
+                <div class="section-header reveal-blur" style="--delay: 0s;">
+                    <p class="eyebrow">{lang === 'en' ? 'OUR SERVICES' : 'NUESTROS SERVICIOS'}</p>
+                    <h2 class="section-heading">{lang === 'en' ? 'Applied' : 'Ingeniería'} <span class="editorial">{lang === 'en' ? 'Engineering.' : 'Aplicada.'}</span></h2>
+                </div>
+
+                <div class="rows-wrapper">
+                    <div class="service-row reveal-blur" style="--delay: 0.1s;">
+                        <div class="row-num">/01</div>
+                        <div class="row-content">
+                            <h3>E-commerce Engineering</h3>
+                            <p>{lang === 'en' ? 'We build transactional stores on Shopify Plus and Webflow. We maximize AOV through CRO architecture and native upsell flows.' : 'Construimos tiendas transaccionales en Shopify Plus y Webflow. Maximizamos el AOV mediante arquitectura CRO y flujos nativos de upsell.'}</p>
+                        </div>
+                        <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+                        <div class="animated-border"></div>
+                    </div>
+                    <div class="service-row reveal-blur" style="--delay: 0.2s;">
+                        <div class="row-num">/02</div>
+                        <div class="row-content">
+                            <h3>B2B Digital Architecture</h3>
+                            <p>{lang === 'en' ? 'We digitize wholesale operations. We develop closed B2B portals, dynamic pricing rules, protected catalogs, and ordering systems.' : 'Digitalizamos operaciones mayoristas. Desarrollamos portales B2B cerrados, reglas de precios dinámicos, catálogos protegidos y pedidos.'}</p>
+                        </div>
+                        <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+                        <div class="animated-border"></div>
+                    </div>
+                    <div class="service-row reveal-blur" style="--delay: 0.3s;">
+                        <div class="row-num">/03</div>
+                        <div class="row-content">
+                            <h3>Business Automation</h3>
+                            <p>{lang === 'en' ? 'We eliminate friction and human error. We integrate your E-commerce with your ERP and databases in real time.' : 'Eliminamos la fricción y el error humano. Integramos tu E-commerce con tu ERP y bases de datos en tiempo real.'}</p>
+                        </div>
+                        <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+                        <div class="animated-border"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="protocol-section">
+            <div class="container protocol-grid">
+                
+                <div class="protocol-sticky-col reveal-blur">
+                    <p class="eyebrow">{t('proto.eyebrow')}</p>
+                    <h2 class="section-heading">{t('proto.title')} <br><span class="editorial">{t('proto.title_editorial')}</span></h2>
+                    <p class="protocol-intro">{t('proto.desc')}</p>
+                </div>
+
+                <div class="protocol-timeline">
+                    <div class="timeline-track"></div>
+
+                    <div class="protocol-step reveal-blur" style="--delay: 0.1s;">
+                        <div class="step-node"><div class="node-core"></div></div>
+                        <div class="step-content">
+                            <div class="watermark-num">01</div>
+                            <h4>{lang === 'en' ? 'Audit & Diagnostics' : 'Auditoría y Diagnóstico'}</h4>
+                            <p>{lang === 'en' ? 'We analyze the current infrastructure to identify operational and conversion bottlenecks, plotting a precise friction map.' : 'Analizamos la infraestructura actual para identificar cuellos de botella en la operación y conversión, trazando un mapa de fricción preciso.'}</p>
+                        </div>
+                    </div>
+
+                    <div class="protocol-step reveal-blur" style="--delay: 0.2s;">
+                        <div class="step-node"><div class="node-core"></div></div>
+                        <div class="step-content">
+                            <div class="watermark-num">02</div>
+                            <h4>{lang === 'en' ? 'System Architecture' : 'Arquitectura del Sistema'}</h4>
+                            <p>{lang === 'en' ? 'We design the database logic, API connections, and UX/UI experience aimed at maximizing the average order value.' : 'Diseñamos la lógica de base de datos, conexiones API y experiencia de usuario (UX/UI) orientada a maximizar el valor promedio del pedido.'}</p>
+                        </div>
+                    </div>
+
+                    <div class="protocol-step reveal-blur" style="--delay: 0.3s;">
+                        <div class="step-node"><div class="node-core"></div></div>
+                        <div class="step-content">
+                            <div class="watermark-num">03</div>
+                            <h4>{lang === 'en' ? 'Full-Stack Development' : 'Desarrollo Full-Stack'}</h4>
+                            <p>{lang === 'en' ? 'We write clean, optimized code, assemble the ecosystem, and connect data automation tools so they operate independently.' : 'Escribimos código limpio y optimizado, montamos el ecosistema y conectamos las herramientas de automatización de datos para que operen solas.'}</p>
+                        </div>
+                    </div>
+
+                    <div class="protocol-step reveal-blur" style="--delay: 0.4s;">
+                        <div class="step-node"><div class="node-core"></div></div>
+                        <div class="step-content">
+                            <div class="watermark-num">04</div>
+                            <h4>{lang === 'en' ? 'Deployment & Scaling' : 'Despliegue y Escalado'}</h4>
+                            <p>{lang === 'en' ? 'Production launch with active server and latency monitoring. We leave the systems ready to scale without breaking.' : 'Lanzamiento a producción con monitoreo activo de servidores y latencia. Dejamos los sistemas listos para que escale sin romper la infraestructura.'}</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="cta-integrated">
+            <div class="container">
+                <div class="cta-card-blue cta-squircle texture-noise reveal-blur" style="--delay: 0.2s;">
+                    <div class="cta-inner-flex">
+                        <div class="cta-text-side">
+                            <p class="eyebrow" style="color: #64748b; letter-spacing: 4px;">{lang === 'en' ? 'THE NEXT STEP' : 'EL SIGUIENTE PASO'}</p>
+                            <h2 class="cta-title-luxe">{lang === 'en' ? 'Scale your' : 'Escale su'} <span class="editorial" style="color: #fff;">{lang === 'en' ? 'operation.' : 'operación.'}</span></h2>
+                        </div>
+                        <div class="cta-action-side">
+                            <a href="/contacto" class="btn-glow-blue">
+                                <span>{lang === 'en' ? 'Schedule Diagnostics' : 'Agendar Diagnóstico'}</span>
+                                <div class="glow-effect"></div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <Footer />
+    <WhatsApp />
+</Layout>
+
+<style is:global>
+    *, *::before, *::after { box-sizing: border-box; } 
+    
+    html, body {
+        width: 100%; 
+        position: relative;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    ::selection { background: #0a192f; color: #ffffff; }
+
+    :root {
+        --color-bg: #ffffff;
+        --color-bg-soft: #fcfcfc; 
+        --color-blue-icy: #f4f6f9; 
+        --color-blue-deep: #0a192f;
+        --color-glass-blue: rgba(10, 25, 47, 0.85);
+        
+        --color-text: #050505;
+        --color-text-muted: #555555;
+        --color-border: rgba(0, 0, 0, 0.08); 
+        
+        --font-sans: 'Inter', system-ui, sans-serif;
+        --font-serif: 'Instrument Serif', serif;
+        
+        --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
+        --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+        --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    body { background-color: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); margin: 0; }
+
+    .flouvia-masterpiece { width: 100%; position: relative; overflow-x: clip; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; }
+    .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: #222; }
+    .eyebrow { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
+    
+    .reveal-blur { 
+        opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(8px); 
+        animation: reveal 1s var(--ease-spring) forwards; animation-play-state: paused; animation-delay: var(--delay, 0s); 
+    }
+    .reveal-blur.active { animation-play-state: running; }
+    @keyframes reveal { to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+
+    .reveal-fade { 
+        opacity: 0; transform: translateY(30px) scale(0.98); 
+        animation: revealFade 1s var(--ease-spring) forwards; animation-play-state: paused; animation-delay: var(--delay, 0s); 
+    }
+    .reveal-fade.active { animation-play-state: running; }
+    @keyframes revealFade { to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    .btn-luxe { 
+        position: relative; display: inline-flex; background: var(--color-text); color: #fff; 
+        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem; 
+        font-weight: 600; transition: all 0.5s var(--ease-spring); overflow: hidden; justify-content: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 10px 20px rgba(0,0,0,0.08);
+    }
+    .btn-luxe span { position: relative; z-index: 2; }
+    .btn-shimmer { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent); transform: skewX(-20deg); transition: 0s; z-index: 1;}
+    .btn-luxe:hover { transform: translateY(-4px); box-shadow: 0 6px 12px rgba(0,0,0,0.08), 0 15px 30px rgba(0,0,0,0.15); }
+    .btn-luxe:active { transform: scale(0.95); box-shadow: 0 2px 4px rgba(0,0,0,0.04); transition: 0.1s;}
+
+    .squircle { border-radius: 24px; transform: translateZ(0); overflow: hidden; }
+    .cta-squircle { border-radius: 32px; transform: translateZ(0); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
+</style>
+
+<style>
+    /* ==========================================================
+       ESCRITORIO
+       ========================================================== */
+    .hero-grand { padding: 13rem 0 7rem 0; min-height: 80vh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
+    .hero-text-zone { transition: transform 0.1s ease-out, opacity 0.1s ease-out; }
+    .hero-title { font-size: clamp(3.2rem, 7vw, 6.8rem); line-height: 0.85; font-weight: 800; letter-spacing: -3px; margin-bottom: 4rem; }
+    .title-bold { display: inline; }
+    .title-serif { display: inline; font-size: 105%; }
+
+    .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem; }
+    .hero-desc { font-size: 1.15rem; color: var(--color-text-muted); max-width: 500px; line-height: 1.5; margin: 0; }
+
+    /* ==========================================================
+       2. TECNOLOGÍA
+       ========================================================== */
+    .tech-spotlight { padding: 8rem 0; background: var(--color-bg); }
+    .tech-spotlight .partners-header { margin-bottom: 4rem; }
+    .section-heading { font-size: clamp(2.5rem, 5vw, 3.8rem); font-weight: 800; letter-spacing: -2px; margin: 0 0 0.5rem 0; line-height: 1; }
+    .section-sub { font-size: 1.05rem; color: var(--color-text-muted); margin: 0; line-height: 1.5;}
+    
+    .spotlight-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    
+    .tech-card { 
+        position: relative; background: #f5f5f7; border-radius: 24px; overflow: hidden;
+        min-height: 180px; border: 1px solid rgba(0,0,0,0.03);
+        transition: transform 0.6s var(--ease-spring), box-shadow 0.6s var(--ease-smooth), background 0.4s var(--ease-smooth);
+    }
+    
+    .tech-card::before {
+        content: ""; position: absolute; top: var(--mouse-y); left: var(--mouse-x);
+        transform: translate(-50%, -50%); width: 400px; height: 400px;
+        background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 50%);
+        opacity: 0; transition: opacity 0.3s ease; z-index: 0; pointer-events: none;
+    }
+    
+    .tech-card:hover { 
+        background: var(--color-glass-blue); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        transform: translateY(-6px) scale(1.02); 
+        box-shadow: 0 25px 50px rgba(10,25,47,0.2), inset 0 1px 0 rgba(255,255,255,0.1); 
+        border-color: transparent;
+    }
+    .tech-card:hover::before { opacity: 1; }
+
+    .card-content { position: relative; z-index: 1; padding: 2rem 1.8rem; display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
+    .cell-label { font-size: 0.6rem; font-weight: 800; letter-spacing: 1.5px; color: #999; margin-bottom: 2rem; transition: color 0.4s var(--ease-smooth);}
+    .logo-wrapper { margin-top: auto; display: flex; align-items: flex-end;}
+    
+    .tech-logo { color: var(--color-text); opacity: 0.5; filter: grayscale(100%); transition: all 0.5s var(--ease-spring); }
+    .tech-card:hover .cell-label { color: rgba(255,255,255,0.6); }
+    .tech-card:hover .tech-logo { color: #ffffff; opacity: 1; filter: grayscale(0%); transform: scale(1.05) translateY(-2px); }
+
+    /* ==========================================================
+       3. CARRUSEL CASOS
+       ========================================================== */
+    .clients-vertical-carousel { 
+        padding: calc(9rem - 25px) 0 calc(8rem - 25px) 0; 
+        background-color: var(--color-blue-icy); 
+    }
+    .header-flex { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; }
+    .nav-hint { font-size: 0.75rem; font-weight: 700; color: #64748b; border: 1px solid rgba(0,0,0,0.08); padding: 8px 16px; border-radius: 50px; background: rgba(255,255,255,0.5); white-space: nowrap;}
+
+    .carousel-track-wrapper { 
+        width: 100%; overflow-x: auto; padding: 4rem max(5%, calc((100vw - 1200px) / 2)); margin-top: -2rem; 
+        scroll-snap-type: x mandatory; scrollbar-width: none;
+    }
+    .carousel-track-wrapper::-webkit-scrollbar { display: none; }
+    .carousel-track { display: flex; gap: 2.5rem; width: max-content; align-items: center; }
+    
+    .vertical-card { 
+        width: 400px; height: 540px; scroll-snap-align: center; position: relative; 
+        text-decoration: none; border: 1px solid rgba(0,0,0,0.05); 
+        transition: all 0.5s var(--ease-smooth); z-index: 1;
+    }
+    
+    @media (hover: hover) {
+        .carousel-track:hover .vertical-card { 
+            transform: scale(0.85); opacity: 0.5; 
+        }
+        .carousel-track .vertical-card:hover { 
+            transform: scale(1.08) translateY(-10px); 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(255,255,255,0.2); 
+            opacity: 1; z-index: 10; 
+        }
+    }
+    
+    .card-num-luxury { position: absolute; top: 1.5rem; left: 2rem; font-family: var(--font-serif); font-style: italic; font-size: 1.8rem; color: #fff; opacity: 0.6; z-index: 3; letter-spacing: -1px; transition: 0.5s var(--ease-spring);}
+    .vertical-card:hover .card-num-luxury { opacity: 1; transform: translateX(5px); }
+
+    .card-bg { position: absolute; width: 100%; height: 100%; background: #eaeaea; display: flex; align-items: center; justify-content: center; z-index: 1; overflow: hidden; border-radius: inherit;}
+    .placeholder-text { font-size: 0.7rem; font-weight: 700; color: #aaa; letter-spacing: 1px; }
+    
+    .carousel-image { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease-spring); z-index: 1;}
+    .vertical-card:hover .carousel-image { transform: scale(1.08); }
+
+    .card-overlay { position: absolute; bottom: 0; width: 100%; padding: 4rem 2.5rem 2.5rem 2.5rem; background: linear-gradient(transparent, rgba(0,0,0,0.85)); color: #fff; transition: transform 0.5s var(--ease-smooth); z-index: 2;}
+    .card-overlay h3 { font-size: 2rem; font-weight: 800; margin: 0; letter-spacing: -0.5px;}
+    .v-tag { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: #ccc; letter-spacing: 2px;}
+    
+    .cta-vertical { background: var(--color-blue-deep); display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; }
+    .cta-inner h3 { font-size: 2.2rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -1px;}
+    .btn-text-only { font-size: 0.9rem; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 4px; transition: 0.3s;}
+    .cta-vertical:hover .btn-text-only { border-color: #fff; }
+
+    /* ==========================================================
+       4. SERVICIOS 
+       ========================================================== */
+    .services-rows { padding: 8rem 0 4rem 0; background: var(--color-bg); }
+    .rows-wrapper { margin-top: 5rem; border-top: 1px solid var(--color-border); }
+    
+    .service-row { 
+        display: grid; grid-template-columns: 60px 1fr auto; gap: 4rem; 
+        padding: 4rem 0; position: relative; cursor: pointer; align-items: center; 
+        transition: all 0.5s var(--ease-smooth); 
+    }
+    
+    .service-row::before { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: var(--color-border); }
+
+    .animated-border {
+        position: absolute; bottom: 0; left: 0; width: 0%; height: 1px; background: #000;
+        transition: width 0.7s var(--ease-spring); z-index: 2;
+    }
+
+    .row-num { font-size: 0.85rem; font-weight: 700; color: #ccc; transition: 0.4s; }
+    .row-content h3 { font-size: 2.4rem; font-weight: 800; letter-spacing: -1px; margin: 0 0 1rem 0; transition: color 0.5s var(--ease-smooth); }
+    .row-content p { font-size: 1.15rem; color: var(--color-text-muted); line-height: 1.6; margin: 0; max-width: 650px; }
+    
+    .arrow-circle { 
+        width: 50px; height: 50px; border: 1px solid var(--color-border); border-radius: 50%; 
+        display: flex; align-items: center; justify-content: center; transition: all 0.6s var(--ease-spring); 
+    }
+    
+    .service-row:hover .animated-border { width: 100%; }
+    .service-row:hover .row-num { color: #000; transform: translateX(5px); }
+    .service-row:hover .arrow-circle { background: transparent; color: #000; border-color: #000; transform: translate(6px, -6px); }
+
+    /* ==========================================================
+       5. PROTOCOLO 
+       ========================================================== */
+    .protocol-section { padding: 7rem 0 8rem 0; background: var(--color-bg-soft); } 
+    
+    .protocol-grid { 
+        display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; 
+        align-items: flex-start; 
+        position: relative;
+    }
+
+    .protocol-sticky-col { 
+        position: -webkit-sticky; 
+        position: sticky; 
+        top: 140px; 
+        height: max-content; 
+    }
+    
+    .protocol-intro { font-size: 1.2rem; color: var(--color-text-muted); line-height: 1.6; margin-top: 1.5rem; max-width: 400px; }
+
+    .protocol-timeline { 
+        position: relative; display: flex; flex-direction: column; 
+        gap: 6rem; 
+        padding-left: 2rem;
+    }
+
+    .timeline-track {
+        position: absolute; top: 10px; bottom: 10px; 
+        left: calc(2rem + 11px); 
+        width: 1px; background: rgba(0,0,0,0.08); z-index: 1;
+    }
+
+    .protocol-step { 
+        position: relative; z-index: 2; display: flex; align-items: flex-start; gap: 3rem; 
+        cursor: default; transition: all 0.4s var(--ease-smooth);
+    }
+
+    .step-node {
+        width: 24px; height: 24px; border-radius: 50%; background: var(--color-bg-soft);
+        border: 1px solid rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0; transition: all 0.5s var(--ease-spring);
+    }
+    .node-core { width: 6px; height: 6px; border-radius: 50%; background: transparent; transition: all 0.5s var(--ease-spring); }
+
+    .step-content { position: relative; padding-top: 2px; }
+    
+    .watermark-num {
+        position: absolute; top: -35px; left: -15px;
+        font-family: var(--font-serif); font-style: italic; font-size: 6rem; line-height: 1;
+        color: rgba(0,0,0,0.03); font-weight: 400; letter-spacing: -4px;
+        pointer-events: none; transition: all 0.6s var(--ease-spring); z-index: -1;
+    }
+
+    .step-content h4 { font-size: 1.6rem; font-weight: 800; margin: 0 0 0.8rem 0; letter-spacing: -0.5px; transition: color 0.4s ease;}
+    .step-content p { font-size: 1.1rem; color: var(--color-text-muted); margin: 0; max-width: 500px; line-height: 1.6;}
+
+    .protocol-step:hover { transform: translateX(10px); }
+    .protocol-step:hover .step-node { border-color: var(--color-blue-deep); transform: scale(1.2); }
+    .protocol-step:hover .node-core { background: var(--color-blue-deep); }
+    .protocol-step:hover .watermark-num { color: rgba(0,0,0,0.06); transform: translateX(10px); }
+    .protocol-step:hover h4 { color: var(--color-blue-deep); }
+
+    /* ==========================================================
+       6. CTA
+       ========================================================== */
+    .cta-integrated { padding: 0 0 8rem 0; background: var(--color-bg-soft); border: none; } 
+    
+    .cta-card-blue { 
+        background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%);
+        padding: 5.5rem 6rem; box-shadow: 0 20px 40px rgba(5,11,20,0.15), 0 50px 100px rgba(5,11,20,0.25); 
+        transition: transform 0.6s var(--ease-spring); position: relative;
+    }
+    
+    .texture-noise::before {
+        content: ""; position: absolute; inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        opacity: 0.04; mix-blend-mode: overlay; pointer-events: none; border-radius: inherit;
+    }
+
+    .cta-card-blue:hover { transform: scale(1.02); }
+    .cta-inner-flex { display: flex; justify-content: space-between; align-items: center; gap: 3rem; position: relative; z-index: 2;}
+    .cta-text-side { flex: 1; }
+    .cta-title-luxe { font-size: clamp(2.5rem, 4vw, 3.8rem); font-weight: 800; color: #fff; line-height: 1.1; letter-spacing: -1.5px; margin: 0; }
+    
+    .btn-glow-blue { 
+        position: relative; background: #fff; color: var(--color-blue-deep); 
+        padding: 20px 44px; border-radius: 100px; text-decoration: none; font-size: 1.05rem; font-weight: 700; overflow: hidden; 
+        transition: 0.5s var(--ease-spring); display: inline-flex; align-items: center; justify-content: center; white-space: nowrap;
+        box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 4px 6px rgba(255,255,255,0.05), 0 10px 20px rgba(255,255,255,0.1);
+    }
+    .btn-glow-blue span { position: relative; z-index: 2; }
+    .btn-glow-blue:hover { transform: translateY(-4px); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 10px 20px rgba(255,255,255,0.1), 0 20px 40px rgba(255,255,255,0.2); }
+    .btn-glow-blue:active { transform: scale(0.96); transition: 0.1s; }
+
+    @media (max-width: 1024px) {
+        .hero-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; }
+        .desktop-only { display: none; }
+        .protocol-grid { grid-template-columns: 1fr; gap: 3rem; }
+        .protocol-sticky-col { position: relative; top: 0; padding-right: 0; height: auto; }
+        .protocol-timeline { padding-left: 0; gap: 3rem; }
+        .timeline-track { left: 11px; } 
+    }
+
+
+    /* ==========================================================
+       MÓVIL
+       ========================================================== */
+    @media (max-width: 768px) {
+        .hero-grand { padding-top: 11rem; padding-bottom: 4rem; min-height: auto; text-align: center; }
+        .hero-content { display: flex; flex-direction: column; align-items: center; }
+        .hero-title { display: flex; flex-direction: column; gap: 0; margin-bottom: 2.5rem; }
+        .title-bold { display: block; font-size: 11.5vw; letter-spacing: -1.8px; line-height: 0.95; margin-bottom: -5px; }
+        .title-serif { display: block; font-size: 12.2vw; font-weight: 300; letter-spacing: -0.5px; line-height: 0.95; }
+        .hero-bottom { flex-direction: column; align-items: center; gap: 2.5rem; text-align: center; border-top: none; padding-top: 0;}
+        .hero-desc { font-size: 1.1rem; padding: 0 5%; max-width: 95%; margin: 0 auto; line-height: 1.6;}
+        .hero-action { width: 100%; padding: 0 5%; }
+        .btn-luxe { width: 100%; padding: 18px 0; font-size: 1.05rem;}
+
+        /* TECNOLOGÍA */
+        .tech-spotlight { padding: 4rem 0; overflow: hidden; width: 100%;}
+        .spotlight-grid { 
+            display: flex; overflow-x: auto; scroll-snap-type: x mandatory; 
+            gap: 16px; padding: 1rem 5% 1rem 5%; padding-right: 25%;
+            scrollbar-width: none;
+        }
+        .spotlight-grid::-webkit-scrollbar { display: none; }
+        .tech-card { min-width: 260px; scroll-snap-align: center; border-radius: 20px; padding: 2rem 1.5rem; min-height: 160px; }
+        .tech-card::before { display: none; } 
+        .card-content { padding: 0; }
+        .cell-label { margin-bottom: 1.5rem; }
+        .tech-logo { width: auto; height: 28px; opacity: 1; filter: grayscale(0%); }
+        .tech-card:active { background: var(--color-glass-blue); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transform: scale(0.96); border-color: rgba(255,255,255,0.1); transition: 0.1s; }
+        .tech-card:active .cell-label { color: rgba(255,255,255,0.7); }
+        .tech-card:active .tech-logo { color: #ffffff; transform: translateY(0); }
+
+        /* CARRUSEL CASOS */
+        .clients-vertical-carousel { 
+            padding: calc(5rem - 25px) 0; 
+            overflow: hidden; width: 100%; 
+        }
+        .header-title-mobile h2 { font-size: 2.4rem; margin-bottom: 1.5rem; letter-spacing: -1px;}
+        
+        .carousel-track-wrapper { 
+            padding: 3rem 10vw; 
+            scroll-padding-left: 10vw; 
+            scroll-behavior: smooth; width: 100%; margin-top: 0; 
+            scroll-snap-type: x mandatory;
+        }
+        .carousel-track { gap: 16px; }
+        
+        .vertical-card { 
+            width: 80vw; 
+            height: 60vh; max-height: 480px;
+            scroll-snap-align: center; 
+            transform: scale(0.85); 
+            opacity: 0.5;
+            transition: transform 0.5s var(--ease-ios), opacity 0.5s var(--ease-ios); 
+            border: 1px solid rgba(0,0,0,0.05); transform-origin: center center;
+        }
+        
+        .vertical-card.is-centered { 
+            transform: scale(1.05); 
+            opacity: 1; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15); z-index: 2; 
+        }
+        
+        .card-num-luxury { font-size: 1.4rem; top: 1rem; left: 1.5rem; }
+        .card-overlay { padding: 3rem 2rem 2rem 2rem; background: linear-gradient(transparent, rgba(0,0,0,0.9));}
+
+        /* SERVICIOS */
+        .services-rows { padding: 4rem 0; }
+        .rows-wrapper { margin-top: 2.5rem; }
+        .service-row { grid-template-columns: 25px 1fr 35px; gap: 1.5rem; padding: 2.5rem 0; margin: 0; }
+        .row-num { display: block; font-size: 0.8rem; padding-top: 5px; color: #aaa;}
+        .row-content h3 { font-size: 1.6rem; margin-bottom: 0.8rem; letter-spacing: -0.5px;}
+        .row-content p { font-size: 1rem; }
+        .row-action { display: flex; align-items: flex-start; padding-top: 2px;}
+        .arrow-circle { width: 40px; height: 40px; border-color: rgba(0,0,0,0.1);}
+        .arrow-circle svg { width: 16px; height: 16px; }
+        .service-row:active { transform: scale(0.98); transition: 0.1s;}
+        .service-row:active .animated-border { width: 100%; transition: 0.2s; }
+        .service-row:active .arrow-circle { background: #000; color: #fff; border-color: #000; transform: rotate(-45deg); }
+
+        /* PROTOCOLO */
+        .protocol-section { padding: 5rem 0;}
+        .protocol-step { gap: 1.5rem; }
+        .protocol-step:hover { transform: translateX(0); } 
+        .step-node { width: 20px; height: 20px; }
+        .watermark-num { font-size: 4rem; top: -20px; left: -10px; }
+        .step-content h4 { font-size: 1.4rem; }
+
+        /* CTA */
+        .cta-integrated { padding: 0 5% 6rem 5%; }
+        .cta-card-blue { padding: 5rem 2rem; box-shadow: 0 20px 40px rgba(5,11,20,0.25), inset 0 1px 0 rgba(255,255,255,0.08);}
+        .cta-inner-flex { flex-direction: column; align-items: center; gap: 3rem; width: 100%;}
+        .cta-text-side { display: flex; flex-direction: column; align-items: center; }
+        .cta-title-luxe { font-size: 3rem; text-align: center; line-height: 1; letter-spacing: -1.5px; margin-top: 0.5rem;}
+        .cta-action-side { width: 100%; }
+        .btn-glow-blue { width: 100%; padding: 20px 0; justify-content: center; font-size: 1.05rem; box-shadow: 0 10px 20px rgba(255,255,255,0.05);}
+    }
+</style>
+
+<script>
+    const reveal = () => {
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); 
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal-blur, .reveal-fade').forEach(el => observer.observe(el));
+    }
+    reveal();
+
+    window.addEventListener('scroll', () => {
+        if (window.innerWidth > 768) { 
+            const scroll = window.scrollY;
+            const heroText = document.getElementById('hero-parallax');
+            if (heroText && scroll < 600) {
+                heroText.style.transform = `translateY(${scroll * 0.4}px)`;
+                heroText.style.opacity = 1 - (scroll * 0.0025);
+            }
+        }
+    });
+
+    if (window.innerWidth > 768) {
+        document.querySelectorAll('.tech-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = (e as MouseEvent).clientX - rect.left;
+                const y = (e as MouseEvent).clientY - rect.top;
+                (card as HTMLElement).style.setProperty('--mouse-x', `${x}px`);
+                (card as HTMLElement).style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    }
+
+    const initCarouselPhysics = () => {
+        const track = document.querySelector('.carousel-track-wrapper');
+        const cards = document.querySelectorAll('.vertical-card');
+        
+        if(!track || cards.length === 0) return;
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    cards.forEach(c => c.classList.remove('is-centered'));
+                    entry.target.classList.add('is-centered');
+                }
+            });
+        }, { 
+            root: track, 
+            threshold: 0.5 
+        });
+
+        cards.forEach(card => observer.observe(card));
+        
+        setTimeout(() => {
+            if(cards[0]) cards[0].classList.add('is-centered');
+        }, 100);
+    };
+
+    if (window.innerWidth <= 768) {
+        initCarouselPhysics();
+    }
+</script>

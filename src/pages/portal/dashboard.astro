@@ -1,0 +1,36 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { SignedIn, UserButton } from '@clerk/astro/components';
+import { clientProjects } from '../../lib/projects';
+
+// Aquí leemos quién es el usuario
+const { sessionClaims } = await Astro.locals.auth();
+const email = sessionClaims?.email as string;
+const project = clientProjects[email];
+---
+<Layout title="Flouvia | Dashboard">
+    <SignedIn>
+        <div style="background: #050b14; min-height: 100vh; color: white; padding: 5%;">
+            <nav style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5rem;">
+                <span class="mono-font">FLOUVIA // PORTAL</span>
+                <UserButton />
+            </nav>
+
+            {project ? (
+                <div>
+                    <p class="eyebrow">PROYECTO ACTIVO</p>
+                    <h1 style="font-size: 4rem;">{project.name}</h1>
+                    <div style="margin-top: 3rem; padding: 2rem; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;">
+                        <h3>Estatus: {project.phase}</h3>
+                        <p>Próximo paso: {project.nextMilestone}</p>
+                    </div>
+                </div>
+            ) : (
+                <div style="text-align: center; margin-top: 10rem;">
+                    <h1 class="editorial">Acceso no autorizado.</h1>
+                    <p>Tu correo {email} no tiene un proyecto asignado.</p>
+                </div>
+            )}
+        </div>
+    </SignedIn>
+</Layout>
