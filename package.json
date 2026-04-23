@@ -14,6 +14,6 @@
   "dependencies": {
     "@astrojs/netlify": "^7.0.8",
     "@clerk/astro": "^3.0.19",
-    "astro": "^6.1.7"
+    "astro": "6.1.2"
   }
 }
