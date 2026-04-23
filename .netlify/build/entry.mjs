@@ -1,4 +1,4 @@
-import { c } from "./chunks/ssr-function_WW0EI8fa.mjs";
+import { c } from "./chunks/ssr-function_Cuqftge2.mjs";
 export {
   c as createHandler
 };
