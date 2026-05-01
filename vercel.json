@@ -1,17 +1,52 @@
 {
   "redirects": [
     {
+      "source": "/portal",
+      "has": [{ "type": "host", "value": "flouvia.com" }],
+      "destination": "https://os.flouvia.com/login",
+      "permanent": false
+    },
+    {
       "source": "/portal/:path*",
       "has": [{ "type": "host", "value": "flouvia.com" }],
       "destination": "https://os.flouvia.com/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/en/portal",
+      "has": [{ "type": "host", "value": "flouvia.com" }],
+      "destination": "https://os.flouvia.com/en/login",
+      "permanent": false
+    },
+    {
+      "source": "/en/portal/:path*",
+      "has": [{ "type": "host", "value": "flouvia.com" }],
+      "destination": "https://os.flouvia.com/en/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/portal",
+      "has": [{ "type": "host", "value": "os.flouvia.com" }],
+      "destination": "/login",
+      "permanent": false
+    },
+    {
+      "source": "/portal/:path*",
+      "has": [{ "type": "host", "value": "os.flouvia.com" }],
+      "destination": "/:path*",
       "permanent": false
     }
   ],
   "rewrites": [
     {
-      "source": "/:path*",
+      "source": "/",
       "has": [{ "type": "host", "value": "os.flouvia.com" }],
-      "destination": "/portal/:path*"
+      "destination": "/portal/login"
+    },
+    {
+      "source": "/:path((?!_astro|api|favicon|robots|portal|en/portal|sitemap).+)",
+      "has": [{ "type": "host", "value": "os.flouvia.com" }],
+      "destination": "/portal/:path"
     }
   ]
 }

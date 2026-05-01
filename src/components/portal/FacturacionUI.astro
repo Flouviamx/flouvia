@@ -218,12 +218,12 @@ const data = {
     background: #ffffff;
     color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
-    padding: 4.5rem 0 8rem;
+    padding: 2.8rem 0 5rem;
     min-height: 100vh;
   }
 
   .os-wrap {
-    max-width: 1100px;
+    max-width: 1180px;
     margin: 0 auto;
     padding: 0 5%;
   }
@@ -288,7 +288,7 @@ const data = {
   .fact-rule {
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent);
-    margin: 1.6rem 0 2.8rem;
+    margin: 1.4rem 0 2.2rem;
     transform-origin: left center;
     transform: scaleX(0);
   }
@@ -297,20 +297,21 @@ const data = {
      TITLE + SUBTITLE
      ===================================================== */
   .fact-title {
-    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    font-size: clamp(2.2rem, 4.4vw, 3.6rem);
     font-weight: 600;
-    letter-spacing: -0.045em;
-    line-height: 1.06;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
     color: var(--text);
-    margin: 0 0 0.85rem;
+    margin: 0 0 0.7rem;
     perspective: 600px;
   }
 
   .fact-sub {
-    font-size: 1.05rem;
+    font-size: 1rem;
     color: var(--muted);
-    margin: 0 0 3rem;
+    margin: 0 0 2.2rem;
     font-weight: 400;
+    max-width: 520px;
   }
 
   /* =====================================================
@@ -319,7 +320,7 @@ const data = {
   .fact-grid {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    gap: 1.4rem;
+    gap: 1rem;
   }
 
   /* =====================================================
@@ -329,17 +330,17 @@ const data = {
     position: relative;
     overflow: hidden;
     background: #ffffff;
-    border-radius: 28px;
+    border-radius: 22px;
     border: 1px solid var(--border);
     box-shadow: var(--shadow);
-    padding: 2.6rem;
+    padding: 1.9rem 2rem;
     display: flex;
     flex-direction: column;
     transition: box-shadow 0.45s var(--ease), transform 0.45s var(--ease);
   }
   .os-card:hover {
     box-shadow: var(--shadow-up);
-    transform: translateY(-4px);
+    transform: translateY(-3px);
   }
 
   /* Spotlight glow */
@@ -397,7 +398,9 @@ const data = {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2.4rem;
+    margin-bottom: 1.8rem;
+    gap: 0.8rem;
+    flex-wrap: wrap;
   }
   .hero-eyebrow .eyebrow-label {
     margin-bottom: 0;
@@ -435,22 +438,23 @@ const data = {
   }
 
   .fact-amount-currency {
-    font-size: clamp(2.2rem, 4vw, 3.4rem);
-    font-weight: 600;
-    color: var(--text);
-    letter-spacing: -0.03em;
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: -0.02em;
   }
 
   .fact-amount-num {
-    font-size: clamp(3.5rem, 6vw, 5.5rem);
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
     font-weight: 600;
-    letter-spacing: -0.05em;
+    letter-spacing: -0.045em;
     color: var(--text);
     font-variant-numeric: tabular-nums;
+    line-height: 1;
   }
 
   .fact-amount-code {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 500;
     color: var(--muted);
     margin-left: 0.3rem;
@@ -458,16 +462,16 @@ const data = {
   }
 
   .hero-next-label {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--muted);
     font-weight: 500;
-    margin: 0 0 2.2rem;
+    margin: 0 0 1.6rem;
   }
 
   .hero-actions {
     display: flex;
     align-items: center;
-    gap: 1.8rem;
+    gap: 1.4rem;
     flex-wrap: wrap;
     margin-top: auto;
   }
@@ -475,22 +479,23 @@ const data = {
   .fact-manage-btn {
     display: inline-flex;
     align-items: center;
-    gap: 9px;
-    background: #0a192f;
+    gap: 8px;
+    background: var(--text);
     color: #ffffff;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     font-weight: 600;
-    padding: 0.95rem 2rem;
+    padding: 0.85rem 1.6rem;
     border-radius: 100px;
     text-decoration: none;
     border: none;
     cursor: pointer;
-    transition: background 0.2s var(--ease), transform 0.1s;
-    box-shadow: 0 6px 20px rgba(10,25,47,0.2);
+    transition: background 0.2s var(--ease), transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 4px 14px rgba(10,14,26,0.18);
     will-change: transform;
   }
   .fact-manage-btn:hover {
-    background: #0d2240;
+    background: #1a2233;
+    box-shadow: 0 8px 22px rgba(10,14,26,0.25);
   }
 
   .haptic:active {
@@ -519,17 +524,18 @@ const data = {
   .apple-card-visual {
     position: relative;
     width: 100%;
-    height: 220px;
+    aspect-ratio: 1.6 / 1;
+    max-height: 200px;
     background: linear-gradient(140deg, #1a1a2e 0%, #080808 50%, #0f0f14 100%);
-    border-radius: 22px;
-    padding: 1.8rem;
+    border-radius: 18px;
+    padding: 1.5rem 1.6rem;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     box-shadow:
-      0 32px 64px -16px rgba(0,0,0,0.4),
-      0 8px 24px rgba(0,0,0,0.25),
+      0 24px 48px -16px rgba(0,0,0,0.4),
+      0 6px 18px rgba(0,0,0,0.22),
       inset 0 1px 0 rgba(255,255,255,0.06);
     flex-shrink: 0;
   }
@@ -622,24 +628,30 @@ const data = {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.4rem 0;
+    padding: 1.1rem 0;
     border-bottom: 1px solid rgba(0,0,0,0.05);
+    gap: 0.8rem;
   }
   .inv-row:last-child {
     border-bottom: none;
     padding-bottom: 0;
   }
+  .inv-row:first-child {
+    padding-top: 0.4rem;
+  }
 
   .inv-left {
     display: flex;
     align-items: center;
-    gap: 1.1rem;
+    gap: 1rem;
+    min-width: 0;
+    flex: 1;
   }
 
   .inv-icon-box {
-    width: 44px;
-    height: 44px;
-    border-radius: 14px;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
     background: rgba(0,0,0,0.03);
     border: 1px solid rgba(0,0,0,0.05);
     display: flex;
@@ -696,8 +708,8 @@ const data = {
   }
 
   .inv-dl-btn {
-    width: 44px;
-    height: 44px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     border: 1px solid var(--border);
     background: #ffffff;
@@ -714,7 +726,7 @@ const data = {
     background: var(--text);
     color: #ffffff;
     border-color: var(--text);
-    transform: rotate(-8deg) scale(1.1);
+    transform: rotate(-6deg) scale(1.08);
   }
 
   /* =====================================================
@@ -724,22 +736,36 @@ const data = {
     .card-hero,
     .card-cc { grid-column: span 12; }
 
+    .apple-card-visual {
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
     .hero-actions {
       flex-direction: column;
-      align-items: flex-start;
+      align-items: stretch;
+      gap: 1rem;
     }
 
     .fact-manage-btn {
       width: 100%;
       justify-content: center;
     }
+
+    .hero-stripe-note {
+      justify-content: center;
+    }
   }
 
   @media (max-width: 560px) {
-    .os-card { padding: 1.8rem; }
+    .os-page { padding: 2rem 0 4rem; }
+    .os-card { padding: 1.5rem 1.4rem; border-radius: 18px; }
 
-    .inv-right { gap: 0.8rem; }
+    .inv-right { gap: 0.7rem; }
     .inv-paid-pill { display: none; }
+    .inv-icon-box { width: 36px; height: 36px; border-radius: 10px; }
+    .inv-dl-btn { width: 34px; height: 34px; }
+    .fact-secure-badge { font-size: 0.62rem; padding: 5px 11px; }
   }
 </style>
 
