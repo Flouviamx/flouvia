@@ -1,0 +1,545 @@
+---
+// src/components/servicios/PlantillaServicioDetalle.astro
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../Navbar.astro';
+import Footer from '../Footer.astro';
+import WhatsApp from '../WhatsApp.astro';
+
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+interface Props {
+  serviceId: 1 | 2 | 3 | 4;
+}
+
+const { serviceId } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const isEn = lang === 'en';
+
+const n = String(serviceId) as '1' | '2' | '3' | '4';
+
+const cat   = t(`serv.${n}.cat` as any);
+const title = t(`serv.${n}.title` as any);
+const desc  = t(`serv.${n}.desc` as any);
+const btn   = t(`serv.${n}.btn` as any);
+
+const caps = [
+  { title: t(`serv.${n}.d1.t` as any), desc: t(`serv.${n}.d1.d` as any) },
+  { title: t(`serv.${n}.d2.t` as any), desc: t(`serv.${n}.d2.d` as any) },
+  { title: t(`serv.${n}.d3.t` as any), desc: t(`serv.${n}.d3.d` as any) },
+  { title: t(`serv.${n}.d4.t` as any), desc: t(`serv.${n}.d4.d` as any) },
+];
+
+const steps = [
+  t(`serv.${n}.p1` as any),
+  t(`serv.${n}.p2` as any),
+  t(`serv.${n}.p3` as any),
+  t(`serv.${n}.p4` as any),
+];
+
+const stack = [
+  t(`serv.${n}.t1` as any),
+  t(`serv.${n}.t2` as any),
+  t(`serv.${n}.t3` as any),
+];
+
+const servicesLink = isEn ? '/en/servicios' : '/servicios';
+const contactLink  = isEn ? '/en/contacto'  : '/contacto';
+
+const pageTitle = `Flouvia | ${title.replace('.', '')}`;
+---
+
+<Layout title={pageTitle}>
+  <Navbar />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <main class="flouvia-masterpiece sd-page">
+
+    <!-- ══════════════ HERO ══════════════ -->
+    <section class="sd-hero">
+      <div class="container">
+
+        <a href={servicesLink} class="sd-back reveal-blur" style="--delay:0s;">
+          {t('serv.page.back')}
+        </a>
+
+        <div class="sd-hero-content">
+          <p class="sd-cat reveal-blur" style="--delay:0.1s;">{cat}</p>
+
+          <h1 class="sd-title reveal-blur" style="--delay:0.2s;" id="sd-title">
+            {title.includes('.') ? (
+              <>
+                <span class="sd-title-plain">{title.split('.')[0]}</span>
+                <span class="editorial sd-title-serif">{title.split('.')[1] ? '.' : ''}</span>
+              </>
+            ) : (
+              <span class="sd-title-plain">{title}</span>
+            )}
+          </h1>
+
+          <div class="sd-hero-bottom reveal-blur" style="--delay:0.35s;">
+            <p class="sd-desc">{desc}</p>
+            <a href={contactLink} class="btn-luxe sd-hero-cta" id="sd-hero-cta">
+              <span>{btn}</span>
+              <div class="btn-shimmer"></div>
+            </a>
+          </div>
+        </div>
+
+        <div class="sd-rule reveal-blur" style="--delay:0.45s;" id="sd-rule"></div>
+      </div>
+    </section>
+
+    <!-- ══════════════ CAPACIDADES ══════════════ -->
+    <section class="sd-caps-section">
+      <div class="container">
+        <p class="eyebrow reveal-blur" style="--delay:0s;">{t('serv.page.capabilities')}</p>
+
+        <div class="sd-caps-grid">
+          {caps.map((cap, i) => (
+            <div class="sd-cap-card reveal-blur" style={`--delay:${0.05 * i}s;`}>
+              <div class="sd-cap-spotlight"></div>
+              <div class="sd-cap-num">{String(i + 1).padStart(2, '0')}</div>
+              <h3 class="sd-cap-title">{cap.title}</h3>
+              <p class="sd-cap-desc">{cap.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════ PROCESO ══════════════ -->
+    <section class="sd-process-section">
+      <div class="container sd-process-grid">
+        <div class="sd-process-left reveal-blur" style="--delay:0s;">
+          <p class="eyebrow">{t('serv.page.process')}</p>
+          <p class="sd-process-intro">
+            {isEn
+              ? 'A structured execution protocol. No improvisation, no surprises.'
+              : 'Protocolo de ejecución estructurado. Sin improvisación, sin sorpresas.'}
+          </p>
+        </div>
+
+        <div class="sd-steps">
+          {steps.map((step, i) => (
+            <div class="sd-step reveal-blur" style={`--delay:${0.1 * i}s;`}>
+              <div class="sd-step-num">
+                <span class="sd-step-n">{String(i + 1).padStart(2, '0')}</span>
+                <div class="sd-step-line"></div>
+              </div>
+              <p class="sd-step-text">{step}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════ TECH STACK ══════════════ -->
+    <section class="sd-stack-section">
+      <div class="container">
+        <p class="eyebrow reveal-blur" style="--delay:0s;">{t('serv.page.stack')}</p>
+        <div class="sd-stack-row reveal-blur" style="--delay:0.1s;">
+          {stack.map(tech => (
+            <span class="sd-tech-badge">{tech}</span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════ CTA ══════════════ -->
+    <section class="sd-cta-section">
+      <div class="container">
+        <div class="sd-cta-card reveal-blur" style="--delay:0.2s;" id="sd-cta-card">
+          <div class="sd-cta-inner">
+            <div class="sd-cta-text">
+              <p class="eyebrow" style="color:#64748b;letter-spacing:4px;">
+                {isEn ? 'THE NEXT STEP' : 'EL SIGUIENTE PASO'}
+              </p>
+              <h2 class="sd-cta-title">
+                {t('serv.page.cta.title')}
+                <span class="editorial"> {isEn ? 'Now.' : 'Ahora.'}</span>
+              </h2>
+              <p class="sd-cta-sub">{t('serv.page.cta.sub')}</p>
+            </div>
+            <a href={contactLink} class="btn-glow-blue sd-cta-btn" id="sd-cta-btn">
+              <span>{t('serv.page.cta.btn')}</span>
+              <div class="glow-effect"></div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+  <WhatsApp />
+</Layout>
+
+<style>
+/* ══════════════════════════════════════════════════════
+   GLOBALS LOCALES
+══════════════════════════════════════════════════════ */
+.sd-page { width: 100%; }
+
+/* ══════════════════════════════════════════════════════
+   HERO
+══════════════════════════════════════════════════════ */
+.sd-hero {
+  padding: 13rem 0 6rem;
+  background: var(--color-bg);
+  position: relative;
+}
+
+.sd-back {
+  display: inline-flex; align-items: center;
+  font-size: 0.78rem; font-weight: 600;
+  color: var(--color-text-muted); text-decoration: none;
+  letter-spacing: 0.01em; margin-bottom: 3rem;
+  transition: color 0.3s, transform 0.3s;
+  border: 1px solid var(--color-border); padding: 8px 16px;
+  border-radius: 100px; gap: 6px;
+}
+.sd-back:hover { color: var(--color-text); transform: translateX(-4px); }
+
+.sd-cat {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em;
+  color: #0055cc; text-transform: uppercase; margin: 0 0 1.4rem;
+}
+
+.sd-title {
+  font-size: clamp(3.5rem, 7.5vw, 7.5rem);
+  font-weight: 800; letter-spacing: -0.045em; line-height: 1;
+  margin: 0 0 3.5rem; overflow: hidden;
+}
+.sd-title-plain { display: inline; color: var(--color-text); }
+.sd-title-serif { font-size: 105%; color: #222; }
+
+.sd-hero-bottom {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem;
+}
+.sd-desc {
+  font-size: 1.15rem; color: var(--color-text-muted);
+  max-width: 540px; line-height: 1.6; margin: 0;
+}
+.sd-hero-cta { flex-shrink: 0; }
+
+.sd-rule {
+  height: 0; margin-top: 0;
+}
+
+/* ══════════════════════════════════════════════════════
+   CAPACIDADES
+══════════════════════════════════════════════════════ */
+.sd-caps-section {
+  padding: 7rem 0;
+  background: var(--color-bg-soft);
+}
+.sd-caps-section .eyebrow { margin-bottom: 3.5rem; }
+
+.sd-caps-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.sd-cap-card {
+  position: relative; overflow: hidden;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: 24px; padding: 2.4rem 2.4rem 2.8rem;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.03),
+    0 2px 4px rgba(0,0,0,0.04),
+    0 8px 20px rgba(0,0,0,0.04);
+  transition: transform 0.5s var(--ease-smooth), box-shadow 0.5s var(--ease-smooth), border-color 0.4s;
+  cursor: default;
+}
+.sd-cap-card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.05),
+    0 4px 10px rgba(0,0,0,0.06),
+    0 20px 40px rgba(0,0,0,0.08);
+  border-color: rgba(0,85,204,0.12);
+}
+
+.sd-cap-spotlight {
+  position: absolute; width: 320px; height: 320px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,85,204,0.06) 0%, transparent 70%);
+  pointer-events: none; transform: translate(-50%,-50%); top: 0; left: 0;
+  opacity: 0; transition: opacity 0.4s;
+}
+.sd-cap-card:hover .sd-cap-spotlight { opacity: 1; }
+
+.sd-cap-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em;
+  color: #0055cc; margin-bottom: 1.8rem;
+}
+.sd-cap-title {
+  font-size: 1.4rem; font-weight: 800; letter-spacing: -0.03em;
+  margin: 0 0 0.9rem; line-height: 1.2; color: var(--color-text);
+}
+.sd-cap-desc {
+  font-size: 1rem; color: var(--color-text-muted); line-height: 1.6; margin: 0;
+}
+
+/* ══════════════════════════════════════════════════════
+   PROCESO
+══════════════════════════════════════════════════════ */
+.sd-process-section { padding: 8rem 0; background: var(--color-bg); }
+
+.sd-process-grid {
+  display: grid; grid-template-columns: 1fr 1.4fr; gap: 6rem; align-items: flex-start;
+}
+.sd-process-left { position: sticky; top: 120px; }
+.sd-process-intro {
+  font-size: 1.1rem; color: var(--color-text-muted); line-height: 1.6;
+  margin-top: 1rem; max-width: 340px;
+}
+
+.sd-steps { display: flex; flex-direction: column; gap: 0; }
+
+.sd-step {
+  display: flex; gap: 2.5rem; align-items: flex-start;
+  padding: 2.2rem 0; border-bottom: 1px solid var(--color-border);
+  transition: transform 0.4s var(--ease-smooth);
+}
+.sd-step:first-child { padding-top: 0; }
+.sd-step:last-child  { border-bottom: none; }
+.sd-step:hover { transform: translateX(8px); }
+
+.sd-step-num { display: flex; flex-direction: column; align-items: center; gap: 0; flex-shrink: 0; }
+.sd-step-n {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem; font-weight: 700; color: #0055cc; letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+.sd-step-line { width: 1px; flex-grow: 1; background: rgba(0,85,204,0.15); margin-top: 8px; min-height: 24px; }
+
+.sd-step-text {
+  font-size: 1.05rem; color: var(--color-text-muted); line-height: 1.6; margin: 0;
+  padding-top: 2px;
+}
+
+/* ══════════════════════════════════════════════════════
+   TECH STACK
+══════════════════════════════════════════════════════ */
+.sd-stack-section { padding: 5rem 0 6rem; background: var(--color-bg-soft); }
+.sd-stack-section .eyebrow { margin-bottom: 2rem; }
+
+.sd-stack-row {
+  display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;
+}
+.sd-tech-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem; font-weight: 700; letter-spacing: 0.04em;
+  color: var(--color-text); background: #ffffff;
+  border: 1px solid var(--color-border);
+  padding: 10px 20px; border-radius: 100px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s, border-color 0.3s;
+}
+.sd-tech-badge:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  border-color: rgba(0,85,204,0.2);
+}
+
+/* ══════════════════════════════════════════════════════
+   CTA
+══════════════════════════════════════════════════════ */
+.sd-cta-section { padding: 0 0 8rem; background: var(--color-bg-soft); }
+
+.sd-cta-card {
+  background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%);
+  border-radius: 32px; overflow: hidden;
+  box-shadow: 0 20px 40px rgba(5,11,20,0.15), 0 50px 100px rgba(5,11,20,0.25);
+  transition: transform 0.6s var(--ease-spring);
+  position: relative;
+}
+.sd-cta-card::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.04; mix-blend-mode: overlay; pointer-events: none;
+}
+.sd-cta-card:hover { transform: scale(1.015); }
+
+.sd-cta-inner {
+  padding: 5rem 6rem;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 3rem; position: relative; z-index: 2;
+}
+.sd-cta-text { flex: 1; }
+.sd-cta-title {
+  font-size: clamp(2.4rem, 4vw, 3.6rem); font-weight: 800;
+  color: #fff; line-height: 1.1; letter-spacing: -1.5px; margin: 0.5rem 0 1rem;
+}
+.sd-cta-title .editorial { color: #bae6fd; }
+.sd-cta-sub { font-size: 1rem; color: rgba(255,255,255,0.5); margin: 0; line-height: 1.5; }
+
+.btn-glow-blue {
+  position: relative; background: #fff; color: var(--color-blue-deep);
+  padding: 20px 44px; border-radius: 100px; text-decoration: none;
+  font-size: 1rem; font-weight: 700; overflow: hidden;
+  transition: 0.5s var(--ease-spring); display: inline-flex;
+  align-items: center; justify-content: center; white-space: nowrap;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 10px 20px rgba(255,255,255,0.08);
+  will-change: transform;
+}
+.btn-glow-blue span { position: relative; z-index: 2; }
+.btn-glow-blue:hover { transform: translateY(-4px); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 14px 28px rgba(255,255,255,0.14); }
+.btn-glow-blue:active { transform: scale(0.96); transition: 0.1s; }
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .sd-process-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .sd-process-left { position: static; }
+  .sd-cta-inner { flex-direction: column; align-items: flex-start; gap: 2.5rem; padding: 4rem 4rem; }
+}
+
+@media (max-width: 768px) {
+  .sd-hero { padding: 11rem 0 4rem; }
+  .sd-title { font-size: clamp(3rem, 12vw, 4.5rem); margin-bottom: 2.5rem; }
+  .sd-hero-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; border-top: none; padding-top: 0; }
+  .sd-desc { font-size: 1.05rem; }
+  .sd-caps-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .sd-cap-card { padding: 2rem; }
+  .sd-step { gap: 1.5rem; }
+  .sd-cta-inner { padding: 3.5rem 2rem; }
+  .sd-cta-title { font-size: 2.4rem; }
+  .btn-glow-blue { width: 100%; justify-content: center; }
+  .sd-stack-row { gap: 0.75rem; }
+}
+</style>
+
+<script>
+import { gsap } from 'gsap';
+import { SplitText } from 'gsap/SplitText';
+
+gsap.registerPlugin(SplitText);
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  /* ── Título hero con SplitText ── */
+  const titleEl = document.getElementById('sd-title');
+  if (titleEl) {
+    const split = SplitText.create(titleEl, { type: 'chars,words' });
+    gsap.set(split.chars, { opacity: 0, y: 40, rotateX: -50, transformOrigin: 'center bottom' });
+    gsap.to(split.chars, {
+      opacity: 1, y: 0, rotateX: 0,
+      duration: 0.75, stagger: 0.012, ease: 'back.out(2)',
+      delay: 0.35
+    });
+  }
+
+  /* ── Botón magnético CTA ── */
+  const ctaBtn = document.getElementById('sd-cta-btn');
+  if (ctaBtn) {
+    ctaBtn.addEventListener('mousemove', (e: MouseEvent) => {
+      const r = ctaBtn.getBoundingClientRect();
+      const x = (e.clientX - r.left - r.width  / 2) * 0.25;
+      const y = (e.clientY - r.top  - r.height / 2) * 0.25;
+      gsap.to(ctaBtn, { x, y, duration: 0.4, ease: 'power2.out' });
+    });
+    ctaBtn.addEventListener('mouseleave', () =>
+      gsap.to(ctaBtn, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.4)' })
+    );
+  }
+
+  /* ── Botón magnético hero ── */
+  const heroBtn = document.getElementById('sd-hero-cta');
+  if (heroBtn) {
+    heroBtn.addEventListener('mousemove', (e: MouseEvent) => {
+      const r = heroBtn.getBoundingClientRect();
+      const x = (e.clientX - r.left - r.width  / 2) * 0.2;
+      const y = (e.clientY - r.top  - r.height / 2) * 0.2;
+      gsap.to(heroBtn, { x, y, duration: 0.4, ease: 'power2.out' });
+    });
+    heroBtn.addEventListener('mouseleave', () =>
+      gsap.to(heroBtn, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.4)' })
+    );
+  }
+
+  /* ── Spotlight en capability cards ── */
+  document.querySelectorAll<HTMLElement>('.sd-cap-card').forEach(card => {
+    const spot = card.querySelector<HTMLElement>('.sd-cap-spotlight');
+    if (!spot) return;
+    card.addEventListener('mousemove', (e: MouseEvent) => {
+      const r = card.getBoundingClientRect();
+      gsap.to(spot, { x: e.clientX - r.left, y: e.clientY - r.top, duration: 0.5, ease: 'power2.out' });
+    });
+  });
+
+  /* ── Reveal por scroll ── */
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal-blur').forEach(el => observer.observe(el));
+
+  /* ── Stagger caps en su aparición ── */
+  const capsObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const cards = entry.target.querySelectorAll('.sd-cap-card');
+        gsap.fromTo(cards,
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'expo.out' }
+        );
+        capsObs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  const grid = document.querySelector('.sd-caps-grid');
+  if (grid) capsObs.observe(grid);
+
+  /* ── Stagger steps ── */
+  const stepsObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const steps = entry.target.querySelectorAll('.sd-step');
+        gsap.fromTo(steps,
+          { x: -20, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.7, stagger: 0.12, ease: 'expo.out' }
+        );
+        stepsObs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  const stepsEl = document.querySelector('.sd-steps');
+  if (stepsEl) stepsObs.observe(stepsEl);
+
+  /* ── Tech badges scramble on appear ── */
+  const badgesObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const badges = entry.target.querySelectorAll('.sd-tech-badge');
+        gsap.fromTo(badges,
+          { y: 16, opacity: 0, scale: 0.9 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.6, stagger: 0.08, ease: 'back.out(1.8)' }
+        );
+        badgesObs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  const stackRow = document.querySelector('.sd-stack-row');
+  if (stackRow) badgesObs.observe(stackRow);
+});
+</script>

@@ -1,0 +1,619 @@
+---
+// src/components/portal/SoporteUI.astro
+import { useTranslations } from '../../i18n/utils';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const user = await Astro.locals.currentUser();
+const firstName = user?.firstName || "";
+const email = user?.emailAddresses[0]?.emailAddress || "flouvia.mx@gmail.com";
+
+const dateOptions: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };
+const today = new Date().toLocaleDateString(lang === 'en' ? 'en-US' : 'es-MX', dateOptions);
+
+const slaData = {
+  responseTime:  lang === 'en' ? "< 2 hours"        : "< 2 horas",
+  uptime:        "99.98%",
+  engineer:      lang === 'en' ? "Assigned Engineer" : "Ingeniero Asignado",
+  engineerName:  "André Valle",
+  engineerRole:  lang === 'en' ? "Lead Architect"   : "Arquitecto Principal",
+  channel:       lang === 'en' ? "Private Channel"  : "Canal Privado",
+  availability:  lang === 'en' ? "Mon–Fri 9–18h"    : "Lun–Vie 9–18h",
+  priority:      lang === 'en' ? "Critical"         : "Crítico",
+};
+
+const categories = [
+  {
+    id: "bug",
+    label: lang === 'en' ? "Bug Report"       : "Reporte de Bug",
+    icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+  },
+  {
+    id: "feature",
+    label: lang === 'en' ? "Feature Request"  : "Nueva Funcionalidad",
+    icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+  },
+  {
+    id: "consult",
+    label: lang === 'en' ? "Technical Consult": "Consulta Técnica",
+    icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+  },
+  {
+    id: "urgent",
+    label: lang === 'en' ? "Urgent Incident"  : "Incidente Urgente",
+    icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+  },
+];
+
+const recentTickets = [
+  { id: "TK-081", title: lang === 'en' ? "API timeout on checkout flow" : "Timeout en API del checkout", status: "resolved" as const, date: "Apr 22" },
+  { id: "TK-074", title: lang === 'en' ? "Webhook signature mismatch"   : "Firma de webhook incorrecta",  status: "resolved" as const, date: "Apr 15" },
+  { id: "TK-061", title: lang === 'en' ? "SKU sync delay > 30 min"      : "Retraso de sincronización SKU > 30 min", status: "resolved" as const, date: "Apr 03" },
+];
+---
+
+<div class="os-page">
+  <div class="os-wrap">
+
+    <!-- HEADER -->
+    <header class="sp-header">
+      <div class="sp-topbar" id="sp-topbar">
+        <div class="sp-date-strip">
+          <span class="sp-mono">{today.toUpperCase()}</span>
+          <span class="sp-sep">·</span>
+          <span class="sp-mono sp-priority">{slaData.priority}</span>
+        </div>
+        <div class="sp-badge">
+          <span class="sp-led"></span>
+          <span>{t('portal.secure')} · {user?.id?.substring(0,8).toUpperCase() || 'GUEST'}</span>
+        </div>
+      </div>
+
+      <h1 class="sp-title" id="sp-title">
+        {t('support.title')} <em class="sp-editorial">{t('support.title_ed')}</em>
+      </h1>
+      <p class="sp-sub" id="sp-sub">{t('support.subtitle')}</p>
+      <div class="sp-rule" id="sp-rule"></div>
+    </header>
+
+    <!-- GRID -->
+    <div class="sp-grid">
+
+      <!-- SLA CARD -->
+      <div class="os-card sp-card-sla" id="sp-sla">
+        <div class="os-spotlight" aria-hidden="true"></div>
+        <div class="os-card-in">
+
+          <div class="sp-card-top">
+            <span class="sp-ey">{t('support.sla.label')}</span>
+            <span class="sp-pill sp-pill-ok">{slaData.priority}</span>
+          </div>
+
+          <!-- Métricas SLA -->
+          <div class="sp-metrics">
+            <div class="sp-metric">
+              <span class="sp-metric-val">{slaData.responseTime}</span>
+              <span class="sp-metric-key">{t('support.sla.response')}</span>
+            </div>
+            <div class="sp-metric-divider"></div>
+            <div class="sp-metric">
+              <span class="sp-metric-val">{slaData.uptime}</span>
+              <span class="sp-metric-key">{t('support.sla.uptime')}</span>
+            </div>
+          </div>
+
+          <!-- Tarjeta del ingeniero -->
+          <div class="sp-engineer">
+            <div class="sp-avatar">AV</div>
+            <div class="sp-eng-info">
+              <span class="sp-eng-name">{slaData.engineerName}</span>
+              <span class="sp-eng-role">{slaData.engineerRole}</span>
+            </div>
+            <div class="sp-online">
+              <span class="sp-led sp-led-sm"></span>
+              {t('support.sla.online')}
+            </div>
+          </div>
+
+          <!-- Detalles -->
+          <div class="sp-details">
+            <div class="sp-detail-row">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <span>{slaData.channel}</span>
+            </div>
+            <div class="sp-detail-row">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span>{slaData.availability}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORM CARD — Genius Bar -->
+      <div class="os-card sp-card-form" id="sp-form-card">
+        <div class="os-spotlight" aria-hidden="true"></div>
+        <div class="os-card-in">
+
+          <div class="sp-card-top">
+            <span class="sp-ey">{t('support.form.label')}</span>
+            <span class="sp-vip-badge">VIP</span>
+          </div>
+
+          <form class="sp-form" id="supportForm" novalidate>
+
+            <!-- Categorías -->
+            <div class="sp-field">
+              <label class="sp-label">{t('support.form.category')}</label>
+              <div class="sp-cat-grid" id="categoryGrid">
+                {categories.map((cat) => (
+                  <button type="button" class="sp-cat-btn" data-id={cat.id}>
+                    <span class="sp-cat-ico" set:html={cat.icon}></span>
+                    <span class="sp-cat-lbl">{cat.label}</span>
+                  </button>
+                ))}
+              </div>
+              <input type="hidden" name="category" id="categoryInput" />
+            </div>
+
+            <!-- Asunto -->
+            <div class="sp-field">
+              <label class="sp-label" for="subject">{t('support.form.subject')}</label>
+              <input type="text" id="subject" name="subject" class="sp-input"
+                placeholder={t('support.form.subject_ph')} autocomplete="off" required />
+            </div>
+
+            <!-- Descripción -->
+            <div class="sp-field">
+              <label class="sp-label" for="description">{t('support.form.description')}</label>
+              <textarea id="description" name="description" class="sp-textarea"
+                placeholder={t('support.form.description_ph')} rows="5" required></textarea>
+              <div class="sp-char-count"><span id="charCount">0</span> / 1000</div>
+            </div>
+
+            <!-- Prioridad -->
+            <div class="sp-field">
+              <label class="sp-label">{t('support.form.priority')}</label>
+              <div class="sp-priority-row">
+                <label class="sp-prio-opt">
+                  <input type="radio" name="priority" value="normal" checked />
+                  <span class="sp-prio-chip sp-prio-normal">{t('support.priority.normal')}</span>
+                </label>
+                <label class="sp-prio-opt">
+                  <input type="radio" name="priority" value="high" />
+                  <span class="sp-prio-chip sp-prio-high">{t('support.priority.high')}</span>
+                </label>
+                <label class="sp-prio-opt">
+                  <input type="radio" name="priority" value="critical" />
+                  <span class="sp-prio-chip sp-prio-crit">{t('support.priority.critical')}</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="sp-submit" id="submitBtn">
+              <span id="btnText">{t('support.form.submit')}</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </form>
+
+          <!-- Estado éxito -->
+          <div class="sp-success" id="formSuccess">
+            <div class="sp-success-ico">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <p class="sp-success-title">{t('support.form.success_title')}</p>
+            <p class="sp-success-sub">{t('support.form.success_sub')}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TICKETS RECIENTES -->
+      <div class="os-card sp-card-tickets" id="sp-tickets">
+        <div class="os-spotlight" aria-hidden="true"></div>
+        <div class="os-card-in">
+          <div class="sp-card-top">
+            <span class="sp-ey">{t('support.tickets.label')}</span>
+            <span class="sp-pill sp-pill-ok">{t('support.tickets.all_resolved')}</span>
+          </div>
+          <div class="sp-ticket-list">
+            {recentTickets.map((tk) => (
+              <div class="sp-ticket-row">
+                <div class="sp-ticket-left">
+                  <span class="sp-ticket-id">{tk.id}</span>
+                  <div class="sp-ticket-info">
+                    <span class="sp-ticket-title">{tk.title}</span>
+                    <span class="sp-ticket-date">{tk.date}</span>
+                  </div>
+                </div>
+                <span class={`sp-ticket-status sp-ts-${tk.status}`}>{t(`support.ticket.${tk.status}`)}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+/* ═══ TOKENS ═══ */
+.os-page {
+    --blue:   #0055cc;
+    --green:  #10b981;
+    --text:   #0a0e1a;
+    --muted:  #6e7d96;
+    --dim:    #c4cdd9;
+    --border: rgba(0,0,0,0.07);
+    --ease:   cubic-bezier(0.16, 1, 0.3, 1);
+    --shadow: 0 0 0 1px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.04), 0 8px 20px rgba(0,0,0,0.05), 0 20px 40px rgba(0,0,0,0.04);
+    --shadow-up: 0 0 0 1px rgba(0,0,0,0.06), 0 4px 10px rgba(0,0,0,0.07), 0 16px 32px rgba(0,0,0,0.08), 0 32px 64px rgba(0,0,0,0.06);
+
+    background: #ffffff;
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    min-height: 100vh;
+    padding: 4.5rem 0 9rem;
+}
+.os-wrap { max-width: 1280px; margin: 0 auto; padding: 0 5%; }
+
+/* ═══ HEADER ═══ */
+.sp-header { margin-bottom: 4rem; }
+
+.sp-topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 2.8rem; opacity: 0;
+}
+.sp-date-strip { display: flex; align-items: center; gap: 0.7rem; }
+.sp-mono { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; color: var(--muted); }
+.sp-sep { color: var(--dim); }
+.sp-priority { color: #c87000; font-weight: 700; }
+
+.sp-badge {
+    display: flex; align-items: center; gap: 8px;
+    background: #0a192f; padding: 6px 16px; border-radius: 100px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.75); font-weight: 600;
+    box-shadow: 0 4px 14px rgba(10,25,47,0.2);
+}
+.sp-led {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0;
+    animation: sp-led 2.5s ease-in-out infinite;
+}
+.sp-led-sm { width: 5px; height: 5px; }
+
+.sp-title {
+    font-size: clamp(2.8rem, 5vw, 4.8rem);
+    font-weight: 600; letter-spacing: -0.045em;
+    line-height: 1.04; margin: 0 0 0.55rem; opacity: 0;
+}
+.sp-editorial {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic; font-weight: 400;
+}
+.sp-sub { font-size: 1.05rem; color: var(--muted); margin: 0; opacity: 0; font-weight: 400; }
+
+.sp-rule {
+    height: 1px; margin-top: 2rem;
+    background: linear-gradient(90deg, transparent, rgba(0,85,204,0.25) 35%, rgba(0,85,204,0.1) 65%, transparent);
+    transform: scaleX(0); transform-origin: left;
+}
+
+/* ═══ GRID ═══ */
+.sp-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.2rem; }
+.sp-card-sla     { grid-column: span 4; }
+.sp-card-form    { grid-column: span 8; }
+.sp-card-tickets { grid-column: span 12; }
+
+/* ═══ CARD BASE ═══ */
+.os-card {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 28px; overflow: hidden;
+    opacity: 0;
+    box-shadow: var(--shadow);
+    transition: box-shadow .5s var(--ease), border-color .5s var(--ease), transform .5s var(--ease);
+}
+.os-card:hover { box-shadow: var(--shadow-up); border-color: rgba(0,0,0,0.1); transform: translateY(-3px); }
+
+.os-spotlight {
+    position: absolute; width: 360px; height: 360px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,85,204,0.06) 0%, transparent 70%);
+    pointer-events: none; transform: translate(-50%,-50%);
+    top: 0; left: 0; opacity: 0; transition: opacity .4s;
+}
+.os-card:hover .os-spotlight { opacity: 1; }
+
+.os-card-in { padding: 2.4rem; display: flex; flex-direction: column; height: 100%; }
+.sp-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.6rem; }
+.sp-ey { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: var(--muted); }
+
+/* Pills */
+.sp-pill { font-size: 0.67rem; font-weight: 700; padding: 5px 12px; border-radius: 100px; }
+.sp-pill-ok { background: rgba(16,185,129,0.09); color: #0d9966; border: 1px solid rgba(16,185,129,0.2); }
+.sp-vip-badge { font-size: 0.62rem; font-weight: 800; background: var(--text); color: #fff; padding: 5px 10px; border-radius: 100px; letter-spacing: 0.06em; }
+
+/* ═══ SLA ═══ */
+.sp-metrics { display: flex; align-items: center; gap: 1.5rem; margin: 0 0 1.8rem; }
+.sp-metric { display: flex; flex-direction: column; gap: 3px; }
+.sp-metric-val {
+    font-size: 1.8rem; font-weight: 700; letter-spacing: -0.04em;
+    color: var(--text); font-family: 'JetBrains Mono', monospace; line-height: 1;
+}
+.sp-metric-key { font-size: 0.68rem; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; }
+.sp-metric-divider { width: 1px; height: 36px; background: rgba(0,0,0,0.07); flex-shrink: 0; }
+
+/* Engineer card */
+.sp-engineer {
+    display: flex; align-items: center; gap: 1rem;
+    background: rgba(0,0,0,0.018); border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 18px; padding: 1rem 1.2rem; margin-bottom: 1.4rem;
+}
+.sp-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--text); color: #fff;
+    font-size: 0.7rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.sp-eng-info { flex-grow: 1; display: flex; flex-direction: column; gap: 2px; }
+.sp-eng-name { font-size: 0.88rem; font-weight: 600; }
+.sp-eng-role { font-size: 0.7rem; color: var(--muted); }
+.sp-online {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 0.62rem; font-weight: 700; color: #0d9966;
+    letter-spacing: 0.04em; white-space: nowrap;
+}
+
+.sp-details { display: flex; flex-direction: column; gap: 0.55rem; margin-top: auto; }
+.sp-detail-row { display: flex; align-items: center; gap: 0.7rem; font-size: 0.8rem; color: var(--muted); font-weight: 500; }
+.sp-detail-row svg { flex-shrink: 0; }
+
+/* ═══ FORM ═══ */
+.sp-form { display: flex; flex-direction: column; gap: 1.3rem; flex-grow: 1; }
+.sp-success {
+    display: none; flex-direction: column; align-items: center;
+    justify-content: center; text-align: center; flex-grow: 1; gap: 0.8rem; padding: 2rem;
+}
+.sp-success.visible { display: flex; }
+.sp-form.hidden { display: none; }
+
+.sp-success-ico {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(16,185,129,0.09); border: 1px solid rgba(16,185,129,0.2);
+    display: flex; align-items: center; justify-content: center; color: #0d9966;
+}
+.sp-success-title { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+.sp-success-sub   { font-size: 0.86rem; color: var(--muted); margin: 0; }
+
+.sp-field { display: flex; flex-direction: column; gap: 0.55rem; }
+.sp-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+
+/* Inputs — Genius Bar: ultra limpios, focus blue glow */
+.sp-input,
+.sp-textarea {
+    width: 100%; padding: 0.88rem 1.1rem; border-radius: 14px;
+    border: 1px solid rgba(0,0,0,0.09); background: rgba(0,0,0,0.018);
+    font-size: 0.94rem; font-family: inherit; color: var(--text);
+    transition: border-color .25s, box-shadow .25s, background .25s;
+    outline: none; resize: none; box-sizing: border-box;
+}
+.sp-input::placeholder,
+.sp-textarea::placeholder { color: var(--dim); }
+.sp-input:focus,
+.sp-textarea:focus {
+    border-color: #0055cc;
+    box-shadow: 0 0 0 4px rgba(0, 85, 204, 0.09);
+    background: #ffffff;
+}
+
+.sp-char-count { font-size: 0.68rem; color: var(--dim); text-align: right; font-family: 'JetBrains Mono', monospace; }
+
+/* Categorías */
+.sp-cat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.45rem; }
+.sp-cat-btn {
+    display: flex; align-items: center; gap: 0.7rem; padding: 0.78rem 1rem;
+    border-radius: 13px; border: 1px solid rgba(0,0,0,0.08);
+    background: rgba(0,0,0,0.018); color: var(--muted);
+    cursor: pointer; font-size: 0.82rem; font-weight: 500; font-family: inherit;
+    transition: all .2s var(--ease);
+}
+.sp-cat-btn:hover { background: rgba(0,0,0,0.04); color: var(--text); }
+.sp-cat-btn.selected { background: var(--text); color: #fff; border-color: var(--text); }
+.sp-cat-ico { display: flex; align-items: center; flex-shrink: 0; }
+.sp-cat-lbl { font-size: 0.8rem; }
+
+/* Prioridad */
+.sp-priority-row { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.sp-prio-opt { cursor: pointer; }
+.sp-prio-opt input[type="radio"] { display: none; }
+.sp-prio-chip {
+    display: block; padding: 6px 14px; border-radius: 100px;
+    border: 1px solid rgba(0,0,0,0.08);
+    font-size: 0.73rem; font-weight: 600; cursor: pointer;
+    transition: all .2s; background: rgba(0,0,0,0.018); color: var(--muted);
+}
+.sp-prio-opt input:checked + .sp-prio-normal { background: rgba(0,0,0,0.07);           color: var(--text);   border-color: rgba(0,0,0,0.15); }
+.sp-prio-opt input:checked + .sp-prio-high   { background: rgba(220,120,0,0.09);        color: #b86000;       border-color: rgba(220,120,0,0.2); }
+.sp-prio-opt input:checked + .sp-prio-crit   { background: rgba(220,38,38,0.09);        color: #b91c1c;       border-color: rgba(220,38,38,0.2); }
+
+/* Submit */
+.sp-submit {
+    display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+    background: var(--text); color: #fff; padding: 1.05rem 1.5rem;
+    border-radius: 14px; font-size: 0.92rem; font-weight: 600;
+    border: none; cursor: pointer; font-family: inherit;
+    box-shadow: 0 4px 16px rgba(10,25,47,0.18), 0 2px 4px rgba(10,25,47,0.1);
+    transition: background .2s, box-shadow .2s, transform .1s;
+    will-change: transform;
+}
+.sp-submit:hover { background: #0a192f; box-shadow: 0 8px 28px rgba(10,25,47,0.28); }
+.sp-submit:active { transform: scale(0.97); }
+.sp-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ═══ TICKETS ═══ */
+.sp-ticket-list { display: flex; flex-direction: column; gap: 0.5rem; }
+.sp-ticket-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 1.2rem; border-radius: 16px;
+    background: rgba(0,0,0,0.018); border: 1px solid rgba(0,0,0,0.06);
+    transition: background .2s, border-color .2s;
+}
+.sp-ticket-row:hover { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.09); }
+.sp-ticket-left { display: flex; align-items: center; gap: 1.1rem; }
+.sp-ticket-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; font-weight: 600; color: var(--muted); flex-shrink: 0;
+}
+.sp-ticket-info { display: flex; flex-direction: column; gap: 2px; }
+.sp-ticket-title { font-size: 0.9rem; font-weight: 500; }
+.sp-ticket-date  { font-size: 0.68rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+.sp-ticket-status {
+    font-size: 0.65rem; font-weight: 700;
+    padding: 4px 11px; border-radius: 100px; flex-shrink: 0;
+}
+.sp-ts-resolved { background: rgba(16,185,129,0.09); color: #0d9966; border: 1px solid rgba(16,185,129,0.2); }
+.sp-ts-open     { background: rgba(0,85,204,0.09);   color: var(--blue); border: 1px solid rgba(0,85,204,0.18); }
+.sp-ts-pending  { background: rgba(220,120,0,0.08);  color: #b86000;    border: 1px solid rgba(220,120,0,0.18); }
+
+/* ═══ KEYFRAMES ═══ */
+@keyframes sp-led {
+    0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,.5); transform: scale(1); }
+    60%      { box-shadow: 0 0 0 5px rgba(16,185,129,0); transform: scale(1.2); }
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 1024px) {
+    .sp-card-sla  { grid-column: span 5; }
+    .sp-card-form { grid-column: span 7; }
+}
+@media (max-width: 768px) {
+    .os-page { padding: 3rem 0 6rem; }
+    .sp-grid { display: flex; flex-direction: column; }
+    .sp-title { font-size: clamp(2.4rem, 9vw, 3.8rem); }
+    .os-card-in { padding: 1.8rem; }
+    .sp-cat-grid { grid-template-columns: 1fr 1fr; }
+    .sp-priority-row { flex-wrap: wrap; }
+    .sp-topbar { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
+}
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { SplitText } from "gsap/SplitText";
+  import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+  gsap.registerPlugin(SplitText, ScrambleTextPlugin);
+
+  document.addEventListener("DOMContentLoaded", () => {
+
+    const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+
+    // Topbar
+    tl.to("#sp-topbar", { opacity: 1, duration: 0.8 }, 0);
+
+    // ScrambleText en el badge
+    const badge = document.querySelector(".sp-badge");
+    if (badge) {
+        const span = badge.querySelector("span:last-child") as HTMLElement;
+        if (span) {
+            const orig = span.textContent || "";
+            tl.to(span, { duration: 1.0, scrambleText: { text: orig, chars: "ABCDEF0123456789·", revealDelay: 0.2 }, ease: "none" }, 0.1);
+        }
+    }
+
+    // SplitText en título
+    const titleEl = document.getElementById("sp-title");
+    if (titleEl) {
+        const split = SplitText.create(titleEl, { type: "chars,words" });
+        gsap.set(split.chars, { opacity: 0, y: 24, rotateX: -40, transformOrigin: "center bottom" });
+        tl.to(split.chars, { opacity: 1, y: 0, rotateX: 0, duration: 0.6, stagger: 0.018, ease: "back.out(1.8)" }, 0.25);
+    }
+
+    // Subtítulo + rule
+    tl.to("#sp-sub",  { opacity: 1, duration: 0.7 }, 0.7);
+    tl.to("#sp-rule", { scaleX: 1, duration: 1.0, ease: "power3.out" }, 0.55);
+
+    // Cards stagger
+    const cards = ["#sp-sla", "#sp-form-card", "#sp-tickets"];
+    gsap.set(cards, { y: 30, opacity: 0, scale: 0.98 });
+    tl.to(cards, { y: 0, opacity: 1, scale: 1, duration: 1.0, stagger: 0.07 }, 0.5);
+
+    // Ticket rows stagger
+    gsap.set(".sp-ticket-row", { opacity: 0, x: -10 });
+    tl.to(".sp-ticket-row", { opacity: 1, x: 0, duration: 0.45, stagger: 0.06, ease: "expo.out" }, 0.9);
+
+    // Spotlight per card
+    document.querySelectorAll<HTMLElement>(".os-card").forEach(card => {
+        const spot = card.querySelector<HTMLElement>(".os-spotlight");
+        if (!spot) return;
+        card.addEventListener("mousemove", (e: MouseEvent) => {
+            const r = card.getBoundingClientRect();
+            gsap.to(spot, { x: e.clientX - r.left, y: e.clientY - r.top, duration: 0.55, ease: "power2.out" });
+        });
+    });
+
+    // Magnetic submit
+    const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement | null;
+    if (submitBtn) {
+        submitBtn.addEventListener("mousemove", (e: MouseEvent) => {
+            const r = submitBtn.getBoundingClientRect();
+            const x = (e.clientX - r.left - r.width / 2) * 0.22;
+            const y = (e.clientY - r.top - r.height / 2) * 0.22;
+            gsap.to(submitBtn, { x, y, duration: 0.4, ease: "power2.out" });
+        });
+        submitBtn.addEventListener("mouseleave", () => {
+            gsap.to(submitBtn, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.4)" });
+        });
+    }
+
+    // ── LÓGICA DEL FORMULARIO (igual que antes) ──
+    const catBtns = document.querySelectorAll<HTMLButtonElement>(".sp-cat-btn");
+    const categoryInput = document.getElementById("categoryInput") as HTMLInputElement | null;
+    catBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            catBtns.forEach(b => b.classList.remove("selected"));
+            btn.classList.add("selected");
+            if (categoryInput) categoryInput.value = btn.dataset.id || "";
+        });
+    });
+
+    const textarea = document.getElementById("description") as HTMLTextAreaElement | null;
+    const charCount = document.getElementById("charCount");
+    textarea?.addEventListener("input", () => {
+        const count = Math.min(textarea.value.length, 1000);
+        if (charCount) charCount.textContent = String(count);
+        if (textarea.value.length > 1000) textarea.value = textarea.value.slice(0, 1000);
+    });
+
+    const form = document.getElementById("supportForm") as HTMLFormElement | null;
+    const formSuccess = document.getElementById("formSuccess");
+    const btnText = document.getElementById("btnText");
+
+    form?.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!submitBtn || !btnText) return;
+
+        submitBtn.disabled = true;
+        btnText.textContent = "Enviando…";
+
+        await new Promise(r => setTimeout(r, 1400));
+
+        gsap.to(form, {
+            opacity: 0, y: -10, duration: 0.4, ease: "power2.in",
+            onComplete: () => {
+                form.classList.add("hidden");
+                if (formSuccess) {
+                    formSuccess.classList.add("visible");
+                    gsap.fromTo(formSuccess, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" });
+                }
+            }
+        });
+    });
+  });
+</script>

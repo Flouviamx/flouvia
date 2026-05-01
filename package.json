@@ -12,8 +12,10 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/netlify": "7.0.6",
+    "@astrojs/vercel": "^10.0.6",
     "@clerk/astro": "^3.0.19",
-    "astro": "6.1.2"
+    "@supabase/supabase-js": "^2.105.1",
+    "astro": "6.1.2",
+    "gsap": "^3.15.0"
   }
 }

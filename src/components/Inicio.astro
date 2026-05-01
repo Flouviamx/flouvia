@@ -192,7 +192,7 @@ const t = useTranslations(lang);
                 </div>
 
                 <div class="rows-wrapper">
-                    <div class="service-row reveal-blur" style="--delay: 0.1s;">
+                    <a href={lang === 'en' ? '/en/servicios/ecommerce' : '/servicios/ecommerce'} class="service-row reveal-blur" style="--delay: 0.1s;">
                         <div class="row-num">/01</div>
                         <div class="row-content">
                             <h3>E-commerce Engineering</h3>
@@ -200,8 +200,8 @@ const t = useTranslations(lang);
                         </div>
                         <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
                         <div class="animated-border"></div>
-                    </div>
-                    <div class="service-row reveal-blur" style="--delay: 0.2s;">
+                    </a>
+                    <a href={lang === 'en' ? '/en/servicios/b2b' : '/servicios/b2b'} class="service-row reveal-blur" style="--delay: 0.2s;">
                         <div class="row-num">/02</div>
                         <div class="row-content">
                             <h3>B2B Digital Architecture</h3>
@@ -209,8 +209,8 @@ const t = useTranslations(lang);
                         </div>
                         <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
                         <div class="animated-border"></div>
-                    </div>
-                    <div class="service-row reveal-blur" style="--delay: 0.3s;">
+                    </a>
+                    <a href={lang === 'en' ? '/en/servicios/automatizacion' : '/servicios/automatizacion'} class="service-row reveal-blur" style="--delay: 0.3s;">
                         <div class="row-num">/03</div>
                         <div class="row-content">
                             <h3>Business Automation</h3>
@@ -218,7 +218,16 @@ const t = useTranslations(lang);
                         </div>
                         <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
                         <div class="animated-border"></div>
-                    </div>
+                    </a>
+                    <a href={lang === 'en' ? '/en/servicios/growth' : '/servicios/growth'} class="service-row reveal-blur" style="--delay: 0.4s;">
+                        <div class="row-num">/04</div>
+                        <div class="row-content">
+                            <h3>Conversion Rate Optimization</h3>
+                            <p>{lang === 'en' ? 'We audit your infrastructure with data, not opinions. We identify exact bottlenecks and implement mathematical improvements to scale your conversion.' : 'Auditamos tu infraestructura con datos, no opiniones. Identificamos los cuellos de botella exactos e implementamos mejoras para escalar tu conversión.'}</p>
+                        </div>
+                        <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+                        <div class="animated-border"></div>
+                    </a>
                 </div>
             </div>
         </section>
@@ -479,10 +488,11 @@ const t = useTranslations(lang);
     .services-rows { padding: 8rem 0 4rem 0; background: var(--color-bg); }
     .rows-wrapper { margin-top: 5rem; border-top: 1px solid var(--color-border); }
     
-    .service-row { 
-        display: grid; grid-template-columns: 60px 1fr auto; gap: 4rem; 
-        padding: 4rem 0; position: relative; cursor: pointer; align-items: center; 
-        transition: all 0.5s var(--ease-smooth); 
+    .service-row {
+        display: grid; grid-template-columns: 60px 1fr auto; gap: 4rem;
+        padding: 4rem 0; position: relative; cursor: pointer; align-items: center;
+        transition: all 0.5s var(--ease-smooth);
+        text-decoration: none; color: inherit;
     }
     
     .service-row::before { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: var(--color-border); }

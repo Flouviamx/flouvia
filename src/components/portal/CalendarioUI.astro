@@ -1,0 +1,396 @@
+---
+// src/components/portal/CalendarioUI.astro
+import { useTranslations } from '../../i18n/utils';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div class="pure-white-wrapper">
+    <div class="noise-overlay"></div>
+
+    <div class="container-master">
+
+        <header class="dashboard-header gsap-reveal">
+            <div class="header-status">
+                <a href={lang === 'en' ? "/en/portal/dashboard" : "/portal/dashboard"} class="back-link haptic-soft">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    {lang === 'en' ? 'Back to Console' : 'Volver a Console'}
+                </a>
+                <div class="secure-badge">
+                    <span class="dot-secure pulse"></span> {t('portal.secure')}
+                </div>
+            </div>
+        </header>
+
+        <div class="cal-split-grid gsap-reveal">
+
+            <!-- ── COLUMNA IZQUIERDA ── -->
+            <div class="col-left">
+                <div class="eyebrow-wrap">
+                    <div class="eyebrow-dot"></div>
+                    <span class="eyebrow">{t('cal.eyebrow')}</span>
+                </div>
+
+                <h1 class="cal-title">
+                    {t('cal.title')}<br>
+                    <span class="editorial">{t('cal.title_ed')}</span>
+                </h1>
+
+                <p class="cal-subtitle">{t('cal.subtitle')}</p>
+
+                <div class="info-pills">
+                    <div class="info-pill">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <span>{t('cal.info.1')}</span>
+                    </div>
+                    <div class="info-pill">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span>{t('cal.info.2')}</span>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="cal-features">
+                    <div class="feature-row">
+                        <div class="feature-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="feature-title">{t('cal.feat.1.title')}</p>
+                            <p class="feature-desc">{t('cal.feat.1.desc')}</p>
+                        </div>
+                    </div>
+                    <div class="feature-row">
+                        <div class="feature-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        </div>
+                        <div>
+                            <p class="feature-title">{t('cal.feat.2.title')}</p>
+                            <p class="feature-desc">{t('cal.feat.2.desc')}</p>
+                        </div>
+                    </div>
+                    <div class="feature-row">
+                        <div class="feature-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="feature-title">{t('cal.feat.3.title')}</p>
+                            <p class="feature-desc">{t('cal.feat.3.desc')}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── COLUMNA DERECHA: Shell de Calendly ── -->
+            <div class="col-right">
+                <div class="calendly-shell">
+                    <div class="shell-header">
+                        <div class="shell-dots">
+                            <span class="sd red"></span>
+                            <span class="sd yellow"></span>
+                            <span class="sd green"></span>
+                        </div>
+                        <span class="shell-url">calendly.com/flouvia</span>
+                        <div class="shell-secure">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        </div>
+                    </div>
+
+                    <div class="calendly-body" id="calendly-container">
+                        <!--
+                            PASTE YOUR CALENDLY IFRAME HERE.
+                            Example:
+                            <iframe src="https://calendly.com/yourlink" width="100%" height="100%" frameborder="0"></iframe>
+                        -->
+                        <div class="calendly-placeholder">
+                            <div class="ph-shimmer-grid">
+                                <div class="ph-row wide"></div>
+                                <div class="ph-row medium"></div>
+                                <div class="ph-slot-grid">
+                                    {Array.from({ length: 9 }).map(() => (
+                                        <div class="ph-slot"></div>
+                                    ))}
+                                </div>
+                                <div class="ph-row narrow"></div>
+                            </div>
+                            <div class="ph-cta-area">
+                                <div class="ph-icon">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                </div>
+                                <p class="ph-text">{t('cal.placeholder')}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<style>
+    :root {
+        --color-bg-white:      #ffffff;
+        --color-card-white:    #ffffff;
+        --color-text-main:     #111111;
+        --color-text-muted:    #86868b;
+        --color-border-subtle: rgba(0,0,0,0.06);
+        --shadow-premium: 0 24px 48px -12px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.02);
+    }
+
+    .pure-white-wrapper {
+        position: relative; width: 100%; min-height: 100vh;
+        background-color: var(--color-bg-white);
+        font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+        color: var(--color-text-main); padding: 6rem 0 8rem; overflow-x: hidden;
+    }
+
+    .noise-overlay {
+        position: absolute; inset: 0; pointer-events: none; z-index: 1;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        opacity: 0.025; mix-blend-mode: multiply;
+    }
+
+    .container-master {
+        width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 5%;
+        position: relative; z-index: 2;
+    }
+
+    /* ── HEADER ── */
+    .dashboard-header { margin-bottom: 4rem; opacity: 0; }
+    .header-status {
+        display: flex; justify-content: space-between; align-items: center;
+        border-bottom: 1px solid var(--color-border-subtle); padding-bottom: 1rem;
+    }
+
+    .back-link {
+        display: flex; align-items: center; gap: 6px; font-size: 0.85rem;
+        font-weight: 600; color: var(--color-text-muted); text-decoration: none;
+        transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--color-text-main); }
+
+    .secure-badge {
+        display: flex; align-items: center; gap: 6px; font-size: 0.7rem;
+        font-weight: 700; color: var(--color-text-muted); letter-spacing: 1px;
+    }
+    .dot-secure { width: 6px; height: 6px; background: #34c759; border-radius: 50%; }
+    .pulse { animation: led-pulse 2.8s ease-in-out infinite; }
+
+    /* ── SPLIT GRID ── */
+    .cal-split-grid {
+        display: grid; grid-template-columns: 5fr 7fr; gap: 6rem;
+        align-items: start; opacity: 0;
+    }
+
+    /* ── LEFT COLUMN ── */
+    .col-left { padding-top: 1.5rem; }
+
+    .eyebrow-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 1.8rem; }
+    .eyebrow-dot { width: 7px; height: 7px; background: #0066cc; border-radius: 50%; }
+    .eyebrow {
+        font-size: 0.62rem; font-weight: 800; letter-spacing: 0.13em;
+        color: var(--color-text-muted); text-transform: uppercase;
+    }
+
+    .cal-title {
+        font-size: clamp(2.8rem, 3.8vw, 4.2rem); font-weight: 600;
+        letter-spacing: -0.045em; line-height: 1.05; margin: 0 0 1.4rem 0;
+        color: var(--color-text-main);
+    }
+    .editorial {
+        font-family: 'Instrument Serif', Georgia, serif;
+        font-style: italic; font-weight: 400;
+    }
+
+    .cal-subtitle {
+        font-size: 1.05rem; color: var(--color-text-muted);
+        margin: 0 0 2.5rem 0; font-weight: 400; line-height: 1.7; max-width: 360px;
+    }
+
+    .info-pills { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2.8rem; }
+    .info-pill {
+        display: inline-flex; align-items: center; gap: 10px; width: fit-content;
+        background: rgba(0,0,0,0.025); border: 1px solid rgba(0,0,0,0.05);
+        padding: 0.65rem 1.2rem; border-radius: 100px;
+        font-size: 0.88rem; font-weight: 600; color: var(--color-text-main);
+        transition: background 0.2s, border-color 0.2s;
+    }
+    .info-pill:hover { background: rgba(0,0,0,0.04); }
+    .info-pill svg { color: var(--color-text-muted); flex-shrink: 0; }
+
+    .divider { width: 100%; height: 1px; background: var(--color-border-subtle); margin-bottom: 2.5rem; }
+
+    .cal-features { display: flex; flex-direction: column; gap: 1.6rem; }
+    .feature-row { display: flex; align-items: flex-start; gap: 1rem; }
+    .feature-icon {
+        width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0;
+        background: rgba(0,0,0,0.025); border: 1px solid rgba(0,0,0,0.045);
+        display: flex; align-items: center; justify-content: center;
+        color: var(--color-text-muted);
+    }
+    .feature-title { font-size: 0.95rem; font-weight: 600; color: var(--color-text-main); margin: 0 0 3px 0; }
+    .feature-desc { font-size: 0.82rem; color: var(--color-text-muted); margin: 0; line-height: 1.55; }
+
+    /* ── RIGHT COLUMN: CALENDLY SHELL ── */
+    .calendly-shell {
+        background: var(--color-card-white);
+        border-radius: 28px;
+        border: 1px solid var(--color-border-subtle);
+        box-shadow:
+            0 48px 96px -24px rgba(0,0,0,0.09),
+            0 20px 40px -10px rgba(0,0,0,0.05),
+            0 6px 16px rgba(0,0,0,0.025),
+            inset 0 1px 0 rgba(255,255,255,0.9);
+        overflow: hidden;
+    }
+
+    .shell-header {
+        display: flex; align-items: center; gap: 1rem;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--color-border-subtle);
+        background: rgba(0,0,0,0.008);
+    }
+    .shell-dots { display: flex; gap: 6px; align-items: center; }
+    .sd { width: 11px; height: 11px; border-radius: 50%; }
+    .sd.red    { background: rgba(255, 95, 87, 0.65); }
+    .sd.yellow { background: rgba(255, 188, 46, 0.65); }
+    .sd.green  { background: rgba(40, 201, 68, 0.65); }
+    .shell-url {
+        font-size: 0.75rem; font-family: 'JetBrains Mono', monospace;
+        color: var(--color-text-muted); font-weight: 500; flex-grow: 1; text-align: center;
+    }
+    .shell-secure { color: var(--color-text-muted); opacity: 0.5; display: flex; }
+
+    .calendly-body {
+        min-height: 600px;
+        display: flex; align-items: stretch;
+    }
+    .calendly-body iframe {
+        width: 100%; min-height: 600px; border: none; display: block; flex-grow: 1;
+    }
+
+    /* Skeleton placeholder */
+    .calendly-placeholder {
+        display: flex; flex-direction: column;
+        width: 100%; min-height: 600px; padding: 2.5rem;
+        gap: 2rem;
+    }
+
+    .ph-shimmer-grid {
+        display: flex; flex-direction: column; gap: 1.2rem; flex-grow: 1;
+    }
+    .ph-row {
+        height: 12px; border-radius: 6px;
+        background: linear-gradient(90deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.07) 50%, rgba(0,0,0,0.04) 100%);
+        background-size: 200% 100%;
+        animation: shimmer 2s ease-in-out infinite;
+    }
+    .ph-row.wide   { width: 65%; }
+    .ph-row.medium { width: 45%; }
+    .ph-row.narrow { width: 30%; }
+
+    .ph-slot-grid {
+        display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem;
+        margin: 0.5rem 0;
+    }
+    .ph-slot {
+        height: 52px; border-radius: 12px;
+        background: rgba(0,0,0,0.025);
+        border: 1px solid rgba(0,0,0,0.04);
+        animation: shimmer 2s ease-in-out infinite;
+    }
+    .ph-slot:nth-child(2) { animation-delay: 0.1s; }
+    .ph-slot:nth-child(3) { animation-delay: 0.2s; }
+    .ph-slot:nth-child(4) { animation-delay: 0.15s; }
+    .ph-slot:nth-child(5) { animation-delay: 0.25s; }
+    .ph-slot:nth-child(6) { animation-delay: 0.35s; }
+    .ph-slot:nth-child(7) { animation-delay: 0.2s; }
+    .ph-slot:nth-child(8) { animation-delay: 0.3s; }
+    .ph-slot:nth-child(9) { animation-delay: 0.4s; }
+
+    .ph-cta-area {
+        display: flex; flex-direction: column; align-items: center;
+        gap: 0.9rem; padding: 2rem 0 1rem;
+        border-top: 1px solid var(--color-border-subtle);
+        text-align: center;
+    }
+    .ph-icon {
+        width: 56px; height: 56px; border-radius: 16px;
+        background: rgba(0,0,0,0.025); border: 1px solid rgba(0,0,0,0.05);
+        display: flex; align-items: center; justify-content: center;
+        color: var(--color-text-muted);
+    }
+    .ph-text { font-size: 0.95rem; color: var(--color-text-muted); font-weight: 500; }
+
+    /* Haptics */
+    .haptic-soft:active { transform: scale(0.985); }
+
+    /* Animations */
+    @keyframes led-pulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(52,199,89,0.55); transform: scale(1); }
+        55%       { box-shadow: 0 0 0 5px rgba(52,199,89,0.0);  transform: scale(1.18); }
+    }
+    @keyframes shimmer {
+        0%, 100% { opacity: 0.7; }
+        50%       { opacity: 1; }
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+        .cal-split-grid { grid-template-columns: 1fr; gap: 3rem; }
+        .col-left { padding-top: 0; }
+        .cal-subtitle { max-width: 100%; }
+    }
+    @media (max-width: 640px) {
+        .cal-title { font-size: clamp(2.2rem, 8vw, 3rem); }
+        .ph-slot-grid { grid-template-columns: repeat(2, 1fr); }
+        .calendly-placeholder { padding: 1.5rem; }
+    }
+</style>
+
+<script>
+    import { gsap } from "gsap";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        gsap.set(".gsap-reveal", { y: 24, opacity: 0, scale: 0.99 });
+
+        const tl = gsap.timeline();
+        tl.to(".dashboard-header", { y: 0, opacity: 1, duration: 1.1, ease: "expo.out" });
+        tl.to(".cal-split-grid",   { y: 0, opacity: 1, scale: 1, duration: 1.4, ease: "expo.out" }, "-=0.8");
+
+        // Info pills slide in from left
+        const pills = document.querySelectorAll('.info-pill');
+        if (pills.length > 0) {
+            gsap.set(pills, { x: -14, opacity: 0 });
+            tl.to(pills, { x: 0, opacity: 1, duration: 0.6, stagger: 0.12, ease: "expo.out" }, "-=1.0");
+        }
+
+        // Feature rows fade up
+        const feats = document.querySelectorAll('.feature-row');
+        if (feats.length > 0) {
+            gsap.set(feats, { y: 12, opacity: 0 });
+            tl.to(feats, { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "expo.out" }, "-=0.8");
+        }
+
+        // Shell drifts up from below with extra spring
+        const shell = document.querySelector('.calendly-shell');
+        if (shell) {
+            gsap.set(shell, { y: 40, opacity: 0, scale: 0.98 });
+            tl.to(shell, { y: 0, opacity: 1, scale: 1, duration: 1.8, ease: "expo.out" }, "-=1.4");
+        }
+
+        // Slot cards stagger in
+        const slots = document.querySelectorAll('.ph-slot');
+        if (slots.length > 0) {
+            gsap.set(slots, { scale: 0.88, opacity: 0 });
+            tl.to(slots, { scale: 1, opacity: 1, duration: 0.5, stagger: 0.04, ease: "back.out(1.5)" }, "-=1.2");
+        }
+    });
+</script>

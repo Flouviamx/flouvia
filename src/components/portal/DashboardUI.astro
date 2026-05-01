@@ -1,0 +1,803 @@
+---
+// src/components/portal/DashboardUI.astro
+import { useTranslations } from '../../i18n/utils';
+import { supabase } from '../../lib/supabase';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const user = await Astro.locals.currentUser();
+
+// fullName primero (Google OAuth lo rellena siempre), luego partes, luego fallback
+const fullName =
+  user?.fullName?.trim() ||
+  `${user?.firstName || ""} ${user?.lastName || ""}`.trim() ||
+  (lang === 'en' ? "Executive" : "Ejecutivo");
+
+const email = user?.emailAddresses[0]?.emailAddress || "flouvia.mx@gmail.com";
+
+const dateOptions: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };
+const today = new Date().toLocaleDateString(lang === 'en' ? 'en-US' : 'es-MX', dateOptions);
+
+const formatDate = (iso: string | null) => {
+  if (!iso) return "—";
+  return new Date(iso).toLocaleDateString(lang === 'en' ? 'en-US' : 'es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
+};
+
+const [{ data: proyecto }, { data: finanza }, { data: roadmapRows }, { data: archivos }] = await Promise.all([
+  supabase.from('proyectos').select('*').eq('email_cliente', email).single(),
+  supabase.from('finanzas_config').select('*').eq('email_cliente', email).single(),
+  supabase.from('roadmap').select('*').eq('email_cliente', email).order('orden_index'),
+  supabase.from('boveda_archivos').select('*').eq('email_cliente', email).limit(2),
+]);
+
+const fallbackPortalUrl = lang === 'en' ? "/en/portal/facturacion" : "/portal/facturacion";
+
+const data = {
+  project: {
+    name:     proyecto?.nombre_proyecto ?? (lang === 'en' ? "Global B2B Platform"  : "Plataforma B2B Global"),
+    stage:    proyecto?.etapa           ?? (lang === 'en' ? "Frontend Engineering"  : "Ingeniería Backend"),
+    progress: proyecto?.progreso        ?? 0,
+    uptime:   proyecto?.uptime          ?? "99.98%",
+    liveUrl:  proyecto?.live_url        ?? "#",
+    deadline: proyecto?.deadline        ?? "—",
+  },
+  capital: {
+    status:    finanza?.auto_pay
+                 ? (lang === 'en' ? "Active Subscription" : "Suscripción Activa")
+                 : (lang === 'en' ? "Payment Pending"     : "Pago Pendiente"),
+    isAutoPay: finanza?.auto_pay        ?? false,
+    amount:    finanza?.monto_proximo   ?? 0,
+    currency:  finanza?.moneda          ?? "USD",
+    nextDate:  formatDate(finanza?.fecha_proxima ?? null),
+    portalUrl: finanza?.stripe_portal_url || fallbackPortalUrl,
+  },
+  services: [
+    { label: lang === 'en' ? "Book Consultancy"      : "Agendar Consultoría",  icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`, link: lang === 'en' ? "/en/portal/calendario" : "/portal/calendario", info: lang === 'en' ? "2h SLA" : "SLA de 2h" },
+    { label: lang === 'en' ? "Document Vault"        : "Bóveda de Documentos", icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>`, link: lang === 'en' ? "/en/portal/boveda" : "/portal/boveda",     info: lang === 'en' ? "Contracts" : "Contratos/Entregables" },
+    { label: lang === 'en' ? "VIP Technical Support" : "Soporte Técnico VIP",  icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`, link: lang === 'en' ? "/en/portal/soporte" : "/portal/soporte",    info: lang === 'en' ? "Assigned Engineer" : "Ingeniero Asignado" },
+  ],
+  roadmap: (roadmapRows ?? []).map((r: any) => ({
+    title:  r.titulo,
+    status: r.status,
+    date:   r.fecha_info ?? "",
+  })),
+  documents: (archivos ?? []).map((a: any) => ({
+    name: a.nombre,
+    type: a.tipo,
+    size: a.size ?? "",
+    url:  a.url_descarga,
+  })),
+};
+
+const userId = user?.id?.substring(0, 8).toUpperCase() || 'GUEST';
+---
+
+<div class="db-root">
+
+    <!-- ═══ OS MENUBAR ═══ -->
+    <div class="os-bar" id="os-bar">
+        <div class="os-bar-left">
+            <span class="os-dot os-r"></span>
+            <span class="os-dot os-y"></span>
+            <span class="os-dot os-g"></span>
+            <span class="os-bar-title">FLOUVIA OS</span>
+        </div>
+        <div class="os-bar-center">
+            <span class="os-bar-date">{today.toUpperCase()}</span>
+        </div>
+        <div class="os-bar-right">
+            <span class="os-led"></span>
+            <span class="os-bar-badge" id="os-badge-txt">{t('portal.secure')} · {userId}</span>
+        </div>
+    </div>
+
+    <div class="db-wrap">
+
+        <!-- ═══════════════ HEADER ═══════════════ -->
+        <header class="db-header">
+            <p class="db-eyeline" id="db-eyeline">
+                <span class="db-mono">{t('portal.uptime')} {data.project.uptime}</span>
+            </p>
+
+            <h1 class="db-title" id="db-title">
+                <span class="db-greeting">{t('portal.greeting')}</span>
+                <br>
+                <em class="db-name">{fullName}.</em>
+            </h1>
+
+            <p class="db-sub" id="db-sub">
+                {t('portal.subtitle')} <strong>{data.project.deadline}</strong>
+            </p>
+
+            <div class="db-rule" id="db-rule"></div>
+        </header>
+
+        <!-- ═══════════════ GRID ═══════════════ -->
+        <div class="db-grid">
+
+            <!-- PROYECTO -->
+            <div class="db-card db-c-project" id="card-project">
+                <div class="db-spotlight" aria-hidden="true"></div>
+                <div class="db-chrome">
+                    <span class="db-cd db-cd-r"></span>
+                    <span class="db-cd db-cd-y"></span>
+                    <span class="db-cd db-cd-g"></span>
+                </div>
+                <div class="db-c-in">
+                    <div class="db-c-top">
+                        <span class="db-ey">{t('portal.project')}</span>
+                        <a href={data.project.liveUrl} target="_blank" class="db-ghost-btn">
+                            {t('portal.btn.env')}
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+                        </a>
+                    </div>
+
+                    <div class="db-proj-body">
+                        <div class="db-proj-left">
+                            <h2 class="db-proj-name">{data.project.name}</h2>
+                            <div class="db-proj-meta">
+                                <span class="db-tag">{t('portal.stage')} <strong>{data.project.stage}</strong></span>
+                                <span class="db-tag">{lang === 'en' ? 'Deadline' : 'Entrega'}: {data.project.deadline}</span>
+                            </div>
+                        </div>
+
+                        <div class="db-ring-shell">
+                            <svg class="db-ring-svg" width="148" height="148" viewBox="0 0 160 160">
+                                <circle class="db-rt" cx="80" cy="80" r="68"/>
+                                {Array.from({ length: 24 }).map((_, i) => {
+                                    const a = (i / 24) * 360 - 90;
+                                    const r = a * Math.PI / 180;
+                                    return <line
+                                        class="db-rtick"
+                                        x1={80 + 74 * Math.cos(r)} y1={80 + 74 * Math.sin(r)}
+                                        x2={80 + 66 * Math.cos(r)} y2={80 + 66 * Math.sin(r)}
+                                    />;
+                                })}
+                                <circle class="db-rf" cx="80" cy="80" r="68"
+                                    data-progress={data.project.progress}
+                                    style="stroke-dasharray:427;stroke-dashoffset:427;"
+                                />
+                            </svg>
+                            <div class="db-ring-mid">
+                                <span class="db-pct"><span class="db-cnt" data-target={data.project.progress}>0</span><span class="db-pct-sym">%</span></span>
+                                <span class="db-pct-lbl">{lang === 'en' ? 'complete' : 'avance'}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FINANZAS — dark/inverted -->
+            <div class="db-card db-c-fin db-card-dark" id="card-fin">
+                <div class="db-chrome db-chrome-lt">
+                    <span class="db-cd db-cd-r"></span>
+                    <span class="db-cd db-cd-y"></span>
+                    <span class="db-cd db-cd-g"></span>
+                </div>
+                <div class="db-c-in">
+                    <div class="db-c-top">
+                        <span class="db-ey db-ey-lt">{t('portal.finance')}</span>
+                        <span class={`db-pill-dk ${data.capital.isAutoPay ? 'db-pill-dk-ok' : 'db-pill-dk-warn'}`}>
+                            {data.capital.status}
+                        </span>
+                    </div>
+                    <div class="db-fin-body">
+                        <p class="db-fin-label">{t('portal.next_charge')} · {data.capital.nextDate}</p>
+                        <div class="db-fin-amount">
+                            <span class="db-fin-sym">$</span>
+                            <span class="db-fin-num" data-target={data.capital.amount}>0</span>
+                            <span class="db-fin-cur">{data.capital.currency}</span>
+                        </div>
+                    </div>
+                    <a href={data.capital.portalUrl} class="db-pay-btn" id="db-pay-btn">
+                        <span>{t('portal.btn.pay')}</span>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- SERVICIOS -->
+            <div class="db-card db-c-svc" id="card-svc">
+                <div class="db-spotlight" aria-hidden="true"></div>
+                <div class="db-chrome">
+                    <span class="db-cd db-cd-r"></span>
+                    <span class="db-cd db-cd-y"></span>
+                    <span class="db-cd db-cd-g"></span>
+                </div>
+                <div class="db-c-in">
+                    <span class="db-ey db-ey-mb">{t('portal.services')}</span>
+                    <div class="db-svc-list">
+                        {data.services.map((svc: any) => (
+                            <a href={svc.link} class="db-svc-row">
+                                <span class="db-svc-ico" set:html={svc.icon}></span>
+                                <span class="db-svc-info">
+                                    <span class="db-svc-lbl">{svc.label}</span>
+                                    <span class="db-svc-sub">{svc.info}</span>
+                                </span>
+                                <span class="db-svc-arr">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                                </span>
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            <!-- ROADMAP -->
+            <div class="db-card db-c-rm" id="card-rm">
+                <div class="db-spotlight" aria-hidden="true"></div>
+                <div class="db-chrome">
+                    <span class="db-cd db-cd-r"></span>
+                    <span class="db-cd db-cd-y"></span>
+                    <span class="db-cd db-cd-g"></span>
+                </div>
+                <div class="db-c-in">
+                    <div class="db-c-top">
+                        <span class="db-ey">{t('portal.roadmap')}</span>
+                        <a href={lang === 'en' ? "/en/portal/roadmap" : "/portal/roadmap"} class="db-link-blue">{t('portal.btn.all')} →</a>
+                    </div>
+                    <div class="db-rm-list">
+                        {data.roadmap.map((item: any, i: number) => (
+                            <div class={`db-rm-row db-rm-${item.status}`}>
+                                <div class="db-rm-track">
+                                    <div class="db-rm-dot"></div>
+                                    {i < data.roadmap.length - 1 && <div class="db-rm-line"></div>}
+                                </div>
+                                <div class="db-rm-body">
+                                    <span class="db-rm-title">{item.title}</span>
+                                    <span class="db-rm-date">{item.date}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            <!-- BÓVEDA -->
+            <div class="db-card db-c-vault" id="card-vault">
+                <div class="db-spotlight" aria-hidden="true"></div>
+                <div class="db-chrome">
+                    <span class="db-cd db-cd-r"></span>
+                    <span class="db-cd db-cd-y"></span>
+                    <span class="db-cd db-cd-g"></span>
+                </div>
+                <div class="db-c-in">
+                    <div class="db-c-top">
+                        <span class="db-ey">{t('portal.vault')}</span>
+                        <a href={lang === 'en' ? "/en/portal/boveda" : "/portal/boveda"} class="db-ghost-btn">{t('portal.btn.upload')}</a>
+                    </div>
+                    <div class="db-vault-list">
+                        {data.documents.map((doc: any) => (
+                            <a href={doc.url} class="db-vault-row" download>
+                                <span class={`db-fchip db-fchip-${doc.type.toLowerCase()}`}>{doc.type}</span>
+                                <span class="db-fmeta">
+                                    <span class="db-fname">{doc.name}</span>
+                                    <span class="db-fsize">{doc.size}</span>
+                                </span>
+                                <span class="db-fdl">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                                </span>
+                            </a>
+                        ))}
+                        {data.documents.length === 0 && (
+                            <p class="db-vault-empty">{lang === 'en' ? 'No documents yet.' : 'Sin documentos aún.'}</p>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+/* ══════════════════════════════════════════════════════════
+   TOKENS
+══════════════════════════════════════════════════════════ */
+.db-root {
+    --blue:   #0055cc;
+    --green:  #10b981;
+    --text:   #0a0e1a;
+    --muted:  #6e7d96;
+    --dim:    #c4cdd9;
+    --border: rgba(0,0,0,0.07);
+    --ease:   cubic-bezier(0.16, 1, 0.3, 1);
+    --shadow:
+        0 0 0 1px rgba(0,0,0,0.04),
+        0 2px 4px rgba(0,0,0,0.04),
+        0 8px 20px rgba(0,0,0,0.05),
+        0 20px 40px rgba(0,0,0,0.04);
+    --shadow-up:
+        0 0 0 1px rgba(0,0,0,0.07),
+        0 4px 10px rgba(0,0,0,0.07),
+        0 16px 32px rgba(0,0,0,0.09),
+        0 32px 64px rgba(0,0,0,0.06);
+
+    background: #ffffff;
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    min-height: 100vh;
+    padding: 0 0 9rem;
+}
+
+.db-wrap { max-width: 1300px; margin: 0 auto; padding: 4rem 5% 0; }
+
+/* ══════════════════════════════════════════════════════════
+   OS MENUBAR — barra estilo macOS en la cima del componente
+══════════════════════════════════════════════════════════ */
+.os-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%;
+    height: 44px;
+    background: #07111f;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    opacity: 0;
+}
+.os-bar-left  { display: flex; align-items: center; gap: 10px; }
+.os-bar-center { position: absolute; left: 50%; transform: translateX(-50%); }
+.os-bar-right { display: flex; align-items: center; gap: 8px; }
+
+.os-dot {
+    width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
+}
+.os-r { background: #ff5f57; }
+.os-y { background: #ffbd2e; }
+.os-g { background: #28c840; }
+
+.os-bar-title {
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.5); text-transform: uppercase;
+    margin-left: 6px;
+}
+.os-bar-date {
+    font-family: 'JetBrains Mono', 'SF Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.35);
+}
+.os-led {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+    animation: led-pulse 2.5s ease-in-out infinite; flex-shrink: 0;
+}
+.os-bar-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.45); font-weight: 600;
+}
+
+/* ══════════════════════════════════════════════════════════
+   HEADER
+══════════════════════════════════════════════════════════ */
+.db-header { margin-bottom: 4.5rem; }
+
+.db-eyeline {
+    margin: 0 0 1.4rem;
+    opacity: 0;
+}
+.db-mono {
+    font-family: 'JetBrains Mono', 'SF Mono', monospace;
+    font-size: 0.66rem; letter-spacing: 0.1em; color: #0d9966;
+}
+
+.db-title {
+    font-size: clamp(3.2rem, 6vw, 6rem);
+    font-weight: 700; letter-spacing: -0.05em;
+    line-height: 1.0; margin: 0 0 0.8rem;
+    color: var(--text); overflow: hidden;
+}
+.db-greeting {
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+    font-weight: 500; letter-spacing: -0.01em;
+    color: var(--muted); display: block; margin-bottom: 0.1em;
+}
+.db-name {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic; font-weight: 400;
+    background: linear-gradient(128deg, #0a192f 0%, #0055cc 55%, #3b82f6 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.db-sub {
+    font-size: 1.05rem; color: var(--muted); margin: 0;
+    font-weight: 400; opacity: 0; letter-spacing: -0.01em;
+}
+.db-sub strong { color: var(--text); font-weight: 600; }
+
+.db-rule {
+    height: 1px; margin-top: 2.4rem;
+    background: linear-gradient(90deg,
+        transparent 0%, rgba(0,85,204,0.3) 30%,
+        rgba(0,85,204,0.12) 65%, transparent 100%);
+    transform: scaleX(0); transform-origin: left;
+}
+
+/* ══════════════════════════════════════════════════════════
+   BENTO GRID
+══════════════════════════════════════════════════════════ */
+.db-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.2rem;
+}
+
+/* ══════════════════════════════════════════════════════════
+   CARD BASE
+══════════════════════════════════════════════════════════ */
+.db-card {
+    position: relative; background: #ffffff;
+    border: 1px solid var(--border); border-radius: 24px;
+    overflow: hidden; opacity: 0;
+    box-shadow: var(--shadow);
+    transition: box-shadow .5s var(--ease), border-color .5s var(--ease), transform .5s var(--ease);
+    will-change: transform, box-shadow;
+}
+.db-card:hover {
+    box-shadow: var(--shadow-up); border-color: rgba(0,0,0,0.1);
+    transform: translateY(-5px);
+}
+.db-card:active { transform: translateY(-1px) scale(0.995); transition-duration: .12s; }
+
+/* Window chrome — los tres puntos de macOS */
+.db-chrome {
+    display: flex; gap: 6px; align-items: center;
+    padding: 14px 18px 0;
+}
+.db-cd {
+    width: 11px; height: 11px; border-radius: 50%;
+    opacity: 0.45; transition: opacity .2s;
+}
+.db-card:hover .db-cd { opacity: 1; }
+.db-cd-r { background: #ff5f57; }
+.db-cd-y { background: #ffbd2e; }
+.db-cd-g { background: #28c840; }
+
+/* Chrome claro para card oscura */
+.db-chrome-lt .db-cd { opacity: 0.6; }
+.db-card-dark:hover .db-chrome-lt .db-cd { opacity: 1; }
+
+/* Spotlight cursor */
+.db-spotlight {
+    position: absolute; width: 400px; height: 400px;
+    border-radius: 50%; pointer-events: none;
+    background: radial-gradient(circle, rgba(0,85,204,0.07) 0%, transparent 70%);
+    transform: translate(-50%, -50%); top: 0; left: 0;
+    opacity: 0; transition: opacity .4s;
+}
+.db-card:hover .db-spotlight { opacity: 1; }
+
+.db-c-in { padding: 1.4rem 2rem 2rem; height: 100%; display: flex; flex-direction: column; }
+.db-c-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.6rem; }
+.db-ey {
+    font-size: 0.59rem; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted);
+}
+.db-ey-mb { display: block; margin-bottom: 1.4rem; }
+
+/* Column spans */
+.db-c-project { grid-column: span 7; }
+.db-c-fin     { grid-column: span 5; }
+.db-c-svc     { grid-column: span 4; }
+.db-c-rm      { grid-column: span 5; }
+.db-c-vault   { grid-column: span 3; }
+
+/* Top accent on project card */
+.db-c-project::after {
+    content: ''; position: absolute; top: 0; left: 16%; right: 16%; height: 1.5px;
+    background: linear-gradient(90deg, transparent, var(--blue), transparent);
+    opacity: 0.5;
+}
+
+/* ══════════════════════════════════════════════════════════
+   CARD DARK — finanzas
+══════════════════════════════════════════════════════════ */
+.db-card-dark {
+    background: linear-gradient(145deg, #08121f 0%, #0d1f35 100%);
+    border-color: rgba(255,255,255,0.07);
+}
+.db-card-dark:hover { border-color: rgba(255,255,255,0.12); }
+.db-ey-lt {
+    font-size: 0.59rem; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: rgba(255,255,255,0.4);
+}
+
+/* Pills para card oscura */
+.db-pill-dk {
+    font-size: 0.65rem; font-weight: 700; padding: 5px 12px; border-radius: 100px;
+    letter-spacing: 0.02em;
+}
+.db-pill-dk-ok   { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+.db-pill-dk-warn { background: rgba(251,146,60,0.14); color: #fb923c; border: 1px solid rgba(251,146,60,0.2); }
+
+/* ══════════════════════════════════════════════════════════
+   PROYECTO
+══════════════════════════════════════════════════════════ */
+.db-proj-body {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-top: auto; flex-grow: 1; padding-top: 1.2rem; gap: 1rem;
+}
+.db-proj-left { min-width: 0; }
+.db-proj-name {
+    font-size: clamp(1.7rem, 2.5vw, 2.5rem);
+    font-weight: 700; letter-spacing: -0.04em;
+    margin: 0 0 1.1rem; line-height: 1.1; color: var(--text);
+}
+.db-proj-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.db-tag {
+    font-size: 0.7rem; font-weight: 500; padding: 4px 11px; border-radius: 8px;
+    color: var(--muted); background: rgba(0,0,0,0.032);
+    border: 1px solid rgba(0,0,0,0.06); letter-spacing: -0.01em;
+}
+.db-tag strong { color: var(--text); font-weight: 600; }
+
+/* Ring */
+.db-ring-shell {
+    position: relative; width: 148px; height: 148px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.db-ring-svg { transform: rotate(-90deg); overflow: visible; }
+.db-rt    { fill: none; stroke: rgba(0,0,0,0.05); stroke-width: 8; }
+.db-rtick { stroke: rgba(0,0,0,0.065); stroke-width: 1.5; stroke-linecap: round; }
+.db-rf    { fill: none; stroke: var(--blue); stroke-width: 8; stroke-linecap: round; filter: drop-shadow(0 0 6px rgba(0,85,204,0.35)); }
+.db-ring-mid {
+    position: absolute; text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 1px;
+}
+.db-pct { font-family: 'JetBrains Mono', monospace; font-size: 2.1rem; font-weight: 700; line-height: 1; color: var(--text); }
+.db-pct-sym { font-size: 1.1rem; }
+.db-pct-lbl { font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.db-cnt { display: inline-block; }
+
+/* ══════════════════════════════════════════════════════════
+   FINANZAS
+══════════════════════════════════════════════════════════ */
+.db-fin-body { margin: auto 0; flex-grow: 1; padding: 1.6rem 0; }
+.db-fin-label { font-size: 0.76rem; color: rgba(255,255,255,0.35); margin: 0 0 0.7rem; font-weight: 500; }
+.db-fin-amount { display: flex; align-items: baseline; gap: 0.25rem; letter-spacing: -0.04em; line-height: 1; }
+.db-fin-sym { font-size: 1.8rem; color: rgba(255,255,255,0.4); font-weight: 400; }
+.db-fin-num { font-size: 4rem; font-weight: 700; color: #ffffff; }
+.db-fin-cur { font-size: 1rem; color: rgba(255,255,255,0.35); font-weight: 500; align-self: flex-end; padding-bottom: 0.55rem; }
+
+.db-pay-btn {
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    background: #ffffff; color: #07111f;
+    padding: 1.05rem 1.5rem; border-radius: 14px;
+    font-size: 0.9rem; font-weight: 700; text-decoration: none;
+    will-change: transform; transition: background .2s, box-shadow .2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.db-pay-btn:hover { background: #f0f4ff; box-shadow: 0 6px 20px rgba(0,0,0,0.35); }
+
+/* ══════════════════════════════════════════════════════════
+   GHOST + LINK BUTTONS
+══════════════════════════════════════════════════════════ */
+.db-ghost-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 0.72rem; font-weight: 600; color: var(--muted);
+    text-decoration: none; background: rgba(0,0,0,0.035);
+    border: 1px solid rgba(0,0,0,0.08); padding: 6px 13px; border-radius: 100px;
+    transition: color .2s, border-color .2s, background .2s;
+}
+.db-ghost-btn:hover { color: var(--text); border-color: rgba(0,0,0,0.14); background: rgba(0,0,0,0.055); }
+.db-link-blue { font-size: 0.75rem; font-weight: 600; color: var(--blue); text-decoration: none; opacity: .7; transition: opacity .2s; }
+.db-link-blue:hover { opacity: 1; }
+
+/* ══════════════════════════════════════════════════════════
+   SERVICIOS
+══════════════════════════════════════════════════════════ */
+.db-svc-list { display: flex; flex-direction: column; gap: 0.35rem; }
+.db-svc-row {
+    display: flex; align-items: center; gap: 0.95rem;
+    padding: 0.85rem 0.9rem; border-radius: 14px;
+    text-decoration: none; color: var(--text);
+    border: 1px solid transparent;
+    transition: background .3s var(--ease), border-color .3s, transform .25s var(--ease);
+}
+.db-svc-row:hover { background: rgba(0,85,204,0.045); border-color: rgba(0,85,204,0.1); transform: translateX(4px); }
+.db-svc-ico  { color: var(--muted); display: flex; flex-shrink: 0; transition: color .2s; }
+.db-svc-row:hover .db-svc-ico { color: var(--blue); }
+.db-svc-info { flex-grow: 1; display: flex; flex-direction: column; gap: 1px; }
+.db-svc-lbl  { font-size: 0.85rem; font-weight: 600; }
+.db-svc-sub  { font-size: 0.67rem; color: var(--muted); }
+.db-svc-arr  { color: var(--dim); display: flex; transition: transform .3s var(--ease), color .2s; }
+.db-svc-row:hover .db-svc-arr { transform: translateX(4px); color: var(--blue); }
+
+/* ══════════════════════════════════════════════════════════
+   ROADMAP
+══════════════════════════════════════════════════════════ */
+.db-rm-list { display: flex; flex-direction: column; }
+.db-rm-row  { display: flex; gap: 1rem; padding-bottom: 1.1rem; }
+.db-rm-row:last-child { padding-bottom: 0; }
+.db-rm-track { display: flex; flex-direction: column; align-items: center; width: 12px; flex-shrink: 0; padding-top: 3px; }
+.db-rm-dot  { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; border: 2px solid var(--dim); background: #fff; transition: all .3s; }
+.db-rm-line { flex-grow: 1; width: 1px; background: rgba(0,0,0,0.07); margin-top: 5px; }
+.db-rm-body { display: flex; flex-direction: column; gap: 2px; }
+.db-rm-title { font-size: 0.87rem; font-weight: 500; color: var(--muted); }
+.db-rm-date  { font-size: 0.63rem; color: var(--dim); font-family: 'JetBrains Mono', monospace; }
+.db-rm-done .db-rm-dot { background: var(--text); border-color: var(--text); }
+.db-rm-done .db-rm-title { color: var(--dim); text-decoration: line-through; text-decoration-color: var(--dim); }
+.db-rm-active .db-rm-dot {
+    background: var(--blue); border-color: var(--blue);
+    box-shadow: 0 0 0 4px rgba(0,85,204,0.14), 0 0 8px rgba(0,85,204,0.2);
+    animation: node-pulse 2s ease-in-out infinite;
+}
+.db-rm-active .db-rm-title { color: var(--blue); font-weight: 600; }
+
+/* ══════════════════════════════════════════════════════════
+   BÓVEDA
+══════════════════════════════════════════════════════════ */
+.db-vault-list { display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.4rem; }
+.db-vault-row {
+    display: flex; align-items: center; gap: 0.85rem;
+    padding: 0.7rem 0.6rem; border-radius: 11px;
+    text-decoration: none; color: var(--text);
+    border: 1px solid transparent;
+    transition: background .2s, border-color .2s;
+}
+.db-vault-row:hover { background: rgba(0,0,0,0.025); border-color: rgba(0,0,0,0.06); }
+.db-fchip { font-size: 0.55rem; font-weight: 800; letter-spacing: 0.05em; padding: 4px 8px; border-radius: 6px; background: rgba(0,0,0,0.05); color: var(--muted); flex-shrink: 0; }
+.db-fchip-pdf { background: rgba(220,38,38,0.09); color: #b91c1c; }
+.db-fchip-fig { background: rgba(0,85,204,0.09); color: var(--blue); }
+.db-fmeta { flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.db-fname { font-size: 0.79rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.db-fsize { font-size: 0.64rem; color: var(--muted); }
+.db-fdl { color: var(--dim); opacity: 0; transform: translateY(-2px); transition: opacity .2s, transform .2s, color .2s; display: flex; }
+.db-vault-row:hover .db-fdl { opacity: 1; transform: translateY(2px); color: var(--text); }
+.db-vault-empty { font-size: 0.82rem; color: var(--dim); margin: 1rem 0 0; }
+
+/* ══════════════════════════════════════════════════════════
+   KEYFRAMES
+══════════════════════════════════════════════════════════ */
+@keyframes led-pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,.5); transform: scale(1); }
+    60%      { box-shadow: 0 0 0 5px rgba(16,185,129,0); transform: scale(1.2); }
+}
+@keyframes node-pulse {
+    0%,100% { box-shadow: 0 0 0 4px rgba(0,85,204,.13), 0 0 8px rgba(0,85,204,.2); }
+    50%      { box-shadow: 0 0 0 7px rgba(0,85,204,.05), 0 0 16px rgba(0,85,204,.1); }
+}
+
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════════════ */
+@media (max-width: 1100px) {
+    .db-c-project { grid-column: span 12; }
+    .db-c-fin     { grid-column: span 6; }
+    .db-c-svc     { grid-column: span 6; }
+    .db-c-rm      { grid-column: span 7; }
+    .db-c-vault   { grid-column: span 5; }
+}
+@media (max-width: 768px) {
+    .db-root { padding-bottom: 6rem; }
+    .db-grid { display: flex; flex-direction: column; }
+    .db-title { font-size: clamp(2.6rem, 10vw, 4rem); }
+    .db-proj-body { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+    .db-ring-shell { margin: 0 auto; }
+    .db-c-in { padding: 1rem 1.5rem 1.6rem; }
+    .db-fin-num { font-size: 3rem; }
+    .os-bar-center { display: none; }
+}
+</style>
+
+<script>
+import { gsap } from "gsap";
+import { SplitText }          from "gsap/SplitText";
+import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+
+gsap.registerPlugin(SplitText, ScrambleTextPlugin);
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+
+    /* 1 ── OS MENUBAR desliza desde arriba */
+    tl.to("#os-bar", { opacity: 1, y: 0, duration: 0.7 }, 0);
+
+    /* 2 ── ScrambleText en el badge de seguridad */
+    const badge = document.getElementById("os-badge-txt");
+    if (badge) {
+        const orig = badge.textContent || "";
+        tl.to(badge, {
+            duration: 1.2,
+            scrambleText: { text: orig, chars: "0123456789ABCDEF·", revealDelay: 0.2 },
+            ease: "none"
+        }, 0.15);
+    }
+
+    /* 3 ── Eyeline monospace */
+    tl.to("#db-eyeline", { opacity: 1, y: 0, duration: 0.6 }, 0.2);
+
+    /* 4 ── Título con SplitText 3D */
+    const titleEl = document.getElementById("db-title");
+    if (titleEl) {
+        const split = SplitText.create(titleEl, { type: "chars,words" });
+        gsap.set(split.chars, { opacity: 0, y: 32, rotateX: -55, transformOrigin: "center bottom" });
+        tl.to(split.chars, {
+            opacity: 1, y: 0, rotateX: 0,
+            duration: 0.7, stagger: 0.014,
+            ease: "back.out(2)"
+        }, 0.35);
+    }
+
+    /* 5 ── Subtítulo y regla */
+    tl.to("#db-sub",  { opacity: 1, y: 0, duration: 0.7 }, 0.8);
+    tl.to("#db-rule", { scaleX: 1, duration: 1.2, ease: "power3.out" }, 0.65);
+
+    /* 6 ── Cards — stagger con perspectiva */
+    const cards = ["#card-project","#card-fin","#card-svc","#card-rm","#card-vault"];
+    gsap.set(cards, { y: 40, opacity: 0, scale: 0.975 });
+    tl.to(cards, {
+        y: 0, opacity: 1, scale: 1,
+        duration: 1.1, stagger: 0.07, ease: "expo.out"
+    }, 0.55);
+
+    /* 7 ── Progress ring */
+    const ring = document.querySelector(".db-rf") as SVGCircleElement | null;
+    if (ring) {
+        const target = parseInt(ring.getAttribute("data-progress") || "0");
+        tl.to(ring, { strokeDashoffset: 427 - (427 * target) / 100, duration: 2.2, ease: "expo.out" }, 0.9);
+    }
+
+    /* 8 ── Counter % */
+    const cntEl = document.querySelector(".db-cnt") as HTMLElement | null;
+    if (cntEl) {
+        const target = parseInt(cntEl.getAttribute("data-target") || "0");
+        const obj = { val: 0 };
+        tl.to(obj, { val: target, duration: 2.2, ease: "expo.out",
+            onUpdate() { cntEl.textContent = String(Math.round(obj.val)); }
+        }, 0.9);
+    }
+
+    /* 9 ── Money counter */
+    const moneyEl = document.querySelector(".db-fin-num") as HTMLElement | null;
+    if (moneyEl) {
+        const target = parseInt(moneyEl.getAttribute("data-target") || "0");
+        const obj = { val: 0 };
+        tl.to(obj, { val: target, duration: 1.8, ease: "power3.out",
+            onUpdate() { moneyEl.textContent = Math.round(obj.val).toLocaleString('en-US'); }
+        }, 0.95);
+    }
+
+    /* 10 ── Roadmap dots + lines */
+    gsap.set(".db-rm-dot",  { scale: 0 });
+    gsap.set(".db-rm-line", { scaleY: 0, transformOrigin: "top" });
+    tl.to(".db-rm-dot",  { scale: 1, duration: 0.5, stagger: 0.09, ease: "back.out(2.5)" }, 1.05);
+    tl.to(".db-rm-line", { scaleY: 1, duration: 0.4, stagger: 0.09, ease: "power2.out" }, 1.2);
+
+    /* 11 ── Service rows */
+    gsap.set(".db-svc-row", { x: -16, opacity: 0 });
+    tl.to(".db-svc-row", { x: 0, opacity: 1, duration: 0.7, stagger: 0.07, ease: "expo.out" }, 0.85);
+
+    /* 12 ── Vault rows */
+    gsap.set(".db-vault-row", { opacity: 0, y: 8 });
+    tl.to(".db-vault-row", { opacity: 1, y: 0, duration: 0.5, stagger: 0.07, ease: "power2.out" }, 1.0);
+
+    /* ── SPOTLIGHT — cursor por card */
+    document.querySelectorAll<HTMLElement>(".db-card").forEach(card => {
+        const spot = card.querySelector<HTMLElement>(".db-spotlight");
+        if (!spot) return;
+        card.addEventListener("mousemove", (e: MouseEvent) => {
+            const r = card.getBoundingClientRect();
+            gsap.to(spot, { x: e.clientX - r.left, y: e.clientY - r.top, duration: 0.55, ease: "power2.out" });
+        });
+    });
+
+    /* ── BOTÓN MAGNÉTICO */
+    const payBtn = document.getElementById("db-pay-btn");
+    if (payBtn) {
+        payBtn.addEventListener("mousemove", (e: MouseEvent) => {
+            const r = payBtn.getBoundingClientRect();
+            const x = (e.clientX - r.left - r.width  / 2) * 0.3;
+            const y = (e.clientY - r.top  - r.height / 2) * 0.3;
+            gsap.to(payBtn, { x, y, duration: 0.4, ease: "power2.out" });
+        });
+        payBtn.addEventListener("mouseleave", () => gsap.to(payBtn, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.4)" }));
+        payBtn.addEventListener("mousedown",  () => gsap.to(payBtn, { scale: 0.95, duration: 0.1 }));
+        payBtn.addEventListener("mouseup",    () => gsap.to(payBtn, { scale: 1, duration: 0.4, ease: "elastic.out(1, 0.4)" }));
+    }
+});
+</script>

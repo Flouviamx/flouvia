@@ -1,0 +1,463 @@
+---
+// src/components/portal/BovedaUI.astro
+import { useTranslations } from '../../i18n/utils';
+import { supabase } from '../../lib/supabase';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const user = await Astro.locals.currentUser();
+const email = user?.emailAddresses[0]?.emailAddress || "flouvia.mx@gmail.com";
+
+const formatDate = (iso: string | null) => {
+  if (!iso) return "—";
+  return new Date(iso).toLocaleDateString(lang === 'en' ? 'en-US' : 'es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
+};
+
+// Mapa de categorías DB → filtro del HTML
+const catMap: Record<string, string> = {
+  contratos:    'contracts',
+  diseno:       'design',
+  entregables:  'design',
+  general:      'general',
+};
+
+const { data: rows } = await supabase
+  .from('boveda_archivos')
+  .select('*')
+  .eq('email_cliente', email)
+  .order('created_at', { ascending: false });
+
+const data = {
+  files: (rows ?? []).map((a: any) => ({
+    id:       a.id,
+    name:     a.nombre,
+    category: catMap[a.categoria] ?? 'general',
+    type:     a.tipo,
+    size:     a.size ?? "",
+    date:     formatDate(a.created_at),
+    url:      a.url_descarga,
+  })),
+};
+---
+
+<div class="os-page">
+    <div class="os-wrap">
+
+        <!-- HEADER -->
+        <header class="bv-header">
+            <div class="bv-topbar" id="bv-topbar">
+                <a href={lang === 'en' ? "/en/portal/dashboard" : "/portal/dashboard"} class="bv-back">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><polyline points="15 18 9 12 15 6"/></svg>
+                    Dashboard
+                </a>
+                <div class="bv-badge">
+                    <span class="bv-led"></span>
+                    <span>{t('portal.secure')}</span>
+                </div>
+            </div>
+
+            <div class="bv-title-row">
+                <div>
+                    <h1 class="bv-title" id="bv-title">{t('vault.title')}</h1>
+                    <p class="bv-sub" id="bv-sub">{t('vault.subtitle')}</p>
+                </div>
+                <a href={lang === 'en' ? "/en/portal/boveda/upload" : "/portal/boveda/upload"} class="bv-upload-btn" id="bv-upload-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    {t('vault.upload_btn')}
+                </a>
+            </div>
+            <div class="bv-rule" id="bv-rule"></div>
+        </header>
+
+        <!-- FINDER CARD -->
+        <div class="bv-card" id="bv-card">
+            <div class="os-spotlight" aria-hidden="true"></div>
+
+            <!-- Toolbar estilo macOS Finder -->
+            <div class="bv-toolbar">
+                <div class="bv-tabs">
+                    <button class="bv-tab active" data-filter="all">{t('vault.folders.all')}</button>
+                    <button class="bv-tab" data-filter="contracts">{t('vault.folders.contracts')}</button>
+                    <button class="bv-tab" data-filter="design">{t('vault.folders.design')}</button>
+                </div>
+                <span class="bv-count" id="bv-count">{data.files.length} {lang === 'en' ? 'items' : 'archivos'}</span>
+            </div>
+
+            <!-- Columnas tipo Finder -->
+            <div class="bv-col-header">
+                <span class="bv-col-name">{lang === 'en' ? 'Name' : 'Nombre'}</span>
+                <span class="bv-col-size">{lang === 'en' ? 'Size' : 'Tamaño'}</span>
+                <span class="bv-col-date">{lang === 'en' ? 'Modified' : 'Modificado'}</span>
+                <span class="bv-col-action"></span>
+            </div>
+
+            <div class="bv-file-list" id="files-container">
+                {data.files.map((file: any) => (
+                    <div class="bv-row-wrap" data-category={file.category}>
+                        <a href={file.url} class="bv-file-row" download>
+                            <div class="bv-accent"></div>
+                            <div class="bv-file-left">
+                                <div class={`bv-icon bv-icon-${file.type.toLowerCase()}`}>
+                                    <span class="bv-ext">{file.type}</span>
+                                </div>
+                                <span class="bv-file-name" title={file.name}>{file.name}</span>
+                            </div>
+                            <span class="bv-file-size">{file.size}</span>
+                            <span class="bv-file-date">{file.date}</span>
+                            <div class="bv-dl-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                            </div>
+                        </a>
+                    </div>
+                ))}
+            </div>
+
+            <div id="vault-empty" class="bv-empty" style="display:none;">
+                <div class="bv-empty-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <p>{t('vault.empty')}</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+/* ═══ TOKENS ═══ */
+.os-page {
+    --blue:   #0055cc;
+    --green:  #10b981;
+    --text:   #0a0e1a;
+    --muted:  #6e7d96;
+    --dim:    #c4cdd9;
+    --border: rgba(0,0,0,0.07);
+    --ease:   cubic-bezier(0.16, 1, 0.3, 1);
+    --shadow: 0 0 0 1px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.04), 0 8px 20px rgba(0,0,0,0.05), 0 20px 40px rgba(0,0,0,0.04);
+    --shadow-up: 0 0 0 1px rgba(0,0,0,0.06), 0 4px 10px rgba(0,0,0,0.07), 0 16px 32px rgba(0,0,0,0.08), 0 32px 64px rgba(0,0,0,0.06);
+
+    background: #ffffff;
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    min-height: 100vh;
+    padding: 4.5rem 0 9rem;
+}
+.os-wrap { max-width: 1100px; margin: 0 auto; padding: 0 5%; }
+
+/* ═══ HEADER ═══ */
+.bv-header { margin-bottom: 2.5rem; }
+
+.bv-topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 2.8rem; opacity: 0;
+}
+.bv-back {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.82rem; font-weight: 600; color: var(--muted);
+    text-decoration: none; transition: color .2s;
+}
+.bv-back:hover { color: var(--text); }
+
+.bv-badge {
+    display: flex; align-items: center; gap: 8px;
+    background: #0a192f; padding: 6px 16px; border-radius: 100px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.75); font-weight: 600;
+    box-shadow: 0 4px 14px rgba(10,25,47,0.2);
+}
+.bv-led {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0;
+    animation: bv-led 2.5s ease-in-out infinite;
+}
+
+.bv-title-row {
+    display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem;
+}
+.bv-title {
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    font-weight: 600; letter-spacing: -0.045em;
+    line-height: 1.04; margin: 0 0 0.5rem; opacity: 0;
+}
+.bv-sub { font-size: 1rem; color: var(--muted); margin: 0; opacity: 0; font-weight: 400; }
+
+/* Botón upload — contorno punteado elegante */
+.bv-upload-btn {
+    display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0;
+    font-size: 0.85rem; font-weight: 600; color: var(--text);
+    text-decoration: none; padding: 0.85rem 1.6rem;
+    border-radius: 100px;
+    border: 1.5px dashed rgba(0,0,0,0.2);
+    background: rgba(0,0,0,0.02);
+    transition: border-color .3s var(--ease), background .3s, transform .2s, box-shadow .3s;
+    will-change: transform;
+}
+.bv-upload-btn:hover {
+    border-color: var(--blue); border-style: solid;
+    background: rgba(0,85,204,0.04);
+    box-shadow: 0 4px 14px rgba(0,85,204,0.12);
+    color: var(--blue);
+}
+.bv-upload-btn:active { transform: scale(0.97); }
+
+.bv-rule {
+    height: 1px; margin-top: 2rem;
+    background: linear-gradient(90deg, transparent, rgba(0,85,204,0.25) 35%, rgba(0,85,204,0.1) 65%, transparent);
+    transform: scaleX(0); transform-origin: left;
+}
+
+/* ═══ FINDER CARD ═══ */
+.bv-card {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    opacity: 0;
+    transition: box-shadow .5s var(--ease), border-color .5s var(--ease);
+}
+.bv-card:hover { box-shadow: var(--shadow-up); border-color: rgba(0,0,0,0.09); }
+
+.os-spotlight {
+    position: absolute; width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,85,204,0.055) 0%, transparent 70%);
+    pointer-events: none; transform: translate(-50%,-50%);
+    top: 0; left: 0; opacity: 0; transition: opacity .4s; z-index: 0;
+}
+.bv-card:hover .os-spotlight { opacity: 1; }
+
+/* Toolbar */
+.bv-toolbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 2.2rem;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    background: rgba(0,0,0,0.008);
+    position: relative; z-index: 1;
+}
+.bv-tabs { display: flex; gap: 0; }
+.bv-tab {
+    background: transparent; border: none; cursor: pointer;
+    font-family: inherit; font-size: 0.85rem; font-weight: 600;
+    color: var(--muted); padding: 1.1rem 1.4rem; position: relative;
+    transition: color .2s; border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+}
+.bv-tab:hover { color: var(--text); }
+.bv-tab.active { color: var(--text); border-bottom-color: var(--text); }
+
+.bv-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem; color: var(--muted); letter-spacing: 0.05em;
+}
+
+/* Columnas */
+.bv-col-header {
+    display: grid;
+    grid-template-columns: 1fr 100px 120px 52px;
+    padding: 0.6rem 2.2rem; gap: 1rem;
+    font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--dim);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    background: rgba(0,0,0,0.005);
+    position: relative; z-index: 1;
+}
+
+/* Filas de archivos */
+.bv-file-list { display: flex; flex-direction: column; position: relative; z-index: 1; }
+
+.bv-row-wrap { position: relative; }
+
+.bv-file-row {
+    display: grid;
+    grid-template-columns: 1fr 100px 120px 52px;
+    align-items: center; gap: 1rem;
+    padding: 1.1rem 2.2rem; text-decoration: none; color: var(--text);
+    border-bottom: 1px solid rgba(0,0,0,0.045);
+    position: relative; overflow: hidden;
+    transition: background .2s var(--ease);
+}
+.bv-row-wrap:last-child .bv-file-row { border-bottom: none; }
+.bv-file-row:hover { background: rgba(0,85,204,0.028); }
+
+/* Acento izquierdo Finder */
+.bv-accent {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--blue); border-radius: 0 2px 2px 0;
+    opacity: 0; transform: scaleY(0.4);
+    transition: opacity .2s var(--ease), transform .3s var(--ease);
+}
+.bv-file-row:hover .bv-accent { opacity: 1; transform: scaleY(1); }
+
+/* Izquierda: icono + nombre */
+.bv-file-left { display: flex; align-items: center; gap: 1rem; min-width: 0; }
+
+.bv-icon {
+    width: 46px; height: 46px; border-radius: 13px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05);
+    transition: transform .3s var(--ease);
+}
+.bv-file-row:hover .bv-icon { transform: scale(1.06); }
+
+.bv-ext { font-size: 0.6rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.04em; }
+
+.bv-icon-pdf { background: rgba(200,30,30,0.07); border-color: rgba(200,30,30,0.14); }
+.bv-icon-pdf .bv-ext { color: #b91c1c; }
+
+.bv-icon-fig { background: rgba(0,85,204,0.07); border-color: rgba(0,85,204,0.14); }
+.bv-icon-fig .bv-ext { color: var(--blue); }
+
+.bv-icon-doc,.bv-icon-docx { background: rgba(37,99,235,0.06); border-color: rgba(37,99,235,0.12); }
+.bv-icon-doc .bv-ext,.bv-icon-docx .bv-ext { color: #1d4ed8; }
+
+.bv-icon-xls,.bv-icon-xlsx { background: rgba(22,163,74,0.07); border-color: rgba(22,163,74,0.14); }
+.bv-icon-xls .bv-ext,.bv-icon-xlsx .bv-ext { color: #166534; }
+
+.bv-file-name {
+    font-size: 0.92rem; font-weight: 500;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    transition: color .2s;
+}
+.bv-file-row:hover .bv-file-name { color: var(--blue); }
+
+.bv-file-size,.bv-file-date {
+    font-size: 0.78rem; color: var(--muted); font-weight: 400;
+    white-space: nowrap;
+}
+.bv-file-date { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; }
+
+/* Botón descarga */
+.bv-dl-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); background: #fff; justify-self: end;
+    transition: all .35s var(--ease);
+}
+.bv-file-row:hover .bv-dl-btn {
+    background: var(--text); color: #fff; border-color: var(--text);
+    transform: rotate(-8deg) scale(1.08);
+}
+
+/* Empty */
+.bv-empty {
+    padding: 5rem 2rem; text-align: center; color: var(--muted);
+    display: flex; flex-direction: column; align-items: center; gap: 1rem;
+}
+.bv-empty-icon { color: var(--dim); }
+.bv-empty p { font-size: 0.95rem; font-weight: 500; margin: 0; }
+
+/* ═══ KEYFRAMES ═══ */
+@keyframes bv-led {
+    0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,.5); transform: scale(1); }
+    60%      { box-shadow: 0 0 0 5px rgba(16,185,129,0); transform: scale(1.2); }
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 768px) {
+    .os-page { padding: 3rem 0 6rem; }
+    .bv-title-row { flex-direction: column; align-items: flex-start; gap: 1.2rem; }
+    .bv-upload-btn { width: 100%; justify-content: center; }
+    .bv-col-header { display: none; }
+    .bv-file-row { grid-template-columns: 1fr 44px; gap: 0.5rem; padding: 1rem 1.5rem; }
+    .bv-file-size,.bv-file-date { display: none; }
+    .bv-title { font-size: clamp(2.2rem, 9vw, 3.5rem); }
+}
+</style>
+
+<script>
+    import { gsap } from "gsap";
+    import { SplitText } from "gsap/SplitText";
+    gsap.registerPlugin(SplitText);
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+
+        // Topbar
+        tl.to("#bv-topbar", { opacity: 1, duration: 0.8 }, 0);
+
+        // SplitText en título
+        const titleEl = document.getElementById("bv-title");
+        if (titleEl) {
+            const split = SplitText.create(titleEl, { type: "chars,words" });
+            gsap.set(split.chars, { opacity: 0, y: 22, rotateX: -38, transformOrigin: "center bottom" });
+            tl.to(split.chars, { opacity: 1, y: 0, rotateX: 0, duration: 0.6, stagger: 0.018, ease: "back.out(1.8)" }, 0.2);
+        }
+
+        // Subtítulo + rule
+        tl.to("#bv-sub",  { opacity: 1, duration: 0.6 }, 0.65);
+        tl.to("#bv-rule", { scaleX: 1, duration: 1.0, ease: "power3.out" }, 0.5);
+
+        // Card Finder
+        tl.to("#bv-card", { opacity: 1, y: 0, scale: 1, duration: 1.0 }, 0.5);
+        gsap.set("#bv-card", { y: 28, scale: 0.985 });
+
+        // Filas de archivos — stagger tipo Finder
+        gsap.set(".bv-row-wrap", { opacity: 0, x: -10 });
+        tl.to(".bv-row-wrap", { opacity: 1, x: 0, duration: 0.5, stagger: 0.05, ease: "expo.out" }, 0.75);
+
+        // Botón upload magnético
+        const uploadBtn = document.getElementById("bv-upload-btn");
+        if (uploadBtn) {
+            uploadBtn.addEventListener("mousemove", (e: MouseEvent) => {
+                const r = uploadBtn.getBoundingClientRect();
+                const x = (e.clientX - r.left - r.width / 2) * 0.2;
+                const y = (e.clientY - r.top - r.height / 2) * 0.2;
+                gsap.to(uploadBtn, { x, y, duration: 0.4, ease: "power2.out" });
+            });
+            uploadBtn.addEventListener("mouseleave", () => {
+                gsap.to(uploadBtn, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1,0.4)" });
+            });
+        }
+
+        // Spotlight
+        const card = document.getElementById("bv-card");
+        const spot = card?.querySelector<HTMLElement>(".os-spotlight");
+        if (card && spot) {
+            card.addEventListener("mousemove", (e: MouseEvent) => {
+                const r = card.getBoundingClientRect();
+                gsap.to(spot, { x: e.clientX - r.left, y: e.clientY - r.top, duration: 0.55, ease: "power2.out" });
+            });
+        }
+
+        // ── FILTRO DE TABS ──
+        const tabs = document.querySelectorAll<HTMLButtonElement>('.bv-tab');
+        const fileWrappers = document.querySelectorAll<HTMLElement>('.bv-row-wrap');
+        const emptyState = document.getElementById('vault-empty');
+        const countEl = document.getElementById('bv-count');
+        const lang = document.documentElement.lang;
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                const filter = tab.getAttribute('data-filter');
+                const toShow: HTMLElement[] = [];
+                const toHide: HTMLElement[] = [];
+
+                fileWrappers.forEach(fw => {
+                    const cat = fw.getAttribute('data-category');
+                    if (filter === 'all' || cat === filter) toShow.push(fw);
+                    else toHide.push(fw);
+                });
+
+                gsap.set(toHide, { opacity: 0, display: 'none' });
+
+                if (toShow.length > 0) {
+                    gsap.set(toShow, { display: 'block', opacity: 0, x: -8 });
+                    gsap.to(toShow, { opacity: 1, x: 0, duration: 0.4, stagger: 0.04, ease: "expo.out", clearProps: "x" });
+                }
+
+                if (emptyState) emptyState.style.display = toShow.length === 0 ? 'flex' : 'none';
+                if (countEl) countEl.textContent = `${toShow.length} ${lang === 'en' ? 'items' : 'archivos'}`;
+            });
+        });
+    });
+</script>

@@ -94,24 +94,16 @@ export const ui = {
     'serv.choose.2.title': 'Expertise Singular', 'serv.choose.2.desc': 'No hacemos redes sociales, no hacemos campañas de branding. Somos una firma obsesionada exclusivamente con la arquitectura transaccional y la ingeniería de conversión.',
     'serv.choose.3.title': 'Metodología Predictiva', 'serv.choose.3.desc': 'Nuestras decisiones de diseño e infraestructura no se basan en opiniones estéticas, se basan en análisis de datos cuantitativos, patrones de usuario y métricas de rendimiento.',
 
-    // ==========================================
-    // NOSOTROS — Rediseñado
-    // ==========================================
-
-    // Hero
+    // NOSOTROS 
     'about.hero.badge': 'LA FIRMA',
     'about.hero.title1': 'Diseño de sistemas.',
     'about.hero.title2': 'Ingeniería de revenue.',
     'about.hero.desc': 'Fundamos Flouvia con una sola convicción: el diseño convencional está obsoleto. Construimos arquitecturas transaccionales diseñadas matemáticamente para escalar.',
-
-    // Manifiesto
     'about.manifesto.badge': 'EL MANIFIESTO',
     'about.manifesto.title': 'Software sobre',
     'about.manifesto.title_ed': 'estética.',
     'about.manifesto.p1': 'Rechazamos tajantemente la forma sin función. No somos una agencia creativa; somos ingenieros de ecosistemas digitales que generan revenue medible.',
     'about.manifesto.p2': 'Nuestra arquitectura está diseñada para latencia cero y conversión absoluta. La tecnología debe generar revenue, no solo ganar premios de diseño.',
-
-    // Valores
     'about.values.badge': 'NUESTRO ADN',
     'about.values.title': 'Principios',
     'about.values.title_ed': 'inquebrantables.',
@@ -121,8 +113,6 @@ export const ui = {
     'about.v2.desc': 'No delegamos. Cada línea empujada a producción está auditada para garantizar latencia cero.',
     'about.v3.title': 'ROI Implacable',
     'about.v3.desc': 'El éxito se mide por el incremento exacto en tu Tasa de Conversión (CR) y Ticket Promedio (AOV).',
-
-    // Métricas
     'about.metrics.badge': 'EL IMPACTO',
     'about.metrics.title': 'Resultados',
     'about.metrics.title_ed': 'cuantificables.',
@@ -132,13 +122,9 @@ export const ui = {
     'about.m4.num': '10', 'about.m4.sym': '+', 'about.m4.desc': 'Sistemas ERP (SAP/NetSuite) integrados en tiempo real.',
     'about.m5.num': '50', 'about.m5.sym': 'M+', 'about.m5.desc': 'Revenue anual orquestado a través de nuestros sistemas.',
     'about.m6.num': '100', 'about.m6.sym': '%', 'about.m6.desc': 'Decisiones UX respaldadas exclusivamente por data real.',
-
-    // ¿Por qué Flouvia?
     'about.liquid.badge': 'LA VENTAJA',
     'about.liquid.title': '¿Por qué Flouvia?',
     'about.liquid.desc': 'Tu facturación es demasiado grande para plantillas genéricas. Escalar requiere infraestructura empresarial, ingeniería real y decisiones basadas en datos.',
-
-    // Reseñas
     'about.reviews.badge': 'TESTIMONIOS',
     'about.reviews.title': 'Lo que dicen',
     'about.reviews.title_ed': 'los fundadores.',
@@ -148,18 +134,144 @@ export const ui = {
     'about.rev2.text': 'Migrar a una arquitectura Headless con ellos disparó nuestra conversión un 34% en el primer trimestre. La latencia simplemente desapareció.',
     'about.rev2.author': 'Diego Godoy',
     'about.rev2.role': 'CEO, Setnpet',
-
-    // CTA
     'about.cta.badge': 'START NOW',
     'about.cta.title': '¿Listo para dominar',
     'about.cta.title_ed': 'tu mercado?',
     'about.cta.btn': 'Iniciar Arquitectura',
+
+    // PORTAL LOGIN
+    'login.eyebrow': 'ENTORNO PRIVADO',
+    'login.title1': 'Ingeniería',
+    'login.title2': 'en movimiento.',
+    'login.desc': 'Supervisa el desarrollo de tus plataformas, gestiona facturación y colabora con el equipo de Flouvia en tiempo real.',
+
+    // PORTAL DASHBOARD
+    'portal.secure': 'SISTEMA ENCRIPTADO',
+    'portal.greeting': 'Bienvenido,',
+    'portal.subtitle': 'Siguiente hito de infraestructura:',
+    'portal.project': 'ENGINEERING CORE',
+    'portal.btn.env': 'Ver Entorno',
+    'portal.stage': 'Etapa:',
+    'portal.uptime': 'Uptime:',
+    'portal.finance': 'CAPITAL',
+    'portal.next_charge': 'Siguiente cargo automático',
+    'portal.btn.pay': 'Gestionar Pagos',
+    'portal.services': 'SERVICIOS VIP',
+    'portal.roadmap': 'ROADMAP OPERATIVO',
+    'portal.btn.all': 'Ver todo',
+    'portal.vault': 'BÓVEDA DE ARCHIVOS',
+    'portal.btn.upload': '+ Subir',
+
+    // PORTAL FACTURACIÓN
+    'fact.title': 'Capital y Facturación',
+    'fact.subtitle': 'Gestión financiera y suscripciones activas.',
+    'fact.plan': 'PLAN ACTIVO',
+    'fact.next': 'Próximo cargo programado',
+    'fact.stripe_btn': 'Gestionar en Stripe ↗',
+    'fact.method': 'MÉTODO DE PAGO',
+    'fact.expires': 'Expira en',
+    'fact.history': 'HISTORIAL DE FACTURAS',
+    'fact.download': 'Descargar',
+    'fact.paid': 'Pagado',
+
+    // PORTAL BÓVEDA
+    'vault.title': 'Bóveda de Archivos',
+    'vault.subtitle': 'Contratos, entregables y recursos de tu proyecto.',
+    'vault.upload_btn': 'Subir Archivo',
+    'vault.folders.all': 'Todos los archivos',
+    'vault.folders.contracts': 'Contratos',
+    'vault.folders.design': 'Diseño & UI',
+    'vault.empty': 'No hay archivos en esta carpeta.',
+
+    // PORTAL ROADMAP
+    'road.title': 'Roadmap del Proyecto',
+    'road.subtitle': 'Seguimiento en tiempo real de los sprints e hitos de tu proyecto.',
+    'road.status.done': 'Completado',
+    'road.status.active': 'En Progreso',
+    'road.status.pending': 'Pendiente',
+    'road.sprint': 'SPRINT',
+    'road.empty': 'No hay elementos en el roadmap aún.',
+
+    // PORTAL CALENDARIO
+    'cal.eyebrow': 'AGENDA TU SESIÓN',
+    'cal.title': 'Agenda una',
+    'cal.title_ed': 'Llamada.',
+    'cal.subtitle': 'Reserva una sesión de estrategia directa con tu ingeniero asignado de Flouvia.',
+    'cal.info.1': 'Video llamada · 45 min',
+    'cal.info.2': 'Confirmación inmediata · Sin costo',
+    'cal.feat.1.title': 'Canal directo',
+    'cal.feat.1.desc': 'Habla directamente con tu lead engineer, sin intermediarios.',
+    'cal.feat.2.title': 'Agenda garantizada',
+    'cal.feat.2.desc': 'Respuesta confirmada en menos de 2 horas hábiles.',
+    'cal.feat.3.title': 'Entorno seguro',
+    'cal.feat.3.desc': 'Sesión privada y encriptada. Solo tu equipo tiene acceso.',
+    'cal.placeholder': 'Selecciona un horario disponible →',
+
+    // PORTAL SOPORTE VIP
+    'support.title': 'Soporte',
+    'support.title_ed': 'VIP.',
+    'support.subtitle': 'Canal directo con tu ingeniero asignado. SLA garantizado.',
+    'support.sla.label': 'ACUERDO DE SERVICIO',
+    'support.sla.response': 'Tiempo de respuesta',
+    'support.sla.uptime': 'Uptime garantizado',
+    'support.sla.online': 'EN LÍNEA',
+    'support.form.label': 'NUEVA SOLICITUD',
+    'support.form.category': 'Categoría',
+    'support.form.subject': 'Asunto',
+    'support.form.subject_ph': 'Ej: Error en sincronización de inventario',
+    'support.form.description': 'Descripción detallada',
+    'support.form.description_ph': 'Describe el problema, los pasos para reproducirlo y el comportamiento esperado…',
+    'support.form.priority': 'Prioridad',
+    'support.form.submit': 'Enviar Solicitud',
+    'support.form.success_title': 'Solicitud enviada',
+    'support.form.success_sub': 'Tu ingeniero asignado responderá en menos de 2 horas.',
+    'support.priority.normal': 'Normal',
+    'support.priority.high': 'Alta',
+    'support.priority.critical': 'Crítica',
+    'support.tickets.label': 'HISTORIAL DE TICKETS',
+    'support.tickets.all_resolved': 'Todo resuelto',
+    'support.ticket.resolved': 'Resuelto',
+    'support.ticket.open': 'Abierto',
+    'support.ticket.pending': 'Pendiente',
+
+    // PÁGINAS DE SERVICIOS INDIVIDUALES
+    'serv.page.back': '← Volver a Servicios',
+    'serv.page.capabilities': 'CAPACIDADES',
+    'serv.page.process': 'CÓMO LO HACEMOS',
+    'serv.page.stack': 'TECH STACK',
+    'serv.page.cta.title': '¿Listo para escalar?',
+    'serv.page.cta.sub': 'Agenda un diagnóstico gratuito con nuestro equipo de ingeniería.',
+    'serv.page.cta.btn': 'Agendar Diagnóstico',
+
+    'serv.1.p1': 'Auditoría de la infraestructura actual y mapeo de fricción técnica',
+    'serv.1.p2': 'Arquitectura Headless o Shopify Plus según el caso de uso',
+    'serv.1.p3': 'Desarrollo full-stack con código nativo, sin templates ni apps de terceros',
+    'serv.1.p4': 'Lanzamiento con monitoreo activo de latencia y conversión',
+
+    'serv.2.p1': 'Mapeo de flujos de venta mayorista y reglas de negocio existentes',
+    'serv.2.p2': 'Diseño del portal privado B2B y arquitectura de catálogos protegidos',
+    'serv.2.p3': 'Integración nativa con ERP, sistemas de pagos y APIs corporativas',
+    'serv.2.p4': 'Entrega, capacitación del equipo y soporte post-lanzamiento',
+
+    'serv.3.p1': 'Diagnóstico de flujos manuales y cuellos de botella operativos',
+    'serv.3.p2': 'Diseño de arquitectura de datos y mapa de integraciones',
+    'serv.3.p3': 'Automatización vía Make, webhooks personalizados y APIs nativas',
+    'serv.3.p4': 'Monitoreo continuo y optimización iterativa de los flujos',
+
+    'serv.4.p1': 'Auditoría UX forense del embudo de conversión con datos reales',
+    'serv.4.p2': 'Hipótesis de optimización basadas en análisis cuantitativo de comportamiento',
+    'serv.4.p3': 'Implementación de A/B tests, heatmaps y herramientas de analytics',
+    'serv.4.p4': 'Iteración continua para maximizar AOV, LTV y Conversion Rate',
   },
 
   en: {
     // NAVBAR & GLOBALS
-    'nav.work': 'WORK', 'nav.services': 'SERVICES', 'nav.about': 'ABOUT US',
-    'nav.cases': 'CASES', 'nav.contact': 'CONTACT ↗', 'nav.login': 'LOGIN',
+    'nav.work': 'WORK',
+    'nav.services': 'SERVICES',
+    'nav.about': 'ABOUT US',
+    'nav.cases': 'CASES',
+    'nav.contact': 'CONTACT ↗',
+    'nav.login': 'LOGIN',
     
     // INICIO
     'hero.badge': 'PRIVATE GROWTH BOUTIQUE',
@@ -234,24 +346,16 @@ export const ui = {
     'serv.choose.2.title': 'Singular Expertise', 'serv.choose.2.desc': 'We don\'t do social media, we don\'t do branding campaigns. We are a firm exclusively obsessed with transactional architecture and conversion engineering.',
     'serv.choose.3.title': 'Predictive Methodology', 'serv.choose.3.desc': 'Our design and infrastructure decisions aren\'t based on aesthetic opinions; they are based on quantitative data analysis, user patterns, and performance metrics.',
 
-    // ==========================================
     // NOSOTROS 
-    // ==========================================
-
-    // Hero
     'about.hero.badge': 'THE FIRM',
     'about.hero.title1': 'Systems design.',
     'about.hero.title2': 'Revenue engineering.',
     'about.hero.desc': 'We founded Flouvia with a single conviction: conventional design is obsolete. We build transactional architectures mathematically designed to generate revenue.',
-
-    // Manifesto
     'about.manifesto.badge': 'THE MANIFESTO',
     'about.manifesto.title': 'Software over',
     'about.manifesto.title_ed': 'aesthetics.',
     'about.manifesto.p1': 'We strongly reject form without function. We are not a creative agency; we are engineers of digital ecosystems that generate measurable revenue.',
     'about.manifesto.p2': 'Our architecture is designed for zero latency and absolute conversion. Technology must generate revenue, not just design awards.',
-
-    // Values
     'about.values.badge': 'CORPORATE DNA',
     'about.values.title': 'Our core',
     'about.values.title_ed': 'principles.',
@@ -261,8 +365,6 @@ export const ui = {
     'about.v2.desc': 'We don\'t outsource. Every line pushed to production is audited by senior architects to guarantee zero latency.',
     'about.v3.title': 'Relentless ROI',
     'about.v3.desc': 'We measure success by the exact increase in your Conversion Rate (CR) and Average Order Value (AOV).',
-
-    // Metrics
     'about.metrics.badge': 'OUR IMPACT',
     'about.metrics.title': 'Quantifiable',
     'about.metrics.title_ed': 'results.',
@@ -272,13 +374,9 @@ export const ui = {
     'about.m4.num': '10', 'about.m4.sym': '+', 'about.m4.desc': 'ERP systems (SAP/NetSuite) integrated in real time.',
     'about.m5.num': '50', 'about.m5.sym': 'M+', 'about.m5.desc': 'Annual revenue orchestrated through our systems.',
     'about.m6.num': '100', 'about.m6.sym': '%', 'about.m6.desc': 'UX decisions backed exclusively by real data.',
-
-    // Why Flouvia
     'about.liquid.badge': 'THE ADVANTAGE',
     'about.liquid.title': 'Why Flouvia?',
     'about.liquid.desc': 'Your revenue is too big for generic templates. Scaling requires enterprise-grade infrastructure, real engineering, and data-driven decisions.',
-
-    // Reviews
     'about.reviews.badge': 'TESTIMONIALS',
     'about.reviews.title': 'What founders',
     'about.reviews.title_ed': 'say.',
@@ -288,11 +386,133 @@ export const ui = {
     'about.rev2.text': 'Migrating to a Headless architecture with them skyrocketed our conversion by 34% in the first quarter. The latency simply disappeared.',
     'about.rev2.author': 'Diego Godoy',
     'about.rev2.role': 'CEO, Setnpet',
-
-    // CTA
     'about.cta.badge': 'START NOW',
     'about.cta.title': 'Ready to dominate',
     'about.cta.title_ed': 'your market?',
     'about.cta.btn': 'Start Architecture',
+
+    // PORTAL LOGIN
+    'login.eyebrow': 'PRIVATE ENVIRONMENT',
+    'login.title1': 'Engineering',
+    'login.title2': 'in motion.',
+    'login.desc': 'Oversee the development of your platforms, manage billing, and collaborate with the Flouvia team in real-time.',
+
+    // PORTAL DASHBOARD
+    'portal.secure': 'ENCRYPTED SYSTEM',
+    'portal.greeting': 'Welcome,',
+    'portal.subtitle': 'Next infrastructure milestone:',
+    'portal.project': 'ENGINEERING CORE',
+    'portal.btn.env': 'View Environment',
+    'portal.stage': 'Stage:',
+    'portal.uptime': 'Uptime:',
+    'portal.finance': 'CAPITAL',
+    'portal.next_charge': 'Next automatic charge',
+    'portal.btn.pay': 'Manage Payments',
+    'portal.services': 'VIP SERVICES',
+    'portal.roadmap': 'OPERATIONAL ROADMAP',
+    'portal.btn.all': 'View all',
+    'portal.vault': 'FILE VAULT',
+    'portal.btn.upload': '+ Upload',
+
+    // PORTAL FACTURACIÓN
+    'fact.title': 'Capital & Billing',
+    'fact.subtitle': 'Financial management and active subscriptions.',
+    'fact.plan': 'ACTIVE PLAN',
+    'fact.next': 'Next scheduled charge',
+    'fact.stripe_btn': 'Manage in Stripe ↗',
+    'fact.method': 'PAYMENT METHOD',
+    'fact.expires': 'Expires',
+    'fact.history': 'BILLING HISTORY',
+    'fact.download': 'Download',
+    'fact.paid': 'Paid',
+
+    // PORTAL BÓVEDA
+    'vault.title': 'File Vault',
+    'vault.subtitle': 'Contracts, deliverables, and project resources.',
+    'vault.upload_btn': 'Upload File',
+    'vault.folders.all': 'All files',
+    'vault.folders.contracts': 'Contracts',
+    'vault.folders.design': 'Design & UI',
+    'vault.empty': 'No files in this folder.',
+
+    // PORTAL ROADMAP
+    'road.title': 'Project Roadmap',
+    'road.subtitle': 'Real-time tracking of your project sprints and milestones.',
+    'road.status.done': 'Completed',
+    'road.status.active': 'In Progress',
+    'road.status.pending': 'Pending',
+    'road.sprint': 'SPRINT',
+    'road.empty': 'No roadmap items found yet.',
+
+    // PORTAL CALENDAR
+    'cal.eyebrow': 'SCHEDULE YOUR SESSION',
+    'cal.title': 'Schedule a',
+    'cal.title_ed': 'Call.',
+    'cal.subtitle': 'Book a direct strategy session with your assigned Flouvia engineer.',
+    'cal.info.1': 'Video call · 45 min',
+    'cal.info.2': 'Instant confirmation · Free',
+    'cal.feat.1.title': 'Direct channel',
+    'cal.feat.1.desc': 'Talk directly to your lead engineer, no intermediaries.',
+    'cal.feat.2.title': 'Guaranteed slot',
+    'cal.feat.2.desc': 'Confirmed response within 2 business hours.',
+    'cal.feat.3.title': 'Secure environment',
+    'cal.feat.3.desc': 'Private and encrypted session. Only your team has access.',
+    'cal.placeholder': 'Select an available time slot →',
+
+    // PORTAL VIP SUPPORT
+    'support.title': 'VIP',
+    'support.title_ed': 'Support.',
+    'support.subtitle': 'Direct line to your assigned engineer. Guaranteed SLA.',
+    'support.sla.label': 'SERVICE AGREEMENT',
+    'support.sla.response': 'Response time',
+    'support.sla.uptime': 'Guaranteed uptime',
+    'support.sla.online': 'ONLINE',
+    'support.form.label': 'NEW REQUEST',
+    'support.form.category': 'Category',
+    'support.form.subject': 'Subject',
+    'support.form.subject_ph': 'E.g.: Inventory sync error on checkout',
+    'support.form.description': 'Detailed description',
+    'support.form.description_ph': 'Describe the issue, steps to reproduce, and expected behavior…',
+    'support.form.priority': 'Priority',
+    'support.form.submit': 'Submit Request',
+    'support.form.success_title': 'Request submitted',
+    'support.form.success_sub': 'Your assigned engineer will respond within 2 hours.',
+    'support.priority.normal': 'Normal',
+    'support.priority.high': 'High',
+    'support.priority.critical': 'Critical',
+    'support.tickets.label': 'TICKET HISTORY',
+    'support.tickets.all_resolved': 'All resolved',
+    'support.ticket.resolved': 'Resolved',
+    'support.ticket.open': 'Open',
+    'support.ticket.pending': 'Pending',
+
+    // INDIVIDUAL SERVICE PAGES
+    'serv.page.back': '← Back to Services',
+    'serv.page.capabilities': 'CAPABILITIES',
+    'serv.page.process': 'HOW WE DO IT',
+    'serv.page.stack': 'TECH STACK',
+    'serv.page.cta.title': 'Ready to scale?',
+    'serv.page.cta.sub': 'Schedule a free diagnostics session with our engineering team.',
+    'serv.page.cta.btn': 'Schedule Diagnostics',
+
+    'serv.1.p1': 'Audit of current infrastructure and technical friction mapping',
+    'serv.1.p2': 'Headless or Shopify Plus architecture design based on use case',
+    'serv.1.p3': 'Full-stack development with native code — no templates or third-party apps',
+    'serv.1.p4': 'Launch with active latency and conversion monitoring',
+
+    'serv.2.p1': 'Mapping of wholesale sales flows and existing business rules',
+    'serv.2.p2': 'B2B private portal design and protected catalog architecture',
+    'serv.2.p3': 'Native integration with ERP, payment systems, and corporate APIs',
+    'serv.2.p4': 'Delivery, team training, and post-launch support',
+
+    'serv.3.p1': 'Diagnostic of manual flows and operational bottlenecks',
+    'serv.3.p2': 'Data architecture design and integration mapping',
+    'serv.3.p3': 'Automation via Make, custom webhooks, and native APIs',
+    'serv.3.p4': 'Continuous monitoring and iterative flow optimization',
+
+    'serv.4.p1': 'Forensic UX audit of the conversion funnel using real data',
+    'serv.4.p2': 'Optimization hypotheses based on quantitative behavioral analysis',
+    'serv.4.p3': 'A/B test implementation, heatmaps, and analytics tools setup',
+    'serv.4.p4': 'Continuous iteration to maximize AOV, LTV, and Conversion Rate',
   },
 } as const;

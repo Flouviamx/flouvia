@@ -1,14 +1,13 @@
 ---
-// src/pages/portal/dashboard.astro
+// src/pages/portal/boveda.astro
 export const prerender = false;
 import PortalLayout from '../../layouts/PortalLayout.astro';
-import DashboardUI from '../../components/portal/DashboardUI.astro';
+import BovedaUI from '../../components/portal/BovedaUI.astro';
 
-// Protección de Ruta
 const { userId } = await Astro.locals.auth();
 if (!userId) return Astro.redirect('/portal/login');
 ---
 
-<PortalLayout title="Console | Flouvia OS">
-    <DashboardUI lang="es" />
+<PortalLayout title="Bóveda | Flouvia OS">
+    <BovedaUI lang="es" />
 </PortalLayout>

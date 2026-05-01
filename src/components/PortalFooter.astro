@@ -1,0 +1,169 @@
+---
+// src/components/PortalFooter.astro
+const isEn = Astro.url.pathname.startsWith('/en');
+---
+
+<footer class="pf-root">
+    <div class="pf-hairline"></div>
+
+    <div class="pf-inner">
+
+        <!-- LOGO + BRAND -->
+        <a href={isEn ? '/en/' : '/'} class="pf-brand">
+            <img src="/imgs/logo-flouvia-1.svg" alt="Flouvia" class="pf-logo" />
+            <div class="pf-brand-sep"></div>
+            <div class="pf-brand-copy">
+                <span class="pf-name">Flouvia OS</span>
+                <span class="pf-sub">{isEn ? 'Client Portal' : 'Portal de Clientes'}</span>
+            </div>
+        </a>
+
+        <!-- CENTRO: copyright + status -->
+        <div class="pf-mid">
+            <span class="pf-copy">© 2026 Flouvia Boutique.</span>
+            <span class="pf-dot-sep">·</span>
+            <div class="pf-status">
+                <span class="pf-led"></span>
+                <span class="pf-status-txt">SYSTEMS OPERATIONAL</span>
+            </div>
+        </div>
+
+        <!-- LINKS -->
+        <nav class="pf-nav">
+            <a href={isEn ? '/en/' : '/'} class="pf-link">
+                <span>{isEn ? 'Public Site' : 'Sitio Público'}</span>
+                <span class="pf-arr">→</span>
+            </a>
+            <a href="mailto:flouvia.mx@gmail.com" class="pf-link">
+                <span>flouvia.mx@gmail.com</span>
+                <span class="pf-arr">→</span>
+            </a>
+            <a href="#" class="pf-link">
+                <span>{isEn ? 'Privacy' : 'Privacidad'}</span>
+                <span class="pf-arr">→</span>
+            </a>
+        </nav>
+
+    </div>
+</footer>
+
+<style>
+    .pf-root {
+        background-color: #0a192f;
+        font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+        color: #ffffff;
+    }
+
+    /* Hairline idéntico al footer público */
+    .pf-hairline {
+        width: 100%; height: 1px;
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Strip slim de una sola línea */
+    .pf-inner {
+        max-width: 1240px; margin: 0 auto;
+        padding: 1.8rem 5%;
+        display: flex; align-items: center;
+        justify-content: space-between; gap: 2rem;
+        animation: pf-fadein 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+        animation-delay: 0.15s;
+    }
+
+    /* ── BRAND ── */
+    .pf-brand {
+        display: flex; align-items: center; gap: 1rem;
+        text-decoration: none; flex-shrink: 0;
+        transition: opacity 0.3s;
+    }
+    .pf-brand:hover { opacity: 0.8; }
+
+    .pf-logo { width: 110px; height: auto; display: block; }
+
+    .pf-brand-sep {
+        width: 1px; height: 32px;
+        background: rgba(255, 255, 255, 0.12);
+        flex-shrink: 0;
+    }
+
+    .pf-brand-copy {
+        display: flex; flex-direction: column; gap: 2px;
+    }
+    .pf-name {
+        font-size: 0.82rem; font-weight: 700;
+        color: rgba(255, 255, 255, 0.88);
+        letter-spacing: 0.02em; line-height: 1;
+    }
+    .pf-sub {
+        font-size: 0.65rem; font-weight: 600;
+        color: #8892b0; letter-spacing: 0.08em; text-transform: uppercase;
+    }
+
+    /* ── CENTRO ── */
+    .pf-mid {
+        display: flex; align-items: center; gap: 0.9rem;
+        flex-shrink: 0;
+    }
+    .pf-copy { font-size: 0.78rem; color: #64748b; font-weight: 500; }
+    .pf-dot-sep { color: rgba(255,255,255,0.12); font-size: 0.7rem; }
+
+    .pf-status {
+        display: flex; align-items: center; gap: 7px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        padding: 4px 12px; border-radius: 100px;
+    }
+    .pf-status-txt {
+        font-size: 0.6rem; font-weight: 700;
+        letter-spacing: 1.2px; color: #8892b0; text-transform: uppercase;
+    }
+    .pf-led {
+        width: 6px; height: 6px; border-radius: 50%;
+        background: #10b981;
+        animation: pf-pulse 2.5s ease-in-out infinite;
+        flex-shrink: 0;
+    }
+
+    /* ── LINKS ── */
+    .pf-nav { display: flex; align-items: center; gap: 2.4rem; }
+
+    .pf-link {
+        display: inline-flex; align-items: center; gap: 6px;
+        font-size: 0.8rem; font-weight: 500;
+        color: #8892b0; text-decoration: none;
+        transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        white-space: nowrap;
+    }
+    .pf-arr {
+        opacity: 0; transform: translateX(-8px);
+        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        color: #ffffff;
+    }
+    .pf-link:hover { color: #ffffff; }
+    .pf-link:hover .pf-arr { opacity: 1; transform: translateX(0); }
+    .pf-link:active { transform: scale(0.97); transition: transform 0.1s; }
+
+    /* ── ANIMACIONES ── */
+    @keyframes pf-fadein {
+        from { opacity: 0; transform: translateY(14px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pf-pulse {
+        0%   { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+        70%  { transform: scale(1);    box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+        .pf-inner { flex-wrap: wrap; gap: 1.4rem; }
+        .pf-mid { order: 3; width: 100%; }
+    }
+    @media (max-width: 600px) {
+        .pf-inner { flex-direction: column; align-items: flex-start; gap: 1.4rem; padding: 1.6rem 5%; }
+        .pf-nav { flex-direction: column; align-items: flex-start; gap: 1rem; width: 100%; }
+        .pf-link { width: 100%; justify-content: space-between; }
+        .pf-arr { opacity: 0.3; transform: translateX(0); }
+    }
+</style>

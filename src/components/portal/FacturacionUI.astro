@@ -1,0 +1,845 @@
+---
+// src/components/portal/FacturacionUI.astro
+import { useTranslations } from '../../i18n/utils';
+import { supabase } from '../../lib/supabase';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const user = await Astro.locals.currentUser();
+const email = user?.emailAddresses[0]?.emailAddress || "flouvia.mx@gmail.com";
+
+const formatDate = (iso: string | null) => {
+  if (!iso) return "—";
+  return new Date(iso).toLocaleDateString(lang === 'en' ? 'en-US' : 'es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
+};
+
+const formatCurrency = (amount: number, currency: string) =>
+  new Intl.NumberFormat('en-US', { style: 'currency', currency, minimumFractionDigits: 2 }).format(amount);
+
+// Queries en paralelo
+const [{ data: perfil }, { data: finanza }, { data: facturaRows }] = await Promise.all([
+  supabase.from('perfiles').select('plan_activo').eq('email_cliente', email).single(),
+  supabase.from('finanzas_config').select('*').eq('email_cliente', email).single(),
+  supabase.from('facturas').select('*').eq('email_cliente', email).order('fecha', { ascending: false }),
+]);
+
+const data = {
+  planName:  perfil?.plan_activo ?? (lang === 'en' ? "Enterprise Infrastructure" : "Infraestructura Enterprise"),
+  currency:  finanza?.moneda     ?? "USD",
+  nextAmount: finanza?.monto_proximo ?? 0,
+  nextDate:  formatDate(finanza?.fecha_proxima ?? null),
+  portalUrl: finanza?.stripe_portal_url ?? "#",
+  paymentMethod: {
+    brand: finanza?.card_brand ?? "Visa",
+    last4: finanza?.card_last4 ?? "••••",
+    exp:   finanza?.card_exp   ?? "••/••",
+  },
+  history: (facturaRows ?? []).map((f: any) => ({
+    id:     f.invoice_id,
+    date:   formatDate(f.fecha),
+    amount: formatCurrency(f.monto, finanza?.moneda ?? "USD"),
+    status: f.status,
+    url:    f.download_url ?? "#",
+  })),
+};
+---
+
+<div class="os-page">
+  <div class="os-wrap">
+
+    <!-- Topbar -->
+    <div class="fact-topbar" style="opacity:0;">
+      <a
+        href={lang === 'en' ? '/en/portal/dashboard' : '/portal/dashboard'}
+        class="fact-back-link"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        {lang === 'en' ? 'Dashboard' : 'Dashboard'}
+      </a>
+
+      <div class="fact-secure-badge">
+        <span class="fact-led pulse" aria-hidden="true"></span>
+        <span id="fact-badge">{t('portal.secure')}</span>
+      </div>
+    </div>
+
+    <!-- Gradient rule -->
+    <div class="fact-rule" aria-hidden="true"></div>
+
+    <!-- Title block -->
+    <h1 class="fact-title" id="fact-title" style="opacity:0;">{t('fact.title')}</h1>
+    <p class="fact-sub" style="opacity:0;">{t('fact.subtitle')}</p>
+
+    <!-- 12-col grid -->
+    <div class="fact-grid">
+
+      <!-- Card hero (span 7) -->
+      <div class="os-card card-hero">
+        <div class="os-spotlight" aria-hidden="true"></div>
+
+        <div class="hero-eyebrow">
+          <span class="eyebrow-label">{t('fact.plan')}</span>
+          <span class="plan-badge">
+            <span class="plan-dot" aria-hidden="true"></span>
+            {data.planName}
+          </span>
+        </div>
+
+        <div class="hero-amount">
+          <span class="fact-amount-currency">{data.currency === 'USD' ? '$' : data.currency === 'MXN' ? '$' : data.currency}</span>
+          <span
+            class="fact-amount-num"
+            data-target={data.nextAmount}
+          >0.00</span>
+          <span class="fact-amount-code">{data.currency}</span>
+        </div>
+
+        <p class="hero-next-label">{t('fact.next')} &mdash; {data.nextDate}</p>
+
+        <div class="hero-actions">
+          <a
+            id="fact-pay-btn"
+            href={data.portalUrl}
+            class="fact-manage-btn haptic"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+              <line x1="1" y1="10" x2="23" y2="10"></line>
+            </svg>
+            {t('fact.stripe_btn')}
+          </a>
+
+          <p class="hero-stripe-note">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            Secured by Stripe
+          </p>
+        </div>
+      </div>
+
+      <!-- Card CC (span 5) -->
+      <div class="os-card card-cc">
+        <div class="os-spotlight" aria-hidden="true"></div>
+
+        <span class="eyebrow-label">{t('fact.method')}</span>
+
+        <div class="apple-card-visual">
+          <div class="apple-card-visual__header">
+            <div class="cc-chip" aria-hidden="true"></div>
+            <span class="cc-brand">{data.paymentMethod.brand}</span>
+          </div>
+
+          <div class="cc-number">
+            &bull;&bull;&bull;&bull;&nbsp;&bull;&bull;&bull;&bull;&nbsp;&bull;&bull;&bull;&bull;&nbsp;{data.paymentMethod.last4}
+          </div>
+
+          <div class="cc-footer">
+            <span class="cc-expires-label">EXPIRES</span>
+            <span class="cc-expires-value">{data.paymentMethod.exp}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card history (span 12) -->
+      <div class="os-card card-history">
+        <div class="os-spotlight" aria-hidden="true"></div>
+
+        <span class="eyebrow-label eyebrow-label--history">{t('fact.history')}</span>
+
+        <div class="inv-table" role="list">
+          {data.history.map((invoice: any) => (
+            <div class="inv-row" role="listitem">
+              <div class="inv-left">
+                <div class="inv-icon-box" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                  </svg>
+                </div>
+                <div class="inv-meta">
+                  <span class="inv-id">{invoice.id}</span>
+                  <span class="inv-date">{invoice.date}</span>
+                </div>
+              </div>
+
+              <div class="inv-right">
+                <span class="inv-amount">{invoice.amount}</span>
+                <span class="inv-paid-pill">{t('fact.paid')}</span>
+                <a
+                  href={invoice.url}
+                  class="inv-dl-btn"
+                  title={t('fact.download')}
+                  aria-label={t('fact.download')}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </div><!-- /fact-grid -->
+  </div><!-- /os-wrap -->
+</div><!-- /os-page -->
+
+<style>
+  /* =====================================================
+     DESIGN TOKENS
+     ===================================================== */
+  :root {
+    --shadow:    0 0 0 1px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.04),
+                 0 8px 20px rgba(0,0,0,0.05), 0 20px 40px rgba(0,0,0,0.04);
+    --shadow-up: 0 0 0 1px rgba(0,0,0,0.06), 0 4px 10px rgba(0,0,0,0.07),
+                 0 16px 32px rgba(0,0,0,0.08), 0 32px 64px rgba(0,0,0,0.06);
+    --blue:   #0055cc;
+    --green:  #10b981;
+    --text:   #0a0e1a;
+    --muted:  #6e7d96;
+    --dim:    #c4cdd9;
+    --border: rgba(0,0,0,0.07);
+    --ease:   cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* =====================================================
+     PAGE SHELL
+     ===================================================== */
+  .os-page {
+    background: #ffffff;
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+    padding: 4.5rem 0 8rem;
+    min-height: 100vh;
+  }
+
+  .os-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 5%;
+  }
+
+  /* =====================================================
+     TOPBAR
+     ===================================================== */
+  .fact-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0;
+  }
+
+  .fact-back-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.83rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s var(--ease);
+  }
+  .fact-back-link:hover {
+    color: var(--text);
+  }
+
+  .fact-secure-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #0a192f;
+    color: rgba(255,255,255,0.9);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 100px;
+    box-shadow: 0 4px 14px rgba(10,25,47,0.2);
+  }
+
+  .fact-led {
+    display: block;
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  @keyframes led-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.6); transform: scale(1); }
+    55%       { box-shadow: 0 0 0 5px rgba(16,185,129,0); transform: scale(1.2); }
+  }
+  .pulse { animation: led-pulse 2.8s ease-in-out infinite; }
+
+  /* =====================================================
+     GRADIENT RULE
+     ===================================================== */
+  .fact-rule {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent);
+    margin: 1.6rem 0 2.8rem;
+    transform-origin: left center;
+    transform: scaleX(0);
+  }
+
+  /* =====================================================
+     TITLE + SUBTITLE
+     ===================================================== */
+  .fact-title {
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    line-height: 1.06;
+    color: var(--text);
+    margin: 0 0 0.85rem;
+    perspective: 600px;
+  }
+
+  .fact-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    margin: 0 0 3rem;
+    font-weight: 400;
+  }
+
+  /* =====================================================
+     12-COL GRID
+     ===================================================== */
+  .fact-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.4rem;
+  }
+
+  /* =====================================================
+     CARDS — BASE
+     ===================================================== */
+  .os-card {
+    position: relative;
+    overflow: hidden;
+    background: #ffffff;
+    border-radius: 28px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 2.6rem;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.45s var(--ease), transform 0.45s var(--ease);
+  }
+  .os-card:hover {
+    box-shadow: var(--shadow-up);
+    transform: translateY(-4px);
+  }
+
+  /* Spotlight glow */
+  .os-spotlight {
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,85,204,0.07) 0%, transparent 70%);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    top: 0;
+    left: 0;
+    z-index: 0;
+  }
+  .os-card:hover .os-spotlight {
+    opacity: 1;
+  }
+
+  /* Ensure card children sit above spotlight */
+  .os-card > *:not(.os-spotlight) {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* =====================================================
+     CARD SPANS
+     ===================================================== */
+  .card-hero    { grid-column: span 7; }
+  .card-cc      { grid-column: span 5; }
+  .card-history { grid-column: span 12; }
+
+  /* =====================================================
+     SHARED — EYEBROW
+     ===================================================== */
+  .eyebrow-label {
+    display: block;
+    font-size: 0.63rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.4rem;
+  }
+  .eyebrow-label--history {
+    margin-bottom: 1rem;
+  }
+
+  /* =====================================================
+     CARD HERO
+     ===================================================== */
+  .hero-eyebrow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.4rem;
+  }
+  .hero-eyebrow .eyebrow-label {
+    margin-bottom: 0;
+  }
+
+  .plan-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(0,0,0,0.04);
+    color: var(--text);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 5px 13px;
+    border-radius: 100px;
+    letter-spacing: 0.01em;
+  }
+
+  .plan-dot {
+    display: block;
+    width: 5px;
+    height: 5px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(16,185,129,0.5);
+    flex-shrink: 0;
+  }
+
+  .hero-amount {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    margin-bottom: 0.7rem;
+    line-height: 1;
+  }
+
+  .fact-amount-currency {
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.03em;
+  }
+
+  .fact-amount-num {
+    font-size: clamp(3.5rem, 6vw, 5.5rem);
+    font-weight: 600;
+    letter-spacing: -0.05em;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .fact-amount-code {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--muted);
+    margin-left: 0.3rem;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-next-label {
+    font-size: 0.9rem;
+    color: var(--muted);
+    font-weight: 500;
+    margin: 0 0 2.2rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.8rem;
+    flex-wrap: wrap;
+    margin-top: auto;
+  }
+
+  .fact-manage-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    background: #0a192f;
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.95rem 2rem;
+    border-radius: 100px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s var(--ease), transform 0.1s;
+    box-shadow: 0 6px 20px rgba(10,25,47,0.2);
+    will-change: transform;
+  }
+  .fact-manage-btn:hover {
+    background: #0d2240;
+  }
+
+  .haptic:active {
+    transform: scale(0.97);
+  }
+
+  .hero-stripe-note {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+  }
+
+  /* =====================================================
+     CARD CC — APPLE CARD VISUAL
+     ===================================================== */
+  .card-cc {
+    justify-content: flex-start;
+  }
+
+  .apple-card-visual {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    background: linear-gradient(140deg, #1a1a2e 0%, #080808 50%, #0f0f14 100%);
+    border-radius: 22px;
+    padding: 1.8rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow:
+      0 32px 64px -16px rgba(0,0,0,0.4),
+      0 8px 24px rgba(0,0,0,0.25),
+      inset 0 1px 0 rgba(255,255,255,0.06);
+    flex-shrink: 0;
+  }
+
+  /* Asymmetric gloss */
+  .apple-card-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      120deg,
+      rgba(255,255,255,0.11) 0%,
+      rgba(255,255,255,0.03) 40%,
+      transparent 65%
+    );
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .apple-card-visual > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  .apple-card-visual__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .cc-chip {
+    width: 40px;
+    height: 28px;
+    border-radius: 5px;
+    background: linear-gradient(135deg, #c9a227 0%, #f5e07a 45%, #d4af37 65%, #f9e29c 100%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(0,0,0,0.3);
+  }
+
+  .cc-brand {
+    color: rgba(255,255,255,0.92);
+    font-size: 1rem;
+    font-weight: 700;
+    font-style: italic;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .cc-number {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-size: 1.15rem;
+    font-weight: 500;
+    letter-spacing: 3px;
+    color: #ffffff;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+    align-self: center;
+  }
+
+  .cc-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .cc-expires-label {
+    font-size: 0.55rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.38);
+    text-transform: uppercase;
+  }
+
+  .cc-expires-value {
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.88);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+  }
+
+  /* =====================================================
+     CARD HISTORY — INVOICE TABLE
+     ===================================================== */
+  .inv-table {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .inv-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.4rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  .inv-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .inv-left {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+  }
+
+  .inv-icon-box {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: rgba(0,0,0,0.03);
+    border: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .inv-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .inv-id {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.01em;
+  }
+
+  .inv-date {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .inv-right {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+  }
+
+  .inv-amount {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .inv-paid-pill {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 100px;
+    background: rgba(16,185,129,0.1);
+    color: #059669;
+    border: 1px solid rgba(16,185,129,0.22);
+  }
+
+  .inv-dl-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    text-decoration: none;
+    transition: background 0.3s var(--ease), color 0.3s var(--ease),
+                border-color 0.3s var(--ease), transform 0.3s var(--ease);
+    flex-shrink: 0;
+  }
+  .inv-dl-btn:hover {
+    background: var(--text);
+    color: #ffffff;
+    border-color: var(--text);
+    transform: rotate(-8deg) scale(1.1);
+  }
+
+  /* =====================================================
+     RESPONSIVE
+     ===================================================== */
+  @media (max-width: 860px) {
+    .card-hero,
+    .card-cc { grid-column: span 12; }
+
+    .hero-actions {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .fact-manage-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .os-card { padding: 1.8rem; }
+
+    .inv-right { gap: 0.8rem; }
+    .inv-paid-pill { display: none; }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { SplitText } from "gsap/SplitText";
+  import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+  gsap.registerPlugin(SplitText, ScrambleTextPlugin);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+
+    // Topbar
+    tl.to(".fact-topbar", { opacity: 1, duration: 0.8 }, 0);
+
+    // Badge scramble
+    const badge = document.getElementById("fact-badge");
+    if (badge) {
+      const orig = badge.textContent || "";
+      tl.to(badge, {
+        duration: 1.0,
+        scrambleText: { text: orig, chars: "ABCDEF0123456789·", revealDelay: 0.2 },
+        ease: "none",
+      }, 0.1);
+    }
+
+    // SplitText title
+    const titleEl = document.getElementById("fact-title");
+    if (titleEl) {
+      const split = SplitText.create(titleEl, { type: "chars,words" });
+      gsap.set(split.chars, { opacity: 0, y: 24, rotateX: -40, transformOrigin: "center bottom" });
+      tl.to(split.chars, {
+        opacity: 1, y: 0, rotateX: 0,
+        duration: 0.6, stagger: 0.02, ease: "back.out(1.8)",
+      }, 0.25);
+    }
+
+    // Subtitle + rule
+    tl.to(".fact-sub",  { opacity: 1, duration: 0.7 }, 0.7);
+    tl.to(".fact-rule", { scaleX: 1, duration: 1.0, ease: "power3.out" }, 0.55);
+
+    // Cards stagger
+    gsap.set(".os-card", { y: 32, opacity: 0, scale: 0.98 });
+    tl.to(".os-card", {
+      y: 0, opacity: 1, scale: 1,
+      duration: 1.0, stagger: 0.07, ease: "expo.out",
+    }, 0.45);
+
+    // Money counter
+    const moneyEl = document.querySelector(".fact-amount-num");
+    if (moneyEl) {
+      const target = parseFloat(moneyEl.getAttribute("data-target") || "0");
+      const obj = { val: 0 };
+      tl.to(obj, {
+        val: target,
+        duration: 2.2,
+        ease: "expo.out",
+        onUpdate() {
+          moneyEl.textContent = obj.val.toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          });
+        },
+      }, 0.8);
+    }
+
+    // Invoice rows stagger
+    gsap.set(".inv-row", { opacity: 0, x: -12 });
+    tl.to(".inv-row", {
+      opacity: 1, x: 0,
+      duration: 0.55, stagger: 0.06, ease: "expo.out",
+    }, 1.0);
+
+    // Spotlight per card
+    document.querySelectorAll(".os-card").forEach(card => {
+      const spot = card.querySelector(".os-spotlight");
+      if (!spot) return;
+      card.addEventListener("mousemove", (e) => {
+        const r = card.getBoundingClientRect();
+        gsap.to(spot, {
+          x: (e as MouseEvent).clientX - r.left,
+          y: (e as MouseEvent).clientY - r.top,
+          duration: 0.5,
+          ease: "power2.out",
+        });
+      });
+    });
+
+    // Magnetic pay button
+    const payBtn = document.getElementById("fact-pay-btn");
+    if (payBtn) {
+      payBtn.addEventListener("mousemove", (e) => {
+        const r = payBtn.getBoundingClientRect();
+        const x = ((e as MouseEvent).clientX - r.left - r.width  / 2) * 0.25;
+        const y = ((e as MouseEvent).clientY - r.top  - r.height / 2) * 0.25;
+        gsap.to(payBtn, { x, y, duration: 0.4, ease: "power2.out" });
+      });
+      payBtn.addEventListener("mouseleave", () => {
+        gsap.to(payBtn, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.4)" });
+      });
+    }
+  });
+</script>

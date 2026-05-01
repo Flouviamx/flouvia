@@ -1,0 +1,202 @@
+---
+// src/components/portal/LoginUI.astro
+import { SignIn } from '@clerk/astro/components';
+import { useTranslations } from '../../i18n/utils';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const loginPath = lang === 'en' ? '/en/portal/login' : '/portal/login';
+const redirectPath = lang === 'en' ? '/en/portal/dashboard' : '/portal/dashboard';
+---
+
+<div class="pure-white-wrapper">
+    <div class="noise-overlay"></div>
+
+    <div class="container-master">
+        <div class="split-grid">
+            
+            <div class="brand-side">
+                <span class="apple-eyebrow gsap-reveal">{t('login.eyebrow')}</span>
+                <h1 class="hero-heading gsap-reveal">
+                    {t('login.title1')} <br />
+                    <span class="editorial">{t('login.title2')}</span>
+                </h1>
+                <p class="brand-description gsap-reveal">
+                    {t('login.desc')}
+                </p>
+                <div class="secure-badge mt-4 gsap-reveal">
+                    <span class="dot-secure pulse"></span> {lang === 'en' ? 'END-TO-END ENCRYPTION' : 'ENCRIPTACIÓN END-TO-END'}
+                </div>
+            </div>
+
+            <div class="login-side">
+                <div class="gsap-card">
+                    <SignIn 
+                        routing="path" 
+                        path={loginPath}
+                        forceRedirectUrl={redirectPath}
+                        appearance={{
+                            variables: {
+                                colorPrimary: "#0a192f", // Tu var(--color-blue-deep)
+                                colorBackground: "#ffffff", 
+                                colorText: "#050505", // Tu var(--color-text)
+                                colorInputBackground: "#f4f6f9", // Tu var(--color-blue-icy)
+                                colorInputText: "#050505",
+                                borderRadius: "24px", // Para coincidir con tu squircle
+                                fontFamily: "'Inter', system-ui, sans-serif"
+                            },
+                            elements: {
+                                // Aquí le damos el estilo de "Apple Card" a la propia caja de Clerk
+                                card: {
+                                    boxShadow: "0 20px 40px -8px rgba(10, 25, 47, 0.08), 0 1px 3px rgba(10, 25, 47, 0.03)",
+                                    border: "1px solid rgba(0,0,0,0.04)",
+                                    padding: "2.5rem"
+                                },
+                                headerTitle: { display: "none" }, 
+                                headerSubtitle: { display: "none" },
+                                dividerRow: { display: "none" },
+                                footer: { display: "none" }, // Quitamos el footer molesto de Clerk
+                                formFieldLabel: {
+                                    color: "#555555", // var(--color-text-muted)
+                                    fontSize: "0.8rem",
+                                    fontWeight: "600",
+                                    letterSpacing: "0.5px"
+                                },
+                                formFieldInput: {
+                                    border: "1px solid rgba(0,0,0,0.08)", 
+                                    transition: "all 0.3s ease",
+                                    padding: "0.8rem 1rem",
+                                    boxShadow: "none"
+                                },
+                                socialButtonsBlockButton: {
+                                    border: "1px solid rgba(0,0,0,0.08)",
+                                    backgroundColor: "#ffffff",
+                                    transition: "all 0.3s ease",
+                                    fontWeight: "600"
+                                },
+                                formButtonPrimary: {
+                                    boxShadow: "0 10px 20px rgba(10, 25, 47, 0.12)",
+                                    transition: "transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.05)",
+                                    padding: "1rem",
+                                    fontWeight: "600",
+                                    fontSize: "0.95rem"
+                                }
+                            }
+                        }}
+                    />
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .pure-white-wrapper { 
+        position: relative;
+        width: 100%; 
+        min-height: 100vh;
+        /* Espaciado equilibrado */
+        padding-top: 100px; 
+        padding-bottom: 4rem;
+        background-color: var(--color-bg-soft); /* Usando tu variable */
+        display: flex; align-items: center;
+    }
+
+    .noise-overlay {
+        position: absolute; inset: 0; pointer-events: none; z-index: 1;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); 
+        opacity: 0.03; mix-blend-mode: multiply;
+    }
+
+    .container-master {
+        width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 5%;
+        position: relative; z-index: 2;
+    }
+
+    .split-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+    }
+
+    /* LADO IZQUIERDO */
+    .brand-side { display: flex; flex-direction: column; padding-right: 2rem;}
+    
+    .apple-eyebrow { 
+        font-size: 0.7rem; font-weight: 800; letter-spacing: 2px; 
+        color: var(--color-text-muted); text-transform: uppercase; 
+        margin-bottom: 1rem;
+    }
+
+    .hero-heading {
+        font-size: clamp(2.5rem, 4vw, 4rem); 
+        line-height: 1; letter-spacing: -2px;
+        color: var(--color-text); 
+        margin: 0 0 1.5rem 0;
+        font-weight: 600;
+    }
+
+    .brand-description {
+        font-size: 1.1rem; line-height: 1.6;
+        color: var(--color-text-muted);
+        margin: 0;
+    }
+
+    .mt-4 { margin-top: 2rem; }
+    .secure-badge { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 700; color: #10b981; letter-spacing: 1px;}
+    .dot-secure { width: 8px; height: 8px; background: #10b981; border-radius: 50%; }
+    .pulse { animation: breathe 2s infinite ease-in-out; }
+
+    /* LADO DERECHO */
+    .login-side {
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+    .gsap-card {
+        width: 100%; max-width: 420px;
+    }
+
+    /* Pseudo-estados para la UI de Clerk inyectada (Focus y Hover) */
+    :global(.cl-formFieldInput:focus) { 
+        border-color: var(--color-blue-deep) !important; 
+        box-shadow: 0 0 0 3px rgba(10, 25, 47, 0.08) !important; 
+        background-color: var(--color-bg) !important;
+    }
+    :global(.cl-socialButtonsBlockButton:hover) { background-color: var(--color-blue-icy) !important; }
+    :global(.cl-formButtonPrimary:hover) { transform: translateY(-2px) !important; }
+
+    @keyframes breathe { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    /* RESPONSIVE */
+    @media (max-width: 960px) {
+        .split-grid { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
+        .brand-side { padding-right: 0; align-items: center;}
+        .login-side { justify-content: center; }
+        .brand-description { margin: 0 auto; }
+        .pure-white-wrapper { padding-top: 100px; align-items: flex-start;}
+        .hero-heading { font-size: clamp(2.5rem, 8vw, 3.5rem); }
+    }
+</style>
+
+<script>
+    import { gsap } from "gsap";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        gsap.set([".gsap-reveal", ".gsap-card"], { autoAlpha: 1 });
+        gsap.set(".gsap-reveal", { y: 30, opacity: 0 });
+        gsap.set(".gsap-card", { y: 40, opacity: 0, scale: 0.98 });
+
+        const tl = gsap.timeline({ defaults: { ease: "expo.out", duration: 1.2 } });
+
+        tl
+            .to(".gsap-reveal", { y: 0, opacity: 1, stagger: 0.1 }, 0.2)
+            .to(".gsap-card", { y: 0, opacity: 1, scale: 1 }, 0.4);
+    });
+</script>
