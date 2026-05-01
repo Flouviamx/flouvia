@@ -9,8 +9,10 @@ const { userId } = await Astro.locals.auth();
 if (userId) {
   return Astro.redirect('/portal/dashboard');
 }
+
+const host = Astro.request.headers.get('host') || '';
 ---
 
 <PortalLayout title="Acceso Privado | Flouvia">
-    <LoginUI lang="es" />
+    <LoginUI lang="es" host={host} />
 </PortalLayout>

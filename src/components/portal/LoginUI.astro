@@ -5,12 +5,20 @@ import { useTranslations } from '../../i18n/utils';
 
 interface Props {
   lang: 'es' | 'en';
+  host?: string;
 }
-const { lang } = Astro.props;
+const { lang, host = '' } = Astro.props;
 const t = useTranslations(lang);
 
-const loginPath = lang === 'en' ? '/en/portal/login' : '/portal/login';
-const redirectPath = lang === 'en' ? '/en/portal/dashboard' : '/portal/dashboard';
+// En os.flouvia.com el browser ve /login y /dashboard (sin /portal/).
+// En flouvia.com el browser ve /portal/login y /portal/dashboard.
+const isOsDomain = host.includes('os.flouvia.com');
+const loginPath = isOsDomain
+  ? '/login'
+  : lang === 'en' ? '/en/portal/login' : '/portal/login';
+const redirectPath = isOsDomain
+  ? '/dashboard'
+  : lang === 'en' ? '/en/portal/dashboard' : '/portal/dashboard';
 ---
 
 <div class="pure-white-wrapper">
