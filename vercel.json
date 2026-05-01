@@ -1,14 +1,17 @@
 {
+  "redirects": [
+    {
+      "source": "/portal/:path*",
+      "has": [{ "type": "host", "value": "flouvia.com" }],
+      "destination": "https://os.flouvia.com/:path*",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     {
-      "source": "/(.*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "os.flouvia.com"
-        }
-      ],
-      "destination": "/portal/$1"
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "os.flouvia.com" }],
+      "destination": "/portal/:path*"
     }
   ]
 }
