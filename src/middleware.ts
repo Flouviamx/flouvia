@@ -1,6 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/astro/server';
 
-// Login queda fuera — el resto del portal es zona privada
 const isProtectedRoute = createRouteMatcher([
   '/portal/dashboard(.*)',
   '/portal/facturacion(.*)',
@@ -12,6 +11,9 @@ const isProtectedRoute = createRouteMatcher([
 
 export const onRequest = clerkMiddleware((auth, context) => {
   if (isProtectedRoute(context.request) && !auth().userId) {
-    return auth().redirectToSignIn();
+    // Redirigimos a /login (no a /portal/login) para que el rewrite de Vercel
+    // lo mapee correctamente en os.flouvia.com/login → /portal/login
+    const loginUrl = new URL('/login', context.request.url);
+    return Response.redirect(loginUrl.href, 302);
   }
 });
