@@ -1,10 +1,17 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/astro/server';
 
-// Toda ruta bajo /portal/ es zona privada — Flouvia OS
-const isPortalRoute = createRouteMatcher(['/portal/(.*)']);
+// Login queda fuera — el resto del portal es zona privada
+const isProtectedRoute = createRouteMatcher([
+  '/portal/dashboard(.*)',
+  '/portal/facturacion(.*)',
+  '/portal/boveda(.*)',
+  '/portal/soporte(.*)',
+  '/portal/roadmap(.*)',
+  '/portal/calendario(.*)',
+]);
 
 export const onRequest = clerkMiddleware((auth, context) => {
-  if (isPortalRoute(context.request) && !auth().userId) {
+  if (isProtectedRoute(context.request) && !auth().userId) {
     return auth().redirectToSignIn();
   }
 });
