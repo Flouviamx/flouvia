@@ -1,0 +1,14 @@
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "os.flouvia.com"
+        }
+      ],
+      "destination": "/portal/$1"
+    }
+  ]
+}
