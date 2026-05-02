@@ -1,24 +1,22 @@
 {
   "redirects": [
-    {
-      "source": "/portal/login",
-      "destination": "/login",
-      "permanent": false
-    },
-    {
-      "source": "/en/portal/login",
-      "destination": "/en/login",
-      "permanent": false
-    },
-    {
-      "source": "/portal/:path*",
-      "destination": "/:path*",
-      "permanent": false
-    },
-    {
-      "source": "/en/portal/:path*",
-      "destination": "/en/:path*",
-      "permanent": false
-    }
+    { "source": "/portal/login",    "destination": "/login",    "permanent": false },
+    { "source": "/en/portal/login", "destination": "/en/login", "permanent": false },
+    { "source": "/portal/:path*",   "destination": "/:path*",   "permanent": false },
+    { "source": "/en/portal/:path*","destination": "/en/:path*","permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/dashboard",      "destination": "/portal/dashboard" },
+    { "source": "/facturacion",    "destination": "/portal/facturacion" },
+    { "source": "/boveda",         "destination": "/portal/boveda" },
+    { "source": "/soporte",        "destination": "/portal/soporte" },
+    { "source": "/roadmap",        "destination": "/portal/roadmap" },
+    { "source": "/calendario",     "destination": "/portal/calendario" },
+    { "source": "/en/dashboard",   "destination": "/en/portal/dashboard" },
+    { "source": "/en/facturacion", "destination": "/en/portal/facturacion" },
+    { "source": "/en/boveda",      "destination": "/en/portal/boveda" },
+    { "source": "/en/soporte",     "destination": "/en/portal/soporte" },
+    { "source": "/en/roadmap",     "destination": "/en/portal/roadmap" },
+    { "source": "/en/calendario",  "destination": "/en/portal/calendario" }
   ]
 }

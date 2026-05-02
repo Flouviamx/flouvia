@@ -10,7 +10,7 @@ if (host === 'flouvia.com' || host === 'www.flouvia.com') {
 
 const { userId } = await Astro.locals.auth();
 if (userId) {
-  return Astro.redirect('https://os.flouvia.com/en/dashboard');
+  return Astro.redirect('/en/dashboard');
 }
 ---
 

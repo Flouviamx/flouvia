@@ -13,9 +13,8 @@ const t = useTranslations(lang);
 // El login SIEMPRE vive en flouvia.com/login.
 // Después de auth, redirige a os.flouvia.com/dashboard (dominio absoluto).
 const loginPath = lang === 'en' ? '/en/login' : '/login';
-const redirectPath = lang === 'en'
-  ? 'https://os.flouvia.com/en/dashboard'
-  : 'https://os.flouvia.com/dashboard';
+// URL relativa para evitar el mecanismo __clerk_handshake (solo ocurre con URLs absolutas cross-domain)
+const redirectPath = lang === 'en' ? '/en/dashboard' : '/dashboard';
 ---
 
 <div class="pure-white-wrapper">
