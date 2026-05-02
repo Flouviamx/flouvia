@@ -515,7 +515,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // center logo fades down
     if (mainLogo) {
         gsap.set(mainLogo, { opacity: 0, y: -8 });
-        tl.to(mainLogo, { opacity: 1, y: 0, duration: 0.7 }, 0.25);
+        tl.to(mainLogo, { opacity: 1, y: 0, duration: 0.7, clearProps: "opacity,transform" }, 0.25);
     }
 
     // right side staggered from right

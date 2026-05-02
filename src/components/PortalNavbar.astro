@@ -1,16 +1,13 @@
 ---
 // src/components/PortalNavbar.astro
-import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { getLangFromUrl } from '../i18n/utils';
 import { UserButton } from '@clerk/astro/components';
 
 const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
 
 const currentPath = Astro.url.pathname;
 const esPath = lang === 'en' ? currentPath.replace(/^\/en/, '') : currentPath;
 const enPath = lang === 'es' ? '/en' + currentPath : currentPath;
-
-const { userId } = await Astro.locals.auth();
 ---
 
 <header class="pnav-wrapper" id="pnav">
@@ -457,7 +454,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if (centerLogo) {
         gsap.set(centerLogo, { opacity: 0, y: -8 });
-        tl.to(centerLogo, { opacity: 1, y: 0, duration: 0.7 }, 0.25);
+        tl.to(centerLogo, { opacity: 1, y: 0, duration: 0.7, clearProps: "opacity,transform" }, 0.25);
     }
     if (right) {
         gsap.set(Array.from(right.children), { opacity: 0, x: 12 });
