@@ -7,18 +7,15 @@ interface Props {
   lang: 'es' | 'en';
   host?: string;
 }
-const { lang, host = '' } = Astro.props;
+const { lang } = Astro.props;
 const t = useTranslations(lang);
 
-// En os.flouvia.com el browser ve /login y /dashboard (sin /portal/).
-// En flouvia.com el browser ve /portal/login y /portal/dashboard.
-const isOsDomain = host.includes('os.flouvia.com');
-const loginPath = isOsDomain
-  ? '/login'
-  : lang === 'en' ? '/en/portal/login' : '/portal/login';
-const redirectPath = isOsDomain
-  ? '/dashboard'
-  : lang === 'en' ? '/en/portal/dashboard' : '/portal/dashboard';
+// El login SIEMPRE vive en flouvia.com/login.
+// Después de auth, redirige a os.flouvia.com/dashboard (dominio absoluto).
+const loginPath = lang === 'en' ? '/en/login' : '/login';
+const redirectPath = lang === 'en'
+  ? 'https://os.flouvia.com/en/dashboard'
+  : 'https://os.flouvia.com/dashboard';
 ---
 
 <div class="pure-white-wrapper">

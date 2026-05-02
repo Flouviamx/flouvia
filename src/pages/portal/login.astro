@@ -1,18 +1,17 @@
 ---
 // src/pages/portal/login.astro
+// Servido en flouvia.com/login vía rewrite de Vercel.
 export const prerender = false;
 import PortalLayout from '../../layouts/PortalLayout.astro';
 import LoginUI from '../../components/portal/LoginUI.astro';
 
-// Redirección si ya está logueado
 const { userId } = await Astro.locals.auth();
 if (userId) {
-  return Astro.redirect('/portal/dashboard');
+  // Una vez autenticado, mandamos al subdominio del portal.
+  return Astro.redirect('https://os.flouvia.com/dashboard');
 }
-
-const host = Astro.request.headers.get('host') || '';
 ---
 
 <PortalLayout title="Acceso Privado | Flouvia">
-    <LoginUI lang="es" host={host} />
+    <LoginUI lang="es" />
 </PortalLayout>

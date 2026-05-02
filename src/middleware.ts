@@ -7,13 +7,25 @@ const isProtectedRoute = createRouteMatcher([
   '/portal/soporte(.*)',
   '/portal/roadmap(.*)',
   '/portal/calendario(.*)',
+  '/en/portal/dashboard(.*)',
+  '/en/portal/facturacion(.*)',
+  '/en/portal/boveda(.*)',
+  '/en/portal/soporte(.*)',
+  '/en/portal/roadmap(.*)',
+  '/en/portal/calendario(.*)',
 ]);
 
 export const onRequest = clerkMiddleware((auth, context) => {
   if (isProtectedRoute(context.request) && !auth().userId) {
-    // Redirigimos a /login (no a /portal/login) para que el rewrite de Vercel
-    // lo mapee correctamente en os.flouvia.com/login → /portal/login
-    const loginUrl = new URL('/login', context.request.url);
-    return Response.redirect(loginUrl.href, 302);
+    // El login vive ÚNICAMENTE en flouvia.com/login.
+    // Si el usuario está en os.flouvia.com sin sesión, lo mandamos al
+    // dominio público con dominio absoluto (cookie de Clerk se setea en
+    // .flouvia.com y aplica a ambos subdominios).
+    const url = new URL(context.request.url);
+    const isEnglish = url.pathname.startsWith('/en/');
+    const loginUrl = isEnglish
+      ? 'https://flouvia.com/en/login'
+      : 'https://flouvia.com/login';
+    return Response.redirect(loginUrl, 302);
   }
 });
