@@ -52,7 +52,7 @@ const { userId } = await Astro.locals.auth();
                 
                 <div class="user-action-wrapper staggered-show-R" style="margin-left: 10px; display: flex; align-items: center;">
                     <div class="user-btn-container" style="transform: scale(1.1);">
-                        <UserButton afterSignOutUrl="/" />
+                        <UserButton  />
                     </div>
                 </div>
             </div>
@@ -71,7 +71,7 @@ const { userId } = await Astro.locals.auth();
                         </a>
                     </div>
 
-                    <div style="padding-right: 10px; transform: scale(1.1);"><UserButton afterSignOutUrl="/" /></div>
+                    <div style="padding-right: 10px; transform: scale(1.1);"><UserButton  /></div>
                 </div>
             </div>
         </div>

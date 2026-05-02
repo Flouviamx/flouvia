@@ -2,38 +2,38 @@
   "redirects": [
     {
       "source": "/login",
-      "has": [{ "type": "host", "value": "os.flouvia.com" }],
-      "destination": "https://flouvia.com/login",
+      "has": [{ "type": "host", "value": "flouvia.com" }],
+      "destination": "https://os.flouvia.com/login",
       "permanent": false
     },
     {
       "source": "/en/login",
-      "has": [{ "type": "host", "value": "os.flouvia.com" }],
-      "destination": "https://flouvia.com/en/login",
+      "has": [{ "type": "host", "value": "flouvia.com" }],
+      "destination": "https://os.flouvia.com/en/login",
       "permanent": false
     },
     {
       "source": "/portal/login",
       "has": [{ "type": "host", "value": "flouvia.com" }],
-      "destination": "/login",
+      "destination": "https://os.flouvia.com/login",
       "permanent": false
     },
     {
       "source": "/en/portal/login",
       "has": [{ "type": "host", "value": "flouvia.com" }],
-      "destination": "/en/login",
+      "destination": "https://os.flouvia.com/en/login",
       "permanent": false
     },
     {
       "source": "/portal",
       "has": [{ "type": "host", "value": "flouvia.com" }],
-      "destination": "https://flouvia.com/login",
+      "destination": "https://os.flouvia.com/login",
       "permanent": false
     },
     {
       "source": "/en/portal",
       "has": [{ "type": "host", "value": "flouvia.com" }],
-      "destination": "https://flouvia.com/en/login",
+      "destination": "https://os.flouvia.com/en/login",
       "permanent": false
     },
     {
@@ -75,13 +75,23 @@
   ],
   "rewrites": [
     {
+      "source": "/login/:path*",
+      "has": [{ "type": "host", "value": "os.flouvia.com" }],
+      "destination": "/portal/login/:path*"
+    },
+    {
       "source": "/login",
-      "has": [{ "type": "host", "value": "flouvia.com" }],
+      "has": [{ "type": "host", "value": "os.flouvia.com" }],
       "destination": "/portal/login"
     },
     {
+      "source": "/en/login/:path*",
+      "has": [{ "type": "host", "value": "os.flouvia.com" }],
+      "destination": "/en/portal/login/:path*"
+    },
+    {
       "source": "/en/login",
-      "has": [{ "type": "host", "value": "flouvia.com" }],
+      "has": [{ "type": "host", "value": "os.flouvia.com" }],
       "destination": "/en/portal/login"
     },
     {

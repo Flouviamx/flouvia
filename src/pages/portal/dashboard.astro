@@ -6,7 +6,7 @@ import DashboardUI from '../../components/portal/DashboardUI.astro';
 
 // Protección de Ruta
 const { userId } = await Astro.locals.auth();
-if (!userId) return Astro.redirect('/portal/login');
+if (!userId) return Astro.redirect('https://os.flouvia.com/login');
 ---
 
 <PortalLayout title="Console | Flouvia OS">

@@ -5,7 +5,7 @@ import PortalLayout from '../../layouts/PortalLayout.astro';
 import BovedaUI from '../../components/portal/BovedaUI.astro';
 
 const { userId } = await Astro.locals.auth();
-if (!userId) return Astro.redirect('/portal/login');
+if (!userId) return Astro.redirect('https://os.flouvia.com/login');
 ---
 
 <PortalLayout title="Bóveda | Flouvia OS">

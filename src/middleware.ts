@@ -24,8 +24,8 @@ export const onRequest = clerkMiddleware((auth, context) => {
     const url = new URL(context.request.url);
     const isEnglish = url.pathname.startsWith('/en/');
     const loginUrl = isEnglish
-      ? 'https://flouvia.com/en/login'
-      : 'https://flouvia.com/login';
+      ? 'https://os.flouvia.com/en/login'
+      : 'https://os.flouvia.com/login';
     return Response.redirect(loginUrl, 302);
   }
 });

@@ -5,7 +5,7 @@ import PortalLayout from '../../layouts/PortalLayout.astro';
 import SoporteUI from '../../components/portal/SoporteUI.astro';
 
 const { userId } = await Astro.locals.auth();
-if (!userId) return Astro.redirect('/portal/login');
+if (!userId) return Astro.redirect('https://os.flouvia.com/login');
 ---
 
 <PortalLayout title="Soporte VIP | Flouvia OS">
