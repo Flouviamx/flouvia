@@ -50,7 +50,7 @@ const data = {
         <!-- HEADER -->
         <header class="bv-header">
             <div class="bv-topbar" id="bv-topbar">
-                <a href={lang === 'en' ? "/en/portal/dashboard" : "/portal/dashboard"} class="bv-back">
+                <a href={lang === 'en' ? "/en/dashboard" : "/dashboard"} class="bv-back">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><polyline points="15 18 9 12 15 6"/></svg>
                     Dashboard
                 </a>
@@ -65,7 +65,7 @@ const data = {
                     <h1 class="bv-title" id="bv-title">{t('vault.title')}</h1>
                     <p class="bv-sub" id="bv-sub">{t('vault.subtitle')}</p>
                 </div>
-                <a href={lang === 'en' ? "/en/portal/boveda/upload" : "/portal/boveda/upload"} class="bv-upload-btn" id="bv-upload-btn">
+                <a href={lang === 'en' ? "/en/boveda-upload" : "/boveda-upload"} class="bv-upload-btn" id="bv-upload-btn">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                     {t('vault.upload_btn')}
                 </a>
@@ -200,6 +200,7 @@ const data = {
 .bv-upload-btn:hover {
     background: #1a2233;
     box-shadow: 0 8px 22px rgba(10,14,26,0.25);
+    transform: translateY(-2px) scale(1.015);
 }
 .bv-upload-btn:active { transform: scale(0.97); }
 
@@ -411,20 +412,6 @@ const data = {
         // Filas de archivos — stagger tipo Finder
         gsap.set(".bv-row-wrap", { opacity: 0, x: -10 });
         tl.to(".bv-row-wrap", { opacity: 1, x: 0, duration: 0.5, stagger: 0.05, ease: "expo.out" }, 0.75);
-
-        // Botón upload magnético
-        const uploadBtn = document.getElementById("bv-upload-btn");
-        if (uploadBtn) {
-            uploadBtn.addEventListener("mousemove", (e: MouseEvent) => {
-                const r = uploadBtn.getBoundingClientRect();
-                const x = (e.clientX - r.left - r.width / 2) * 0.2;
-                const y = (e.clientY - r.top - r.height / 2) * 0.2;
-                gsap.to(uploadBtn, { x, y, duration: 0.4, ease: "power2.out" });
-            });
-            uploadBtn.addEventListener("mouseleave", () => {
-                gsap.to(uploadBtn, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1,0.4)" });
-            });
-        }
 
         // Spotlight
         const card = document.getElementById("bv-card");

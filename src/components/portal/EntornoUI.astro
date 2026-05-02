@@ -1,0 +1,441 @@
+---
+// src/components/portal/EntornoUI.astro
+import { useTranslations } from '../../i18n/utils';
+import { supabase } from '../../lib/supabase';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const user = await Astro.locals.currentUser();
+const email = user?.emailAddresses[0]?.emailAddress || "flouvia.mx@gmail.com";
+
+const { data: proyecto } = await supabase
+  .from('proyectos')
+  .select('*')
+  .eq('email_cliente', email)
+  .single();
+
+const data = {
+  name:     proyecto?.nombre_proyecto ?? (lang === 'en' ? "Global B2B Platform" : "Plataforma B2B Global"),
+  stage:    proyecto?.etapa           ?? (lang === 'en' ? "Frontend Engineering" : "Ingeniería Frontend"),
+  progress: proyecto?.progreso        ?? 0,
+  uptime:   proyecto?.uptime          ?? "99.98%",
+  liveUrl:  proyecto?.live_url        ?? "",
+  deadline: proyecto?.deadline        ?? "—",
+  stack:    proyecto?.stack           ?? "Next.js · Vercel · Supabase",
+  region:   proyecto?.region          ?? "US East",
+  latency:  proyecto?.latencia        ?? "< 80ms",
+};
+
+const hasUrl = data.liveUrl && data.liveUrl !== "#" && data.liveUrl !== "";
+---
+
+<div class="env-root">
+  <div class="env-wrap">
+
+    <!-- TOPBAR -->
+    <div class="env-topbar" id="env-topbar">
+      <a href={lang === 'en' ? '/en/dashboard' : '/dashboard'} class="env-back">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><polyline points="15 18 9 12 15 6"/></svg>
+        {t('entorno.back')}
+      </a>
+      <div class="env-badge">
+        <span class="env-led"></span>
+        <span>{t('portal.secure')}</span>
+      </div>
+    </div>
+
+    <!-- HEADER -->
+    <div class="env-header" id="env-header">
+      <span class="env-eyebrow">{t('entorno.eyebrow')}</span>
+      <h1 class="env-title" id="env-title">
+        <span>{t('entorno.title')}</span>
+        <em>{t('entorno.title_ed')}</em>
+      </h1>
+      <p class="env-sub" id="env-sub">{t('entorno.subtitle')}</p>
+    </div>
+
+    <div class="env-rule" id="env-rule"></div>
+
+    <!-- MAIN GRID -->
+    <div class="env-grid">
+
+      <!-- URL CARD -->
+      <div class="env-card env-card-url" id="card-url">
+        <div class="env-spotlight" aria-hidden="true"></div>
+        <span class="env-ey">{t('entorno.meta.project')}</span>
+        <h2 class="env-project-name">{data.name}</h2>
+
+        {hasUrl ? (
+          <a href={data.liveUrl} target="_blank" rel="noopener noreferrer" class="env-open-btn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            {t('entorno.open_btn')}
+          </a>
+        ) : (
+          <p class="env-no-url">{t('entorno.no_url')}</p>
+        )}
+
+        <div class="env-url-display">
+          <span class="env-url-dot {hasUrl ? '' : 'env-url-dot-off'}"></span>
+          <span class="env-url-text">{hasUrl ? data.liveUrl : '—'}</span>
+        </div>
+      </div>
+
+      <!-- STATUS CARD -->
+      <div class="env-card env-card-status" id="card-status">
+        <div class="env-spotlight" aria-hidden="true"></div>
+        <span class="env-ey">{t('entorno.status.label')}</span>
+
+        <div class="env-status-rows">
+          <div class="env-stat-row">
+            <span class="env-stat-label">{t('entorno.status.online')}</span>
+            <span class="env-stat-val env-stat-green">
+              <span class="env-pulse-dot"></span>
+              {lang === 'en' ? 'Operational' : 'Operativo'}
+            </span>
+          </div>
+          <div class="env-stat-row">
+            <span class="env-stat-label">{t('entorno.status.uptime')}</span>
+            <span class="env-stat-val">{data.uptime}</span>
+          </div>
+          <div class="env-stat-row">
+            <span class="env-stat-label">{t('entorno.status.latency')}</span>
+            <span class="env-stat-val">{data.latency}</span>
+          </div>
+          <div class="env-stat-row">
+            <span class="env-stat-label">{t('entorno.status.region')}</span>
+            <span class="env-stat-val">{data.region}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- META CARD -->
+      <div class="env-card env-card-meta" id="card-meta">
+        <div class="env-spotlight" aria-hidden="true"></div>
+
+        <div class="env-meta-grid">
+          <div class="env-meta-item">
+            <span class="env-ey">{t('entorno.meta.stage')}</span>
+            <span class="env-meta-val">{data.stage}</span>
+          </div>
+          <div class="env-meta-item">
+            <span class="env-ey">{t('entorno.meta.deadline')}</span>
+            <span class="env-meta-val">{data.deadline}</span>
+          </div>
+          <div class="env-meta-item env-meta-wide">
+            <span class="env-ey">{t('entorno.meta.stack')}</span>
+            <div class="env-stack-pills">
+              {data.stack.split('·').map((s: string) => (
+                <span class="env-stack-pill">{s.trim()}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="env-progress-wrap">
+          <div class="env-progress-header">
+            <span class="env-ey" style="margin-bottom:0">{lang === 'en' ? 'COMPLETION' : 'AVANCE'}</span>
+            <span class="env-progress-pct" id="env-pct">0%</span>
+          </div>
+          <div class="env-progress-bar">
+            <div class="env-progress-fill" id="env-fill" data-target={data.progress} style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+/* ══ TOKENS ══ */
+.env-root {
+  --blue:   #0055cc;
+  --green:  #10b981;
+  --text:   #0a0e1a;
+  --muted:  #6e7d96;
+  --dim:    #c4cdd9;
+  --border: rgba(0,0,0,0.07);
+  --ease:   cubic-bezier(0.16, 1, 0.3, 1);
+  --shadow: 0 0 0 1px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.04), 0 8px 20px rgba(0,0,0,0.05);
+  --shadow-up: 0 0 0 1px rgba(0,0,0,0.07), 0 4px 12px rgba(0,0,0,0.08), 0 16px 32px rgba(0,0,0,0.08);
+
+  background: #ffffff;
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+  min-height: 100vh;
+  padding: 2.8rem 0 6rem;
+}
+.env-wrap { max-width: 1180px; margin: 0 auto; padding: 0 5%; }
+
+/* ══ TOPBAR ══ */
+.env-topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 2.4rem; opacity: 0;
+}
+.env-back {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.82rem; font-weight: 600; color: var(--muted);
+  text-decoration: none; transition: color .2s;
+}
+.env-back:hover { color: var(--text); }
+.env-badge {
+  display: flex; align-items: center; gap: 8px;
+  background: #0a192f; padding: 6px 16px; border-radius: 100px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.75); font-weight: 600;
+  box-shadow: 0 4px 14px rgba(10,25,47,0.2);
+}
+.env-led {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+  animation: led-pulse 2.5s ease-in-out infinite;
+}
+
+/* ══ HEADER ══ */
+.env-header { margin-bottom: 0.6rem; }
+.env-eyebrow {
+  display: block; font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 0.9rem; opacity: 0;
+}
+.env-title {
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 600; letter-spacing: -0.045em;
+  line-height: 1.05; margin: 0 0 0.9rem;
+  display: flex; flex-direction: column; gap: 0.05em;
+  overflow: hidden;
+}
+.env-title span { display: block; opacity: 0; }
+.env-title em { font-style: normal; color: var(--muted); opacity: 0; }
+.env-sub {
+  font-size: 0.98rem; color: var(--muted); margin: 0;
+  font-weight: 400; opacity: 0; max-width: 480px;
+}
+.env-rule {
+  height: 1px; margin: 1.6rem 0 2rem;
+  background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent);
+  transform: scaleX(0); transform-origin: left;
+}
+
+/* ══ GRID ══ */
+.env-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
+}
+.env-card-url    { grid-column: span 7; }
+.env-card-status { grid-column: span 5; }
+.env-card-meta   { grid-column: span 12; }
+
+/* ══ CARD BASE ══ */
+.env-card {
+  position: relative; background: #ffffff;
+  border: 1px solid var(--border); border-radius: 22px;
+  padding: 2rem 2.2rem; overflow: hidden; opacity: 0;
+  box-shadow: var(--shadow);
+  transition: box-shadow .45s var(--ease), transform .45s var(--ease);
+}
+.env-card:hover { box-shadow: var(--shadow-up); transform: translateY(-3px); }
+
+.env-spotlight {
+  position: absolute; width: 380px; height: 380px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,85,204,0.06) 0%, transparent 70%);
+  pointer-events: none; transform: translate(-50%,-50%);
+  top: 0; left: 0; opacity: 0; transition: opacity .4s; z-index: 0;
+}
+.env-card:hover .env-spotlight { opacity: 1; }
+.env-card > *:not(.env-spotlight) { position: relative; z-index: 1; }
+
+.env-ey {
+  display: block; font-size: 0.6rem; font-weight: 700;
+  letter-spacing: 0.13em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 1rem;
+}
+
+/* ══ URL CARD ══ */
+.env-project-name {
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  font-weight: 600; letter-spacing: -0.035em;
+  margin: 0 0 1.6rem; color: var(--text);
+}
+.env-open-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--text); color: #fff;
+  font-size: 0.88rem; font-weight: 600;
+  padding: 0.8rem 1.5rem; border-radius: 100px;
+  text-decoration: none; margin-bottom: 1.4rem;
+  box-shadow: 0 4px 14px rgba(10,14,26,0.18);
+  transition: background .25s var(--ease), transform .2s var(--ease), box-shadow .25s;
+}
+.env-open-btn:hover {
+  background: #1a2233;
+  box-shadow: 0 8px 22px rgba(10,14,26,0.25);
+  transform: translateY(-2px) scale(1.015);
+}
+.env-open-btn:active { transform: translateY(0) scale(0.98); }
+
+.env-no-url {
+  font-size: 0.9rem; color: var(--muted);
+  font-weight: 500; margin-bottom: 1.4rem;
+}
+.env-url-display {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(0,0,0,0.03); border: 1px solid var(--border);
+  border-radius: 10px; padding: 0.65rem 1rem;
+}
+.env-url-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green); flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(16,185,129,0.5);
+}
+.env-url-dot-off { background: var(--dim); box-shadow: none; }
+.env-url-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem; color: var(--muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* ══ STATUS CARD ══ */
+.env-status-rows { display: flex; flex-direction: column; }
+.env-stat-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.9rem 0; border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.env-stat-row:last-child { border-bottom: none; padding-bottom: 0; }
+.env-stat-label {
+  font-size: 0.84rem; font-weight: 500; color: var(--muted);
+}
+.env-stat-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem; font-weight: 600; color: var(--text);
+  display: flex; align-items: center; gap: 7px;
+}
+.env-stat-green { color: #059669; }
+.env-pulse-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green);
+  animation: led-pulse 2.5s ease-in-out infinite;
+}
+
+/* ══ META CARD ══ */
+.env-meta-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem 2rem; margin-bottom: 2rem;
+}
+.env-meta-wide { grid-column: span 1; }
+.env-meta-item { display: flex; flex-direction: column; gap: 0.5rem; }
+.env-meta-val {
+  font-size: 1rem; font-weight: 600; color: var(--text);
+  letter-spacing: -0.02em;
+}
+.env-stack-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.env-stack-pill {
+  font-size: 0.7rem; font-weight: 600; padding: 4px 10px;
+  border-radius: 8px; background: rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.06); color: var(--muted);
+}
+
+/* Progress */
+.env-progress-wrap {
+  border-top: 1px solid rgba(0,0,0,0.06); padding-top: 1.4rem;
+}
+.env-progress-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 0.75rem;
+}
+.env-progress-pct {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem; font-weight: 700; color: var(--text);
+}
+.env-progress-bar {
+  height: 6px; background: rgba(0,0,0,0.06);
+  border-radius: 100px; overflow: hidden;
+}
+.env-progress-fill {
+  height: 100%; background: var(--text);
+  border-radius: 100px;
+  transition: width 2s var(--ease);
+}
+
+/* ══ KEYFRAMES ══ */
+@keyframes led-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,.5); transform: scale(1); }
+  60%      { box-shadow: 0 0 0 5px rgba(16,185,129,0); transform: scale(1.2); }
+}
+
+/* ══ RESPONSIVE ══ */
+@media (max-width: 960px) {
+  .env-card-url    { grid-column: span 12; }
+  .env-card-status { grid-column: span 12; }
+}
+@media (max-width: 640px) {
+  .env-root { padding: 2rem 0 5rem; }
+  .env-card { padding: 1.5rem 1.5rem; border-radius: 18px; }
+  .env-meta-grid { grid-template-columns: 1fr 1fr; }
+  .env-title { font-size: clamp(2rem, 9vw, 3rem); }
+}
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { SplitText } from "gsap/SplitText";
+  gsap.registerPlugin(SplitText);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+
+    tl.to("#env-topbar", { opacity: 1, duration: 0.7 }, 0);
+
+    const eyebrow = document.querySelector(".env-eyebrow") as HTMLElement | null;
+    if (eyebrow) tl.to(eyebrow, { opacity: 1, y: 0, duration: 0.6 }, 0.1);
+    gsap.set(".env-eyebrow", { y: 10 });
+
+    const titleSpan = document.querySelector(".env-title span") as HTMLElement | null;
+    const titleEm   = document.querySelector(".env-title em")   as HTMLElement | null;
+    if (titleSpan) {
+      const split = SplitText.create(titleSpan, { type: "chars" });
+      gsap.set(split.chars, { opacity: 0, y: 24, rotateX: -40, transformOrigin: "center bottom" });
+      tl.to(split.chars, { opacity: 1, y: 0, rotateX: 0, duration: 0.65, stagger: 0.02, ease: "back.out(1.7)" }, 0.25);
+    }
+    if (titleEm) tl.to(titleEm, { opacity: 1, duration: 0.6 }, 0.55);
+
+    tl.to("#env-sub",  { opacity: 1, duration: 0.6 }, 0.65);
+    tl.to("#env-rule", { scaleX: 1, duration: 1.0, ease: "power3.out" }, 0.5);
+
+    gsap.set(["#card-url","#card-status","#card-meta"], { y: 28, opacity: 0, scale: 0.985 });
+    tl.to(["#card-url","#card-status","#card-meta"], {
+      y: 0, opacity: 1, scale: 1, duration: 1.0, stagger: 0.07, ease: "expo.out"
+    }, 0.5);
+
+    // Progress bar counter
+    const fillEl = document.getElementById("env-fill") as HTMLElement | null;
+    const pctEl  = document.getElementById("env-pct")  as HTMLElement | null;
+    if (fillEl && pctEl) {
+      const target = parseInt(fillEl.getAttribute("data-target") || "0") || 0;
+      const obj = { val: 0 };
+      tl.to(obj, {
+        val: target, duration: 2.0, ease: "expo.out",
+        onUpdate() {
+          const v = Math.round(obj.val);
+          if (fillEl) fillEl.style.width = v + "%";
+          if (pctEl) pctEl.textContent = v + "%";
+        }
+      }, 0.8);
+    }
+
+    // Spotlight per card
+    document.querySelectorAll<HTMLElement>(".env-card").forEach(card => {
+      const spot = card.querySelector<HTMLElement>(".env-spotlight");
+      if (!spot) return;
+      card.addEventListener("mousemove", (e: MouseEvent) => {
+        const r = card.getBoundingClientRect();
+        gsap.to(spot, { x: e.clientX - r.left, y: e.clientY - r.top, duration: 0.5, ease: "power2.out" });
+      });
+    });
+  });
+</script>

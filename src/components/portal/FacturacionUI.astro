@@ -54,7 +54,7 @@ const data = {
     <!-- Topbar -->
     <div class="fact-topbar" style="opacity:0;">
       <a
-        href={lang === 'en' ? '/en/portal/dashboard' : '/portal/dashboard'}
+        href={lang === 'en' ? '/en/dashboard' : '/dashboard'}
         class="fact-back-link"
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
@@ -496,6 +496,7 @@ const data = {
   .fact-manage-btn:hover {
     background: #1a2233;
     box-shadow: 0 8px 22px rgba(10,14,26,0.25);
+    transform: translateY(-2px) scale(1.015);
   }
 
   .haptic:active {
@@ -854,18 +855,5 @@ const data = {
       });
     });
 
-    // Magnetic pay button
-    const payBtn = document.getElementById("fact-pay-btn");
-    if (payBtn) {
-      payBtn.addEventListener("mousemove", (e) => {
-        const r = payBtn.getBoundingClientRect();
-        const x = ((e as MouseEvent).clientX - r.left - r.width  / 2) * 0.25;
-        const y = ((e as MouseEvent).clientY - r.top  - r.height / 2) * 0.25;
-        gsap.to(payBtn, { x, y, duration: 0.4, ease: "power2.out" });
-      });
-      payBtn.addEventListener("mouseleave", () => {
-        gsap.to(payBtn, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.4)" });
-      });
-    }
   });
 </script>
