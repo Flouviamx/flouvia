@@ -1,0 +1,20 @@
+---
+export const prerender = false;
+import PortalLayout from '../layouts/PortalLayout.astro';
+import LoginUI from '../components/portal/LoginUI.astro';
+
+// Si llegan a flouvia.com/login, mandamos a os.flouvia.com/login
+const host = Astro.request.headers.get('host') || Astro.url.hostname;
+if (host === 'flouvia.com' || host === 'www.flouvia.com') {
+  return Astro.redirect('https://os.flouvia.com/login', 302);
+}
+
+const { userId } = await Astro.locals.auth();
+if (userId) {
+  return Astro.redirect('https://os.flouvia.com/dashboard');
+}
+---
+
+<PortalLayout title="Acceso Privado | Flouvia">
+    <LoginUI lang="es" />
+</PortalLayout>

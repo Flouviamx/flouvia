@@ -1,118 +1,24 @@
 {
   "redirects": [
     {
-      "source": "/login",
-      "has": [{ "type": "host", "value": "flouvia.com" }],
-      "destination": "https://os.flouvia.com/login",
-      "permanent": false
-    },
-    {
-      "source": "/en/login",
-      "has": [{ "type": "host", "value": "flouvia.com" }],
-      "destination": "https://os.flouvia.com/en/login",
-      "permanent": false
-    },
-    {
       "source": "/portal/login",
-      "has": [{ "type": "host", "value": "flouvia.com" }],
-      "destination": "https://os.flouvia.com/login",
+      "destination": "/login",
       "permanent": false
     },
     {
       "source": "/en/portal/login",
-      "has": [{ "type": "host", "value": "flouvia.com" }],
-      "destination": "https://os.flouvia.com/en/login",
-      "permanent": false
-    },
-    {
-      "source": "/portal",
-      "has": [{ "type": "host", "value": "flouvia.com" }],
-      "destination": "https://os.flouvia.com/login",
-      "permanent": false
-    },
-    {
-      "source": "/en/portal",
-      "has": [{ "type": "host", "value": "flouvia.com" }],
-      "destination": "https://os.flouvia.com/en/login",
+      "destination": "/en/login",
       "permanent": false
     },
     {
       "source": "/portal/:path*",
-      "has": [{ "type": "host", "value": "flouvia.com" }],
-      "destination": "https://os.flouvia.com/:path*",
-      "permanent": false
-    },
-    {
-      "source": "/en/portal/:path*",
-      "has": [{ "type": "host", "value": "flouvia.com" }],
-      "destination": "https://os.flouvia.com/en/:path*",
-      "permanent": false
-    },
-    {
-      "source": "/portal",
-      "has": [{ "type": "host", "value": "os.flouvia.com" }],
-      "destination": "/dashboard",
-      "permanent": false
-    },
-    {
-      "source": "/en/portal",
-      "has": [{ "type": "host", "value": "os.flouvia.com" }],
-      "destination": "/en/dashboard",
-      "permanent": false
-    },
-    {
-      "source": "/portal/:path*",
-      "has": [{ "type": "host", "value": "os.flouvia.com" }],
       "destination": "/:path*",
       "permanent": false
     },
     {
       "source": "/en/portal/:path*",
-      "has": [{ "type": "host", "value": "os.flouvia.com" }],
       "destination": "/en/:path*",
       "permanent": false
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/login/:path*",
-      "has": [{ "type": "host", "value": "os.flouvia.com" }],
-      "destination": "/portal/login/:path*"
-    },
-    {
-      "source": "/login",
-      "has": [{ "type": "host", "value": "os.flouvia.com" }],
-      "destination": "/portal/login"
-    },
-    {
-      "source": "/en/login/:path*",
-      "has": [{ "type": "host", "value": "os.flouvia.com" }],
-      "destination": "/en/portal/login/:path*"
-    },
-    {
-      "source": "/en/login",
-      "has": [{ "type": "host", "value": "os.flouvia.com" }],
-      "destination": "/en/portal/login"
-    },
-    {
-      "source": "/",
-      "has": [{ "type": "host", "value": "os.flouvia.com" }],
-      "destination": "/portal/dashboard"
-    },
-    {
-      "source": "/en",
-      "has": [{ "type": "host", "value": "os.flouvia.com" }],
-      "destination": "/en/portal/dashboard"
-    },
-    {
-      "source": "/en/((?!portal|login).+)",
-      "has": [{ "type": "host", "value": "os.flouvia.com" }],
-      "destination": "/en/portal/$1"
-    },
-    {
-      "source": "/((?!_astro|api|favicon|robots|portal|en/portal|en/login|login|sitemap|en/).+)",
-      "has": [{ "type": "host", "value": "os.flouvia.com" }],
-      "destination": "/portal/$1"
     }
   ]
 }
