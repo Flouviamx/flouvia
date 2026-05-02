@@ -1,0 +1,11 @@
+---
+export const prerender = false;
+import PortalLayout from '../../layouts/PortalLayout.astro';
+import CalendarioUI from '../../components/portal/CalendarioUI.astro';
+
+const { userId } = await Astro.locals.auth();
+if (!userId) return Astro.redirect('https://os.flouvia.com/en/login');
+---
+<PortalLayout title="Calendar | Flouvia OS">
+    <CalendarioUI lang="en" />
+</PortalLayout>
