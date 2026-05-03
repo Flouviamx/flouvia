@@ -43,6 +43,102 @@ const stack = [
   t(`serv.${n}.t3` as any),
 ];
 
+// Iconos por capability/servicio (4 iconos por servicio = 16 totales)
+const capIcons: Record<string, string[]> = {
+  '1': [
+    `<path d="M3 3h18v18H3z"/><path d="M3 9h18M9 21V9"/>`,
+    `<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>`,
+    `<path d="M9 11H5a2 2 0 0 0-2 2v7h18v-7a2 2 0 0 0-2-2h-4"/><path d="M9 11V7a3 3 0 0 1 6 0v4"/><circle cx="12" cy="16" r="1"/>`,
+    `<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>`,
+  ],
+  '2': [
+    `<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>`,
+    `<path d="M3 12c0-1.5 2-3 4.5-3S12 10.5 12 12s-2 3-4.5 3S3 13.5 3 12z"/><path d="M12 12c0-1.5 2-3 4.5-3S21 10.5 21 12s-2 3-4.5 3S12 13.5 12 12z"/>`,
+    `<polyline points="3 9 12 2 21 9 21 20 3 20 3 9"/><polyline points="9 22 9 12 15 12 15 22"/>`,
+    `<path d="M21 12a9 9 0 0 1-9 9m9-9a9 9 0 0 0-9-9m9 9H3m9 9a9 9 0 0 1-9-9m9 9c1.66 0 3-4.03 3-9s-1.34-9-3-9m0 18c-1.66 0-3-4.03-3-9s1.34-9 3-9m-9 9a9 9 0 0 1 9-9"/>`,
+  ],
+  '3': [
+    `<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>`,
+    `<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/>`,
+    `<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>`,
+    `<path d="M16 3h5v5"/><path d="M8 21H3v-5"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/>`,
+  ],
+  '4': [
+    `<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>`,
+    `<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>`,
+    `<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>`,
+    `<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>`,
+  ],
+};
+
+const icons = capIcons[n] || capIcons['1'];
+
+// Métricas por servicio
+const metricsMap: Record<string, Array<{val: string, suf: string, label: string}>> = {
+  '1': [
+    { val: '34', suf: '%',  label: isEn ? 'CR uplift' : 'Aumento CR' },
+    { val: '< 1', suf: 's', label: isEn ? 'Load time' : 'Tiempo de carga' },
+    { val: '99.9', suf: '%', label: 'Uptime' },
+    { val: '0',  suf: '',   label: isEn ? 'Tech debt' : 'Deuda técnica' },
+  ],
+  '2': [
+    { val: '85', suf: '%',  label: isEn ? 'Automated ops' : 'Ops automatizadas' },
+    { val: '24/7', suf: '', label: isEn ? 'Availability' : 'Disponibilidad' },
+    { val: '5',  suf: '+',  label: isEn ? 'ERP integrations' : 'Integraciones ERP' },
+    { val: '0',  suf: '',   label: isEn ? 'Manual errors' : 'Errores manuales' },
+  ],
+  '3': [
+    { val: '10', suf: 'x',  label: isEn ? 'Faster ops' : 'Ops más rápidas' },
+    { val: '100', suf: '%', label: isEn ? 'Real-time sync' : 'Sync en vivo' },
+    { val: '0',  suf: '',   label: isEn ? 'Manual entries' : 'Entradas manuales' },
+    { val: '15', suf: '+',  label: isEn ? 'Workflows' : 'Flujos' },
+  ],
+  '4': [
+    { val: '34', suf: '%',  label: isEn ? 'CR average' : 'CR promedio' },
+    { val: '2',  suf: 'x',  label: 'AOV' },
+    { val: '100', suf: '%', label: isEn ? 'Data-driven' : 'Basado en datos' },
+    { val: 'A/B', suf: '',  label: isEn ? 'Continuous' : 'Continuo' },
+  ],
+};
+const metrics = metricsMap[n];
+
+// "Why choose" — 3 razones por servicio
+const whyMap: Record<string, Array<{title: string, desc: string}>> = {
+  '1': [
+    { title: isEn ? 'Native code, no templates' : 'Código nativo, sin plantillas',
+      desc:  isEn ? 'We write modular code from scratch — no theme bloat, no app dependencies.' : 'Escribimos código modular desde cero — sin bloat de templates ni dependencias de apps.' },
+    { title: isEn ? 'Headless architecture' : 'Arquitectura headless',
+      desc:  isEn ? 'Decoupled front-end with React or Hydrogen for instant page loads.' : 'Front-end desacoplado con React o Hydrogen para cargas instantáneas.' },
+    { title: isEn ? 'Documented Lifetime Value' : 'Lifetime Value documentado',
+      desc:  isEn ? 'Every architectural decision tied to revenue impact and CR data.' : 'Cada decisión de arquitectura ligada al impacto en revenue y data de CR.' },
+  ],
+  '2': [
+    { title: isEn ? 'Authenticated portals' : 'Portales autenticados',
+      desc:  isEn ? 'Private B2B systems with role-based access and protected catalogs.' : 'Sistemas B2B privados con acceso por roles y catálogos protegidos.' },
+    { title: isEn ? 'ERP-native integration' : 'Integración nativa ERP',
+      desc:  isEn ? 'Bi-directional connection with SAP, NetSuite or Microsoft Dynamics.' : 'Conexión bidireccional con SAP, NetSuite o Microsoft Dynamics.' },
+    { title: isEn ? 'Dynamic pricing engine' : 'Motor de precios dinámicos',
+      desc:  isEn ? 'Volume rules, net terms, automated credit allocation per distributor.' : 'Reglas de volumen, net terms, asignación de crédito por distribuidor.' },
+  ],
+  '3': [
+    { title: isEn ? 'Real-time orchestration' : 'Orquestación en tiempo real',
+      desc:  isEn ? 'Webhooks and APIs that move data the moment events happen.' : 'Webhooks y APIs que mueven datos en el momento exacto del evento.' },
+    { title: isEn ? 'Centralized command' : 'Comando centralizado',
+      desc:  isEn ? 'Airtable as your operational source of truth, connected everywhere.' : 'Airtable como fuente única de verdad operativa, conectada a todo.' },
+    { title: isEn ? 'Zero manual entry' : 'Cero captura manual',
+      desc:  isEn ? 'Your team focuses on growth — the systems handle the data.' : 'Tu equipo se enfoca en crecer — los sistemas manejan los datos.' },
+  ],
+  '4': [
+    { title: isEn ? 'Forensic UX audit' : 'Auditoría UX forense',
+      desc:  isEn ? 'Heatmaps, session recordings, and friction maps based on real user data.' : 'Heatmaps, grabaciones y mapas de fricción con data real de usuarios.' },
+    { title: isEn ? 'Continuous A/B testing' : 'A/B testing continuo',
+      desc:  isEn ? 'Iterative experiments on critical conversion paths every sprint.' : 'Experimentos iterativos en rutas críticas de conversión cada sprint.' },
+    { title: isEn ? 'Klaviyo-grade retention' : 'Retención nivel Klaviyo',
+      desc:  isEn ? 'Engineered automation flows to maximize repeat purchase and LTV.' : 'Flujos de automatización para maximizar recompra y LTV.' },
+  ],
+};
+const whys = whyMap[n];
+
 const servicesLink = isEn ? '/en/servicios' : '/servicios';
 const contactLink  = isEn ? '/en/contacto'  : '/contacto';
 
@@ -54,83 +150,147 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <main class="flouvia-masterpiece sd-page">
+  <main class="sd-page">
 
     <!-- ══════════════ HERO ══════════════ -->
-    <section class="sd-hero">
+    <section class="sd-hero" id="sd-hero">
+      <div class="sd-hero-grid-bg" aria-hidden="true"></div>
       <div class="container">
 
-        <a href={servicesLink} class="sd-back reveal-blur" style="--delay:0s;">
+        <a href={servicesLink} class="sd-back" id="sd-back">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><polyline points="15 18 9 12 15 6"/></svg>
           {t('serv.page.back')}
         </a>
 
         <div class="sd-hero-content">
-          <p class="sd-cat reveal-blur" style="--delay:0.1s;">{cat}</p>
+          <p class="sd-cat" id="sd-cat">
+            <span class="sd-cat-line"></span>
+            {cat}
+          </p>
 
-          <h1 class="sd-title reveal-blur" style="--delay:0.2s;" id="sd-title">
+          <h1 class="sd-title" id="sd-title">
             {title.includes('.') ? (
               <>
-                <span class="sd-title-plain">{title.split('.')[0]}</span>
-                <span class="editorial sd-title-serif">{title.split('.')[1] ? '.' : ''}</span>
+                <span class="sd-t-plain">{title.split('.')[0]}</span>
+                <span class="sd-t-serif">{title.split('.')[1] !== undefined ? '.' : ''}</span>
               </>
             ) : (
-              <span class="sd-title-plain">{title}</span>
+              <span class="sd-t-plain">{title}</span>
             )}
           </h1>
 
-          <div class="sd-hero-bottom reveal-blur" style="--delay:0.35s;">
-            <p class="sd-desc">{desc}</p>
-            <a href={contactLink} class="btn-luxe sd-hero-cta" id="sd-hero-cta">
+          <div class="sd-hero-bottom">
+            <p class="sd-desc" id="sd-desc">{desc}</p>
+            <a href={contactLink} class="sd-hero-cta" id="sd-hero-cta">
               <span>{btn}</span>
-              <div class="btn-shimmer"></div>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="19" x2="19" y2="5"/><polyline points="9 5 19 5 19 15"/></svg>
             </a>
           </div>
         </div>
 
-        <div class="sd-rule reveal-blur" style="--delay:0.45s;" id="sd-rule"></div>
+        <!-- Scroll cue -->
+        <div class="sd-scroll-cue" id="sd-scroll-cue">
+          <span>{isEn ? 'Scroll' : 'Desliza'}</span>
+          <div class="sd-cue-line"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════ METRICS BAR ══════════════ -->
+    <section class="sd-metrics-section">
+      <div class="container">
+        <div class="sd-metrics-row" id="sd-metrics-row">
+          {metrics.map(m => {
+            const numericVal = parseFloat(m.val);
+            const isNumeric  = !isNaN(numericVal);
+            return (
+              <div class="sd-metric">
+                <span class="sd-metric-num" data-target={isNumeric ? numericVal : 0} data-display={!isNumeric ? m.val : ''}>
+                  {isNumeric ? '0' : m.val}
+                </span>
+                <span class="sd-metric-suf">{m.suf}</span>
+                <span class="sd-metric-label">{m.label}</span>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </section>
 
     <!-- ══════════════ CAPACIDADES ══════════════ -->
     <section class="sd-caps-section">
       <div class="container">
-        <p class="eyebrow reveal-blur" style="--delay:0s;">{t('serv.page.capabilities')}</p>
+        <div class="sd-section-head">
+          <p class="sd-section-ey" id="sd-caps-ey">
+            <span class="sd-ey-line"></span>
+            {t('serv.page.capabilities')}
+          </p>
+          <h2 class="sd-section-title sd-caps-title" id="sd-caps-title">
+            {isEn ? 'What we' : 'Lo que'} <em>{isEn ? 'engineer.' : 'ingenieramos.'}</em>
+          </h2>
+        </div>
 
         <div class="sd-caps-grid">
           {caps.map((cap, i) => (
-            <div class="sd-cap-card reveal-blur" style={`--delay:${0.05 * i}s;`}>
+            <div class="sd-cap-card" data-i={i}>
               <div class="sd-cap-spotlight"></div>
+              <div class="sd-cap-icon-wrap">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" set:html={icons[i]}></svg>
+              </div>
               <div class="sd-cap-num">{String(i + 1).padStart(2, '0')}</div>
               <h3 class="sd-cap-title">{cap.title}</h3>
               <p class="sd-cap-desc">{cap.desc}</p>
+              <div class="sd-cap-corner">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+              </div>
             </div>
           ))}
         </div>
       </div>
     </section>
 
-    <!-- ══════════════ PROCESO ══════════════ -->
-    <section class="sd-process-section">
+    <!-- ══════════════ PROCESO (PINNED) ══════════════ -->
+    <section class="sd-process-section" id="sd-process">
       <div class="container sd-process-grid">
-        <div class="sd-process-left reveal-blur" style="--delay:0s;">
-          <p class="eyebrow">{t('serv.page.process')}</p>
-          <p class="sd-process-intro">
-            {isEn
-              ? 'A structured execution protocol. No improvisation, no surprises.'
-              : 'Protocolo de ejecución estructurado. Sin improvisación, sin sorpresas.'}
+
+        <div class="sd-process-left" id="sd-process-left">
+          <p class="sd-section-ey">
+            <span class="sd-ey-line"></span>
+            {t('serv.page.process')}
           </p>
+          <h2 class="sd-section-title">
+            {isEn ? 'Execution' : 'Protocolo'} <em>{isEn ? 'protocol.' : 'de ejecución.'}</em>
+          </h2>
+          <p class="sd-process-intro">
+            {isEn ? 'Four phases. No improvisation, no surprises — every milestone documented, every commit reviewed.'
+                  : 'Cuatro fases. Sin improvisación, sin sorpresas — cada hito documentado, cada commit revisado.'}
+          </p>
+          <div class="sd-process-progress">
+            <span class="sd-pp-label">{isEn ? 'PHASE' : 'FASE'}</span>
+            <span class="sd-pp-current" id="sd-pp-current">01</span>
+            <span class="sd-pp-of">/ 04</span>
+          </div>
         </div>
 
         <div class="sd-steps">
           {steps.map((step, i) => (
-            <div class="sd-step reveal-blur" style={`--delay:${0.1 * i}s;`}>
-              <div class="sd-step-num">
-                <span class="sd-step-n">{String(i + 1).padStart(2, '0')}</span>
-                <div class="sd-step-line"></div>
+            <div class="sd-step" data-step={i}>
+              <div class="sd-step-marker">
+                <div class="sd-step-num">
+                  <span class="sd-step-n">{String(i + 1).padStart(2, '0')}</span>
+                </div>
+                {i < steps.length - 1 && <div class="sd-step-line"></div>}
               </div>
-              <p class="sd-step-text">{step}</p>
+              <div class="sd-step-body">
+                <h3 class="sd-step-title">
+                  {isEn
+                    ? ['Discovery', 'Architecture', 'Build', 'Launch'][i]
+                    : ['Descubrimiento', 'Arquitectura', 'Construcción', 'Lanzamiento'][i]}
+                </h3>
+                <p class="sd-step-text">{step}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -140,10 +300,44 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
     <!-- ══════════════ TECH STACK ══════════════ -->
     <section class="sd-stack-section">
       <div class="container">
-        <p class="eyebrow reveal-blur" style="--delay:0s;">{t('serv.page.stack')}</p>
-        <div class="sd-stack-row reveal-blur" style="--delay:0.1s;">
+        <div class="sd-section-head sd-stack-head">
+          <p class="sd-section-ey" id="sd-stack-ey">
+            <span class="sd-ey-line"></span>
+            {t('serv.page.stack')}
+          </p>
+          <p class="sd-stack-sub">{isEn ? 'Production-grade technologies battle-tested at scale.' : 'Tecnologías production-grade probadas a escala.'}</p>
+        </div>
+        <div class="sd-stack-row" id="sd-stack-row">
           {stack.map(tech => (
-            <span class="sd-tech-badge">{tech}</span>
+            <div class="sd-tech-badge">
+              <span class="sd-tech-pulse"></span>
+              <span>{tech}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════ WHY ══════════════ -->
+    <section class="sd-why-section" id="sd-why">
+      <div class="container">
+        <div class="sd-section-head">
+          <p class="sd-section-ey">
+            <span class="sd-ey-line"></span>
+            {isEn ? 'WHY THIS, WHY US' : 'POR QUÉ ESTO, POR QUÉ NOSOTROS'}
+          </p>
+          <h2 class="sd-section-title">
+            {isEn ? 'The Flouvia' : 'El estándar'} <em>{isEn ? 'standard.' : 'Flouvia.'}</em>
+          </h2>
+        </div>
+
+        <div class="sd-why-grid">
+          {whys.map((w, i) => (
+            <div class="sd-why-item" data-i={i}>
+              <div class="sd-why-num">0{i + 1}</div>
+              <h3 class="sd-why-title">{w.title}</h3>
+              <p class="sd-why-desc">{w.desc}</p>
+            </div>
           ))}
         </div>
       </div>
@@ -152,21 +346,24 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
     <!-- ══════════════ CTA ══════════════ -->
     <section class="sd-cta-section">
       <div class="container">
-        <div class="sd-cta-card reveal-blur" style="--delay:0.2s;" id="sd-cta-card">
+        <div class="sd-cta-card" id="sd-cta-card">
+          <div class="sd-cta-noise" aria-hidden="true"></div>
+          <div class="sd-cta-glow" aria-hidden="true"></div>
           <div class="sd-cta-inner">
             <div class="sd-cta-text">
-              <p class="eyebrow" style="color:#64748b;letter-spacing:4px;">
+              <p class="sd-cta-eyebrow">
+                <span class="sd-cta-dot"></span>
                 {isEn ? 'THE NEXT STEP' : 'EL SIGUIENTE PASO'}
               </p>
               <h2 class="sd-cta-title">
                 {t('serv.page.cta.title')}
-                <span class="editorial"> {isEn ? 'Now.' : 'Ahora.'}</span>
+                <em> {isEn ? 'Now.' : 'Ahora.'}</em>
               </h2>
               <p class="sd-cta-sub">{t('serv.page.cta.sub')}</p>
             </div>
-            <a href={contactLink} class="btn-glow-blue sd-cta-btn" id="sd-cta-btn">
-              <span>{t('serv.page.cta.btn')}</span>
-              <div class="glow-effect"></div>
+            <a href={contactLink} class="sd-cta-btn" id="sd-cta-btn">
+              <span class="sd-cta-btn-label">{t('serv.page.cta.btn')}</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="19" x2="19" y2="5"/><polyline points="9 5 19 5 19 15"/></svg>
             </a>
           </div>
         </div>
@@ -180,222 +377,516 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
 </Layout>
 
 <style>
-/* ══════════════════════════════════════════════════════
-   GLOBALS LOCALES
-══════════════════════════════════════════════════════ */
-.sd-page { width: 100%; }
+.sd-page {
+  --blue:    #0055cc;
+  --blue-deep: #002a66;
+  --green:   #10b981;
+  --text:    #0a0e1a;
+  --muted:   #6e7d96;
+  --dim:     #c4cdd9;
+  --border:  rgba(0,0,0,0.07);
+  --bg:      #ffffff;
+  --bg-soft: #f7f8fa;
+  --bg-dark: #0a0e1a;
+  --ease:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-back: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.container { max-width: 1240px; margin: 0 auto; padding: 0 5%; }
 
 /* ══════════════════════════════════════════════════════
    HERO
 ══════════════════════════════════════════════════════ */
 .sd-hero {
-  padding: 13rem 0 6rem;
-  background: var(--color-bg);
   position: relative;
+  padding: 11rem 0 6rem;
+  background: var(--bg);
+  overflow: hidden;
+}
+.sd-hero-grid-bg {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(0,0,0,0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0,0.02) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 70%);
+  pointer-events: none;
 }
 
 .sd-back {
-  display: inline-flex; align-items: center;
-  font-size: 0.78rem; font-weight: 600;
-  color: var(--color-text-muted); text-decoration: none;
-  letter-spacing: 0.01em; margin-bottom: 3rem;
-  transition: color 0.3s, transform 0.3s;
-  border: 1px solid var(--color-border); padding: 8px 16px;
-  border-radius: 100px; gap: 6px;
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
+  color: var(--muted); text-decoration: none;
+  padding: 7px 14px; border-radius: 100px;
+  background: rgba(0,0,0,0.025); border: 1px solid var(--border);
+  margin-bottom: 3rem; opacity: 0;
+  transition: all .3s var(--ease);
 }
-.sd-back:hover { color: var(--color-text); transform: translateX(-4px); }
+.sd-back:hover {
+  color: var(--text); background: rgba(0,0,0,0.05);
+  transform: translateX(-3px);
+}
 
 .sd-cat {
+  display: inline-flex; align-items: center; gap: 12px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em;
-  color: #0055cc; text-transform: uppercase; margin: 0 0 1.4rem;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em;
+  color: var(--blue); text-transform: uppercase;
+  margin: 0 0 1.6rem; opacity: 0;
+}
+.sd-cat-line {
+  display: inline-block; width: 36px; height: 1px;
+  background: var(--blue); transform-origin: left;
 }
 
 .sd-title {
-  font-size: clamp(3.5rem, 7.5vw, 7.5rem);
-  font-weight: 800; letter-spacing: -0.045em; line-height: 1;
-  margin: 0 0 3.5rem; overflow: hidden;
+  font-size: clamp(3.4rem, 7.8vw, 7.6rem);
+  font-weight: 600; letter-spacing: -0.05em; line-height: 1;
+  margin: 0 0 3.5rem;
+  display: inline-block;
+  overflow: hidden;
 }
-.sd-title-plain { display: inline; color: var(--color-text); }
-.sd-title-serif { font-size: 105%; color: #222; }
+.sd-t-plain { color: var(--text); }
+.sd-t-serif {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic; font-weight: 400;
+  font-size: 1.05em; color: var(--muted);
+  margin-left: 0.05em;
+}
 
 .sd-hero-bottom {
   display: flex; justify-content: space-between; align-items: flex-end;
-  gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem;
+  gap: 4rem; border-top: 1px solid var(--border); padding-top: 2rem;
 }
 .sd-desc {
-  font-size: 1.15rem; color: var(--color-text-muted);
-  max-width: 540px; line-height: 1.6; margin: 0;
+  font-size: 1.18rem; color: var(--muted);
+  max-width: 580px; line-height: 1.55; margin: 0;
+  font-weight: 400; opacity: 0;
 }
-.sd-hero-cta { flex-shrink: 0; }
 
-.sd-rule {
-  height: 0; margin-top: 0;
+.sd-hero-cta {
+  flex-shrink: 0;
+  display: inline-flex; align-items: center; gap: 9px;
+  background: var(--text); color: #fff;
+  font-size: 0.95rem; font-weight: 600;
+  padding: 1rem 2rem; border-radius: 100px;
+  text-decoration: none;
+  box-shadow: 0 8px 22px rgba(10,14,26,0.18), inset 0 1px 0 rgba(255,255,255,0.08);
+  transition: all .35s var(--ease);
+  opacity: 0; position: relative; overflow: hidden;
+}
+.sd-hero-cta::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.08) 50%, transparent 70%);
+  transform: translateX(-100%);
+}
+.sd-hero-cta:hover::before { transform: translateX(100%); transition: transform .6s var(--ease); }
+.sd-hero-cta:hover {
+  background: #1a2233;
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 14px 32px rgba(10,14,26,0.28), inset 0 1px 0 rgba(255,255,255,0.12);
+}
+.sd-hero-cta svg { transition: transform .35s var(--ease); }
+.sd-hero-cta:hover svg { transform: translate(2px, -2px); }
+
+.sd-scroll-cue {
+  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  opacity: 0;
+}
+.sd-scroll-cue span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.2em;
+  color: var(--muted); text-transform: uppercase;
+}
+.sd-cue-line {
+  width: 1px; height: 36px; background: linear-gradient(180deg, var(--muted), transparent);
+  position: relative; overflow: hidden;
+}
+.sd-cue-line::after {
+  content: ''; position: absolute; left: 0; top: -50%; width: 100%; height: 50%;
+  background: var(--text);
+  animation: sd-cue-flow 2s ease-in-out infinite;
+}
+@keyframes sd-cue-flow {
+  0%   { top: -50%; }
+  100% { top: 100%; }
+}
+
+/* ══════════════════════════════════════════════════════
+   METRICS
+══════════════════════════════════════════════════════ */
+.sd-metrics-section {
+  background: var(--bg-dark); color: #fff;
+  padding: 3.5rem 0;
+}
+.sd-metrics-row {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+.sd-metric {
+  display: flex; flex-direction: column; gap: 0.35rem;
+  padding-left: 1.3rem;
+  border-left: 1px solid rgba(255,255,255,0.1);
+  opacity: 0;
+}
+.sd-metric:first-child { padding-left: 0; border-left: none; }
+.sd-metric-num {
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  font-weight: 700; letter-spacing: -0.04em;
+  line-height: 1; color: #fff;
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+}
+.sd-metric-suf {
+  font-size: 1.1rem; font-weight: 600; color: rgba(255,255,255,0.5);
+  margin-top: -0.4rem;
+}
+.sd-metric-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.66rem; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: rgba(255,255,255,0.5);
+  margin-top: 0.55rem;
+}
+
+/* ══════════════════════════════════════════════════════
+   SECTION HEADERS
+══════════════════════════════════════════════════════ */
+.sd-section-head {
+  display: flex; flex-direction: column; gap: 1.4rem;
+  margin-bottom: 4rem; max-width: 720px;
+}
+.sd-section-ey {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.66rem; font-weight: 700; letter-spacing: 0.16em;
+  color: var(--muted); text-transform: uppercase;
+  margin: 0;
+}
+.sd-ey-line {
+  display: inline-block; width: 32px; height: 1px;
+  background: var(--muted); transform-origin: left;
+}
+.sd-section-title {
+  font-size: clamp(2rem, 4.4vw, 3.4rem);
+  font-weight: 600; letter-spacing: -0.04em; line-height: 1.05;
+  margin: 0; color: var(--text);
+}
+.sd-section-title em {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic; font-weight: 400;
+  color: var(--muted); font-size: 1.05em;
 }
 
 /* ══════════════════════════════════════════════════════
    CAPACIDADES
 ══════════════════════════════════════════════════════ */
 .sd-caps-section {
-  padding: 7rem 0;
-  background: var(--color-bg-soft);
+  padding: 7rem 0; background: var(--bg-soft);
 }
-.sd-caps-section .eyebrow { margin-bottom: 3.5rem; }
 
 .sd-caps-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem;
 }
-
 .sd-cap-card {
   position: relative; overflow: hidden;
-  background: #ffffff;
-  border: 1px solid var(--color-border);
-  border-radius: 24px; padding: 2.4rem 2.4rem 2.8rem;
-  box-shadow:
-    0 0 0 1px rgba(0,0,0,0.03),
-    0 2px 4px rgba(0,0,0,0.04),
-    0 8px 20px rgba(0,0,0,0.04);
-  transition: transform 0.5s var(--ease-smooth), box-shadow 0.5s var(--ease-smooth), border-color 0.4s;
+  background: #fff; border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 2.4rem 2.4rem 2.6rem;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.02), 0 2px 4px rgba(0,0,0,0.04), 0 8px 20px rgba(0,0,0,0.04);
+  transition: all .5s var(--ease);
   cursor: default;
 }
 .sd-cap-card:hover {
   transform: translateY(-6px);
-  box-shadow:
-    0 0 0 1px rgba(0,0,0,0.05),
-    0 4px 10px rgba(0,0,0,0.06),
-    0 20px 40px rgba(0,0,0,0.08);
-  border-color: rgba(0,85,204,0.12);
+  box-shadow: 0 0 0 1px rgba(0,85,204,0.08), 0 6px 16px rgba(0,85,204,0.04), 0 24px 48px rgba(0,85,204,0.08);
+  border-color: rgba(0,85,204,0.18);
 }
 
 .sd-cap-spotlight {
   position: absolute; width: 320px; height: 320px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,85,204,0.06) 0%, transparent 70%);
-  pointer-events: none; transform: translate(-50%,-50%); top: 0; left: 0;
-  opacity: 0; transition: opacity 0.4s;
+  background: radial-gradient(circle, rgba(0,85,204,0.07) 0%, transparent 70%);
+  pointer-events: none; transform: translate(-50%,-50%);
+  top: 0; left: 0; opacity: 0; transition: opacity .4s; z-index: 0;
 }
 .sd-cap-card:hover .sd-cap-spotlight { opacity: 1; }
+.sd-cap-card > *:not(.sd-cap-spotlight) { position: relative; z-index: 1; }
 
+.sd-cap-icon-wrap {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 48px; height: 48px; border-radius: 14px;
+  background: rgba(0,85,204,0.08); color: var(--blue);
+  margin-bottom: 1.6rem;
+  transition: all .4s var(--ease);
+}
+.sd-cap-card:hover .sd-cap-icon-wrap {
+  background: var(--blue); color: #fff;
+  transform: rotate(-6deg) scale(1.05);
+}
 .sd-cap-num {
+  position: absolute; top: 2.4rem; right: 2.4rem;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em;
-  color: #0055cc; margin-bottom: 1.8rem;
+  font-size: 0.66rem; font-weight: 700; letter-spacing: 0.1em;
+  color: var(--muted); opacity: 0.5;
 }
 .sd-cap-title {
-  font-size: 1.4rem; font-weight: 800; letter-spacing: -0.03em;
-  margin: 0 0 0.9rem; line-height: 1.2; color: var(--color-text);
+  font-size: 1.45rem; font-weight: 700; letter-spacing: -0.025em;
+  margin: 0 0 0.85rem; line-height: 1.18; color: var(--text);
 }
 .sd-cap-desc {
-  font-size: 1rem; color: var(--color-text-muted); line-height: 1.6; margin: 0;
+  font-size: 1rem; color: var(--muted); line-height: 1.55; margin: 0;
 }
+.sd-cap-corner {
+  position: absolute; bottom: 1.5rem; right: 1.5rem;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(0,0,0,0.04); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); opacity: 0;
+  transform: translate(8px, 8px);
+  transition: all .4s var(--ease);
+}
+.sd-cap-card:hover .sd-cap-corner { opacity: 1; transform: translate(0,0); background: var(--blue); color: #fff; border-color: var(--blue); }
 
 /* ══════════════════════════════════════════════════════
    PROCESO
 ══════════════════════════════════════════════════════ */
-.sd-process-section { padding: 8rem 0; background: var(--color-bg); }
-
+.sd-process-section {
+  padding: 8rem 0; background: var(--bg);
+}
 .sd-process-grid {
-  display: grid; grid-template-columns: 1fr 1.4fr; gap: 6rem; align-items: flex-start;
+  display: grid; grid-template-columns: 1fr 1.5fr;
+  gap: 5rem; align-items: flex-start;
 }
-.sd-process-left { position: sticky; top: 120px; }
+.sd-process-left {
+  position: sticky; top: 130px;
+  display: flex; flex-direction: column; gap: 1.2rem;
+}
 .sd-process-intro {
-  font-size: 1.1rem; color: var(--color-text-muted); line-height: 1.6;
-  margin-top: 1rem; max-width: 340px;
+  font-size: 1.05rem; color: var(--muted); line-height: 1.55;
+  margin: 0; max-width: 360px;
 }
+.sd-process-progress {
+  display: flex; align-items: baseline; gap: 8px;
+  margin-top: 1.4rem; padding-top: 1.4rem;
+  border-top: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace;
+}
+.sd-pp-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.13em; color: var(--muted); }
+.sd-pp-current {
+  font-size: 2.2rem; font-weight: 700; color: var(--text);
+  letter-spacing: -0.02em; line-height: 1;
+  font-variant-numeric: tabular-nums;
+  transition: color .3s;
+}
+.sd-pp-of { font-size: 1rem; font-weight: 600; color: var(--muted); }
 
 .sd-steps { display: flex; flex-direction: column; gap: 0; }
 
 .sd-step {
-  display: flex; gap: 2.5rem; align-items: flex-start;
-  padding: 2.2rem 0; border-bottom: 1px solid var(--color-border);
-  transition: transform 0.4s var(--ease-smooth);
+  display: flex; gap: 2.2rem; align-items: flex-start;
+  padding: 2.2rem 0;
+  position: relative;
+  opacity: 0;
 }
 .sd-step:first-child { padding-top: 0; }
-.sd-step:last-child  { border-bottom: none; }
-.sd-step:hover { transform: translateX(8px); }
+.sd-step:last-child  { padding-bottom: 0; }
 
-.sd-step-num { display: flex; flex-direction: column; align-items: center; gap: 0; flex-shrink: 0; }
+.sd-step-marker {
+  display: flex; flex-direction: column; align-items: center;
+  flex-shrink: 0; position: relative;
+}
+.sd-step-num {
+  width: 44px; height: 44px; border-radius: 14px;
+  background: rgba(0,85,204,0.05); border: 1px solid rgba(0,85,204,0.15);
+  display: flex; align-items: center; justify-content: center;
+  transition: all .4s var(--ease);
+}
+.sd-step.is-active .sd-step-num {
+  background: var(--blue); border-color: var(--blue);
+  box-shadow: 0 0 0 4px rgba(0,85,204,0.15), 0 8px 22px rgba(0,85,204,0.25);
+}
+.sd-step.is-active .sd-step-n { color: #fff; }
 .sd-step-n {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem; font-weight: 700; color: #0055cc; letter-spacing: 0.06em;
-  white-space: nowrap;
+  font-size: 0.78rem; font-weight: 700; color: var(--blue); letter-spacing: 0.04em;
+  transition: color .3s;
 }
-.sd-step-line { width: 1px; flex-grow: 1; background: rgba(0,85,204,0.15); margin-top: 8px; min-height: 24px; }
+.sd-step-line {
+  width: 1px; flex: 1;
+  background: rgba(0,85,204,0.18);
+  margin-top: 8px; min-height: 80px;
+  position: relative; overflow: hidden;
+}
+.sd-step-line::after {
+  content: ''; position: absolute; left: 0; top: 0;
+  width: 100%; height: 0;
+  background: var(--blue);
+  transition: height .8s var(--ease);
+}
+.sd-step.is-active ~ .sd-step .sd-step-line::after { height: 0%; }
+.sd-step.is-active .sd-step-line::after { height: 100%; }
 
+.sd-step-body {
+  flex: 1; padding-top: 6px;
+}
+.sd-step-title {
+  font-size: 1.5rem; font-weight: 700; letter-spacing: -0.025em;
+  color: var(--text); margin: 0 0 0.6rem; line-height: 1.2;
+  transition: color .3s;
+}
+.sd-step.is-active .sd-step-title { color: var(--blue); }
 .sd-step-text {
-  font-size: 1.05rem; color: var(--color-text-muted); line-height: 1.6; margin: 0;
-  padding-top: 2px;
+  font-size: 1.02rem; color: var(--muted); line-height: 1.6; margin: 0;
 }
 
 /* ══════════════════════════════════════════════════════
    TECH STACK
 ══════════════════════════════════════════════════════ */
-.sd-stack-section { padding: 5rem 0 6rem; background: var(--color-bg-soft); }
-.sd-stack-section .eyebrow { margin-bottom: 2rem; }
-
+.sd-stack-section { padding: 6rem 0; background: var(--bg-soft); }
+.sd-stack-head { margin-bottom: 2.2rem; }
+.sd-stack-sub {
+  font-size: 1rem; color: var(--muted); margin: 0;
+}
 .sd-stack-row {
-  display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;
+  display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center;
 }
 .sd-tech-badge {
+  display: inline-flex; align-items: center; gap: 9px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.82rem; font-weight: 700; letter-spacing: 0.04em;
-  color: var(--color-text); background: #ffffff;
-  border: 1px solid var(--color-border);
-  padding: 10px 20px; border-radius: 100px;
+  color: var(--text); background: #fff;
+  border: 1px solid var(--border);
+  padding: 11px 18px; border-radius: 100px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-  transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s, border-color 0.3s;
+  transition: all .35s var(--ease);
+}
+.sd-tech-pulse {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+  animation: sd-pulse 2.5s ease-in-out infinite;
 }
 .sd-tech-badge:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-  border-color: rgba(0,85,204,0.2);
+  box-shadow: 0 8px 22px rgba(0,85,204,0.1);
+  border-color: rgba(0,85,204,0.3);
+}
+
+@keyframes sd-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,.5); transform: scale(1); }
+  60%      { box-shadow: 0 0 0 4px rgba(16,185,129,0); transform: scale(1.2); }
+}
+
+/* ══════════════════════════════════════════════════════
+   WHY
+══════════════════════════════════════════════════════ */
+.sd-why-section { padding: 8rem 0 6rem; background: var(--bg); }
+.sd-why-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+}
+.sd-why-item {
+  position: relative; padding-top: 1.6rem;
+  border-top: 1px solid var(--text);
+}
+.sd-why-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+  color: var(--muted); margin-bottom: 1.2rem;
+}
+.sd-why-title {
+  font-size: 1.3rem; font-weight: 700; letter-spacing: -0.025em;
+  color: var(--text); margin: 0 0 0.85rem; line-height: 1.25;
+}
+.sd-why-desc {
+  font-size: 0.96rem; color: var(--muted); line-height: 1.55; margin: 0;
 }
 
 /* ══════════════════════════════════════════════════════
    CTA
 ══════════════════════════════════════════════════════ */
-.sd-cta-section { padding: 0 0 8rem; background: var(--color-bg-soft); }
-
+.sd-cta-section { padding: 0 0 8rem; background: var(--bg); }
 .sd-cta-card {
+  position: relative;
   background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%);
   border-radius: 32px; overflow: hidden;
   box-shadow: 0 20px 40px rgba(5,11,20,0.15), 0 50px 100px rgba(5,11,20,0.25);
-  transition: transform 0.6s var(--ease-spring);
-  position: relative;
+  transition: transform .6s var(--ease);
 }
-.sd-cta-card::before {
-  content: ""; position: absolute; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+.sd-cta-card:hover { transform: scale(1.012); }
+.sd-cta-noise {
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   opacity: 0.04; mix-blend-mode: overlay; pointer-events: none;
 }
-.sd-cta-card:hover { transform: scale(1.015); }
-
+.sd-cta-glow {
+  position: absolute; width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(0,85,204,0.4) 0%, transparent 70%);
+  pointer-events: none; top: -200px; right: -200px;
+  filter: blur(60px); opacity: 0.5;
+}
 .sd-cta-inner {
-  padding: 5rem 6rem;
+  position: relative; z-index: 2;
+  padding: 5rem 5.5rem;
   display: flex; justify-content: space-between; align-items: center;
-  gap: 3rem; position: relative; z-index: 2;
+  gap: 3rem;
 }
 .sd-cta-text { flex: 1; }
-.sd-cta-title {
-  font-size: clamp(2.4rem, 4vw, 3.6rem); font-weight: 800;
-  color: #fff; line-height: 1.1; letter-spacing: -1.5px; margin: 0.5rem 0 1rem;
+.sd-cta-eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.66rem; font-weight: 700; letter-spacing: 0.18em;
+  color: rgba(186,230,253,0.7); text-transform: uppercase;
+  margin: 0 0 1.2rem;
 }
-.sd-cta-title .editorial { color: #bae6fd; }
-.sd-cta-sub { font-size: 1rem; color: rgba(255,255,255,0.5); margin: 0; line-height: 1.5; }
+.sd-cta-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #bae6fd; flex-shrink: 0;
+  animation: sd-dot-pulse 2.5s ease-in-out infinite;
+}
+@keyframes sd-dot-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(186,230,253,0.6); transform: scale(1); }
+  60%      { box-shadow: 0 0 0 5px rgba(186,230,253,0); transform: scale(1.2); }
+}
 
-.btn-glow-blue {
-  position: relative; background: #fff; color: var(--color-blue-deep);
-  padding: 20px 44px; border-radius: 100px; text-decoration: none;
-  font-size: 1rem; font-weight: 700; overflow: hidden;
-  transition: 0.5s var(--ease-spring); display: inline-flex;
-  align-items: center; justify-content: center; white-space: nowrap;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 10px 20px rgba(255,255,255,0.08);
-  will-change: transform;
+.sd-cta-title {
+  font-size: clamp(2.2rem, 3.8vw, 3.4rem); font-weight: 600;
+  color: #fff; line-height: 1.08; letter-spacing: -0.04em; margin: 0 0 0.9rem;
 }
-.btn-glow-blue span { position: relative; z-index: 2; }
-.btn-glow-blue:hover { transform: translateY(-4px); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 14px 28px rgba(255,255,255,0.14); }
-.btn-glow-blue:active { transform: scale(0.96); transition: 0.1s; }
+.sd-cta-title em {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic; font-weight: 400;
+  color: #bae6fd;
+}
+.sd-cta-sub { font-size: 1rem; color: rgba(255,255,255,0.55); margin: 0; line-height: 1.5; max-width: 460px; }
+
+.sd-cta-btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  background: #fff; color: var(--blue-deep);
+  padding: 1.1rem 2.2rem; border-radius: 100px;
+  text-decoration: none; font-size: 1rem; font-weight: 700;
+  position: relative; overflow: hidden;
+  transition: all .5s var(--ease);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05), 0 10px 22px rgba(255,255,255,0.1);
+}
+.sd-cta-btn::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(0,85,204,0.08) 50%, transparent 70%);
+  transform: translateX(-100%);
+}
+.sd-cta-btn:hover::before { transform: translateX(100%); transition: transform .6s var(--ease); }
+.sd-cta-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06), 0 16px 32px rgba(255,255,255,0.15);
+}
+.sd-cta-btn-label { position: relative; z-index: 2; }
+.sd-cta-btn svg { transition: transform .35s var(--ease); }
+.sd-cta-btn:hover svg { transform: translate(2px, -2px); }
 
 /* ══════════════════════════════════════════════════════
    RESPONSIVE
@@ -403,143 +894,244 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
 @media (max-width: 1024px) {
   .sd-process-grid { grid-template-columns: 1fr; gap: 3rem; }
   .sd-process-left { position: static; }
-  .sd-cta-inner { flex-direction: column; align-items: flex-start; gap: 2.5rem; padding: 4rem 4rem; }
+  .sd-cta-inner { flex-direction: column; align-items: flex-start; gap: 2.4rem; padding: 4rem; }
+  .sd-why-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .sd-metrics-row { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+  .sd-metric:nth-child(3) { padding-left: 0; border-left: none; }
 }
 
 @media (max-width: 768px) {
-  .sd-hero { padding: 11rem 0 4rem; }
-  .sd-title { font-size: clamp(3rem, 12vw, 4.5rem); margin-bottom: 2.5rem; }
-  .sd-hero-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; border-top: none; padding-top: 0; }
-  .sd-desc { font-size: 1.05rem; }
-  .sd-caps-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .sd-hero { padding: 9rem 0 4rem; }
+  .sd-back { margin-bottom: 2rem; }
+  .sd-title { font-size: clamp(2.8rem, 12vw, 4.4rem); margin-bottom: 2.5rem; }
+  .sd-hero-bottom { flex-direction: column; align-items: stretch; gap: 1.8rem; border-top: none; padding-top: 0; }
+  .sd-desc { font-size: 1.04rem; }
+  .sd-hero-cta { width: 100%; justify-content: center; }
+  .sd-scroll-cue { display: none; }
+
+  .sd-metrics-section { padding: 2.5rem 0; }
+  .sd-metric-num { font-size: 2rem; }
+
+  .sd-section-title { font-size: clamp(1.7rem, 7vw, 2.4rem); }
+  .sd-section-head { margin-bottom: 2.5rem; }
+
+  .sd-caps-section { padding: 4.5rem 0; }
+  .sd-caps-grid { grid-template-columns: 1fr; }
   .sd-cap-card { padding: 2rem; }
-  .sd-step { gap: 1.5rem; }
-  .sd-cta-inner { padding: 3.5rem 2rem; }
-  .sd-cta-title { font-size: 2.4rem; }
-  .btn-glow-blue { width: 100%; justify-content: center; }
-  .sd-stack-row { gap: 0.75rem; }
+  .sd-cap-num { top: 2rem; right: 2rem; }
+
+  .sd-process-section { padding: 4.5rem 0; }
+  .sd-step { gap: 1.4rem; padding: 1.6rem 0; }
+  .sd-step-num { width: 38px; height: 38px; }
+
+  .sd-stack-section { padding: 4rem 0; }
+  .sd-tech-badge { padding: 9px 14px; font-size: 0.74rem; }
+
+  .sd-why-section { padding: 5rem 0 4rem; }
+
+  .sd-cta-section { padding: 0 0 5rem; }
+  .sd-cta-inner { padding: 3rem 2rem; }
+  .sd-cta-title { font-size: 2rem; }
+  .sd-cta-btn { width: 100%; justify-content: center; }
 }
 </style>
 
 <script>
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 
-gsap.registerPlugin(SplitText);
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  /* ── Título hero con SplitText ── */
+  /* ─────────────── HERO ENTRANCE ─────────────── */
+  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+
+  tl.to('#sd-back', { opacity: 1, y: 0, duration: 0.55 }, 0.1);
+  gsap.set('#sd-back', { y: 8 });
+
+  // Category eyebrow + line
+  tl.to('#sd-cat', { opacity: 1, duration: 0.55 }, 0.2);
+  gsap.set('.sd-cat-line', { scaleX: 0 });
+  tl.to('.sd-cat-line', { scaleX: 1, duration: 0.7, ease: 'power3.out' }, 0.3);
+
+  // Title SplitText
   const titleEl = document.getElementById('sd-title');
   if (titleEl) {
     const split = SplitText.create(titleEl, { type: 'chars,words' });
-    gsap.set(split.chars, { opacity: 0, y: 40, rotateX: -50, transformOrigin: 'center bottom' });
-    gsap.to(split.chars, {
+    gsap.set(split.chars, { opacity: 0, y: 60, rotateX: -50, transformOrigin: 'center bottom' });
+    tl.to(split.chars, {
       opacity: 1, y: 0, rotateX: 0,
-      duration: 0.75, stagger: 0.012, ease: 'back.out(2)',
-      delay: 0.35
+      duration: 0.85, stagger: 0.018, ease: 'back.out(2)',
+    }, 0.35);
+  }
+
+  tl.to('#sd-desc',     { opacity: 1, y: 0, duration: 0.6 }, 0.7);
+  tl.to('#sd-hero-cta', { opacity: 1, y: 0, duration: 0.6 }, 0.78);
+  gsap.set(['#sd-desc', '#sd-hero-cta'], { y: 12 });
+
+  tl.to('#sd-scroll-cue', { opacity: 1, duration: 0.5 }, 1.1);
+
+  // Hero parallax background
+  gsap.to('.sd-hero-grid-bg', {
+    yPercent: 30,
+    ease: 'none',
+    scrollTrigger: { trigger: '.sd-hero', start: 'top top', end: 'bottom top', scrub: true },
+  });
+
+  /* ─────────────── METRICS COUNTERS ─────────────── */
+  const metricsRow = document.getElementById('sd-metrics-row');
+  if (metricsRow) {
+    ScrollTrigger.create({
+      trigger: metricsRow, start: 'top 85%', once: true,
+      onEnter: () => {
+        const metrics = metricsRow.querySelectorAll<HTMLElement>('.sd-metric');
+        gsap.fromTo(metrics,
+          { opacity: 0, y: 18 },
+          { opacity: 1, y: 0, duration: 0.7, stagger: 0.08, ease: 'expo.out' }
+        );
+
+        // Animate numbers
+        metrics.forEach((m, i) => {
+          const numEl = m.querySelector<HTMLElement>('.sd-metric-num');
+          if (!numEl) return;
+          const display = numEl.getAttribute('data-display') || '';
+          if (display) return; // non-numeric, skip
+          const target = parseFloat(numEl.getAttribute('data-target') || '0');
+          const obj = { val: 0 };
+          gsap.to(obj, {
+            val: target, duration: 1.6, ease: 'expo.out', delay: 0.2 + i * 0.05,
+            onUpdate() {
+              numEl.textContent = target % 1 === 0
+                ? Math.round(obj.val).toString()
+                : obj.val.toFixed(1);
+            }
+          });
+        });
+      }
     });
   }
 
-  /* ── Botón magnético CTA ── */
-  const ctaBtn = document.getElementById('sd-cta-btn');
-  if (ctaBtn) {
-    ctaBtn.addEventListener('mousemove', (e: MouseEvent) => {
-      const r = ctaBtn.getBoundingClientRect();
-      const x = (e.clientX - r.left - r.width  / 2) * 0.25;
-      const y = (e.clientY - r.top  - r.height / 2) * 0.25;
-      gsap.to(ctaBtn, { x, y, duration: 0.4, ease: 'power2.out' });
-    });
-    ctaBtn.addEventListener('mouseleave', () =>
-      gsap.to(ctaBtn, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.4)' })
-    );
-  }
-
-  /* ── Botón magnético hero ── */
-  const heroBtn = document.getElementById('sd-hero-cta');
-  if (heroBtn) {
-    heroBtn.addEventListener('mousemove', (e: MouseEvent) => {
-      const r = heroBtn.getBoundingClientRect();
-      const x = (e.clientX - r.left - r.width  / 2) * 0.2;
-      const y = (e.clientY - r.top  - r.height / 2) * 0.2;
-      gsap.to(heroBtn, { x, y, duration: 0.4, ease: 'power2.out' });
-    });
-    heroBtn.addEventListener('mouseleave', () =>
-      gsap.to(heroBtn, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.4)' })
-    );
-  }
-
-  /* ── Spotlight en capability cards ── */
-  document.querySelectorAll<HTMLElement>('.sd-cap-card').forEach(card => {
-    const spot = card.querySelector<HTMLElement>('.sd-cap-spotlight');
-    if (!spot) return;
-    card.addEventListener('mousemove', (e: MouseEvent) => {
-      const r = card.getBoundingClientRect();
-      gsap.to(spot, { x: e.clientX - r.left, y: e.clientY - r.top, duration: 0.5, ease: 'power2.out' });
+  /* ─────────────── EYEBROW LINES ─────────────── */
+  document.querySelectorAll<HTMLElement>('.sd-section-ey').forEach(ey => {
+    const line = ey.querySelector<HTMLElement>('.sd-ey-line');
+    if (!line) return;
+    gsap.set(line, { scaleX: 0 });
+    ScrollTrigger.create({
+      trigger: ey, start: 'top 88%', once: true,
+      onEnter: () => gsap.to(line, { scaleX: 1, duration: 0.7, ease: 'power3.out' })
     });
   });
 
-  /* ── Reveal por scroll ── */
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('active');
-        observer.unobserve(entry.target);
-      }
+  /* ─────────────── SECTION TITLES (SplitText reveal) ─────────────── */
+  document.querySelectorAll<HTMLElement>('.sd-section-title').forEach(title => {
+    const split = SplitText.create(title, { type: 'words' });
+    gsap.set(split.words, { opacity: 0, y: 24, filter: 'blur(8px)' });
+    ScrollTrigger.create({
+      trigger: title, start: 'top 85%', once: true,
+      onEnter: () => gsap.to(split.words, {
+        opacity: 1, y: 0, filter: 'blur(0px)',
+        duration: 0.8, stagger: 0.05, ease: 'expo.out'
+      })
     });
-  }, { threshold: 0.1 });
+  });
 
-  document.querySelectorAll('.reveal-blur').forEach(el => observer.observe(el));
-
-  /* ── Stagger caps en su aparición ── */
-  const capsObs = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const cards = entry.target.querySelectorAll('.sd-cap-card');
-        gsap.fromTo(cards,
-          { y: 30, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'expo.out' }
+  /* ─────────────── CAPABILITY CARDS ─────────────── */
+  const caps = document.querySelectorAll<HTMLElement>('.sd-cap-card');
+  if (caps.length) {
+    ScrollTrigger.create({
+      trigger: '.sd-caps-grid', start: 'top 80%', once: true,
+      onEnter: () => {
+        gsap.fromTo(caps,
+          { y: 36, opacity: 0, scale: 0.97 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.85, stagger: 0.1, ease: 'expo.out' }
         );
-        capsObs.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.15 });
 
-  const grid = document.querySelector('.sd-caps-grid');
-  if (grid) capsObs.observe(grid);
-
-  /* ── Stagger steps ── */
-  const stepsObs = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const steps = entry.target.querySelectorAll('.sd-step');
-        gsap.fromTo(steps,
-          { x: -20, opacity: 0 },
-          { x: 0, opacity: 1, duration: 0.7, stagger: 0.12, ease: 'expo.out' }
-        );
-        stepsObs.unobserve(entry.target);
-      }
+    // Spotlight tracking
+    caps.forEach(card => {
+      const spot = card.querySelector<HTMLElement>('.sd-cap-spotlight');
+      if (!spot) return;
+      card.addEventListener('mousemove', (e: MouseEvent) => {
+        const r = card.getBoundingClientRect();
+        gsap.to(spot, { x: e.clientX - r.left, y: e.clientY - r.top, duration: 0.5, ease: 'power2.out' });
+      });
     });
-  }, { threshold: 0.15 });
+  }
 
-  const stepsEl = document.querySelector('.sd-steps');
-  if (stepsEl) stepsObs.observe(stepsEl);
+  /* ─────────────── PROCESS STEPS (sequential reveal + active tracking) ─────────────── */
+  const steps = document.querySelectorAll<HTMLElement>('.sd-step');
+  const ppCurrent = document.getElementById('sd-pp-current');
 
-  /* ── Tech badges scramble on appear ── */
-  const badgesObs = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const badges = entry.target.querySelectorAll('.sd-tech-badge');
+  steps.forEach((step, i) => {
+    // Entrance
+    ScrollTrigger.create({
+      trigger: step, start: 'top 85%', once: true,
+      onEnter: () => gsap.to(step, { opacity: 1, x: 0, duration: 0.8, ease: 'expo.out' })
+    });
+    gsap.set(step, { x: -16 });
+
+    // Active state tracking — current phase counter
+    ScrollTrigger.create({
+      trigger: step,
+      start: 'top 60%',
+      end: 'bottom 60%',
+      onEnter:    () => { step.classList.add('is-active'); if (ppCurrent) ppCurrent.textContent = String(i + 1).padStart(2, '0'); },
+      onEnterBack:() => { step.classList.add('is-active'); if (ppCurrent) ppCurrent.textContent = String(i + 1).padStart(2, '0'); },
+      onLeave:    () => step.classList.remove('is-active'),
+      onLeaveBack:() => step.classList.remove('is-active'),
+    });
+  });
+
+  /* ─────────────── TECH STACK ─────────────── */
+  const stack = document.querySelector('.sd-stack-row');
+  if (stack) {
+    ScrollTrigger.create({
+      trigger: stack, start: 'top 85%', once: true,
+      onEnter: () => {
+        const badges = stack.querySelectorAll('.sd-tech-badge');
         gsap.fromTo(badges,
-          { y: 16, opacity: 0, scale: 0.9 },
-          { y: 0, opacity: 1, scale: 1, duration: 0.6, stagger: 0.08, ease: 'back.out(1.8)' }
+          { y: 18, opacity: 0, scale: 0.92 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.65, stagger: 0.08, ease: 'back.out(1.8)' }
         );
-        badgesObs.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.2 });
+  }
 
-  const stackRow = document.querySelector('.sd-stack-row');
-  if (stackRow) badgesObs.observe(stackRow);
+  /* ─────────────── WHY GRID ─────────────── */
+  const whyItems = document.querySelectorAll<HTMLElement>('.sd-why-item');
+  if (whyItems.length) {
+    ScrollTrigger.create({
+      trigger: '.sd-why-grid', start: 'top 80%', once: true,
+      onEnter: () => {
+        gsap.fromTo(whyItems,
+          { y: 28, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.75, stagger: 0.12, ease: 'expo.out' }
+        );
+      }
+    });
+  }
+
+  /* ─────────────── CTA SCROLL REVEAL ─────────────── */
+  const ctaCard = document.getElementById('sd-cta-card');
+  if (ctaCard) {
+    gsap.fromTo(ctaCard,
+      { y: 50, opacity: 0, scale: 0.96 },
+      {
+        y: 0, opacity: 1, scale: 1, duration: 1.0, ease: 'expo.out',
+        scrollTrigger: { trigger: ctaCard, start: 'top 85%', once: true }
+      }
+    );
+  }
+
+  /* ─────────────── REDUCED MOTION ─────────────── */
+  gsap.matchMedia().add('(prefers-reduced-motion: reduce)', () => {
+    gsap.globalTimeline.timeScale(2);
+    document.querySelectorAll('.sd-cue-line, .sd-cta-dot, .sd-tech-pulse').forEach(el => {
+      (el as HTMLElement).style.animation = 'none';
+    });
+  });
 });
 </script>
