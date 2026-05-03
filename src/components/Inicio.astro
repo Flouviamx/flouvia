@@ -718,69 +718,187 @@ const t = useTranslations(lang);
 </style>
 
 <script>
-    const reveal = () => {
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target); 
-                }
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+    import { SplitText } from 'gsap/SplitText';
+
+    gsap.registerPlugin(ScrollTrigger, SplitText);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const isMobile = window.innerWidth <= 768;
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        /* ═════════════ FALLBACK REVEAL (legacy CSS classes) ═════════════ */
+        document.querySelectorAll('.reveal-blur, .reveal-fade').forEach(el => {
+            ScrollTrigger.create({
+                trigger: el,
+                start: 'top 88%',
+                once: true,
+                onEnter: () => el.classList.add('active'),
             });
-        }, { threshold: 0.1 });
+        });
 
-        document.querySelectorAll('.reveal-blur, .reveal-fade').forEach(el => observer.observe(el));
-    }
-    reveal();
+        if (reduced) return;
 
-    window.addEventListener('scroll', () => {
-        if (window.innerWidth > 768) { 
-            const scroll = window.scrollY;
-            const heroText = document.getElementById('hero-parallax');
-            if (heroText && scroll < 600) {
-                heroText.style.transform = `translateY(${scroll * 0.4}px)`;
-                heroText.style.opacity = 1 - (scroll * 0.0025);
+        const mm = gsap.matchMedia();
+
+        /* ═════════════ DESKTOP ANIMATIONS ═════════════ */
+        mm.add('(min-width: 769px)', () => {
+
+            /* HERO — title chars + parallax scrub */
+            const heroTitle = document.querySelector('.hero-title');
+            if (heroTitle) {
+                const split = SplitText.create(heroTitle, { type: 'chars,words' });
+                gsap.set(split.chars, { yPercent: 110, opacity: 0, rotateX: -55, transformOrigin: '50% 100%' });
+                gsap.to(split.chars, {
+                    yPercent: 0, opacity: 1, rotateX: 0,
+                    duration: 1.05, ease: 'power4.out',
+                    stagger: 0.018, delay: 0.25,
+                });
             }
-        }
-    });
 
-    if (window.innerWidth > 768) {
-        document.querySelectorAll('.tech-card').forEach(card => {
-            card.addEventListener('mousemove', e => {
-                const rect = card.getBoundingClientRect();
-                const x = (e as MouseEvent).clientX - rect.left;
-                const y = (e as MouseEvent).clientY - rect.top;
-                (card as HTMLElement).style.setProperty('--mouse-x', `${x}px`);
-                (card as HTMLElement).style.setProperty('--mouse-y', `${y}px`);
+            const heroParallax = document.getElementById('hero-parallax');
+            if (heroParallax) {
+                gsap.to(heroParallax, {
+                    yPercent: 28, opacity: 0.15,
+                    ease: 'none',
+                    scrollTrigger: { trigger: '.hero-grand', start: 'top top', end: 'bottom 30%', scrub: 0.8 },
+                });
+            }
+
+            /* TECH SPOTLIGHT — staggered card entrance */
+            gsap.from('.tech-spotlight .tech-card', {
+                y: 60, opacity: 0, scale: 0.94,
+                duration: 0.9, ease: 'power3.out',
+                stagger: { each: 0.06, from: 'start' },
+                scrollTrigger: { trigger: '.tech-spotlight', start: 'top 70%' },
             });
-        });
-    }
 
-    const initCarouselPhysics = () => {
-        const track = document.querySelector('.carousel-track-wrapper');
-        const cards = document.querySelectorAll('.vertical-card');
-        
-        if(!track || cards.length === 0) return;
+            /* TECH LOGOS — subtle float */
+            gsap.utils.toArray<HTMLElement>('.tech-logo').forEach((logo, i) => {
+                gsap.to(logo, {
+                    y: -3, duration: 2.6 + (i % 3) * 0.4,
+                    ease: 'sine.inOut', yoyo: true, repeat: -1, delay: i * 0.15,
+                });
+            });
 
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    cards.forEach(c => c.classList.remove('is-centered'));
-                    entry.target.classList.add('is-centered');
+            /* TECH CARD MOUSE GLOW */
+            document.querySelectorAll<HTMLElement>('.tech-card').forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                    card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+                });
+            });
+
+            /* CAROUSEL — drift on scroll */
+            const carouselTrack = document.querySelector('.carousel-track');
+            if (carouselTrack) {
+                gsap.to(carouselTrack, {
+                    x: () => -((carouselTrack as HTMLElement).scrollWidth - window.innerWidth) * 0.18,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: '.clients-vertical-carousel',
+                        start: 'top bottom', end: 'bottom top', scrub: 1,
+                    },
+                });
+            }
+
+            /* SERVICE ROWS — slide in from left, arrow circle springs */
+            gsap.utils.toArray<HTMLElement>('.service-row').forEach((row, i) => {
+                gsap.from(row, {
+                    x: -50, opacity: 0,
+                    duration: 0.95, ease: 'power3.out', delay: i * 0.04,
+                    scrollTrigger: { trigger: row, start: 'top 85%' },
+                });
+                const arrow = row.querySelector('.arrow-circle');
+                if (arrow) {
+                    gsap.from(arrow, {
+                        scale: 0, rotate: -90, opacity: 0,
+                        duration: 0.8, ease: 'back.out(2.2)',
+                        scrollTrigger: { trigger: row, start: 'top 80%' },
+                    });
                 }
             });
-        }, { 
-            root: track, 
-            threshold: 0.5 
+
+            /* SECTION HEADINGS — split on scroll */
+            gsap.utils.toArray<HTMLElement>('.section-heading').forEach(h => {
+                const split = SplitText.create(h, { type: 'words' });
+                gsap.from(split.words, {
+                    y: 30, opacity: 0, rotateX: -30,
+                    duration: 0.7, ease: 'power3.out', stagger: 0.06,
+                    scrollTrigger: { trigger: h, start: 'top 85%' },
+                });
+            });
+
+            /* PROTOCOL — vertical timeline draw + step reveal */
+            const timelineTrack = document.querySelector('.timeline-track');
+            if (timelineTrack) {
+                gsap.set(timelineTrack, { transformOrigin: 'top center', scaleY: 0 });
+                gsap.to(timelineTrack, {
+                    scaleY: 1, ease: 'none',
+                    scrollTrigger: {
+                        trigger: '.protocol-section', start: 'top 60%', end: 'bottom 70%', scrub: 0.6,
+                    },
+                });
+            }
+
+            gsap.utils.toArray<HTMLElement>('.protocol-step').forEach((step, i) => {
+                const node = step.querySelector('.step-node');
+                gsap.from(step, {
+                    x: 40, opacity: 0,
+                    duration: 0.85, ease: 'power3.out', delay: i * 0.05,
+                    scrollTrigger: { trigger: step, start: 'top 82%' },
+                });
+                if (node) {
+                    gsap.from(node, {
+                        scale: 0, rotate: 180,
+                        duration: 0.7, ease: 'back.out(2.5)', delay: i * 0.05 + 0.15,
+                        scrollTrigger: { trigger: step, start: 'top 82%' },
+                    });
+                }
+            });
+
+            /* CTA — magnetic scale-in */
+            const ctaCard = document.querySelector('.cta-card-blue');
+            if (ctaCard) {
+                gsap.from(ctaCard, {
+                    y: 80, scale: 0.92, opacity: 0,
+                    duration: 1.1, ease: 'expo.out',
+                    scrollTrigger: { trigger: ctaCard, start: 'top 80%' },
+                });
+            }
         });
 
-        cards.forEach(card => observer.observe(card));
-        
-        setTimeout(() => {
-            if(cards[0]) cards[0].classList.add('is-centered');
-        }, 100);
-    };
+        /* ═════════════ MOBILE: lighter animations ═════════════ */
+        mm.add('(max-width: 768px)', () => {
+            gsap.from('.hero-title', { y: 30, opacity: 0, duration: 1, ease: 'power3.out', delay: 0.2 });
+            gsap.from('.tech-spotlight .tech-card', {
+                y: 30, opacity: 0, duration: 0.7, ease: 'power3.out', stagger: 0.05,
+                scrollTrigger: { trigger: '.tech-spotlight', start: 'top 80%' },
+            });
+            gsap.utils.toArray<HTMLElement>('.service-row').forEach((row) => {
+                gsap.from(row, {
+                    y: 30, opacity: 0, duration: 0.7, ease: 'power3.out',
+                    scrollTrigger: { trigger: row, start: 'top 88%' },
+                });
+            });
 
-    if (window.innerWidth <= 768) {
-        initCarouselPhysics();
-    }
+            /* CAROUSEL CENTER DETECTION (kept from legacy logic) */
+            const track = document.querySelector('.carousel-track-wrapper');
+            const cards = document.querySelectorAll('.vertical-card');
+            if (track && cards.length) {
+                const observer = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            cards.forEach(c => c.classList.remove('is-centered'));
+                            entry.target.classList.add('is-centered');
+                        }
+                    });
+                }, { root: track, threshold: 0.5 });
+                cards.forEach(card => observer.observe(card));
+                setTimeout(() => { cards[0]?.classList.add('is-centered'); }, 100);
+            }
+        });
+    });
 </script>

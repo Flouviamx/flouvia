@@ -376,25 +376,36 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
   <WhatsApp />
 </Layout>
 
+<style is:global>
+  :root {
+    --color-bg: #ffffff;
+    --color-bg-soft: #fcfcfc;
+    --color-blue-icy: #f4f6f9;
+    --color-blue-deep: #0a192f;
+    --color-glass-blue: rgba(10, 25, 47, 0.85);
+    --color-text: #050505;
+    --color-text-muted: #555555;
+    --color-border: rgba(0, 0, 0, 0.08);
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-serif: 'Instrument Serif', serif;
+    --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+    --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    margin: 0;
+  }
+</style>
+
 <style>
 .sd-page {
-  --blue:    #0055cc;
-  --blue-deep: #002a66;
-  --green:   #10b981;
-  --text:    #0a0e1a;
-  --muted:   #6e7d96;
-  --dim:     #c4cdd9;
-  --border:  rgba(0,0,0,0.07);
-  --bg:      #ffffff;
-  --bg-soft: #f7f8fa;
-  --bg-dark: #0a0e1a;
-  --ease:    cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-back: cubic-bezier(0.175, 0.885, 0.32, 1.275);
-
   width: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
-  background: var(--bg);
-  color: var(--text);
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text);
 }
 
 .container { max-width: 1240px; margin: 0 auto; padding: 0 5%; }
@@ -405,7 +416,7 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
 .sd-hero {
   position: relative;
   padding: 11rem 0 6rem;
-  background: var(--bg);
+  background: var(--color-bg);
   overflow: hidden;
 }
 .sd-hero-grid-bg {
@@ -423,14 +434,14 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
   display: inline-flex; align-items: center; gap: 7px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
-  color: var(--muted); text-decoration: none;
+  color: var(--color-text-muted); text-decoration: none;
   padding: 7px 14px; border-radius: 100px;
-  background: rgba(0,0,0,0.025); border: 1px solid var(--border);
+  background: rgba(0,0,0,0.025); border: 1px solid var(--color-border);
   margin-bottom: 3rem; opacity: 0;
-  transition: all .3s var(--ease);
+  transition: all .3s var(--ease-smooth);
 }
 .sd-back:hover {
-  color: var(--text); background: rgba(0,0,0,0.05);
+  color: var(--color-text); background: rgba(0,0,0,0.05);
   transform: translateX(-3px);
 }
 
@@ -438,12 +449,12 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
   display: inline-flex; align-items: center; gap: 12px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em;
-  color: var(--blue); text-transform: uppercase;
+  color: var(--color-blue-deep); text-transform: uppercase;
   margin: 0 0 1.6rem; opacity: 0;
 }
 .sd-cat-line {
   display: inline-block; width: 36px; height: 1px;
-  background: var(--blue); transform-origin: left;
+  background: var(--color-blue-deep); transform-origin: left;
 }
 
 .sd-title {
@@ -453,20 +464,20 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
   display: inline-block;
   overflow: hidden;
 }
-.sd-t-plain { color: var(--text); }
+.sd-t-plain { color: var(--color-text); }
 .sd-t-serif {
   font-family: 'Instrument Serif', Georgia, serif;
   font-style: italic; font-weight: 400;
-  font-size: 1.05em; color: var(--muted);
+  font-size: 1.05em; color: var(--color-text-muted);
   margin-left: 0.05em;
 }
 
 .sd-hero-bottom {
   display: flex; justify-content: space-between; align-items: flex-end;
-  gap: 4rem; border-top: 1px solid var(--border); padding-top: 2rem;
+  gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem;
 }
 .sd-desc {
-  font-size: 1.18rem; color: var(--muted);
+  font-size: 1.18rem; color: var(--color-text-muted);
   max-width: 580px; line-height: 1.55; margin: 0;
   font-weight: 400; opacity: 0;
 }
@@ -474,12 +485,12 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
 .sd-hero-cta {
   flex-shrink: 0;
   display: inline-flex; align-items: center; gap: 9px;
-  background: var(--text); color: #fff;
+  background: var(--color-text); color: #fff;
   font-size: 0.95rem; font-weight: 600;
   padding: 1rem 2rem; border-radius: 100px;
   text-decoration: none;
   box-shadow: 0 8px 22px rgba(10,14,26,0.18), inset 0 1px 0 rgba(255,255,255,0.08);
-  transition: all .35s var(--ease);
+  transition: all .35s var(--ease-smooth);
   opacity: 0; position: relative; overflow: hidden;
 }
 .sd-hero-cta::before {
@@ -487,13 +498,13 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
   background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.08) 50%, transparent 70%);
   transform: translateX(-100%);
 }
-.sd-hero-cta:hover::before { transform: translateX(100%); transition: transform .6s var(--ease); }
+.sd-hero-cta:hover::before { transform: translateX(100%); transition: transform .6s var(--ease-smooth); }
 .sd-hero-cta:hover {
   background: #1a2233;
   transform: translateY(-3px) scale(1.02);
   box-shadow: 0 14px 32px rgba(10,14,26,0.28), inset 0 1px 0 rgba(255,255,255,0.12);
 }
-.sd-hero-cta svg { transition: transform .35s var(--ease); }
+.sd-hero-cta svg { transition: transform .35s var(--ease-smooth); }
 .sd-hero-cta:hover svg { transform: translate(2px, -2px); }
 
 .sd-scroll-cue {
@@ -504,15 +515,15 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
 .sd-scroll-cue span {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.6rem; font-weight: 700; letter-spacing: 0.2em;
-  color: var(--muted); text-transform: uppercase;
+  color: var(--color-text-muted); text-transform: uppercase;
 }
 .sd-cue-line {
-  width: 1px; height: 36px; background: linear-gradient(180deg, var(--muted), transparent);
+  width: 1px; height: 36px; background: linear-gradient(180deg, var(--color-text-muted), transparent);
   position: relative; overflow: hidden;
 }
 .sd-cue-line::after {
   content: ''; position: absolute; left: 0; top: -50%; width: 100%; height: 50%;
-  background: var(--text);
+  background: var(--color-text);
   animation: sd-cue-flow 2s ease-in-out infinite;
 }
 @keyframes sd-cue-flow {
@@ -524,7 +535,7 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
    METRICS
 ══════════════════════════════════════════════════════ */
 .sd-metrics-section {
-  background: var(--bg-dark); color: #fff;
+  background: var(--color-blue-deep); color: #fff;
   padding: 3.5rem 0;
 }
 .sd-metrics-row {
@@ -567,29 +578,29 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
   display: inline-flex; align-items: center; gap: 12px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.66rem; font-weight: 700; letter-spacing: 0.16em;
-  color: var(--muted); text-transform: uppercase;
+  color: var(--color-text-muted); text-transform: uppercase;
   margin: 0;
 }
 .sd-ey-line {
   display: inline-block; width: 32px; height: 1px;
-  background: var(--muted); transform-origin: left;
+  background: var(--color-text-muted); transform-origin: left;
 }
 .sd-section-title {
   font-size: clamp(2rem, 4.4vw, 3.4rem);
   font-weight: 600; letter-spacing: -0.04em; line-height: 1.05;
-  margin: 0; color: var(--text);
+  margin: 0; color: var(--color-text);
 }
 .sd-section-title em {
   font-family: 'Instrument Serif', Georgia, serif;
   font-style: italic; font-weight: 400;
-  color: var(--muted); font-size: 1.05em;
+  color: var(--color-text-muted); font-size: 1.05em;
 }
 
 /* ══════════════════════════════════════════════════════
    CAPACIDADES
 ══════════════════════════════════════════════════════ */
 .sd-caps-section {
-  padding: 7rem 0; background: var(--bg-soft);
+  padding: 7rem 0; background: var(--color-bg-soft);
 }
 
 .sd-caps-grid {
@@ -597,11 +608,11 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
 }
 .sd-cap-card {
   position: relative; overflow: hidden;
-  background: #fff; border: 1px solid var(--border);
+  background: #fff; border: 1px solid var(--color-border);
   border-radius: 24px;
   padding: 2.4rem 2.4rem 2.6rem;
   box-shadow: 0 0 0 1px rgba(0,0,0,0.02), 0 2px 4px rgba(0,0,0,0.04), 0 8px 20px rgba(0,0,0,0.04);
-  transition: all .5s var(--ease);
+  transition: all .5s var(--ease-smooth);
   cursor: default;
 }
 .sd-cap-card:hover {
@@ -622,43 +633,43 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
 .sd-cap-icon-wrap {
   display: inline-flex; align-items: center; justify-content: center;
   width: 48px; height: 48px; border-radius: 14px;
-  background: rgba(0,85,204,0.08); color: var(--blue);
+  background: rgba(0,85,204,0.08); color: var(--color-blue-deep);
   margin-bottom: 1.6rem;
-  transition: all .4s var(--ease);
+  transition: all .4s var(--ease-smooth);
 }
 .sd-cap-card:hover .sd-cap-icon-wrap {
-  background: var(--blue); color: #fff;
+  background: var(--color-blue-deep); color: #fff;
   transform: rotate(-6deg) scale(1.05);
 }
 .sd-cap-num {
   position: absolute; top: 2.4rem; right: 2.4rem;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.66rem; font-weight: 700; letter-spacing: 0.1em;
-  color: var(--muted); opacity: 0.5;
+  color: var(--color-text-muted); opacity: 0.5;
 }
 .sd-cap-title {
   font-size: 1.45rem; font-weight: 700; letter-spacing: -0.025em;
-  margin: 0 0 0.85rem; line-height: 1.18; color: var(--text);
+  margin: 0 0 0.85rem; line-height: 1.18; color: var(--color-text);
 }
 .sd-cap-desc {
-  font-size: 1rem; color: var(--muted); line-height: 1.55; margin: 0;
+  font-size: 1rem; color: var(--color-text-muted); line-height: 1.55; margin: 0;
 }
 .sd-cap-corner {
   position: absolute; bottom: 1.5rem; right: 1.5rem;
   width: 32px; height: 32px; border-radius: 50%;
-  background: rgba(0,0,0,0.04); border: 1px solid var(--border);
+  background: rgba(0,0,0,0.04); border: 1px solid var(--color-border);
   display: flex; align-items: center; justify-content: center;
-  color: var(--muted); opacity: 0;
+  color: var(--color-text-muted); opacity: 0;
   transform: translate(8px, 8px);
-  transition: all .4s var(--ease);
+  transition: all .4s var(--ease-smooth);
 }
-.sd-cap-card:hover .sd-cap-corner { opacity: 1; transform: translate(0,0); background: var(--blue); color: #fff; border-color: var(--blue); }
+.sd-cap-card:hover .sd-cap-corner { opacity: 1; transform: translate(0,0); background: var(--color-blue-deep); color: #fff; border-color: var(--color-blue-deep); }
 
 /* ══════════════════════════════════════════════════════
    PROCESO
 ══════════════════════════════════════════════════════ */
 .sd-process-section {
-  padding: 8rem 0; background: var(--bg);
+  padding: 8rem 0; background: var(--color-bg);
 }
 .sd-process-grid {
   display: grid; grid-template-columns: 1fr 1.5fr;
@@ -669,23 +680,23 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
   display: flex; flex-direction: column; gap: 1.2rem;
 }
 .sd-process-intro {
-  font-size: 1.05rem; color: var(--muted); line-height: 1.55;
+  font-size: 1.05rem; color: var(--color-text-muted); line-height: 1.55;
   margin: 0; max-width: 360px;
 }
 .sd-process-progress {
   display: flex; align-items: baseline; gap: 8px;
   margin-top: 1.4rem; padding-top: 1.4rem;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--color-border);
   font-family: 'JetBrains Mono', monospace;
 }
-.sd-pp-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.13em; color: var(--muted); }
+.sd-pp-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.13em; color: var(--color-text-muted); }
 .sd-pp-current {
-  font-size: 2.2rem; font-weight: 700; color: var(--text);
+  font-size: 2.2rem; font-weight: 700; color: var(--color-text);
   letter-spacing: -0.02em; line-height: 1;
   font-variant-numeric: tabular-nums;
   transition: color .3s;
 }
-.sd-pp-of { font-size: 1rem; font-weight: 600; color: var(--muted); }
+.sd-pp-of { font-size: 1rem; font-weight: 600; color: var(--color-text-muted); }
 
 .sd-steps { display: flex; flex-direction: column; gap: 0; }
 
@@ -706,16 +717,16 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
   width: 44px; height: 44px; border-radius: 14px;
   background: rgba(0,85,204,0.05); border: 1px solid rgba(0,85,204,0.15);
   display: flex; align-items: center; justify-content: center;
-  transition: all .4s var(--ease);
+  transition: all .4s var(--ease-smooth);
 }
 .sd-step.is-active .sd-step-num {
-  background: var(--blue); border-color: var(--blue);
+  background: var(--color-blue-deep); border-color: var(--color-blue-deep);
   box-shadow: 0 0 0 4px rgba(0,85,204,0.15), 0 8px 22px rgba(0,85,204,0.25);
 }
 .sd-step.is-active .sd-step-n { color: #fff; }
 .sd-step-n {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.78rem; font-weight: 700; color: var(--blue); letter-spacing: 0.04em;
+  font-size: 0.78rem; font-weight: 700; color: var(--color-blue-deep); letter-spacing: 0.04em;
   transition: color .3s;
 }
 .sd-step-line {
@@ -727,8 +738,8 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
 .sd-step-line::after {
   content: ''; position: absolute; left: 0; top: 0;
   width: 100%; height: 0;
-  background: var(--blue);
-  transition: height .8s var(--ease);
+  background: var(--color-blue-deep);
+  transition: height .8s var(--ease-smooth);
 }
 .sd-step.is-active ~ .sd-step .sd-step-line::after { height: 0%; }
 .sd-step.is-active .sd-step-line::after { height: 100%; }
@@ -738,21 +749,21 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
 }
 .sd-step-title {
   font-size: 1.5rem; font-weight: 700; letter-spacing: -0.025em;
-  color: var(--text); margin: 0 0 0.6rem; line-height: 1.2;
+  color: var(--color-text); margin: 0 0 0.6rem; line-height: 1.2;
   transition: color .3s;
 }
-.sd-step.is-active .sd-step-title { color: var(--blue); }
+.sd-step.is-active .sd-step-title { color: var(--color-blue-deep); }
 .sd-step-text {
-  font-size: 1.02rem; color: var(--muted); line-height: 1.6; margin: 0;
+  font-size: 1.02rem; color: var(--color-text-muted); line-height: 1.6; margin: 0;
 }
 
 /* ══════════════════════════════════════════════════════
    TECH STACK
 ══════════════════════════════════════════════════════ */
-.sd-stack-section { padding: 6rem 0; background: var(--bg-soft); }
+.sd-stack-section { padding: 6rem 0; background: var(--color-bg-soft); }
 .sd-stack-head { margin-bottom: 2.2rem; }
 .sd-stack-sub {
-  font-size: 1rem; color: var(--muted); margin: 0;
+  font-size: 1rem; color: var(--color-text-muted); margin: 0;
 }
 .sd-stack-row {
   display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center;
@@ -761,14 +772,14 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
   display: inline-flex; align-items: center; gap: 9px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.82rem; font-weight: 700; letter-spacing: 0.04em;
-  color: var(--text); background: #fff;
-  border: 1px solid var(--border);
+  color: var(--color-text); background: #fff;
+  border: 1px solid var(--color-border);
   padding: 11px 18px; border-radius: 100px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-  transition: all .35s var(--ease);
+  transition: all .35s var(--ease-smooth);
 }
 .sd-tech-pulse {
-  width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+  width: 6px; height: 6px; border-radius: 50%; background: #10b981;
   animation: sd-pulse 2.5s ease-in-out infinite;
 }
 .sd-tech-badge:hover {
@@ -785,38 +796,38 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
 /* ══════════════════════════════════════════════════════
    WHY
 ══════════════════════════════════════════════════════ */
-.sd-why-section { padding: 8rem 0 6rem; background: var(--bg); }
+.sd-why-section { padding: 8rem 0 6rem; background: var(--color-bg); }
 .sd-why-grid {
   display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 2.5rem;
 }
 .sd-why-item {
   position: relative; padding-top: 1.6rem;
-  border-top: 1px solid var(--text);
+  border-top: 1px solid var(--color-text);
 }
 .sd-why-num {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
-  color: var(--muted); margin-bottom: 1.2rem;
+  color: var(--color-text-muted); margin-bottom: 1.2rem;
 }
 .sd-why-title {
   font-size: 1.3rem; font-weight: 700; letter-spacing: -0.025em;
-  color: var(--text); margin: 0 0 0.85rem; line-height: 1.25;
+  color: var(--color-text); margin: 0 0 0.85rem; line-height: 1.25;
 }
 .sd-why-desc {
-  font-size: 0.96rem; color: var(--muted); line-height: 1.55; margin: 0;
+  font-size: 0.96rem; color: var(--color-text-muted); line-height: 1.55; margin: 0;
 }
 
 /* ══════════════════════════════════════════════════════
    CTA
 ══════════════════════════════════════════════════════ */
-.sd-cta-section { padding: 0 0 8rem; background: var(--bg); }
+.sd-cta-section { padding: 0 0 8rem; background: var(--color-bg); }
 .sd-cta-card {
   position: relative;
   background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%);
   border-radius: 32px; overflow: hidden;
   box-shadow: 0 20px 40px rgba(5,11,20,0.15), 0 50px 100px rgba(5,11,20,0.25);
-  transition: transform .6s var(--ease);
+  transition: transform .6s var(--ease-smooth);
 }
 .sd-cta-card:hover { transform: scale(1.012); }
 .sd-cta-noise {
@@ -867,11 +878,11 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
 
 .sd-cta-btn {
   display: inline-flex; align-items: center; gap: 9px;
-  background: #fff; color: var(--blue-deep);
+  background: #fff; color: var(--color-blue-deep);
   padding: 1.1rem 2.2rem; border-radius: 100px;
   text-decoration: none; font-size: 1rem; font-weight: 700;
   position: relative; overflow: hidden;
-  transition: all .5s var(--ease);
+  transition: all .5s var(--ease-smooth);
   box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05), 0 10px 22px rgba(255,255,255,0.1);
 }
 .sd-cta-btn::before {
@@ -879,13 +890,13 @@ const pageTitle = `Flouvia | ${title.replace('.', '')}`;
   background: linear-gradient(105deg, transparent 30%, rgba(0,85,204,0.08) 50%, transparent 70%);
   transform: translateX(-100%);
 }
-.sd-cta-btn:hover::before { transform: translateX(100%); transition: transform .6s var(--ease); }
+.sd-cta-btn:hover::before { transform: translateX(100%); transition: transform .6s var(--ease-smooth); }
 .sd-cta-btn:hover {
   transform: translateY(-3px) scale(1.02);
   box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06), 0 16px 32px rgba(255,255,255,0.15);
 }
 .sd-cta-btn-label { position: relative; z-index: 2; }
-.sd-cta-btn svg { transition: transform .35s var(--ease); }
+.sd-cta-btn svg { transition: transform .35s var(--ease-smooth); }
 .sd-cta-btn:hover svg { transform: translate(2px, -2px); }
 
 /* ══════════════════════════════════════════════════════
