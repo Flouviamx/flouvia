@@ -1,0 +1,11 @@
+---
+export const prerender = false;
+import PortalLayout from '../layouts/PortalLayout.astro';
+import EntornoUI from '../components/portal/EntornoUI.astro';
+
+const { userId } = await Astro.locals.auth();
+if (!userId) return Astro.redirect('https://os.flouvia.com/login');
+---
+<PortalLayout title="Entorno | Flouvia OS">
+    <EntornoUI lang="es" />
+</PortalLayout>
