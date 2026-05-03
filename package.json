@@ -16,6 +16,7 @@
     "@clerk/astro": "^3.0.19",
     "@supabase/supabase-js": "^2.105.1",
     "astro": "6.1.2",
-    "gsap": "^3.15.0"
+    "gsap": "^3.15.0",
+    "svix": "^1.92.2"
   }
 }
