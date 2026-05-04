@@ -1,13 +1,26 @@
 -- ============================================================
 -- FLOUVIA OS — SCHEMA COMPLETO v2.1
--- Cambios vs v2: clerk_id + nombre en perfiles, policy INSERT en perfiles
+-- Corre esto en Supabase SQL Editor.
+-- Borra todo lo existente y recrea limpio.
 -- ============================================================
+
+
+-- ────────────────────────────────────────────────────────────
+-- 0. RESET — borrar tablas existentes en orden de dependencia
+-- ────────────────────────────────────────────────────────────
+DROP TABLE IF EXISTS roadmap         CASCADE;
+DROP TABLE IF EXISTS boveda_archivos CASCADE;
+DROP TABLE IF EXISTS facturas        CASCADE;
+DROP TABLE IF EXISTS finanzas_config CASCADE;
+DROP TABLE IF EXISTS proyectos       CASCADE;
+DROP TABLE IF EXISTS perfiles        CASCADE;
+
+DROP FUNCTION IF EXISTS set_updated_at CASCADE;
 
 
 -- ────────────────────────────────────────────────────────────
 -- HELPER: auto-actualizar updated_at
 -- ────────────────────────────────────────────────────────────
-
 CREATE OR REPLACE FUNCTION set_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -23,9 +36,9 @@ $$ LANGUAGE plpgsql;
 CREATE TABLE perfiles (
   id               UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
   email_cliente    TEXT        NOT NULL UNIQUE,
-  nombre           TEXT,                                    -- nombre del contacto
+  nombre           TEXT,
   nombre_empresa   TEXT        NOT NULL,
-  clerk_id         TEXT,                                    -- ID de usuario en Clerk
+  clerk_id         TEXT,
   plan_activo      TEXT        NOT NULL DEFAULT 'Enterprise',
   logo_url         TEXT,
   created_at       TIMESTAMPTZ NOT NULL DEFAULT NOW(),
