@@ -433,16 +433,24 @@ const isEn = lang === 'en';
             const heroEyebrow = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
             const heroBottom = document.querySelector<HTMLElement>('.hero-bottom');
 
-            if (heroEyebrow) gsap.from(heroEyebrow, { opacity: 0, y: 12, letterSpacing: '5px', duration: 1.2, ease: 'power3.out', delay: 0.15 });
+            const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+            if (heroEyebrow) {
+                tl.from(heroEyebrow, { opacity: 0, y: 14, letterSpacing: '7px', duration: 1.4 }, 0.1);
+            }
             if (heroTitle) {
                 const split = SplitText.create(heroTitle, { type: 'lines,words', linesClass: 'lx-line-mask' });
-                gsap.set(split.words, { yPercent: 110 });
-                gsap.to(split.words, {
-                    yPercent: 0, duration: 1.4, ease: 'expo.out',
-                    stagger: { amount: 0.4 }, delay: 0.28,
-                });
+                gsap.set(split.words, { yPercent: 105 });
+                tl.to(split.words, {
+                    yPercent: 0, duration: 1.5,
+                    stagger: { amount: 0.5, from: 'start' },
+                }, 0.35);
             }
-            if (heroBottom) gsap.from(heroBottom, { opacity: 0, y: 18, duration: 1.2, ease: 'power3.out', delay: 0.85 });
+            if (heroBottom && heroBottom.children.length > 0) {
+                tl.from(gsap.utils.toArray<HTMLElement>(heroBottom.children), {
+                    opacity: 0, y: 16, duration: 1.1, ease: 'power3.out',
+                    stagger: 0.12,
+                }, 1.0);
+            }
 
             const heroParallax = document.getElementById('hero-parallax');
             if (heroParallax) {
@@ -457,9 +465,15 @@ const isEn = lang === 'en';
             const mHeroTitle = document.querySelector<HTMLElement>('.hero-title');
             const mEyebrow = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
             const mHeroBottom = document.querySelector<HTMLElement>('.hero-bottom');
-            if (mEyebrow) gsap.from(mEyebrow, { opacity: 0, y: 8, duration: 0.9, ease: 'power3.out', delay: 0.12 });
-            if (mHeroTitle) gsap.from(mHeroTitle, { opacity: 0, y: 24, duration: 1.15, ease: 'expo.out', delay: 0.24 });
-            if (mHeroBottom) gsap.from(mHeroBottom, { opacity: 0, y: 16, duration: 1, ease: 'power3.out', delay: 0.7 });
+            const tlm = gsap.timeline({ defaults: { ease: 'expo.out' } });
+            if (mEyebrow) tlm.from(mEyebrow, { opacity: 0, y: 10, letterSpacing: '6px', duration: 1.1 }, 0.1);
+            if (mHeroTitle) tlm.from(mHeroTitle, { opacity: 0, y: 24, duration: 1.2 }, 0.3);
+            if (mHeroBottom && mHeroBottom.children.length > 0) {
+                tlm.from(gsap.utils.toArray<HTMLElement>(mHeroBottom.children), {
+                    opacity: 0, y: 14, duration: 1.0, ease: 'power3.out',
+                    stagger: 0.1,
+                }, 0.85);
+            }
         });
     }
 </script>
