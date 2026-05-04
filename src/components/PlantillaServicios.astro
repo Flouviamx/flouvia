@@ -592,6 +592,7 @@ const isEn = lang === 'en';
     .hero-grand { padding: 13rem 0 7rem 0; min-height: 80vh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
     .hero-text-zone { transition: transform 0.1s ease-out, opacity 0.1s ease-out; }
     .hero-title { font-size: clamp(3.2rem, 7vw, 6.8rem); line-height: 0.85; font-weight: 800; letter-spacing: -3px; margin-bottom: 4rem; color: var(--color-text); }
+    .lx-line-mask { overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; }
     .title-bold { display: inline; }
     .title-serif { display: inline; font-size: 105%; color: #94a3b8;}
     .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem; }
@@ -746,30 +747,80 @@ const isEn = lang === 'en';
 </style>
 
 <script>
-    // 1. REVEALS GLOBALES
-    const reveal = () => {
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.1 });
-        
-        document.querySelectorAll('.reveal-blur, .reveal-fade, .reveal-up, .blueprint-reveal').forEach(el => observer.observe(el));
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+    import { SplitText } from 'gsap/SplitText';
+    gsap.registerPlugin(ScrollTrigger, SplitText);
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // GSAP controls hero — cancel CSS fallback animations
+    document.querySelectorAll<HTMLElement>('.hero-title, .hero-text-zone .eyebrow, .hero-bottom').forEach(el => {
+        el.style.animation = 'none';
+        el.style.opacity = '1';
+    });
+
+    // Fallback reveals for non-hero elements
+    const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('active');
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal-blur, .reveal-fade, .reveal-up, .blueprint-reveal').forEach(el => {
+        if (!el.closest('.hero-grand')) revealObserver.observe(el);
+    });
+
+    if (!reduced) {
+        const mm = gsap.matchMedia();
+
+        mm.add('(min-width: 769px)', () => {
+            /* HERO — luxury grand reveal */
+            const heroTitle = document.querySelector<HTMLElement>('.hero-title');
+            const heroEyebrow = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
+            const heroBottom = document.querySelector<HTMLElement>('.hero-bottom');
+
+            if (heroTitle) {
+                const split = SplitText.create(heroTitle, { type: 'lines,words', linesClass: 'lx-line-mask' });
+                gsap.set(split.words, { yPercent: 118 });
+                gsap.set(heroTitle, { filter: 'blur(6px)', scale: 1.022, transformOrigin: '0% 50%' });
+
+                const tl = gsap.timeline({ delay: 0.12 });
+                tl.to(split.words, { yPercent: 0, duration: 1.25, ease: 'expo.out', stagger: { amount: 0.44 } })
+                  .to(heroTitle, { filter: 'blur(0px)', scale: 1, duration: 1.35, ease: 'expo.out' }, 0);
+            }
+            if (heroEyebrow) gsap.from(heroEyebrow, { opacity: 0, letterSpacing: '9px', y: 5, duration: 1.1, ease: 'power4.out', delay: 0.1 });
+            if (heroBottom) gsap.from(heroBottom, { opacity: 0, y: 22, duration: 1.2, ease: 'expo.out', delay: 0.65 });
+
+            /* HERO PARALLAX */
+            const heroParallax = document.getElementById('hero-parallax');
+            if (heroParallax) {
+                gsap.to(heroParallax, {
+                    yPercent: 28, opacity: 0.15, ease: 'none',
+                    scrollTrigger: { trigger: '.hero-grand', start: 'top top', end: 'bottom 30%', scrub: 0.8 },
+                });
+            }
+        });
+
+        mm.add('(max-width: 768px)', () => {
+            const mHeroTitle = document.querySelector<HTMLElement>('.hero-title');
+            const mEyebrow = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
+            const mHeroBottom = document.querySelector<HTMLElement>('.hero-bottom');
+            if (mEyebrow) gsap.from(mEyebrow, { opacity: 0, y: 8, duration: 0.9, ease: 'power3.out', delay: 0.1 });
+            if (mHeroTitle) gsap.from(mHeroTitle, { opacity: 0, y: 28, filter: 'blur(8px)', duration: 1.1, ease: 'expo.out', delay: 0.22 });
+            if (mHeroBottom) gsap.from(mHeroBottom, { opacity: 0, y: 20, duration: 1, ease: 'expo.out', delay: 0.68 });
+        });
     }
-    reveal();
 
     // 2. BARRAS DE PROGRESO DE SCROLL
     window.addEventListener('scroll', () => {
         const sections = document.querySelectorAll('.master-service-row');
-        
+
         sections.forEach(section => {
             const bar = section.querySelector('.ms-progress-bar') as HTMLElement;
             if (!bar) return;
 
             const rect = section.getBoundingClientRect();
-            
+
             if (rect.top <= 140 && rect.bottom >= 0) {
                 const totalHeight = (section as HTMLElement).offsetHeight;
                 const progress = Math.abs(rect.top - 140) / (totalHeight - 140);
@@ -781,18 +832,6 @@ const isEn = lang === 'en';
                 bar.style.height = '100%';
             }
         });
-    });
-
-    // PARALLAX HERO INYECTADO
-    window.addEventListener('scroll', () => {
-        if (window.innerWidth > 768) { 
-            const scroll = window.scrollY;
-            const heroText = document.getElementById('hero-parallax');
-            if (heroText && scroll < 600) {
-                heroText.style.transform = `translateY(${scroll * 0.4}px)`;
-                heroText.style.opacity = (1 - (scroll * 0.0025)).toString();
-            }
-        }
     });
 
     // 3. EFECTO HARDWARE 3D TILT (APPLE GLOW + ROTACIÓN)
