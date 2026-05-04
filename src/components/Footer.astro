@@ -143,10 +143,10 @@ const isEn = lang === 'en';
         --text-main: #ffffff;
         --text-muted: #8892b0;
         --text-dim: #64748b;
-        --hairline: rgba(255, 255, 255, 0.08); /* Ligeramente más visible */
+        --hairline: rgba(255, 255, 255, 0.08); 
         
         --ease-apple: cubic-bezier(0.16, 1, 0.3, 1);
-        --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05); /* Física de resorte */
+        --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05);
         --font-sans: 'Inter', system-ui, sans-serif;
     }
 
@@ -163,29 +163,25 @@ const isEn = lang === 'en';
 
     .container { width: 100%; max-width: 1240px; padding: 0 5%; margin: 0 auto; position: relative;}
 
-    .top-hairline { width: 100%; height: 1px; background-color: var(--hairline); margin-bottom: 6rem;}
-
-    /* ANIMACIÓN REVEAL SUTIL (Apple Cascading Fade) */
-    .reveal-stagger { 
-        opacity: 0; transform: translateY(20px); 
-        animation: reveal-foot 1s var(--ease-spring) forwards; 
-        animation-play-state: paused; 
-        animation-delay: var(--delay, 0s); 
+    /* Modificación GSAP: Transform origin para que la línea crezca de izquierda a derecha */
+    .top-hairline { 
+        width: 100%; 
+        height: 1px; 
+        background-color: var(--hairline); 
+        margin-bottom: 6rem;
+        transform-origin: left center;
     }
-    .reveal-stagger.active { animation-play-state: running; }
-    @keyframes reveal-foot { to { opacity: 1; transform: translateY(0); } }
 
     /* ==========================================================
        1. GRID ASIMÉTRICO (12 Columnas Editoriales)
        ========================================================== */
     .footer-grid {
         display: grid;
-        grid-template-columns: 5fr 7fr; /* 5 columnas izquierda, 7 derecha */
+        grid-template-columns: 5fr 7fr; 
         gap: 6rem;
         margin-bottom: 8rem;
     }
 
-    /* BLOQUE IZQUIERDO (Brand & Statement) */
     .brand-column {
         display: flex;
         flex-direction: column;
@@ -206,7 +202,7 @@ const isEn = lang === 'en';
         max-width: 90%;
     }
 
-    /* EL BOTÓN DE CORREO SUTIL (Micro-interacción de Resorte) */
+    /* EL BOTÓN DE CORREO SUTIL (Micro-interacción mantenida en CSS por performance) */
     .minimal-email-link {
         display: inline-flex; align-items: center; gap: 12px;
         text-decoration: none; color: var(--text-main);
@@ -244,7 +240,6 @@ const isEn = lang === 'en';
         color: var(--text-dim); margin-bottom: 2rem;
     }
 
-    /* LINKS LIMPIOS (Física de flechas iOS) */
     .nav-links { display: flex; flex-direction: column; gap: 1.2rem; }
     
     .link-item {
@@ -261,7 +256,7 @@ const isEn = lang === 'en';
     .link-item:hover { color: #fff; }
     .link-item:hover .link-arrow { opacity: 1; transform: translateX(0); }
 
-    /* REDES SOCIALES (Hover magnético) */
+    /* REDES SOCIALES */
     .social-links { display: flex; flex-direction: column; gap: 1.2rem; }
     
     .social-item {
@@ -299,7 +294,6 @@ const isEn = lang === 'en';
     .status-indicator { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.03); padding: 4px 10px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.05);}
     .status-text { letter-spacing: 1px; font-weight: 600; color: #94a3b8; font-size: 0.7rem;}
 
-    /* Glow de Apple (Respiración) */
     .dot-online { 
         width: 6px; height: 6px; background-color: #10b981; border-radius: 50%; 
         box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); 
@@ -315,10 +309,7 @@ const isEn = lang === 'en';
     .legal-link { color: var(--text-dim); text-decoration: none; transition: color 0.3s; }
     .legal-link:hover { color: var(--text-muted); }
 
-
-    /* ==========================================================
-       MÓVIL (Cuadrícula 2x2 Inteligente & Responsive Táctil)
-       ========================================================== */
+    /* MÓVIL RESPONSIVE */
     @media (max-width: 1024px) {
         .footer-grid { grid-template-columns: 1fr; gap: 5rem; margin-bottom: 6rem;}
         .navigation-columns { gap: 2rem; }
@@ -330,52 +321,85 @@ const isEn = lang === 'en';
     @media (max-width: 768px) {
         .top-hairline { margin-bottom: 4rem; }
         .footer-logo-svg { width: 110px; margin-bottom: 2rem;}
-        
         .description { font-size: 1.1rem; line-height: 1.6; }
-        
         .minimal-email-link { width: 100%; justify-content: space-between; }
-        
-        /* MAGIA MÓVIL: Convertimos la lista en una cuadrícula para que no sea infinita */
         .navigation-columns { 
-            grid-template-columns: 1fr 1fr; /* 2 Columnas */
+            grid-template-columns: 1fr 1fr; 
             row-gap: 3rem; column-gap: 1rem; 
         }
-        
-        /* Forzamos que la columna de Redes abarque las dos columnas al final */
         .navigation-columns .nav-col:nth-child(3) { grid-column: span 2; }
-
-        /* Ajustes Táctiles (Áreas de toque más grandes) */
         .link-item { padding: 4px 0; width: 100%; justify-content: space-between;}
-        .link-arrow { opacity: 0.3; transform: translateX(0); } /* En móvil la flecha siempre se ve un poco */
-
+        .link-arrow { opacity: 0.3; transform: translateX(0); }
         .social-item { width: 100%; justify-content: space-between; padding: 4px 0;}
         .s-icon-wrap { border-color: rgba(255,255,255,0.1); }
         .social-icon { opacity: 0.8; }
-
-        /* Barra Inferior (Apilada pero estética) */
         .footer-bottom { flex-direction: column; align-items: flex-start; gap: 2.5rem; }
         .legal-left { flex-direction: column; align-items: flex-start; gap: 1rem; }
         .dot-separator { display: none; }
-        .status-indicator { align-self: stretch; justify-content: center; padding: 8px;} /* Botón ancho en móvil */
-        
+        .status-indicator { align-self: stretch; justify-content: center; padding: 8px;} 
         .legal-right { flex-direction: column; gap: 1.5rem; width: 100%; }
         .legal-link { padding: 8px 0; display: block; border-bottom: 1px solid var(--hairline);}
     }
 </style>
 
 <script>
-    // Reveal de Alta Precisión (Cascada suave)
-    const revealFooter = () => {
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target); 
-                }
-            });
-        }, { threshold: 0.1 });
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-        document.querySelectorAll('.footer-premium .reveal-stagger').forEach(el => observer.observe(el));
-    }
-    revealFooter();
+    // Registro del plugin en el ecosistema Astro/Client
+    gsap.registerPlugin(ScrollTrigger);
+
+    const initFooterAnimations = () => {
+        // Pre-establecer estados iniciales para evitar parpadeos antes del scroll
+        gsap.set('.top-hairline', { scaleX: 0 });
+        gsap.set(['.footer-logo-svg', '.statement-box', '.contact-action', '.nav-col', '.footer-bottom'], { y: 30, opacity: 0 });
+
+        // Crear una línea de tiempo maestra
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: '.footer-premium',
+                start: 'top 85%', // Dispara la animación cuando el footer asoma el 15% en pantalla
+                toggleActions: 'play none none reverse', // Vuelve a reproducirse si haces scroll up/down
+            }
+        });
+
+        tl
+            // 1. La línea superior se despliega (Precisión geométrica)
+            .to('.top-hairline', { 
+                scaleX: 1, 
+                duration: 1.2, 
+                ease: 'expo.out' 
+            })
+            
+            // 2. Aparece la columna izquierda (Logo, texto, correo) en cascada
+            .to(['.footer-logo-svg', '.statement-box', '.contact-action'], { 
+                y: 0, 
+                opacity: 1, 
+                duration: 0.8, 
+                stagger: 0.15, 
+                ease: 'power3.out' 
+            }, '-=0.8') // El '-=0.8' empalma la animación con la de la línea
+            
+            // 3. Las columnas de navegación entran una por una
+            .to('.nav-col', { 
+                y: 0, 
+                opacity: 1, 
+                duration: 0.8, 
+                stagger: 0.1, 
+                ease: 'power3.out' 
+            }, '-=0.6')
+            
+            // 4. El status operativo y el copyright se revelan sutilmente al final
+            .to('.footer-bottom', { 
+                y: 0, 
+                opacity: 1, 
+                duration: 1, 
+                ease: 'power2.out' 
+            }, '-=0.4');
+    };
+
+    // Asegurar ejecución en la arquitectura Astro
+    document.addEventListener('DOMContentLoaded', initFooterAnimations);
+    // Soporte para transiciones de vista de Astro (ViewTransitions) si las tienes activas
+    document.addEventListener('astro:page-load', initFooterAnimations);
 </script>
