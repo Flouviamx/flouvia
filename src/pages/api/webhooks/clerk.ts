@@ -4,12 +4,6 @@ import type { APIRoute } from 'astro';
 import { Webhook } from 'svix';
 import { createClient } from '@supabase/supabase-js';
 
-// Supabase admin client — bypasses RLS via service role key
-const supabaseAdmin = createClient(
-  import.meta.env.SUPABASE_URL,
-  import.meta.env.SUPABASE_SERVICE_ROLE_KEY,
-);
-
 interface ClerkEmailAddress {
   id: string;
   email_address: string;
@@ -27,6 +21,13 @@ interface ClerkWebhookEvent {
 }
 
 export const POST: APIRoute = async ({ request }) => {
+  // ── 0. Inicializar cliente Supabase (lazy — la key no siempre está disponible) ──
+  const serviceKey = import.meta.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!serviceKey) {
+    return new Response(JSON.stringify({ error: 'Supabase service role key not configured' }), { status: 500 });
+  }
+  const supabaseAdmin = createClient(import.meta.env.SUPABASE_URL, serviceKey);
+
   // ── 1. Extraer headers de firma Svix ──
   const svixId        = request.headers.get('svix-id');
   const svixTimestamp = request.headers.get('svix-timestamp');
