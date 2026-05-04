@@ -1,1 +1,0 @@
-import{g as a}from"./index.xgxdCp6f.js";document.addEventListener("DOMContentLoaded",()=>{a.set([".gsap-reveal",".gsap-card"],{autoAlpha:1}),a.set(".gsap-reveal",{y:30,opacity:0}),a.set(".gsap-card",{y:40,opacity:0,scale:.98}),a.timeline({defaults:{ease:"expo.out",duration:1.2}}).to(".gsap-reveal",{y:0,opacity:1,stagger:.1},.2).to(".gsap-card",{y:0,opacity:1,scale:1},.4)});
