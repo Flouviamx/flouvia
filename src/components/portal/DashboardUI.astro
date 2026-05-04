@@ -2,6 +2,7 @@
 // src/components/portal/DashboardUI.astro
 import { useTranslations } from '../../i18n/utils';
 import { supabase } from '../../lib/supabase';
+import { createClient } from '@supabase/supabase-js';
 
 interface Props {
   lang: 'es' | 'en';
@@ -18,6 +19,29 @@ const fullName =
   (lang === 'en' ? "Executive" : "Ejecutivo");
 
 const email = user?.emailAddresses[0]?.emailAddress || "flouvia.mx@gmail.com";
+
+// Auto-create perfil on first login
+if (user?.id && email !== "flouvia.mx@gmail.com") {
+  try {
+    const adminKey = import.meta.env.SUPABASE_SERVICE_ROLE_KEY ?? import.meta.env.SUPABASE_ANON_KEY;
+    const adminClient = createClient(import.meta.env.SUPABASE_URL, adminKey);
+    const { data: existing } = await adminClient
+      .from('perfiles')
+      .select('id')
+      .eq('email_cliente', email)
+      .single();
+    if (!existing) {
+      await adminClient.from('perfiles').insert({
+        email_cliente: email,
+        clerk_id: user.id,
+        nombre_empresa: 'Nuevo Cliente',
+        nombre: user.fullName?.trim() || user.firstName || 'Cliente',
+      } as any);
+    }
+  } catch {
+    // non-critical — fail silently
+  }
+}
 
 const dateOptions: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };
 const today = new Date().toLocaleDateString(lang === 'en' ? 'en-US' : 'es-MX', dateOptions);

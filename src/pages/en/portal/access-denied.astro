@@ -1,0 +1,190 @@
+---
+// src/pages/en/portal/access-denied.astro
+export const prerender = false;
+import PortalLayout from '../../../layouts/PortalLayout.astro';
+---
+
+<PortalLayout title="Access Restricted | Flouvia OS">
+  <div class="ar-root">
+    <div class="ar-wrap">
+
+      <div class="ar-badge">
+        <span class="ar-dot"></span>
+        <span>Invitation only</span>
+      </div>
+
+      <h1 class="ar-title">
+        This portal is<br />
+        <em class="ar-serif">exclusive</em>
+        to active<br />Flouvia clients.
+      </h1>
+
+      <p class="ar-body">
+        Access to <strong>Flouvia OS</strong> requires a direct invitation from our
+        team. If you're a client and haven't received yours yet, reach out and we'll
+        sort it out right away.
+      </p>
+
+      <div class="ar-actions">
+        <a href="/en/contacto" class="ar-btn-primary">
+          Contact Flouvia
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M7 17l9.2-9.2M17 17V7H7"/>
+          </svg>
+        </a>
+        <a href="/en/portal/login" class="ar-btn-ghost">
+          I have an invitation →
+        </a>
+      </div>
+
+      <div class="ar-divider"></div>
+
+      <a href="/en" class="ar-home-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to flouvia.com
+      </a>
+
+    </div>
+  </div>
+</PortalLayout>
+
+<style>
+.ar-root {
+  min-height: calc(100vh - 140px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 5%;
+}
+
+.ar-wrap {
+  max-width: 560px;
+  width: 100%;
+  opacity: 0;
+  animation: ar-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+}
+
+.ar-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: #6e7d96;
+  background: #f4f6f9;
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 100px;
+  padding: 6px 14px;
+  margin-bottom: 2.4rem;
+}
+
+.ar-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #dc2626;
+  animation: ar-pulse 2.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.ar-title {
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  color: #0a0e1a;
+  margin: 0 0 1.6rem;
+}
+
+.ar-serif {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.ar-body {
+  font-size: 1rem;
+  color: #6e7d96;
+  line-height: 1.7;
+  margin: 0 0 2.4rem;
+  max-width: 480px;
+}
+
+.ar-body strong {
+  color: #0a0e1a;
+  font-weight: 600;
+}
+
+.ar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.ar-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #0a0e1a;
+  color: #ffffff;
+  padding: 14px 28px;
+  border-radius: 100px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+  box-shadow: 0 4px 14px rgba(10,14,26,0.16);
+}
+
+.ar-btn-primary:hover {
+  background: #1a2233;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(10,14,26,0.24);
+}
+
+.ar-btn-ghost {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #6e7d96;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.ar-btn-ghost:hover {
+  color: #0a0e1a;
+}
+
+.ar-divider {
+  height: 1px;
+  background: rgba(0,0,0,0.07);
+  margin: 2.8rem 0 1.8rem;
+}
+
+.ar-home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #c4cdd9;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.ar-home-link:hover {
+  color: #6e7d96;
+}
+
+@keyframes ar-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ar-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220,38,38,0.4); transform: scale(1); }
+  60%       { box-shadow: 0 0 0 5px rgba(220,38,38,0); transform: scale(1.1); }
+}
+</style>

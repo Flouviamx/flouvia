@@ -19,9 +19,9 @@ export const onRequest = clerkMiddleware((auth, context) => {
   if (isProtectedRoute(context.request) && !auth().userId) {
     const url = new URL(context.request.url);
     const isEnglish = url.pathname.startsWith('/en/');
-    const loginUrl = isEnglish
-      ? 'https://os.flouvia.com/en/login'
-      : 'https://os.flouvia.com/login';
-    return Response.redirect(loginUrl, 302);
+    const blockedUrl = isEnglish
+      ? `${url.origin}/en/portal/access-denied`
+      : `${url.origin}/portal/acceso-restringido`;
+    return Response.redirect(blockedUrl, 302);
   }
 });
