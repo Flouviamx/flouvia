@@ -236,11 +236,15 @@ const isEn = lang === 'en';
 
                     <!-- SUCCESS STATE -->
                     <div class="diag-success" id="diagSuccess">
-                        <div class="ds-ico">
-                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+                        <div class="ds-inner">
+                            <p class="ds-eyebrow mono-font">{isEn ? 'MESSAGE SENT' : 'ENVIADO'}</p>
+                            <h2 class="ds-headline">
+                                {isEn ? 'We\'ll be in' : 'Nos ponemos'}
+                                <br/><em class="ds-serif">{isEn ? 'touch soon.' : 'en contacto.'}</em>
+                            </h2>
+                            <div class="ds-rule"></div>
+                            <p class="ds-sub">{isEn ? 'We read every submission personally. Expect a response within 24 hours — no spam, no automated replies.' : 'Leemos cada solicitud personalmente. Te respondemos en menos de 24h, sin respuestas automáticas.'}</p>
                         </div>
-                        <h3 class="ds-title">{isEn ? 'Diagnosis received.' : 'Diagnóstico recibido.'}</h3>
-                        <p class="ds-sub">{isEn ? 'We read every submission personally. Expect a response within 24 hours.' : 'Leemos cada solicitud personalmente. Te respondemos en menos de 24h.'}</p>
                     </div>
                 </div>
 
@@ -409,109 +413,155 @@ const isEn = lang === 'en';
     .social-icon-link:hover { color: #000; background: #fff; border-color: #000; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05);}
 
     /* ── DIAGNOSTIC FORM ── */
-    .ec-form-zone { padding-top: 0; }
+    .ec-form-zone { padding-top: 0; position: relative; }
 
     .diag-form { display: flex; flex-direction: column; }
+    .diag-form.hidden { display: none; }
 
     /* Question blocks */
     .dq-block {
-        padding: 2.8rem 0;
-        border-bottom: 1px solid rgba(0,0,0,0.06);
+        padding: 2.8rem 0 2.8rem 2rem;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
         display: flex; flex-direction: column; gap: 1.8rem;
+        border-left: 1.5px solid rgba(0,0,0,0.06);
+        transition: border-left-color 0.4s var(--ease-smooth), border-bottom-color 0.4s ease;
+        position: relative;
     }
     .dq-block:first-of-type { padding-top: 0; }
+    .dq-block:last-of-type  { border-bottom: none; }
+    .dq-block:hover { border-left-color: #0a0e1a; }
 
     .dq-head { display: flex; gap: 1.6rem; align-items: flex-start; }
-    .dq-num { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em; color: #d4dbe6; min-width: 20px; padding-top: 2px; }
-    .dq-meta { display: flex; flex-direction: column; gap: 0.45rem; }
+    .dq-num {
+        font-size: 0.58rem; font-weight: 700; letter-spacing: 0.16em;
+        color: #c4cdd9; min-width: 18px; padding-top: 3px;
+        font-family: 'JetBrains Mono', monospace;
+    }
+    .dq-meta { display: flex; flex-direction: column; gap: 0.5rem; }
     .dq-title {
-        font-size: 0.63rem; font-weight: 700; letter-spacing: 0.13em;
+        font-size: 0.62rem; font-weight: 700; letter-spacing: 0.14em;
         color: #0a0e1a; text-transform: uppercase; margin: 0;
         display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap;
     }
     .dq-opt {
-        font-size: 0.55rem; font-weight: 700; letter-spacing: 0.1em;
-        color: #94a3b8; background: #f1f5f9; border-radius: 100px; padding: 3px 10px;
-        text-transform: uppercase;
+        font-size: 0.53rem; font-weight: 700; letter-spacing: 0.1em;
+        color: #94a3b8; background: #f4f6f9; border-radius: 100px;
+        padding: 3px 10px; text-transform: uppercase; border: 1px solid rgba(0,0,0,0.05);
     }
-    .dq-desc { font-size: 0.9rem; color: #6e7d96; margin: 0; line-height: 1.6; max-width: 500px; }
+    .dq-desc { font-size: 0.88rem; color: #8895a7; margin: 0; line-height: 1.65; max-width: 480px; }
 
-    .dq-body { display: flex; flex-direction: column; gap: 1.5rem; }
+    .dq-body { display: flex; flex-direction: column; gap: 1.6rem; }
 
-    /* Inputs shared */
-    .sf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
-    .sf-group { display: flex; flex-direction: column; gap: 0.9rem; }
-    .sf-group label { font-size: 0.6rem; color: #94a3b8; letter-spacing: 0.14em; text-transform: uppercase; }
+    /* Inputs */
+    .sf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2.8rem; }
+    .sf-group { display: flex; flex-direction: column; gap: 0.85rem; }
+    .sf-group label {
+        font-size: 0.58rem; color: #b0bcc8; letter-spacing: 0.16em;
+        text-transform: uppercase; font-family: 'JetBrains Mono', monospace;
+    }
 
     .input-wrapper { position: relative; width: 100%; }
 
     .diag-form input:not([type="hidden"]),
     .diag-form textarea {
         width: 100%; background: transparent; border: none;
-        border-bottom: 1px solid rgba(0,0,0,0.1); padding: 10px 0 15px;
+        border-bottom: 1px solid rgba(0,0,0,0.08); padding: 10px 0 14px;
         font-family: var(--font-sans); font-size: 1.05rem;
         font-weight: 500; color: #0a0e1a; outline: none; border-radius: 0;
-        transition: border-color 0.35s ease;
+        transition: border-color 0.3s ease;
         appearance: none; -webkit-appearance: none;
     }
     .diag-form input::placeholder,
-    .diag-form textarea::placeholder { color: #c4cdd9; font-weight: 400; font-size: 0.95rem; }
-    .diag-form input:hover, .diag-form textarea:hover { border-bottom-color: rgba(0,0,0,0.25); }
+    .diag-form textarea::placeholder { color: #dde2e9; font-weight: 400; font-size: 0.98rem; }
+    .diag-form input:hover,
+    .diag-form textarea:hover { border-bottom-color: rgba(0,0,0,0.2); }
 
     .focus-border {
         position: absolute; bottom: 0; left: 0; width: 0%; height: 1.5px;
-        background: #0a0e1a; transition: width 0.45s var(--ease-spring); z-index: 2;
+        background: #0a0e1a; transition: width 0.5s var(--ease-spring); z-index: 2;
     }
     .input-wrapper:focus-within .focus-border { width: 100%; }
 
-    .diag-form textarea { resize: none; overflow: hidden; min-height: 42px; line-height: 1.6; }
+    .diag-form textarea { resize: none; overflow: hidden; min-height: 48px; line-height: 1.65; }
 
     /* Chip buttons */
-    .q-chips { display: flex; flex-wrap: wrap; gap: 0.55rem; }
+    .q-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .q-chip {
-        padding: 11px 22px; border-radius: 100px;
-        border: 1px solid rgba(0,0,0,0.1);
-        background: transparent; color: #6e7d96;
-        font-size: 0.85rem; font-weight: 500; letter-spacing: -0.01em;
-        cursor: pointer; transition: all 0.2s ease;
+        padding: 10px 20px; border-radius: 100px;
+        border: 1px solid rgba(0,0,0,0.09);
+        background: rgba(0,0,0,0.015); color: #8895a7;
+        font-size: 0.83rem; font-weight: 500; letter-spacing: -0.01em;
+        cursor: pointer; transition: all 0.22s var(--ease-smooth);
         font-family: var(--font-sans);
     }
-    .q-chip:hover { border-color: rgba(0,0,0,0.22); color: #0a0e1a; background: #f8fafc; }
-    .q-chip.selected { background: #0a0e1a; border-color: #0a0e1a; color: #fff; }
+    .q-chip:hover {
+        border-color: rgba(0,0,0,0.2); color: #0a0e1a;
+        background: #f4f6f9; transform: translateY(-1px);
+    }
+    .q-chip.selected {
+        background: #0a0e1a; border-color: #0a0e1a; color: #fff;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(10,14,26,0.18);
+    }
 
     /* Submit */
-    .dq-submit { padding-top: 2.8rem; display: flex; flex-direction: column; gap: 1.1rem; align-items: flex-start; }
-    .dq-privacy { font-size: 0.76rem; color: #c4cdd9; margin: 0; letter-spacing: -0.01em; }
+    .dq-submit { padding: 3rem 0 0 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; }
+    .dq-privacy { font-size: 0.74rem; color: #c4cdd9; margin: 0; letter-spacing: -0.01em; }
 
     .btn-submit-luxe {
         background: #0a0e1a; color: #fff; border: none;
-        padding: 16px 20px 16px 32px; border-radius: 100px;
-        display: inline-flex; align-items: center; gap: 18px;
+        padding: 17px 22px 17px 34px; border-radius: 100px;
+        display: inline-flex; align-items: center; gap: 20px;
         cursor: pointer; font-family: var(--font-sans); font-size: 0.95rem; font-weight: 600;
-        transition: all 0.4s var(--ease-spring); box-shadow: 0 4px 14px rgba(10,14,26,0.14);
+        transition: all 0.4s var(--ease-spring); box-shadow: 0 4px 16px rgba(10,14,26,0.16);
+        letter-spacing: -0.01em;
     }
     .submit-icon-wrapper {
-        width: 32px; height: 32px; background: rgba(255,255,255,0.1); border-radius: 50%;
+        width: 33px; height: 33px; background: rgba(255,255,255,0.1); border-radius: 50%;
         display: flex; align-items: center; justify-content: center;
         transition: transform 0.4s var(--ease-spring), background 0.4s ease;
     }
-    .btn-submit-luxe:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(10,14,26,0.22); }
-    .btn-submit-luxe:hover .submit-icon-wrapper { transform: translateX(4px); background: #fff; color: #0a0e1a; }
+    .btn-submit-luxe:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(10,14,26,0.24); }
+    .btn-submit-luxe:hover .submit-icon-wrapper { transform: translateX(4px); background: rgba(255,255,255,0.22); }
+    .btn-submit-luxe:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-    /* Success state */
+    /* ── SUCCESS STATE ── */
     .diag-success {
-        display: none; flex-direction: column; gap: 1rem;
-        padding: 3rem 0 2rem;
+        display: none;
+        align-items: flex-start;
+        justify-content: center;
+        flex-direction: column;
+        padding: 0 0 0 2rem;
     }
     .diag-success.visible { display: flex; }
-    .diag-form.hidden { display: none; }
-    .ds-ico {
-        width: 52px; height: 52px; border-radius: 50%;
-        background: rgba(16,185,129,0.09); border: 1px solid rgba(16,185,129,0.2);
-        display: flex; align-items: center; justify-content: center; color: #0d9966;
+
+    .ds-inner { display: flex; flex-direction: column; gap: 1.6rem; }
+
+    .ds-eyebrow {
+        font-size: 0.58rem; font-weight: 700; letter-spacing: 0.18em;
+        color: #c4cdd9; text-transform: uppercase;
+        font-family: 'JetBrains Mono', monospace;
     }
-    .ds-title { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.03em; margin: 0; color: #0a0e1a; }
-    .ds-sub { font-size: 0.9rem; color: #6e7d96; margin: 0; line-height: 1.6; max-width: 420px; }
+    .ds-headline {
+        font-size: clamp(2.8rem, 5vw, 4.2rem);
+        font-weight: 700; letter-spacing: -0.04em;
+        line-height: 1.05; color: #0a0e1a; margin: 0;
+    }
+    .ds-serif {
+        font-family: var(--font-serif);
+        font-style: italic; font-weight: 400;
+        color: #0a0e1a;
+    }
+    .ds-rule {
+        width: 48px; height: 1.5px;
+        background: #0a0e1a;
+        border-radius: 2px;
+        transform-origin: left;
+    }
+    .ds-sub {
+        font-size: 0.95rem; color: #8895a7;
+        margin: 0; line-height: 1.7; max-width: 400px;
+    }
 
     /* ==========================================================
        RESPONSIVO
@@ -743,22 +793,46 @@ const isEn = lang === 'en';
                     });
                 } catch(e) { /* fail silently — no bloqueamos el success */ }
 
+                // Bloquear la altura del contenedor para evitar el salto del footer
+                var formZone = document.querySelector('.ec-form-zone');
+                if (formZone) {
+                    formZone.style.minHeight = diagForm.offsetHeight + 'px';
+                }
+
+                // Fade out del formulario
+                diagForm.style.transition = 'opacity 0.38s ease, transform 0.38s ease';
                 diagForm.style.opacity = '0';
-                diagForm.style.transform = 'translateY(-8px)';
-                diagForm.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+                diagForm.style.transform = 'translateY(-10px)';
+
                 setTimeout(function() {
                     diagForm.classList.add('hidden');
+
                     if (diagSuccess) {
+                        // Animar cada elemento del success individualmente
+                        var eyebrow  = diagSuccess.querySelector('.ds-eyebrow');
+                        var headline = diagSuccess.querySelector('.ds-headline');
+                        var rule     = diagSuccess.querySelector('.ds-rule');
+                        var sub      = diagSuccess.querySelector('.ds-sub');
+
+                        [eyebrow, headline, rule, sub].forEach(function(el) {
+                            if (el) { el.style.opacity = '0'; el.style.transform = 'translateY(18px)'; }
+                        });
+                        if (rule) rule.style.transform = 'scaleX(0)';
+
                         diagSuccess.classList.add('visible');
-                        diagSuccess.style.opacity = '0';
-                        diagSuccess.style.transform = 'translateY(12px)';
-                        diagSuccess.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-                        setTimeout(function() {
-                            diagSuccess.style.opacity = '1';
-                            diagSuccess.style.transform = 'translateY(0)';
-                        }, 20);
+
+                        var delays = [0, 80, 200, 300];
+                        [eyebrow, headline, rule, sub].forEach(function(el, i) {
+                            if (!el) return;
+                            setTimeout(function() {
+                                el.style.transition = 'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1)';
+                                el.style.opacity = '1';
+                                el.style.transform = i === 2 ? 'scaleX(1)' : 'translateY(0)';
+                                if (i === 2) el.style.transformOrigin = 'left';
+                            }, delays[i]);
+                        });
                     }
-                }, 360);
+                }, 400);
             });
         }
 
