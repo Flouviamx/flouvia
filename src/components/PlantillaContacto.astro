@@ -100,69 +100,138 @@ const isEn = lang === 'en';
                 </div>
 
                 <div class="ec-form-zone">
-                    <form name="contacto" action="/" method="POST" data-netlify="true" class="sober-form">
-                        
+                    <form name="contacto" action="/" method="POST" data-netlify="true" class="diag-form">
+
                         <input type="hidden" name="form-name" value="contacto" />
+                        <input type="hidden" name="tipo_negocio" id="field-tipo_negocio" />
+                        <input type="hidden" name="urgencia"     id="field-urgencia" />
+                        <input type="hidden" name="presupuesto"  id="field-presupuesto" />
 
-                        <div class="sf-row">
-                            <div class="sf-group reveal-up" style="--delay: 0.1s;">
-                                <label for="name" class="mono-font">{isEn ? 'NAME' : 'NOMBRE'}</label>
-                                <div class="input-wrapper">
-                                    <input type="text" id="name" name="name" placeholder={isEn ? "Your full name" : "Tu nombre completo"} required />
-                                    <div class="focus-border"></div>
+                        <!-- 01 — DATOS DE CONTACTO -->
+                        <div class="dq-block reveal-fade" style="--delay:0.05s;">
+                            <div class="dq-head">
+                                <span class="dq-num mono-font">01</span>
+                                <div class="dq-meta">
+                                    <h3 class="dq-title">{isEn ? 'CONTACT DETAILS' : 'DATOS DE CONTACTO'}</h3>
+                                    <p class="dq-desc">{isEn ? `Full name, email and WhatsApp. We'll respond through whichever is fastest.` : 'Nombre completo, correo y WhatsApp. Respondemos por el canal más rápido.'}</p>
                                 </div>
                             </div>
-                            <div class="sf-group reveal-up" style="--delay: 0.2s;">
-                                <label for="email" class="mono-font">{isEn ? 'EMAIL' : 'CORREO'}</label>
-                                <div class="input-wrapper">
-                                    <input type="email" id="email" name="email" placeholder="email@company.com" required />
-                                    <div class="focus-border"></div>
+                            <div class="dq-body">
+                                <div class="sf-row">
+                                    <div class="sf-group">
+                                        <label for="name" class="mono-font">{isEn ? 'FULL NAME' : 'NOMBRE'}</label>
+                                        <div class="input-wrapper">
+                                            <input type="text" id="name" name="nombre" placeholder={isEn ? 'Your full name' : 'Tu nombre completo'} required />
+                                            <div class="focus-border"></div>
+                                        </div>
+                                    </div>
+                                    <div class="sf-group">
+                                        <label for="email" class="mono-font">{isEn ? 'EMAIL' : 'CORREO'}</label>
+                                        <div class="input-wrapper">
+                                            <input type="email" id="email" name="email" placeholder="email@empresa.com" required />
+                                            <div class="focus-border"></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="sf-row">
-                            <div class="sf-group reveal-up" style="--delay: 0.3s;">
-                                <label for="phone" class="mono-font">{isEn ? 'PHONE' : 'TELÉFONO'}</label>
-                                <div class="input-wrapper">
-                                    <input type="tel" id="phone" name="phone" />
-                                    <div class="focus-border"></div>
-                                </div>
-                            </div>
-                            <div class="sf-group reveal-up" style="--delay: 0.4s;">
-                                <label for="service" class="mono-font">{isEn ? 'INTEREST' : 'INTERÉS'}</label>
-                                <div class="input-wrapper">
-                                    <select id="service" name="service" required>
-                                        <option value="" disabled selected>{isEn ? 'Select an area...' : 'Selecciona un área...'}</option>
-                                        <option value="ecommerce">{isEn ? 'E-commerce Architecture' : 'Arquitectura E-commerce'}</option>
-                                        <option value="b2b">{isEn ? 'B2B Digitalization' : 'Digitalización B2B'}</option>
-                                        <option value="automation">{isEn ? 'Process Automation' : 'Automatización de Procesos'}</option>
-                                        <option value="audit">{isEn ? 'Full Systems Audit' : 'Auditoría Completa'}</option>
-                                    </select>
-                                    <div class="focus-border"></div>
-                                    <div class="select-arrow">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                <div class="sf-group">
+                                    <label for="whatsapp" class="mono-font">WHATSAPP</label>
+                                    <div class="input-wrapper">
+                                        <input type="tel" id="whatsapp" name="whatsapp" />
+                                        <div class="focus-border"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="sf-group reveal-up" style="--delay: 0.5s;">
-                            <label for="message" class="mono-font">{isEn ? 'EXPLANATION / CHALLENGE' : 'EXPLICACIÓN / RETO'}</label>
-                            <div class="input-wrapper">
-                                <textarea id="message" name="message" rows="1" placeholder={isEn ? "Briefly describe your current architecture and bottlenecks..." : "Describe brevemente tu arquitectura actual y cuellos de botella..."}></textarea>
-                                <div class="focus-border"></div>
+                        <!-- 02 — TIPO DE NEGOCIO -->
+                        <div class="dq-block reveal-fade" style="--delay:0.1s;">
+                            <div class="dq-head">
+                                <span class="dq-num mono-font">02</span>
+                                <div class="dq-meta">
+                                    <h3 class="dq-title">{isEn ? 'BUSINESS TYPE' : 'TIPO DE NEGOCIO'}</h3>
+                                    <p class="dq-desc">{isEn ? 'How would you best describe your operation?' : '¿Cómo describirías mejor tu operación?'}</p>
+                                </div>
+                            </div>
+                            <div class="dq-body">
+                                <div class="q-chips" data-field="tipo_negocio">
+                                    <button type="button" class="q-chip" data-value="dtc-ecommerce">{isEn ? 'DTC / E-commerce' : 'DTC / E-commerce'}</button>
+                                    <button type="button" class="q-chip" data-value="mayorista-b2b">{isEn ? 'Wholesale B2B' : 'Mayorista B2B'}</button>
+                                    <button type="button" class="q-chip" data-value="operacion-compleja">{isEn ? 'Complex Enterprise Operation' : 'Empresa con operación compleja'}</button>
+                                    <button type="button" class="q-chip" data-value="otro">{isEn ? 'Other' : 'Otro'}</button>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="reveal-up" style="--delay: 0.6s;">
+                        <!-- 03 — PROBLEMA PRINCIPAL -->
+                        <div class="dq-block reveal-fade" style="--delay:0.15s;">
+                            <div class="dq-head">
+                                <span class="dq-num mono-font">03</span>
+                                <div class="dq-meta">
+                                    <h3 class="dq-title">{isEn ? 'MAIN PROBLEM' : 'PROBLEMA PRINCIPAL'}</h3>
+                                    <p class="dq-desc">{isEn ? 'The most important question. Write freely — this shapes our first message to you.' : 'La pregunta más importante. Escribe con libertad. Le da el ángulo exacto a nuestro primer mensaje.'}</p>
+                                </div>
+                            </div>
+                            <div class="dq-body">
+                                <div class="sf-group">
+                                    <div class="input-wrapper">
+                                        <textarea id="problema" name="problema" rows="3" placeholder={isEn ? 'Describe the main challenge you need to solve...' : 'Describe el reto principal que necesitas resolver...'} required></textarea>
+                                        <div class="focus-border"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 04 — URGENCIA -->
+                        <div class="dq-block reveal-fade" style="--delay:0.2s;">
+                            <div class="dq-head">
+                                <span class="dq-num mono-font">04</span>
+                                <div class="dq-meta">
+                                    <h3 class="dq-title">{isEn ? 'WHEN DO YOU NEED THIS SOLVED?' : '¿CUÁNDO NECESITAS RESOLVERLO?'}</h3>
+                                    <p class="dq-desc">{isEn ? 'Helps us separate ready-to-buy from early research. Prioritizes your time.' : 'Diferencia quién está listo de quién está explorando. Prioriza tu tiempo.'}</p>
+                                </div>
+                            </div>
+                            <div class="dq-body">
+                                <div class="q-chips" data-field="urgencia">
+                                    <button type="button" class="q-chip" data-value="lo-antes-posible">{isEn ? 'As soon as possible' : 'Lo antes posible'}</button>
+                                    <button type="button" class="q-chip" data-value="1-2-meses">{isEn ? '1–2 months' : '1–2 meses'}</button>
+                                    <button type="button" class="q-chip" data-value="explorando">{isEn ? 'Just exploring' : 'Estoy explorando'}</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 05 — PRESUPUESTO (OPCIONAL) -->
+                        <div class="dq-block reveal-fade" style="--delay:0.25s;">
+                            <div class="dq-head">
+                                <span class="dq-num mono-font">05</span>
+                                <div class="dq-meta">
+                                    <h3 class="dq-title">
+                                        {isEn ? 'DO YOU HAVE A BUDGET?' : '¿TIENEN PRESUPUESTO DESTINADO?'}
+                                        <span class="dq-opt">{isEn ? 'OPTIONAL' : 'OPCIONAL'}</span>
+                                    </h3>
+                                    <p class="dq-desc">{isEn ? `No commitment. Just helps us skip calls that won't be a fit.` : 'Sin compromiso. Solo para no hacerte perder tiempo en una llamada sin fit.'}</p>
+                                </div>
+                            </div>
+                            <div class="dq-body">
+                                <div class="q-chips" data-field="presupuesto">
+                                    <button type="button" class="q-chip" data-value="menos-30k">{isEn ? 'Under $30k' : 'Menos de $30k'}</button>
+                                    <button type="button" class="q-chip" data-value="30k-80k">$30k – $80k</button>
+                                    <button type="button" class="q-chip" data-value="mas-80k">{isEn ? 'Over $80k' : 'Más de $80k'}</button>
+                                    <button type="button" class="q-chip" data-value="no-claro">{isEn ? 'Not sure yet' : 'No lo tengo claro'}</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SUBMIT -->
+                        <div class="dq-submit reveal-fade" style="--delay:0.3s;">
                             <button type="submit" class="btn-submit-luxe">
-                                <span>{isEn ? 'Transmit Inquiry' : 'Enviar Consulta'}</span>
+                                <span>{isEn ? 'Send Diagnosis' : 'Enviar diagnóstico'}</span>
                                 <div class="submit-icon-wrapper">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                 </div>
                             </button>
+                            <p class="dq-privacy">{isEn ? 'We respond within 24 hours. No spam, no hard selling.' : 'Respondemos en menos de 24h. Sin spam, sin ventas agresivas.'}</p>
                         </div>
+
                     </form>
                 </div>
 
@@ -330,55 +399,95 @@ const isEn = lang === 'en';
     }
     .social-icon-link:hover { color: #000; background: #fff; border-color: #000; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05);}
 
-    /* FORMULARIO SOBRIO */
+    /* ── DIAGNOSTIC FORM ── */
     .ec-form-zone { padding-top: 0; }
-    .sober-form { display: flex; flex-direction: column; gap: 3.5rem; }
-    .sf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
-    .sf-group { display: flex; flex-direction: column; gap: 1rem; }
-    
-    .sf-group label { font-size: 0.65rem; color: #888; letter-spacing: 2px; }
-    
+
+    .diag-form { display: flex; flex-direction: column; }
+
+    /* Question blocks */
+    .dq-block {
+        padding: 2.8rem 0;
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+        display: flex; flex-direction: column; gap: 1.8rem;
+    }
+    .dq-block:first-of-type { padding-top: 0; }
+
+    .dq-head { display: flex; gap: 1.6rem; align-items: flex-start; }
+    .dq-num { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em; color: #d4dbe6; min-width: 20px; padding-top: 2px; }
+    .dq-meta { display: flex; flex-direction: column; gap: 0.45rem; }
+    .dq-title {
+        font-size: 0.63rem; font-weight: 700; letter-spacing: 0.13em;
+        color: #0a0e1a; text-transform: uppercase; margin: 0;
+        display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap;
+    }
+    .dq-opt {
+        font-size: 0.55rem; font-weight: 700; letter-spacing: 0.1em;
+        color: #94a3b8; background: #f1f5f9; border-radius: 100px; padding: 3px 10px;
+        text-transform: uppercase;
+    }
+    .dq-desc { font-size: 0.9rem; color: #6e7d96; margin: 0; line-height: 1.6; max-width: 500px; }
+
+    .dq-body { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    /* Inputs shared */
+    .sf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+    .sf-group { display: flex; flex-direction: column; gap: 0.9rem; }
+    .sf-group label { font-size: 0.6rem; color: #94a3b8; letter-spacing: 0.14em; text-transform: uppercase; }
+
     .input-wrapper { position: relative; width: 100%; }
-    
-    .sober-form input, .sober-form select, .sober-form textarea {
-        width: 100%; background: transparent; border: none; 
-        border-bottom: 1px solid rgba(0,0,0,0.1); padding-top: 10px; padding-bottom: 16px;
-        font-family: var(--font-sans); font-size: 1.15rem; 
-        font-weight: 500; color: #000; outline: none; border-radius: 0;
-        transition: border-color 0.4s var(--ease-spring);
+
+    .diag-form input:not([type="hidden"]),
+    .diag-form textarea {
+        width: 100%; background: transparent; border: none;
+        border-bottom: 1px solid rgba(0,0,0,0.1); padding: 10px 0 15px;
+        font-family: var(--font-sans); font-size: 1.05rem;
+        font-weight: 500; color: #0a0e1a; outline: none; border-radius: 0;
+        transition: border-color 0.35s ease;
         appearance: none; -webkit-appearance: none;
     }
-    /* El input de teléfono necesita dejarle el padding izquierdo a la librería para que no encime la bandera */
-    .sober-form input:not([type="tel"]), .sober-form select, .sober-form textarea {
-        padding-left: 0; padding-right: 0;
+    .diag-form input::placeholder,
+    .diag-form textarea::placeholder { color: #c4cdd9; font-weight: 400; font-size: 0.95rem; }
+    .diag-form input:hover, .diag-form textarea:hover { border-bottom-color: rgba(0,0,0,0.25); }
+
+    .focus-border {
+        position: absolute; bottom: 0; left: 0; width: 0%; height: 1.5px;
+        background: #0a0e1a; transition: width 0.45s var(--ease-spring); z-index: 2;
     }
-
-    .sober-form input::placeholder, .sober-form textarea::placeholder { color: #cbd5e1; font-weight: 400; }
-    
-    .sober-form input:hover, .sober-form select:hover, .sober-form textarea:hover { border-bottom-color: rgba(0,0,0,0.3); }
-
-    .focus-border { position: absolute; bottom: 0; left: 0; width: 0%; height: 1px; background: #000; transition: width 0.5s var(--ease-spring); z-index: 2;}
-    
-    /* El trigger ahora lee a todo el wrapper por la librería de teléfono */
     .input-wrapper:focus-within .focus-border { width: 100%; }
 
-    .sober-form textarea { resize: none; overflow: hidden; min-height: 35px; line-height: 1.5; }
-    .select-arrow { position: absolute; right: 0; top: 40%; transform: translateY(-50%); pointer-events: none; color: #94a3b8; transition: color 0.3s ease; }
-    .sober-form select:focus ~ .select-arrow { color: #000; }
+    .diag-form textarea { resize: none; overflow: hidden; min-height: 42px; line-height: 1.6; }
 
-    /* Submit Button Elegante */
-    .btn-submit-luxe { 
-        align-self: flex-start; background: #000; color: #fff; border: none; 
-        padding: 16px 20px 16px 32px; border-radius: 100px; display: inline-flex; align-items: center; gap: 20px; 
+    /* Chip buttons */
+    .q-chips { display: flex; flex-wrap: wrap; gap: 0.55rem; }
+    .q-chip {
+        padding: 11px 22px; border-radius: 100px;
+        border: 1px solid rgba(0,0,0,0.1);
+        background: transparent; color: #6e7d96;
+        font-size: 0.85rem; font-weight: 500; letter-spacing: -0.01em;
+        cursor: pointer; transition: all 0.2s ease;
+        font-family: var(--font-sans);
+    }
+    .q-chip:hover { border-color: rgba(0,0,0,0.22); color: #0a0e1a; background: #f8fafc; }
+    .q-chip.selected { background: #0a0e1a; border-color: #0a0e1a; color: #fff; }
+
+    /* Submit */
+    .dq-submit { padding-top: 2.8rem; display: flex; flex-direction: column; gap: 1.1rem; align-items: flex-start; }
+    .dq-privacy { font-size: 0.76rem; color: #c4cdd9; margin: 0; letter-spacing: -0.01em; }
+
+    .btn-submit-luxe {
+        background: #0a0e1a; color: #fff; border: none;
+        padding: 16px 20px 16px 32px; border-radius: 100px;
+        display: inline-flex; align-items: center; gap: 18px;
         cursor: pointer; font-family: var(--font-sans); font-size: 0.95rem; font-weight: 600;
-        margin-top: 1rem; transition: all 0.4s var(--ease-spring); box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        transition: all 0.4s var(--ease-spring); box-shadow: 0 4px 14px rgba(10,14,26,0.14);
     }
     .submit-icon-wrapper {
         width: 32px; height: 32px; background: rgba(255,255,255,0.1); border-radius: 50%;
-        display: flex; align-items: center; justify-content: center; transition: transform 0.4s var(--ease-spring), background 0.4s ease;
+        display: flex; align-items: center; justify-content: center;
+        transition: transform 0.4s var(--ease-spring), background 0.4s ease;
     }
-    .btn-submit-luxe:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
-    .btn-submit-luxe:hover .submit-icon-wrapper { transform: translateX(4px); background: #fff; color: #000;}
+    .btn-submit-luxe:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(10,14,26,0.22); }
+    .btn-submit-luxe:hover .submit-icon-wrapper { transform: translateX(4px); background: #fff; color: #0a0e1a; }
 
     /* ==========================================================
        RESPONSIVO
@@ -402,10 +511,11 @@ const isEn = lang === 'en';
 
         .executive-contact { padding: 2rem 0 6rem 0; }
         .ec-sidebar { flex-direction: column; gap: 3rem; padding-bottom: 3rem; }
-        
-        .sober-form { gap: 2.5rem; }
-        .sf-row { grid-template-columns: 1fr; gap: 2.5rem; }
-        
+
+        .sf-row { grid-template-columns: 1fr; gap: 2rem; }
+        .dq-block { padding: 2.2rem 0; }
+        .q-chip { padding: 10px 18px; font-size: 0.82rem; }
+        .dq-submit { align-items: stretch; }
         .btn-submit-luxe { width: 100%; justify-content: space-between; padding: 16px 20px 16px 24px; }
     }
 </style>
@@ -506,13 +616,13 @@ const isEn = lang === 'en';
 
 
         /* =========================================
-           2. INTL-TEL-INPUT (TELÉFONO MILITAR)
+           2. INTL-TEL-INPUT (WHATSAPP)
            ========================================= */
-        const phoneInput = document.querySelector("#phone");
+        const phoneInput = document.querySelector("#whatsapp");
         if (phoneInput) {
             window.intlTelInput(phoneInput, {
                 initialCountry: "auto",
-                strictMode: true, // LA MAGIA: Impide escribir letras y limita exacto a los números del país
+                strictMode: true,
                 formatOnDisplay: true,
                 geoIpLookup: function(callback) {
                     fetch("https://ipapi.co/json")
@@ -521,14 +631,28 @@ const isEn = lang === 'en';
                         .catch(function() { callback("mx"); });
                 },
                 separateDialCode: true,
-                dropdownContainer: document.body, // Arregla el bug del menú atrapado
+                dropdownContainer: document.body,
                 utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.4/build/js/utils.js",
             });
         }
 
+        /* =========================================
+           3. CHIP SELECTION
+           ========================================= */
+        document.querySelectorAll('.q-chips').forEach(function(group) {
+            group.querySelectorAll('.q-chip').forEach(function(chip) {
+                chip.addEventListener('click', function() {
+                    group.querySelectorAll('.q-chip').forEach(function(c) { c.classList.remove('selected'); });
+                    chip.classList.add('selected');
+                    var fieldId = 'field-' + group.getAttribute('data-field');
+                    var hidden = document.getElementById(fieldId);
+                    if (hidden) hidden.value = chip.getAttribute('data-value');
+                });
+            });
+        });
 
         /* =========================================
-           3. ANIMACIONES Y PARALLAX
+           4. ANIMACIONES Y PARALLAX
            ========================================= */
         const reveal = () => {
             const observer = new IntersectionObserver(entries => {
@@ -537,16 +661,15 @@ const isEn = lang === 'en';
                         entry.target.classList.add('active');
                     }
                 });
-            }, { threshold: 0.1 });
-            
+            }, { threshold: 0.08 });
             document.querySelectorAll('.reveal-blur, .reveal-fade, .reveal-up').forEach(el => observer.observe(el));
         }
         reveal();
 
         /* =========================================
-           4. TEXTAREA AUTO-RESIZE Y RELOJ CDMX
+           5. TEXTAREA AUTO-RESIZE Y RELOJ CDMX
            ========================================= */
-        const textarea = document.getElementById('message');
+        const textarea = document.getElementById('problema');
         if (textarea) {
             textarea.addEventListener('input', function() {
                 this.style.height = 'auto';
