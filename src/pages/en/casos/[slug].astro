@@ -1,0 +1,17 @@
+---
+export const prerender = true;
+
+import Layout from '../../../layouts/Layout.astro';
+import Navbar from '../../../components/Navbar.astro';
+import Footer from '../../../components/Footer.astro';
+import WhatsApp from '../../../components/WhatsApp.astro';
+import { casos } from '../../../data/casos';
+
+export function getStaticPaths() {
+  return casos.map(c => ({ params: { slug: c.slug } }));
+}
+
+// Redirect to Spanish version — keeps content in one place
+const { slug } = Astro.params;
+return Astro.redirect(`/casos/${slug}`, 301);
+---
