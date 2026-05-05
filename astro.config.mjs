@@ -6,7 +6,9 @@ import vercel from '@astrojs/vercel';
 export default defineConfig({
   output: 'server',
 
-  integrations: [clerk()],
+  integrations: [clerk({
+    afterSignOutUrl: 'https://flouvia.com/',
+  })],
 
   adapter: vercel(),
 });

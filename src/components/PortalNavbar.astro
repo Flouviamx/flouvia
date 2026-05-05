@@ -31,7 +31,7 @@ const enPath = lang === 'es' ? '/en' + currentPath : currentPath;
                     <div class="pnav-pill-shimmer" aria-hidden="true"></div>
 
                     <!-- logo (aparece al hacer scroll) -->
-                    <a href={lang === 'en' ? '/en/' : '/'} class="pnav-pill-logo" id="pnav-pill-logo" title="Ir al inicio">
+                    <a href={lang === 'en' ? 'https://flouvia.com/en/' : 'https://flouvia.com/'} class="pnav-pill-logo" id="pnav-pill-logo" title="Ir al inicio">
                         <img src="/imgs/logo-flouvia-2.svg" alt="Flouvia" class="pnav-logo-pill-img" />
                     </a>
 
@@ -44,7 +44,7 @@ const enPath = lang === 'es' ? '/en' + currentPath : currentPath;
 
             <!-- CENTER: logo -->
             <div class="pnav-center desktop-nav">
-                <a href={lang === 'en' ? '/en/' : '/'} class="pnav-center-logo" id="pnav-center-logo" title="Ir al inicio">
+                <a href={lang === 'en' ? 'https://flouvia.com/en/' : 'https://flouvia.com/'} class="pnav-center-logo" id="pnav-center-logo" title="Ir al inicio">
                     <img src="/imgs/logo-flouvia-3.svg" alt="Flouvia" class="pnav-logo-center-img" />
                 </a>
             </div>
@@ -69,7 +69,7 @@ const enPath = lang === 'es' ? '/en' + currentPath : currentPath;
                                 <span class="l1"></span><span class="l2"></span><span class="l3"></span>
                             </div>
                         </button>
-                        <a href={lang === 'en' ? '/en/' : '/'} class="pnav-mobile-logo">
+                        <a href={lang === 'en' ? 'https://flouvia.com/en/' : 'https://flouvia.com/'} class="pnav-mobile-logo">
                             <img src="/imgs/logo-flouvia-3.png" alt="Flouvia" class="pnav-logo-m default-logo" />
                             <img src="/imgs/logo-flouvia-1.png" alt="Flouvia" class="pnav-logo-m scrolled-logo" />
                         </a>
@@ -88,9 +88,9 @@ const enPath = lang === 'es' ? '/en' + currentPath : currentPath;
         <div class="pnav-overlay-content">
 
             <div class="pnav-overlay-top">
-                <a href={lang === 'en' ? '/en/' : '/'} class="pnav-home-pill">
+                <a href={lang === 'en' ? 'https://flouvia.com/en/' : 'https://flouvia.com/'} class="pnav-home-pill">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                    {lang === 'en' ? 'Back to Flouvia.mx' : 'Volver a Flouvia.mx'}
+                    {lang === 'en' ? 'Back to Flouvia.com' : 'Volver a Flouvia.com'}
                 </a>
                 <div class="pnav-lang-switch-m">
                     <a href={esPath} class="pnav-lang-m" class:list={[{ active: lang === 'es' }]}>ES</a>
