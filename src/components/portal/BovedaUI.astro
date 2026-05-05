@@ -31,17 +31,28 @@ const { data: rows } = await supabase
   .eq('email_cliente', email)
   .order('created_at', { ascending: false });
 
-const data = {
-  files: (rows ?? []).map((a: any) => ({
+// Generate signed URLs server-side (1 hour TTL).
+// url_descarga is a storage path for new uploads, or a legacy URL for seed data.
+const isPath = (v: string) => v && !v.startsWith('http') && v !== '#';
+
+const files = await Promise.all((rows ?? []).map(async (a: any) => {
+  let url = a.url_descarga ?? '#';
+  if (isPath(url)) {
+    const { data: signed } = await supabase.storage
+      .from('boveda')
+      .createSignedUrl(url, 3600); // expires in 1 hour
+    url = signed?.signedUrl ?? '#';
+  }
+  return {
     id:       a.id,
     name:     a.nombre,
     category: catMap[a.categoria] ?? 'general',
     type:     a.tipo,
     size:     a.size ?? "",
     date:     formatDate(a.created_at),
-    url:      a.url_descarga,
-  })),
-};
+    url,
+  };
+}));
 ---
 
 <div class="os-page">
@@ -84,7 +95,7 @@ const data = {
                     <button class="bv-tab" data-filter="contracts">{t('vault.folders.contracts')}</button>
                     <button class="bv-tab" data-filter="design">{t('vault.folders.design')}</button>
                 </div>
-                <span class="bv-count" id="bv-count">{data.files.length} {lang === 'en' ? 'items' : 'archivos'}</span>
+                <span class="bv-count" id="bv-count">{files.length} {lang === 'en' ? 'items' : 'archivos'}</span>
             </div>
 
             <!-- Columnas tipo Finder -->
@@ -96,7 +107,7 @@ const data = {
             </div>
 
             <div class="bv-file-list" id="files-container">
-                {data.files.map((file: any) => (
+                {files.map((file: any) => (
                     <div class="bv-row-wrap" data-category={file.category}>
                         <a href={file.url} class="bv-file-row" download>
                             <div class="bv-accent"></div>

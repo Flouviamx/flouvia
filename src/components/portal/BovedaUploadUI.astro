@@ -24,13 +24,24 @@ const { data: rows } = await supabase
   .order('created_at', { ascending: false })
   .limit(3);
 
-const recents = (rows ?? []).map((a: any) => ({
-  id:    a.id,
-  name:  a.nombre,
-  type:  (a.tipo ?? '').toUpperCase(),
-  size:  a.size ?? '',
-  date:  formatDate(a.created_at),
-  url:   a.url_descarga,
+const isPath = (v: string) => v && !v.startsWith('http') && v !== '#';
+
+const recents = await Promise.all((rows ?? []).map(async (a: any) => {
+  let url = a.url_descarga ?? '#';
+  if (isPath(url)) {
+    const { data: signed } = await supabase.storage
+      .from('boveda')
+      .createSignedUrl(url, 3600);
+    url = signed?.signedUrl ?? '#';
+  }
+  return {
+    id:   a.id,
+    name: a.nombre,
+    type: (a.tipo ?? '').toUpperCase(),
+    size: a.size ?? '',
+    date: formatDate(a.created_at),
+    url,
+  };
 }));
 
 const categories = [
