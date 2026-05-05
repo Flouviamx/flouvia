@@ -144,6 +144,8 @@ const recentTickets = [
           </div>
 
           <form class="sp-form" id="supportForm" novalidate>
+            <input type="hidden" id="sp-user-email" value={email} />
+            <input type="hidden" id="sp-user-name"  value={firstName} />
 
             <!-- Categorías -->
             <div class="sp-field">
@@ -618,7 +620,29 @@ const recentTickets = [
         submitBtn.disabled = true;
         btnText.textContent = "Enviando…";
 
-        await new Promise(r => setTimeout(r, 1400));
+        const category    = (document.getElementById("categoryInput") as HTMLInputElement)?.value || "";
+        const subject     = (document.getElementById("subject")       as HTMLInputElement)?.value || "";
+        const description = (document.getElementById("description")   as HTMLTextAreaElement)?.value || "";
+        const priority    = (form.querySelector<HTMLInputElement>('input[name="priority"]:checked'))?.value || "normal";
+
+        const payload = {
+            email:       (document.getElementById("sp-user-email") as HTMLInputElement)?.value || "",
+            nombre:      (document.getElementById("sp-user-name")  as HTMLInputElement)?.value || "",
+            category,
+            subject,
+            description,
+            priority,
+            timestamp:   new Date().toISOString(),
+            fuente:      "flouvia.com/portal/soporte",
+        };
+
+        try {
+            await fetch("https://hook.us2.make.com/yxof110p9eswdp0eayr7qihrqx6778dd", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+        } catch { /* fail silently */ }
 
         gsap.to(form, {
             opacity: 0, y: -10, duration: 0.4, ease: "power2.in",
