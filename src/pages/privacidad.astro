@@ -1,0 +1,340 @@
+---
+export const prerender = true;
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import WhatsApp from '../components/WhatsApp.astro';
+
+const updated = '1 de mayo de 2026';
+---
+
+<Layout title="Aviso de Privacidad — Flouvia">
+  <Navbar />
+
+  <main class="legal-page">
+
+    <section class="legal-hero">
+      <div class="container">
+        <p class="legal-eyebrow">DOCUMENTO LEGAL</p>
+        <h1 class="legal-title">Aviso de <span class="editorial">Privacidad.</span></h1>
+        <div class="legal-meta">
+          <span>Flouvia Boutique, S. de R.L. de C.V.</span>
+          <span class="sep">·</span>
+          <span>Última actualización: {updated}</span>
+          <span class="sep">·</span>
+          <a href="/en/privacy" class="lang-switch-link">English version →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="legal-body">
+      <div class="container legal-grid">
+
+        <!-- Índice -->
+        <aside class="legal-index" id="legal-index">
+          <p class="index-title">CONTENIDO</p>
+          <nav>
+            <a href="#responsable" class="index-link">1. Responsable</a>
+            <a href="#datos" class="index-link">2. Datos personales</a>
+            <a href="#finalidades" class="index-link">3. Finalidades</a>
+            <a href="#transferencias" class="index-link">4. Transferencias</a>
+            <a href="#arco" class="index-link">5. Derechos ARCO</a>
+            <a href="#cookies" class="index-link">6. Cookies</a>
+            <a href="#cambios" class="index-link">7. Cambios</a>
+            <a href="#contacto" class="index-link">8. Contacto</a>
+          </nav>
+        </aside>
+
+        <!-- Contenido -->
+        <article class="legal-content" id="legal-content">
+
+          <div class="legal-intro">
+            <p>El presente Aviso de Privacidad es emitido en cumplimiento a la <strong>Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP)</strong> y su Reglamento, publicados en el Diario Oficial de la Federación.</p>
+          </div>
+
+          <div class="legal-section" id="responsable">
+            <h2 class="section-title"><span class="section-num">01</span>Identidad del Responsable</h2>
+            <p><strong>Flouvia Boutique</strong> (en adelante "Flouvia"), con domicilio en Ciudad de México, México, correo electrónico <a href="mailto:flouvia.mx@gmail.com">flouvia.mx@gmail.com</a>, es responsable del tratamiento de sus datos personales conforme a lo establecido en el presente Aviso de Privacidad.</p>
+          </div>
+
+          <div class="legal-section" id="datos">
+            <h2 class="section-title"><span class="section-num">02</span>Datos Personales Recabados</h2>
+            <p>Flouvia puede recabar las siguientes categorías de datos personales:</p>
+            <ul class="legal-list">
+              <li><strong>Identificación:</strong> nombre completo, razón social.</li>
+              <li><strong>Contacto:</strong> correo electrónico, número de teléfono / WhatsApp.</li>
+              <li><strong>Profesionales:</strong> empresa, cargo, sector de industria.</li>
+              <li><strong>Financieros:</strong> información de facturación necesaria para la prestación de servicios (RFC, dirección fiscal).</li>
+              <li><strong>Navegación:</strong> dirección IP, tipo de dispositivo, páginas visitadas, duración de la sesión (a través de cookies y herramientas de analítica).</li>
+            </ul>
+            <p>No recabamos datos personales sensibles en el sentido de la LFPDPPP.</p>
+          </div>
+
+          <div class="legal-section" id="finalidades">
+            <h2 class="section-title"><span class="section-num">03</span>Finalidades del Tratamiento</h2>
+            <p><strong>Finalidades primarias</strong> (necesarias para la relación contractual):</p>
+            <ul class="legal-list">
+              <li>Prestación de servicios de ingeniería digital, diseño y desarrollo web contratados.</li>
+              <li>Gestión de facturación, pagos y cumplimiento fiscal.</li>
+              <li>Comunicación relacionada con el proyecto: avances, entregables y soporte.</li>
+              <li>Acceso y operación del Portal de Clientes (Flouvia OS).</li>
+            </ul>
+            <p><strong>Finalidades secundarias</strong> (puede oponerse en cualquier momento):</p>
+            <ul class="legal-list">
+              <li>Envío de comunicaciones comerciales sobre nuevos servicios o actualizaciones.</li>
+              <li>Análisis estadístico de uso para mejorar nuestros servicios.</li>
+            </ul>
+          </div>
+
+          <div class="legal-section" id="transferencias">
+            <h2 class="section-title"><span class="section-num">04</span>Transferencias de Datos</h2>
+            <p>Flouvia puede compartir sus datos con terceros exclusivamente para el cumplimiento de las finalidades descritas:</p>
+            <ul class="legal-list">
+              <li><strong>Clerk Inc.</strong> — gestión de autenticación del portal de clientes.</li>
+              <li><strong>Supabase Inc.</strong> — almacenamiento de datos del proyecto.</li>
+              <li><strong>Stripe Inc.</strong> — procesamiento de pagos.</li>
+              <li><strong>Google LLC</strong> — servicios de analítica (Google Analytics 4) y comunicación.</li>
+            </ul>
+            <p>Dichas transferencias se realizan bajo contratos que garantizan el mismo nivel de protección exigido por la LFPDPPP. No vendemos ni cedemos sus datos a terceros con fines comerciales propios.</p>
+          </div>
+
+          <div class="legal-section" id="arco">
+            <h2 class="section-title"><span class="section-num">05</span>Derechos ARCO</h2>
+            <p>Usted tiene derecho a <strong>Acceder, Rectificar, Cancelar u Oponerse</strong> al tratamiento de sus datos personales (derechos ARCO), así como a revocar el consentimiento otorgado.</p>
+            <p>Para ejercer sus derechos, envíe una solicitud al correo <a href="mailto:flouvia.mx@gmail.com">flouvia.mx@gmail.com</a> con los siguientes datos:</p>
+            <ul class="legal-list">
+              <li>Nombre completo y datos de contacto.</li>
+              <li>Descripción clara del derecho que desea ejercer.</li>
+              <li>Documentos que acrediten su identidad o representación legal.</li>
+            </ul>
+            <p>Daremos respuesta en un plazo máximo de <strong>20 días hábiles</strong> a partir de la recepción de la solicitud.</p>
+          </div>
+
+          <div class="legal-section" id="cookies">
+            <h2 class="section-title"><span class="section-num">06</span>Uso de Cookies</h2>
+            <p>Nuestro sitio utiliza cookies técnicas (necesarias para el funcionamiento) y analíticas (para medir el rendimiento). Puede configurar su navegador para bloquear o eliminar cookies; sin embargo, algunas funcionalidades del sitio pueden verse afectadas.</p>
+            <p>Las cookies utilizadas por herramientas de terceros (Google Analytics) pueden transferir datos a servidores ubicados fuera de México, de conformidad con los términos de privacidad de dichos proveedores.</p>
+          </div>
+
+          <div class="legal-section" id="cambios">
+            <h2 class="section-title"><span class="section-num">07</span>Cambios al Aviso de Privacidad</h2>
+            <p>Flouvia se reserva el derecho de modificar el presente Aviso de Privacidad en cualquier momento. Cualquier modificación será publicada en <strong>flouvia.com/privacidad</strong>. Le recomendamos revisarlo periódicamente.</p>
+          </div>
+
+          <div class="legal-section" id="contacto">
+            <h2 class="section-title"><span class="section-num">08</span>Contacto</h2>
+            <p>Para cualquier consulta relacionada con el tratamiento de sus datos personales o el presente Aviso de Privacidad:</p>
+            <div class="contact-box">
+              <p><strong>Flouvia Boutique</strong></p>
+              <p>Ciudad de México, México</p>
+              <p><a href="mailto:flouvia.mx@gmail.com">flouvia.mx@gmail.com</a></p>
+              <p><a href="https://flouvia.com">flouvia.com</a></p>
+            </div>
+          </div>
+
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+  <WhatsApp />
+</Layout>
+
+<style is:global>
+  :root {
+    --color-bg:        #ffffff;
+    --color-bg-soft:   #fcfcfc;
+    --color-blue-deep: #0a192f;
+    --color-text:      #050505;
+    --color-text-muted:#555556;
+    --color-border:    rgba(0,0,0,0.08);
+    --font-sans:       'Inter', system-ui, sans-serif;
+    --font-serif:      'Instrument Serif', serif;
+    --font-mono:       'JetBrains Mono', monospace;
+    --ease-smooth:     cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-spring:     cubic-bezier(0.175, 0.885, 0.32, 1.05);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { width: 100%; -webkit-font-smoothing: antialiased; margin: 0; }
+  body { background: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
+  .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+</style>
+
+<style>
+.legal-page { width: 100%; overflow-x: clip; }
+
+/* ── HERO ── */
+.legal-hero {
+  padding: 13rem 0 5rem;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+.legal-eyebrow {
+  font-size: 0.6rem; font-weight: 800; letter-spacing: 4px;
+  color: #aaa; text-transform: uppercase; margin: 0 0 1.5rem;
+  opacity: 0;
+}
+.legal-title {
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 800; letter-spacing: -3px; line-height: 0.95;
+  margin: 0 0 2.5rem; color: var(--color-text);
+  opacity: 0;
+}
+.legal-meta {
+  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+  font-size: 0.8rem; color: var(--color-text-muted); font-weight: 500;
+  opacity: 0;
+}
+.legal-meta .sep { opacity: 0.3; }
+.lang-switch-link {
+  color: var(--color-blue-deep); text-decoration: none; font-weight: 700;
+  transition: opacity .2s;
+}
+.lang-switch-link:hover { opacity: 0.7; }
+
+/* ── BODY ── */
+.legal-body { padding: 6rem 0 8rem; background: var(--color-bg-soft); }
+
+.legal-grid {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 6rem;
+  align-items: start;
+}
+
+/* Índice lateral */
+.legal-index {
+  position: sticky; top: 120px;
+  opacity: 0;
+}
+.index-title {
+  font-size: 0.58rem; font-weight: 800; letter-spacing: 2.5px;
+  color: #bbb; text-transform: uppercase; margin: 0 0 1.2rem;
+}
+.legal-index nav { display: flex; flex-direction: column; gap: 0.1rem; }
+.index-link {
+  font-size: 0.82rem; color: var(--color-text-muted); text-decoration: none;
+  padding: 0.45rem 0.75rem; border-radius: 8px; font-weight: 500;
+  transition: all .2s var(--ease-smooth); border-left: 2px solid transparent;
+}
+.index-link:hover {
+  color: var(--color-text); background: rgba(0,0,0,.04);
+  border-left-color: var(--color-blue-deep);
+}
+.index-link.active {
+  color: var(--color-blue-deep); font-weight: 700;
+  border-left-color: var(--color-blue-deep);
+}
+
+/* Contenido */
+.legal-content { max-width: 720px; opacity: 0; }
+
+.legal-intro {
+  font-size: 1.05rem; line-height: 1.8; color: var(--color-text-muted);
+  padding: 2rem; background: rgba(10,25,47,.03);
+  border: 1px solid var(--color-border); border-radius: 16px;
+  margin-bottom: 3rem;
+}
+.legal-intro p { margin: 0; }
+
+.legal-section {
+  padding-bottom: 3rem; margin-bottom: 3rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.legal-section:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+
+.section-title {
+  display: flex; align-items: baseline; gap: 1rem;
+  font-size: 1.3rem; font-weight: 700; letter-spacing: -0.5px;
+  color: var(--color-text); margin: 0 0 1.5rem;
+}
+.section-num {
+  font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700;
+  color: #bbb; letter-spacing: 1px; flex-shrink: 0;
+}
+
+.legal-section p {
+  font-size: 0.97rem; line-height: 1.8; color: #333; margin: 0 0 1rem;
+}
+.legal-section p:last-child { margin-bottom: 0; }
+.legal-section a {
+  color: var(--color-blue-deep); font-weight: 600; text-decoration: none;
+  border-bottom: 1px solid rgba(10,25,47,.2); transition: border-color .2s;
+}
+.legal-section a:hover { border-color: var(--color-blue-deep); }
+
+.legal-list {
+  margin: 0.5rem 0 1rem 0; padding: 0;
+  list-style: none; display: flex; flex-direction: column; gap: 0.6rem;
+}
+.legal-list li {
+  font-size: 0.95rem; line-height: 1.7; color: #444;
+  padding-left: 1.4rem; position: relative;
+}
+.legal-list li::before {
+  content: '—'; position: absolute; left: 0;
+  color: #bbb; font-size: 0.8rem;
+}
+
+.contact-box {
+  background: var(--color-bg); border: 1px solid var(--color-border);
+  border-radius: 16px; padding: 1.8rem 2rem;
+  display: flex; flex-direction: column; gap: 0.3rem;
+}
+.contact-box p { margin: 0; font-size: 0.95rem; color: #444; }
+.contact-box strong { color: var(--color-text); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .legal-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .legal-index { position: static; }
+}
+@media (max-width: 768px) {
+  .legal-hero { padding: 10rem 0 4rem; }
+  .legal-title { letter-spacing: -2px; }
+  .legal-body { padding: 4rem 0 6rem; }
+  .legal-index nav { flex-direction: row; flex-wrap: wrap; }
+  .index-link { border-left: none; border-bottom: 2px solid transparent; }
+  .index-link:hover, .index-link.active { border-left: none; border-bottom-color: var(--color-blue-deep); }
+}
+</style>
+
+<script>
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);
+
+document.addEventListener('DOMContentLoaded', () => {
+  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+  tl.to('.legal-eyebrow', { opacity: 1, y: 0, duration: 0.8 }, 0.1);
+  tl.from('.legal-title', { y: 30, duration: 1.0 }, 0.2);
+  tl.to('.legal-title',   { opacity: 1, duration: 0.1 }, 0.2);
+  tl.to('.legal-meta',    { opacity: 1, y: 0, duration: 0.7 }, 0.6);
+
+  gsap.set('.legal-title', { opacity: 0 });
+
+  gsap.to('.legal-index', { opacity: 1, x: 0, duration: 0.9, ease: 'expo.out',
+    scrollTrigger: { trigger: '.legal-body', start: 'top 85%' }
+  });
+  gsap.to('.legal-content', { opacity: 1, y: 0, duration: 1.0, ease: 'expo.out',
+    scrollTrigger: { trigger: '.legal-body', start: 'top 85%' }
+  });
+
+  // Active link en el índice
+  const sections = document.querySelectorAll<HTMLElement>('.legal-section');
+  const links    = document.querySelectorAll<HTMLElement>('.index-link');
+  sections.forEach(sec => {
+    ScrollTrigger.create({
+      trigger: sec, start: 'top 40%', end: 'bottom 40%',
+      onEnter: () => highlight(sec.id),
+      onEnterBack: () => highlight(sec.id),
+    });
+  });
+  function highlight(id: string) {
+    links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === `#${id}`));
+  }
+});
+</script>

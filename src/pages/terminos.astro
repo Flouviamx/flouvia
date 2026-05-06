@@ -1,0 +1,239 @@
+---
+export const prerender = true;
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import WhatsApp from '../components/WhatsApp.astro';
+
+const updated = '1 de mayo de 2026';
+---
+
+<Layout title="Términos de Servicio — Flouvia">
+  <Navbar />
+
+  <main class="legal-page">
+
+    <section class="legal-hero">
+      <div class="container">
+        <p class="legal-eyebrow">DOCUMENTO LEGAL</p>
+        <h1 class="legal-title">Términos de <span class="editorial">Servicio.</span></h1>
+        <div class="legal-meta">
+          <span>Flouvia Boutique, S. de R.L. de C.V.</span>
+          <span class="sep">·</span>
+          <span>Última actualización: {updated}</span>
+          <span class="sep">·</span>
+          <a href="/en/terms" class="lang-switch-link">English version →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="legal-body">
+      <div class="container legal-grid">
+
+        <aside class="legal-index" id="legal-index">
+          <p class="index-title">CONTENIDO</p>
+          <nav>
+            <a href="#aceptacion"    class="index-link">1. Aceptación</a>
+            <a href="#servicios"     class="index-link">2. Servicios</a>
+            <a href="#obligaciones"  class="index-link">3. Obligaciones</a>
+            <a href="#pagos"         class="index-link">4. Pagos</a>
+            <a href="#propiedad"     class="index-link">5. Propiedad intelectual</a>
+            <a href="#confidencial"  class="index-link">6. Confidencialidad</a>
+            <a href="#garantias"     class="index-link">7. Garantías y límites</a>
+            <a href="#vigencia"      class="index-link">8. Vigencia</a>
+            <a href="#ley"           class="index-link">9. Ley aplicable</a>
+          </nav>
+        </aside>
+
+        <article class="legal-content" id="legal-content">
+
+          <div class="legal-intro">
+            <p>Al contratar los servicios de <strong>Flouvia Boutique</strong> o acceder al Portal de Clientes (Flouvia OS), usted acepta en su totalidad los presentes Términos de Servicio. Si no está de acuerdo con alguna de las condiciones aquí establecidas, le pedimos no utilizar nuestros servicios.</p>
+          </div>
+
+          <div class="legal-section" id="aceptacion">
+            <h2 class="section-title"><span class="section-num">01</span>Aceptación de los Términos</h2>
+            <p>Estos Términos de Servicio constituyen un acuerdo legal vinculante entre usted (el "Cliente") y <strong>Flouvia Boutique</strong> (el "Proveedor"). El uso continuado de los servicios implica la aceptación plena y sin reservas de estos términos, incluyendo cualquier modificación futura debidamente notificada.</p>
+            <p>Los presentes términos aplican a todos los servicios prestados por Flouvia, incluyendo diseño y desarrollo web, ingeniería de e-commerce, automatización de procesos, consultoría digital y acceso al Portal de Clientes.</p>
+          </div>
+
+          <div class="legal-section" id="servicios">
+            <h2 class="section-title"><span class="section-num">02</span>Descripción de los Servicios</h2>
+            <p>Flouvia ofrece servicios de ingeniería digital bajo propuesta comercial individualizada. El alcance, los entregables, los tiempos y el precio de cada proyecto quedan definidos en la propuesta o contrato de servicios firmado entre las partes.</p>
+            <ul class="legal-list">
+              <li>Diseño y desarrollo de tiendas en Shopify / Shopify Plus.</li>
+              <li>Arquitectura e implementación de portales B2B.</li>
+              <li>Estrategia y configuración de retención (Klaviyo, CRM).</li>
+              <li>Integración de APIs, automatización de procesos y dashboards.</li>
+              <li>Consultoría de conversión (CRO) y analítica avanzada.</li>
+              <li>Acceso y mantenimiento del Portal de Clientes Flouvia OS.</li>
+            </ul>
+            <p>Flouvia se reserva el derecho de rechazar proyectos que contravengan sus políticas internas o la legislación vigente.</p>
+          </div>
+
+          <div class="legal-section" id="obligaciones">
+            <h2 class="section-title"><span class="section-num">03</span>Obligaciones del Cliente</h2>
+            <p>Para el correcto desarrollo del proyecto, el Cliente se compromete a:</p>
+            <ul class="legal-list">
+              <li>Proporcionar de forma oportuna la información, accesos y materiales necesarios para el desarrollo del proyecto.</li>
+              <li>Designar un interlocutor con capacidad de toma de decisiones.</li>
+              <li>Revisar y aprobar entregables en los plazos acordados. La falta de respuesta en 5 días hábiles se considerará aprobación tácita.</li>
+              <li>No compartir las credenciales de acceso al Portal de Clientes con terceros no autorizados.</li>
+              <li>Realizar los pagos en los plazos y formas acordadas.</li>
+              <li>Notificar cualquier cambio en el alcance del proyecto antes de su implementación.</li>
+            </ul>
+          </div>
+
+          <div class="legal-section" id="pagos">
+            <h2 class="section-title"><span class="section-num">04</span>Condiciones de Pago</h2>
+            <p>Las condiciones específicas de pago se establecen en la propuesta comercial individual. Como política general:</p>
+            <ul class="legal-list">
+              <li>Los proyectos se facturan según el esquema acordado (hito, mensual o a la entrega).</li>
+              <li>El retraso en pagos superiores a <strong>10 días hábiles</strong> puede resultar en la suspensión del servicio.</li>
+              <li>Los pagos realizados no son reembolsables salvo incumplimiento demostrable por parte de Flouvia.</li>
+              <li>Las tarifas están expresadas en dólares americanos (USD) o pesos mexicanos (MXN) según se indique en la propuesta.</li>
+              <li>Flouvia emite facturas fiscales (CFDI) conforme a la legislación fiscal mexicana.</li>
+            </ul>
+          </div>
+
+          <div class="legal-section" id="propiedad">
+            <h2 class="section-title"><span class="section-num">05</span>Propiedad Intelectual</h2>
+            <p><strong>Entregables del proyecto:</strong> Una vez liquidado el pago total acordado, el Cliente adquiere los derechos de uso sobre los entregables específicos del proyecto (diseños, código personalizado, flujos de automatización).</p>
+            <p><strong>Propiedad de Flouvia:</strong> Flouvia retiene los derechos sobre sus metodologías, frameworks internos, componentes genéricos reutilizables y conocimiento técnico acumulado, independientemente de su uso en el proyecto del Cliente.</p>
+            <p><strong>Herramientas de terceros:</strong> El uso de plataformas de terceros (Shopify, Klaviyo, Make, Supabase, etc.) está sujeto a los términos de cada proveedor. Flouvia no otorga licencias sobre software de terceros.</p>
+            <p>El Cliente autoriza a Flouvia a mencionar el proyecto como referencia comercial, salvo acuerdo de confidencialidad expreso.</p>
+          </div>
+
+          <div class="legal-section" id="confidencial">
+            <h2 class="section-title"><span class="section-num">06</span>Confidencialidad</h2>
+            <p>Ambas partes acuerdan mantener la confidencialidad de la información sensible intercambiada durante la relación comercial, incluyendo datos financieros, estratégicos y técnicos, durante la vigencia del contrato y por un período de <strong>2 años</strong> posterior a su terminación.</p>
+            <p>Esta obligación no aplica a información que sea de dominio público, que la parte receptora ya conociera con anterioridad, o que deba divulgarse por mandato legal o resolución judicial.</p>
+          </div>
+
+          <div class="legal-section" id="garantias">
+            <h2 class="section-title"><span class="section-num">07</span>Garantías y Limitación de Responsabilidad</h2>
+            <p>Flouvia garantiza que los servicios serán prestados con diligencia profesional y conforme al alcance acordado. No obstante:</p>
+            <ul class="legal-list">
+              <li>Flouvia no garantiza resultados comerciales específicos (ventas, conversiones, tráfico) derivados del uso de los entregables.</li>
+              <li>La responsabilidad de Flouvia por daños directos queda limitada al monto pagado por el proyecto en cuestión.</li>
+              <li>Flouvia no será responsable por daños indirectos, pérdida de ingresos o daños consecuentes.</li>
+              <li>El tiempo de actividad del Portal de Clientes está sujeto a la disponibilidad de los proveedores de infraestructura (Vercel, Supabase, Clerk).</li>
+            </ul>
+          </div>
+
+          <div class="legal-section" id="vigencia">
+            <h2 class="section-title"><span class="section-num">08</span>Vigencia y Terminación</h2>
+            <p>Estos Términos entran en vigor desde el inicio de la relación comercial y permanecen vigentes hasta la conclusión del proyecto o la terminación del acceso al Portal de Clientes.</p>
+            <p>Cualquiera de las partes puede dar por terminada la relación comercial con <strong>15 días naturales</strong> de aviso previo por escrito, salvo incumplimiento grave que amerite terminación inmediata.</p>
+            <p>En caso de terminación anticipada, el Cliente pagará los servicios efectivamente prestados hasta la fecha de terminación.</p>
+          </div>
+
+          <div class="legal-section" id="ley">
+            <h2 class="section-title"><span class="section-num">09</span>Ley Aplicable y Jurisdicción</h2>
+            <p>Los presentes Términos de Servicio se rigen por las leyes vigentes en los <strong>Estados Unidos Mexicanos</strong>. Para cualquier controversia derivada de la interpretación o cumplimiento de estos términos, las partes se someten a la jurisdicción de los tribunales competentes de la <strong>Ciudad de México</strong>, renunciando a cualquier otro fuero que pudiera corresponderles por razón de sus domicilios presentes o futuros.</p>
+            <div class="contact-box">
+              <p><strong>Flouvia Boutique</strong></p>
+              <p>Ciudad de México, México</p>
+              <p><a href="mailto:flouvia.mx@gmail.com">flouvia.mx@gmail.com</a></p>
+            </div>
+          </div>
+
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+  <WhatsApp />
+</Layout>
+
+<style is:global>
+  :root {
+    --color-bg:        #ffffff;
+    --color-bg-soft:   #fcfcfc;
+    --color-blue-deep: #0a192f;
+    --color-text:      #050505;
+    --color-text-muted:#555556;
+    --color-border:    rgba(0,0,0,0.08);
+    --font-sans:       'Inter', system-ui, sans-serif;
+    --font-serif:      'Instrument Serif', serif;
+    --font-mono:       'JetBrains Mono', monospace;
+    --ease-smooth:     cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-spring:     cubic-bezier(0.175, 0.885, 0.32, 1.05);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { width: 100%; -webkit-font-smoothing: antialiased; margin: 0; }
+  body { background: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
+  .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+</style>
+
+<style>
+.legal-page { width: 100%; overflow-x: clip; }
+.legal-hero { padding: 13rem 0 5rem; background: var(--color-bg); border-bottom: 1px solid var(--color-border); }
+.legal-eyebrow { font-size: 0.6rem; font-weight: 800; letter-spacing: 4px; color: #aaa; text-transform: uppercase; margin: 0 0 1.5rem; opacity: 0; }
+.legal-title { font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 800; letter-spacing: -3px; line-height: 0.95; margin: 0 0 2.5rem; color: var(--color-text); opacity: 0; }
+.legal-meta { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; font-size: 0.8rem; color: var(--color-text-muted); font-weight: 500; opacity: 0; }
+.legal-meta .sep { opacity: 0.3; }
+.lang-switch-link { color: var(--color-blue-deep); text-decoration: none; font-weight: 700; transition: opacity .2s; }
+.lang-switch-link:hover { opacity: 0.7; }
+.legal-body { padding: 6rem 0 8rem; background: var(--color-bg-soft); }
+.legal-grid { display: grid; grid-template-columns: 220px 1fr; gap: 6rem; align-items: start; }
+.legal-index { position: sticky; top: 120px; opacity: 0; }
+.index-title { font-size: 0.58rem; font-weight: 800; letter-spacing: 2.5px; color: #bbb; text-transform: uppercase; margin: 0 0 1.2rem; }
+.legal-index nav { display: flex; flex-direction: column; gap: 0.1rem; }
+.index-link { font-size: 0.82rem; color: var(--color-text-muted); text-decoration: none; padding: 0.45rem 0.75rem; border-radius: 8px; font-weight: 500; transition: all .2s var(--ease-smooth); border-left: 2px solid transparent; }
+.index-link:hover { color: var(--color-text); background: rgba(0,0,0,.04); border-left-color: var(--color-blue-deep); }
+.index-link.active { color: var(--color-blue-deep); font-weight: 700; border-left-color: var(--color-blue-deep); }
+.legal-content { max-width: 720px; opacity: 0; }
+.legal-intro { font-size: 1.05rem; line-height: 1.8; color: var(--color-text-muted); padding: 2rem; background: rgba(10,25,47,.03); border: 1px solid var(--color-border); border-radius: 16px; margin-bottom: 3rem; }
+.legal-intro p { margin: 0; }
+.legal-section { padding-bottom: 3rem; margin-bottom: 3rem; border-bottom: 1px solid var(--color-border); }
+.legal-section:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+.section-title { display: flex; align-items: baseline; gap: 1rem; font-size: 1.3rem; font-weight: 700; letter-spacing: -0.5px; color: var(--color-text); margin: 0 0 1.5rem; }
+.section-num { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; color: #bbb; letter-spacing: 1px; flex-shrink: 0; }
+.legal-section p { font-size: 0.97rem; line-height: 1.8; color: #333; margin: 0 0 1rem; }
+.legal-section p:last-child { margin-bottom: 0; }
+.legal-section a { color: var(--color-blue-deep); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(10,25,47,.2); transition: border-color .2s; }
+.legal-section a:hover { border-color: var(--color-blue-deep); }
+.legal-list { margin: 0.5rem 0 1rem 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+.legal-list li { font-size: 0.95rem; line-height: 1.7; color: #444; padding-left: 1.4rem; position: relative; }
+.legal-list li::before { content: '—'; position: absolute; left: 0; color: #bbb; font-size: 0.8rem; }
+.contact-box { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 16px; padding: 1.8rem 2rem; display: flex; flex-direction: column; gap: 0.3rem; margin-top: 1.5rem; }
+.contact-box p { margin: 0; font-size: 0.95rem; color: #444; }
+.contact-box strong { color: var(--color-text); }
+@media (max-width: 1024px) { .legal-grid { grid-template-columns: 1fr; gap: 3rem; } .legal-index { position: static; } }
+@media (max-width: 768px) { .legal-hero { padding: 10rem 0 4rem; } .legal-title { letter-spacing: -2px; } .legal-body { padding: 4rem 0 6rem; } .legal-index nav { flex-direction: row; flex-wrap: wrap; } .index-link { border-left: none; border-bottom: 2px solid transparent; } .index-link:hover, .index-link.active { border-left: none; border-bottom-color: var(--color-blue-deep); } }
+</style>
+
+<script>
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);
+
+document.addEventListener('DOMContentLoaded', () => {
+  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+  gsap.set('.legal-title', { opacity: 0 });
+  tl.to('.legal-eyebrow', { opacity: 1, duration: 0.8 }, 0.1);
+  tl.from('.legal-title', { y: 30, duration: 1.0 }, 0.2);
+  tl.to('.legal-title',   { opacity: 1, duration: 0.1 }, 0.2);
+  tl.to('.legal-meta',    { opacity: 1, duration: 0.7 }, 0.6);
+
+  gsap.to('.legal-index',   { opacity: 1, duration: 0.9, ease: 'expo.out', scrollTrigger: { trigger: '.legal-body', start: 'top 85%' } });
+  gsap.to('.legal-content', { opacity: 1, duration: 1.0, ease: 'expo.out', scrollTrigger: { trigger: '.legal-body', start: 'top 85%' } });
+
+  const sections = document.querySelectorAll<HTMLElement>('.legal-section');
+  const links    = document.querySelectorAll<HTMLElement>('.index-link');
+  sections.forEach(sec => {
+    ScrollTrigger.create({
+      trigger: sec, start: 'top 40%', end: 'bottom 40%',
+      onEnter: () => highlight(sec.id),
+      onEnterBack: () => highlight(sec.id),
+    });
+  });
+  function highlight(id: string) {
+    links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === `#${id}`));
+  }
+});
+</script>

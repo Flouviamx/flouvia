@@ -125,8 +125,8 @@ const isEn = lang === 'en';
             </div>
             
             <div class="legal-right">
-                <a href="#" class="legal-link">{isEn ? 'Privacy Policy' : 'Aviso de Privacidad'}</a>
-                <a href="#" class="legal-link">{isEn ? 'Terms of Service' : 'Términos de Servicio'}</a>
+                <a href={isEn ? '/en/privacy' : '/privacidad'} class="legal-link">{isEn ? 'Privacy Policy' : 'Aviso de Privacidad'}</a>
+                <a href={isEn ? '/en/terms' : '/terminos'} class="legal-link">{isEn ? 'Terms of Service' : 'Términos de Servicio'}</a>
                 <a href="#" class="legal-link">Op. Global — CDMX</a>
             </div>
         </div>
