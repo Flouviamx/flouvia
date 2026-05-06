@@ -865,7 +865,9 @@ const t = useTranslations(lang);
         /* ═════════════ DESKTOP ANIMATIONS ═════════════ */
         mm.add('(min-width: 769px)', () => {
 
-            /* HERO — luxury minimalist reveal (pure curtain, no blur, no scale) */
+            /* HERO — deferred one frame so Navbar entrance animation has GPU priority */
+            requestAnimationFrame(() => {
+
             const heroTitle = document.querySelector<HTMLElement>('.hero-title');
             const heroEyebrow = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
             const heroBottom = document.querySelector<HTMLElement>('.hero-bottom');
@@ -888,6 +890,8 @@ const t = useTranslations(lang);
                     stagger: 0.12,
                 }, 1.0);
             }
+
+            }); // end requestAnimationFrame
 
             const heroParallax = document.getElementById('hero-parallax');
             if (heroParallax) {

@@ -94,6 +94,7 @@ const t = useTranslations(lang);
             </div>
 
             <nav class="mobile-links" id="mobile-links">
+                <a href={lang === 'en' ? '/en/' : '/'}                   class="m-link">{lang === 'en' ? 'Home' : 'Inicio'}</a>
                 <a href={lang === 'en' ? '/en/servicios' : '/servicios'} class="m-link">{t('nav.services')}</a>
                 <a href={lang === 'en' ? '/en/nosotros'  : '/nosotros'}  class="m-link">{t('nav.about')}</a>
                 <a href={lang === 'en' ? '/en/casos'     : '/casos'}     class="m-link">{t('nav.cases')}</a>
@@ -468,6 +469,7 @@ const t = useTranslations(lang);
         .m-link:nth-child(2) { transition-delay: 0.31s; }
         .m-link:nth-child(3) { transition-delay: 0.40s; }
         .m-link:nth-child(4) { transition-delay: 0.49s; }
+        .m-link:nth-child(5) { transition-delay: 0.58s; }
 
         .mobile-menu-footer {
             border-top: 1px solid rgba(255,255,255,0.07); padding-top: 2rem;
