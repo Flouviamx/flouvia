@@ -1,0 +1,514 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import Navbar from '../../../components/Navbar.astro';
+import Footer from '../../../components/Footer.astro';
+import WhatsApp from '../../../components/WhatsApp.astro';
+import { posts, getRelated, formatDate } from '../../../data/blog';
+
+export function getStaticPaths() {
+  return posts.map(post => ({ params: { slug: post.slug }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const isEn = true;
+const t = (o: { es: string; en: string }) => o.en;
+const lang: 'es' | 'en' = 'en';
+const root = '/en';
+const related = getRelated(post.slug);
+const postIdx = posts.indexOf(post) + 1;
+---
+
+<Layout title={`${t(post.title)} — Flouvia Blog`}>
+  <Navbar />
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-bar" id="progress-bar"></div>
+
+  <main class="post-page">
+
+    <!-- HERO -->
+    <section class="post-hero">
+      <div class="container">
+        <nav class="breadcrumb">
+          <a href="/en/">Flouvia</a>
+          <span class="bc-sep">›</span>
+          <a href={`${root}/blog`}>Blog</a>
+          <span class="bc-sep">›</span>
+          <span>{t(post.category)}</span>
+        </nav>
+
+        <div class="post-meta-top">
+          <span class="cat-badge" style={`background: ${post.categoryBg}; color: ${post.categoryColor};`}>
+            {t(post.category)}
+          </span>
+          <span class="post-num-badge">/{String(postIdx).padStart(2, '0')}</span>
+        </div>
+
+        <h1 class="post-title">{t(post.title)}</h1>
+
+        <div class="post-meta-row">
+          <div class="author-block">
+            <div class="author-avatar">{post.authorInitial}</div>
+            <div>
+              <span class="author-n">{post.author}</span>
+              <span class="post-dt">{formatDate(post.date, lang)} · {post.readTime} min read</span>
+            </div>
+          </div>
+          <div class="post-tags">
+            {post.tags.map(tag => <span class="tag">{tag}</span>)}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISUAL BANNER -->
+    <div class="post-banner">
+      <div class="post-banner-inner" style={`background: ${post.categoryBg}`}>
+        <div class="banner-grid-lines" aria-hidden="true"></div>
+        <span class="banner-title-watermark">{t(post.title).split(':')[0]}</span>
+      </div>
+    </div>
+
+    <!-- ARTICLE + SIDEBAR -->
+    <section class="post-body">
+      <div class="container post-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="post-sidebar" id="post-sidebar">
+          <div class="sidebar-sticky">
+            <p class="sidebar-label">IN THIS ARTICLE</p>
+            <nav class="toc" id="toc"></nav>
+            <div class="sidebar-divider"></div>
+            <a href={`${root}/blog`} class="back-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+              Back to Blog
+            </a>
+          </div>
+        </aside>
+
+        <!-- ARTICLE -->
+        <article class="post-article" id="post-article" set:html={t(post.content)} />
+
+      </div>
+    </section>
+
+    <!-- RELATED POSTS -->
+    {related.length > 0 && (
+      <section class="related-section">
+        <div class="container">
+          <p class="eyebrow">KEEP READING</p>
+          <h2 class="related-title">Related <span class="editorial">articles.</span></h2>
+          <div class="related-grid">
+            {related.map((rp, i) => (
+              <a href={`${root}/blog/${rp.slug}`} class="related-card squircle">
+                <div class="related-visual" style={`background: ${rp.categoryBg}`}>
+                  <div class="banner-grid-lines" aria-hidden="true"></div>
+                  <span class="related-num">/{String(posts.indexOf(rp) + 1).padStart(2, '0')}</span>
+                </div>
+                <div class="related-body">
+                  <span class="cat-badge-sm">{t(rp.category)}</span>
+                  <h3 class="related-card-title">{t(rp.title)}</h3>
+                  <span class="related-link">Read →</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- CTA -->
+    <section class="post-cta">
+      <div class="container">
+        <div class="cta-box squircle-cta">
+          <div class="cta-left">
+            <p class="eyebrow" style="color: rgba(255,255,255,0.4);">THE NEXT STEP</p>
+            <h2>Scale your <span class="editorial" style="color:#fff;">operation.</span></h2>
+          </div>
+          <a href={`${root}/contacto`} class="cta-btn">
+            <span>Schedule diagnostics</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="19" x2="19" y2="5"/><polyline points="9 5 19 5 19 15"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+  <WhatsApp />
+</Layout>
+
+<style is:global>
+  :root {
+    --color-bg: #ffffff;
+    --color-bg-soft: #fcfcfc;
+    --color-blue-deep: #0a192f;
+    --color-text: #050505;
+    --color-text-muted: #555556;
+    --color-border: rgba(0,0,0,0.08);
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-serif: 'Instrument Serif', serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { width: 100%; -webkit-font-smoothing: antialiased; margin: 0; }
+  body { background: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
+  .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+  .eyebrow { font-size: 0.62rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
+  .squircle { border-radius: 20px; overflow: hidden; transform: translateZ(0); }
+  .squircle-cta { border-radius: 28px; overflow: hidden; }
+
+  /* ARTICLE TYPOGRAPHY */
+  .post-article { line-height: 1.8; color: #1a1a1a; }
+  .post-article .article-lead {
+    font-size: 1.3rem; font-weight: 500; line-height: 1.6;
+    color: var(--color-text); border-left: 3px solid var(--color-blue-deep);
+    padding-left: 1.5rem; margin: 0 0 3rem;
+  }
+  .post-article h2 {
+    font-size: 1.7rem; font-weight: 800; letter-spacing: -0.5px;
+    color: var(--color-text); margin: 3.5rem 0 1.2rem; line-height: 1.2;
+    padding-top: 1rem; border-top: 1px solid var(--color-border);
+  }
+  .post-article h3 {
+    font-size: 1.2rem; font-weight: 700; color: var(--color-text);
+    margin: 2rem 0 0.8rem; letter-spacing: -0.3px;
+  }
+  .post-article p {
+    font-size: 1.05rem; line-height: 1.8; color: #2d2d2d;
+    margin: 0 0 1.4rem;
+  }
+  .post-article ul {
+    margin: 0.5rem 0 1.5rem; padding: 0; list-style: none;
+    display: flex; flex-direction: column; gap: 0.6rem;
+  }
+  .post-article ul li {
+    font-size: 1.02rem; line-height: 1.7; color: #333;
+    padding-left: 1.5rem; position: relative;
+  }
+  .post-article ul li::before {
+    content: '—'; position: absolute; left: 0;
+    color: var(--color-blue-deep); font-size: 0.85rem; font-weight: 700;
+  }
+  .post-article blockquote {
+    margin: 2.5rem 0; padding: 1.5rem 2rem;
+    background: rgba(10,25,47,0.03);
+    border-left: 3px solid var(--color-blue-deep);
+    border-radius: 0 12px 12px 0;
+  }
+  .post-article blockquote p {
+    font-family: var(--font-serif); font-style: italic;
+    font-size: 1.25rem; color: var(--color-blue-deep);
+    margin: 0; line-height: 1.5; font-weight: 400;
+  }
+
+  /* TOC links are injected by JS so they need global scope */
+  .toc a {
+    font-size: 0.78rem; color: #c0c0c0; text-decoration: none;
+    padding: 0.42rem 0 0.42rem 1rem;
+    margin-left: -1.5px;
+    border-left: 2px solid transparent;
+    transition: color 0.22s cubic-bezier(0.16,1,0.3,1), border-color 0.22s cubic-bezier(0.16,1,0.3,1);
+    font-weight: 500; line-height: 1.35;
+    display: block;
+  }
+  .toc a:hover { color: #555; border-left-color: #d0d0d0; }
+  .toc a.toc-active {
+    color: #0a192f; font-weight: 700;
+    border-left-color: #0a192f;
+  }
+</style>
+
+<style>
+.post-page { width: 100%; }
+
+/* PROGRESS BAR */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 2px;
+  background: var(--color-blue-deep); width: 0%;
+  z-index: 99999; transition: width 0.1s linear;
+}
+
+/* HERO */
+.post-hero {
+  padding: 12rem 0 4rem;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+.breadcrumb {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.72rem; font-weight: 600; color: #aaa; margin-bottom: 2rem;
+}
+.breadcrumb a { color: #aaa; text-decoration: none; transition: color 0.2s; }
+.breadcrumb a:hover { color: var(--color-text); }
+.bc-sep { opacity: 0.4; }
+
+.post-meta-top {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem;
+}
+.cat-badge {
+  font-size: 0.65rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+  border-radius: 50px; padding: 6px 14px;
+}
+.post-num-badge {
+  font-family: var(--font-serif); font-style: italic;
+  font-size: 1.1rem; color: #ccc; letter-spacing: -0.5px;
+}
+
+.post-title {
+  font-size: clamp(2.2rem, 4.5vw, 4rem);
+  font-weight: 800; letter-spacing: -1.5px; line-height: 1.05;
+  margin: 0 0 2.5rem; color: var(--color-text);
+  max-width: 860px;
+}
+
+.post-meta-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 2rem; flex-wrap: wrap;
+}
+.author-block { display: flex; align-items: center; gap: 12px; }
+.author-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--color-blue-deep); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; font-weight: 800; flex-shrink: 0;
+}
+.author-n { display: block; font-size: 0.85rem; font-weight: 700; color: var(--color-text); }
+.post-dt { display: block; font-size: 0.75rem; color: #aaa; font-weight: 500; margin-top: 2px; }
+.post-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px;
+  color: #888; background: rgba(0,0,0,0.04); border: 1px solid var(--color-border);
+  border-radius: 50px; padding: 4px 10px;
+}
+
+/* BANNER */
+.post-banner { padding: 0 5%; max-width: 1200px; margin: 3rem auto 0; }
+.post-banner-inner {
+  border-radius: 20px; height: 320px; position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.banner-grid-lines {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+.banner-title-watermark {
+  font-family: var(--font-serif); font-style: italic;
+  font-size: clamp(3rem, 7vw, 6rem); font-weight: 400;
+  color: rgba(255,255,255,0.06); text-align: center;
+  padding: 0 5%; line-height: 1; letter-spacing: -2px;
+  position: relative; z-index: 1;
+}
+
+/* BODY LAYOUT */
+.post-body { padding: 5rem 0 6rem; background: var(--color-bg-soft); }
+.post-layout {
+  display: grid; grid-template-columns: 240px 1fr; gap: 6rem; align-items: start;
+}
+
+/* SIDEBAR */
+.post-sidebar {
+  position: sticky; top: 130px;
+  align-self: start;
+}
+.sidebar-sticky {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  padding: 1.75rem 1.5rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+.sidebar-label {
+  font-size: 0.52rem; font-weight: 800; letter-spacing: 2.5px;
+  color: #ccc; text-transform: uppercase;
+  margin: 0 0 1.25rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.sidebar-label::before {
+  content: ''; display: block;
+  width: 18px; height: 1px; background: currentColor; flex-shrink: 0;
+}
+
+/* TOC track */
+.toc {
+  display: flex; flex-direction: column; gap: 0;
+  margin-bottom: 1.75rem;
+  border-left: 1.5px solid var(--color-border);
+  padding-left: 0;
+}
+
+.sidebar-divider { height: 1px; background: var(--color-border); margin-bottom: 1.25rem; }
+.back-link {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.3px;
+  color: #bbb; text-decoration: none;
+  transition: color 0.2s;
+}
+.back-link:hover { color: var(--color-blue-deep); }
+.back-link svg { transition: transform 0.3s; flex-shrink: 0; }
+.back-link:hover svg { transform: translateX(-3px); }
+
+/* RELATED */
+.related-section { padding: 6rem 0; background: var(--color-bg); }
+.related-title {
+  font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
+  letter-spacing: -1.5px; margin: 0 0 3rem; color: var(--color-text);
+}
+.related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+.related-card {
+  text-decoration: none; color: inherit; background: var(--color-bg-soft);
+  border: 1px solid var(--color-border);
+  transition: transform 0.4s var(--ease-smooth), box-shadow 0.4s, border-color 0.3s;
+}
+.related-card:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.14); }
+.related-visual { height: 160px; position: relative; overflow: hidden; }
+.related-num {
+  position: absolute; bottom: 1rem; left: 1.5rem;
+  font-family: var(--font-serif); font-style: italic;
+  font-size: 2.5rem; color: rgba(255,255,255,0.12); letter-spacing: -1px;
+}
+.related-body { padding: 1.5rem 1.75rem; }
+.cat-badge-sm {
+  font-size: 0.6rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+  color: #888; display: block; margin-bottom: 0.6rem;
+}
+.related-card-title {
+  font-size: 1.05rem; font-weight: 700; letter-spacing: -0.3px;
+  color: var(--color-text); margin: 0 0 1rem; line-height: 1.3;
+  transition: color 0.3s;
+}
+.related-card:hover .related-card-title { color: var(--color-blue-deep); }
+.related-link { font-size: 0.78rem; font-weight: 700; color: #bbb; transition: color 0.3s; }
+.related-card:hover .related-link { color: var(--color-blue-deep); }
+
+/* CTA */
+.post-cta { padding: 0 0 6rem; background: var(--color-bg); }
+.cta-box {
+  background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%);
+  padding: 4.5rem 5rem;
+  display: flex; justify-content: space-between; align-items: center; gap: 3rem;
+}
+.cta-left h2 { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 800; color: rgba(255,255,255,0.85); letter-spacing: -1px; margin: 0; line-height: 1.1; }
+.cta-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: #fff; color: var(--color-blue-deep);
+  padding: 16px 32px; border-radius: 100px;
+  text-decoration: none; font-size: 0.95rem; font-weight: 700;
+  transition: all 0.4s var(--ease-smooth); white-space: nowrap; flex-shrink: 0;
+}
+.cta-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(255,255,255,0.15); }
+.cta-btn svg { transition: transform 0.35s var(--ease-spring); }
+.cta-btn:hover svg { transform: translate(2px, -2px); }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .post-layout { grid-template-columns: 1fr; gap: 3rem; }
+  .post-sidebar { display: none; }
+  .related-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .post-hero { padding: 10rem 0 3rem; }
+  .post-title { letter-spacing: -1px; }
+  .post-banner { padding: 0 5%; }
+  .post-banner-inner { height: 200px; }
+  .post-body { padding: 3rem 0 4rem; }
+  .post-meta-row { flex-direction: column; align-items: flex-start; }
+  .cta-box { flex-direction: column; padding: 3rem 2rem; }
+  .cta-btn { width: 100%; justify-content: center; }
+  .post-cta { padding: 0 5% 4rem; }
+  .related-section { padding: 4rem 0; }
+
+  /* Article typography mobile */
+  .post-article h2 { font-size: 1.4rem; }
+  .post-article .article-lead { font-size: 1.1rem; }
+  .post-article blockquote p { font-size: 1.1rem; }
+}
+</style>
+
+<script>
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Reading progress bar
+  const bar = document.getElementById('progress-bar');
+  const article = document.getElementById('post-article');
+  if (bar && article) {
+    window.addEventListener('scroll', () => {
+      const rect = article.getBoundingClientRect();
+      const totalHeight = article.offsetHeight;
+      const scrolled = Math.max(0, -rect.top);
+      const pct = Math.min(100, (scrolled / totalHeight) * 100);
+      bar.style.width = pct + '%';
+    }, { passive: true });
+  }
+
+  // Build TOC from h2 elements in article
+  const toc = document.getElementById('toc');
+  const articleEl = document.getElementById('post-article');
+  if (toc && articleEl) {
+    const headings = articleEl.querySelectorAll<HTMLElement>('h2');
+    headings.forEach((h, i) => {
+      const id = `section-${i}`;
+      h.id = id;
+      const link = document.createElement('a');
+      link.href = `#${id}`;
+      link.textContent = h.textContent || '';
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      toc.appendChild(link);
+
+      ScrollTrigger.create({
+        trigger: h,
+        start: 'top 40%',
+        end: 'bottom 40%',
+        onEnter: () => setActive(id),
+        onEnterBack: () => setActive(id),
+      });
+    });
+  }
+
+  function setActive(id: string) {
+    document.querySelectorAll('.toc a').forEach(a => {
+      a.classList.toggle('toc-active', a.getAttribute('href') === `#${id}`);
+    });
+  }
+
+  // GSAP entrance animations
+  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+  tl.from('.breadcrumb', { opacity: 0, y: 10, duration: 0.7 }, 0.1)
+    .from('.post-meta-top', { opacity: 0, y: 12, duration: 0.8 }, 0.25)
+    .from('.post-title', { opacity: 0, y: 30, duration: 1.1 }, 0.35)
+    .from('.post-meta-row', { opacity: 0, y: 12, duration: 0.8 }, 0.7);
+
+  gsap.from('.post-banner-inner', {
+    opacity: 0, scale: 0.97, y: 20, duration: 1, ease: 'expo.out',
+    scrollTrigger: { trigger: '.post-banner', start: 'top 90%' }
+  });
+  gsap.from('.post-sidebar', {
+    opacity: 0, x: -20, duration: 0.9, ease: 'expo.out',
+    scrollTrigger: { trigger: '.post-body', start: 'top 80%' }
+  });
+  gsap.from('.post-article', {
+    opacity: 0, y: 20, duration: 1, ease: 'expo.out',
+    scrollTrigger: { trigger: '.post-body', start: 'top 80%' }
+  });
+  gsap.utils.toArray<HTMLElement>('.related-card').forEach((card, i) => {
+    gsap.from(card, {
+      opacity: 0, y: 30, duration: 0.8, ease: 'power3.out', delay: i * 0.08,
+      scrollTrigger: { trigger: card, start: 'top 88%' }
+    });
+  });
+});
+</script>

@@ -1,0 +1,256 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import Navbar from '../../../components/Navbar.astro';
+import Footer from '../../../components/Footer.astro';
+import WhatsApp from '../../../components/WhatsApp.astro';
+import { posts, formatDate } from '../../../data/blog';
+
+const isEn = true;
+const t = (o: { es: string; en: string }) => o.en;
+const lang: 'es' | 'en' = 'en';
+const root = '/en';
+
+const featured = posts.find(p => p.featured)!;
+const rest = posts.filter(p => !p.featured);
+
+const categories = [
+  { es: 'Todos', en: 'All' },
+  { es: 'B2B', en: 'B2B' },
+  { es: 'E-commerce', en: 'E-commerce' },
+  { es: 'Automatización', en: 'Automation' },
+];
+---
+
+<Layout title="Blog — Flouvia">
+  <Navbar />
+
+  <main class="blog-page">
+
+    <section class="blog-hero">
+      <div class="container">
+        <p class="eyebrow blog-eyebrow">INSIGHTS · PERSPECTIVES</p>
+        <h1 class="blog-title">The Flouvia <span class="editorial"> Blog.</span></h1>
+        <p class="blog-desc">Digital engineering, B2B strategy, and e-commerce analysis. No filler.</p>
+        <div class="blog-hero-meta">
+          <span class="post-count">{posts.length} articles</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="filter-bar">
+      <div class="container">
+        <div class="filter-pills">
+          {categories.map((cat, i) => (
+            <button
+              class={`filter-pill ${i === 0 ? 'active' : ''}`}
+              data-filter={i === 0 ? 'all' : cat.es}
+            >
+              {t(cat)}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <section class="blog-body">
+      <div class="container">
+
+        <div class="featured-wrapper" data-category={featured.category.es}>
+          <a href={`${root}/blog/${featured.slug}`} class="featured-card squircle">
+            <div class="featured-visual" style={`background: ${featured.categoryBg}`}>
+              <span class="featured-num">/01</span>
+              <div class="visual-grid-lines" aria-hidden="true"></div>
+            </div>
+            <div class="featured-body">
+              <div class="card-top">
+                <span class="cat-pill" style={`color: ${featured.categoryColor}; background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12);`}>
+                  {t(featured.category)}
+                </span>
+                <span class="read-time">{featured.readTime} min read</span>
+              </div>
+              <h2 class="featured-title">{t(featured.title)}</h2>
+              <p class="featured-excerpt">{t(featured.excerpt)}</p>
+              <div class="card-footer">
+                <div class="author-meta">
+                  <div class="author-dot">{featured.authorInitial}</div>
+                  <div>
+                    <span class="author-name">{featured.author}</span>
+                    <span class="post-date">{formatDate(featured.date, lang)}</span>
+                  </div>
+                </div>
+                <span class="read-link">Read article →</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="posts-grid">
+          {rest.map((post, idx) => (
+            <div class="post-card-wrapper" data-category={post.category.es}>
+              <a href={`${root}/blog/${post.slug}`} class="post-card squircle">
+                <div class="card-visual" style={`background: ${post.categoryBg}`}>
+                  <span class="card-num">/{String(idx + 2).padStart(2, '0')}</span>
+                  <div class="visual-grid-lines" aria-hidden="true"></div>
+                </div>
+                <div class="card-body">
+                  <div class="card-top">
+                    <span class="cat-pill cat-pill-dark" style={`color: ${post.categoryColor}; background: rgba(10,25,47,0.06); border-color: rgba(10,25,47,0.1);`}>
+                      {t(post.category)}
+                    </span>
+                    <span class="read-time read-time-dark">{post.readTime} min</span>
+                  </div>
+                  <h3 class="card-title">{t(post.title)}</h3>
+                  <p class="card-excerpt">{t(post.excerpt)}</p>
+                  <div class="card-footer card-footer-dark">
+                    <div class="author-meta">
+                      <div class="author-dot author-dot-dark">{post.authorInitial}</div>
+                      <span class="post-date post-date-dark">{formatDate(post.date, lang)}</span>
+                    </div>
+                    <span class="read-link read-link-dark">Read →</span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          ))}
+        </div>
+
+      </div>
+    </section>
+
+    <section class="blog-cta">
+      <div class="container">
+        <div class="cta-inner squircle-cta">
+          <div class="cta-text">
+            <p class="eyebrow" style="color: rgba(255,255,255,0.4);">WORK WITH US</p>
+            <h2>Ready to scale your <span class="editorial" style="color: #fff;">operation?</span></h2>
+          </div>
+          <a href="/en/contacto" class="cta-btn">
+            <span>Start architecture</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="19" x2="19" y2="5"/><polyline points="9 5 19 5 19 15"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+  <WhatsApp />
+</Layout>
+
+<style is:global>
+  :root {
+    --color-bg: #ffffff; --color-bg-soft: #fcfcfc;
+    --color-blue-deep: #0a192f; --color-text: #050505;
+    --color-text-muted: #555556; --color-border: rgba(0,0,0,0.08);
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-serif: 'Instrument Serif', serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { width: 100%; -webkit-font-smoothing: antialiased; margin: 0; }
+  body { background: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
+  .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+  .eyebrow { font-size: 0.62rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
+  .squircle { border-radius: 24px; overflow: hidden; transform: translateZ(0); }
+  .squircle-cta { border-radius: 28px; overflow: hidden; }
+</style>
+
+<style>
+.blog-page { width: 100%; overflow-x: clip; }
+.blog-hero { padding: 13rem 0 5rem; background: var(--color-bg); border-bottom: 1px solid var(--color-border); }
+.blog-eyebrow { opacity: 0; }
+.blog-title { font-size: clamp(3.5rem, 7vw, 6.5rem); font-weight: 800; letter-spacing: -3px; line-height: 0.9; margin: 0 0 2rem; color: var(--color-text); opacity: 0; }
+.blog-desc { font-size: 1.2rem; color: var(--color-text-muted); max-width: 520px; line-height: 1.5; margin: 0 0 2rem; opacity: 0; }
+.blog-hero-meta { opacity: 0; }
+.post-count { font-size: 0.72rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #bbb; border: 1px solid var(--color-border); padding: 6px 14px; border-radius: 50px; }
+.filter-bar { padding: 2rem 0; background: var(--color-bg); border-bottom: 1px solid var(--color-border); position: sticky; top: 80px; z-index: 100; backdrop-filter: blur(16px); }
+.filter-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+.filter-pill { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; color: var(--color-text-muted); background: transparent; border: 1px solid var(--color-border); border-radius: 50px; padding: 8px 18px; cursor: pointer; transition: all 0.3s var(--ease-smooth); }
+.filter-pill:hover { color: var(--color-text); border-color: rgba(0,0,0,0.2); }
+.filter-pill.active { background: var(--color-blue-deep); color: #fff; border-color: var(--color-blue-deep); }
+.blog-body { padding: 5rem 0 6rem; background: var(--color-bg-soft); }
+.featured-wrapper { margin-bottom: 3rem; }
+.featured-card { display: grid; grid-template-columns: 1fr 1fr; min-height: 460px; text-decoration: none; color: inherit; background: var(--color-blue-deep); border: 1px solid rgba(255,255,255,0.04); transition: transform 0.5s var(--ease-smooth), box-shadow 0.5s var(--ease-smooth); }
+.featured-card:hover { transform: translateY(-6px); box-shadow: 0 30px 60px rgba(0,0,0,0.15); }
+.featured-visual { position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 2.5rem; }
+.featured-num { font-family: var(--font-serif); font-style: italic; font-size: 5rem; color: rgba(255,255,255,0.08); line-height: 1; letter-spacing: -3px; position: absolute; bottom: 1.5rem; left: 2.5rem; transition: color 0.5s, transform 0.5s var(--ease-smooth); }
+.featured-card:hover .featured-num { color: rgba(255,255,255,0.15); transform: scale(1.05); }
+.card-num { font-family: var(--font-serif); font-style: italic; font-size: 3.5rem; color: rgba(255,255,255,0.1); line-height: 1; letter-spacing: -2px; position: absolute; bottom: 1.5rem; left: 2rem; transition: color 0.5s, transform 0.5s var(--ease-smooth); }
+.post-card:hover .card-num { color: rgba(255,255,255,0.18); transform: scale(1.06); }
+.visual-grid-lines { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 40px 40px; }
+.featured-body { padding: 3.5rem; display: flex; flex-direction: column; justify-content: space-between; }
+.card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+.cat-pill { font-size: 0.62rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; border-radius: 50px; padding: 5px 12px; }
+.read-time { font-size: 0.72rem; font-weight: 600; color: rgba(255,255,255,0.4); }
+.read-time-dark { color: #aaa; }
+.featured-title { font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 800; letter-spacing: -0.8px; line-height: 1.15; margin: 0 0 1.5rem; color: #fff; }
+.featured-excerpt { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.6); margin: 0; }
+.card-footer { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.5rem; margin-top: 2rem; }
+.card-footer-dark { border-top-color: var(--color-border); }
+.author-meta { display: flex; align-items: center; gap: 10px; }
+.author-dot { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; color: rgba(255,255,255,0.7); flex-shrink: 0; }
+.author-dot-dark { background: rgba(10,25,47,0.06); border-color: rgba(10,25,47,0.1); color: var(--color-blue-deep); }
+.author-name { display: block; font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.85); }
+.post-date { display: block; font-size: 0.72rem; color: rgba(255,255,255,0.4); }
+.post-date-dark { color: #aaa; font-size: 0.75rem; font-weight: 500; }
+.read-link { font-size: 0.78rem; font-weight: 700; color: rgba(255,255,255,0.5); transition: color 0.3s, transform 0.3s; }
+.read-link-dark { color: #aaa; }
+.featured-card:hover .read-link { color: #fff; transform: translateX(4px); }
+.post-card:hover .read-link-dark { color: var(--color-blue-deep); transform: translateX(4px); }
+.posts-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+.post-card { display: flex; flex-direction: column; text-decoration: none; color: inherit; background: var(--color-bg); border: 1px solid var(--color-border); transition: transform 0.4s var(--ease-smooth), box-shadow 0.4s, border-color 0.3s; }
+.post-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.14); }
+.card-visual { height: 200px; position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 1.5rem; }
+.card-body { padding: 2rem; flex: 1; display: flex; flex-direction: column; }
+.card-title { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.4px; line-height: 1.2; margin: 0 0 0.8rem; color: var(--color-text); transition: color 0.3s; }
+.post-card:hover .card-title { color: var(--color-blue-deep); }
+.card-excerpt { font-size: 0.93rem; line-height: 1.7; color: var(--color-text-muted); margin: 0; flex: 1; }
+.blog-cta { padding: 0 0 6rem; background: var(--color-bg-soft); }
+.cta-inner { background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%); padding: 4.5rem 5rem; display: flex; justify-content: space-between; align-items: center; gap: 3rem; position: relative; overflow: hidden; }
+.cta-text h2 { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 800; color: rgba(255,255,255,0.85); letter-spacing: -1px; margin: 0; line-height: 1.1; }
+.cta-btn { display: inline-flex; align-items: center; gap: 10px; background: #fff; color: var(--color-blue-deep); padding: 16px 32px; border-radius: 100px; text-decoration: none; font-size: 0.95rem; font-weight: 700; transition: all 0.4s var(--ease-smooth); white-space: nowrap; flex-shrink: 0; }
+.cta-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(255,255,255,0.15); }
+.post-card-wrapper.hidden, .featured-wrapper.hidden { display: none; }
+@media (max-width: 1024px) { .featured-card { grid-template-columns: 1fr; } .featured-visual { min-height: 240px; } .posts-grid { grid-template-columns: 1fr; } }
+@media (max-width: 768px) { .blog-hero { padding: 11rem 0 4rem; } .blog-title { letter-spacing: -2px; } .filter-bar { top: 70px; } .blog-body { padding: 3rem 0 4rem; } .featured-body { padding: 2rem; } .featured-title { font-size: 1.5rem; } .card-body { padding: 1.5rem; } .cta-inner { flex-direction: column; padding: 3rem 2rem; text-align: center; } .cta-btn { width: 100%; justify-content: center; } .blog-cta { padding: 0 5% 4rem; } }
+</style>
+
+<script>
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);
+
+document.addEventListener('DOMContentLoaded', () => {
+  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+  tl.to('.blog-eyebrow', { opacity: 1, y: 0, duration: 0.8 }, 0.1)
+    .from('.blog-title', { y: 40, duration: 1.1 }, 0.2)
+    .to('.blog-title', { opacity: 1, duration: 0.1 }, 0.2)
+    .to('.blog-desc', { opacity: 1, y: 0, duration: 0.8 }, 0.55)
+    .to('.blog-hero-meta', { opacity: 1, duration: 0.6 }, 0.7);
+  gsap.set('.blog-title', { opacity: 0 });
+
+  gsap.from('.featured-card', { y: 50, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: '.featured-wrapper', start: 'top 85%' } });
+  gsap.utils.toArray<HTMLElement>('.post-card').forEach((card, i) => {
+    gsap.from(card, { y: 40, opacity: 0, duration: 0.8, ease: 'power3.out', delay: i * 0.06, scrollTrigger: { trigger: card, start: 'top 88%' } });
+  });
+
+  const pills = document.querySelectorAll<HTMLButtonElement>('.filter-pill');
+  const featured = document.querySelector<HTMLElement>('.featured-wrapper');
+  const cards = document.querySelectorAll<HTMLElement>('.post-card-wrapper');
+
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      pills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const filter = pill.dataset.filter;
+      if (featured) featured.classList.toggle('hidden', filter !== 'all' && featured.dataset.category !== filter);
+      cards.forEach(card => card.classList.toggle('hidden', filter !== 'all' && card.dataset.category !== filter));
+    });
+  });
+});
+</script>

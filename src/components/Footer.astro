@@ -41,7 +41,7 @@ const isEn = lang === 'en';
                     <h4 class="col-title">{isEn ? 'PORTFOLIO' : 'PORTAFOLIO'}</h4>
                     <nav class="nav-links">
                         <a href={isEn ? '/en/' : '/'} class="link-item">
-                            <span>{t('nav.work')}</span>
+                            <span>{isEn ? 'HOME' : 'INICIO'}</span>
                             <span class="link-arrow">→</span>
                         </a>
                         <a href={isEn ? '/en/servicios' : '/servicios'} class="link-item">
@@ -50,6 +50,10 @@ const isEn = lang === 'en';
                         </a>
                         <a href={isEn ? '/en/casos' : '/casos'} class="link-item">
                             <span>{t('nav.cases')}</span>
+                            <span class="link-arrow">→</span>
+                        </a>
+                        <a href={isEn ? '/en/blog' : '/blog'} class="link-item">
+                            <span>BLOG</span>
                             <span class="link-arrow">→</span>
                         </a>
                     </nav>
