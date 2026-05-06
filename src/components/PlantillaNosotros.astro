@@ -238,6 +238,12 @@ const parseSerifTitle = (title: string) => {
                             <h2 class="section-heading">{t('about.reviews.title')} <span class="editorial">{t('about.reviews.title_ed')}</span></h2>
                         </div>
                     </div>
+                    <div class="t-scroll-hint">
+                        <span class="scroll-pill">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            {isEn ? 'Swipe to explore' : 'Desliza para explorar'}
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -468,6 +474,16 @@ const parseSerifTitle = (title: string) => {
     .btn-contact-sober:hover { background: #fff; color: var(--color-blue-deep); }
     .btn-contact-sober:hover .arrow-circle-small { background: var(--color-blue-deep); color: #fff; transform: translateX(3px); }
 
+    /* Scroll hint — oculto en desktop */
+    .t-scroll-hint { display: none; }
+    .scroll-pill {
+        display: inline-flex; align-items: center; gap: 6px;
+        font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+        color: #888; background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.07);
+        padding: 7px 14px; border-radius: 50px;
+    }
+    .scroll-pill svg { opacity: 0.6; flex-shrink: 0; }
+
     /* 6. TESTIMONIOS */
     .testimonials-slider-pro { padding-bottom: 2rem; }
     .header-flex { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; }
@@ -520,7 +536,7 @@ const parseSerifTitle = (title: string) => {
         .m-visual-side { order: -1; }
         .image-frame-luxe { aspect-ratio: 16/9; } 
         .monolith-grid { grid-template-columns: 1fr; gap: 2rem; }
-        .thin-grid { grid-template-columns: 1fr; gap: 3rem;}
+        .thin-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem 3rem; }
         .adv-banner-flex { flex-direction: column; align-items: flex-start; gap: 2rem; }
         .adv-b-right { border-left: none; padding-left: 0; flex-direction: column; align-items: flex-start; gap: 2rem;}
         .cta-inner-flex { flex-direction: column; align-items: flex-start; gap: 3rem;}
@@ -549,21 +565,36 @@ const parseSerifTitle = (title: string) => {
         .m-top-zone { margin-bottom: 2rem;}
 
         .thin-metrics-section { padding: 4rem 0; }
-        .thin-card { padding: 1.5rem 0;}
-        .thin-num { font-size: 3.5rem; }
+        .thin-grid { grid-template-columns: repeat(2, 1fr); gap: 1.8rem 2rem; padding-top: 2.5rem; }
+        .thin-card { padding: 0.75rem 0; }
+        .thin-num { font-size: clamp(2.4rem, 9vw, 3.5rem); }
+        .thin-sym { font-size: 1.4rem; }
+        .thin-desc { font-size: 1rem; max-width: none; line-height: 1.4; }
 
         .advantage-sober-banner { padding: 5rem 0; }
         .adv-b-title { font-size: 2.5rem; }
         .adv-b-desc { font-size: 1.1rem; }
 
-        .testimonials-slider-pro { padding: 4rem 0; width: 100%; overflow: hidden;}
-        .header-title-mobile h2 { font-size: 2.4rem; margin-bottom: 1.5rem; letter-spacing: -1px;}
-        .t-track-wrapper { padding: 3rem 10vw; scroll-padding-left: 10vw; scroll-behavior: smooth;}
-        .t-track { gap: 16px; }
-        .t-card-pro { width: 85vw; padding: 3rem 2.5rem; transform: scale(0.85); opacity: 0.5; transition: transform 0.5s var(--ease-spring), opacity 0.5s var(--ease-spring); min-height: auto;}
-        .t-card-pro.is-centered { transform: scale(1.05); opacity: 1; box-shadow: 0 20px 40px rgba(0,0,0,0.1); z-index: 2; }
-        .t-quote-watermark { font-size: 8rem; top: -15px; left: 15px;}
-        .t-text { font-size: 1.25rem; margin-bottom: 2rem;}
+        .testimonials-slider-pro { padding: 4rem 0; width: 100%; overflow: hidden; }
+        .header-flex { margin-bottom: 0.5rem; }
+        .header-title-mobile h2 { font-size: 2.2rem; margin-bottom: 0.5rem; letter-spacing: -1px; }
+        .t-scroll-hint { display: flex; margin-top: 1rem; }
+        .t-track-wrapper { padding: 2rem 0 3rem 5%; scroll-padding-left: 5%; scroll-behavior: smooth; }
+        .t-track { gap: 14px; }
+        .t-card-pro {
+            width: 78vw; flex-shrink: 0;
+            padding: 2.5rem 2rem;
+            transform: scale(0.92); opacity: 0.55;
+            transform-origin: left center;
+            transition: transform 0.5s var(--ease-spring), opacity 0.5s var(--ease-spring);
+            min-height: auto;
+            scroll-snap-align: start;
+        }
+        .t-card-pro.is-centered { transform: scale(1); opacity: 1; box-shadow: 0 20px 40px rgba(0,0,0,0.1); z-index: 2; }
+        .t-quote-watermark { font-size: 8rem; top: -15px; left: 15px; }
+        .t-text { font-size: 1.2rem; margin-bottom: 1.5rem; }
+        .t-author-strip { padding-top: 1.5rem; }
+        .t-avatar { width: 42px; height: 42px; font-size: 0.95rem; }
 
         .cta-final-clean { padding-bottom: 4rem; }
         .cta-box-refined { padding: 3rem 2rem; border-radius: 24px; text-align: center; }
