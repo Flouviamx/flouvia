@@ -7,6 +7,22 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
+
+const user = await Astro.locals.currentUser();
+const firstName = user?.firstName || '';
+const lastName  = user?.lastName  || '';
+const fullName  = [firstName, lastName].filter(Boolean).join(' ');
+const email     = user?.emailAddresses?.[0]?.emailAddress || '';
+
+const calendlyBase = 'https://calendly.com/flouvia-mx/consultoria';
+const params = new URLSearchParams({
+  hide_gdpr_banner: '1',
+  primary_color:    '0a192f',
+  text_color:       '111111',
+  ...(fullName && { name:  fullName }),
+  ...(email    && { email: email    }),
+});
+const calendlyUrl = `${calendlyBase}?${params.toString()}`;
 ---
 
 <div class="pure-white-wrapper">
@@ -95,36 +111,14 @@ const t = useTranslations(lang);
                             <span class="sd yellow"></span>
                             <span class="sd green"></span>
                         </div>
-                        <span class="shell-url">calendly.com/flouvia</span>
+                        <span class="shell-url">calendly.com/flouvia-mx/consultoria</span>
                         <div class="shell-secure">
                             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                         </div>
                     </div>
 
                     <div class="calendly-body" id="calendly-container">
-                        <!--
-                            PASTE YOUR CALENDLY IFRAME HERE.
-                            Example:
-                            <iframe src="https://calendly.com/yourlink" width="100%" height="100%" frameborder="0"></iframe>
-                        -->
-                        <div class="calendly-placeholder">
-                            <div class="ph-shimmer-grid">
-                                <div class="ph-row wide"></div>
-                                <div class="ph-row medium"></div>
-                                <div class="ph-slot-grid">
-                                    {Array.from({ length: 9 }).map(() => (
-                                        <div class="ph-slot"></div>
-                                    ))}
-                                </div>
-                                <div class="ph-row narrow"></div>
-                            </div>
-                            <div class="ph-cta-area">
-                                <div class="ph-icon">
-                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                                </div>
-                                <p class="ph-text">{t('cal.placeholder')}</p>
-                            </div>
-                        </div>
+                        <div class="calendly-inline-widget" data-url={calendlyUrl}></div>
                     </div>
                 </div>
             </div>
@@ -269,65 +263,15 @@ const t = useTranslations(lang);
     .shell-secure { color: var(--color-text-muted); opacity: 0.5; display: flex; }
 
     .calendly-body {
-        min-height: 600px;
+        min-height: 660px;
         display: flex; align-items: stretch;
     }
+    .calendly-inline-widget {
+        width: 100%; min-height: 660px; flex-grow: 1;
+    }
     .calendly-body iframe {
-        width: 100%; min-height: 600px; border: none; display: block; flex-grow: 1;
+        width: 100%; min-height: 660px; border: none; display: block; flex-grow: 1;
     }
-
-    /* Skeleton placeholder */
-    .calendly-placeholder {
-        display: flex; flex-direction: column;
-        width: 100%; min-height: 600px; padding: 2.5rem;
-        gap: 2rem;
-    }
-
-    .ph-shimmer-grid {
-        display: flex; flex-direction: column; gap: 1.2rem; flex-grow: 1;
-    }
-    .ph-row {
-        height: 12px; border-radius: 6px;
-        background: linear-gradient(90deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.07) 50%, rgba(0,0,0,0.04) 100%);
-        background-size: 200% 100%;
-        animation: shimmer 2s ease-in-out infinite;
-    }
-    .ph-row.wide   { width: 65%; }
-    .ph-row.medium { width: 45%; }
-    .ph-row.narrow { width: 30%; }
-
-    .ph-slot-grid {
-        display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem;
-        margin: 0.5rem 0;
-    }
-    .ph-slot {
-        height: 52px; border-radius: 12px;
-        background: rgba(0,0,0,0.025);
-        border: 1px solid rgba(0,0,0,0.04);
-        animation: shimmer 2s ease-in-out infinite;
-    }
-    .ph-slot:nth-child(2) { animation-delay: 0.1s; }
-    .ph-slot:nth-child(3) { animation-delay: 0.2s; }
-    .ph-slot:nth-child(4) { animation-delay: 0.15s; }
-    .ph-slot:nth-child(5) { animation-delay: 0.25s; }
-    .ph-slot:nth-child(6) { animation-delay: 0.35s; }
-    .ph-slot:nth-child(7) { animation-delay: 0.2s; }
-    .ph-slot:nth-child(8) { animation-delay: 0.3s; }
-    .ph-slot:nth-child(9) { animation-delay: 0.4s; }
-
-    .ph-cta-area {
-        display: flex; flex-direction: column; align-items: center;
-        gap: 0.9rem; padding: 2rem 0 1rem;
-        border-top: 1px solid var(--color-border-subtle);
-        text-align: center;
-    }
-    .ph-icon {
-        width: 56px; height: 56px; border-radius: 16px;
-        background: rgba(0,0,0,0.025); border: 1px solid rgba(0,0,0,0.05);
-        display: flex; align-items: center; justify-content: center;
-        color: var(--color-text-muted);
-    }
-    .ph-text { font-size: 0.95rem; color: var(--color-text-muted); font-weight: 500; }
 
     /* Haptics */
     .haptic-soft:active { transform: scale(0.985); }
@@ -337,11 +281,6 @@ const t = useTranslations(lang);
         0%, 100% { box-shadow: 0 0 0 0 rgba(52,199,89,0.55); transform: scale(1); }
         55%       { box-shadow: 0 0 0 5px rgba(52,199,89,0.0);  transform: scale(1.18); }
     }
-    @keyframes shimmer {
-        0%, 100% { opacity: 0.7; }
-        50%       { opacity: 1; }
-    }
-
     /* Responsive */
     @media (max-width: 960px) {
         .cal-split-grid { grid-template-columns: 1fr; gap: 3rem; }
@@ -355,6 +294,8 @@ const t = useTranslations(lang);
     }
 </style>
 
+<script is:inline src="https://assets.calendly.com/assets/external/widget.js"></script>
+
 <script>
     import { gsap } from "gsap";
 
@@ -365,32 +306,22 @@ const t = useTranslations(lang);
         tl.to(".dashboard-header", { y: 0, opacity: 1, duration: 1.1, ease: "expo.out" });
         tl.to(".cal-split-grid",   { y: 0, opacity: 1, scale: 1, duration: 1.4, ease: "expo.out" }, "-=0.8");
 
-        // Info pills slide in from left
         const pills = document.querySelectorAll('.info-pill');
         if (pills.length > 0) {
             gsap.set(pills, { x: -14, opacity: 0 });
             tl.to(pills, { x: 0, opacity: 1, duration: 0.6, stagger: 0.12, ease: "expo.out" }, "-=1.0");
         }
 
-        // Feature rows fade up
         const feats = document.querySelectorAll('.feature-row');
         if (feats.length > 0) {
             gsap.set(feats, { y: 12, opacity: 0 });
             tl.to(feats, { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "expo.out" }, "-=0.8");
         }
 
-        // Shell drifts up from below with extra spring
         const shell = document.querySelector('.calendly-shell');
         if (shell) {
             gsap.set(shell, { y: 40, opacity: 0, scale: 0.98 });
             tl.to(shell, { y: 0, opacity: 1, scale: 1, duration: 1.8, ease: "expo.out" }, "-=1.4");
-        }
-
-        // Slot cards stagger in
-        const slots = document.querySelectorAll('.ph-slot');
-        if (slots.length > 0) {
-            gsap.set(slots, { scale: 0.88, opacity: 0 });
-            tl.to(slots, { scale: 1, opacity: 1, duration: 0.5, stagger: 0.04, ease: "back.out(1.5)" }, "-=1.2");
         }
     });
 </script>
