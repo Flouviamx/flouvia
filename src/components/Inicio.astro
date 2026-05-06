@@ -55,6 +55,13 @@ const t = useTranslations(lang);
                     </div>
                 </div>
 
+                <div class="tech-scroll-hint">
+                    <span class="scroll-pill">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        {lang === 'en' ? 'Swipe to explore' : 'Desliza para explorar'}
+                    </span>
+                </div>
+
                 <div class="spotlight-grid reveal-blur" style="--delay: 0.3s;">
 
                     <div class="tech-card">
@@ -188,6 +195,12 @@ const t = useTranslations(lang);
                         <div class="carousel-nav desktop-only">
                             <span class="nav-hint">{lang === 'en' ? 'Swipe →' : 'Desliza →'}</span>
                         </div>
+                    </div>
+                    <div class="carousel-mobile-hint">
+                        <span class="scroll-pill">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            {lang === 'en' ? 'Swipe to explore' : 'Desliza para explorar'}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -420,6 +433,18 @@ const t = useTranslations(lang);
 
     .squircle { border-radius: 24px; transform: translateZ(0); overflow: hidden; }
     .cta-squircle { border-radius: 32px; transform: translateZ(0); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
+
+    /* Scroll hints — hidden on desktop, shown only on mobile */
+    .tech-scroll-hint,
+    .carousel-mobile-hint { display: none; }
+
+    .scroll-pill {
+        display: inline-flex; align-items: center; gap: 6px;
+        font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+        color: #888; background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.07);
+        padding: 7px 14px; border-radius: 50px;
+    }
+    .scroll-pill svg { opacity: 0.6; flex-shrink: 0; }
 </style>
 
 <style>
@@ -709,15 +734,18 @@ const t = useTranslations(lang);
         .btn-luxe { width: 100%; padding: 18px 0; font-size: 1.05rem;}
 
         /* TECNOLOGÍA */
-        .tech-spotlight { padding: 4rem 0; overflow: hidden; width: 100%;}
+        .tech-spotlight { padding: 4rem 0; overflow: hidden; width: 100%; position: relative; }
+        .tech-scroll-hint {
+            display: flex; margin: 1rem 0 1.2rem; padding: 0 5%;
+        }
         .spotlight-grid {
             display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
-            gap: 12px; padding: 1rem 5% 1rem 5%; padding-right: 25%;
+            gap: 12px; padding: 0.5rem 5% 1.5rem;
             scrollbar-width: none;
             border-radius: 0; border: none; background: transparent;
         }
         .spotlight-grid::-webkit-scrollbar { display: none; }
-        .tech-card { min-width: 200px; scroll-snap-align: center; border-radius: 20px; min-height: 196px; border: 1px solid rgba(0,0,0,0.07); }
+        .tech-card { min-width: 185px; scroll-snap-align: start; border-radius: 20px; min-height: 196px; border: 1px solid rgba(0,0,0,0.07); flex-shrink: 0; }
         .tech-card::before { display: none; }
         .card-content { min-height: 196px; }
         .tc-mark { opacity: 0.6; }
@@ -728,69 +756,77 @@ const t = useTranslations(lang);
         .tech-card:active .tool-name { color: #fff; }
 
         /* CARRUSEL CASOS */
-        .clients-vertical-carousel { 
-            padding: calc(5rem - 25px) 0; 
-            overflow: hidden; width: 100%; 
+        .clients-vertical-carousel {
+            padding: 4rem 0 4rem;
+            overflow: hidden; width: 100%;
         }
-        .header-title-mobile h2 { font-size: 2.4rem; margin-bottom: 1.5rem; letter-spacing: -1px;}
-        
-        .carousel-track-wrapper { 
-            padding: 3rem 10vw; 
-            scroll-padding-left: 10vw; 
-            scroll-behavior: smooth; width: 100%; margin-top: 0; 
+        .header-flex { margin-bottom: 0.5rem; }
+        .header-title-mobile h2 { font-size: 2.2rem; margin-bottom: 0.5rem; letter-spacing: -1px; }
+        .carousel-mobile-hint {
+            display: flex; margin-top: 1rem;
+        }
+
+        .carousel-track-wrapper {
+            padding: 2rem 0 3rem 5%;
+            scroll-padding-left: 5%;
+            scroll-behavior: smooth; width: 100%; margin-top: 0;
             scroll-snap-type: x mandatory;
         }
-        .carousel-track { gap: 16px; }
-        
-        .vertical-card { 
-            width: 80vw; 
-            height: 60vh; max-height: 480px;
-            scroll-snap-align: center; 
-            transform: scale(0.85); 
-            opacity: 0.5;
-            transition: transform 0.5s var(--ease-ios), opacity 0.5s var(--ease-ios); 
-            border: 1px solid rgba(0,0,0,0.05); transform-origin: center center;
+        .carousel-track { gap: 14px; }
+
+        .vertical-card {
+            width: 76vw;
+            height: 58vh; max-height: 460px;
+            scroll-snap-align: start;
+            transform: scale(0.92);
+            opacity: 0.55;
+            transition: transform 0.5s var(--ease-ios), opacity 0.5s var(--ease-ios);
+            border: 1px solid rgba(0,0,0,0.05); transform-origin: left center;
+            flex-shrink: 0;
         }
-        
-        .vertical-card.is-centered { 
-            transform: scale(1.05); 
-            opacity: 1; 
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15); z-index: 2; 
+
+        .vertical-card.is-centered {
+            transform: scale(1);
+            opacity: 1;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12); z-index: 2;
         }
-        
+
         .card-num-luxury { font-size: 1.4rem; top: 1rem; left: 1.5rem; }
-        .card-overlay { padding: 3rem 2rem 2rem 2rem; background: linear-gradient(transparent, rgba(0,0,0,0.9));}
+        .card-overlay { padding: 3rem 2rem 2rem 2rem; background: linear-gradient(transparent, rgba(0,0,0,0.9)); }
 
         /* SERVICIOS */
-        .services-rows { padding: 4rem 0; }
-        .rows-wrapper { margin-top: 2.5rem; }
-        .service-row { grid-template-columns: 25px 1fr 35px; gap: 1.5rem; padding: 2.5rem 0; margin: 0; }
-        .row-num { display: block; font-size: 0.8rem; padding-top: 5px; color: #aaa;}
-        .row-content h3 { font-size: 1.6rem; margin-bottom: 0.8rem; letter-spacing: -0.5px;}
-        .row-content p { font-size: 1rem; }
-        .row-action { display: flex; align-items: flex-start; padding-top: 2px;}
-        .arrow-circle { width: 40px; height: 40px; border-color: rgba(0,0,0,0.1);}
-        .arrow-circle svg { width: 16px; height: 16px; }
-        .service-row:active { transform: scale(0.98); transition: 0.1s;}
+        .services-rows { padding: 4rem 0 3rem; }
+        .services-rows .section-header { margin-bottom: 0; }
+        .rows-wrapper { margin-top: 2rem; }
+        .service-row { grid-template-columns: 28px 1fr 36px; gap: 1.2rem; padding: 2rem 0; margin: 0; }
+        .row-num { display: block; font-size: 0.75rem; padding-top: 4px; color: #bbb; }
+        .row-content h3 { font-size: 1.4rem; margin-bottom: 0.6rem; letter-spacing: -0.5px; }
+        .row-content p { font-size: 0.97rem; line-height: 1.55; }
+        .row-action { display: flex; align-items: flex-start; padding-top: 2px; }
+        .arrow-circle { width: 38px; height: 38px; border-color: rgba(0,0,0,0.1); }
+        .arrow-circle svg { width: 15px; height: 15px; }
+        .service-row:active { transform: scale(0.98); transition: 0.1s; }
         .service-row:active .animated-border { width: 100%; transition: 0.2s; }
         .service-row:active .arrow-circle { background: #000; color: #fff; border-color: #000; transform: rotate(-45deg); }
 
         /* PROTOCOLO */
-        .protocol-section { padding: 5rem 0;}
+        .protocol-section { padding: 4rem 0 5rem; }
+        .protocol-timeline { gap: 2.5rem; }
         .protocol-step { gap: 1.5rem; }
-        .protocol-step:hover { transform: translateX(0); } 
+        .protocol-step:hover { transform: translateX(0); }
         .step-node { width: 20px; height: 20px; }
         .watermark-num { font-size: 4rem; top: -20px; left: -10px; }
-        .step-content h4 { font-size: 1.4rem; }
+        .step-content h4 { font-size: 1.3rem; }
+        .step-content p { font-size: 1rem; }
 
         /* CTA */
-        .cta-integrated { padding: 0 5% 6rem 5%; }
-        .cta-card-blue { padding: 5rem 2rem; box-shadow: 0 20px 40px rgba(5,11,20,0.25), inset 0 1px 0 rgba(255,255,255,0.08);}
-        .cta-inner-flex { flex-direction: column; align-items: center; gap: 3rem; width: 100%;}
+        .cta-integrated { padding: 0 5% 5rem 5%; }
+        .cta-card-blue { padding: 4rem 2rem; box-shadow: 0 20px 40px rgba(5,11,20,0.25), inset 0 1px 0 rgba(255,255,255,0.08); }
+        .cta-inner-flex { flex-direction: column; align-items: center; gap: 2.5rem; width: 100%; }
         .cta-text-side { display: flex; flex-direction: column; align-items: center; }
-        .cta-title-luxe { font-size: 3rem; text-align: center; line-height: 1; letter-spacing: -1.5px; margin-top: 0.5rem;}
+        .cta-title-luxe { font-size: 2.8rem; text-align: center; line-height: 1; letter-spacing: -1.5px; margin-top: 0.5rem; }
         .cta-action-side { width: 100%; }
-        .btn-glow-blue { width: 100%; padding: 20px 0; justify-content: center; font-size: 1.05rem; box-shadow: 0 10px 20px rgba(255,255,255,0.05);}
+        .btn-glow-blue { width: 100%; padding: 20px 0; justify-content: center; font-size: 1.05rem; box-shadow: 0 10px 20px rgba(255,255,255,0.05); }
     }
 </style>
 
@@ -802,7 +838,6 @@ const t = useTranslations(lang);
     gsap.registerPlugin(ScrollTrigger, SplitText);
 
     document.addEventListener('DOMContentLoaded', () => {
-        const isMobile = window.innerWidth <= 768;
         const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         // GSAP controls hero — fully clear CSS fallback (.reveal-blur leaves filter+transform behind)
