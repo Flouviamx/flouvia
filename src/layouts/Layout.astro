@@ -19,38 +19,39 @@ const lang = getLangFromUrl(Astro.url);
         
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         
+        <!-- Favicon — PNG first so mobile browsers pick it up for tabs -->
+        <link rel="icon" type="image/png" sizes="512x512" href="/android-touch-icon-512.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/android-touch-icon.png" />
         <link id="favicon-tag" rel="icon" type="image/svg+xml" href="/favicon-light.svg" />
-<link rel="apple-touch-icon" href="/favicon-light.svg" />
+        <!-- favicon.ico sigue como último fallback para browsers muy antiguos -->
 
-<script is:inline>
-  // Función para cambiar el favicon manualmente
-  function updateFavicon() {
-    const favicon = document.getElementById('favicon-tag');
-    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if (isDark) {
-      favicon.href = '/favicon-dark.svg';
-    } else {
-      favicon.href = '/favicon-light.svg';
-    }
-  }
+        <!-- iOS home screen icon (must be PNG, SVG is ignored by Safari) -->
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
-  // Ejecutar al cargar la página
-  updateFavicon();
+        <!-- PWA manifest -->
+        <link rel="manifest" href="/manifest.json" />
 
-  // Escuchar si el usuario cambia el modo mientras tiene la página abierta
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateFavicon);
-</script>
+        <script is:inline>
+          function updateFavicon() {
+            const favicon = document.getElementById('favicon-tag');
+            if (!favicon) return;
+            favicon.href = window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? '/favicon-dark.svg'
+              : '/favicon-light.svg';
+          }
+          updateFavicon();
+          window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateFavicon);
+        </script>
 
-<link rel="apple-touch-icon" href="/favicon-light.svg" />
-        
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-        
-        <meta name="theme-color" content="#ffffff" />
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+        <!-- PWA / mobile chrome -->
+        <meta name="theme-color" content="#0a192f" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-title" content="Flouvia" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         
         <title>{title}</title>
     </head>
