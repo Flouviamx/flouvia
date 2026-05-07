@@ -70,7 +70,9 @@ const t = useTranslations(lang);
                                 <span class="cell-label">COMMERCE ENGINE</span>
                                 <span class="tc-num">01</span>
                             </div>
-                            <div class="logo-slot"></div>
+                            <div class="logo-slot">
+                                <img src="/imgs/Logo-Shopify.png" alt="Shopify" class="tc-logo" />
+                            </div>
                             <div class="tc-foot">
                                 <p class="tool-name">Shopify<span class="tool-tier"> Plus</span></p>
                             </div>
@@ -83,7 +85,9 @@ const t = useTranslations(lang);
                                 <span class="cell-label">DATA LOGISTICS</span>
                                 <span class="tc-num">02</span>
                             </div>
-                            <div class="logo-slot"></div>
+                            <div class="logo-slot">
+                                <img src="/imgs/Logo-Aritable.png" alt="Airtable" class="tc-logo" />
+                            </div>
                             <div class="tc-foot">
                                 <p class="tool-name">Airtable</p>
                             </div>
@@ -97,13 +101,7 @@ const t = useTranslations(lang);
                                 <span class="tc-num">03</span>
                             </div>
                             <div class="logo-slot">
-                                <svg class="tc-mark" viewBox="0 0 48 16" fill="currentColor" aria-hidden="true">
-                                    <circle cx="6" cy="8" r="5.5"/>
-                                    <line x1="11.5" y1="8" x2="18.5" y2="8" stroke="currentColor" stroke-width="2"/>
-                                    <circle cx="24" cy="8" r="5.5"/>
-                                    <line x1="29.5" y1="8" x2="36.5" y2="8" stroke="currentColor" stroke-width="2"/>
-                                    <circle cx="42" cy="8" r="5.5"/>
-                                </svg>
+                                <img src="/imgs/Logo-make.png" alt="Make" class="tc-logo" />
                             </div>
                             <div class="tc-foot">
                                 <p class="tool-name">Make</p>
@@ -117,7 +115,9 @@ const t = useTranslations(lang);
                                 <span class="cell-label">FRONTEND FRAMEWORK</span>
                                 <span class="tc-num">04</span>
                             </div>
-                            <div class="logo-slot"></div>
+                            <div class="logo-slot">
+                                <img src="/imgs/Logo-next.png" alt="Next.js" class="tc-logo" />
+                            </div>
                             <div class="tc-foot">
                                 <p class="tool-name">Next<span class="tool-tier">.js</span></p>
                             </div>
@@ -130,7 +130,9 @@ const t = useTranslations(lang);
                                 <span class="cell-label">HEADLESS CMS</span>
                                 <span class="tc-num">05</span>
                             </div>
-                            <div class="logo-slot"></div>
+                            <div class="logo-slot">
+                                <img src="/imgs/Logo-sanity.png" alt="Sanity" class="tc-logo" />
+                            </div>
                             <div class="tc-foot">
                                 <p class="tool-name">Sanity</p>
                             </div>
@@ -144,9 +146,7 @@ const t = useTranslations(lang);
                                 <span class="tc-num">06</span>
                             </div>
                             <div class="logo-slot">
-                                <svg class="tc-mark" viewBox="0 0 32 28" fill="currentColor" aria-hidden="true">
-                                    <polygon points="16,0 32,28 0,28"/>
-                                </svg>
+                                <img src="/imgs/Logo-vercel.png" alt="Vercel" class="tc-logo" />
                             </div>
                             <div class="tc-foot">
                                 <p class="tool-name">Vercel</p>
@@ -160,7 +160,9 @@ const t = useTranslations(lang);
                                 <span class="cell-label">PAYMENTS API</span>
                                 <span class="tc-num">07</span>
                             </div>
-                            <div class="logo-slot"></div>
+                            <div class="logo-slot">
+                                <img src="/imgs/Logo-stripe.png" alt="Stripe" class="tc-logo" />
+                            </div>
                             <div class="tc-foot">
                                 <p class="tool-name">Stripe</p>
                             </div>
@@ -173,7 +175,9 @@ const t = useTranslations(lang);
                                 <span class="cell-label">RETENTION ENGINE</span>
                                 <span class="tc-num">08</span>
                             </div>
-                            <div class="logo-slot"></div>
+                            <div class="logo-slot">
+                                <img src="/imgs/Logo-klaviyo.png" alt="Klaviyo" class="tc-logo" />
+                            </div>
                             <div class="tc-foot">
                                 <p class="tool-name">Klaviyo</p>
                             </div>
@@ -508,6 +512,18 @@ const t = useTranslations(lang);
     }
 
     .logo-slot { flex: 1; display: flex; align-items: center; min-height: 52px; }
+    .tc-logo {
+        height: 32px; width: auto; max-width: 140px;
+        object-fit: contain; object-position: left center;
+        opacity: 0.55;
+        filter: grayscale(1) contrast(0.9);
+        transition: opacity 0.45s var(--ease-spring), filter 0.45s var(--ease-smooth), transform 0.45s var(--ease-spring);
+    }
+    .tech-card:hover .tc-logo {
+        opacity: 1;
+        filter: grayscale(0) contrast(1);
+        transform: scale(1.06) translateY(-2px);
+    }
     .tc-mark {
         height: 26px; width: auto; color: var(--color-text); opacity: 0.45;
         transition: opacity 0.5s var(--ease-spring), color 0.4s var(--ease-smooth), transform 0.5s var(--ease-spring);

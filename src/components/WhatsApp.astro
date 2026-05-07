@@ -1,154 +1,248 @@
 ---
-// WhatsApp Flouvia Elite: Logo Oficial + Expansión Premium + Inversión en Footer
 ---
 
-<a href="https://wa.me/521234567890" target="_blank" rel="noopener noreferrer" class="premium-wa-btn" aria-label="Contactar por WhatsApp">
-    <div class="icon-container">
-        <svg class="wa-svg" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.878-.788-1.47-1.761-1.643-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
-        </svg>
-    </div>
-    <span class="text-container">WhatsApp</span>
-</a>
+<div class="wa-wrap" id="wa-wrap">
+  <p class="wa-tooltip" id="wa-tooltip">WHATSAPP</p>
+  <a
+    href="https://wa.me/521234567890"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="wa-pill"
+    id="wa-pill"
+    aria-label="Contactar por WhatsApp"
+  >
+    <div class="wa-shimmer" aria-hidden="true"></div>
+    <svg class="wa-ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.878-.788-1.47-1.761-1.643-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+    </svg>
+  </a>
+</div>
 
 <style>
-    :root {
-        --wa-brand-color: #25D366;
-        --btn-bg: #050505;
-        --btn-text: #ffffff;
-        --bezier-smooth: cubic-bezier(0.16, 1, 0.3, 1);
-    }
+  /* ── WRAPPER ── */
+  .wa-wrap {
+    position: fixed;
+    bottom: 2.2rem;
+    right: 2.2rem;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0; /* GSAP entrance */
+    will-change: opacity, transform;
+  }
 
-    /* ESTADO DEFAULT (Sobre fondos claros) */
-    .premium-wa-btn {
-        position: fixed;
-        bottom: 2.5rem;
-        right: 2.5rem;
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        height: 56px;
-        width: 56px; /* Empieza como un círculo perfecto */
-        background-color: var(--btn-bg);
-        border-radius: 100px;
-        text-decoration: none;
-        overflow: hidden;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        transition: all 0.5s var(--bezier-smooth);
-    }
+  /* ── TOOLTIP — misma familia que el top-bar ── */
+  .wa-tooltip {
+    font-family: 'JetBrains Mono', 'SF Mono', monospace;
+    font-size: 7px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 0;
+    color: rgba(0,0,0,0.5);
+    /* glass pill — igual que nav */
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 100px;
+    padding: 5px 11px;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.9),
+      0 2px 8px rgba(0,0,0,0.04);
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    will-change: opacity, transform;
+  }
 
-    .icon-container {
-        min-width: 56px;
-        height: 56px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+  /* ── PILL — idéntico al glass-pill de navbar ── */
+  .wa-pill {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 100px;
+    text-decoration: none;
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0,0,0,0.07);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.9),
+      0 4px 20px rgba(0,0,0,0.04),
+      0 1px 3px rgba(0,0,0,0.03);
+    will-change: transform, background-color, box-shadow;
+  }
 
-    .wa-svg {
-        width: 26px;
-        height: 26px;
-        color: #ffffff; /* Blanco puro en estado de reposo */
-        transition: color 0.4s ease, transform 0.5s var(--bezier-smooth);
-    }
+  /* shimmer sweep — igual que navbar */
+  .wa-shimmer {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.55) 50%, transparent 70%);
+    transform: translateX(-100%);
+    pointer-events: none;
+    z-index: 0;
+    transition: transform 0s;
+  }
+  .wa-pill:hover .wa-shimmer {
+    transform: translateX(100%);
+    transition: transform 0.55s cubic-bezier(0.16,1,0.3,1);
+  }
 
-    .text-container {
-        color: var(--btn-text);
-        font-family: 'Inter', sans-serif;
-        font-size: 0.95rem;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        white-space: nowrap;
-        opacity: 0;
-        transform: translateX(-15px);
-        transition: all 0.5s var(--bezier-smooth);
-        padding-right: 24px;
-    }
+  .wa-ico {
+    width: 20px;
+    height: 20px;
+    color: rgba(0,0,0,0.5);
+    display: block;
+    position: relative;
+    z-index: 1;
+    will-change: color, transform;
+  }
 
-    /* ANIMACIÓN EXPANSIÓN DEFAULT */
-    .premium-wa-btn:hover {
-        width: 155px;
-        background-color: #ffffff;
-        box-shadow: 0 15px 35px rgba(37, 211, 102, 0.2);
-        border-color: rgba(37, 211, 102, 0.3);
-        transform: translateY(-4px);
-    }
-    .premium-wa-btn:hover .wa-svg {
-        color: var(--wa-brand-color);
-        transform: scale(1.1);
-    }
-    .premium-wa-btn:hover .text-container {
-        opacity: 1;
-        transform: translateX(0);
-        color: #050505;
-    }
-
-    /* ==================================================== */
-    /* ESTADO INVERTIDO (Cuando toca el Footer oscuro) */
-    /* ==================================================== */
-    .premium-wa-btn.on-footer {
-        background-color: #ffffff; /* Se vuelve blanco para destacar */
-        border-color: transparent;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    }
-    .premium-wa-btn.on-footer .wa-svg {
-        color: #0a192f; /* El icono se vuelve azul oscuro/negro para hacer contraste interno */
-    }
-    
-    /* Hover en estado invertido */
-    .premium-wa-btn.on-footer:hover {
-        background-color: #ffffff;
-        box-shadow: 0 15px 35px rgba(37, 211, 102, 0.25);
-        border-color: rgba(37, 211, 102, 0.3);
-    }
-    .premium-wa-btn.on-footer:hover .wa-svg {
-        color: var(--wa-brand-color); /* El verde sigue funcionando perfecto */
-    }
-    .premium-wa-btn.on-footer:hover .text-container {
-        color: #050505;
-    }
-
-    /* Responsivo */
-    @media (max-width: 768px) {
-        .premium-wa-btn { bottom: 1.5rem; right: 1.5rem; height: 52px; width: 52px; }
-        .icon-container { min-width: 52px; height: 52px; }
-        .wa-svg { width: 24px; height: 24px; }
-        
-        .premium-wa-btn:hover { width: 52px; transform: translateY(-2px); }
-        .premium-wa-btn:hover .text-container { display: none; }
-    }
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .wa-wrap  { bottom: 1.4rem; right: 1.4rem; gap: 6px; }
+    .wa-pill  { width: 42px; height: 42px; }
+    .wa-ico   { width: 19px; height: 19px; }
+    .wa-tooltip { display: none; }
+  }
 </style>
 
 <script>
-    // Lógica para detectar cuándo el botón entra a la zona del Footer
-    const initWaObserver = () => {
-        const waBtn = document.querySelector('.premium-wa-btn');
-        // Buscamos el footer o el bloque oscuro final
-        const footer = document.querySelector('footer'); 
-        
-        if (!waBtn || !footer) return;
+import { gsap } from 'gsap';
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                // Si el footer es visible en pantalla
-                if (entry.isIntersecting) {
-                    waBtn.classList.add('on-footer');
-                } else {
-                    waBtn.classList.remove('on-footer');
-                }
-            });
-        }, {
-            root: null,
-            threshold: 0,
-            // El rootMargin hace que el efecto se active justo cuando el botón "choca" con el footer
-            rootMargin: "0px 0px -60px 0px" 
-        });
+document.addEventListener('DOMContentLoaded', () => {
+  const wrap    = document.getElementById('wa-wrap')    as HTMLElement;
+  const pill    = document.getElementById('wa-pill')    as HTMLAnchorElement;
+  const tooltip = document.getElementById('wa-tooltip') as HTMLElement;
+  const ico     = pill.querySelector('.wa-ico')         as SVGSVGElement;
 
-        observer.observe(footer);
-    };
+  if (!wrap || !pill || !tooltip || !ico) return;
 
-    // Inicializar al cargar (y compatible si usas Astro ViewTransitions)
-    initWaObserver();
-    document.addEventListener('astro:page-load', initWaObserver);
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+  /* ── STATE ── */
+  let onDark = false;
+
+  /* ── ENTRANCE ── */
+  gsap.set(wrap, { y: 18 });
+  gsap.to(wrap, { opacity: 1, y: 0, duration: 0.9, ease: 'power4.out', delay: 1.5 });
+
+  /* ── HOVER (desktop) ── */
+  if (!isMobile) {
+    pill.addEventListener('mouseenter', () => {
+      gsap.to(pill, {
+        y: -3, scale: 1.06,
+        boxShadow: onDark
+          ? 'inset 0 1px 0 rgba(255,255,255,0.1), 0 12px 40px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.18)'
+          : 'inset 0 1px 0 rgba(255,255,255,0.95), 0 12px 40px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.06)',
+        duration: 0.45, ease: 'expo.out',
+      });
+      gsap.to(ico, { color: '#25D366', scale: 1.1, duration: 0.4, ease: 'expo.out' });
+      gsap.fromTo(tooltip,
+        { opacity: 0, y: 5, scale: 0.93 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.38, ease: 'expo.out' }
+      );
+    });
+
+    pill.addEventListener('mouseleave', () => {
+      gsap.to(pill, {
+        y: 0, scale: 1,
+        boxShadow: onDark
+          ? 'inset 0 1px 0 rgba(255,255,255,0.08), 0 16px 48px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12)'
+          : 'inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 20px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.03)',
+        duration: 0.55, ease: 'expo.out',
+      });
+      gsap.to(ico, {
+        color: onDark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.5)',
+        scale: 1, duration: 0.45, ease: 'expo.out',
+      });
+      gsap.to(tooltip, { opacity: 0, y: 4, scale: 0.94, duration: 0.22, ease: 'power2.in' });
+    });
+  }
+
+  /* ── DARK SECTION DETECTION ── */
+  function luminance(color: string): number {
+    const m = color.match(/\d+/g);
+    if (!m || m.length < 3) return 1;
+    const [r, g, b] = m.map(Number);
+    return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  }
+
+  function bgBehindPill(): string {
+    const r  = pill.getBoundingClientRect();
+    const cx = r.left + r.width  / 2;
+    const cy = r.top  + r.height / 2;
+    pill.style.pointerEvents = 'none';
+    let el = document.elementFromPoint(cx, cy) as HTMLElement | null;
+    pill.style.pointerEvents = '';
+    while (el && el !== document.documentElement) {
+      const bg = getComputedStyle(el).backgroundColor;
+      if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') return bg;
+      el = el.parentElement;
+    }
+    return 'rgb(255,255,255)';
+  }
+
+  function applyState(dark: boolean, instant = false) {
+    const dur  = instant ? 0 : 0.48;
+    const ease = 'power3.out';
+    if (dark) {
+      /* mismo estilo que .navbar-wrapper.scrolled .glass-pill */
+      gsap.to(pill, {
+        backgroundColor: 'rgba(10,25,47,0.9)',
+        borderColor: 'rgba(255,255,255,0.1)',
+        backdropFilter: 'blur(28px)',
+        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08), 0 16px 48px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12)',
+        duration: dur, ease,
+      });
+      gsap.to(ico,     { color: 'rgba(255,255,255,0.6)', duration: dur, ease });
+      gsap.to(tooltip, {
+        backgroundColor: 'rgba(10,25,47,0.9)',
+        borderColor: 'rgba(255,255,255,0.1)',
+        color: 'rgba(255,255,255,0.55)',
+        duration: dur, ease,
+      });
+    } else {
+      /* estado original — glass pill claro */
+      gsap.to(pill, {
+        backgroundColor: 'rgba(255,255,255,0.65)',
+        borderColor: 'rgba(0,0,0,0.07)',
+        backdropFilter: 'blur(20px)',
+        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 20px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.03)',
+        duration: dur, ease,
+      });
+      gsap.to(ico,     { color: 'rgba(0,0,0,0.5)', duration: dur, ease });
+      gsap.to(tooltip, {
+        backgroundColor: 'rgba(255,255,255,0.65)',
+        borderColor: 'rgba(0,0,0,0.07)',
+        color: 'rgba(0,0,0,0.5)',
+        duration: dur, ease,
+      });
+    }
+  }
+
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const dark = luminance(bgBehindPill()) < 0.45;
+      if (dark !== onDark) { onDark = dark; applyState(onDark); }
+      ticking = false;
+    });
+  }, { passive: true });
+
+  setTimeout(() => {
+    onDark = luminance(bgBehindPill()) < 0.45;
+    applyState(onDark, true);
+  }, 1600);
+});
 </script>
