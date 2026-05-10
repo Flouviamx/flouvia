@@ -254,7 +254,7 @@ const t = useTranslations(lang);
 
         <section class="services-rows">
             <div class="container">
-                <div class="section-header reveal-blur" style="--delay: 0s;">
+                <div class="section-header">
                     <p class="eyebrow">{lang === 'en' ? 'OUR SERVICES' : 'NUESTROS SERVICIOS'}</p>
                     <h2 class="section-heading">{lang === 'en' ? 'Applied' : 'Ingeniería'} <span class="editorial">{lang === 'en' ? 'Engineering.' : 'Aplicada.'}</span></h2>
                 </div>
@@ -598,7 +598,6 @@ const t = useTranslations(lang);
         font-family: var(--font-serif); font-style: italic; font-size: 33vw;
         font-weight: 400; color: rgba(255,255,255,0.035); pointer-events: none;
         white-space: nowrap; line-height: 1; user-select: none; z-index: 0;
-        will-change: transform;
     }
     .casos-eyebrow { color: rgba(255,255,255,0.32) !important; }
     .clients-vertical-carousel .section-heading { color: #ffffff; }
@@ -626,8 +625,6 @@ const t = useTranslations(lang);
         width: 400px; height: 540px; scroll-snap-align: center; position: relative;
         text-decoration: none; border: 1px solid rgba(255,255,255,0.08);
         transition: all 0.5s var(--ease-smooth); z-index: 1;
-        transform-style: preserve-3d;
-        will-change: transform;
     }
     
     @media (hover: hover) {
@@ -933,56 +930,35 @@ const t = useTranslations(lang);
     import { SplitText } from 'gsap/SplitText';
 
     gsap.registerPlugin(ScrollTrigger, SplitText);
-    ScrollTrigger.defaults({ invalidateOnRefresh: true });
 
-    // Ensure ScrollTrigger recalculates after all assets load
+    // Recalculate positions after fonts + images load
     window.addEventListener('load', () => {
-        setTimeout(() => ScrollTrigger.refresh(), 150);
+        setTimeout(() => ScrollTrigger.refresh(), 120);
     });
 
     document.addEventListener('DOMContentLoaded', () => {
         const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        // Clear CSS animation on ALL elements GSAP explicitly controls
-        document.querySelectorAll<HTMLElement>(
-            '.hero-title, .hero-text-zone .eyebrow, .hero-bottom, ' +
-            '.service-row, .protocol-step, .protocol-sticky-col, ' +
-            '.partners-header, #cta-card'
-        ).forEach(el => {
-            el.style.animation = 'none';
-            el.style.filter   = 'none';
-        });
-        // Hero needs to start visible (animated on load, not scroll)
+        // Hero animates on page load (not scroll) — must start visible
         document.querySelectorAll<HTMLElement>('.hero-title, .hero-text-zone .eyebrow, .hero-bottom').forEach(el => {
+            el.style.animation = 'none';
             el.style.opacity   = '1';
             el.style.transform = 'none';
+            el.style.filter    = 'none';
         });
-
-        /* ═════════════ FALLBACK REVEAL (CSS classes only — eyebrows, section headers) ═════════════ */
-        document.querySelectorAll('.reveal-blur, .reveal-fade').forEach(el => {
-            ScrollTrigger.create({
-                trigger: el,
-                start: 'top 88%',
-                once: true,
-                onEnter: () => el.classList.add('active'),
-            });
-        });
-
-        // Safety net: if anything is still invisible after 3 s, force-reveal it
-        setTimeout(() => {
-            document.querySelectorAll<HTMLElement>('.reveal-blur:not(.active), .reveal-fade:not(.active)').forEach(el => {
-                el.classList.add('active');
-            });
-        }, 3000);
 
         if (reduced) return;
 
+        // Key: immediateRender: false — elements stay visible until ScrollTrigger fires.
+        // This prevents the "stuck invisible" bug entirely.
+        const ir = { immediateRender: false } as const;
+
         const mm = gsap.matchMedia();
 
-        /* ═════════════ DESKTOP ANIMATIONS ═════════════ */
+        /* ─── DESKTOP ──────────────────────────────────────────────── */
         mm.add('(min-width: 769px)', () => {
 
-            /* HERO — deferred one frame so Navbar entrance animation has GPU priority */
+            /* HERO */
             requestAnimationFrame(() => {
 
             const heroTitle = document.querySelector<HTMLElement>('.hero-title');
@@ -1019,38 +995,86 @@ const t = useTranslations(lang);
                 });
             }
 
-            /* TECH — header reveal */
-            gsap.from('.partners-header', {
-                y: 32, opacity: 0, duration: 1.1, ease: 'expo.out',
-                scrollTrigger: { trigger: '.tech-spotlight', start: 'top 80%' },
+            /* ═══════ SECTION HEADINGS — line-mask word reveal (Apple-style) ═══════ */
+            gsap.utils.toArray<HTMLElement>('.section-heading').forEach(h => {
+                const split = SplitText.create(h, { type: 'lines,words', linesClass: 'lx-line-mask' });
+                gsap.set(split.words, { yPercent: 115 });
+                gsap.to(split.words, {
+                    ...ir, yPercent: 0, duration: 1.4, ease: 'expo.out',
+                    stagger: { amount: 0.45, from: 'start' },
+                    scrollTrigger: { trigger: h, start: 'top 85%', once: true },
+                });
             });
 
-            /* TECH — rule draw + counter count-up */
+            /* ═══════ EYEBROWS — letter-spacing close + fade ═══════ */
+            gsap.utils.toArray<HTMLElement>('section:not(.hero-grand) .eyebrow').forEach(eb => {
+                gsap.from(eb, {
+                    ...ir, opacity: 0, y: 12, letterSpacing: '8px', duration: 1.3, ease: 'expo.out',
+                    scrollTrigger: { trigger: eb, start: 'top 88%', once: true },
+                });
+            });
+
+            /* ═══════════════════════════════════════════════════
+                              TECH SECTION
+               ═══════════════════════════════════════════════════ */
+
+            /* Header rule draw */
             const techRule = document.getElementById('tech-rule');
+            if (techRule) {
+                gsap.to(techRule, {
+                    scaleX: 1, duration: 1.6, ease: 'power3.inOut',
+                    scrollTrigger: { trigger: '.tech-spotlight', start: 'top 78%', once: true },
+                });
+            }
+
+            /* Counter count-up */
             const techCounter = document.getElementById('tech-counter');
-            ScrollTrigger.create({
-                trigger: '.tech-spotlight', start: 'top 78%', once: true,
-                onEnter: () => {
-                    if (techRule) gsap.to(techRule, { scaleX: 1, duration: 1.5, ease: 'expo.out', delay: 0.15 });
-                    if (techCounter) {
+            if (techCounter) {
+                ScrollTrigger.create({
+                    trigger: '.tech-spotlight', start: 'top 78%', once: true,
+                    onEnter: () => {
                         const obj = { val: 0 };
                         gsap.to(obj, {
-                            val: 8, duration: 1.4, ease: 'power3.out', delay: 0.2,
+                            val: 8, duration: 1.8, ease: 'power3.out', delay: 0.3,
                             onUpdate: () => { techCounter.textContent = String(Math.round(obj.val)).padStart(2, '0'); },
                         });
-                    }
-                },
+                    },
+                });
+            }
+
+            /* Sub-text fade */
+            gsap.from('.tech-spotlight .section-sub', {
+                ...ir, opacity: 0, y: 16, duration: 1.1, ease: 'expo.out',
+                scrollTrigger: { trigger: '.tech-spotlight', start: 'top 80%', once: true },
             });
 
-            /* TECH — cards stagger entrance */
-            gsap.from('.tech-spotlight .tech-card', {
-                y: 50, opacity: 0, scale: 0.94,
-                duration: 1.1, ease: 'expo.out',
-                stagger: { each: 0.09, from: 'start' },
-                scrollTrigger: { trigger: '.spotlight-grid', start: 'top 76%', once: true },
+            /* Cards: clip-path reveal from bottom + subtle blur lift */
+            gsap.set('.tech-spotlight .tech-card', { clipPath: 'inset(0 0 100% 0)' });
+            gsap.utils.toArray<HTMLElement>('.tech-spotlight .tech-card').forEach((card, i) => {
+                const logo = card.querySelector<HTMLElement>('.tc-logo');
+                const tl = gsap.timeline({
+                    scrollTrigger: { trigger: '.spotlight-grid', start: 'top 80%', once: true },
+                    delay: i * 0.07,
+                });
+                tl.to(card, {
+                    ...ir, clipPath: 'inset(0 0 0% 0)', duration: 1.3, ease: 'expo.out',
+                    onComplete: () => { (card as HTMLElement).style.clipPath = 'none'; },
+                });
+                if (logo) {
+                    gsap.set(logo, { y: 14, opacity: 0 });
+                    tl.to(logo, {
+                        ...ir, y: 0, opacity: 0.55, duration: 1.0, ease: 'expo.out',
+                    }, '-=0.9');
+                }
             });
 
-            /* TECH — global grid glow follows cursor */
+            /* Watermark slow parallax */
+            gsap.to('.tech-watermark', {
+                yPercent: -18, ease: 'none',
+                scrollTrigger: { trigger: '.tech-spotlight', start: 'top bottom', end: 'bottom top', scrub: 0.8 },
+            });
+
+            /* Grid glow follows cursor */
             const techGrid = document.getElementById('tech-grid');
             if (techGrid) {
                 techGrid.addEventListener('mousemove', e => {
@@ -1060,7 +1084,7 @@ const t = useTranslations(lang);
                 });
             }
 
-            /* TECH CARD — per-card radial glow */
+            /* Per-card radial glow */
             document.querySelectorAll<HTMLElement>('.tech-card').forEach(card => {
                 card.addEventListener('mousemove', e => {
                     const rect = card.getBoundingClientRect();
@@ -1069,143 +1093,152 @@ const t = useTranslations(lang);
                 });
             });
 
-            /* TECH WATERMARK — slow parallax */
-            const techWm = document.querySelector('.tech-watermark');
-            if (techWm) {
-                gsap.to(techWm, {
-                    yPercent: -15, ease: 'none',
-                    scrollTrigger: { trigger: '.tech-spotlight', start: 'top bottom', end: 'bottom top', scrub: 0.8 },
-                });
-            }
+            /* ═══════════════════════════════════════════════════
+                              CASOS SECTION
+               ═══════════════════════════════════════════════════ */
 
-            /* CASOS — background text parallax */
-            const casosBg = document.querySelector('.casos-bg-text');
-            if (casosBg) {
-                gsap.to(casosBg, {
-                    yPercent: -20, ease: 'none',
-                    scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top bottom', end: 'bottom top', scrub: 0.9 },
-                });
-            }
-
-            /* CASOS — header eyebrow */
-            gsap.from('.clients-vertical-carousel .casos-eyebrow', {
-                opacity: 0, y: 18, letterSpacing: '6px', duration: 1.1, ease: 'expo.out',
-                scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top 75%', once: true },
+            /* Background text parallax */
+            gsap.to('.casos-bg-text', {
+                yPercent: -22, ease: 'none',
+                scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top bottom', end: 'bottom top', scrub: 0.9 },
             });
 
-            /* CASOS — cards 3D perspective entrance */
-            gsap.set('.clients-vertical-carousel .vertical-card', { transformPerspective: 900 });
-            gsap.from('.clients-vertical-carousel .vertical-card', {
-                y: 130, rotateX: 14, opacity: 0,
-                transformOrigin: 'center top',
-                duration: 1.35, ease: 'expo.out',
-                stagger: { each: 0.14 },
-                scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top 72%', once: true },
+            /* Cards: orchestrated reveal — clip wipe + Ken Burns image + overlay slide */
+            gsap.utils.toArray<HTMLElement>('.clients-vertical-carousel .vertical-card').forEach((card, i) => {
+                const img     = card.querySelector<HTMLElement>('.carousel-image');
+                const overlay = card.querySelector<HTMLElement>('.card-overlay');
+                const num     = card.querySelector<HTMLElement>('.card-num-luxury');
+                const ctaInner = card.querySelector<HTMLElement>('.cta-inner');
+
+                gsap.set(card, { clipPath: 'inset(0 0 100% 0)' });
+                if (img)      gsap.set(img,     { scale: 1.25 });
+                if (overlay)  gsap.set(overlay, { yPercent: 60, opacity: 0 });
+                if (num)      gsap.set(num,     { opacity: 0, x: -8 });
+                if (ctaInner) gsap.set(ctaInner.children, { opacity: 0, y: 18 });
+
+                const tl = gsap.timeline({
+                    scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top 72%', once: true },
+                    delay: 0.15 + i * 0.13,
+                });
+
+                tl.to(card,    { ...ir, clipPath: 'inset(0 0 0% 0)', duration: 1.4, ease: 'expo.out',
+                    onComplete: () => { (card as HTMLElement).style.clipPath = 'none'; } });
+                if (img)      tl.to(img,     { ...ir, scale: 1, duration: 1.8, ease: 'expo.out' }, 0);
+                if (overlay)  tl.to(overlay, { ...ir, yPercent: 0, opacity: 1, duration: 1.1, ease: 'expo.out' }, 0.45);
+                if (num)      tl.to(num,     { ...ir, opacity: 0.6, x: 0, duration: 0.9, ease: 'expo.out' }, 0.55);
+                if (ctaInner) tl.to(ctaInner.children, {
+                    ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out', stagger: 0.1,
+                }, 0.4);
             });
 
-            /* CASOS — magnetic 3D tilt on hover */
-            document.querySelectorAll<HTMLElement>('.vertical-card').forEach(card => {
-                card.addEventListener('mousemove', e => {
-                    const rect = card.getBoundingClientRect();
-                    const cx = (e.clientX - rect.left - rect.width  / 2) / (rect.width  / 2);
-                    const cy = (e.clientY - rect.top  - rect.height / 2) / (rect.height / 2);
-                    gsap.to(card, { rotateY: cx * 6, rotateX: -cy * 6, duration: 0.55, ease: 'power2.out' });
-                });
-                card.addEventListener('mouseleave', () => {
-                    gsap.to(card, { rotateY: 0, rotateX: 0, duration: 1.1, ease: 'expo.out' });
-                });
-            });
-
-            /* CAROUSEL — subtle scroll drift */
-            const carouselTrack = document.querySelector('.carousel-track');
-            if (carouselTrack) {
-                gsap.to(carouselTrack, {
-                    x: () => -((carouselTrack as HTMLElement).scrollWidth - window.innerWidth) * 0.13,
-                    ease: 'none',
+            /* Image Ken Burns parallax inside cards while scrolling section */
+            gsap.utils.toArray<HTMLElement>('.clients-vertical-carousel .carousel-image').forEach(img => {
+                gsap.to(img, {
+                    yPercent: -8, ease: 'none',
                     scrollTrigger: {
                         trigger: '.clients-vertical-carousel',
                         start: 'top bottom', end: 'bottom top', scrub: 1.2,
                     },
                 });
-            }
-
-            /* SERVICES — rows fade up with stagger */
-            gsap.from('.service-row', {
-                y: 36, opacity: 0,
-                duration: 1.0, ease: 'expo.out',
-                stagger: { each: 0.1 },
-                scrollTrigger: { trigger: '.rows-wrapper', start: 'top 82%', once: true },
-            });
-            gsap.from('.service-row .arrow-circle', {
-                scale: 0, opacity: 0,
-                duration: 0.75, ease: 'back.out(2.4)',
-                stagger: { each: 0.1 },
-                scrollTrigger: { trigger: '.rows-wrapper', start: 'top 82%', once: true },
             });
 
-            /* SECTION HEADINGS — split on scroll */
-            gsap.utils.toArray<HTMLElement>('.section-heading').forEach(h => {
-                const split = SplitText.create(h, { type: 'words' });
-                gsap.from(split.words, {
-                    y: 30, opacity: 0, rotateX: -30,
-                    duration: 0.7, ease: 'power3.out', stagger: 0.06,
-                    scrollTrigger: { trigger: h, start: 'top 85%', once: true },
+            /* ═══════════════════════════════════════════════════
+                            SERVICES SECTION
+               ═══════════════════════════════════════════════════ */
+
+            gsap.utils.toArray<HTMLElement>('.service-row').forEach((row, i) => {
+                const num   = row.querySelector<HTMLElement>('.row-num');
+                const h3    = row.querySelector<HTMLElement>('.row-content h3');
+                const p     = row.querySelector<HTMLElement>('.row-content p');
+                const arrow = row.querySelector<HTMLElement>('.arrow-circle');
+
+                if (num)   gsap.set(num,   { opacity: 0, x: -16 });
+                if (h3)    gsap.set(h3,    { opacity: 0, y: 28 });
+                if (p)     gsap.set(p,     { opacity: 0, y: 18 });
+                if (arrow) gsap.set(arrow, { opacity: 0, scale: 0.4, rotate: -45 });
+
+                const tl = gsap.timeline({
+                    scrollTrigger: { trigger: row, start: 'top 86%', once: true },
+                    delay: i * 0.04,
                 });
+
+                if (num)   tl.to(num,   { ...ir, opacity: 1, x: 0, duration: 0.95, ease: 'expo.out' }, 0);
+                if (h3)    tl.to(h3,    { ...ir, opacity: 1, y: 0, duration: 1.15, ease: 'expo.out' }, 0.08);
+                if (p)     tl.to(p,     { ...ir, opacity: 1, y: 0, duration: 1.05, ease: 'expo.out' }, 0.18);
+                if (arrow) tl.to(arrow, { ...ir, opacity: 1, scale: 1, rotate: 0, duration: 0.85, ease: 'back.out(2)' }, 0.28);
             });
 
-            /* PROTOCOL — sticky col reveal */
-            gsap.from('.protocol-sticky-col', {
-                y: 30, opacity: 0, duration: 1.1, ease: 'expo.out',
-                scrollTrigger: { trigger: '.protocol-section', start: 'top 75%', once: true },
+            /* ═══════════════════════════════════════════════════
+                           PROTOCOL SECTION
+               ═══════════════════════════════════════════════════ */
+
+            /* Sticky col children stagger */
+            gsap.from('.protocol-sticky-col > *', {
+                ...ir, y: 28, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: 0.1,
+                scrollTrigger: { trigger: '.protocol-section', start: 'top 78%', once: true },
             });
 
-            /* PROTOCOL — timeline track draws top to bottom */
+            /* Timeline track draws as user scrolls */
             const timelineTrack = document.querySelector('.timeline-track');
             if (timelineTrack) {
                 gsap.set(timelineTrack, { transformOrigin: 'top center', scaleY: 0 });
                 gsap.to(timelineTrack, {
                     scaleY: 1, ease: 'none',
                     scrollTrigger: {
-                        trigger: '.protocol-section', start: 'top 55%', end: 'bottom 75%', scrub: 0.5,
+                        trigger: '.protocol-section', start: 'top 60%', end: 'bottom 75%', scrub: 0.6,
                     },
                 });
             }
 
-            /* PROTOCOL — steps slide + node pop */
-            gsap.utils.toArray<HTMLElement>('.protocol-step').forEach((step, i) => {
+            /* Steps: choreographed reveal — node bounce, watermark slide, h4 then p */
+            gsap.utils.toArray<HTMLElement>('.protocol-step').forEach((step) => {
                 const node = step.querySelector<HTMLElement>('.step-node');
                 const wm   = step.querySelector<HTMLElement>('.watermark-num');
+                const h4   = step.querySelector<HTMLElement>('h4');
+                const p    = step.querySelector<HTMLElement>('p');
 
-                gsap.from(step, {
-                    x: 30, opacity: 0, duration: 1.0, ease: 'expo.out',
-                    scrollTrigger: { trigger: step, start: 'top 84%', once: true },
+                if (node) gsap.set(node, { scale: 0 });
+                if (wm)   gsap.set(wm,   { opacity: 0, x: -18 });
+                if (h4)   gsap.set(h4,   { opacity: 0, y: 22 });
+                if (p)    gsap.set(p,    { opacity: 0, y: 18 });
+
+                const tl = gsap.timeline({
+                    scrollTrigger: { trigger: step, start: 'top 86%', once: true },
                 });
-                if (node) {
-                    gsap.from(node, {
-                        scale: 0, duration: 0.65, ease: 'back.out(3)',
-                        delay: 0.18,
-                        scrollTrigger: { trigger: step, start: 'top 84%', once: true },
-                    });
-                }
-                if (wm) {
-                    gsap.to(wm, {
-                        y: -20, ease: 'none',
-                        scrollTrigger: {
-                            trigger: step, start: 'top bottom', end: 'bottom top',
-                            scrub: 0.6,
-                        },
-                    });
-                }
+
+                if (node) tl.to(node, { ...ir, scale: 1, duration: 0.8, ease: 'back.out(2.6)' }, 0);
+                if (wm)   tl.to(wm,   { ...ir, opacity: 1, x: 0, duration: 1.3, ease: 'expo.out' }, 0.08);
+                if (h4)   tl.to(h4,   { ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out' }, 0.18);
+                if (p)    tl.to(p,    { ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out' }, 0.28);
             });
 
-            /* CTA — scale-in + mouse glow */
+            /* ═══════════════════════════════════════════════════
+                                CTA SECTION
+               ═══════════════════════════════════════════════════ */
+
             const ctaCard = document.getElementById('cta-card') as HTMLElement | null;
             if (ctaCard) {
-                gsap.from(ctaCard, {
-                    y: 60, scale: 0.93, opacity: 0,
-                    duration: 1.2, ease: 'expo.out',
+                const ctaText = ctaCard.querySelectorAll<HTMLElement>('.cta-text-side > *');
+                const ctaBtn  = ctaCard.querySelector<HTMLElement>('.cta-action-side');
+
+                gsap.set(ctaText, { opacity: 0, y: 26 });
+                if (ctaBtn) gsap.set(ctaBtn, { opacity: 0, y: 22 });
+
+                const tl = gsap.timeline({
                     scrollTrigger: { trigger: ctaCard, start: 'top 82%', once: true },
                 });
+
+                tl.from(ctaCard, {
+                    ...ir, y: 70, scale: 0.92, opacity: 0,
+                    duration: 1.4, ease: 'expo.out',
+                });
+                tl.to(ctaText, {
+                    ...ir, opacity: 1, y: 0, duration: 1.1, ease: 'expo.out', stagger: 0.12,
+                }, '-=0.9');
+                if (ctaBtn) tl.to(ctaBtn, {
+                    ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out',
+                }, '-=0.7');
+
                 ctaCard.addEventListener('mousemove', e => {
                     const r = ctaCard.getBoundingClientRect();
                     ctaCard.style.setProperty('--cta-mx', `${((e.clientX - r.left) / r.width) * 100}%`);
@@ -1230,17 +1263,17 @@ const t = useTranslations(lang);
                 }, 0.85);
             }
             gsap.from('.tech-spotlight .tech-card', {
-                y: 30, opacity: 0, duration: 0.7, ease: 'power3.out', stagger: 0.05,
-                scrollTrigger: { trigger: '.tech-spotlight', start: 'top 80%' },
+                ...ir, y: 30, opacity: 0, duration: 0.7, ease: 'power3.out', stagger: 0.05,
+                scrollTrigger: { trigger: '.tech-spotlight', start: 'top 80%', once: true },
             });
             gsap.utils.toArray<HTMLElement>('.service-row').forEach((row) => {
                 gsap.from(row, {
-                    y: 30, opacity: 0, duration: 0.7, ease: 'power3.out',
-                    scrollTrigger: { trigger: row, start: 'top 88%' },
+                    ...ir, y: 30, opacity: 0, duration: 0.7, ease: 'power3.out',
+                    scrollTrigger: { trigger: row, start: 'top 88%', once: true },
                 });
             });
 
-            /* CAROUSEL CENTER DETECTION (kept from legacy logic) */
+            /* CAROUSEL CENTER DETECTION */
             const track = document.querySelector('.carousel-track-wrapper');
             const cards = document.querySelectorAll('.vertical-card');
             if (track && cards.length) {
