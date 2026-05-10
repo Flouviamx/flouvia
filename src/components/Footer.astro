@@ -1,5 +1,5 @@
 ---
-// Footer Flouvia Elite: Minimalismo Suizo & Quiet Luxury (Apple Pro Style)
+// Footer Flouvia — Editorial Luxury (Apple / Bottega aesthetic)
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
@@ -10,24 +10,34 @@ const isEn = lang === 'en';
 <footer class="footer-premium">
     <div class="top-hairline"></div>
 
-    <div class="container">
-        
+    <div class="footer-watermark" aria-hidden="true">Flouvia</div>
+
+    <div class="container footer-inner">
+
+        <div class="footer-meta-row">
+            <p class="footer-eyebrow">{isEn ? 'STUDIO · MEXICO CITY' : 'ESTUDIO · CIUDAD DE MÉXICO'}</p>
+            <p class="footer-edition"><span class="edition-num">2026</span><span class="edition-divider">·</span><span class="edition-label">{isEn ? 'Edition' : 'Edición'}</span></p>
+        </div>
+
         <div class="footer-grid">
-            
-            <div class="brand-column reveal-stagger">
+
+            <div class="brand-column">
                 <img src="/imgs/logo-flouvia-1.svg" alt="Flouvia" class="footer-logo-svg" />
-                
-                <div class="statement-box">
-                    <p class="description">
-                        {isEn ? 'Digital engineering studio.' : 'Estudio de ingeniería digital.'}<br>
-                        {isEn ? 'We design high-conversion transactional ecosystems for leading brands in B2B and E-commerce.' : 'Diseñamos ecosistemas transaccionales de alta conversión para marcas líderes en B2B y E-commerce.'}
-                    </p>
-                </div>
+
+                <h3 class="footer-statement">
+                    {isEn ? 'Digital engineering' : 'Ingeniería digital'} <span class="editorial">{isEn ? 'that converts.' : 'que convierte.'}</span>
+                </h3>
+
+                <p class="description">
+                    {isEn
+                        ? 'We design high-conversion transactional ecosystems for leading brands in B2B and E-commerce.'
+                        : 'Diseñamos ecosistemas transaccionales de alta conversión para marcas líderes en B2B y E-commerce.'}
+                </p>
 
                 <div class="contact-action">
                     <a href="mailto:flouvia.mx@gmail.com" class="minimal-email-link">
                         <span class="email-text">flouvia.mx@gmail.com</span>
-                        <svg class="email-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="email-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="5" y1="12" x2="19" y2="12"></line>
                             <polyline points="12 5 19 12 12 19"></polyline>
                         </svg>
@@ -36,12 +46,15 @@ const isEn = lang === 'en';
             </div>
 
             <div class="navigation-columns">
-                
-                <div class="nav-col reveal-stagger" style="--delay: 0.1s;">
-                    <h4 class="col-title">{isEn ? 'PORTFOLIO' : 'PORTAFOLIO'}</h4>
+
+                <div class="nav-col">
+                    <div class="col-head">
+                        <span class="col-num">/01</span>
+                        <h4 class="col-title">{isEn ? 'Portfolio' : 'Portafolio'}</h4>
+                    </div>
                     <nav class="nav-links">
                         <a href={isEn ? '/en/' : '/'} class="link-item">
-                            <span>{isEn ? 'HOME' : 'INICIO'}</span>
+                            <span>{isEn ? 'Home' : 'Inicio'}</span>
                             <span class="link-arrow">→</span>
                         </a>
                         <a href={isEn ? '/en/servicios' : '/servicios'} class="link-item">
@@ -53,14 +66,17 @@ const isEn = lang === 'en';
                             <span class="link-arrow">→</span>
                         </a>
                         <a href={isEn ? '/en/blog' : '/blog'} class="link-item">
-                            <span>BLOG</span>
+                            <span>Blog</span>
                             <span class="link-arrow">→</span>
                         </a>
                     </nav>
                 </div>
 
-                <div class="nav-col reveal-stagger" style="--delay: 0.2s;">
-                    <h4 class="col-title">{isEn ? 'STUDIO' : 'ESTUDIO'}</h4>
+                <div class="nav-col">
+                    <div class="col-head">
+                        <span class="col-num">/02</span>
+                        <h4 class="col-title">{isEn ? 'Studio' : 'Estudio'}</h4>
+                    </div>
                     <nav class="nav-links">
                         <a href={isEn ? '/en/nosotros' : '/nosotros'} class="link-item">
                             <span>{t('nav.about')}</span>
@@ -70,15 +86,18 @@ const isEn = lang === 'en';
                             <span>{isEn ? 'Client Portal' : 'Portal de Clientes'}</span>
                             <span class="link-arrow">→</span>
                         </a>
-                        <a href="#contacto" class="link-item">
+                        <a href={isEn ? '/en/contacto' : '/contacto'} class="link-item">
                             <span>{isEn ? 'Private Contact' : 'Contacto Privado'}</span>
                             <span class="link-arrow">→</span>
                         </a>
                     </nav>
                 </div>
 
-                <div class="nav-col reveal-stagger" style="--delay: 0.3s;">
-                    <h4 class="col-title">{isEn ? 'SOCIALS' : 'REDES'}</h4>
+                <div class="nav-col">
+                    <div class="col-head">
+                        <span class="col-num">/03</span>
+                        <h4 class="col-title">{isEn ? 'Socials' : 'Redes'}</h4>
+                    </div>
                     <div class="social-links">
                         <a href="https://www.instagram.com/flouvia.mx/" class="social-item" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
                             <span class="social-text">Instagram</span>
@@ -117,20 +136,22 @@ const isEn = lang === 'en';
 
         </div>
 
-        <div class="footer-bottom reveal-stagger" style="--delay: 0.5s;">
+        <div class="footer-divider"></div>
+
+        <div class="footer-bottom">
             <div class="legal-left">
-                <p class="copyright">&copy; 2026 Flouvia Boutique.</p>
-                <span class="dot-separator">•</span>
+                <p class="copyright">&copy; <span class="copy-year">2026</span> <span class="editorial">Flouvia</span> Boutique.</p>
+                <span class="dot-separator">·</span>
                 <div class="status-indicator">
                     <span class="dot-online"></span>
-                    <span class="status-text">SYSTEMS OPERATIONAL</span>
+                    <span class="status-text">{isEn ? 'SYSTEMS OPERATIONAL' : 'SISTEMAS OPERATIVOS'}</span>
                 </div>
             </div>
-            
+
             <div class="legal-right">
-                <a href={isEn ? '/en/privacy' : '/privacidad'} class="legal-link">{isEn ? 'Privacy Policy' : 'Aviso de Privacidad'}</a>
-                <a href={isEn ? '/en/terms' : '/terminos'} class="legal-link">{isEn ? 'Terms of Service' : 'Términos de Servicio'}</a>
-                <a href="#" class="legal-link">Op. Global — CDMX</a>
+                <a href={isEn ? '/en/privacy' : '/privacidad'} class="legal-link">{isEn ? 'Privacy' : 'Privacidad'}</a>
+                <a href={isEn ? '/en/terms' : '/terminos'} class="legal-link">{isEn ? 'Terms' : 'Términos'}</a>
+                <a href="#" class="legal-link">CDMX</a>
             </div>
         </div>
 
@@ -139,270 +160,400 @@ const isEn = lang === 'en';
 
 <style>
     /* ==========================================================
-       VARIABLES & RESET MAESTRO (Precisión Matemática)
+       VARIABLES
        ========================================================== */
     :root {
-        --bg-footer: #0a192f; 
+        --bg-footer: #0a192f;
         --text-main: #ffffff;
         --text-muted: #8892b0;
         --text-dim: #64748b;
-        --hairline: rgba(255, 255, 255, 0.08); 
-        
+        --hairline: rgba(255, 255, 255, 0.08);
+
         --ease-apple: cubic-bezier(0.16, 1, 0.3, 1);
         --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05);
         --font-sans: 'Inter', system-ui, sans-serif;
+        --font-serif: 'Instrument Serif', serif;
     }
 
     .footer-premium ::selection { background: #ffffff; color: #0a192f; }
 
     .footer-premium {
-        background-color: var(--bg-footer);
+        background: radial-gradient(ellipse at 30% 20%, #112240 0%, #0a192f 60%, #050b14 100%);
         color: var(--text-main);
-        padding: 0 0 3rem 0; 
+        padding: 0 0 2.5rem 0;
         position: relative;
         font-family: var(--font-sans);
         overflow: hidden;
+        isolation: isolate;
     }
 
-    .container { width: 100%; max-width: 1240px; padding: 0 5%; margin: 0 auto; position: relative;}
+    .container { width: 100%; max-width: 1240px; padding: 0 5%; margin: 0 auto; position: relative; }
+    .footer-inner { z-index: 2; }
 
-    /* Modificación GSAP: Transform origin para que la línea crezca de izquierda a derecha */
-    .top-hairline { 
-        width: 100%; 
-        height: 1px; 
-        background-color: var(--hairline); 
-        margin-bottom: 6rem;
+    /* ── Editorial watermark — gigantesco "Flouvia" en serif italic ── */
+    .footer-watermark {
+        position: absolute; bottom: -6vw; right: -3vw;
+        font-family: var(--font-serif); font-style: italic; font-weight: 400;
+        font-size: 26vw; line-height: 0.85; letter-spacing: -0.04em;
+        color: rgba(255,255,255,0.025);
+        pointer-events: none; user-select: none; white-space: nowrap;
+        z-index: 1;
+    }
+
+    /* ── Top hairline ── */
+    .top-hairline {
+        width: 100%; height: 1px;
+        background: linear-gradient(to right, transparent, rgba(255,255,255,0.18) 20%, rgba(255,255,255,0.18) 80%, transparent);
+        margin-bottom: 3rem;
         transform-origin: left center;
     }
 
+    /* ── Meta row encima del grid (eyebrow + edition) ── */
+    .footer-meta-row {
+        display: flex; justify-content: space-between; align-items: baseline;
+        margin-bottom: 5rem; padding-top: 1rem;
+    }
+    .footer-eyebrow {
+        font-size: 0.65rem; font-weight: 800; letter-spacing: 3px;
+        color: rgba(255,255,255,0.45); text-transform: uppercase; margin: 0;
+    }
+    .footer-edition {
+        display: inline-flex; align-items: baseline; gap: 0.55rem;
+        font-family: var(--font-serif); font-style: italic; font-weight: 400;
+        color: rgba(255,255,255,0.65); margin: 0; line-height: 1;
+    }
+    .edition-num { font-size: 1.5rem; }
+    .edition-divider { color: rgba(255,255,255,0.3); font-size: 1rem; }
+    .edition-label { font-size: 1.05rem; color: rgba(255,255,255,0.45); }
+
     /* ==========================================================
-       1. GRID ASIMÉTRICO (12 Columnas Editoriales)
+       1. GRID EDITORIAL
        ========================================================== */
     .footer-grid {
         display: grid;
-        grid-template-columns: 5fr 7fr; 
+        grid-template-columns: 5fr 7fr;
         gap: 6rem;
-        margin-bottom: 8rem;
+        margin-bottom: 6rem;
     }
 
-    .brand-column {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+    .brand-column { display: flex; flex-direction: column; }
+
+    .footer-logo-svg { width: 130px; height: auto; margin-bottom: 2.5rem; opacity: 0.95; }
+
+    /* Statement editorial — la frase grande con accent serif */
+    .footer-statement {
+        font-size: clamp(1.7rem, 2.2vw, 2.3rem);
+        font-weight: 800;
+        line-height: 1.15;
+        letter-spacing: -0.8px;
+        color: var(--text-main);
+        margin: 0 0 1.5rem 0;
+        max-width: 95%;
+    }
+    .footer-statement .editorial {
+        font-family: var(--font-serif); font-style: italic; font-weight: 400;
+        letter-spacing: -0.5px;
+        color: rgba(255,255,255,0.7);
+        margin-left: 0.15em;
     }
 
-    .footer-logo-svg { width: 130px; height: auto; margin-bottom: 3rem; opacity: 0.9;}
-
-    .statement-box { margin-bottom: 4rem; }
-    
-    .description { 
-        color: var(--text-muted); 
-        font-size: 1.25rem; 
-        line-height: 1.5; 
+    .description {
+        color: var(--text-muted);
+        font-size: 1.05rem;
+        line-height: 1.65;
         font-weight: 400;
-        letter-spacing: -0.3px;
-        margin: 0; 
+        letter-spacing: -0.1px;
+        margin: 0 0 3rem 0;
         max-width: 90%;
     }
 
-    /* EL BOTÓN DE CORREO SUTIL (Micro-interacción mantenida en CSS por performance) */
+    /* Email link refinado */
     .minimal-email-link {
-        display: inline-flex; align-items: center; gap: 12px;
+        display: inline-flex; align-items: center; gap: 14px;
         text-decoration: none; color: var(--text-main);
-        padding-bottom: 8px;
+        padding-bottom: 10px;
         border-bottom: 1px solid var(--hairline);
-        transition: border-color 0.4s var(--ease-apple);
+        transition: border-color 0.5s var(--ease-apple);
+        width: max-content;
     }
-
     .email-text {
-        font-size: 1.05rem; font-weight: 500; letter-spacing: 0.5px;
-        transition: transform 0.4s var(--ease-spring), color 0.4s var(--ease-apple);
+        font-size: 1.05rem; font-weight: 500; letter-spacing: 0.3px;
+        transition: transform 0.5s var(--ease-spring);
     }
-
     .email-arrow {
-        width: 16px; height: 16px; opacity: 0.5; color: var(--text-muted);
-        transition: all 0.4s var(--ease-spring);
+        width: 16px; height: 16px; opacity: 0.55; color: var(--text-muted);
+        transition: all 0.5s var(--ease-spring);
     }
-
-    .minimal-email-link:hover { border-bottom-color: rgba(255,255,255,0.4); }
+    .minimal-email-link:hover { border-bottom-color: rgba(255,255,255,0.45); }
     .minimal-email-link:hover .email-text { transform: translateX(4px); }
     .minimal-email-link:hover .email-arrow { opacity: 1; transform: translateX(8px); color: #fff; }
     .minimal-email-link:active { transform: scale(0.98); transition: 0.1s; }
 
-    /* BLOQUE DERECHO (Navegación) */
+    /* ── Bloque derecho: nav columns ── */
     .navigation-columns {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 3rem;
+        display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem;
+        padding-top: 0.5rem;
     }
 
     .nav-col { display: flex; flex-direction: column; }
 
+    .col-head {
+        display: flex; align-items: baseline; gap: 0.7rem;
+        margin-bottom: 2.25rem;
+    }
+    .col-num {
+        font-family: var(--font-serif); font-style: italic; font-weight: 400;
+        font-size: 1.05rem; color: rgba(255,255,255,0.3); line-height: 1;
+    }
     .col-title {
-        font-size: 0.65rem; font-weight: 700; letter-spacing: 1.5px;
-        color: var(--text-dim); margin-bottom: 2rem;
+        font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px;
+        color: rgba(255,255,255,0.55); margin: 0;
     }
 
-    .nav-links { display: flex; flex-direction: column; gap: 1.2rem; }
-    
+    .nav-links { display: flex; flex-direction: column; gap: 1.1rem; }
+
     .link-item {
-        display: inline-flex; align-items: center; gap: 8px;
-        color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 500;
-        transition: color 0.3s var(--ease-apple); width: max-content;
+        display: inline-flex; align-items: center; gap: 10px;
+        color: var(--text-muted); text-decoration: none;
+        font-size: 0.98rem; font-weight: 500;
+        transition: color 0.4s var(--ease-apple), transform 0.5s var(--ease-spring);
+        width: max-content; position: relative;
     }
-    
+    .link-item span:first-child {
+        transition: transform 0.5s var(--ease-spring);
+    }
     .link-arrow {
-        font-size: 0.8rem; opacity: 0; transform: translateX(-10px);
-        transition: all 0.4s var(--ease-spring); color: #fff;
+        font-size: 0.85rem; opacity: 0;
+        transform: translateX(-8px);
+        transition: all 0.5s var(--ease-spring);
+        color: #fff;
     }
-
     .link-item:hover { color: #fff; }
+    .link-item:hover span:first-child { transform: translateX(4px); }
     .link-item:hover .link-arrow { opacity: 1; transform: translateX(0); }
 
-    /* REDES SOCIALES */
-    .social-links { display: flex; flex-direction: column; gap: 1.2rem; }
-    
+    /* ── Redes sociales ── */
+    .social-links { display: flex; flex-direction: column; gap: 1.1rem; }
+
     .social-item {
-        display: flex; align-items: center; gap: 12px;
-        color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 500;
-        transition: color 0.3s var(--ease-apple);
-        width: max-content; 
+        display: inline-flex; align-items: center; gap: 12px;
+        color: var(--text-muted); text-decoration: none;
+        font-size: 0.98rem; font-weight: 500;
+        transition: color 0.4s var(--ease-apple);
+        width: max-content;
     }
-
     .s-icon-wrap {
-        width: 28px; height: 28px; border-radius: 50%; border: 1px solid transparent;
+        width: 30px; height: 30px; border-radius: 50%;
+        background: rgba(255,255,255,0.03);
         display: flex; align-items: center; justify-content: center;
-        transition: all 0.4s var(--ease-spring);
+        transition: all 0.5s var(--ease-spring);
     }
-
     .social-icon { width: 14px; height: 14px; opacity: 0.6; transition: all 0.4s var(--ease-apple); }
 
     .social-item:hover { color: #fff; }
-    .social-item:hover .s-icon-wrap { border-color: rgba(255,255,255,0.2); transform: translateX(4px);}
+    .social-item:hover .s-icon-wrap { background: rgba(255,255,255,0.1); transform: translateX(4px); }
     .social-item:hover .social-icon { opacity: 1; }
 
+    /* ── Divider entre grid y bottom ── */
+    .footer-divider {
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba(255,255,255,0.1) 20%, rgba(255,255,255,0.1) 80%, transparent);
+        margin: 0 0 2rem 0;
+        transform-origin: center;
+    }
+
     /* ==========================================================
-       2. BARRA INFERIOR (Status Legal Integrado)
+       2. BARRA INFERIOR
        ========================================================== */
     .footer-bottom {
         display: flex; justify-content: space-between; align-items: center;
-        border-top: 1px solid var(--hairline); padding-top: 2rem;
         font-size: 0.8rem; color: var(--text-dim); font-weight: 500;
     }
 
-    .legal-left { display: flex; align-items: center; gap: 1rem; }
-    .copyright { margin: 0; }
-    .dot-separator { opacity: 0.5; font-size: 0.6rem;}
+    .legal-left { display: flex; align-items: center; gap: 1.25rem; }
+    .copyright { margin: 0; letter-spacing: 0.2px; }
+    .copyright .editorial {
+        font-family: var(--font-serif); font-style: italic; font-weight: 400;
+        color: rgba(255,255,255,0.7);
+    }
+    .dot-separator { opacity: 0.4; font-size: 0.85rem; line-height: 1; }
 
-    .status-indicator { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.03); padding: 4px 10px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.05);}
-    .status-text { letter-spacing: 1px; font-weight: 600; color: #94a3b8; font-size: 0.7rem;}
+    .status-indicator {
+        display: flex; align-items: center; gap: 8px;
+        background: rgba(255,255,255,0.03); padding: 5px 12px; border-radius: 100px;
+        border: 1px solid rgba(255,255,255,0.06);
+    }
+    .status-text {
+        letter-spacing: 1.2px; font-weight: 700;
+        color: #94a3b8; font-size: 0.65rem;
+    }
 
-    .dot-online { 
-        width: 6px; height: 6px; background-color: #10b981; border-radius: 50%; 
-        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); 
+    .dot-online {
+        width: 6px; height: 6px; background-color: #10b981; border-radius: 50%;
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
         animation: pulse-server 2.5s infinite;
     }
-    @keyframes pulse-server { 
-        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 
-        70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); } 
-        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } 
+    @keyframes pulse-server {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+        70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
     }
 
-    .legal-right { display: flex; gap: 2rem; }
-    .legal-link { color: var(--text-dim); text-decoration: none; transition: color 0.3s; }
-    .legal-link:hover { color: var(--text-muted); }
+    .legal-right { display: flex; gap: 2rem; align-items: center; }
+    .legal-link {
+        color: var(--text-dim); text-decoration: none;
+        transition: color 0.4s var(--ease-apple);
+        position: relative;
+    }
+    .legal-link::after {
+        content: ''; position: absolute; left: 0; right: 100%;
+        bottom: -3px; height: 1px; background: rgba(255,255,255,0.4);
+        transition: right 0.5s var(--ease-spring);
+    }
+    .legal-link:hover { color: #fff; }
+    .legal-link:hover::after { right: 0; }
 
-    /* MÓVIL RESPONSIVE */
+    /* ==========================================================
+       MÓVIL
+       ========================================================== */
     @media (max-width: 1024px) {
-        .footer-grid { grid-template-columns: 1fr; gap: 5rem; margin-bottom: 6rem;}
+        .footer-grid { grid-template-columns: 1fr; gap: 4rem; margin-bottom: 4.5rem; }
         .navigation-columns { gap: 2rem; }
         .description { max-width: 100%; }
-        .brand-column { gap: 2rem; }
-        .statement-box { margin-bottom: 2rem; }
+        .footer-statement { max-width: 100%; }
+        .footer-watermark { font-size: 38vw; bottom: -10vw; }
     }
 
     @media (max-width: 768px) {
-        .top-hairline { margin-bottom: 4rem; }
-        .footer-logo-svg { width: 110px; margin-bottom: 2rem;}
-        .description { font-size: 1.1rem; line-height: 1.6; }
+        .footer-premium { padding-bottom: 2rem; }
+        .top-hairline { margin-bottom: 2.5rem; }
+        .footer-meta-row { margin-bottom: 3.5rem; padding-top: 0.5rem; }
+        .footer-edition { gap: 0.4rem; }
+        .edition-num { font-size: 1.2rem; }
+        .edition-label { font-size: 0.9rem; }
+
+        .footer-logo-svg { width: 110px; margin-bottom: 2rem; }
+        .footer-statement { font-size: 1.55rem; line-height: 1.2; margin-bottom: 1.25rem; }
+        .description { font-size: 1rem; line-height: 1.6; margin-bottom: 2.5rem; }
         .minimal-email-link { width: 100%; justify-content: space-between; }
-        .navigation-columns { 
-            grid-template-columns: 1fr 1fr; 
-            row-gap: 3rem; column-gap: 1rem; 
+
+        .navigation-columns {
+            grid-template-columns: 1fr 1fr;
+            row-gap: 3rem; column-gap: 1.5rem;
         }
         .navigation-columns .nav-col:nth-child(3) { grid-column: span 2; }
-        .link-item { padding: 4px 0; width: 100%; justify-content: space-between;}
-        .link-arrow { opacity: 0.3; transform: translateX(0); }
-        .social-item { width: 100%; justify-content: space-between; padding: 4px 0;}
-        .s-icon-wrap { border-color: rgba(255,255,255,0.1); }
+        .col-head { margin-bottom: 1.75rem; }
+        .link-item { padding: 4px 0; width: 100%; justify-content: space-between; }
+        .link-arrow { opacity: 0.35; transform: translateX(0); }
+        .social-item { width: 100%; justify-content: space-between; padding: 4px 0; }
+        .s-icon-wrap { background: rgba(255,255,255,0.05); }
         .social-icon { opacity: 0.8; }
-        .footer-bottom { flex-direction: column; align-items: flex-start; gap: 2.5rem; }
+
+        .footer-divider { margin: 1rem 0 2rem 0; }
+        .footer-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; }
         .legal-left { flex-direction: column; align-items: flex-start; gap: 1rem; }
         .dot-separator { display: none; }
-        .status-indicator { align-self: stretch; justify-content: center; padding: 8px;} 
-        .legal-right { flex-direction: column; gap: 1.5rem; width: 100%; }
-        .legal-link { padding: 8px 0; display: block; border-bottom: 1px solid var(--hairline);}
+        .status-indicator { padding: 6px 12px; }
+        .legal-right { gap: 1.75rem; flex-wrap: wrap; }
+
+        .footer-watermark { font-size: 56vw; bottom: -12vw; right: -8vw; }
     }
 </style>
 
 <script>
     import { gsap } from 'gsap';
     import { ScrollTrigger } from 'gsap/ScrollTrigger';
+    import { SplitText } from 'gsap/SplitText';
 
-    // Registro del plugin en el ecosistema Astro/Client
-    gsap.registerPlugin(ScrollTrigger);
+    gsap.registerPlugin(ScrollTrigger, SplitText);
+
+    const ir = { immediateRender: false } as const;
 
     const initFooterAnimations = () => {
-        // Pre-establecer estados iniciales para evitar parpadeos antes del scroll
-        gsap.set('.top-hairline', { scaleX: 0 });
-        gsap.set(['.footer-logo-svg', '.statement-box', '.contact-action', '.nav-col', '.footer-bottom'], { y: 30, opacity: 0 });
+        const footer = document.querySelector<HTMLElement>('.footer-premium');
+        if (!footer) return;
 
-        // Crear una línea de tiempo maestra
+        // ── Initial states ──
+        gsap.set('.footer-premium .top-hairline', { scaleX: 0, transformOrigin: 'left center' });
+        gsap.set('.footer-premium .footer-divider', { scaleX: 0, transformOrigin: 'center' });
+        gsap.set('.footer-premium .footer-eyebrow', { opacity: 0, y: 12 });
+        gsap.set('.footer-premium .footer-edition', { opacity: 0, y: 12 });
+        gsap.set('.footer-premium .footer-logo-svg', { opacity: 0, y: 22 });
+        gsap.set('.footer-premium .description', { opacity: 0, y: 18 });
+        gsap.set('.footer-premium .contact-action', { opacity: 0, y: 18 });
+        gsap.set('.footer-premium .nav-col', { opacity: 0, y: 24 });
+        gsap.set('.footer-premium .footer-bottom > *', { opacity: 0, y: 14 });
+
+        // SplitText sobre el statement editorial
+        const statement = document.querySelector<HTMLElement>('.footer-premium .footer-statement');
+        let statementSplit: SplitText | null = null;
+        if (statement) {
+            statementSplit = SplitText.create(statement, { type: 'lines,words', linesClass: 'lx-line-mask-footer' });
+            gsap.set(statementSplit.words, { yPercent: 115 });
+        }
+
+        // ── Master timeline ──
         const tl = gsap.timeline({
             scrollTrigger: {
-                trigger: '.footer-premium',
-                start: 'top 85%', // Dispara la animación cuando el footer asoma el 15% en pantalla
-                toggleActions: 'play none none reverse', // Vuelve a reproducirse si haces scroll up/down
-            }
+                trigger: footer,
+                start: 'top 85%',
+                once: true,
+            },
+            defaults: { ease: 'expo.out' },
         });
 
         tl
-            // 1. La línea superior se despliega (Precisión geométrica)
-            .to('.top-hairline', { 
-                scaleX: 1, 
-                duration: 1.2, 
-                ease: 'expo.out' 
-            })
-            
-            // 2. Aparece la columna izquierda (Logo, texto, correo) en cascada
-            .to(['.footer-logo-svg', '.statement-box', '.contact-action'], { 
-                y: 0, 
-                opacity: 1, 
-                duration: 0.8, 
-                stagger: 0.15, 
-                ease: 'power3.out' 
-            }, '-=0.8') // El '-=0.8' empalma la animación con la de la línea
-            
-            // 3. Las columnas de navegación entran una por una
-            .to('.nav-col', { 
-                y: 0, 
-                opacity: 1, 
-                duration: 0.8, 
-                stagger: 0.1, 
-                ease: 'power3.out' 
-            }, '-=0.6')
-            
-            // 4. El status operativo y el copyright se revelan sutilmente al final
-            .to('.footer-bottom', { 
-                y: 0, 
-                opacity: 1, 
-                duration: 1, 
-                ease: 'power2.out' 
-            }, '-=0.4');
+            // 1. Hairline expande
+            .to('.footer-premium .top-hairline', { ...ir, scaleX: 1, duration: 1.3 }, 0)
+
+            // 2. Meta row (eyebrow + edition)
+            .to('.footer-premium .footer-eyebrow', { ...ir, opacity: 1, y: 0, duration: 1.0 }, 0.25)
+            .to('.footer-premium .footer-edition', { ...ir, opacity: 1, y: 0, duration: 1.0 }, 0.32)
+
+            // 3. Brand col: logo
+            .to('.footer-premium .footer-logo-svg', { ...ir, opacity: 1, y: 0, duration: 1.1 }, 0.45);
+
+        // 4. Statement (SplitText words reveal)
+        if (statementSplit) {
+            tl.to(statementSplit.words, {
+                ...ir, yPercent: 0, duration: 1.3, ease: 'expo.out',
+                stagger: { amount: 0.4, from: 'start' },
+            }, 0.55);
+        }
+
+        tl
+            // 5. Description + email
+            .to('.footer-premium .description', { ...ir, opacity: 1, y: 0, duration: 1.0 }, 0.85)
+            .to('.footer-premium .contact-action', { ...ir, opacity: 1, y: 0, duration: 1.0 }, 0.95)
+
+            // 6. Nav columns en cascada
+            .to('.footer-premium .nav-col', {
+                ...ir, opacity: 1, y: 0, duration: 1.0, stagger: 0.1,
+            }, 0.7)
+
+            // 7. Divider
+            .to('.footer-premium .footer-divider', { ...ir, scaleX: 1, duration: 1.1 }, 1.15)
+
+            // 8. Footer bottom
+            .to('.footer-premium .footer-bottom > *', {
+                ...ir, opacity: 1, y: 0, duration: 0.95, stagger: 0.08,
+            }, 1.25);
+
+        // ── Refresh ScrollTrigger después de fonts/imágenes ──
+        window.addEventListener('load', () => {
+            setTimeout(() => ScrollTrigger.refresh(), 120);
+        });
     };
 
-    // Asegurar ejecución en la arquitectura Astro
     document.addEventListener('DOMContentLoaded', initFooterAnimations);
-    // Soporte para transiciones de vista de Astro (ViewTransitions) si las tienes activas
     document.addEventListener('astro:page-load', initFooterAnimations);
 </script>
+
+<style is:global>
+    /* line-mask para el SplitText del statement */
+    .lx-line-mask-footer {
+        overflow: hidden;
+        display: block;
+        padding-bottom: 0.12em;
+    }
+</style>

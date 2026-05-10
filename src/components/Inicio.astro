@@ -307,6 +307,18 @@ const t = useTranslations(lang);
                     <p class="eyebrow">{t('proto.eyebrow')}</p>
                     <h2 class="section-heading">{t('proto.title')} <br><span class="editorial">{t('proto.title_editorial')}</span></h2>
                     <p class="protocol-intro">{t('proto.desc')}</p>
+
+                    <div class="proto-progress" aria-hidden="true">
+                        <div class="proto-progress-meta">
+                            <span class="proto-progress-label">{lang === 'en' ? 'STEP' : 'PASO'}</span>
+                            <span class="proto-progress-count">
+                                <span class="proto-current">01</span>
+                                <span class="proto-divider">/</span>
+                                <span class="proto-total">04</span>
+                            </span>
+                        </div>
+                        <div class="proto-progress-bar"><div class="proto-progress-fill"></div></div>
+                    </div>
                 </div>
 
                 <div class="protocol-timeline">
@@ -474,115 +486,129 @@ const t = useTranslations(lang);
     .hero-desc { font-size: 1.15rem; color: var(--color-text-muted); max-width: 500px; line-height: 1.5; margin: 0; }
 
     /* ==========================================================
-       2. TECNOLOGÍA
+       2. TECNOLOGÍA — Editorial Stack
        ========================================================== */
-    .tech-spotlight { padding: 8rem 0; background: var(--color-bg); position: relative; overflow: hidden; }
-    .tech-spotlight .partners-header { margin-bottom: 4rem; position: relative; z-index: 1; }
+    .tech-spotlight {
+        padding: 10rem 0 9rem;
+        background: var(--color-bg);
+        position: relative; overflow: hidden;
+    }
+    .tech-spotlight .partners-header { margin-bottom: 5rem; position: relative; z-index: 1; }
     .section-heading { font-size: clamp(2.5rem, 5vw, 3.8rem); font-weight: 800; letter-spacing: -2px; margin: 0 0 0.5rem 0; line-height: 1; }
     .section-sub { font-size: 1.05rem; color: var(--color-text-muted); margin: 0; line-height: 1.5;}
 
-    /* Tech header layout */
-    .tech-header-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1rem; }
+    /* Tech header — editorial layout */
+    .tech-header-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.25rem; gap: 2rem; }
     .tech-count-wrap { display: flex; flex-direction: column; align-items: flex-end; line-height: 1; flex-shrink: 0; }
     .tech-count-num {
         font-family: var(--font-serif); font-style: italic;
-        font-size: 4rem; font-weight: 400; color: rgba(0,0,0,0.07); line-height: 1;
+        font-size: 5.5rem; font-weight: 400; color: rgba(0,0,0,0.08); line-height: 0.9;
+        letter-spacing: -3px;
     }
-    .tech-count-unit { font-size: 0.55rem; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: #d0d0d0; }
+    .tech-count-unit { font-size: 0.6rem; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: #b8b8b8; margin-top: 6px; }
     .tech-header-rule {
         height: 1px;
-        background: linear-gradient(90deg, var(--color-blue-deep) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
-        margin-bottom: 1.5rem; transform-origin: left center; transform: scaleX(0);
+        background: linear-gradient(90deg, var(--color-blue-deep) 0%, rgba(0,0,0,0.08) 60%, transparent 100%);
+        margin-bottom: 1.75rem; transform-origin: left center; transform: scaleX(0);
     }
 
     /* Section watermark */
     .tech-watermark {
-        position: absolute; bottom: -10%; right: -2%;
+        position: absolute; bottom: -8%; right: -3%;
         font-family: var(--font-serif); font-style: italic;
-        font-size: 20vw; font-weight: 400; color: rgba(0,0,0,0.028);
+        font-size: 22vw; font-weight: 400; color: rgba(0,0,0,0.025);
         pointer-events: none; white-space: nowrap; line-height: 1;
         user-select: none; z-index: 0; will-change: transform;
     }
 
+    /* GRID — refined editorial */
     .spotlight-grid {
         display: grid; grid-template-columns: repeat(4, 1fr);
-        gap: 1px; background: rgba(0,0,0,0.07);
-        border: 1px solid rgba(0,0,0,0.07); border-radius: 24px; overflow: hidden;
+        gap: 1px; background: rgba(0,0,0,0.06);
+        border: 1px solid rgba(0,0,0,0.06); border-radius: 28px; overflow: hidden;
         position: relative;
         --grid-mx: 50%; --grid-my: 50%;
+        box-shadow: 0 30px 80px -30px rgba(10,25,47,0.08);
     }
     .spotlight-grid::after {
         content: ''; position: absolute; inset: 0; border-radius: inherit;
-        background: radial-gradient(700px circle at var(--grid-mx) var(--grid-my), rgba(255,255,255,0.09) 0%, transparent 55%);
-        pointer-events: none; z-index: 10; opacity: 0; transition: opacity 0.4s ease;
+        background: radial-gradient(800px circle at var(--grid-mx) var(--grid-my), rgba(10,25,47,0.04) 0%, transparent 50%);
+        pointer-events: none; z-index: 10; opacity: 0; transition: opacity 0.5s ease;
     }
     .spotlight-grid:hover::after { opacity: 1; }
 
+    /* CARD — luxe editorial */
     .tech-card {
-        position: relative; background: #fafafa; min-height: 216px;
-        transition: background 0.45s var(--ease-smooth);
+        position: relative; background: #fdfdfd; min-height: 280px;
+        transition: background 0.5s var(--ease-smooth);
     }
 
     .tech-card::before {
         content: ""; position: absolute; top: var(--mouse-y); left: var(--mouse-x);
-        transform: translate(-50%, -50%); width: 300px; height: 300px;
-        background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 60%);
-        opacity: 0; transition: opacity 0.3s ease; z-index: 0; pointer-events: none;
+        transform: translate(-50%, -50%); width: 380px; height: 380px;
+        background: radial-gradient(circle, rgba(255,255,255,0.14) 0%, transparent 60%);
+        opacity: 0; transition: opacity 0.35s ease; z-index: 0; pointer-events: none;
     }
 
     .tech-card:hover { background: #0a1929; z-index: 2; }
     .tech-card:hover::before { opacity: 1; }
 
     .card-content {
-        position: relative; z-index: 1; padding: 1.75rem 1.8rem;
-        display: flex; flex-direction: column; height: 100%; min-height: 216px;
+        position: relative; z-index: 1; padding: 2rem 2rem 1.75rem;
+        display: flex; flex-direction: column; height: 100%; min-height: 280px;
     }
 
-    .tc-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; }
+    .tc-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
     .cell-label {
-        font-size: 0.57rem; font-weight: 800; letter-spacing: 1.5px;
-        color: #bbb; text-transform: uppercase;
+        font-size: 0.58rem; font-weight: 800; letter-spacing: 2px;
+        color: #999; text-transform: uppercase;
         transition: color 0.4s var(--ease-smooth); line-height: 1.3;
     }
     .tc-num {
-        font-size: 0.6rem; font-weight: 600; color: rgba(0,0,0,0.12);
-        transition: color 0.4s; flex-shrink: 0;
+        font-family: var(--font-serif); font-style: italic;
+        font-size: 1.6rem; font-weight: 400;
+        color: rgba(10,25,47,0.18);
+        transition: color 0.4s; flex-shrink: 0; line-height: 0.9;
+        letter-spacing: -1px;
     }
 
-    .logo-slot { flex: 1; display: flex; align-items: center; min-height: 52px; }
+    .logo-slot {
+        flex: 1; display: flex; align-items: center; justify-content: center;
+        min-height: 80px; padding: 1rem 0;
+    }
     .tc-logo {
-        height: 32px; width: auto; max-width: 140px;
-        object-fit: contain; object-position: left center;
+        height: 38px; width: auto; max-width: 140px;
+        object-fit: contain; object-position: center;
         opacity: 0.55;
         filter: grayscale(1) contrast(0.9);
-        transition: opacity 0.45s var(--ease-spring), filter 0.45s var(--ease-smooth), transform 0.45s var(--ease-spring);
+        transition: opacity 0.5s var(--ease-spring), filter 0.5s var(--ease-smooth), transform 0.5s var(--ease-spring);
     }
     .tech-card:hover .tc-logo {
         opacity: 1;
         filter: grayscale(0) contrast(1);
-        transform: scale(1.06) translateY(-2px);
-    }
-    .tc-mark {
-        height: 26px; width: auto; color: var(--color-text); opacity: 0.45;
-        transition: opacity 0.5s var(--ease-spring), color 0.4s var(--ease-smooth), transform 0.5s var(--ease-spring);
+        transform: scale(1.08) translateY(-2px);
     }
 
     .tc-foot {
-        margin-top: auto; padding-top: 1.25rem;
-        border-top: 1px solid rgba(0,0,0,0.07); transition: border-color 0.4s;
+        margin-top: auto; padding-top: 1.5rem;
+        border-top: 1px solid rgba(0,0,0,0.06); transition: border-color 0.4s;
     }
     .tool-name {
-        font-size: 1.3rem; font-weight: 800; letter-spacing: -0.5px;
+        font-size: 1.45rem; font-weight: 800; letter-spacing: -0.5px;
         margin: 0; color: var(--color-text);
         transition: color 0.4s var(--ease-smooth); line-height: 1.1;
     }
-    .tool-tier { font-weight: 400; font-style: normal; }
+    .tool-tier {
+        font-family: var(--font-serif); font-style: italic;
+        font-weight: 400; font-size: 1.2rem; color: rgba(10,25,47,0.5);
+        transition: color 0.4s var(--ease-smooth);
+    }
 
     .tech-card:hover .cell-label { color: rgba(255,255,255,0.4); }
-    .tech-card:hover .tc-num { color: rgba(255,255,255,0.15); }
-    .tech-card:hover .tc-mark { opacity: 1; color: #fff; transform: scale(1.08) translateY(-2px); }
+    .tech-card:hover .tc-num { color: rgba(147,210,255,0.4); }
     .tech-card:hover .tc-foot { border-top-color: rgba(255,255,255,0.1); }
     .tech-card:hover .tool-name { color: #fff; }
+    .tech-card:hover .tool-tier { color: rgba(147,210,255,0.7); }
 
     /* ==========================================================
        3. CARRUSEL CASOS
@@ -623,18 +649,20 @@ const t = useTranslations(lang);
     
     .vertical-card {
         width: 400px; height: 540px; scroll-snap-align: center; position: relative;
-        text-decoration: none; border: 1px solid rgba(255,255,255,0.08);
-        transition: all 0.5s var(--ease-smooth); z-index: 1;
+        text-decoration: none;
+        transition: transform 0.6s var(--ease-smooth), opacity 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth);
+        z-index: 1;
+        box-shadow: 0 24px 60px rgba(0,0,0,0.35);
     }
-    
+
     @media (hover: hover) {
-        .carousel-track:hover .vertical-card { 
-            transform: scale(0.85); opacity: 0.5; 
+        .carousel-track:hover .vertical-card {
+            transform: scale(0.86); opacity: 0.45;
         }
-        .carousel-track .vertical-card:hover { 
-            transform: scale(1.08) translateY(-10px); 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(255,255,255,0.2); 
-            opacity: 1; z-index: 10; 
+        .carousel-track .vertical-card:hover {
+            transform: scale(1.06) translateY(-12px);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+            opacity: 1; z-index: 10;
         }
     }
     
@@ -651,113 +679,204 @@ const t = useTranslations(lang);
     .card-overlay h3 { font-size: 2rem; font-weight: 800; margin: 0; letter-spacing: -0.5px;}
     .v-tag { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: #ccc; letter-spacing: 2px;}
     
-    .cta-vertical { background: #112240; border: 1px solid rgba(255,255,255,0.12) !important; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; }
+    .cta-vertical {
+        background: radial-gradient(120% 90% at 50% 0%, #1a2f52 0%, #0a192f 65%, #050b14 100%);
+        display: flex; align-items: center; justify-content: center;
+        text-align: center; color: #fff;
+    }
     .cta-inner h3 { font-size: 2.2rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -1px;}
     .btn-text-only { font-size: 0.9rem; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 4px; transition: 0.3s;}
     .cta-vertical:hover .btn-text-only { border-color: #fff; }
 
     /* ==========================================================
-       4. SERVICIOS 
+       4. SERVICIOS — Editorial Rows
        ========================================================== */
-    .services-rows { padding: 8rem 0 4rem 0; background: var(--color-bg); }
+    .services-rows { padding: 9rem 0 5rem 0; background: var(--color-bg); position: relative; }
     .rows-wrapper { margin-top: 5rem; border-top: 1px solid var(--color-border); }
-    
+
     .service-row {
-        display: grid; grid-template-columns: 60px 1fr auto; gap: 4rem;
-        padding: 4rem 0; position: relative; cursor: pointer; align-items: center;
-        transition: all 0.5s var(--ease-smooth);
+        display: grid; grid-template-columns: 110px 1fr auto; gap: 4rem;
+        padding: 4.5rem 0; position: relative; cursor: pointer; align-items: center;
+        transition: background 0.5s var(--ease-smooth);
         text-decoration: none; color: inherit;
     }
-    
+
     .service-row::before { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: var(--color-border); }
 
     .animated-border {
-        position: absolute; bottom: 0; left: 0; width: 0%; height: 1px; background: #000;
-        transition: width 0.7s var(--ease-spring); z-index: 2;
+        position: absolute; bottom: 0; left: 0; width: 0%; height: 1px;
+        background: linear-gradient(90deg, #0a192f 0%, #0a192f 60%, transparent 100%);
+        transition: width 0.85s var(--ease-spring); z-index: 2;
     }
 
-    .row-num { font-size: 0.85rem; font-weight: 700; color: #ccc; transition: 0.4s; }
-    .row-content h3 { font-size: 2.4rem; font-weight: 800; letter-spacing: -1px; margin: 0 0 1rem 0; transition: color 0.5s var(--ease-smooth), letter-spacing 0.5s var(--ease-smooth); }
-    .row-content p { font-size: 1.15rem; color: var(--color-text-muted); line-height: 1.6; margin: 0; max-width: 650px; }
-    
-    .arrow-circle {
-        width: 50px; height: 50px; border: 1px solid var(--color-border); border-radius: 50%;
-        display: flex; align-items: center; justify-content: center;
-        transition: background 0.4s var(--ease-spring), color 0.4s var(--ease-spring),
-                    border-color 0.4s var(--ease-spring), transform 0.55s var(--ease-spring);
+    /* Number — editorial serif italic */
+    .row-num {
+        font-family: var(--font-serif); font-style: italic;
+        font-size: 2.6rem; font-weight: 400;
+        color: rgba(10,25,47,0.18);
+        line-height: 0.9; letter-spacing: -1.5px;
+        transition: color 0.5s var(--ease-smooth), transform 0.6s var(--ease-spring);
     }
-    
-    .service-row:hover { background: rgba(10,25,47,0.018); }
+
+    .row-content h3 {
+        font-size: 2.6rem; font-weight: 800; letter-spacing: -1.2px;
+        margin: 0 0 1rem 0;
+        transition: color 0.5s var(--ease-smooth), letter-spacing 0.5s var(--ease-smooth), transform 0.55s var(--ease-spring);
+    }
+    .row-content p {
+        font-size: 1.1rem; color: var(--color-text-muted); line-height: 1.65;
+        margin: 0; max-width: 620px;
+        transition: color 0.4s var(--ease-smooth);
+    }
+
+    .arrow-circle {
+        width: 56px; height: 56px; border: 1px solid var(--color-border); border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        transition: background 0.5s var(--ease-spring), color 0.5s var(--ease-spring),
+                    border-color 0.5s var(--ease-spring), transform 0.6s var(--ease-spring);
+    }
+
     .service-row:hover .animated-border { width: 100%; }
-    .service-row:hover .row-num { color: #000; transform: translateX(6px) scale(1.15); }
-    .service-row:hover .row-content h3 { letter-spacing: -0.8px; }
-    .service-row:hover .arrow-circle { background: #0a192f; color: #fff; border-color: #0a192f; transform: translate(4px, -4px) rotate(-45deg); }
+    .service-row:hover .row-num { color: var(--color-blue-deep); transform: translateX(8px); }
+    .service-row:hover .row-content h3 { letter-spacing: -0.8px; transform: translateX(6px); }
+    .service-row:hover .arrow-circle { background: var(--color-blue-deep); color: #fff; border-color: var(--color-blue-deep); transform: translate(6px, -6px) rotate(-45deg); }
 
     /* ==========================================================
-       5. PROTOCOLO 
+       5. PROTOCOLO — Editorial Timeline
        ========================================================== */
-    .protocol-section { padding: 7rem 0 8rem 0; background: var(--color-bg-soft); } 
-    
-    .protocol-grid { 
-        display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; 
-        align-items: flex-start; 
+    .protocol-section {
+        padding: 9rem 0 18rem 0;
+        background: var(--color-bg-soft);
         position: relative;
+        overflow: clip; /* clip no crea scroll context — sticky funciona; hidden lo rompía */
     }
 
-    .protocol-sticky-col { 
-        position: -webkit-sticky; 
-        position: sticky; 
-        top: 140px; 
-        height: max-content; 
+    /* Subtle bg watermark like tech section */
+    .protocol-section::before {
+        content: 'Protocol'; position: absolute; bottom: -8%; right: -3%;
+        font-family: var(--font-serif); font-style: italic;
+        font-size: 22vw; font-weight: 400; color: rgba(10,25,47,0.022);
+        pointer-events: none; white-space: nowrap; line-height: 1;
+        user-select: none; z-index: 0;
     }
-    
-    .protocol-intro { font-size: 1.2rem; color: var(--color-text-muted); line-height: 1.6; margin-top: 1.5rem; max-width: 400px; }
 
-    .protocol-timeline { 
-        position: relative; display: flex; flex-direction: column; 
-        gap: 6rem; 
-        padding-left: 2rem;
+    .protocol-grid {
+        display: grid; grid-template-columns: 1fr 1.3fr; gap: 5rem;
+        align-items: flex-start;
+        position: relative; z-index: 1;
+    }
+
+    .protocol-sticky-col {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 140px;
+        height: max-content;
+    }
+
+    .protocol-intro { font-size: 1.15rem; color: var(--color-text-muted); line-height: 1.7; margin-top: 1.75rem; max-width: 400px; }
+
+    /* Editorial progress indicator inside the sticky col */
+    .proto-progress {
+        margin-top: 3rem;
+        max-width: 280px;
+        opacity: 0; /* GSAP entrance */
+    }
+    .proto-progress-meta {
+        display: flex; align-items: baseline; justify-content: space-between;
+        margin-bottom: 0.85rem;
+    }
+    .proto-progress-label {
+        font-size: 0.62rem; font-weight: 800; letter-spacing: 3px;
+        text-transform: uppercase; color: rgba(10,25,47,0.4);
+    }
+    .proto-progress-count {
+        display: inline-flex; align-items: baseline; gap: 0.35rem;
+        font-family: var(--font-serif); font-style: italic; font-weight: 400;
+        color: var(--color-blue-deep); line-height: 1;
+    }
+    .proto-current { font-size: 2rem; display: inline-block; min-width: 1.6ch; transition: transform 0.6s var(--ease-spring); }
+    .proto-divider { font-size: 1.2rem; color: rgba(10,25,47,0.25); }
+    .proto-total { font-size: 1.2rem; color: rgba(10,25,47,0.45); }
+
+    .proto-progress-bar {
+        position: relative; width: 100%; height: 1px;
+        background: rgba(10,25,47,0.08); overflow: hidden;
+    }
+    .proto-progress-fill {
+        position: absolute; inset: 0; transform: scaleX(0); transform-origin: left center;
+        background: linear-gradient(to right, var(--color-blue-deep), #1a3a6e);
+    }
+
+    /* Active step state — driven by JS */
+    .protocol-step.is-active .step-node {
+        border-color: var(--color-blue-deep);
+        box-shadow: 0 0 0 6px rgba(10,25,47,0.06), 0 0 0 14px rgba(10,25,47,0.025);
+    }
+    .protocol-step.is-active .node-core { background: var(--color-blue-deep); transform: scale(1.4); }
+    .protocol-step.is-active .watermark-num { color: rgba(10,25,47,0.075); }
+    .protocol-step.is-active h4 { color: var(--color-blue-deep); }
+
+    .protocol-timeline {
+        position: relative; display: flex; flex-direction: column;
+        gap: 7rem;
+        padding-left: 2.5rem;
     }
 
     .timeline-track {
-        position: absolute; top: 10px; bottom: 10px;
-        left: calc(2rem + 11px);
+        position: absolute; top: 12px; bottom: 12px;
+        left: calc(2.5rem + 13px);
         width: 1px;
-        background: linear-gradient(to bottom, var(--color-blue-deep) 0%, rgba(0,0,0,0.07) 100%);
+        background: linear-gradient(to bottom,
+            var(--color-blue-deep) 0%,
+            var(--color-blue-deep) 30%,
+            rgba(10,25,47,0.2) 70%,
+            rgba(10,25,47,0.05) 100%);
         z-index: 1;
     }
 
-    .protocol-step { 
-        position: relative; z-index: 2; display: flex; align-items: flex-start; gap: 3rem; 
-        cursor: default; transition: all 0.4s var(--ease-smooth);
+    .protocol-step {
+        position: relative; z-index: 2; display: flex; align-items: flex-start; gap: 3.5rem;
+        cursor: default; transition: transform 0.5s var(--ease-smooth);
     }
 
     .step-node {
-        width: 24px; height: 24px; border-radius: 50%; background: var(--color-bg-soft);
-        border: 1px solid rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center;
-        flex-shrink: 0; transition: all 0.5s var(--ease-spring), box-shadow 0.5s ease;
+        width: 28px; height: 28px; border-radius: 50%; background: var(--color-bg-soft);
+        border: 1.5px solid rgba(10,25,47,0.18); display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0; transition: all 0.55s var(--ease-spring), box-shadow 0.55s ease;
+        position: relative;
     }
-    .node-core { width: 6px; height: 6px; border-radius: 50%; background: transparent; transition: all 0.5s var(--ease-spring); }
+    .node-core {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: transparent; transition: all 0.55s var(--ease-spring);
+    }
 
-    .step-content { position: relative; padding-top: 2px; }
-    
+    .step-content { position: relative; padding-top: 2px; min-height: 80px; }
+
     .watermark-num {
-        position: absolute; top: -35px; left: -15px;
-        font-family: var(--font-serif); font-style: italic; font-size: 6rem; line-height: 1;
-        color: rgba(0,0,0,0.03); font-weight: 400; letter-spacing: -4px;
-        pointer-events: none; transition: all 0.6s var(--ease-spring); z-index: -1;
+        position: absolute; top: -50px; left: -18px;
+        font-family: var(--font-serif); font-style: italic;
+        font-size: 8rem; line-height: 1;
+        color: rgba(10,25,47,0.04); font-weight: 400; letter-spacing: -5px;
+        pointer-events: none; transition: all 0.7s var(--ease-spring); z-index: -1;
     }
 
-    .step-content h4 { font-size: 1.6rem; font-weight: 800; margin: 0 0 0.8rem 0; letter-spacing: -0.5px; transition: color 0.4s ease;}
-    .step-content p { font-size: 1.1rem; color: var(--color-text-muted); margin: 0; max-width: 500px; line-height: 1.6;}
+    .step-content h4 {
+        font-size: 1.75rem; font-weight: 800; margin: 0 0 1rem 0;
+        letter-spacing: -0.7px; line-height: 1.15;
+        transition: color 0.5s ease, transform 0.55s var(--ease-spring);
+    }
+    .step-content p {
+        font-size: 1.08rem; color: var(--color-text-muted); margin: 0;
+        max-width: 480px; line-height: 1.65;
+    }
 
-    .protocol-step:hover { transform: translateX(10px); }
+    .protocol-step:hover { transform: translateX(8px); }
     .protocol-step:hover .step-node {
-        border-color: var(--color-blue-deep); transform: scale(1.25);
-        box-shadow: 0 0 0 5px rgba(10,25,47,0.07), 0 0 0 10px rgba(10,25,47,0.03);
+        border-color: var(--color-blue-deep); transform: scale(1.2);
+        box-shadow: 0 0 0 6px rgba(10,25,47,0.06), 0 0 0 12px rgba(10,25,47,0.025);
     }
-    .protocol-step:hover .node-core { background: var(--color-blue-deep); }
-    .protocol-step:hover .watermark-num { color: rgba(0,0,0,0.06); transform: translateX(10px); }
+    .protocol-step:hover .node-core { background: var(--color-blue-deep); transform: scale(1.4); }
+    .protocol-step:hover .watermark-num { color: rgba(10,25,47,0.075); transform: translateX(8px); }
     .protocol-step:hover h4 { color: var(--color-blue-deep); }
 
     /* ==========================================================
@@ -861,28 +980,29 @@ const t = useTranslations(lang);
         }
 
         .carousel-track-wrapper {
-            padding: 2rem 0 3rem 5%;
-            scroll-padding-left: 5%;
+            padding: 2.5rem 11% 3.5rem;
+            scroll-padding-left: 11%;
             scroll-behavior: smooth; width: 100%; margin-top: 0;
             scroll-snap-type: x mandatory;
         }
         .carousel-track { gap: 14px; }
 
         .vertical-card {
-            width: 76vw;
+            width: 78vw;
             height: 58vh; max-height: 460px;
-            scroll-snap-align: start;
-            transform: scale(0.92);
-            opacity: 0.55;
-            transition: transform 0.5s var(--ease-ios), opacity 0.5s var(--ease-ios);
-            border: 1px solid rgba(255,255,255,0.08); transform-origin: left center;
+            scroll-snap-align: center;
+            transform: scale(0.84) translateY(16px);
+            opacity: 0.45;
+            transition: transform 0.55s var(--ease-ios), opacity 0.55s var(--ease-ios), box-shadow 0.55s ease;
+            transform-origin: center center;
             flex-shrink: 0;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
         }
 
         .vertical-card.is-centered {
-            transform: scale(1);
+            transform: scale(1) translateY(0);
             opacity: 1;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.12); z-index: 2;
+            box-shadow: 0 28px 60px rgba(0,0,0,0.5); z-index: 2;
         }
 
         .card-num-luxury { font-size: 1.4rem; top: 1rem; left: 1.5rem; }
@@ -1048,24 +1168,29 @@ const t = useTranslations(lang);
                 scrollTrigger: { trigger: '.tech-spotlight', start: 'top 80%', once: true },
             });
 
-            /* Cards: clip-path reveal from bottom + subtle blur lift */
-            gsap.set('.tech-spotlight .tech-card', { clipPath: 'inset(0 0 100% 0)' });
+            /* Cards: orchestrated reveal — card lifts, then logo settles, then number fades */
             gsap.utils.toArray<HTMLElement>('.tech-spotlight .tech-card').forEach((card, i) => {
                 const logo = card.querySelector<HTMLElement>('.tc-logo');
+                const num  = card.querySelector<HTMLElement>('.tc-num');
+                const cat  = card.querySelector<HTMLElement>('.cell-label');
+                const name = card.querySelector<HTMLElement>('.tool-name');
+
+                gsap.set(card, { y: 50, opacity: 0 });
+                if (logo) gsap.set(logo, { y: 18, opacity: 0, scale: 0.92 });
+                if (num)  gsap.set(num, { opacity: 0, x: -6 });
+                if (cat)  gsap.set(cat, { opacity: 0, x: -6 });
+                if (name) gsap.set(name, { opacity: 0, y: 12 });
+
                 const tl = gsap.timeline({
                     scrollTrigger: { trigger: '.spotlight-grid', start: 'top 80%', once: true },
-                    delay: i * 0.07,
+                    delay: i * 0.08,
                 });
-                tl.to(card, {
-                    ...ir, clipPath: 'inset(0 0 0% 0)', duration: 1.3, ease: 'expo.out',
-                    onComplete: () => { (card as HTMLElement).style.clipPath = 'none'; },
-                });
-                if (logo) {
-                    gsap.set(logo, { y: 14, opacity: 0 });
-                    tl.to(logo, {
-                        ...ir, y: 0, opacity: 0.55, duration: 1.0, ease: 'expo.out',
-                    }, '-=0.9');
-                }
+
+                tl.to(card, { ...ir, y: 0, opacity: 1, duration: 1.3, ease: 'expo.out' });
+                if (cat)  tl.to(cat,  { ...ir, opacity: 1, x: 0, duration: 0.9, ease: 'expo.out' }, '-=1.0');
+                if (num)  tl.to(num,  { ...ir, opacity: 1, x: 0, duration: 0.9, ease: 'expo.out' }, '-=0.95');
+                if (logo) tl.to(logo, { ...ir, y: 0, opacity: 0.55, scale: 1, duration: 1.0, ease: 'expo.out' }, '-=0.85');
+                if (name) tl.to(name, { ...ir, opacity: 1, y: 0, duration: 0.95, ease: 'expo.out' }, '-=0.7');
             });
 
             /* Watermark slow parallax */
@@ -1103,32 +1228,31 @@ const t = useTranslations(lang);
                 scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top bottom', end: 'bottom top', scrub: 0.9 },
             });
 
-            /* Cards: orchestrated reveal — clip wipe + Ken Burns image + overlay slide */
+            /* Cards: refined reveal — y+opacity + Ken Burns image + overlay slide */
             gsap.utils.toArray<HTMLElement>('.clients-vertical-carousel .vertical-card').forEach((card, i) => {
                 const img     = card.querySelector<HTMLElement>('.carousel-image');
                 const overlay = card.querySelector<HTMLElement>('.card-overlay');
                 const num     = card.querySelector<HTMLElement>('.card-num-luxury');
                 const ctaInner = card.querySelector<HTMLElement>('.cta-inner');
 
-                gsap.set(card, { clipPath: 'inset(0 0 100% 0)' });
-                if (img)      gsap.set(img,     { scale: 1.25 });
-                if (overlay)  gsap.set(overlay, { yPercent: 60, opacity: 0 });
+                gsap.set(card, { y: 80, opacity: 0 });
+                if (img)      gsap.set(img,     { scale: 1.2 });
+                if (overlay)  gsap.set(overlay, { yPercent: 40, opacity: 0 });
                 if (num)      gsap.set(num,     { opacity: 0, x: -8 });
                 if (ctaInner) gsap.set(ctaInner.children, { opacity: 0, y: 18 });
 
                 const tl = gsap.timeline({
-                    scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top 72%', once: true },
+                    scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top 75%', once: true },
                     delay: 0.15 + i * 0.13,
                 });
 
-                tl.to(card,    { ...ir, clipPath: 'inset(0 0 0% 0)', duration: 1.4, ease: 'expo.out',
-                    onComplete: () => { (card as HTMLElement).style.clipPath = 'none'; } });
-                if (img)      tl.to(img,     { ...ir, scale: 1, duration: 1.8, ease: 'expo.out' }, 0);
-                if (overlay)  tl.to(overlay, { ...ir, yPercent: 0, opacity: 1, duration: 1.1, ease: 'expo.out' }, 0.45);
-                if (num)      tl.to(num,     { ...ir, opacity: 0.6, x: 0, duration: 0.9, ease: 'expo.out' }, 0.55);
+                tl.to(card, { ...ir, y: 0, opacity: 1, duration: 1.5, ease: 'expo.out' });
+                if (img)      tl.to(img,     { ...ir, scale: 1, duration: 2.0, ease: 'expo.out' }, 0);
+                if (overlay)  tl.to(overlay, { ...ir, yPercent: 0, opacity: 1, duration: 1.2, ease: 'expo.out' }, 0.35);
+                if (num)      tl.to(num,     { ...ir, opacity: 0.6, x: 0, duration: 1.0, ease: 'expo.out' }, 0.45);
                 if (ctaInner) tl.to(ctaInner.children, {
-                    ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out', stagger: 0.1,
-                }, 0.4);
+                    ...ir, opacity: 1, y: 0, duration: 1.1, ease: 'expo.out', stagger: 0.12,
+                }, 0.3);
             });
 
             /* Image Ken Burns parallax inside cards while scrolling section */
@@ -1155,17 +1279,17 @@ const t = useTranslations(lang);
                 if (num)   gsap.set(num,   { opacity: 0, x: -16 });
                 if (h3)    gsap.set(h3,    { opacity: 0, y: 28 });
                 if (p)     gsap.set(p,     { opacity: 0, y: 18 });
-                if (arrow) gsap.set(arrow, { opacity: 0, scale: 0.4, rotate: -45 });
+                if (arrow) gsap.set(arrow, { opacity: 0, scale: 0.7 });
 
                 const tl = gsap.timeline({
                     scrollTrigger: { trigger: row, start: 'top 86%', once: true },
                     delay: i * 0.04,
                 });
 
-                if (num)   tl.to(num,   { ...ir, opacity: 1, x: 0, duration: 0.95, ease: 'expo.out' }, 0);
-                if (h3)    tl.to(h3,    { ...ir, opacity: 1, y: 0, duration: 1.15, ease: 'expo.out' }, 0.08);
-                if (p)     tl.to(p,     { ...ir, opacity: 1, y: 0, duration: 1.05, ease: 'expo.out' }, 0.18);
-                if (arrow) tl.to(arrow, { ...ir, opacity: 1, scale: 1, rotate: 0, duration: 0.85, ease: 'back.out(2)' }, 0.28);
+                if (num)   tl.to(num,   { ...ir, opacity: 1, x: 0, duration: 1.0, ease: 'expo.out' }, 0);
+                if (h3)    tl.to(h3,    { ...ir, opacity: 1, y: 0, duration: 1.2, ease: 'expo.out' }, 0.08);
+                if (p)     tl.to(p,     { ...ir, opacity: 1, y: 0, duration: 1.1, ease: 'expo.out' }, 0.18);
+                if (arrow) tl.to(arrow, { ...ir, opacity: 1, scale: 1, duration: 1.0, ease: 'expo.out' }, 0.28);
             });
 
             /* ═══════════════════════════════════════════════════
@@ -1173,8 +1297,14 @@ const t = useTranslations(lang);
                ═══════════════════════════════════════════════════ */
 
             /* Sticky col children stagger */
-            gsap.from('.protocol-sticky-col > *', {
+            gsap.from('.protocol-sticky-col > *:not(.proto-progress)', {
                 ...ir, y: 28, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: 0.1,
+                scrollTrigger: { trigger: '.protocol-section', start: 'top 78%', once: true },
+            });
+
+            /* Progress indicator entrance */
+            gsap.to('.proto-progress', {
+                ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out', delay: 0.5,
                 scrollTrigger: { trigger: '.protocol-section', start: 'top 78%', once: true },
             });
 
@@ -1190,14 +1320,49 @@ const t = useTranslations(lang);
                 });
             }
 
+            /* Progress bar fills as user scrolls through the protocol section */
+            const progressFill = document.querySelector<HTMLElement>('.proto-progress-fill');
+            if (progressFill) {
+                gsap.to(progressFill, {
+                    scaleX: 1, ease: 'none',
+                    scrollTrigger: {
+                        trigger: '.protocol-section', start: 'top 50%', end: 'bottom 70%', scrub: 0.4,
+                    },
+                });
+            }
+
+            /* Active step detection — sets .is-active and updates the counter */
+            const protoSteps = gsap.utils.toArray<HTMLElement>('.protocol-step');
+            const protoCurrent = document.querySelector<HTMLElement>('.proto-current');
+            protoSteps.forEach((step, idx) => {
+                ScrollTrigger.create({
+                    trigger: step,
+                    start: 'top 55%',
+                    end: 'bottom 45%',
+                    onEnter:     () => { step.classList.add('is-active');    setProtoCount(idx); },
+                    onEnterBack: () => { step.classList.add('is-active');    setProtoCount(idx); },
+                    onLeave:     () => { step.classList.remove('is-active'); },
+                    onLeaveBack: () => { step.classList.remove('is-active'); },
+                });
+            });
+            function setProtoCount(idx: number) {
+                if (!protoCurrent) return;
+                const next = String(idx + 1).padStart(2, '0');
+                if (protoCurrent.textContent === next) return;
+                gsap.fromTo(protoCurrent,
+                    { y: -10, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.5, ease: 'expo.out',
+                      onStart: () => { protoCurrent.textContent = next; } });
+            }
+
             /* Steps: choreographed reveal — node bounce, watermark slide, h4 then p */
-            gsap.utils.toArray<HTMLElement>('.protocol-step').forEach((step) => {
+            protoSteps.forEach((step) => {
                 const node = step.querySelector<HTMLElement>('.step-node');
                 const wm   = step.querySelector<HTMLElement>('.watermark-num');
                 const h4   = step.querySelector<HTMLElement>('h4');
                 const p    = step.querySelector<HTMLElement>('p');
 
-                if (node) gsap.set(node, { scale: 0 });
+                if (node) gsap.set(node, { scale: 0, opacity: 0 });
                 if (wm)   gsap.set(wm,   { opacity: 0, x: -18 });
                 if (h4)   gsap.set(h4,   { opacity: 0, y: 22 });
                 if (p)    gsap.set(p,    { opacity: 0, y: 18 });
@@ -1206,7 +1371,7 @@ const t = useTranslations(lang);
                     scrollTrigger: { trigger: step, start: 'top 86%', once: true },
                 });
 
-                if (node) tl.to(node, { ...ir, scale: 1, duration: 0.8, ease: 'back.out(2.6)' }, 0);
+                if (node) tl.to(node, { ...ir, scale: 1, opacity: 1, duration: 1.0, ease: 'expo.out' }, 0);
                 if (wm)   tl.to(wm,   { ...ir, opacity: 1, x: 0, duration: 1.3, ease: 'expo.out' }, 0.08);
                 if (h4)   tl.to(h4,   { ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out' }, 0.18);
                 if (p)    tl.to(p,    { ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out' }, 0.28);
@@ -1247,9 +1412,12 @@ const t = useTranslations(lang);
             }
         });
 
-        /* ═════════════ MOBILE: lighter animations ═════════════ */
+        /* ═══════════════════════════════════════════════════
+                            MOBILE
+           ═══════════════════════════════════════════════════ */
         mm.add('(max-width: 768px)', () => {
-            /* MOBILE HERO — luxury minimalist (no blur) */
+
+            /* MOBILE HERO — on-load timeline */
             const mHeroTitle = document.querySelector<HTMLElement>('.hero-title');
             const mEyebrow = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
             const mHeroBottom = document.querySelector<HTMLElement>('.hero-bottom');
@@ -1262,18 +1430,208 @@ const t = useTranslations(lang);
                     stagger: 0.1,
                 }, 0.85);
             }
-            gsap.from('.tech-spotlight .tech-card', {
-                ...ir, y: 30, opacity: 0, duration: 0.7, ease: 'power3.out', stagger: 0.05,
-                scrollTrigger: { trigger: '.tech-spotlight', start: 'top 80%', once: true },
-            });
-            gsap.utils.toArray<HTMLElement>('.service-row').forEach((row) => {
-                gsap.from(row, {
-                    ...ir, y: 30, opacity: 0, duration: 0.7, ease: 'power3.out',
-                    scrollTrigger: { trigger: row, start: 'top 88%', once: true },
+
+            /* SECTION HEADINGS — same line-mask reveal */
+            gsap.utils.toArray<HTMLElement>('.section-heading').forEach(h => {
+                const split = SplitText.create(h, { type: 'lines,words', linesClass: 'lx-line-mask' });
+                gsap.set(split.words, { yPercent: 115 });
+                gsap.to(split.words, {
+                    ...ir, yPercent: 0, duration: 1.2, ease: 'expo.out',
+                    stagger: { amount: 0.4, from: 'start' },
+                    scrollTrigger: { trigger: h, start: 'top 88%', once: true },
                 });
             });
 
-            /* CAROUSEL CENTER DETECTION */
+            /* EYEBROWS */
+            gsap.utils.toArray<HTMLElement>('section:not(.hero-grand) .eyebrow').forEach(eb => {
+                gsap.from(eb, {
+                    ...ir, opacity: 0, y: 10, letterSpacing: '6px', duration: 1.1, ease: 'expo.out',
+                    scrollTrigger: { trigger: eb, start: 'top 90%', once: true },
+                });
+            });
+
+            /* TECH — header rule */
+            const mTechRule = document.getElementById('tech-rule');
+            if (mTechRule) {
+                gsap.to(mTechRule, {
+                    scaleX: 1, duration: 1.4, ease: 'power3.inOut',
+                    scrollTrigger: { trigger: '.tech-spotlight', start: 'top 82%', once: true },
+                });
+            }
+
+            /* TECH — counter */
+            const mTechCounter = document.getElementById('tech-counter');
+            if (mTechCounter) {
+                ScrollTrigger.create({
+                    trigger: '.tech-spotlight', start: 'top 82%', once: true,
+                    onEnter: () => {
+                        const obj = { val: 0 };
+                        gsap.to(obj, {
+                            val: 8, duration: 1.5, ease: 'power3.out', delay: 0.2,
+                            onUpdate: () => { mTechCounter.textContent = String(Math.round(obj.val)).padStart(2, '0'); },
+                        });
+                    },
+                });
+            }
+
+            /* TECH — sub */
+            gsap.from('.tech-spotlight .section-sub', {
+                ...ir, opacity: 0, y: 14, duration: 1.0, ease: 'expo.out',
+                scrollTrigger: { trigger: '.tech-spotlight', start: 'top 84%', once: true },
+            });
+
+            /* TECH — cards */
+            gsap.utils.toArray<HTMLElement>('.tech-spotlight .tech-card').forEach((card, i) => {
+                gsap.from(card, {
+                    ...ir, y: 30, opacity: 0,
+                    duration: 1.1, ease: 'expo.out', delay: i * 0.05,
+                    scrollTrigger: { trigger: card, start: 'top 92%', once: true },
+                });
+            });
+
+            /* CASOS — bg parallax (lighter) */
+            gsap.to('.casos-bg-text', {
+                yPercent: -12, ease: 'none',
+                scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top bottom', end: 'bottom top', scrub: 1.2 },
+            });
+
+            /* CASOS — cards (simpler for mobile, with image scale) */
+            gsap.utils.toArray<HTMLElement>('.clients-vertical-carousel .vertical-card').forEach((card, i) => {
+                const img = card.querySelector<HTMLElement>('.carousel-image');
+                if (img) gsap.set(img, { scale: 1.15 });
+                const tl = gsap.timeline({
+                    scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top 80%', once: true },
+                    delay: i * 0.1,
+                });
+                tl.from(card, { ...ir, y: 50, opacity: 0, duration: 1.2, ease: 'expo.out' });
+                if (img) tl.to(img, { ...ir, scale: 1, duration: 1.6, ease: 'expo.out' }, 0);
+            });
+
+            /* SERVICES — rows */
+            gsap.utils.toArray<HTMLElement>('.service-row').forEach((row) => {
+                const h3 = row.querySelector<HTMLElement>('.row-content h3');
+                const p = row.querySelector<HTMLElement>('.row-content p');
+                const arrow = row.querySelector<HTMLElement>('.arrow-circle');
+                const num = row.querySelector<HTMLElement>('.row-num');
+
+                if (num)   gsap.set(num,   { opacity: 0, x: -10 });
+                if (h3)    gsap.set(h3,    { opacity: 0, y: 22 });
+                if (p)     gsap.set(p,     { opacity: 0, y: 16 });
+                if (arrow) gsap.set(arrow, { opacity: 0, scale: 0.7 });
+
+                const tl = gsap.timeline({
+                    scrollTrigger: { trigger: row, start: 'top 90%', once: true },
+                });
+
+                if (num)   tl.to(num,   { ...ir, opacity: 1, x: 0, duration: 0.9, ease: 'expo.out' }, 0);
+                if (h3)    tl.to(h3,    { ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out' }, 0.06);
+                if (p)     tl.to(p,     { ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out' }, 0.14);
+                if (arrow) tl.to(arrow, { ...ir, opacity: 1, scale: 1, duration: 0.9, ease: 'expo.out' }, 0.22);
+            });
+
+            /* PROTOCOL — sticky col */
+            gsap.from('.protocol-sticky-col > *:not(.proto-progress)', {
+                ...ir, y: 22, opacity: 0, duration: 1.0, ease: 'expo.out', stagger: 0.1,
+                scrollTrigger: { trigger: '.protocol-section', start: 'top 84%', once: true },
+            });
+
+            /* PROTOCOL — progress indicator entrance */
+            gsap.to('.proto-progress', {
+                ...ir, opacity: 1, y: 0, duration: 0.9, ease: 'expo.out', delay: 0.4,
+                scrollTrigger: { trigger: '.protocol-section', start: 'top 84%', once: true },
+            });
+
+            /* PROTOCOL — track scrub */
+            const mTrack = document.querySelector('.timeline-track');
+            if (mTrack) {
+                gsap.set(mTrack, { transformOrigin: 'top center', scaleY: 0 });
+                gsap.to(mTrack, {
+                    scaleY: 1, ease: 'none',
+                    scrollTrigger: { trigger: '.protocol-section', start: 'top 70%', end: 'bottom 85%', scrub: 0.8 },
+                });
+            }
+
+            /* PROTOCOL — progress bar fill scrub */
+            const mProgressFill = document.querySelector<HTMLElement>('.proto-progress-fill');
+            if (mProgressFill) {
+                gsap.to(mProgressFill, {
+                    scaleX: 1, ease: 'none',
+                    scrollTrigger: { trigger: '.protocol-section', start: 'top 60%', end: 'bottom 75%', scrub: 0.4 },
+                });
+            }
+
+            /* PROTOCOL — active step + counter */
+            const mProtoSteps = gsap.utils.toArray<HTMLElement>('.protocol-step');
+            const mProtoCurrent = document.querySelector<HTMLElement>('.proto-current');
+            mProtoSteps.forEach((step, idx) => {
+                ScrollTrigger.create({
+                    trigger: step,
+                    start: 'top 60%',
+                    end: 'bottom 50%',
+                    onEnter:     () => { step.classList.add('is-active');    setMProtoCount(idx); },
+                    onEnterBack: () => { step.classList.add('is-active');    setMProtoCount(idx); },
+                    onLeave:     () => { step.classList.remove('is-active'); },
+                    onLeaveBack: () => { step.classList.remove('is-active'); },
+                });
+            });
+            function setMProtoCount(idx: number) {
+                if (!mProtoCurrent) return;
+                const next = String(idx + 1).padStart(2, '0');
+                if (mProtoCurrent.textContent === next) return;
+                gsap.fromTo(mProtoCurrent,
+                    { y: -8, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.4, ease: 'expo.out',
+                      onStart: () => { mProtoCurrent.textContent = next; } });
+            }
+
+            /* PROTOCOL — steps */
+            mProtoSteps.forEach((step) => {
+                const node = step.querySelector<HTMLElement>('.step-node');
+                const wm = step.querySelector<HTMLElement>('.watermark-num');
+                const h4 = step.querySelector<HTMLElement>('h4');
+                const p = step.querySelector<HTMLElement>('p');
+
+                if (node) gsap.set(node, { scale: 0, opacity: 0 });
+                if (wm)   gsap.set(wm, { opacity: 0, x: -12 });
+                if (h4)   gsap.set(h4, { opacity: 0, y: 18 });
+                if (p)    gsap.set(p,  { opacity: 0, y: 14 });
+
+                const tl = gsap.timeline({
+                    scrollTrigger: { trigger: step, start: 'top 90%', once: true },
+                });
+
+                if (node) tl.to(node, { ...ir, scale: 1, opacity: 1, duration: 0.9, ease: 'expo.out' }, 0);
+                if (wm)   tl.to(wm,   { ...ir, opacity: 1, x: 0, duration: 1.1, ease: 'expo.out' }, 0.06);
+                if (h4)   tl.to(h4,   { ...ir, opacity: 1, y: 0, duration: 0.9, ease: 'expo.out' }, 0.14);
+                if (p)    tl.to(p,    { ...ir, opacity: 1, y: 0, duration: 0.9, ease: 'expo.out' }, 0.22);
+            });
+
+            /* CTA */
+            const mCtaCard = document.getElementById('cta-card') as HTMLElement | null;
+            if (mCtaCard) {
+                const ctaText = mCtaCard.querySelectorAll<HTMLElement>('.cta-text-side > *');
+                const ctaBtn = mCtaCard.querySelector<HTMLElement>('.cta-action-side');
+
+                gsap.set(ctaText, { opacity: 0, y: 20 });
+                if (ctaBtn) gsap.set(ctaBtn, { opacity: 0, y: 18 });
+
+                const tl = gsap.timeline({
+                    scrollTrigger: { trigger: mCtaCard, start: 'top 86%', once: true },
+                });
+
+                tl.from(mCtaCard, {
+                    ...ir, y: 50, scale: 0.94, opacity: 0,
+                    duration: 1.3, ease: 'expo.out',
+                });
+                tl.to(ctaText, {
+                    ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out', stagger: 0.1,
+                }, '-=0.8');
+                if (ctaBtn) tl.to(ctaBtn, {
+                    ...ir, opacity: 1, y: 0, duration: 0.9, ease: 'expo.out',
+                }, '-=0.6');
+            }
+
+            /* CAROUSEL CENTER DETECTION (legacy is-centered class) */
             const track = document.querySelector('.carousel-track-wrapper');
             const cards = document.querySelectorAll('.vertical-card');
             if (track && cards.length) {
