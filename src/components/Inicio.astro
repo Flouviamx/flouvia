@@ -47,12 +47,18 @@ const t = useTranslations(lang);
         </section>
 
         <section class="tech-spotlight">
+            <div class="tech-watermark" aria-hidden="true">Stack</div>
             <div class="container">
-                <div class="partners-header reveal-blur" style="--delay: 0.1s;">
-                    <div class="header-text">
+                <div class="partners-header">
+                    <div class="tech-header-row">
                         <h2 class="section-heading">{t('tech.title')} <span class="editorial">{t('tech.title_editorial')}</span></h2>
-                        <p class="section-sub">{t('tech.sub')}</p>
+                        <div class="tech-count-wrap" aria-hidden="true">
+                            <span class="tech-count-num" id="tech-counter">08</span>
+                            <span class="tech-count-unit">tools</span>
+                        </div>
                     </div>
+                    <div class="tech-header-rule" id="tech-rule"></div>
+                    <p class="section-sub">{t('tech.sub')}</p>
                 </div>
 
                 <div class="tech-scroll-hint">
@@ -62,7 +68,7 @@ const t = useTranslations(lang);
                     </span>
                 </div>
 
-                <div class="spotlight-grid reveal-blur" style="--delay: 0.3s;">
+                <div class="spotlight-grid" id="tech-grid">
 
                     <div class="tech-card">
                         <div class="card-content">
@@ -189,11 +195,12 @@ const t = useTranslations(lang);
         </section>
 
         <section class="clients-vertical-carousel">
+            <div class="casos-bg-text" aria-hidden="true">Casos</div>
             <div class="container">
-                <div class="section-header reveal-fade" style="--delay: 0s;">
+                <div class="section-header">
                     <div class="header-flex">
                         <div class="header-title-mobile">
-                            <p class="eyebrow" style="color: #64748b;">{lang === 'en' ? 'OUR SYSTEMS' : 'NUESTROS SISTEMAS'}</p>
+                            <p class="eyebrow casos-eyebrow">{lang === 'en' ? 'OUR SYSTEMS' : 'NUESTROS SISTEMAS'}</p>
                             <h2 class="section-heading">{lang === 'en' ? 'Engineering' : 'Casos de'} <span class="editorial">{lang === 'en' ? 'Cases.' : 'Ingeniería.'}</span></h2>
                         </div>
                         <div class="carousel-nav desktop-only">
@@ -209,7 +216,7 @@ const t = useTranslations(lang);
                 </div>
             </div>
 
-            <div class="carousel-track-wrapper reveal-fade" style="--delay: 0.2s;">
+            <div class="carousel-track-wrapper">
                 <div class="carousel-track">
                     
                     <a href="/casos/el-zarco" class="vertical-card squircle">
@@ -253,7 +260,7 @@ const t = useTranslations(lang);
                 </div>
 
                 <div class="rows-wrapper">
-                    <a href={lang === 'en' ? '/en/servicios/ecommerce' : '/servicios/ecommerce'} class="service-row reveal-blur" style="--delay: 0.1s;">
+                    <a href={lang === 'en' ? '/en/servicios/ecommerce' : '/servicios/ecommerce'} class="service-row" style="--delay: 0.1s;">
                         <div class="row-num">/01</div>
                         <div class="row-content">
                             <h3>E-commerce Engineering</h3>
@@ -262,7 +269,7 @@ const t = useTranslations(lang);
                         <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
                         <div class="animated-border"></div>
                     </a>
-                    <a href={lang === 'en' ? '/en/servicios/b2b' : '/servicios/b2b'} class="service-row reveal-blur" style="--delay: 0.2s;">
+                    <a href={lang === 'en' ? '/en/servicios/b2b' : '/servicios/b2b'} class="service-row" style="--delay: 0.2s;">
                         <div class="row-num">/02</div>
                         <div class="row-content">
                             <h3>B2B Digital Architecture</h3>
@@ -271,7 +278,7 @@ const t = useTranslations(lang);
                         <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
                         <div class="animated-border"></div>
                     </a>
-                    <a href={lang === 'en' ? '/en/servicios/automatizacion' : '/servicios/automatizacion'} class="service-row reveal-blur" style="--delay: 0.3s;">
+                    <a href={lang === 'en' ? '/en/servicios/automatizacion' : '/servicios/automatizacion'} class="service-row" style="--delay: 0.3s;">
                         <div class="row-num">/03</div>
                         <div class="row-content">
                             <h3>Business Automation</h3>
@@ -280,7 +287,7 @@ const t = useTranslations(lang);
                         <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
                         <div class="animated-border"></div>
                     </a>
-                    <a href={lang === 'en' ? '/en/servicios/growth' : '/servicios/growth'} class="service-row reveal-blur" style="--delay: 0.4s;">
+                    <a href={lang === 'en' ? '/en/servicios/growth' : '/servicios/growth'} class="service-row" style="--delay: 0.4s;">
                         <div class="row-num">/04</div>
                         <div class="row-content">
                             <h3>Conversion Rate Optimization</h3>
@@ -296,7 +303,7 @@ const t = useTranslations(lang);
         <section class="protocol-section">
             <div class="container protocol-grid">
                 
-                <div class="protocol-sticky-col reveal-blur">
+                <div class="protocol-sticky-col">
                     <p class="eyebrow">{t('proto.eyebrow')}</p>
                     <h2 class="section-heading">{t('proto.title')} <br><span class="editorial">{t('proto.title_editorial')}</span></h2>
                     <p class="protocol-intro">{t('proto.desc')}</p>
@@ -305,7 +312,7 @@ const t = useTranslations(lang);
                 <div class="protocol-timeline">
                     <div class="timeline-track"></div>
 
-                    <div class="protocol-step reveal-blur" style="--delay: 0.1s;">
+                    <div class="protocol-step" style="--delay: 0.1s;">
                         <div class="step-node"><div class="node-core"></div></div>
                         <div class="step-content">
                             <div class="watermark-num">01</div>
@@ -314,7 +321,7 @@ const t = useTranslations(lang);
                         </div>
                     </div>
 
-                    <div class="protocol-step reveal-blur" style="--delay: 0.2s;">
+                    <div class="protocol-step" style="--delay: 0.2s;">
                         <div class="step-node"><div class="node-core"></div></div>
                         <div class="step-content">
                             <div class="watermark-num">02</div>
@@ -323,7 +330,7 @@ const t = useTranslations(lang);
                         </div>
                     </div>
 
-                    <div class="protocol-step reveal-blur" style="--delay: 0.3s;">
+                    <div class="protocol-step" style="--delay: 0.3s;">
                         <div class="step-node"><div class="node-core"></div></div>
                         <div class="step-content">
                             <div class="watermark-num">03</div>
@@ -332,7 +339,7 @@ const t = useTranslations(lang);
                         </div>
                     </div>
 
-                    <div class="protocol-step reveal-blur" style="--delay: 0.4s;">
+                    <div class="protocol-step" style="--delay: 0.4s;">
                         <div class="step-node"><div class="node-core"></div></div>
                         <div class="step-content">
                             <div class="watermark-num">04</div>
@@ -347,7 +354,7 @@ const t = useTranslations(lang);
 
         <section class="cta-integrated">
             <div class="container">
-                <div class="cta-card-blue cta-squircle texture-noise reveal-blur" style="--delay: 0.2s;">
+                <div class="cta-card-blue cta-squircle texture-noise" id="cta-card">
                     <div class="cta-inner-flex">
                         <div class="cta-text-side">
                             <p class="eyebrow" style="color: #64748b; letter-spacing: 4px;">{lang === 'en' ? 'THE NEXT STEP' : 'EL SIGUIENTE PASO'}</p>
@@ -469,16 +476,47 @@ const t = useTranslations(lang);
     /* ==========================================================
        2. TECNOLOGÍA
        ========================================================== */
-    .tech-spotlight { padding: 8rem 0; background: var(--color-bg); }
-    .tech-spotlight .partners-header { margin-bottom: 4rem; }
+    .tech-spotlight { padding: 8rem 0; background: var(--color-bg); position: relative; overflow: hidden; }
+    .tech-spotlight .partners-header { margin-bottom: 4rem; position: relative; z-index: 1; }
     .section-heading { font-size: clamp(2.5rem, 5vw, 3.8rem); font-weight: 800; letter-spacing: -2px; margin: 0 0 0.5rem 0; line-height: 1; }
     .section-sub { font-size: 1.05rem; color: var(--color-text-muted); margin: 0; line-height: 1.5;}
+
+    /* Tech header layout */
+    .tech-header-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1rem; }
+    .tech-count-wrap { display: flex; flex-direction: column; align-items: flex-end; line-height: 1; flex-shrink: 0; }
+    .tech-count-num {
+        font-family: var(--font-serif); font-style: italic;
+        font-size: 4rem; font-weight: 400; color: rgba(0,0,0,0.07); line-height: 1;
+    }
+    .tech-count-unit { font-size: 0.55rem; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: #d0d0d0; }
+    .tech-header-rule {
+        height: 1px;
+        background: linear-gradient(90deg, var(--color-blue-deep) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
+        margin-bottom: 1.5rem; transform-origin: left center; transform: scaleX(0);
+    }
+
+    /* Section watermark */
+    .tech-watermark {
+        position: absolute; bottom: -10%; right: -2%;
+        font-family: var(--font-serif); font-style: italic;
+        font-size: 20vw; font-weight: 400; color: rgba(0,0,0,0.028);
+        pointer-events: none; white-space: nowrap; line-height: 1;
+        user-select: none; z-index: 0; will-change: transform;
+    }
 
     .spotlight-grid {
         display: grid; grid-template-columns: repeat(4, 1fr);
         gap: 1px; background: rgba(0,0,0,0.07);
         border: 1px solid rgba(0,0,0,0.07); border-radius: 24px; overflow: hidden;
+        position: relative;
+        --grid-mx: 50%; --grid-my: 50%;
     }
+    .spotlight-grid::after {
+        content: ''; position: absolute; inset: 0; border-radius: inherit;
+        background: radial-gradient(700px circle at var(--grid-mx) var(--grid-my), rgba(255,255,255,0.09) 0%, transparent 55%);
+        pointer-events: none; z-index: 10; opacity: 0; transition: opacity 0.4s ease;
+    }
+    .spotlight-grid:hover::after { opacity: 1; }
 
     .tech-card {
         position: relative; background: #fafafa; min-height: 216px;
@@ -549,12 +587,33 @@ const t = useTranslations(lang);
     /* ==========================================================
        3. CARRUSEL CASOS
        ========================================================== */
-    .clients-vertical-carousel { 
-        padding: calc(9rem - 25px) 0 calc(8rem - 25px) 0; 
-        background-color: var(--color-blue-icy); 
+    .clients-vertical-carousel {
+        padding: calc(9rem - 25px) 0 calc(8rem - 25px) 0;
+        background: radial-gradient(ellipse at 20% 50%, #112240 0%, #0a192f 65%, #050b14 100%);
+        position: relative; overflow: hidden;
     }
+    .casos-bg-text {
+        position: absolute; top: 50%; left: -4%;
+        transform: translateY(-50%);
+        font-family: var(--font-serif); font-style: italic; font-size: 33vw;
+        font-weight: 400; color: rgba(255,255,255,0.035); pointer-events: none;
+        white-space: nowrap; line-height: 1; user-select: none; z-index: 0;
+        will-change: transform;
+    }
+    .casos-eyebrow { color: rgba(255,255,255,0.32) !important; }
+    .clients-vertical-carousel .section-heading { color: #ffffff; }
+    .clients-vertical-carousel .editorial { color: rgba(147,210,255,0.85) !important; }
     .header-flex { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; }
-    .nav-hint { font-size: 0.75rem; font-weight: 700; color: #64748b; border: 1px solid rgba(0,0,0,0.08); padding: 8px 16px; border-radius: 50px; background: rgba(255,255,255,0.5); white-space: nowrap;}
+    .nav-hint {
+        font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.4);
+        border: 1px solid rgba(255,255,255,0.1); padding: 8px 16px;
+        border-radius: 50px; background: rgba(255,255,255,0.05); white-space: nowrap;
+    }
+    .clients-vertical-carousel .scroll-pill {
+        color: rgba(255,255,255,0.38); background: rgba(255,255,255,0.05);
+        border-color: rgba(255,255,255,0.1);
+    }
+    .clients-vertical-carousel .scroll-pill svg { opacity: 0.5; }
 
     .carousel-track-wrapper { 
         width: 100%; overflow-x: auto; padding: 4rem max(5%, calc((100vw - 1200px) / 2)); margin-top: -2rem; 
@@ -563,10 +622,12 @@ const t = useTranslations(lang);
     .carousel-track-wrapper::-webkit-scrollbar { display: none; }
     .carousel-track { display: flex; gap: 2.5rem; width: max-content; align-items: center; }
     
-    .vertical-card { 
-        width: 400px; height: 540px; scroll-snap-align: center; position: relative; 
-        text-decoration: none; border: 1px solid rgba(0,0,0,0.05); 
+    .vertical-card {
+        width: 400px; height: 540px; scroll-snap-align: center; position: relative;
+        text-decoration: none; border: 1px solid rgba(255,255,255,0.08);
         transition: all 0.5s var(--ease-smooth); z-index: 1;
+        transform-style: preserve-3d;
+        will-change: transform;
     }
     
     @media (hover: hover) {
@@ -593,7 +654,7 @@ const t = useTranslations(lang);
     .card-overlay h3 { font-size: 2rem; font-weight: 800; margin: 0; letter-spacing: -0.5px;}
     .v-tag { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: #ccc; letter-spacing: 2px;}
     
-    .cta-vertical { background: var(--color-blue-deep); display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; }
+    .cta-vertical { background: #112240; border: 1px solid rgba(255,255,255,0.12) !important; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; }
     .cta-inner h3 { font-size: 2.2rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -1px;}
     .btn-text-only { font-size: 0.9rem; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 4px; transition: 0.3s;}
     .cta-vertical:hover .btn-text-only { border-color: #fff; }
@@ -619,17 +680,21 @@ const t = useTranslations(lang);
     }
 
     .row-num { font-size: 0.85rem; font-weight: 700; color: #ccc; transition: 0.4s; }
-    .row-content h3 { font-size: 2.4rem; font-weight: 800; letter-spacing: -1px; margin: 0 0 1rem 0; transition: color 0.5s var(--ease-smooth); }
+    .row-content h3 { font-size: 2.4rem; font-weight: 800; letter-spacing: -1px; margin: 0 0 1rem 0; transition: color 0.5s var(--ease-smooth), letter-spacing 0.5s var(--ease-smooth); }
     .row-content p { font-size: 1.15rem; color: var(--color-text-muted); line-height: 1.6; margin: 0; max-width: 650px; }
     
-    .arrow-circle { 
-        width: 50px; height: 50px; border: 1px solid var(--color-border); border-radius: 50%; 
-        display: flex; align-items: center; justify-content: center; transition: all 0.6s var(--ease-spring); 
+    .arrow-circle {
+        width: 50px; height: 50px; border: 1px solid var(--color-border); border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        transition: background 0.4s var(--ease-spring), color 0.4s var(--ease-spring),
+                    border-color 0.4s var(--ease-spring), transform 0.55s var(--ease-spring);
     }
     
+    .service-row:hover { background: rgba(10,25,47,0.018); }
     .service-row:hover .animated-border { width: 100%; }
-    .service-row:hover .row-num { color: #000; transform: translateX(5px); }
-    .service-row:hover .arrow-circle { background: transparent; color: #000; border-color: #000; transform: translate(6px, -6px); }
+    .service-row:hover .row-num { color: #000; transform: translateX(6px) scale(1.15); }
+    .service-row:hover .row-content h3 { letter-spacing: -0.8px; }
+    .service-row:hover .arrow-circle { background: #0a192f; color: #fff; border-color: #0a192f; transform: translate(4px, -4px) rotate(-45deg); }
 
     /* ==========================================================
        5. PROTOCOLO 
@@ -658,9 +723,11 @@ const t = useTranslations(lang);
     }
 
     .timeline-track {
-        position: absolute; top: 10px; bottom: 10px; 
-        left: calc(2rem + 11px); 
-        width: 1px; background: rgba(0,0,0,0.08); z-index: 1;
+        position: absolute; top: 10px; bottom: 10px;
+        left: calc(2rem + 11px);
+        width: 1px;
+        background: linear-gradient(to bottom, var(--color-blue-deep) 0%, rgba(0,0,0,0.07) 100%);
+        z-index: 1;
     }
 
     .protocol-step { 
@@ -671,7 +738,7 @@ const t = useTranslations(lang);
     .step-node {
         width: 24px; height: 24px; border-radius: 50%; background: var(--color-bg-soft);
         border: 1px solid rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center;
-        flex-shrink: 0; transition: all 0.5s var(--ease-spring);
+        flex-shrink: 0; transition: all 0.5s var(--ease-spring), box-shadow 0.5s ease;
     }
     .node-core { width: 6px; height: 6px; border-radius: 50%; background: transparent; transition: all 0.5s var(--ease-spring); }
 
@@ -688,7 +755,10 @@ const t = useTranslations(lang);
     .step-content p { font-size: 1.1rem; color: var(--color-text-muted); margin: 0; max-width: 500px; line-height: 1.6;}
 
     .protocol-step:hover { transform: translateX(10px); }
-    .protocol-step:hover .step-node { border-color: var(--color-blue-deep); transform: scale(1.2); }
+    .protocol-step:hover .step-node {
+        border-color: var(--color-blue-deep); transform: scale(1.25);
+        box-shadow: 0 0 0 5px rgba(10,25,47,0.07), 0 0 0 10px rgba(10,25,47,0.03);
+    }
     .protocol-step:hover .node-core { background: var(--color-blue-deep); }
     .protocol-step:hover .watermark-num { color: rgba(0,0,0,0.06); transform: translateX(10px); }
     .protocol-step:hover h4 { color: var(--color-blue-deep); }
@@ -698,11 +768,18 @@ const t = useTranslations(lang);
        ========================================================== */
     .cta-integrated { padding: 0 0 8rem 0; background: var(--color-bg-soft); border: none; } 
     
-    .cta-card-blue { 
+    .cta-card-blue {
         background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%);
-        padding: 5.5rem 6rem; box-shadow: 0 20px 40px rgba(5,11,20,0.15), 0 50px 100px rgba(5,11,20,0.25); 
+        padding: 5.5rem 6rem; box-shadow: 0 20px 40px rgba(5,11,20,0.15), 0 50px 100px rgba(5,11,20,0.25);
         transition: transform 0.6s var(--ease-spring); position: relative;
+        --cta-mx: 50%; --cta-my: 50%;
     }
+    .cta-card-blue::after {
+        content: ''; position: absolute; inset: 0; border-radius: inherit;
+        background: radial-gradient(600px circle at var(--cta-mx) var(--cta-my), rgba(255,255,255,0.05) 0%, transparent 60%);
+        pointer-events: none; z-index: 1; opacity: 0; transition: opacity 0.4s ease;
+    }
+    .cta-card-blue:hover::after { opacity: 1; }
     
     .texture-noise::before {
         content: ""; position: absolute; inset: 0;
@@ -751,6 +828,9 @@ const t = useTranslations(lang);
 
         /* TECNOLOGÍA */
         .tech-spotlight { padding: 4rem 0; overflow: hidden; width: 100%; position: relative; }
+        .tech-watermark { font-size: 40vw; bottom: -5%; right: -5%; }
+        .tech-count-num { font-size: 2.6rem; }
+        .tech-count-unit { display: none; }
         .tech-scroll-hint {
             display: flex; margin: 1rem 0 1.2rem; padding: 0 5%;
         }
@@ -776,6 +856,7 @@ const t = useTranslations(lang);
             padding: 4rem 0 4rem;
             overflow: hidden; width: 100%;
         }
+        .casos-bg-text { font-size: 60vw; left: -8%; }
         .header-flex { margin-bottom: 0.5rem; }
         .header-title-mobile h2 { font-size: 2.2rem; margin-bottom: 0.5rem; letter-spacing: -1px; }
         .carousel-mobile-hint {
@@ -797,7 +878,7 @@ const t = useTranslations(lang);
             transform: scale(0.92);
             opacity: 0.55;
             transition: transform 0.5s var(--ease-ios), opacity 0.5s var(--ease-ios);
-            border: 1px solid rgba(0,0,0,0.05); transform-origin: left center;
+            border: 1px solid rgba(255,255,255,0.08); transform-origin: left center;
             flex-shrink: 0;
         }
 
@@ -852,19 +933,32 @@ const t = useTranslations(lang);
     import { SplitText } from 'gsap/SplitText';
 
     gsap.registerPlugin(ScrollTrigger, SplitText);
+    ScrollTrigger.defaults({ invalidateOnRefresh: true });
+
+    // Ensure ScrollTrigger recalculates after all assets load
+    window.addEventListener('load', () => {
+        setTimeout(() => ScrollTrigger.refresh(), 150);
+    });
 
     document.addEventListener('DOMContentLoaded', () => {
         const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        // GSAP controls hero — fully clear CSS fallback (.reveal-blur leaves filter+transform behind)
-        document.querySelectorAll<HTMLElement>('.hero-title, .hero-text-zone .eyebrow, .hero-bottom').forEach(el => {
+        // Clear CSS animation on ALL elements GSAP explicitly controls
+        document.querySelectorAll<HTMLElement>(
+            '.hero-title, .hero-text-zone .eyebrow, .hero-bottom, ' +
+            '.service-row, .protocol-step, .protocol-sticky-col, ' +
+            '.partners-header, #cta-card'
+        ).forEach(el => {
             el.style.animation = 'none';
-            el.style.opacity = '1';
-            el.style.filter = 'none';
+            el.style.filter   = 'none';
+        });
+        // Hero needs to start visible (animated on load, not scroll)
+        document.querySelectorAll<HTMLElement>('.hero-title, .hero-text-zone .eyebrow, .hero-bottom').forEach(el => {
+            el.style.opacity   = '1';
             el.style.transform = 'none';
         });
 
-        /* ═════════════ FALLBACK REVEAL (legacy CSS classes) ═════════════ */
+        /* ═════════════ FALLBACK REVEAL (CSS classes only — eyebrows, section headers) ═════════════ */
         document.querySelectorAll('.reveal-blur, .reveal-fade').forEach(el => {
             ScrollTrigger.create({
                 trigger: el,
@@ -873,6 +967,13 @@ const t = useTranslations(lang);
                 onEnter: () => el.classList.add('active'),
             });
         });
+
+        // Safety net: if anything is still invisible after 3 s, force-reveal it
+        setTimeout(() => {
+            document.querySelectorAll<HTMLElement>('.reveal-blur:not(.active), .reveal-fade:not(.active)').forEach(el => {
+                el.classList.add('active');
+            });
+        }, 3000);
 
         if (reduced) return;
 
@@ -918,23 +1019,48 @@ const t = useTranslations(lang);
                 });
             }
 
-            /* TECH SPOTLIGHT — staggered card entrance */
+            /* TECH — header reveal */
+            gsap.from('.partners-header', {
+                y: 32, opacity: 0, duration: 1.1, ease: 'expo.out',
+                scrollTrigger: { trigger: '.tech-spotlight', start: 'top 80%' },
+            });
+
+            /* TECH — rule draw + counter count-up */
+            const techRule = document.getElementById('tech-rule');
+            const techCounter = document.getElementById('tech-counter');
+            ScrollTrigger.create({
+                trigger: '.tech-spotlight', start: 'top 78%', once: true,
+                onEnter: () => {
+                    if (techRule) gsap.to(techRule, { scaleX: 1, duration: 1.5, ease: 'expo.out', delay: 0.15 });
+                    if (techCounter) {
+                        const obj = { val: 0 };
+                        gsap.to(obj, {
+                            val: 8, duration: 1.4, ease: 'power3.out', delay: 0.2,
+                            onUpdate: () => { techCounter.textContent = String(Math.round(obj.val)).padStart(2, '0'); },
+                        });
+                    }
+                },
+            });
+
+            /* TECH — cards stagger entrance */
             gsap.from('.tech-spotlight .tech-card', {
-                y: 60, opacity: 0, scale: 0.94,
-                duration: 0.9, ease: 'power3.out',
-                stagger: { each: 0.06, from: 'start' },
-                scrollTrigger: { trigger: '.tech-spotlight', start: 'top 70%' },
+                y: 50, opacity: 0, scale: 0.94,
+                duration: 1.1, ease: 'expo.out',
+                stagger: { each: 0.09, from: 'start' },
+                scrollTrigger: { trigger: '.spotlight-grid', start: 'top 76%', once: true },
             });
 
-            /* TECH MARKS — subtle float */
-            gsap.utils.toArray<HTMLElement>('.tc-mark').forEach((mark, i) => {
-                gsap.to(mark, {
-                    y: -3, duration: 2.8 + (i % 3) * 0.5,
-                    ease: 'sine.inOut', yoyo: true, repeat: -1, delay: i * 0.3,
+            /* TECH — global grid glow follows cursor */
+            const techGrid = document.getElementById('tech-grid');
+            if (techGrid) {
+                techGrid.addEventListener('mousemove', e => {
+                    const r = techGrid.getBoundingClientRect();
+                    techGrid.style.setProperty('--grid-mx', `${((e.clientX - r.left) / r.width) * 100}%`);
+                    techGrid.style.setProperty('--grid-my', `${((e.clientY - r.top) / r.height) * 100}%`);
                 });
-            });
+            }
 
-            /* TECH CARD MOUSE GLOW */
+            /* TECH CARD — per-card radial glow */
             document.querySelectorAll<HTMLElement>('.tech-card').forEach(card => {
                 card.addEventListener('mousemove', e => {
                     const rect = card.getBoundingClientRect();
@@ -943,34 +1069,78 @@ const t = useTranslations(lang);
                 });
             });
 
-            /* CAROUSEL — drift on scroll */
+            /* TECH WATERMARK — slow parallax */
+            const techWm = document.querySelector('.tech-watermark');
+            if (techWm) {
+                gsap.to(techWm, {
+                    yPercent: -15, ease: 'none',
+                    scrollTrigger: { trigger: '.tech-spotlight', start: 'top bottom', end: 'bottom top', scrub: 0.8 },
+                });
+            }
+
+            /* CASOS — background text parallax */
+            const casosBg = document.querySelector('.casos-bg-text');
+            if (casosBg) {
+                gsap.to(casosBg, {
+                    yPercent: -20, ease: 'none',
+                    scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top bottom', end: 'bottom top', scrub: 0.9 },
+                });
+            }
+
+            /* CASOS — header eyebrow */
+            gsap.from('.clients-vertical-carousel .casos-eyebrow', {
+                opacity: 0, y: 18, letterSpacing: '6px', duration: 1.1, ease: 'expo.out',
+                scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top 75%', once: true },
+            });
+
+            /* CASOS — cards 3D perspective entrance */
+            gsap.set('.clients-vertical-carousel .vertical-card', { transformPerspective: 900 });
+            gsap.from('.clients-vertical-carousel .vertical-card', {
+                y: 130, rotateX: 14, opacity: 0,
+                transformOrigin: 'center top',
+                duration: 1.35, ease: 'expo.out',
+                stagger: { each: 0.14 },
+                scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top 72%', once: true },
+            });
+
+            /* CASOS — magnetic 3D tilt on hover */
+            document.querySelectorAll<HTMLElement>('.vertical-card').forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const cx = (e.clientX - rect.left - rect.width  / 2) / (rect.width  / 2);
+                    const cy = (e.clientY - rect.top  - rect.height / 2) / (rect.height / 2);
+                    gsap.to(card, { rotateY: cx * 6, rotateX: -cy * 6, duration: 0.55, ease: 'power2.out' });
+                });
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, { rotateY: 0, rotateX: 0, duration: 1.1, ease: 'expo.out' });
+                });
+            });
+
+            /* CAROUSEL — subtle scroll drift */
             const carouselTrack = document.querySelector('.carousel-track');
             if (carouselTrack) {
                 gsap.to(carouselTrack, {
-                    x: () => -((carouselTrack as HTMLElement).scrollWidth - window.innerWidth) * 0.18,
+                    x: () => -((carouselTrack as HTMLElement).scrollWidth - window.innerWidth) * 0.13,
                     ease: 'none',
                     scrollTrigger: {
                         trigger: '.clients-vertical-carousel',
-                        start: 'top bottom', end: 'bottom top', scrub: 1,
+                        start: 'top bottom', end: 'bottom top', scrub: 1.2,
                     },
                 });
             }
 
-            /* SERVICE ROWS — slide in from left, arrow circle springs */
-            gsap.utils.toArray<HTMLElement>('.service-row').forEach((row, i) => {
-                gsap.from(row, {
-                    x: -50, opacity: 0,
-                    duration: 0.95, ease: 'power3.out', delay: i * 0.04,
-                    scrollTrigger: { trigger: row, start: 'top 85%' },
-                });
-                const arrow = row.querySelector('.arrow-circle');
-                if (arrow) {
-                    gsap.from(arrow, {
-                        scale: 0, rotate: -90, opacity: 0,
-                        duration: 0.8, ease: 'back.out(2.2)',
-                        scrollTrigger: { trigger: row, start: 'top 80%' },
-                    });
-                }
+            /* SERVICES — rows fade up with stagger */
+            gsap.from('.service-row', {
+                y: 36, opacity: 0,
+                duration: 1.0, ease: 'expo.out',
+                stagger: { each: 0.1 },
+                scrollTrigger: { trigger: '.rows-wrapper', start: 'top 82%', once: true },
+            });
+            gsap.from('.service-row .arrow-circle', {
+                scale: 0, opacity: 0,
+                duration: 0.75, ease: 'back.out(2.4)',
+                stagger: { each: 0.1 },
+                scrollTrigger: { trigger: '.rows-wrapper', start: 'top 82%', once: true },
             });
 
             /* SECTION HEADINGS — split on scroll */
@@ -979,45 +1149,67 @@ const t = useTranslations(lang);
                 gsap.from(split.words, {
                     y: 30, opacity: 0, rotateX: -30,
                     duration: 0.7, ease: 'power3.out', stagger: 0.06,
-                    scrollTrigger: { trigger: h, start: 'top 85%' },
+                    scrollTrigger: { trigger: h, start: 'top 85%', once: true },
                 });
             });
 
-            /* PROTOCOL — vertical timeline draw + step reveal */
+            /* PROTOCOL — sticky col reveal */
+            gsap.from('.protocol-sticky-col', {
+                y: 30, opacity: 0, duration: 1.1, ease: 'expo.out',
+                scrollTrigger: { trigger: '.protocol-section', start: 'top 75%', once: true },
+            });
+
+            /* PROTOCOL — timeline track draws top to bottom */
             const timelineTrack = document.querySelector('.timeline-track');
             if (timelineTrack) {
                 gsap.set(timelineTrack, { transformOrigin: 'top center', scaleY: 0 });
                 gsap.to(timelineTrack, {
                     scaleY: 1, ease: 'none',
                     scrollTrigger: {
-                        trigger: '.protocol-section', start: 'top 60%', end: 'bottom 70%', scrub: 0.6,
+                        trigger: '.protocol-section', start: 'top 55%', end: 'bottom 75%', scrub: 0.5,
                     },
                 });
             }
 
+            /* PROTOCOL — steps slide + node pop */
             gsap.utils.toArray<HTMLElement>('.protocol-step').forEach((step, i) => {
-                const node = step.querySelector('.step-node');
+                const node = step.querySelector<HTMLElement>('.step-node');
+                const wm   = step.querySelector<HTMLElement>('.watermark-num');
+
                 gsap.from(step, {
-                    x: 40, opacity: 0,
-                    duration: 0.85, ease: 'power3.out', delay: i * 0.05,
-                    scrollTrigger: { trigger: step, start: 'top 82%' },
+                    x: 30, opacity: 0, duration: 1.0, ease: 'expo.out',
+                    scrollTrigger: { trigger: step, start: 'top 84%', once: true },
                 });
                 if (node) {
                     gsap.from(node, {
-                        scale: 0, rotate: 180,
-                        duration: 0.7, ease: 'back.out(2.5)', delay: i * 0.05 + 0.15,
-                        scrollTrigger: { trigger: step, start: 'top 82%' },
+                        scale: 0, duration: 0.65, ease: 'back.out(3)',
+                        delay: 0.18,
+                        scrollTrigger: { trigger: step, start: 'top 84%', once: true },
+                    });
+                }
+                if (wm) {
+                    gsap.to(wm, {
+                        y: -20, ease: 'none',
+                        scrollTrigger: {
+                            trigger: step, start: 'top bottom', end: 'bottom top',
+                            scrub: 0.6,
+                        },
                     });
                 }
             });
 
-            /* CTA — magnetic scale-in */
-            const ctaCard = document.querySelector('.cta-card-blue');
+            /* CTA — scale-in + mouse glow */
+            const ctaCard = document.getElementById('cta-card') as HTMLElement | null;
             if (ctaCard) {
                 gsap.from(ctaCard, {
-                    y: 80, scale: 0.92, opacity: 0,
-                    duration: 1.1, ease: 'expo.out',
-                    scrollTrigger: { trigger: ctaCard, start: 'top 80%' },
+                    y: 60, scale: 0.93, opacity: 0,
+                    duration: 1.2, ease: 'expo.out',
+                    scrollTrigger: { trigger: ctaCard, start: 'top 82%', once: true },
+                });
+                ctaCard.addEventListener('mousemove', e => {
+                    const r = ctaCard.getBoundingClientRect();
+                    ctaCard.style.setProperty('--cta-mx', `${((e.clientX - r.left) / r.width) * 100}%`);
+                    ctaCard.style.setProperty('--cta-my', `${((e.clientY - r.top) / r.height) * 100}%`);
                 });
             }
         });

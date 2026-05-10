@@ -1,7 +1,8 @@
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
-import { supabase } from '../../../lib/supabase';
+import { supabase }    from '../../../lib/supabase';
+import { rateLimit }   from '../../../lib/rateLimit';
 
 const ALLOWED_TYPES = new Set([
   'pdf', 'doc', 'docx', 'xls', 'xlsx',
@@ -15,6 +16,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const { userId } = await locals.auth();
   if (!userId) {
     return json({ error: 'Unauthorized' }, 401);
+  }
+
+  // ── Rate limit — 10 uploads / minute per user ──────────────────────
+  if (!rateLimit(userId, 10, 60_000)) {
+    return json({ error: 'Too many requests — max 10 uploads per minute' }, 429);
   }
 
   const user = await locals.currentUser();
