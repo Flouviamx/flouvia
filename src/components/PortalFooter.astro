@@ -38,7 +38,7 @@ const isEn = Astro.url.pathname.startsWith('/en');
                 <span>flouvia.mx@gmail.com</span>
                 <span class="pf-arr">→</span>
             </a>
-            <a href="#" class="pf-link">
+            <a href={isEn ? '/en/privacidad-portal' : '/privacidad-portal'} class="pf-link">
                 <span>{isEn ? 'Privacy' : 'Privacidad'}</span>
                 <span class="pf-arr">→</span>
             </a>

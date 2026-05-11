@@ -1,6 +1,7 @@
 ---
 // src/components/portal/SoporteUI.astro
 import { useTranslations } from '../../i18n/utils';
+import { supabase } from '../../lib/supabase';
 import PortalHeader from './PortalHeader.astro';
 
 interface Props {
@@ -50,11 +51,22 @@ const categories = [
   },
 ];
 
-const recentTickets = [
-  { id: "TK-081", title: lang === 'en' ? "API timeout on checkout flow" : "Timeout en API del checkout", status: "resolved" as const, date: "Apr 22" },
-  { id: "TK-074", title: lang === 'en' ? "Webhook signature mismatch"   : "Firma de webhook incorrecta",  status: "resolved" as const, date: "Apr 15" },
-  { id: "TK-061", title: lang === 'en' ? "SKU sync delay > 30 min"      : "Retraso de sincronización SKU > 30 min", status: "resolved" as const, date: "Apr 03" },
-];
+const { data: ticketRows } = await supabase
+  .from('tickets')
+  .select('ticket_ref, title, status, created_at')
+  .eq('email_cliente', email)
+  .order('created_at', { ascending: false })
+  .limit(8);
+
+const formatTicketDate = (iso: string) =>
+  new Date(iso).toLocaleDateString(lang === 'en' ? 'en-US' : 'es-MX', { day: '2-digit', month: 'short' });
+
+const recentTickets = (ticketRows ?? []).map((r: any) => ({
+  id:     r.ticket_ref,
+  title:  r.title,
+  status: r.status as 'open' | 'resolved' | 'pending',
+  date:   formatTicketDate(r.created_at),
+}));
 ---
 
 <div class="os-page">
@@ -202,6 +214,7 @@ const recentTickets = [
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             <p class="sp-success-title">{t('support.form.success_title')}</p>
+            <p class="sp-success-ref" style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:rgba(0,0,0,0.35);margin:0.3rem 0 0;letter-spacing:0.06em;"></p>
             <p class="sp-success-sub">{t('support.form.success_sub')}</p>
           </div>
         </div>
@@ -213,22 +226,28 @@ const recentTickets = [
         <div class="os-card-in">
           <div class="sp-card-top">
             <span class="sp-ey">{t('support.tickets.label')}</span>
-            <span class="sp-pill sp-pill-ok">{t('support.tickets.all_resolved')}</span>
+            {recentTickets.length > 0 && (
+              <span class="sp-pill sp-pill-ok">{recentTickets.length} {lang === 'en' ? 'total' : 'total'}</span>
+            )}
           </div>
-          <div class="sp-ticket-list">
-            {recentTickets.map((tk) => (
-              <div class="sp-ticket-row">
-                <div class="sp-ticket-left">
-                  <span class="sp-ticket-id">{tk.id}</span>
-                  <div class="sp-ticket-info">
-                    <span class="sp-ticket-title">{tk.title}</span>
-                    <span class="sp-ticket-date">{tk.date}</span>
+          {recentTickets.length === 0 ? (
+            <p class="sp-tickets-empty">{lang === 'en' ? 'No tickets yet. Use the form to open your first request.' : 'Sin tickets aún. Usa el formulario para abrir tu primera solicitud.'}</p>
+          ) : (
+            <div class="sp-ticket-list">
+              {recentTickets.map((tk) => (
+                <div class="sp-ticket-row">
+                  <div class="sp-ticket-left">
+                    <span class="sp-ticket-id">{tk.id}</span>
+                    <div class="sp-ticket-info">
+                      <span class="sp-ticket-title">{tk.title}</span>
+                      <span class="sp-ticket-date">{tk.date}</span>
+                    </div>
                   </div>
+                  <span class={`sp-ticket-status sp-ts-${tk.status}`}>{t(`support.ticket.${tk.status}`)}</span>
                 </div>
-                <span class={`sp-ticket-status sp-ts-${tk.status}`}>{t(`support.ticket.${tk.status}`)}</span>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -451,6 +470,11 @@ const recentTickets = [
 .sp-ts-open     { background: rgba(0,85,204,0.09);   color: var(--blue); border: 1px solid rgba(0,85,204,0.18); }
 .sp-ts-pending  { background: rgba(220,120,0,0.08);  color: #b86000;    border: 1px solid rgba(220,120,0,0.18); }
 
+.sp-tickets-empty {
+    font-size: 0.88rem; color: var(--muted); padding: 2rem 0;
+    text-align: center; font-weight: 400;
+}
+
 /* ═══ KEYFRAMES ═══ */
 @keyframes sp-led {
     0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,.5); transform: scale(1); }
@@ -561,23 +585,17 @@ const recentTickets = [
         const description = (document.getElementById("description")   as HTMLTextAreaElement)?.value || "";
         const priority    = (form.querySelector<HTMLInputElement>('input[name="priority"]:checked'))?.value || "normal";
 
-        const payload = {
-            email:       (document.getElementById("sp-user-email") as HTMLInputElement)?.value || "",
-            nombre:      (document.getElementById("sp-user-name")  as HTMLInputElement)?.value || "",
-            category,
-            subject,
-            description,
-            priority,
-            timestamp:   new Date().toISOString(),
-            fuente:      "flouvia.com/portal/soporte",
-        };
-
+        let ticketRef = "";
         try {
-            await fetch("https://hook.us2.make.com/yxof110p9eswdp0eayr7qihrqx6778dd", {
+            const res = await fetch("/api/soporte/ticket", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
+                body: JSON.stringify({ category, subject, description, priority }),
             });
+            if (res.ok) {
+                const json = await res.json();
+                ticketRef = json.ticket_ref ?? "";
+            }
         } catch { /* fail silently */ }
 
         gsap.to(form, {
@@ -585,6 +603,10 @@ const recentTickets = [
             onComplete: () => {
                 form.classList.add("hidden");
                 if (formSuccess) {
+                    if (ticketRef) {
+                        const refEl = formSuccess.querySelector(".sp-success-ref");
+                        if (refEl) refEl.textContent = ticketRef;
+                    }
                     formSuccess.classList.add("visible");
                     gsap.fromTo(formSuccess, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" });
                 }
