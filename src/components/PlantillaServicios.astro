@@ -19,8 +19,9 @@ const isEn = lang === 'en';
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <main class="flouvia-masterpiece page-bg-unified">
-        
+
         <section class="hero-grand">
+            <div class="serv-watermark" aria-hidden="true">Servicios</div>
             <div class="container hero-container">
                 <div class="hero-content">
                     <div class="hero-text-zone" id="hero-parallax">
@@ -41,6 +42,7 @@ const isEn = lang === 'en';
         </section>
 
         <section class="philosophy-blueprint dark-section">
+            <div class="bp-watermark" aria-hidden="true">{isEn ? 'Why' : 'Por qué'}</div>
             <div class="texture-noise-micro"></div>
             
             <div class="bp-line-x bp-line-top"></div>
@@ -562,14 +564,33 @@ const isEn = lang === 'en';
 
     .squircle { border-radius: 24px; transform: translateZ(0); overflow: hidden; }
     .cta-squircle { border-radius: 32px; transform: translateZ(0); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
+    .lx-line-mask { overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; }
 </style>
 
 <style>
     /* ==========================================================
-       ESTILOS LOCALES 
+       ESTILOS LOCALES
        ========================================================== */
-    .page-bg-unified { background: #fdfdfd; } 
+    .page-bg-unified { background: #fdfdfd; }
     .relative-z { position: relative; z-index: 2; }
+
+    /* ── Watermarks ── */
+    .serv-watermark {
+        position: absolute; right: -3vw; bottom: -2vw;
+        font-family: var(--font-serif); font-style: italic;
+        font-size: clamp(10rem, 20vw, 28rem);
+        color: rgba(0,0,0,0.022);
+        line-height: 1; pointer-events: none; user-select: none;
+        letter-spacing: -0.04em; z-index: 0;
+    }
+    .bp-watermark {
+        position: absolute; right: -3vw; bottom: -2vw;
+        font-family: var(--font-serif); font-style: italic;
+        font-size: clamp(8rem, 16vw, 22rem);
+        color: rgba(255,255,255,0.04);
+        line-height: 1; pointer-events: none; user-select: none;
+        letter-spacing: -0.04em; z-index: 0;
+    }
 
     .reveal-up { 
         opacity: 0; transform: translateY(60px); 
@@ -589,7 +610,7 @@ const isEn = lang === 'en';
     }
 
     /* 1. HERO (INDEX STYLE EXACTO) */
-    .hero-grand { padding: 13rem 0 7rem 0; min-height: 80vh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
+    .hero-grand { padding: 13rem 0 7rem 0; min-height: 80vh; display: flex; align-items: center; background: var(--color-bg); position: relative; overflow: clip; }
     .hero-text-zone { transition: transform 0.1s ease-out, opacity 0.1s ease-out; }
     .hero-title { font-size: clamp(3.2rem, 7vw, 6.8rem); line-height: 0.85; font-weight: 800; letter-spacing: -3px; margin-bottom: 4rem; color: #050505; }
     .hero-title .title-bold, .hero-title .title-serif, .hero-title .editorial { color: #050505; }
@@ -646,24 +667,142 @@ const isEn = lang === 'en';
     .ms-massive-title { font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 800; letter-spacing: -3px; line-height: 0.95; margin: 0 0 2.5rem 0; color: var(--color-text); }
     .ms-main-desc { font-size: 1.25rem; color: var(--color-text-muted); line-height: 1.6; max-width: 750px; margin: 0 0 4.5rem 0; font-weight: 400; }
 
-    /* BENTO MODULES */
-    .bento-modules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 4rem; }
-    .b-module { background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%); border: 1px solid rgba(0,0,0,0.04); padding: 2.5rem; display: flex; flex-direction: column; transition: all 0.5s var(--ease-smooth); box-shadow: 0 10px 30px rgba(0,0,0,0.02), inset 0 2px 0 rgba(255,255,255,1); position: relative; }
-    .b-module:hover { border-color: rgba(0,0,0,0.08); transform: translateY(-6px) scale(1.01); box-shadow: 0 30px 60px rgba(0,0,0,0.06), inset 0 2px 0 rgba(255,255,255,1); }
+    /* BENTO MODULES — premium editorial cards */
+    .bento-modules-grid {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;
+        margin-bottom: 4rem;
+        counter-reset: bento;
+    }
+    .b-module {
+        background: linear-gradient(180deg, #ffffff 0%, #fafbfd 100%);
+        border: 1px solid rgba(10,25,47,0.06);
+        padding: 2.4rem 2.4rem 2.2rem;
+        display: flex; flex-direction: column;
+        transition:
+            transform 0.7s cubic-bezier(0.16,1,0.3,1),
+            box-shadow 0.7s cubic-bezier(0.16,1,0.3,1),
+            border-color 0.45s ease;
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,1),
+            0 1px 2px rgba(10,25,47,0.02),
+            0 8px 24px -8px rgba(10,25,47,0.03);
+        position: relative;
+        overflow: hidden;
+        border-radius: 20px;
+        counter-increment: bento;
+        isolation: isolate;
+    }
+    /* Número editorial top-right */
+    .b-module::before {
+        content: "/0" counter(bento);
+        position: absolute;
+        top: 1.65rem; right: 1.85rem;
+        font-family: var(--font-serif);
+        font-style: italic; font-weight: 400;
+        font-size: 1.05rem;
+        color: rgba(10,25,47,0.18);
+        letter-spacing: -0.3px;
+        transition: color 0.5s ease, transform 0.6s cubic-bezier(0.16,1,0.3,1);
+        z-index: 2; pointer-events: none;
+    }
+    /* Línea acento top que se revela en hover */
+    .b-module::after {
+        content: ''; position: absolute;
+        top: 0; left: 0; right: 0; height: 1px;
+        background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(10,25,47,0.28) 20%,
+            rgba(10,25,47,0.28) 80%,
+            transparent 100%);
+        transform: scaleX(0);
+        transform-origin: center;
+        transition: transform 0.8s cubic-bezier(0.16,1,0.3,1);
+        z-index: 3; pointer-events: none;
+    }
+    .b-module:hover {
+        border-color: rgba(10,25,47,0.1);
+        transform: translateY(-6px);
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,1),
+            0 2px 8px rgba(10,25,47,0.04),
+            0 28px 56px -14px rgba(10,25,47,0.14);
+    }
+    .b-module:hover::before {
+        color: rgba(10,25,47,0.45);
+        transform: translateX(-2px);
+    }
+    .b-module:hover::after { transform: scaleX(1); }
 
-    .b-mod-icon { width: 48px; height: 48px; background: #ffffff; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--color-blue-deep); margin-bottom: 2rem; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 12px rgba(0,0,0,0.04); transition: all 0.5s var(--ease-smooth); }
-    .b-module:hover .b-mod-icon { transform: scale(1.08) rotate(-3deg); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+    .b-mod-icon {
+        width: 50px; height: 50px;
+        background: linear-gradient(180deg, #ffffff 0%, #f3f5f8 100%);
+        border-radius: 13px;
+        display: flex; align-items: center; justify-content: center;
+        color: var(--color-blue-deep);
+        margin-bottom: 2.2rem;
+        border: 1px solid rgba(10,25,47,0.06);
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,1),
+            0 3px 8px rgba(10,25,47,0.03);
+        transition:
+            transform 0.55s cubic-bezier(0.16,1,0.3,1),
+            box-shadow 0.55s cubic-bezier(0.16,1,0.3,1),
+            border-color 0.4s ease;
+        position: relative; z-index: 2;
+    }
+    .b-mod-icon svg { width: 22px; height: 22px; }
+    .b-module:hover .b-mod-icon {
+        transform: scale(1.05) translateY(-2px);
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,1),
+            0 10px 22px rgba(10,25,47,0.1);
+        border-color: rgba(10,25,47,0.1);
+    }
 
-    .b-module h3 { font-size: 1.15rem; font-weight: 800; color: var(--color-text); margin: 0 0 0.8rem 0; letter-spacing: -0.5px; }
-    .b-module p { font-size: 0.95rem; color: #64748b; line-height: 1.5; margin: 0; }
+    .b-module h3 {
+        font-size: 1.1rem; font-weight: 700;
+        color: var(--color-text);
+        margin: 0 0 0.65rem 0;
+        letter-spacing: -0.35px;
+        line-height: 1.3;
+        padding-right: 2.4rem;
+        position: relative; z-index: 2;
+    }
+    .b-module p {
+        font-size: 0.93rem;
+        color: #5a6677;
+        line-height: 1.6;
+        margin: 0;
+        font-weight: 400;
+        position: relative; z-index: 2;
+    }
 
-    .dna-footer { display: flex; align-items: center; gap: 2rem; border-top: 1px solid var(--color-border); padding-top: 2rem; }
-    .dna-label { font-size: 0.65rem; font-weight: 800; color: #cbd5e1; letter-spacing: 1px; }
-    .dna-pills { display: flex; flex-wrap: wrap; gap: 15px; }
-    .dna-pills span { font-size: 0.75rem; font-weight: 700; color: #94a3b8; }
+    /* DNA Footer refinado */
+    .dna-footer {
+        display: flex; align-items: center; gap: 2rem;
+        border-top: 1px solid rgba(10,25,47,0.06);
+        padding-top: 1.8rem;
+    }
+    .dna-label {
+        font-size: 0.6rem; font-weight: 700;
+        color: rgba(10,25,47,0.32);
+        letter-spacing: 2px;
+    }
+    .dna-pills { display: flex; flex-wrap: wrap; gap: 14px; }
+    .dna-pills span {
+        font-size: 0.78rem; font-weight: 500;
+        color: rgba(10,25,47,0.55);
+        letter-spacing: -0.1px;
+        position: relative;
+    }
+    .dna-pills span:not(:last-child)::after {
+        content: '·';
+        margin-left: 14px;
+        color: rgba(10,25,47,0.2);
+    }
 
     /* 4. WHY FLOUVIA HARDWARE */
-    .why-flouvia-hardware { padding: 6rem 0 8rem 0; background: #ffffff; }
+    .why-flouvia-hardware { padding: 6rem 0 8rem 0; background: #ffffff; position: relative; overflow: clip; }
     .wf-header { text-align: center; margin-bottom: 6rem; }
     .wf-title { font-size: clamp(2.8rem, 5vw, 4.5rem); font-weight: 800; letter-spacing: -2px; margin: 0; line-height: 1; }
 
@@ -755,53 +894,73 @@ const isEn = lang === 'en';
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // GSAP controls hero — fully clear CSS fallback (.reveal-blur leaves filter+transform behind)
-    document.querySelectorAll<HTMLElement>('.hero-title, .hero-text-zone .eyebrow, .hero-bottom').forEach(el => {
+    // ── Kill ALL CSS reveal animations + reset to visible state ──
+    // GSAP will explicitly hide via gsap.set() and animate in via gsap.to()
+    document.querySelectorAll<HTMLElement>(
+        '.reveal-blur, .reveal-fade, .reveal-up, .bp-fade-up, .blueprint-reveal'
+    ).forEach(el => {
         el.style.animation = 'none';
         el.style.opacity = '1';
         el.style.filter = 'none';
         el.style.transform = 'none';
     });
-
-    // Fallback reveals for non-hero elements
-    const revealObserver = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('active');
-        });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal-blur, .reveal-fade, .reveal-up, .blueprint-reveal').forEach(el => {
-        if (!el.closest('.hero-grand')) revealObserver.observe(el);
+    // Disable CSS transitions on blueprint lines (GSAP will animate width/height)
+    document.querySelectorAll<HTMLElement>('.bp-line-x, .bp-line-y').forEach(el => {
+        el.style.transition = 'none';
     });
+
+    // ── Robust ScrollTrigger refresh (waits for fonts + window.load) ──
+    const robustRefresh = () => {
+        const winLoad = new Promise<void>((resolve) => {
+            if (document.readyState === 'complete') resolve();
+            else window.addEventListener('load', () => resolve(), { once: true });
+        });
+        const fontsReady = (document as any).fonts?.ready ?? Promise.resolve();
+        Promise.all([winLoad, fontsReady]).then(() => {
+            setTimeout(() => ScrollTrigger.refresh(), 120);
+        });
+    };
+    robustRefresh();
 
     if (!reduced) {
         const mm = gsap.matchMedia();
 
+        // Helper to safely create SplitText (returns null if element missing)
+        const splitWords = (el: HTMLElement | null) => {
+            if (!el) return null;
+            const split = SplitText.create(el, { type: 'lines,words', linesClass: 'lx-line-mask' });
+            gsap.set(split.words, { yPercent: 110 });
+            return split;
+        };
+
+        // ── DESKTOP ────────────────────────────────────────────────────
         mm.add('(min-width: 769px)', () => {
-            /* HERO — luxury minimalist reveal (pure curtain, no blur, no scale) */
-            const heroTitle = document.querySelector<HTMLElement>('.hero-title');
+
+            // HERO ───────────────────────────────────────────────
+            const heroTitle   = document.querySelector<HTMLElement>('.hero-title');
             const heroEyebrow = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
-            const heroBottom = document.querySelector<HTMLElement>('.hero-bottom');
+            const heroBottom  = document.querySelector<HTMLElement>('.hero-bottom');
+
+            // Hide immediately so nothing flashes
+            if (heroEyebrow) gsap.set(heroEyebrow, { opacity: 0, y: 14 });
+            if (heroBottom)  gsap.set(heroBottom.children, { opacity: 0, y: 16 });
+            const heroSplit = heroTitle ? SplitText.create(heroTitle, {
+                type: 'lines,words', linesClass: 'lx-line-mask',
+            }) : null;
+            if (heroSplit) gsap.set(heroSplit.words, { yPercent: 105 });
 
             const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-            if (heroEyebrow) {
-                tl.from(heroEyebrow, { opacity: 0, y: 14, letterSpacing: '7px', duration: 1.4 }, 0.1);
-            }
-            if (heroTitle) {
-                const split = SplitText.create(heroTitle, { type: 'lines,words', linesClass: 'lx-line-mask' });
-                gsap.set(split.words, { yPercent: 105 });
-                tl.to(split.words, {
-                    yPercent: 0, duration: 1.5,
-                    stagger: { amount: 0.5, from: 'start' },
-                }, 0.35);
-            }
+            if (heroEyebrow) tl.to(heroEyebrow, { opacity: 1, y: 0, duration: 1.4 }, 0.1);
+            if (heroSplit)   tl.to(heroSplit.words, {
+                yPercent: 0, duration: 1.5, stagger: { amount: 0.5, from: 'start' },
+            }, 0.35);
             if (heroBottom && heroBottom.children.length > 0) {
-                tl.from(gsap.utils.toArray<HTMLElement>(heroBottom.children), {
-                    opacity: 0, y: 16, duration: 1.1, ease: 'power3.out',
-                    stagger: 0.12,
+                tl.to(heroBottom.children, {
+                    opacity: 1, y: 0, duration: 1.1, ease: 'power3.out', stagger: 0.12,
                 }, 1.0);
             }
 
-            /* HERO PARALLAX */
+            // Hero parallax
             const heroParallax = document.getElementById('hero-parallax');
             if (heroParallax) {
                 gsap.to(heroParallax, {
@@ -809,84 +968,190 @@ const isEn = lang === 'en';
                     scrollTrigger: { trigger: '.hero-grand', start: 'top top', end: 'bottom 30%', scrub: 0.8 },
                 });
             }
+
+            // PHILOSOPHY BLUEPRINT ───────────────────────────────
+            const bpSection = document.querySelector<HTMLElement>('.philosophy-blueprint');
+            if (bpSection) {
+                const bpLineTop    = bpSection.querySelector<HTMLElement>('.bp-line-top');
+                const bpLineBottom = bpSection.querySelector<HTMLElement>('.bp-line-bottom');
+                const bpLineYs     = bpSection.querySelectorAll<HTMLElement>('.bp-line-y');
+                const bpBadge      = bpSection.querySelector<HTMLElement>('.p-badge');
+                const bpTitle      = bpSection.querySelector<HTMLElement>('.p-title');
+                const bpBtn        = bpSection.querySelector<HTMLElement>('.sleek-btn-light');
+                const bpCols       = bpSection.querySelectorAll<HTMLElement>('.bp-col:not(.bp-header-col) .bp-content');
+
+                // Hide all immediately
+                if (bpLineTop)    gsap.set(bpLineTop,    { width: 0 });
+                if (bpLineBottom) gsap.set(bpLineBottom, { width: 0 });
+                gsap.set(bpLineYs, { height: 0 });
+                if (bpBadge) gsap.set(bpBadge, { opacity: 0, y: 16 });
+                if (bpBtn)   gsap.set(bpBtn,   { opacity: 0, y: 12 });
+                gsap.set(bpCols, { opacity: 0, y: 20 });
+                const bpSplit = splitWords(bpTitle);
+
+                const bpTl = gsap.timeline({
+                    scrollTrigger: { trigger: bpSection, start: 'top 85%', once: true },
+                });
+                if (bpLineTop)    bpTl.to(bpLineTop,    { width: '100%', duration: 1.5, ease: 'expo.out' }, 0);
+                if (bpLineBottom) bpTl.to(bpLineBottom, { width: '100%', duration: 1.5, ease: 'expo.out' }, 0.3);
+                bpLineYs.forEach((line, i) => {
+                    bpTl.to(line, { height: '100%', duration: 1.2, ease: 'expo.out' }, 0.4 + i * 0.1);
+                });
+                if (bpBadge) bpTl.to(bpBadge, { opacity: 1, y: 0, duration: 0.9, ease: 'expo.out' }, 0.25);
+                if (bpSplit) bpTl.to(bpSplit.words, {
+                    yPercent: 0, duration: 1.3, ease: 'expo.out', stagger: { amount: 0.4 },
+                }, 0.4);
+                if (bpBtn) bpTl.to(bpBtn, { opacity: 1, y: 0, duration: 0.9, ease: 'expo.out' }, 0.75);
+                bpCols.forEach((col, i) => {
+                    bpTl.to(col, { opacity: 1, y: 0, duration: 1.0, ease: 'expo.out' }, 0.5 + i * 0.12);
+                });
+            }
+
+            // SERVICES ROWS ──────────────────────────────────────
+            document.querySelectorAll<HTMLElement>('.master-service-row').forEach((row) => {
+                const stickyContent = row.querySelector<HTMLElement>('.ms-sticky-content');
+                const title   = row.querySelector<HTMLElement>('.ms-massive-title');
+                const desc    = row.querySelector<HTMLElement>('.ms-main-desc');
+                const modules = row.querySelectorAll<HTMLElement>('.b-module');
+                const dna     = row.querySelector<HTMLElement>('.dna-footer');
+
+                if (stickyContent) gsap.set(stickyContent, { opacity: 0, x: -24 });
+                if (desc) gsap.set(desc, { opacity: 0, y: 18 });
+                gsap.set(modules, { opacity: 0, y: 28 });
+                if (dna) gsap.set(dna, { opacity: 0 });
+                const titleSplit = splitWords(title);
+
+                const rowTl = gsap.timeline({
+                    scrollTrigger: { trigger: row, start: 'top 85%', once: true },
+                });
+                if (stickyContent) rowTl.to(stickyContent, { opacity: 1, x: 0, duration: 1.0, ease: 'expo.out' }, 0);
+                if (titleSplit)    rowTl.to(titleSplit.words, {
+                    yPercent: 0, duration: 1.4, ease: 'expo.out', stagger: { amount: 0.35 },
+                }, 0.1);
+                if (desc) rowTl.to(desc, { opacity: 1, y: 0, duration: 1.1, ease: 'expo.out' }, 0.5);
+                modules.forEach((mod, j) => {
+                    rowTl.to(mod, { opacity: 1, y: 0, duration: 1.0, ease: 'expo.out' }, 0.7 + j * 0.07);
+                });
+                if (dna) rowTl.to(dna, { opacity: 1, duration: 0.8, ease: 'expo.out' }, 1.1);
+            });
+
+            // WHY FLOUVIA HARDWARE ───────────────────────────────
+            const wfSection = document.querySelector<HTMLElement>('.why-flouvia-hardware');
+            if (wfSection) {
+                const eyebrow = wfSection.querySelector<HTMLElement>('.eyebrow');
+                const wfTitle = wfSection.querySelector<HTMLElement>('.wf-title');
+                const cards   = wfSection.querySelectorAll<HTMLElement>('.hw-card');
+
+                if (eyebrow) gsap.set(eyebrow, { opacity: 0, y: 14 });
+                gsap.set(cards, { opacity: 0, y: 30 });
+                const wfSplit = splitWords(wfTitle);
+
+                const wfTl = gsap.timeline({
+                    scrollTrigger: { trigger: wfSection, start: 'top 85%', once: true },
+                });
+                if (eyebrow) wfTl.to(eyebrow, { opacity: 1, y: 0, duration: 1.2, ease: 'expo.out' }, 0);
+                if (wfSplit) wfTl.to(wfSplit.words, {
+                    yPercent: 0, duration: 1.4, ease: 'expo.out', stagger: { amount: 0.4 },
+                }, 0.2);
+                cards.forEach((card, i) => {
+                    wfTl.to(card, { opacity: 1, y: 0, duration: 1.1, ease: 'expo.out' }, 0.55 + i * 0.1);
+                });
+            }
+
+            // CTA FINAL ──────────────────────────────────────────
+            const ctaSection = document.querySelector<HTMLElement>('.cta-final-clean');
+            if (ctaSection) {
+                const ctaBox     = ctaSection.querySelector<HTMLElement>('.cta-box-refined');
+                const ctaEyebrow = ctaSection.querySelector<HTMLElement>('.eyebrow');
+                const ctaTitle   = ctaSection.querySelector<HTMLElement>('.cta-title');
+                const ctaBtn     = ctaSection.querySelector<HTMLElement>('.btn-luxe-main');
+
+                if (ctaBox)     gsap.set(ctaBox,     { opacity: 0, y: 30, scale: 0.97 });
+                if (ctaEyebrow) gsap.set(ctaEyebrow, { opacity: 0, y: 12 });
+                if (ctaBtn)     gsap.set(ctaBtn,     { opacity: 0, y: 16 });
+                const ctaSplit = splitWords(ctaTitle);
+
+                const ctaTl = gsap.timeline({
+                    scrollTrigger: { trigger: ctaSection, start: 'top 85%', once: true },
+                });
+                if (ctaBox)     ctaTl.to(ctaBox,     { opacity: 1, y: 0, scale: 1, duration: 1.3, ease: 'expo.out' }, 0);
+                if (ctaEyebrow) ctaTl.to(ctaEyebrow, { opacity: 1, y: 0, duration: 1.0, ease: 'expo.out' }, 0.35);
+                if (ctaSplit)   ctaTl.to(ctaSplit.words, {
+                    yPercent: 0, duration: 1.3, ease: 'expo.out', stagger: { amount: 0.3 },
+                }, 0.45);
+                if (ctaBtn)     ctaTl.to(ctaBtn,     { opacity: 1, y: 0, duration: 1.0, ease: 'expo.out' }, 0.85);
+            }
         });
 
+        // ── MOBILE ─────────────────────────────────────────────────────
         mm.add('(max-width: 768px)', () => {
-            const mHeroTitle = document.querySelector<HTMLElement>('.hero-title');
-            const mEyebrow = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
+            const mHeroTitle  = document.querySelector<HTMLElement>('.hero-title');
+            const mEyebrow    = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
             const mHeroBottom = document.querySelector<HTMLElement>('.hero-bottom');
+
+            if (mEyebrow)    gsap.set(mEyebrow,    { opacity: 0, y: 10 });
+            if (mHeroTitle)  gsap.set(mHeroTitle,  { opacity: 0, y: 24 });
+            if (mHeroBottom) gsap.set(mHeroBottom.children, { opacity: 0, y: 14 });
+
             const tlm = gsap.timeline({ defaults: { ease: 'expo.out' } });
-            if (mEyebrow) tlm.from(mEyebrow, { opacity: 0, y: 10, letterSpacing: '6px', duration: 1.1 }, 0.1);
-            if (mHeroTitle) tlm.from(mHeroTitle, { opacity: 0, y: 24, duration: 1.2 }, 0.3);
+            if (mEyebrow)   tlm.to(mEyebrow,   { opacity: 1, y: 0, duration: 1.1 }, 0.1);
+            if (mHeroTitle) tlm.to(mHeroTitle, { opacity: 1, y: 0, duration: 1.2 }, 0.3);
             if (mHeroBottom && mHeroBottom.children.length > 0) {
-                tlm.from(gsap.utils.toArray<HTMLElement>(mHeroBottom.children), {
-                    opacity: 0, y: 14, duration: 1.0, ease: 'power3.out',
-                    stagger: 0.1,
+                tlm.to(mHeroBottom.children, {
+                    opacity: 1, y: 0, duration: 1.0, ease: 'power3.out', stagger: 0.1,
                 }, 0.85);
             }
         });
     }
 
-    // 2. BARRAS DE PROGRESO DE SCROLL
+    // ── SCROLL PROGRESS BARS ────────────────────────────────────────
     window.addEventListener('scroll', () => {
-        const sections = document.querySelectorAll('.master-service-row');
-
-        sections.forEach(section => {
+        document.querySelectorAll('.master-service-row').forEach(section => {
             const bar = section.querySelector('.ms-progress-bar') as HTMLElement;
             if (!bar) return;
-
             const rect = section.getBoundingClientRect();
-
             if (rect.top <= 140 && rect.bottom >= 0) {
-                const totalHeight = (section as HTMLElement).offsetHeight;
-                const progress = Math.abs(rect.top - 140) / (totalHeight - 140);
-                const percent = Math.min(Math.max(progress * 100, 0), 100);
-                bar.style.height = `${percent}%`;
+                const total = (section as HTMLElement).offsetHeight;
+                const pct = Math.min(Math.max((Math.abs(rect.top - 140) / (total - 140)) * 100, 0), 100);
+                bar.style.height = `${pct}%`;
             } else if (rect.top > 140) {
                 bar.style.height = '0%';
-            } else if (rect.bottom < 140) {
+            } else {
                 bar.style.height = '100%';
             }
         });
-    });
+    }, { passive: true });
 
-    // 3. EFECTO HARDWARE 3D TILT (APPLE GLOW + ROTACIÓN)
+    // ── 3D TILT (APPLE GLOW) ────────────────────────────────────────
     if (window.innerWidth > 768) {
         document.querySelectorAll('.tilt-card').forEach(card => {
             card.addEventListener('mousemove', e => {
                 const rect = card.getBoundingClientRect();
                 const x = (e as MouseEvent).clientX - rect.left;
                 const y = (e as MouseEvent).clientY - rect.top;
-                
                 (card as HTMLElement).style.setProperty('--mouse-x', `${x}px`);
                 (card as HTMLElement).style.setProperty('--mouse-y', `${y}px`);
-
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const rotateX = ((y - centerY) / centerY) * -5; 
-                const rotateY = ((x - centerX) / centerX) * 5;
-                
-                (card as HTMLElement).style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                const cx = rect.width / 2, cy = rect.height / 2;
+                const rx = ((y - cy) / cy) * -5, ry = ((x - cx) / cx) * 5;
+                (card as HTMLElement).style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02, 1.02, 1.02)`;
             });
-
             card.addEventListener('mouseleave', () => {
-                (card as HTMLElement).style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                (card as HTMLElement).style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
             });
         });
     }
 
-    // 4. BOTONES MAGNÉTICOS
+    // ── MAGNETIC BUTTONS ────────────────────────────────────────────
     if (window.innerWidth > 1024) {
         document.querySelectorAll('.magnetic-btn-minimal, .sleek-btn-light').forEach(btn => {
-            btn.addEventListener('mousemove', (e) => {
+            btn.addEventListener('mousemove', e => {
                 const rect = btn.getBoundingClientRect();
                 const x = (e as MouseEvent).clientX - rect.left - rect.width / 2;
                 const y = (e as MouseEvent).clientY - rect.top - rect.height / 2;
                 (btn as HTMLElement).style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
             });
-            
             btn.addEventListener('mouseleave', () => {
-                (btn as HTMLElement).style.transform = `translate(0, 0)`;
+                (btn as HTMLElement).style.transform = 'translate(0, 0)';
             });
         });
     }

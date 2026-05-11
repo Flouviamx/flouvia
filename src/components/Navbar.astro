@@ -3,6 +3,10 @@ import { getLangFromUrl, useTranslations } from '../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
+const pathname = Astro.url.pathname;
+const esUrl = lang === 'en' ? (pathname.replace(/^\/en/, '') || '/') : pathname;
+const enUrl = lang === 'es' ? '/en' + pathname : pathname;
 ---
 
 <header class="navbar-wrapper" id="navbar">
@@ -39,8 +43,8 @@ const t = useTranslations(lang);
 
             <div class="nav-right desktop-nav" id="nav-right">
                 <div class="lang-switch">
-                    <a href="/"    class="lang-option" class:list={[{ active: lang === 'es' }]}>ES</a>
-                    <a href="/en/" class="lang-option" class:list={[{ active: lang === 'en' }]}>EN</a>
+                    <a href={esUrl} class="lang-option" class:list={[{ active: lang === 'es' }]}>ES</a>
+                    <a href={enUrl} class="lang-option" class:list={[{ active: lang === 'en' }]}>EN</a>
                 </div>
 
                 <a href={lang === 'en' ? '/en/login' : '/login'} class="mini-pill user-link" aria-label="Login">
@@ -88,8 +92,8 @@ const t = useTranslations(lang);
                     {t('nav.login')}
                 </a>
                 <div class="lang-switch-mobile">
-                    <a href="/"    class="lang-option-m" class:list={[{ active: lang === 'es' }]}>ES</a>
-                    <a href="/en/" class="lang-option-m" class:list={[{ active: lang === 'en' }]}>EN</a>
+                    <a href={esUrl} class="lang-option-m" class:list={[{ active: lang === 'es' }]}>ES</a>
+                    <a href={enUrl} class="lang-option-m" class:list={[{ active: lang === 'en' }]}>EN</a>
                 </div>
             </div>
 
