@@ -669,7 +669,7 @@ const t = useTranslations(lang);
     .card-num-luxury { position: absolute; top: 1.5rem; left: 2rem; font-family: var(--font-serif); font-style: italic; font-size: 1.8rem; color: #fff; opacity: 0.6; z-index: 3; letter-spacing: -1px; transition: 0.5s var(--ease-spring);}
     .vertical-card:hover .card-num-luxury { opacity: 1; transform: translateX(5px); }
 
-    .card-bg { position: absolute; width: 100%; height: 100%; background: #eaeaea; display: flex; align-items: center; justify-content: center; z-index: 1; overflow: hidden; border-radius: inherit;}
+    .card-bg { position: absolute; width: 100%; height: 100%; background: #050b14; display: flex; align-items: center; justify-content: center; z-index: 1; border-radius: inherit;}
     .placeholder-text { font-size: 0.7rem; font-weight: 700; color: #aaa; letter-spacing: 1px; }
     
     .carousel-image { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease-spring); z-index: 1;}
@@ -1255,16 +1255,6 @@ const t = useTranslations(lang);
                 }, 0.3);
             });
 
-            /* Image Ken Burns parallax inside cards while scrolling section */
-            gsap.utils.toArray<HTMLElement>('.clients-vertical-carousel .carousel-image').forEach(img => {
-                gsap.to(img, {
-                    yPercent: -8, ease: 'none',
-                    scrollTrigger: {
-                        trigger: '.clients-vertical-carousel',
-                        start: 'top bottom', end: 'bottom top', scrub: 1.2,
-                    },
-                });
-            });
 
             /* ═══════════════════════════════════════════════════
                             SERVICES SECTION

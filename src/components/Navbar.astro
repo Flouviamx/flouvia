@@ -153,28 +153,31 @@ const t = useTranslations(lang);
     }
     .desktop-nav { display: flex; align-items: center; }
 
-    /* ── GLASS PILL ── */
+    /* ── GLASS PILL — gradient sutil, sombras refinadas ── */
     .glass-pill {
         display: inline-flex; align-items: center;
-        background: rgba(255,255,255,0.65);
-        backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        background: linear-gradient(135deg, rgba(255,255,255,0.78) 0%, rgba(255,255,255,0.62) 100%);
+        backdrop-filter: blur(20px) saturate(1.4);
+        -webkit-backdrop-filter: blur(20px) saturate(1.4);
         padding: 4px 6px; border-radius: 100px;
-        border: 1px solid rgba(0,0,0,0.07);
+        border: 1px solid rgba(0,0,0,0.06);
         box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.9),
-            0 4px 20px rgba(0,0,0,0.04),
-            0 1px 3px rgba(0,0,0,0.03);
+            inset 0 1px 0 rgba(255,255,255,0.95),
+            inset 0 -1px 0 rgba(0,0,0,0.02),
+            0 6px 24px rgba(10,25,47,0.06),
+            0 1px 3px rgba(0,0,0,0.04);
         position: relative; overflow: hidden;
         transition: box-shadow 0.6s var(--ease-expo), border-color 0.6s var(--ease-expo),
                     background 0.6s var(--ease-expo), backdrop-filter 0.6s;
-        will-change: transform;
+        will-change: transform, filter;
     }
     .glass-pill:hover {
         box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.9),
-            0 12px 40px rgba(0,0,0,0.08),
-            0 2px 6px rgba(0,0,0,0.04);
-        border-color: rgba(0,0,0,0.1);
+            inset 0 1px 0 rgba(255,255,255,0.95),
+            inset 0 -1px 0 rgba(0,0,0,0.02),
+            0 14px 44px rgba(10,25,47,0.1),
+            0 2px 6px rgba(0,0,0,0.05);
+        border-color: rgba(0,0,0,0.09);
     }
 
     /* shimmer sweep */
@@ -189,13 +192,15 @@ const t = useTranslations(lang);
     }
 
     .navbar-wrapper.scrolled .glass-pill {
-        background: rgba(10,25,47,0.9);
-        backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
-        border-color: rgba(255,255,255,0.1);
+        background: linear-gradient(135deg, rgba(13,30,55,0.92) 0%, rgba(8,20,38,0.88) 100%);
+        backdrop-filter: blur(28px) saturate(1.6);
+        -webkit-backdrop-filter: blur(28px) saturate(1.6);
+        border-color: rgba(255,255,255,0.08);
         box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.08),
-            0 16px 48px rgba(0,0,0,0.22),
-            0 2px 8px rgba(0,0,0,0.12);
+            inset 0 1px 0 rgba(255,255,255,0.1),
+            inset 0 -1px 0 rgba(0,0,0,0.2),
+            0 18px 52px rgba(0,0,0,0.28),
+            0 2px 8px rgba(0,0,0,0.14);
     }
 
     /* ── NAV LINKS ── */
@@ -214,24 +219,27 @@ const t = useTranslations(lang);
         width: 100%; height: 100%;
         background: rgba(0,0,0,0.055); border-radius: 100px; z-index: -1;
         opacity: 0; transform: scale(0.82);
-        transition: opacity 0.35s var(--ease-expo), transform 0.35s var(--ease-back);
+        transition: opacity 0.35s var(--ease-expo), transform 0.35s var(--ease-back), background 0.4s;
     }
-    .navbar-wrapper.scrolled .nav-link::before { background: rgba(255,255,255,0.12); }
+    .navbar-wrapper.scrolled .nav-link::before { background: rgba(255,255,255,0.1); }
     .nav-link:hover::before { opacity: 1; transform: scale(1); }
     .nav-link:hover { color: rgba(0,0,0,0.95); }
     .navbar-wrapper.scrolled .nav-link:hover { color: rgba(255,255,255,0.95); }
 
-    /* active dot */
-    .nav-link::after {
-        content: ''; position: absolute; bottom: 1px; left: 50%;
-        transform: translateX(-50%) scale(0);
-        width: 4px; height: 4px; border-radius: 50%;
-        background: currentColor; opacity: 0;
-        transition: transform 0.4s var(--ease-back), opacity 0.3s;
+    /* ── ACTIVE LINK — filled pill background con depth (no dot) ── */
+    .nav-link.nav-active {
+        color: rgba(0,0,0,0.95);
     }
-    .nav-link.nav-active { color: rgba(0,0,0,0.95); }
-    .nav-link.nav-active::after { transform: translateX(-50%) scale(1); opacity: 0.8; }
+    .nav-link.nav-active::before {
+        opacity: 1; transform: scale(1);
+        background: rgba(0,0,0,0.08);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(0,0,0,0.03);
+    }
     .navbar-wrapper.scrolled .nav-link.nav-active { color: #fff; }
+    .navbar-wrapper.scrolled .nav-link.nav-active::before {
+        background: rgba(255,255,255,0.14);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
+    }
 
     /* pill-logo */
     .pill-logo {
@@ -498,49 +506,121 @@ const t = useTranslations(lang);
 import { gsap } from "gsap";
 
 document.addEventListener("DOMContentLoaded", () => {
-    const navbar  = document.getElementById("navbar");
-    const toggle  = document.getElementById("menu-toggle");
-    const pill    = document.getElementById("glass-pill");
+    const navbar   = document.getElementById("navbar");
+    const toggle   = document.getElementById("menu-toggle");
+    const pill     = document.getElementById("glass-pill");
     const mainLogo = document.getElementById("main-logo");
     const navRight = document.getElementById("nav-right");
+    const topBar   = document.getElementById("top-bar");
+    const contactBtn = document.querySelector<HTMLElement>(".btn-contact");
 
-    /* ── ENTRANCE ANIMATION ── */
+    /* ═══════════════════════════════════════════════════
+       ENTRANCE — multi-capa cinemático
+       Pattern: pill scales → content reveals → right enters
+       ═══════════════════════════════════════════════════ */
     const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
 
-    // top bar slides down
-    gsap.set("#top-bar", { y: -44 });
-    tl.to("#top-bar", { y: 0, duration: 0.65 }, 0);
+    // 1. Top bar — slides down con sus elementos internos staggered
+    if (topBar) {
+        gsap.set(topBar, { y: -44 });
+        gsap.set(topBar.querySelectorAll(".top-text, .top-dot"), { opacity: 0, y: -4 });
+        tl.to(topBar, { y: 0, duration: 0.85 }, 0);
+        tl.to(topBar.querySelectorAll(".top-text, .top-dot"), {
+            opacity: 1, y: 0, duration: 0.7, stagger: 0.06,
+        }, 0.25);
+    }
 
-    // glass pill scales + fades from left
+    // 2. Glass pill — escala desde 0.5 horizontalmente con drop sutil + blur
     if (pill) {
-        gsap.set(pill, { opacity: 0, scale: 0.92, x: -10 });
-        tl.to(pill, { opacity: 1, scale: 1, x: 0, duration: 0.8 }, 0.18);
+        const navLinks   = pill.querySelectorAll(".nav-link");
+        const pillLogo   = pill.querySelector(".pill-logo");
+
+        gsap.set(pill, {
+            opacity: 0, scaleX: 0.5, scaleY: 0.85, y: -16,
+            filter: "blur(8px)", transformOrigin: "center center",
+        });
+        gsap.set(navLinks, { opacity: 0, y: 16, filter: "blur(4px)" });
+
+        tl.to(pill, {
+            opacity: 1, scaleX: 1, scaleY: 1, y: 0,
+            filter: "blur(0px)", duration: 1.2,
+            onComplete: () => gsap.set(pill, { clearProps: "opacity,transform,filter" }),
+        }, 0.2);
+
+        // Links revelan desde dentro del pill con stagger orgánico
+        tl.to(navLinks, {
+            opacity: 1, y: 0, filter: "blur(0px)",
+            duration: 0.8, stagger: 0.055,
+            onComplete: () => gsap.set(navLinks, { clearProps: "opacity,transform,filter" }),
+        }, 0.65);
     }
 
-    // center logo fades down
+    // 3. Center logo — drop desde arriba con scale + blur (Apple-style)
     if (mainLogo) {
-        gsap.set(mainLogo, { opacity: 0, y: -8 });
-        tl.to(mainLogo, { opacity: 1, y: 0, duration: 0.7, clearProps: "opacity,transform" }, 0.25);
+        gsap.set(mainLogo, {
+            opacity: 0, y: -22, scale: 1.18, filter: "blur(14px)",
+        });
+        tl.to(mainLogo, {
+            opacity: 1, y: 0, scale: 1, filter: "blur(0px)",
+            duration: 1.1,
+            onComplete: () => gsap.set(mainLogo, { clearProps: "opacity,transform,filter" }),
+        }, 0.45);
     }
 
-    // right side staggered from right
+    // 4. Right side — cada item desde arriba con scale (no desde el lado para sentirse más coherente)
     if (navRight) {
-        const rightItems = navRight.children;
-        gsap.set(rightItems, { opacity: 0, x: 12 });
-        tl.to(rightItems, { opacity: 1, x: 0, duration: 0.65, stagger: 0.06 }, 0.3);
+        const rightItems = Array.from(navRight.children) as HTMLElement[];
+        gsap.set(rightItems, { opacity: 0, y: -14, scale: 0.88, filter: "blur(6px)" });
+        tl.to(rightItems, {
+            opacity: 1, y: 0, scale: 1, filter: "blur(0px)",
+            duration: 0.9, stagger: 0.08,
+            onComplete: () => gsap.set(rightItems, { clearProps: "opacity,transform,filter" }),
+        }, 0.6);
     }
 
-    /* ── ACTIVE LINK ── */
+    // 5. Contact button — pulse de glow al final (microdetalle premium)
+    if (contactBtn) {
+        tl.fromTo(contactBtn,
+            { boxShadow: "0 4px 16px rgba(10,25,47,0), inset 0 1px 0 rgba(255,255,255,0)" },
+            { boxShadow: "0 4px 16px rgba(10,25,47,0.2), inset 0 1px 0 rgba(255,255,255,0.08)",
+              duration: 1.0, ease: "expo.out" },
+            1.1
+        );
+    }
+
+    /* ═══════════════════════════════════════════════════
+       ACTIVE LINK — filled pill background
+       ═══════════════════════════════════════════════════ */
     const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
     document.querySelectorAll<HTMLAnchorElement>(".nav-link[data-path]").forEach(link => {
         const lp = (link.getAttribute("data-path") || "").replace(/\/$/, '');
-        if (lp && currentPath.startsWith(lp)) {
-            link.classList.add("nav-active");
-            gsap.from(link.querySelector("::after") as any || link, {});
-        }
+        // exact match para "/" y "/en/" — startsWith para sub-rutas
+        const isHome = lp === '/' || lp === '/en';
+        const matches = isHome
+            ? (currentPath === lp || currentPath === '')
+            : currentPath.startsWith(lp);
+        if (lp && matches) link.classList.add("nav-active");
     });
 
-    /* ── LINK HOVER — letterSpacing spring ── */
+    /* ═══════════════════════════════════════════════════
+       MAGNETIC HOVER en btn-contact
+       ═══════════════════════════════════════════════════ */
+    if (contactBtn) {
+        const strength = 0.25; // intensidad del magnetismo
+        contactBtn.addEventListener("mousemove", (e) => {
+            const r = contactBtn.getBoundingClientRect();
+            const dx = (e.clientX - r.left - r.width / 2) * strength;
+            const dy = (e.clientY - r.top - r.height / 2) * strength;
+            gsap.to(contactBtn, { x: dx, y: dy, duration: 0.45, ease: "power3.out" });
+        });
+        contactBtn.addEventListener("mouseleave", () => {
+            gsap.to(contactBtn, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.5)" });
+        });
+    }
+
+    /* ═══════════════════════════════════════════════════
+       LINK HOVER — letterSpacing spring (mantenido)
+       ═══════════════════════════════════════════════════ */
     document.querySelectorAll<HTMLElement>(".nav-link").forEach(link => {
         link.addEventListener("mouseenter", () => {
             gsap.to(link, { letterSpacing: "1.8px", duration: 0.35, ease: "power2.out" });
@@ -550,31 +630,28 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    /* ── SCROLL ── */
+    /* ═══════════════════════════════════════════════════
+       SCROLL — toggle scrolled class
+       ═══════════════════════════════════════════════════ */
     if (navbar) {
-        let lastY = 0;
         window.addEventListener("scroll", () => {
-            const y = window.scrollY;
-            navbar.classList.toggle("scrolled", y > 50);
-            lastY = y;
+            navbar.classList.toggle("scrolled", window.scrollY > 50);
         }, { passive: true });
     }
 
-    /* ── MOBILE MENU ── */
+    /* ═══════════════════════════════════════════════════
+       MOBILE MENU
+       ═══════════════════════════════════════════════════ */
     if (navbar && toggle) {
         toggle.addEventListener("click", () => {
             navbar.classList.toggle("menu-open");
             const main = document.querySelector("main");
             if (navbar.classList.contains("menu-open")) {
                 document.body.style.overflow = "hidden";
-                if (main) {
-                    gsap.to(main, { scale: 0.96, y: 10, filter: "blur(4px)", borderRadius: "20px", duration: 0.6, ease: "expo.out" });
-                }
+                if (main) gsap.to(main, { scale: 0.96, y: 10, filter: "blur(4px)", borderRadius: "20px", duration: 0.6, ease: "expo.out" });
             } else {
                 document.body.style.overflow = "";
-                if (main) {
-                    gsap.to(main, { scale: 1, y: 0, filter: "blur(0px)", borderRadius: "0px", duration: 0.5, ease: "expo.out" });
-                }
+                if (main) gsap.to(main, { scale: 1, y: 0, filter: "blur(0px)", borderRadius: "0px", duration: 0.5, ease: "expo.out" });
             }
         });
 

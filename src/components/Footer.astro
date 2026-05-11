@@ -463,97 +463,45 @@ const isEn = lang === 'en';
 <script>
     import { gsap } from 'gsap';
     import { ScrollTrigger } from 'gsap/ScrollTrigger';
-    import { SplitText } from 'gsap/SplitText';
 
-    gsap.registerPlugin(ScrollTrigger, SplitText);
+    gsap.registerPlugin(ScrollTrigger);
 
+    // Usando gsap.from() con immediateRender:false:
+    // Los elementos permanecen visibles en CSS. Solo se ocultan cuando
+    // el tween comienza a correr. Si ScrollTrigger no dispara, nunca se ocultan.
     const ir = { immediateRender: false } as const;
 
     const initFooterAnimations = () => {
         const footer = document.querySelector<HTMLElement>('.footer-premium');
         if (!footer) return;
 
-        // ── Initial states ──
-        gsap.set('.footer-premium .top-hairline', { scaleX: 0, transformOrigin: 'left center' });
+        // Solo scaleX necesita set explícito (valor 0 no es el CSS default)
+        gsap.set('.footer-premium .top-hairline',  { scaleX: 0, transformOrigin: 'left center' });
         gsap.set('.footer-premium .footer-divider', { scaleX: 0, transformOrigin: 'center' });
-        gsap.set('.footer-premium .footer-eyebrow', { opacity: 0, y: 12 });
-        gsap.set('.footer-premium .footer-edition', { opacity: 0, y: 12 });
-        gsap.set('.footer-premium .footer-logo-svg', { opacity: 0, y: 22 });
-        gsap.set('.footer-premium .description', { opacity: 0, y: 18 });
-        gsap.set('.footer-premium .contact-action', { opacity: 0, y: 18 });
-        gsap.set('.footer-premium .nav-col', { opacity: 0, y: 24 });
-        gsap.set('.footer-premium .footer-bottom > *', { opacity: 0, y: 14 });
 
-        // SplitText sobre el statement editorial
-        const statement = document.querySelector<HTMLElement>('.footer-premium .footer-statement');
-        let statementSplit: SplitText | null = null;
-        if (statement) {
-            statementSplit = SplitText.create(statement, { type: 'lines,words', linesClass: 'lx-line-mask-footer' });
-            gsap.set(statementSplit.words, { yPercent: 115 });
-        }
+        const st = {
+            trigger: footer,
+            start: 'top 92%', // más permisivo — dispara antes para evitar que se quede atascado
+            once: true,
+        };
 
-        // ── Master timeline ──
-        const tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: footer,
-                start: 'top 85%',
-                once: true,
-            },
-            defaults: { ease: 'expo.out' },
-        });
+        const tl = gsap.timeline({ scrollTrigger: st, defaults: { ease: 'expo.out' } });
 
         tl
-            // 1. Hairline expande
-            .to('.footer-premium .top-hairline', { ...ir, scaleX: 1, duration: 1.3 }, 0)
+            .to('.footer-premium .top-hairline',  { ...ir, scaleX: 1, duration: 1.2 }, 0)
+            .from('.footer-premium .footer-eyebrow', { ...ir, opacity: 0, y: 14, duration: 1.0 }, 0.15)
+            .from('.footer-premium .footer-edition', { ...ir, opacity: 0, y: 14, duration: 1.0 }, 0.22)
+            .from('.footer-premium .footer-logo-svg', { ...ir, opacity: 0, y: 24, duration: 1.1 }, 0.32)
+            .from('.footer-premium .footer-statement', { ...ir, opacity: 0, y: 22, duration: 1.1 }, 0.42)
+            .from('.footer-premium .description',    { ...ir, opacity: 0, y: 18, duration: 1.0 }, 0.55)
+            .from('.footer-premium .contact-action', { ...ir, opacity: 0, y: 18, duration: 1.0 }, 0.65)
+            .from('.footer-premium .nav-col',        { ...ir, opacity: 0, y: 24, duration: 1.0, stagger: 0.1 }, 0.50)
+            .to('.footer-premium .footer-divider',   { ...ir, scaleX: 1, duration: 1.1 }, 0.95)
+            .from('.footer-premium .footer-bottom > *', { ...ir, opacity: 0, y: 14, duration: 0.9, stagger: 0.08 }, 1.05);
 
-            // 2. Meta row (eyebrow + edition)
-            .to('.footer-premium .footer-eyebrow', { ...ir, opacity: 1, y: 0, duration: 1.0 }, 0.25)
-            .to('.footer-premium .footer-edition', { ...ir, opacity: 1, y: 0, duration: 1.0 }, 0.32)
-
-            // 3. Brand col: logo
-            .to('.footer-premium .footer-logo-svg', { ...ir, opacity: 1, y: 0, duration: 1.1 }, 0.45);
-
-        // 4. Statement (SplitText words reveal)
-        if (statementSplit) {
-            tl.to(statementSplit.words, {
-                ...ir, yPercent: 0, duration: 1.3, ease: 'expo.out',
-                stagger: { amount: 0.4, from: 'start' },
-            }, 0.55);
-        }
-
-        tl
-            // 5. Description + email
-            .to('.footer-premium .description', { ...ir, opacity: 1, y: 0, duration: 1.0 }, 0.85)
-            .to('.footer-premium .contact-action', { ...ir, opacity: 1, y: 0, duration: 1.0 }, 0.95)
-
-            // 6. Nav columns en cascada
-            .to('.footer-premium .nav-col', {
-                ...ir, opacity: 1, y: 0, duration: 1.0, stagger: 0.1,
-            }, 0.7)
-
-            // 7. Divider
-            .to('.footer-premium .footer-divider', { ...ir, scaleX: 1, duration: 1.1 }, 1.15)
-
-            // 8. Footer bottom
-            .to('.footer-premium .footer-bottom > *', {
-                ...ir, opacity: 1, y: 0, duration: 0.95, stagger: 0.08,
-            }, 1.25);
-
-        // ── Refresh ScrollTrigger después de fonts/imágenes ──
-        window.addEventListener('load', () => {
-            setTimeout(() => ScrollTrigger.refresh(), 120);
-        });
+        // Refresh después de que carguen fuentes/imágenes
+        window.addEventListener('load', () => setTimeout(() => ScrollTrigger.refresh(), 100), { once: true });
     };
 
     document.addEventListener('DOMContentLoaded', initFooterAnimations);
-    document.addEventListener('astro:page-load', initFooterAnimations);
 </script>
-
-<style is:global>
-    /* line-mask para el SplitText del statement */
-    .lx-line-mask-footer {
-        overflow: hidden;
-        display: block;
-        padding-bottom: 0.12em;
-    }
-</style>
