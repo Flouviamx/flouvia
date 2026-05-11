@@ -1,0 +1,162 @@
+---
+import { useTranslations } from '../../i18n/utils';
+
+interface Props {
+  title?: string;
+  titleEd?: string;
+  subtitle?: string;
+  backHref: string;
+  lang: 'es' | 'en';
+}
+
+const { title, titleEd, subtitle, backHref, lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div class="ph-wrap">
+
+  <!-- Topbar: back + slot derecho (refresh, etc.) + badge -->
+  <div class="ph-topbar" id="ph-topbar" style="opacity:0;">
+    <div class="ph-left">
+      <a href={backHref} class="ph-back" id="ph-back" aria-label="Dashboard">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </a>
+      <slot name="topbar-left" />
+    </div>
+    <div class="ph-right">
+      <slot name="topbar-right" />
+      <div class="ph-badge">
+        <span class="ph-led" aria-hidden="true"></span>
+        <span>{t('portal.secure')}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Title block (solo si hay título) -->
+  {title && (
+    <div class="ph-title-block">
+      <div class="ph-title-row">
+        <div>
+          <h1 class="ph-title" id="ph-title" style="opacity:0;">
+            {title}{titleEd && <> <em class="ph-title-ed">{titleEd}</em></>}
+          </h1>
+          {subtitle && <p class="ph-sub" id="ph-sub" style="opacity:0;">{subtitle}</p>}
+        </div>
+        <slot name="title-right" />
+      </div>
+    </div>
+  )}
+
+</div>
+
+<style>
+.ph-wrap { margin-bottom: 2.2rem; }
+
+/* ── TOPBAR ── */
+.ph-topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 1.8rem;
+}
+.ph-left  { display: flex; align-items: center; gap: 12px; }
+.ph-right { display: flex; align-items: center; gap: 10px; }
+
+/* Back button — círculo icono */
+.ph-back {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.08);
+  color: rgba(0,0,0,0.45); text-decoration: none; flex-shrink: 0;
+  transition: background .25s, color .25s, transform .35s cubic-bezier(0.16,1,0.3,1),
+              box-shadow .25s;
+}
+.ph-back:hover {
+  background: rgba(0,0,0,0.09); color: #0a0e1a;
+  transform: translateX(-3px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Secure badge */
+.ph-badge {
+  display: flex; align-items: center; gap: 8px;
+  background: #0a192f; padding: 6px 16px; border-radius: 100px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.78); font-weight: 600;
+  box-shadow: 0 4px 14px rgba(10,25,47,0.18);
+}
+.ph-led {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #10b981; flex-shrink: 0;
+  animation: ph-pulse 2.5s ease-in-out infinite;
+}
+
+/* ── TITLE BLOCK ── */
+.ph-title-row {
+  display: flex; justify-content: space-between;
+  align-items: flex-end; gap: 1.5rem;
+}
+.ph-title {
+  font-size: clamp(2.2rem, 4.4vw, 3.6rem);
+  font-weight: 600; letter-spacing: -0.04em;
+  line-height: 1.04; margin: 0 0 0.6rem;
+  color: #0a0e1a;
+}
+.ph-title-ed {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic; font-weight: 400;
+  color: rgba(0,0,0,0.4); letter-spacing: -0.02em;
+}
+.ph-sub {
+  font-size: 1rem; color: rgba(0,0,0,0.5);
+  margin: 0; font-weight: 400;
+  max-width: 520px; line-height: 1.55;
+}
+
+/* ── KEYFRAMES ── */
+@keyframes ph-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,.45); }
+  60%      { box-shadow: 0 0 0 5px rgba(16,185,129,0); }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .ph-title { font-size: clamp(1.9rem, 9vw, 2.8rem); }
+  .ph-topbar { margin-bottom: 1.4rem; }
+  .ph-title-row { flex-direction: column; align-items: flex-start; gap: 1rem; }
+}
+</style>
+
+<script>
+import { gsap } from 'gsap';
+
+document.addEventListener('DOMContentLoaded', () => {
+  const topbar = document.getElementById('ph-topbar');
+  const back   = document.getElementById('ph-back');
+  const title  = document.getElementById('ph-title');
+  const sub    = document.getElementById('ph-sub');
+  if (!topbar) return;
+
+  const ease = 'expo.out';
+  const tl   = gsap.timeline({ defaults: { ease } });
+
+  // Estado inicial
+  gsap.set(back,   { x: -8, scale: 0.75, opacity: 0, filter: 'blur(4px)' });
+  gsap.set('.ph-badge', { x: 10, opacity: 0, filter: 'blur(4px)' });
+  if (title) gsap.set(title, { y: 22, opacity: 0 });
+  if (sub)   gsap.set(sub,   { y: 14, opacity: 0 });
+
+  // Animación escalonada
+  tl.to(topbar, { opacity: 1, duration: 0.01 }, 0); // hace visible el contenedor sin animar
+  tl.to(back,   { x: 0, scale: 1, opacity: 1, filter: 'blur(0px)', duration: 0.65 }, 0.05);
+  tl.to('.ph-badge', { x: 0, opacity: 1, filter: 'blur(0px)', duration: 0.65 }, 0.12);
+
+  if (title) {
+    tl.to(title, { y: 0, opacity: 1, duration: 1.0 }, 0.22);
+    // clearProps para que CSS posterior (hover, etc.) funcione sin conflicto
+    tl.call(() => gsap.set(title, { clearProps: 'transform,opacity' }), [], '+=0.01');
+  }
+  if (sub) tl.to(sub, { y: 0, opacity: 1, duration: 0.75 }, 0.38);
+});
+</script>

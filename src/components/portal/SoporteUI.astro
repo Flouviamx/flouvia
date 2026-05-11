@@ -1,6 +1,7 @@
 ---
 // src/components/portal/SoporteUI.astro
 import { useTranslations } from '../../i18n/utils';
+import PortalHeader from './PortalHeader.astro';
 
 interface Props {
   lang: 'es' | 'en';
@@ -59,26 +60,19 @@ const recentTickets = [
 <div class="os-page">
   <div class="os-wrap">
 
-    <!-- HEADER -->
-    <header class="sp-header">
-      <div class="sp-topbar" id="sp-topbar">
-        <div class="sp-date-strip">
-          <span class="sp-mono">{today.toUpperCase()}</span>
-          <span class="sp-sep">·</span>
-          <span class="sp-mono sp-priority">{slaData.priority}</span>
-        </div>
-        <div class="sp-badge">
-          <span class="sp-led"></span>
-          <span>{t('portal.secure')} · {user?.id?.substring(0,8).toUpperCase() || 'GUEST'}</span>
-        </div>
+    <PortalHeader
+      title={t('support.title')}
+      titleEd={t('support.title_ed')}
+      subtitle={t('support.subtitle')}
+      backHref={lang === 'en' ? '/en/dashboard' : '/dashboard'}
+      {lang}
+    >
+      <div slot="topbar-left" class="sp-date-strip">
+        <span class="sp-mono">{today.toUpperCase()}</span>
+        <span class="sp-sep">·</span>
+        <span class="sp-mono sp-priority">{slaData.priority}</span>
       </div>
-
-      <h1 class="sp-title" id="sp-title">
-        {t('support.title')} <em class="sp-editorial">{t('support.title_ed')}</em>
-      </h1>
-      <p class="sp-sub" id="sp-sub">{t('support.subtitle')}</p>
-      <div class="sp-rule" id="sp-rule"></div>
-    </header>
+    </PortalHeader>
 
     <!-- GRID -->
     <div class="sp-grid">
@@ -263,48 +257,18 @@ const recentTickets = [
 }
 .os-wrap { max-width: 1240px; margin: 0 auto; padding: 0 5%; }
 
-/* ═══ HEADER ═══ */
-.sp-header { margin-bottom: 2.4rem; }
-
-.sp-topbar {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 2rem; opacity: 0;
-}
+/* ═══ DATE STRIP (topbar-left slot) ═══ */
 .sp-date-strip { display: flex; align-items: center; gap: 0.7rem; }
-.sp-mono { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; color: var(--muted); }
-.sp-sep { color: var(--dim); }
+.sp-mono { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.1em; color: rgba(0,0,0,0.45); }
+.sp-sep { color: rgba(0,0,0,0.2); }
 .sp-priority { color: #c87000; font-weight: 700; }
 
-.sp-badge {
-    display: flex; align-items: center; gap: 8px;
-    background: #0a192f; padding: 6px 16px; border-radius: 100px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.6rem; letter-spacing: 0.08em;
-    color: rgba(255,255,255,0.75); font-weight: 600;
-    box-shadow: 0 4px 14px rgba(10,25,47,0.2);
-}
+/* LED dot used in engineer card */
 .sp-led {
     width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0;
     animation: sp-led 2.5s ease-in-out infinite;
 }
 .sp-led-sm { width: 5px; height: 5px; }
-
-.sp-title {
-    font-size: clamp(2.2rem, 4.4vw, 3.6rem);
-    font-weight: 600; letter-spacing: -0.04em;
-    line-height: 1.04; margin: 0 0 0.6rem; opacity: 0;
-}
-.sp-editorial {
-    font-family: 'Instrument Serif', Georgia, serif;
-    font-style: italic; font-weight: 400;
-}
-.sp-sub { font-size: 1rem; color: var(--muted); margin: 0; opacity: 0; font-weight: 400; max-width: 520px; }
-
-.sp-rule {
-    height: 1px; margin-top: 1.4rem;
-    background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent);
-    transform: scaleX(0); transform-origin: left;
-}
 
 /* ═══ GRID ═══ */
 .sp-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1rem; }
@@ -502,14 +466,14 @@ const recentTickets = [
 @media (max-width: 768px) {
     .os-page { padding: 2rem 0 4rem; }
     .sp-grid { display: flex; flex-direction: column; gap: 0.85rem; }
-    .sp-title { font-size: clamp(2rem, 8vw, 3rem); }
+
     .os-card-in { padding: 1.5rem 1.4rem; }
     .os-card { border-radius: 18px; }
     .sp-cat-grid { grid-template-columns: 1fr 1fr; gap: 0.4rem; }
     .sp-cat-btn { padding: 0.7rem 0.8rem; }
     .sp-cat-lbl { font-size: 0.75rem; }
     .sp-priority-row { flex-wrap: wrap; }
-    .sp-topbar { flex-direction: column; align-items: flex-start; gap: 0.7rem; }
+    .sp-date-strip { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
     .sp-metrics { gap: 1rem; }
     .sp-metric-val { font-size: 1.4rem; }
     .sp-engineer { padding: 0.85rem 1rem; gap: 0.75rem; }
@@ -524,38 +488,10 @@ const recentTickets = [
 
 <script>
   import { gsap } from "gsap";
-  import { SplitText } from "gsap/SplitText";
-  import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
-  gsap.registerPlugin(SplitText, ScrambleTextPlugin);
 
   document.addEventListener("DOMContentLoaded", () => {
 
     const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
-
-    // Topbar
-    tl.to("#sp-topbar", { opacity: 1, duration: 0.8 }, 0);
-
-    // ScrambleText en el badge
-    const badge = document.querySelector(".sp-badge");
-    if (badge) {
-        const span = badge.querySelector("span:last-child") as HTMLElement;
-        if (span) {
-            const orig = span.textContent || "";
-            tl.to(span, { duration: 1.0, scrambleText: { text: orig, chars: "ABCDEF0123456789·", revealDelay: 0.2 }, ease: "none" }, 0.1);
-        }
-    }
-
-    // SplitText en título
-    const titleEl = document.getElementById("sp-title");
-    if (titleEl) {
-        const split = SplitText.create(titleEl, { type: "chars,words" });
-        gsap.set(split.chars, { opacity: 0, y: 24, rotateX: -40, transformOrigin: "center bottom" });
-        tl.to(split.chars, { opacity: 1, y: 0, rotateX: 0, duration: 0.6, stagger: 0.018, ease: "back.out(1.8)" }, 0.25);
-    }
-
-    // Subtítulo + rule
-    tl.to("#sp-sub",  { opacity: 1, duration: 0.7 }, 0.7);
-    tl.to("#sp-rule", { scaleX: 1, duration: 1.0, ease: "power3.out" }, 0.55);
 
     // Cards stagger
     const cards = ["#sp-sla", "#sp-form-card", "#sp-tickets"];

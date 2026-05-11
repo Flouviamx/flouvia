@@ -1,6 +1,7 @@
 ---
 // src/components/portal/CalendarioUI.astro
 import { useTranslations } from '../../i18n/utils';
+import PortalHeader from './PortalHeader.astro';
 
 interface Props {
   lang: 'es' | 'en';
@@ -30,19 +31,12 @@ const calendlyUrl = `${calendlyBase}?${params.toString()}`;
 
     <div class="container-master">
 
-        <header class="dashboard-header gsap-reveal">
-            <div class="header-status">
-                <a href={lang === 'en' ? "/en/dashboard" : "/dashboard"} class="back-link haptic-soft">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                    {lang === 'en' ? 'Back to Console' : 'Volver a Console'}
-                </a>
-                <div class="secure-badge">
-                    <span class="dot-secure pulse"></span> {t('portal.secure')}
-                </div>
-            </div>
-        </header>
+        <PortalHeader
+            backHref={lang === 'en' ? '/en/dashboard' : '/dashboard'}
+            {lang}
+        />
 
-        <div class="cal-split-grid gsap-reveal">
+        <div class="cal-split-grid">
 
             <!-- ── COLUMNA IZQUIERDA ── -->
             <div class="col-left">
@@ -156,31 +150,10 @@ const calendlyUrl = `${calendlyBase}?${params.toString()}`;
         position: relative; z-index: 2;
     }
 
-    /* ── HEADER ── */
-    .dashboard-header { margin-bottom: 4rem; opacity: 0; }
-    .header-status {
-        display: flex; justify-content: space-between; align-items: center;
-        border-bottom: 1px solid var(--color-border-subtle); padding-bottom: 1rem;
-    }
-
-    .back-link {
-        display: flex; align-items: center; gap: 6px; font-size: 0.85rem;
-        font-weight: 600; color: var(--color-text-muted); text-decoration: none;
-        transition: color 0.2s;
-    }
-    .back-link:hover { color: var(--color-text-main); }
-
-    .secure-badge {
-        display: flex; align-items: center; gap: 6px; font-size: 0.7rem;
-        font-weight: 700; color: var(--color-text-muted); letter-spacing: 1px;
-    }
-    .dot-secure { width: 6px; height: 6px; background: #34c759; border-radius: 50%; }
-    .pulse { animation: led-pulse 2.8s ease-in-out infinite; }
-
     /* ── SPLIT GRID ── */
     .cal-split-grid {
         display: grid; grid-template-columns: 5fr 7fr; gap: 6rem;
-        align-items: start; opacity: 0;
+        align-items: start;
     }
 
     /* ── LEFT COLUMN ── */
@@ -300,11 +273,10 @@ const calendlyUrl = `${calendlyBase}?${params.toString()}`;
     import { gsap } from "gsap";
 
     document.addEventListener("DOMContentLoaded", () => {
-        gsap.set(".gsap-reveal", { y: 24, opacity: 0, scale: 0.99 });
+        gsap.set(".cal-split-grid", { y: 24, opacity: 0, scale: 0.99 });
 
         const tl = gsap.timeline();
-        tl.to(".dashboard-header", { y: 0, opacity: 1, duration: 1.1, ease: "expo.out" });
-        tl.to(".cal-split-grid",   { y: 0, opacity: 1, scale: 1, duration: 1.4, ease: "expo.out" }, "-=0.8");
+        tl.to(".cal-split-grid", { y: 0, opacity: 1, scale: 1, duration: 1.4, ease: "expo.out" }, 0.3);
 
         const pills = document.querySelectorAll('.info-pill');
         if (pills.length > 0) {

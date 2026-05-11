@@ -2,6 +2,7 @@
 // src/components/portal/BovedaUI.astro
 import { useTranslations } from '../../i18n/utils';
 import { supabase } from '../../lib/supabase';
+import PortalHeader from './PortalHeader.astro';
 
 interface Props {
   lang: 'es' | 'en';
@@ -59,29 +60,17 @@ const files = await Promise.all((rows ?? []).map(async (a: any) => {
     <div class="os-wrap">
 
         <!-- HEADER -->
-        <header class="bv-header">
-            <div class="bv-topbar" id="bv-topbar">
-                <a href={lang === 'en' ? "/en/dashboard" : "/dashboard"} class="bv-back" aria-label="Dashboard">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><polyline points="15 18 9 12 15 6"/></svg>
-                </a>
-                <div class="bv-badge">
-                    <span class="bv-led"></span>
-                    <span>{t('portal.secure')}</span>
-                </div>
-            </div>
-
-            <div class="bv-title-row">
-                <div>
-                    <h1 class="bv-title" id="bv-title">{t('vault.title')}</h1>
-                    <p class="bv-sub" id="bv-sub">{t('vault.subtitle')}</p>
-                </div>
-                <a href={lang === 'en' ? "/en/boveda-upload" : "/boveda-upload"} class="bv-upload-btn" id="bv-upload-btn">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                    {t('vault.upload_btn')}
-                </a>
-            </div>
-            <div class="bv-rule" id="bv-rule"></div>
-        </header>
+        <PortalHeader
+          title={t('vault.title')}
+          subtitle={t('vault.subtitle')}
+          backHref={lang === 'en' ? '/en/dashboard' : '/dashboard'}
+          {lang}
+        >
+          <a slot="title-right" href={lang === 'en' ? "/en/boveda-upload" : "/boveda-upload"} class="bv-upload-btn" id="bv-upload-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            {t('vault.upload_btn')}
+          </a>
+        </PortalHeader>
 
         <!-- FINDER CARD -->
         <div class="bv-card" id="bv-card">
@@ -158,45 +147,6 @@ const files = await Promise.all((rows ?? []).map(async (a: any) => {
 }
 .os-wrap { max-width: 1180px; margin: 0 auto; padding: 0 5%; }
 
-/* ═══ HEADER ═══ */
-.bv-header { margin-bottom: 2rem; }
-
-.bv-topbar {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 2rem; opacity: 0;
-}
-.bv-back {
-    display: flex; align-items: center; justify-content: center;
-    width: 34px; height: 34px; border-radius: 50%;
-    background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.07);
-    color: var(--muted); text-decoration: none; flex-shrink: 0;
-    transition: background .2s, color .2s, transform .3s cubic-bezier(0.16,1,0.3,1);
-}
-.bv-back:hover { background: rgba(0,0,0,0.08); color: var(--text); transform: translateX(-2px); }
-
-.bv-badge {
-    display: flex; align-items: center; gap: 8px;
-    background: #0a192f; padding: 6px 16px; border-radius: 100px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.6rem; letter-spacing: 0.1em;
-    color: rgba(255,255,255,0.75); font-weight: 600;
-    box-shadow: 0 4px 14px rgba(10,25,47,0.2);
-}
-.bv-led {
-    width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0;
-    animation: bv-led 2.5s ease-in-out infinite;
-}
-
-.bv-title-row {
-    display: flex; justify-content: space-between; align-items: flex-end; gap: 1.5rem;
-}
-.bv-title {
-    font-size: clamp(2.2rem, 4.4vw, 3.6rem);
-    font-weight: 600; letter-spacing: -0.04em;
-    line-height: 1.04; margin: 0 0 0.5rem; opacity: 0;
-}
-.bv-sub { font-size: 0.95rem; color: var(--muted); margin: 0; opacity: 0; font-weight: 400; max-width: 480px; }
-
 /* Botón upload — sólido, premium */
 .bv-upload-btn {
     display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0;
@@ -215,12 +165,6 @@ const files = await Promise.all((rows ?? []).map(async (a: any) => {
     transform: translateY(-2px) scale(1.015);
 }
 .bv-upload-btn:active { transform: scale(0.97); }
-
-.bv-rule {
-    height: 1px; margin: 1.4rem 0 0;
-    background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent);
-    transform: scaleX(0); transform-origin: left;
-}
 
 /* ═══ FINDER CARD ═══ */
 .bv-card {
@@ -402,23 +346,8 @@ const files = await Promise.all((rows ?? []).map(async (a: any) => {
 
         const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
 
-        // Topbar
-        tl.to("#bv-topbar", { opacity: 1, duration: 0.8 }, 0);
-
-        // SplitText en título
-        const titleEl = document.getElementById("bv-title");
-        if (titleEl) {
-            const split = SplitText.create(titleEl, { type: "chars,words" });
-            gsap.set(split.chars, { opacity: 0, y: 22, rotateX: -38, transformOrigin: "center bottom" });
-            tl.to(split.chars, { opacity: 1, y: 0, rotateX: 0, duration: 0.6, stagger: 0.018, ease: "back.out(1.8)" }, 0.2);
-        }
-
-        // Subtítulo + rule
-        tl.to("#bv-sub",  { opacity: 1, duration: 0.6 }, 0.65);
-        tl.to("#bv-rule", { scaleX: 1, duration: 1.0, ease: "power3.out" }, 0.5);
-
-        // Card Finder
-        tl.to("#bv-card", { opacity: 1, y: 0, scale: 1, duration: 1.0 }, 0.5);
+        // Card Finder (header animado por PortalHeader)
+        tl.to("#bv-card", { opacity: 1, y: 0, scale: 1, duration: 1.0 }, 0.55);
         gsap.set("#bv-card", { y: 28, scale: 0.985 });
 
         // Filas de archivos — stagger tipo Finder

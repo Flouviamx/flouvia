@@ -2,6 +2,7 @@
 // src/components/portal/FacturacionUI.astro
 import { useTranslations } from '../../i18n/utils';
 import { supabase } from '../../lib/supabase';
+import PortalHeader from './PortalHeader.astro';
 
 interface Props {
   lang: 'es' | 'en';
@@ -51,30 +52,12 @@ const data = {
 <div class="os-page">
   <div class="os-wrap">
 
-    <!-- Topbar -->
-    <div class="fact-topbar" style="opacity:0;">
-      <a
-        href={lang === 'en' ? '/en/dashboard' : '/dashboard'}
-        class="fact-back-link"
-      >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-          <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
-        {lang === 'en' ? 'Dashboard' : 'Dashboard'}
-      </a>
-
-      <div class="fact-secure-badge">
-        <span class="fact-led pulse" aria-hidden="true"></span>
-        <span id="fact-badge">{t('portal.secure')}</span>
-      </div>
-    </div>
-
-    <!-- Gradient rule -->
-    <div class="fact-rule" aria-hidden="true"></div>
-
-    <!-- Title block -->
-    <h1 class="fact-title" id="fact-title" style="opacity:0;">{t('fact.title')}</h1>
-    <p class="fact-sub" style="opacity:0;">{t('fact.subtitle')}</p>
+    <PortalHeader
+      title={t('fact.title')}
+      subtitle={t('fact.subtitle')}
+      backHref={lang === 'en' ? '/en/dashboard' : '/dashboard'}
+      {lang}
+    />
 
     <!-- 12-col grid -->
     <div class="fact-grid">
@@ -226,92 +209,6 @@ const data = {
     max-width: 1180px;
     margin: 0 auto;
     padding: 0 5%;
-  }
-
-  /* =====================================================
-     TOPBAR
-     ===================================================== */
-  .fact-topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0;
-  }
-
-  .fact-back-link {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.83rem;
-    font-weight: 600;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.2s var(--ease);
-  }
-  .fact-back-link:hover {
-    color: var(--text);
-  }
-
-  .fact-secure-badge {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: #0a192f;
-    color: rgba(255,255,255,0.9);
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 6px 14px;
-    border-radius: 100px;
-    box-shadow: 0 4px 14px rgba(10,25,47,0.2);
-  }
-
-  .fact-led {
-    display: block;
-    width: 6px;
-    height: 6px;
-    background: var(--green);
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  @keyframes led-pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.6); transform: scale(1); }
-    55%       { box-shadow: 0 0 0 5px rgba(16,185,129,0); transform: scale(1.2); }
-  }
-  .pulse { animation: led-pulse 2.8s ease-in-out infinite; }
-
-  /* =====================================================
-     GRADIENT RULE
-     ===================================================== */
-  .fact-rule {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent);
-    margin: 1.4rem 0 2.2rem;
-    transform-origin: left center;
-    transform: scaleX(0);
-  }
-
-  /* =====================================================
-     TITLE + SUBTITLE
-     ===================================================== */
-  .fact-title {
-    font-size: clamp(2.2rem, 4.4vw, 3.6rem);
-    font-weight: 600;
-    letter-spacing: -0.04em;
-    line-height: 1.05;
-    color: var(--text);
-    margin: 0 0 0.7rem;
-    perspective: 600px;
-  }
-
-  .fact-sub {
-    font-size: 1rem;
-    color: var(--muted);
-    margin: 0 0 2.2rem;
-    font-weight: 400;
-    max-width: 520px;
   }
 
   /* =====================================================
@@ -766,47 +663,14 @@ const data = {
     .inv-paid-pill { display: none; }
     .inv-icon-box { width: 36px; height: 36px; border-radius: 10px; }
     .inv-dl-btn { width: 34px; height: 34px; }
-    .fact-secure-badge { font-size: 0.62rem; padding: 5px 11px; }
   }
 </style>
 
 <script>
   import { gsap } from "gsap";
-  import { SplitText } from "gsap/SplitText";
-  import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
-  gsap.registerPlugin(SplitText, ScrambleTextPlugin);
 
   document.addEventListener("DOMContentLoaded", () => {
     const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
-
-    // Topbar
-    tl.to(".fact-topbar", { opacity: 1, duration: 0.8 }, 0);
-
-    // Badge scramble
-    const badge = document.getElementById("fact-badge");
-    if (badge) {
-      const orig = badge.textContent || "";
-      tl.to(badge, {
-        duration: 1.0,
-        scrambleText: { text: orig, chars: "ABCDEF0123456789·", revealDelay: 0.2 },
-        ease: "none",
-      }, 0.1);
-    }
-
-    // SplitText title
-    const titleEl = document.getElementById("fact-title");
-    if (titleEl) {
-      const split = SplitText.create(titleEl, { type: "chars,words" });
-      gsap.set(split.chars, { opacity: 0, y: 24, rotateX: -40, transformOrigin: "center bottom" });
-      tl.to(split.chars, {
-        opacity: 1, y: 0, rotateX: 0,
-        duration: 0.6, stagger: 0.02, ease: "back.out(1.8)",
-      }, 0.25);
-    }
-
-    // Subtitle + rule
-    tl.to(".fact-sub",  { opacity: 1, duration: 0.7 }, 0.7);
-    tl.to(".fact-rule", { scaleX: 1, duration: 1.0, ease: "power3.out" }, 0.55);
 
     // Cards stagger
     gsap.set(".os-card", { y: 32, opacity: 0, scale: 0.98 });
