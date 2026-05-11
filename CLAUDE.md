@@ -182,6 +182,20 @@ gsap.to(split.words, { ...ir, yPercent: 0, duration: 1.4, ease: 'expo.out', stag
 **Pattern de revelación coreografiada (per-element timeline):**
 Para tarjetas/secciones con varios elementos hijos, no animar todos juntos. Crear un timeline por elemento padre y secuenciar los hijos con `'-=0.X'` overlap o tiempos absolutos. Ej: card aparece → categoría desliza → número aparece → logo aterriza → nombre fade.
 
+**Regla crítica — `clearProps` después de animaciones de entrada:**
+Cuando GSAP anima un elemento de `opacity:0 → 1` (o cualquier propiedad CSS que luego controla una clase), el inline style que deja GSAP tiene más especificidad que las reglas de clase. Esto rompe estados CSS como `.scrolled`, `.is-active`, etc.
+Solución: limpiar los props inline al terminar la animación de entrada:
+```ts
+tl.to(element, {
+  opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 1.1,
+  onComplete: () => gsap.set(element, { clearProps: 'opacity,transform,filter' }),
+}, 0.45);
+```
+Aplicar a **todos** los elementos cuyo estado visual cambia después vía clase CSS (navbar logo, pills, items del right side, etc.).
+
+**Ken Burns — NO usar `yPercent` con scrub:**
+`yPercent: -8` con scrub en imágenes de carrusel mueve la imagen hacia arriba conforme scrollea, revelando el fondo del contenedor en el borde inferior. Solo usar `scale` para Ken Burns, sin desplazamiento vertical scrubbed.
+
 ---
 
 ## Diseño — tokens CSS
@@ -260,6 +274,57 @@ Footer (dark navy)  — Watermark "Flouvia" 26vw, statement editorial, edition t
 - Numeración `/01 /02 /03` en serif italic encima de cada nav col
 - Hairlines con `linear-gradient(transparent, rgba(255,255,255,0.18) 20%, ..., transparent)` — bordes desvanecen
 - Master timeline con `defaults: { ease: 'expo.out' }`, todas las animaciones en cascada con tiempos absolutos
+
+---
+
+## Navbar — patterns
+
+**Logo transition (desktop):**
+- Logo grande en centro desaparece al scroll con clase `.scrolled` vía CSS: `opacity: 0; transform: translateY(-12px) scale(0.94); pointer-events: none`
+- Logo pequeño dentro de la píldora aparece: `.pill-logo { max-width: 0; opacity: 0 }` → `.scrolled .pill-logo { max-width: 150px; opacity: 1 }`
+- La transición es 100% CSS (no GSAP) — GSAP solo maneja la animación de entrada. Crítico: limpiar inline styles con `clearProps` al terminar entrada o el CSS de `.scrolled` no puede sobreescribir.
+
+**Animación de entrada cinemática (multi-capa):**
+```ts
+// Pill crece desde scaleX:0.5 con blur
+gsap.set(pill, { opacity:0, scaleX:0.5, scaleY:0.85, y:-16, filter:'blur(8px)', transformOrigin:'center center' });
+tl.to(pill, { opacity:1, scaleX:1, scaleY:1, y:0, filter:'blur(0px)', duration:1.2,
+  onComplete: () => gsap.set(pill, { clearProps:'opacity,transform,filter' }) }, 0.2);
+// Logo cae desde arriba con scale + blur (Apple-style)
+gsap.set(mainLogo, { opacity:0, y:-22, scale:1.18, filter:'blur(14px)' });
+tl.to(mainLogo, { opacity:1, y:0, scale:1, filter:'blur(0px)', duration:1.1,
+  onComplete: () => gsap.set(mainLogo, { clearProps:'opacity,transform,filter' }) }, 0.45);
+// Links del pill: stagger desde abajo
+tl.to(navLinks, { opacity:1, y:0, filter:'blur(0px)', duration:0.8, stagger:0.055,
+  onComplete: () => gsap.set(navLinks, { clearProps:'opacity,transform,filter' }) }, 0.65);
+```
+
+**Active link:** Filled pill via `::before` pseudo-element con `background: rgba(0,0,0,0.08)` (light) / `rgba(255,255,255,0.14)` (dark). No usar dot/underline.
+
+**Magnetic hover en btn-contact:**
+```ts
+contactBtn.addEventListener('mousemove', (e) => {
+  const r = contactBtn.getBoundingClientRect();
+  const dx = (e.clientX - r.left - r.width/2) * 0.25;
+  const dy = (e.clientY - r.top - r.height/2) * 0.25;
+  gsap.to(contactBtn, { x:dx, y:dy, duration:0.45, ease:'power3.out' });
+});
+contactBtn.addEventListener('mouseleave', () => {
+  gsap.to(contactBtn, { x:0, y:0, duration:0.6, ease:'elastic.out(1, 0.5)' });
+});
+```
+
+---
+
+## Bugs conocidos y sus fixes
+
+| Bug | Causa raíz | Fix |
+|-----|-----------|-----|
+| Elemento invisible en primera carga | `gsap.set(opacity:0)` + ScrollTrigger que no dispara | Usar `gsap.from(..., { immediateRender:false })` — elementos visibles en CSS hasta que el tween arranca |
+| Logo/elemento no responde a clase `.scrolled` | GSAP deja inline style `opacity:1` al terminar entrada | `onComplete: () => gsap.set(el, { clearProps:'opacity,transform,filter' })` |
+| `position: sticky` no funciona en sección | `overflow: hidden` en el contenedor padre crea scroll container | Cambiar a `overflow: clip` — recorta visualmente sin crear scroll container |
+| Línea gris en borde inferior de carrusel | `yPercent: -8` con scrub mueve imagen hacia arriba revelando fondo | Eliminar scrub de yPercent, solo usar scale para Ken Burns |
+| Footer invisible hasta refresh | `gsap.set(opacity:0)` + posiciones calculadas antes de que carguen fuentes | Convertir a `gsap.from()` con `immediateRender:false` + solo un listener `DOMContentLoaded` |
 
 ---
 
