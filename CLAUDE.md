@@ -74,14 +74,31 @@ Para texto inline que no vale la pena agregar a ui.ts, usar ternario directo:
 
 ---
 
-## Auth — Clerk
+## Auth — Clerk (invitation-only)
 
-- Usuarios se autentican con Clerk
-- Rutas protegidas declaradas en `src/middleware.ts` con `createRouteMatcher`
-- En rutas no autenticadas → redirect a `/portal/acceso-restringido` o `/en/portal/access-denied`
-- En API routes: `const { userId } = await locals.auth()`
-- Email del usuario: `const user = await locals.currentUser(); user.emailAddresses[0].emailAddress`
-- El `email_cliente` (email de Clerk) es la clave primaria que relaciona todos los datos del portal
+**Modelo:** Solo emails con invitación aceptada en Clerk pueden entrar al portal.
+
+**Doble capa de defensa:**
+1. **Clerk Dashboard** (configurar manualmente — Restrictions → Sign-ups → "Restricted"). Sin esto, cualquiera puede crear cuenta vía OAuth.
+2. **Middleware** (`src/middleware.ts`) verifica que el email del user esté en `clerkClient.invitations.getInvitationList({ status: 'accepted', query: email })`. Si no, redirect a `/portal/acceso-restringido?signout=1`.
+
+**Optimización:** Tras la primera verificación exitosa, el middleware setea `user.publicMetadata.flouvia_invited = true` y futuras requests usan ese flag (fast path) sin volver a llamar al API de invitations.
+
+**Sign-out automático:** La página `acceso-restringido` detecta el query `?signout=1` y ejecuta `window.Clerk.signOut()` para limpiar la sesión zombie.
+
+**Rutas protegidas:** Todas las rutas root-level (`/dashboard`, `/facturacion`, `/boveda`, `/soporte`, `/roadmap`, `/calendario`, `/entorno`, `/boveda-upload`) + sus mirrors `/portal/*` y `/en/*`.
+
+**Flow de redirects:**
+- No autenticado en ruta protegida → `/login` (o `/en/login`)
+- Autenticado pero sin invitación → `/portal/acceso-restringido?signout=1` → auto-logout
+
+**Rutas SSO callback (Clerk routing="path"):** Como `<SignIn>` usa `routing="path"`, deben existir páginas en `/login/sso-callback` y `/en/login/sso-callback` que rendericen el mismo componente. Sin ellas → 404 al completar OAuth.
+
+**API routes:**
+- `const { userId } = await locals.auth()`
+- Email: `const user = await locals.currentUser(); user.emailAddresses[0].emailAddress`
+
+**Cliente principal:** El `email_cliente` (email de Clerk en lowercase) es la PK que relaciona todos los datos del portal en Supabase.
 
 ---
 

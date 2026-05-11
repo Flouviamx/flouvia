@@ -1,190 +1,259 @@
 ---
-// src/pages/portal/acceso-restringido.astro
 export const prerender = false;
 import PortalLayout from '../../layouts/PortalLayout.astro';
+
+const needsSignout = Astro.url.searchParams.has('signout');
 ---
 
 <PortalLayout title="Acceso Restringido | Flouvia OS">
-  <div class="ar-root">
-    <div class="ar-wrap">
+  <div class="denied-root">
 
-      <div class="ar-badge">
-        <span class="ar-dot"></span>
+    <!-- Atmosphere -->
+    <div class="glow-orb glow-1" aria-hidden="true"></div>
+    <div class="glow-orb glow-2" aria-hidden="true"></div>
+    <div class="watermark" aria-hidden="true">OS</div>
+
+    <!-- Logo top -->
+    <a href="/" class="denied-logo">
+      <img src="/imgs/logo-flouvia-2.svg" alt="Flouvia" />
+    </a>
+
+    <!-- Content -->
+    <div class="denied-content" id="ar-wrap" data-needs-signout={needsSignout ? '1' : null}>
+
+      <div class="denied-badge">
+        <span class="denied-dot"></span>
         <span>Solo por invitación</span>
       </div>
 
-      <h1 class="ar-title">
-        Este portal es<br />
-        <em class="ar-serif">exclusivo</em>
-        para clientes<br />activos de Flouvia.
+      <h1 class="denied-title">
+        Área<br />
+        <em class="denied-serif">exclusiva</em><br />
+        de clientes.
       </h1>
 
-      <p class="ar-body">
-        El acceso a <strong>Flouvia OS</strong> funciona únicamente por invitación
-        directa de nuestro equipo. Si eres cliente y no has recibido tu invitación,
-        escríbenos y lo resolvemos de inmediato.
+      <p class="denied-body">
+        Flouvia OS es un portal privado accesible únicamente por invitación directa de nuestro equipo.
+        Si ya eres cliente, revisa tu email. Si no, escríbenos.
       </p>
 
-      <div class="ar-actions">
-        <a href="/contacto" class="ar-btn-primary">
-          Contactar a Flouvia
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M7 17l9.2-9.2M17 17V7H7"/>
-          </svg>
+      <div class="denied-actions">
+        <a href="/" class="btn-home">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          Ir a flouvia.com
         </a>
-        <a href="/portal/login" class="ar-btn-ghost">
-          Ya tengo invitación →
+        <a href="mailto:flouvia.mx@gmail.com" class="btn-contact">
+          Escribirnos
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="19" x2="19" y2="5"/><polyline points="9 5 19 5 19 15"/></svg>
         </a>
       </div>
 
-      <div class="ar-divider"></div>
-
-      <a href="/" class="ar-home-link">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-        Volver a flouvia.com
-      </a>
-
     </div>
+
+    <!-- Footer line -->
+    <div class="denied-footer">
+      <span class="footer-brand">Flouvia OS</span>
+      <span class="footer-sep">·</span>
+      <span class="footer-note">Portal privado · 2026</span>
+    </div>
+
   </div>
 </PortalLayout>
 
 <style>
-.ar-root {
-  min-height: calc(100vh - 140px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem 5%;
-}
+  /* ── Full-bleed dark override ── */
+  :global(body) { background: #050b14; }
 
-.ar-wrap {
-  max-width: 560px;
-  width: 100%;
-  opacity: 0;
-  animation: ar-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
-}
+  .denied-root {
+    position: fixed; inset: 0;
+    background: radial-gradient(ellipse at 20% 40%, #112240 0%, #0a192f 55%, #050b14 100%);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 2rem; overflow: hidden;
+  }
 
-.ar-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: #6e7d96;
-  background: #f4f6f9;
-  border: 1px solid rgba(0,0,0,0.07);
-  border-radius: 100px;
-  padding: 6px 14px;
-  margin-bottom: 2.4rem;
-}
+  /* ── Atmospheric glows ── */
+  .glow-orb {
+    position: absolute; border-radius: 50%;
+    pointer-events: none; filter: blur(80px);
+  }
+  .glow-1 {
+    width: 500px; height: 500px;
+    background: rgba(17,34,64,0.7);
+    top: -120px; left: -80px;
+  }
+  .glow-2 {
+    width: 340px; height: 340px;
+    background: rgba(10,25,47,0.5);
+    bottom: -80px; right: -60px;
+  }
 
-.ar-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #dc2626;
-  animation: ar-pulse 2.5s ease-in-out infinite;
-  flex-shrink: 0;
-}
+  /* ── Watermark ── */
+  .watermark {
+    position: absolute; right: -2vw; bottom: -4vw;
+    font-family: 'Instrument Serif', serif; font-style: italic;
+    font-size: clamp(14rem, 22vw, 28rem);
+    color: rgba(255,255,255,0.025);
+    line-height: 1; pointer-events: none; user-select: none;
+    letter-spacing: -0.04em;
+  }
 
-.ar-title {
-  font-size: clamp(2.2rem, 5vw, 3.4rem);
-  font-weight: 600;
-  letter-spacing: -0.04em;
-  line-height: 1.1;
-  color: #0a0e1a;
-  margin: 0 0 1.6rem;
-}
+  /* ── Logo ── */
+  .denied-logo {
+    position: absolute; top: 2.4rem; left: 3rem;
+    opacity: 0.85; transition: opacity 0.3s;
+    z-index: 2;
+  }
+  .denied-logo:hover { opacity: 1; }
+  .denied-logo img { height: 36px; width: auto; filter: brightness(0) invert(1); }
 
-.ar-serif {
-  font-family: 'Instrument Serif', serif;
-  font-style: italic;
-  font-weight: 400;
-}
+  /* ── Main content ── */
+  .denied-content {
+    position: relative; z-index: 2;
+    max-width: 520px; width: 100%;
+    text-align: left;
+  }
 
-.ar-body {
-  font-size: 1rem;
-  color: #6e7d96;
-  line-height: 1.7;
-  margin: 0 0 2.4rem;
-  max-width: 480px;
-}
+  /* Badge */
+  .denied-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem; font-weight: 600; letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    border-radius: 100px; padding: 7px 16px;
+    margin-bottom: 2.8rem;
+    backdrop-filter: blur(8px);
+  }
+  .denied-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #ef4444; flex-shrink: 0;
+    animation: pulse-dot 2.4s ease-in-out infinite;
+  }
 
-.ar-body strong {
-  color: #0a0e1a;
-  font-weight: 600;
-}
+  /* Headline */
+  .denied-title {
+    font-size: clamp(3rem, 7vw, 5.8rem);
+    font-weight: 600; letter-spacing: -0.04em;
+    line-height: 1.04; color: #fff;
+    margin: 0 0 1.8rem;
+  }
+  .denied-serif {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic; font-weight: 400;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: -0.02em;
+  }
 
-.ar-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
+  /* Body */
+  .denied-body {
+    font-size: 0.98rem; line-height: 1.75;
+    color: rgba(255,255,255,0.38);
+    max-width: 420px; margin: 0 0 3rem;
+  }
 
-.ar-btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  background: #0a0e1a;
-  color: #ffffff;
-  padding: 14px 28px;
-  border-radius: 100px;
-  font-size: 0.88rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
-  box-shadow: 0 4px 14px rgba(10,14,26,0.16);
-}
+  /* CTAs */
+  .denied-actions {
+    display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+  }
 
-.ar-btn-primary:hover {
-  background: #1a2233;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(10,14,26,0.24);
-}
+  .btn-home {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.92); color: #0a0e1a;
+    padding: 13px 26px; border-radius: 100px;
+    font-size: 0.88rem; font-weight: 650; text-decoration: none;
+    letter-spacing: -0.01em;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.5) inset, 0 12px 32px rgba(0,0,0,0.3);
+    transition: background 0.3s, transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s;
+  }
+  .btn-home:hover {
+    background: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.5) inset, 0 18px 48px rgba(0,0,0,0.4);
+  }
+  .btn-home svg { flex-shrink: 0; transition: transform 0.3s cubic-bezier(0.16,1,0.3,1); }
+  .btn-home:hover svg { transform: translateX(-3px); }
 
-.ar-btn-ghost {
-  font-size: 0.88rem;
-  font-weight: 500;
-  color: #6e7d96;
-  text-decoration: none;
-  transition: color 0.2s;
-}
+  .btn-contact {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.88rem; font-weight: 500; text-decoration: none;
+    letter-spacing: 0.01em;
+    transition: color 0.3s;
+    padding: 13px 4px;
+  }
+  .btn-contact:hover { color: rgba(255,255,255,0.9); }
+  .btn-contact svg { transition: transform 0.3s cubic-bezier(0.16,1,0.3,1); }
+  .btn-contact:hover svg { transform: translate(2px,-2px); }
 
-.ar-btn-ghost:hover {
-  color: #0a0e1a;
-}
+  /* Footer */
+  .denied-footer {
+    position: absolute; bottom: 2.2rem; left: 3rem; right: 3rem;
+    display: flex; align-items: center; gap: 0.6rem;
+    z-index: 2;
+  }
+  .footer-brand {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.25);
+  }
+  .footer-sep { color: rgba(255,255,255,0.12); font-size: 0.65rem; }
+  .footer-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; font-weight: 400; letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.18);
+  }
 
-.ar-divider {
-  height: 1px;
-  background: rgba(0,0,0,0.07);
-  margin: 2.8rem 0 1.8rem;
-}
+  /* ── Keyframes ── */
+  @keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.5); }
+    60%       { box-shadow: 0 0 0 5px rgba(239,68,68,0); }
+  }
 
-.ar-home-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.78rem;
-  font-weight: 500;
-  color: #c4cdd9;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.ar-home-link:hover {
-  color: #6e7d96;
-}
-
-@keyframes ar-in {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes ar-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(220,38,38,0.4); transform: scale(1); }
-  60%       { box-shadow: 0 0 0 5px rgba(220,38,38,0); transform: scale(1.1); }
-}
+  /* ── Mobile ── */
+  @media (max-width: 640px) {
+    .denied-logo { top: 1.6rem; left: 1.6rem; }
+    .denied-footer { left: 1.6rem; right: 1.6rem; }
+    .denied-title { font-size: clamp(2.8rem, 14vw, 4rem); }
+    .watermark { font-size: 50vw; right: -5vw; bottom: -2vw; }
+  }
 </style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const ease = 'expo.out';
+    const ir = { immediateRender: false } as const;
+
+    // Entrance stagger
+    gsap.from('.denied-badge',   { ...ir, opacity: 0, y: 16, duration: 0.9, ease, delay: 0.15 });
+    gsap.from('.denied-title',   { ...ir, opacity: 0, y: 24, duration: 1.1, ease, delay: 0.28 });
+    gsap.from('.denied-body',    { ...ir, opacity: 0, y: 16, duration: 1.0, ease, delay: 0.42 });
+    gsap.from('.denied-actions', { ...ir, opacity: 0, y: 14, duration: 0.9, ease, delay: 0.54 });
+    gsap.from('.denied-logo',    { ...ir, opacity: 0, y: -10, duration: 0.8, ease, delay: 0.1 });
+    gsap.from('.denied-footer',  { ...ir, opacity: 0, duration: 1.2, ease, delay: 0.8 });
+
+    // Sign-out silencioso si viene del middleware
+    const wrap = document.getElementById('ar-wrap');
+    if (wrap?.dataset.needsSignout === '1') {
+      const tryLogout = () => {
+        const Clerk = (window as any).Clerk;
+        if (Clerk?.loaded && typeof Clerk.signOut === 'function') {
+          Clerk.signOut().finally(() => {
+            history.replaceState({}, '', window.location.pathname);
+          });
+          return true;
+        }
+        return false;
+      };
+      if (!tryLogout()) {
+        const interval = setInterval(() => { if (tryLogout()) clearInterval(interval); }, 120);
+        setTimeout(() => clearInterval(interval), 6000);
+      }
+    }
+  });
+</script>
+</PortalLayout>
