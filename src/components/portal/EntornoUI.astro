@@ -14,7 +14,7 @@ const email = user?.emailAddresses[0]?.emailAddress || "flouvia.mx@gmail.com";
 
 const { data: proyecto } = await supabase
   .from('proyectos')
-  .select('*')
+  .select('*, vercel_project_id')
   .eq('email_cliente', email)
   .single();
 
@@ -33,21 +33,101 @@ const data = {
 const hasUrl = data.liveUrl && data.liveUrl !== "#" && data.liveUrl !== "";
 const displayHost = hasUrl ? (() => { try { return new URL(data.liveUrl).host; } catch { return data.liveUrl; } })() : "";
 
-// Mock Core Web Vitals (production-grade values, would come from real RUM later)
-const vitals = [
-  { key: 'lcp',  label: t('entorno.perf.lcp'),  value: 1.2, unit: 's',  full: t('entorno.perf.lcp_full'),  threshold: 2.5, target: 1.2 },
-  { key: 'fid',  label: t('entorno.perf.fid'),  value: 84,  unit: 'ms', full: t('entorno.perf.fid_full'),  threshold: 200, target: 84  },
-  { key: 'cls',  label: t('entorno.perf.cls'),  value: 0.03, unit: '',  full: t('entorno.perf.cls_full'),  threshold: 0.1, target: 0.03 },
-  { key: 'ttfb', label: t('entorno.perf.ttfb'), value: 180, unit: 'ms', full: t('entorno.perf.ttfb_full'), threshold: 600, target: 180 },
+function timeAgo(ms: number): string {
+  const diff = Date.now() - ms;
+  const min = Math.floor(diff / 60000);
+  if (min < 1) return lang === 'en' ? 'just now' : 'ahora mismo';
+  if (min < 60) return `${min} min`;
+  const h = Math.floor(min / 60);
+  if (h < 24) return `${h} h`;
+  const d = Math.floor(h / 24);
+  return `${d} d`;
+}
+
+function deployStatusLabel(status: string): string {
+  const map: Record<string, [string, string]> = {
+    READY:    [lang === 'en' ? 'Ready'    : 'Listo',       'green'],
+    ERROR:    [lang === 'en' ? 'Failed'   : 'Fallido',     'red'],
+    BUILDING: [lang === 'en' ? 'Building' : 'Compilando',  'amber'],
+    QUEUED:   [lang === 'en' ? 'Queued'   : 'En cola',     'muted'],
+    CANCELED: [lang === 'en' ? 'Canceled' : 'Cancelado',   'muted'],
+  };
+  return map[status]?.[0] ?? status;
+}
+
+function deployStatusColor(status: string): string {
+  const map: Record<string, string> = {
+    READY: 'green', ERROR: 'red', BUILDING: 'amber',
+  };
+  return map[status] ?? 'muted';
+}
+
+// Core Web Vitals — Google PageSpeed Insights (con fallback a valores mock)
+let vitals = [
+  { key: 'lcp',  label: t('entorno.perf.lcp'),  value: 1.2,  unit: 's',  full: t('entorno.perf.lcp_full'),  threshold: 2.5, target: 1.2,  pass: true },
+  { key: 'fid',  label: t('entorno.perf.fid'),  value: 84,   unit: 'ms', full: t('entorno.perf.fid_full'),  threshold: 200, target: 84,   pass: true },
+  { key: 'cls',  label: t('entorno.perf.cls'),  value: 0.03, unit: '',   full: t('entorno.perf.cls_full'),  threshold: 0.1, target: 0.03, pass: true },
+  { key: 'ttfb', label: t('entorno.perf.ttfb'), value: 180,  unit: 'ms', full: t('entorno.perf.ttfb_full'), threshold: 600, target: 180,  pass: true },
 ];
 
-// Mock deploys (would come from Vercel API later)
-const deploys = [
-  { sha: '4b28187', msg: lang === 'en' ? 'fix: navbar scroll transition' : 'fix: transición scroll del navbar', branch: 'main', env: 'production', when: '12 min', status: 'ready' },
-  { sha: '9f1613e', msg: lang === 'en' ? 'feat: GSAP entrance, active dots' : 'feat: entrada GSAP, dots activos',  branch: 'main', env: 'production', when: '47 min', status: 'ready' },
-  { sha: '6025bad', msg: lang === 'en' ? 'feat: Clerk → Supabase webhook' : 'feat: webhook Clerk → Supabase',     branch: 'main', env: 'production', when: '2 h',   status: 'ready' },
-  { sha: '616bd2d', msg: lang === 'en' ? 'feat: Entorno & Upload pages' : 'feat: páginas Entorno & Upload',       branch: 'main', env: 'production', when: '5 h',   status: 'ready' },
-];
+if (hasUrl) {
+  try {
+    const psiRes = await fetch(
+      `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(data.liveUrl)}&strategy=mobile&category=performance`,
+      { signal: AbortSignal.timeout(7000) }
+    );
+    if (psiRes.ok) {
+      const psi = await psiRes.json();
+      const m = psi.loadingExperience?.metrics;
+      if (m) {
+        const psiMap: Record<string, { key: string; unit: string; divisor: number }> = {
+          lcp:  { key: 'LARGEST_CONTENTFUL_PAINT_MS',   unit: 's',  divisor: 1000 },
+          fid:  { key: 'INTERACTION_TO_NEXT_PAINT',      unit: 'ms', divisor: 1    },
+          cls:  { key: 'CUMULATIVE_LAYOUT_SHIFT_SCORE',  unit: '',   divisor: 100  },
+          ttfb: { key: 'EXPERIMENTAL_TIME_TO_FIRST_BYTE',unit: 'ms', divisor: 1    },
+        };
+        vitals = vitals.map(v => {
+          const mapping = psiMap[v.key];
+          if (!mapping || !m[mapping.key]) return v;
+          const raw   = m[mapping.key].percentiles?.p75 ?? 0;
+          const value = parseFloat((raw / mapping.divisor).toFixed(mapping.unit === 's' ? 2 : 0));
+          const pass  = value <= v.threshold;
+          return { ...v, value, target: value, pass };
+        });
+      }
+    }
+  } catch {}
+}
+
+// Deploys reales desde Vercel API
+let deploys: any[] = [];
+const vercelProjectId = proyecto?.vercel_project_id;
+const vercelToken = import.meta.env.VERCEL_TOKEN;
+
+if (vercelProjectId && vercelToken) {
+  try {
+    const vRes = await fetch(
+      `https://api.vercel.com/v6/deployments?projectId=${vercelProjectId}&limit=8`,
+      {
+        headers: { Authorization: `Bearer ${vercelToken}` },
+        signal: AbortSignal.timeout(5000),
+      }
+    );
+    if (vRes.ok) {
+      const vJson = await vRes.json();
+      deploys = (vJson.deployments ?? []).map((d: any) => ({
+        sha:      (d.meta?.githubCommitSha ?? d.uid ?? '').slice(0, 7),
+        msg:      d.meta?.githubCommitMessage?.split('\n')[0] ?? d.name ?? 'Deploy',
+        branch:   d.meta?.githubCommitRef ?? 'main',
+        env:      d.target ?? 'production',
+        status:   d.state ?? 'READY',
+        url:      d.url ? `https://${d.url}` : null,
+        duration: d.buildingAt && d.ready ? Math.round((d.ready - d.buildingAt) / 1000) : null,
+        when:     d.created ?? Date.now(),
+      }));
+    }
+  } catch {}
+}
 
 // Mock regions
 const regions = [
@@ -206,17 +286,24 @@ const activity = [
     <div class="env-vitals-row" id="vitals-row">
       <div class="env-vitals-header">
         <span class="env-ey">{t('entorno.perf.label')}</span>
-        <span class="env-vitals-pill">
-          <span class="env-vitals-dot"></span>
-          {lang === 'en' ? 'All metrics passing' : 'Todas las métricas pasan'}
-        </span>
+        {vitals.every(v => v.pass) ? (
+          <span class="env-vitals-pill">
+            <span class="env-vitals-dot"></span>
+            {lang === 'en' ? 'All metrics passing' : 'Todas las métricas pasan'}
+          </span>
+        ) : (
+          <span class="env-vitals-pill env-vitals-pill-warn">
+            <span class="env-vitals-dot env-vitals-dot-warn"></span>
+            {lang === 'en' ? `${vitals.filter(v => !v.pass).length} metric(s) to improve` : `${vitals.filter(v => !v.pass).length} métrica(s) por mejorar`}
+          </span>
+        )}
       </div>
       <div class="env-vitals-grid">
         {vitals.map((v) => (
-          <div class="env-vital-card vital-card" data-target={v.target}>
+          <div class={`env-vital-card vital-card ${!v.pass ? 'vital-warn' : ''}`} data-target={v.target}>
             <div class="env-vital-top">
               <span class="env-vital-label">{v.label}</span>
-              <span class="env-vital-status">●</span>
+              <span class={`env-vital-status ${!v.pass ? 'vital-status-warn' : ''}`}>●</span>
             </div>
             <div class="env-vital-num-row">
               <span class="env-vital-num" data-target={v.target} data-decimals={v.unit === '' ? 2 : (v.value < 10 ? 1 : 0)}>0</span>
@@ -246,27 +333,37 @@ const activity = [
         <div class="env-spotlight" aria-hidden="true"></div>
         <div class="env-card-head">
           <span class="env-ey">{t('entorno.deploy.label')}</span>
-          <span class="env-count-pill">{deploys.length}</span>
+          <span class="env-count-pill">{deploys.length || '—'}</span>
         </div>
         <div class="env-deploys">
+          {deploys.length === 0 && (
+            <p class="env-deploys-empty">{lang === 'en' ? 'No deploys found' : 'Sin deploys encontrados'}</p>
+          )}
           {deploys.map((d, i) => (
             <div class="env-deploy-row" data-i={i}>
               <div class="env-deploy-status">
-                <div class="env-deploy-dot"></div>
+                <div class={`env-deploy-dot deploy-dot-${deployStatusColor(d.status)}`}></div>
                 {i < deploys.length - 1 && <div class="env-deploy-line"></div>}
               </div>
               <div class="env-deploy-body">
                 <div class="env-deploy-top">
                   <span class="env-deploy-msg">{d.msg}</span>
-                  <span class="env-deploy-when">{d.when}</span>
+                  <span class="env-deploy-when">{timeAgo(d.when)}</span>
                 </div>
                 <div class="env-deploy-meta">
-                  <span class="env-deploy-sha"><span class="env-sha-prefix">git:</span>{d.sha}</span>
+                  {d.sha && <span class="env-deploy-sha"><span class="env-sha-prefix">git:</span>{d.sha}</span>}
                   <span class="env-deploy-branch">{d.branch}</span>
-                  <span class="env-deploy-env env-deploy-env-prod">{t('entorno.deploy.production')}</span>
-                  <span class="env-deploy-status-pill">
-                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                    {t('entorno.deploy.success')}
+                  <span class={`env-deploy-env ${d.env === 'production' ? 'env-deploy-env-prod' : 'env-deploy-env-prev'}`}>
+                    {d.env}
+                  </span>
+                  {d.duration && (
+                    <span class="env-deploy-duration">{d.duration}s</span>
+                  )}
+                  <span class={`env-deploy-status-pill env-status-${deployStatusColor(d.status)}`}>
+                    {d.status === 'READY' && <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>}
+                    {d.status === 'ERROR' && <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>}
+                    {d.status === 'BUILDING' && <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="animation:env-spin 1s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>}
+                    {deployStatusLabel(d.status)}
                   </span>
                 </div>
               </div>
@@ -754,10 +851,35 @@ const activity = [
 }
 .env-deploy-status-pill {
   display: inline-flex; align-items: center; gap: 4px;
-  background: rgba(16,185,129,0.08); color: #059669;
   padding: 2px 7px; border-radius: 4px; font-weight: 700;
   font-size: 0.6rem;
 }
+.env-status-green { background: rgba(16,185,129,0.08);  color: #059669; }
+.env-status-red   { background: rgba(220,38,38,0.08);   color: #dc2626; }
+.env-status-amber { background: rgba(245,158,11,0.08);  color: #d97706; }
+.env-status-muted { background: rgba(0,0,0,0.04);       color: var(--muted); }
+
+.deploy-dot-green { background: var(--green); box-shadow: 0 0 0 3px rgba(16,185,129,0.15); }
+.deploy-dot-red   { background: var(--red);   box-shadow: 0 0 0 3px rgba(220,38,38,0.15); }
+.deploy-dot-amber { background: var(--amber); box-shadow: 0 0 0 3px rgba(245,158,11,0.15); animation: env-pulse 1s ease-in-out infinite; }
+.deploy-dot-muted { background: var(--dim);   box-shadow: none; }
+
+.env-deploy-env-prev {
+  background: rgba(99,102,241,0.08); color: #6366f1;
+}
+.env-deploy-duration {
+  color: var(--muted); font-weight: 500;
+  background: rgba(0,0,0,0.03); padding: 2px 6px; border-radius: 4px;
+}
+.env-deploys-empty {
+  font-size: 0.84rem; color: var(--muted); padding: 1.5rem 0; text-align: center;
+}
+
+.env-vitals-pill-warn { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.2); color: #d97706; }
+.env-vitals-dot-warn  { background: var(--amber); }
+.vital-warn { border-color: rgba(245,158,11,0.2); }
+.vital-warn:hover { border-color: rgba(245,158,11,0.35); }
+.vital-status-warn { color: var(--amber); }
 
 /* ── REGIONS ── */
 .env-regions { display: flex; flex-direction: column; gap: 0; }
