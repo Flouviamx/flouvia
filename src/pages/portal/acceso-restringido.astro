@@ -236,19 +236,21 @@ const needsSignout = Astro.url.searchParams.has('signout');
     gsap.from('.denied-logo',    { ...ir, opacity: 0, y: -10, duration: 0.8, ease, delay: 0.1 });
     gsap.from('.denied-footer',  { ...ir, opacity: 0, duration: 1.2, ease, delay: 0.8 });
 
-    // Sign-out silencioso si viene del middleware
+    // Sign-out silencioso SIN navegación (Clerk por defecto redirige a signInUrl
+    // si no le pasamos callback). Limpiamos el query param sin recargar la página.
     const wrap = document.getElementById('ar-wrap');
     if (wrap?.dataset.needsSignout === '1') {
+      const cleanQuery = () => history.replaceState({}, '', window.location.pathname);
+
       const tryLogout = () => {
         const Clerk = (window as any).Clerk;
-        if (Clerk?.loaded && typeof Clerk.signOut === 'function') {
-          Clerk.signOut().finally(() => {
-            history.replaceState({}, '', window.location.pathname);
-          });
-          return true;
-        }
-        return false;
+        if (!Clerk?.loaded || typeof Clerk.signOut !== 'function') return false;
+
+        // El callback como primer argumento le dice a Clerk: no navegues, yo manejo el flow.
+        Clerk.signOut(() => { cleanQuery(); }).catch(() => { cleanQuery(); });
+        return true;
       };
+
       if (!tryLogout()) {
         const interval = setInterval(() => { if (tryLogout()) clearInterval(interval); }, 120);
         setTimeout(() => clearInterval(interval), 6000);

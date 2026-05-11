@@ -342,6 +342,9 @@ contactBtn.addEventListener('mouseleave', () => {
 | `position: sticky` no funciona en sección | `overflow: hidden` en el contenedor padre crea scroll container | Cambiar a `overflow: clip` — recorta visualmente sin crear scroll container |
 | Línea gris en borde inferior de carrusel | `yPercent: -8` con scrub mueve imagen hacia arriba revelando fondo | Eliminar scrub de yPercent, solo usar scale para Ken Burns |
 | Footer invisible hasta refresh | `gsap.set(opacity:0)` + posiciones calculadas antes de que carguen fuentes | Convertir a `gsap.from()` con `immediateRender:false` + solo un listener `DOMContentLoaded` |
+| Sección entera (ej. protocolo) se encima al cargar, se arregla con refresh | Patrón `gsap.set(opacity:0) + gsap.to(opacity:1)` + ScrollTrigger calcula posiciones antes de fuentes/imgs | (a) Convertir a `gsap.from(..., { immediateRender:false })` para que el CSS quede visible si no dispara. (b) `ScrollTrigger.refresh()` después de `Promise.all([fonts.ready, window.load])` |
+| Hover/`is-active` no aplica `transform` después de la animación de entrada | GSAP deja inline `transform: matrix(...)` que tiene mayor especificidad que las pseudo-clases CSS | `onComplete: () => gsap.set(targets, { clearProps: 'opacity,transform' })` en el timeline |
+| `Clerk.signOut()` redirige al login en vez de quedarse en la página | Sin callback, el SDK navega a `signInUrl` automáticamente | Pasar callback como primer argumento: `Clerk.signOut(() => { /* limpiar */ })`. El callback inhibe la navegación default. |
 
 ---
 

@@ -1051,10 +1051,22 @@ const t = useTranslations(lang);
 
     gsap.registerPlugin(ScrollTrigger, SplitText);
 
-    // Recalculate positions after fonts + images load
-    window.addEventListener('load', () => {
-        setTimeout(() => ScrollTrigger.refresh(), 120);
-    });
+    // Recalculate positions after fonts + images load.
+    // Two-stage: first refresh post-load (catches images), second after fonts.ready
+    // (catches font swaps that shift baseline). Without this, ScrollTrigger uses
+    // pre-layout positions and triggers fire at the wrong scroll Y → elements
+    // stay invisible until manual refresh.
+    const robustRefresh = () => {
+        const winLoad = new Promise<void>((resolve) => {
+            if (document.readyState === 'complete') resolve();
+            else window.addEventListener('load', () => resolve(), { once: true });
+        });
+        const fontsReady = (document as any).fonts?.ready ?? Promise.resolve();
+        Promise.all([winLoad, fontsReady]).then(() => {
+            setTimeout(() => ScrollTrigger.refresh(), 120);
+        });
+    };
+    robustRefresh();
 
     document.addEventListener('DOMContentLoaded', () => {
         const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1266,20 +1278,24 @@ const t = useTranslations(lang);
                 const p     = row.querySelector<HTMLElement>('.row-content p');
                 const arrow = row.querySelector<HTMLElement>('.arrow-circle');
 
-                if (num)   gsap.set(num,   { opacity: 0, x: -16 });
-                if (h3)    gsap.set(h3,    { opacity: 0, y: 28 });
-                if (p)     gsap.set(p,     { opacity: 0, y: 18 });
-                if (arrow) gsap.set(arrow, { opacity: 0, scale: 0.7 });
-
+                // Patrón gsap.from + immediateRender:false → elementos visibles en CSS
+                // hasta que el tween arranca. Si ScrollTrigger no dispara, no quedan
+                // invisibles permanentes.
                 const tl = gsap.timeline({
                     scrollTrigger: { trigger: row, start: 'top 86%', once: true },
                     delay: i * 0.04,
+                    // clearProps al final → libera inline styles para que los
+                    // transforms del :hover (translateX, rotate, etc.) puedan aplicar.
+                    onComplete: () => {
+                        const targets = [num, h3, p, arrow].filter(Boolean) as HTMLElement[];
+                        if (targets.length) gsap.set(targets, { clearProps: 'opacity,transform' });
+                    },
                 });
 
-                if (num)   tl.to(num,   { ...ir, opacity: 1, x: 0, duration: 1.0, ease: 'expo.out' }, 0);
-                if (h3)    tl.to(h3,    { ...ir, opacity: 1, y: 0, duration: 1.2, ease: 'expo.out' }, 0.08);
-                if (p)     tl.to(p,     { ...ir, opacity: 1, y: 0, duration: 1.1, ease: 'expo.out' }, 0.18);
-                if (arrow) tl.to(arrow, { ...ir, opacity: 1, scale: 1, duration: 1.0, ease: 'expo.out' }, 0.28);
+                if (num)   tl.from(num,   { ...ir, opacity: 0, x: -16,   duration: 1.0, ease: 'expo.out' }, 0);
+                if (h3)    tl.from(h3,    { ...ir, opacity: 0, y: 28,    duration: 1.2, ease: 'expo.out' }, 0.08);
+                if (p)     tl.from(p,     { ...ir, opacity: 0, y: 18,    duration: 1.1, ease: 'expo.out' }, 0.18);
+                if (arrow) tl.from(arrow, { ...ir, opacity: 0, scale: 0.7, duration: 1.0, ease: 'expo.out' }, 0.28);
             });
 
             /* ═══════════════════════════════════════════════════
@@ -1345,26 +1361,29 @@ const t = useTranslations(lang);
                       onStart: () => { protoCurrent.textContent = next; } });
             }
 
-            /* Steps: choreographed reveal — node bounce, watermark slide, h4 then p */
+            /* Steps: choreographed reveal — node bounce, watermark slide, h4 then p.
+               Patrón gsap.from + immediateRender:false → si ScrollTrigger calcula
+               posiciones antes de que carguen fuentes, los elementos NO se quedan
+               invisibles encimados. clearProps al final libera transforms inline
+               para que .is-active / :hover apliquen sus propios transforms. */
             protoSteps.forEach((step) => {
                 const node = step.querySelector<HTMLElement>('.step-node');
                 const wm   = step.querySelector<HTMLElement>('.watermark-num');
                 const h4   = step.querySelector<HTMLElement>('h4');
                 const p    = step.querySelector<HTMLElement>('p');
 
-                if (node) gsap.set(node, { scale: 0, opacity: 0 });
-                if (wm)   gsap.set(wm,   { opacity: 0, x: -18 });
-                if (h4)   gsap.set(h4,   { opacity: 0, y: 22 });
-                if (p)    gsap.set(p,    { opacity: 0, y: 18 });
-
                 const tl = gsap.timeline({
                     scrollTrigger: { trigger: step, start: 'top 86%', once: true },
+                    onComplete: () => {
+                        const targets = [node, wm, h4, p].filter(Boolean) as HTMLElement[];
+                        if (targets.length) gsap.set(targets, { clearProps: 'opacity,transform' });
+                    },
                 });
 
-                if (node) tl.to(node, { ...ir, scale: 1, opacity: 1, duration: 1.0, ease: 'expo.out' }, 0);
-                if (wm)   tl.to(wm,   { ...ir, opacity: 1, x: 0, duration: 1.3, ease: 'expo.out' }, 0.08);
-                if (h4)   tl.to(h4,   { ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out' }, 0.18);
-                if (p)    tl.to(p,    { ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out' }, 0.28);
+                if (node) tl.from(node, { ...ir, scale: 0, opacity: 0, duration: 1.0, ease: 'expo.out' }, 0);
+                if (wm)   tl.from(wm,   { ...ir, opacity: 0, x: -18,   duration: 1.3, ease: 'expo.out' }, 0.08);
+                if (h4)   tl.from(h4,   { ...ir, opacity: 0, y: 22,    duration: 1.0, ease: 'expo.out' }, 0.18);
+                if (p)    tl.from(p,    { ...ir, opacity: 0, y: 18,    duration: 1.0, ease: 'expo.out' }, 0.28);
             });
 
             /* ═══════════════════════════════════════════════════
