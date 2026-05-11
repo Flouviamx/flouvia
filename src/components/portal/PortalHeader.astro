@@ -28,22 +28,6 @@ const t = useTranslations(lang);
     <div class="ph-right">
       <slot name="topbar-right" />
 
-      <!-- Dark mode toggle -->
-      <button class="ph-theme-btn" id="ph-theme-btn" aria-label="Toggle dark mode" title="Dark mode">
-        <!-- Sun icon (visible in dark mode) -->
-        <svg class="ph-icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="5"/>
-          <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-        </svg>
-        <!-- Moon icon (visible in light mode) -->
-        <svg class="ph-icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>
-      </button>
-
       <!-- Push notifications bell -->
       <button class="ph-bell-btn" id="ph-bell-btn" aria-label="Notifications" title="Enable notifications" style="display:none">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -118,6 +102,24 @@ const t = useTranslations(lang);
   animation: ph-pulse 2.5s ease-in-out infinite;
 }
 
+/* ── Bell button ── */
+.ph-bell-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.08);
+  color: rgba(0,0,0,0.45); cursor: pointer; flex-shrink: 0;
+  transition: background .25s, color .25s, border-color .25s;
+  position: relative;
+}
+.ph-bell-btn:hover {
+  background: rgba(0,0,0,0.09); color: #0a0e1a; border-color: rgba(0,0,0,0.15);
+}
+.ph-bell-dot {
+  position: absolute; top: 4px; right: 4px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #ef4444; border: 1.5px solid #fff;
+}
+
 /* ── TITLE BLOCK ── */
 .ph-title-row {
   display: flex; justify-content: space-between;
@@ -145,47 +147,6 @@ const t = useTranslations(lang);
   0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,.45); }
   60%      { box-shadow: 0 0 0 5px rgba(16,185,129,0); }
 }
-
-/* ── Dark / Bell toggle buttons ── */
-.ph-theme-btn,
-.ph-bell-btn {
-  display: flex; align-items: center; justify-content: center;
-  width: 34px; height: 34px; border-radius: 50%;
-  background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.08);
-  color: rgba(0,0,0,0.45); cursor: pointer; flex-shrink: 0;
-  transition: background .25s, color .25s, border-color .25s;
-  position: relative;
-}
-.ph-theme-btn:hover,
-.ph-bell-btn:hover {
-  background: rgba(0,0,0,0.09); color: #0a0e1a; border-color: rgba(0,0,0,0.15);
-}
-
-/* Sun/moon icon swap */
-.ph-icon-sun  { display: none; }
-.ph-icon-moon { display: block; }
-:global(html[data-theme="dark"]) .ph-icon-sun  { display: block; }
-:global(html[data-theme="dark"]) .ph-icon-moon { display: none; }
-
-/* Dark mode: invert button colors */
-:global(html[data-theme="dark"]) .ph-theme-btn,
-:global(html[data-theme="dark"]) .ph-bell-btn {
-  background: rgba(255,255,255,0.06);
-  border-color: rgba(255,255,255,0.1);
-  color: rgba(255,255,255,0.55);
-}
-:global(html[data-theme="dark"]) .ph-theme-btn:hover,
-:global(html[data-theme="dark"]) .ph-bell-btn:hover {
-  background: rgba(255,255,255,0.1);
-  color: rgba(255,255,255,0.9);
-}
-
-.ph-bell-dot {
-  position: absolute; top: 4px; right: 4px;
-  width: 7px; height: 7px; border-radius: 50%;
-  background: #ef4444; border: 1.5px solid #fff;
-}
-:global(html[data-theme="dark"]) .ph-bell-dot { border-color: #0d1826; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 640px) {
@@ -225,63 +186,46 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   if (sub) tl.to(sub, { y: 0, opacity: 1, duration: 0.75 }, 0.38);
 
-  // ── Dark mode toggle ──────────────────────────────────
-  const themeBtn = document.getElementById('ph-theme-btn');
-  themeBtn?.addEventListener('click', () => {
-    const html    = document.getElementById('html-root') as HTMLElement;
-    const isDark  = html.getAttribute('data-theme') === 'dark';
-    const next    = isDark ? 'light' : 'dark';
-    if (next === 'dark') html.setAttribute('data-theme', 'dark');
-    else                  html.removeAttribute('data-theme');
-    try { localStorage.setItem('flouvia-theme', next); } catch(e) {}
-
-    // Micro-animation en el botón
-    gsap.fromTo(themeBtn, { scale: 0.8, rotate: -30 }, { scale: 1, rotate: 0, duration: 0.4, ease: 'back.out(2)' });
-  });
-
   // ── Push notifications bell ───────────────────────────
-  const bellBtn  = document.getElementById('ph-bell-btn')  as HTMLButtonElement | null;
-  const bellDot  = document.getElementById('ph-bell-dot');
+  const bellBtn = document.getElementById('ph-bell-btn') as HTMLButtonElement | null;
+  const bellDot = document.getElementById('ph-bell-dot');
   const VAPID_KEY = (window as any).__VAPID_KEY__;
 
   async function initPush() {
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
 
-    // Register SW
-    const reg = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
-
+    const reg  = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
     const perm = Notification.permission;
-    if (perm === 'denied') return; // user blocked it — hide bell
+    if (perm === 'denied') return;
 
-    // Show bell if push not yet subscribed
     const existing = await reg.pushManager.getSubscription();
     if (!existing && bellBtn) {
       bellBtn.style.display = 'flex';
-    } else if (existing && bellDot) {
-      // Already subscribed — show active dot
-      if (bellBtn) bellBtn.style.display = 'flex';
-      bellDot.style.display = 'block';
+    } else if (existing && bellBtn) {
+      bellBtn.style.display = 'flex';
+      if (bellDot) bellDot.style.display = 'block';
     }
 
     bellBtn?.addEventListener('click', async () => {
       const sub = await reg.pushManager.getSubscription();
       if (sub) {
-        // Already subscribed → unsubscribe
         await sub.unsubscribe();
-        await fetch('/api/push/subscribe', { method: 'DELETE', body: JSON.stringify({ endpoint: sub.endpoint }), headers: { 'Content-Type': 'application/json' } });
+        await fetch('/api/push/subscribe', {
+          method: 'DELETE',
+          body: JSON.stringify({ endpoint: sub.endpoint }),
+          headers: { 'Content-Type': 'application/json' },
+        });
         if (bellDot) bellDot.style.display = 'none';
         gsap.fromTo(bellBtn, { scale: 0.85 }, { scale: 1, duration: 0.35, ease: 'back.out(2)' });
         return;
       }
 
-      // Request permission + subscribe
       const result = await Notification.requestPermission();
-      if (result !== 'granted') { bellBtn.style.display = 'none'; return; }
+      if (result !== 'granted') { if (bellBtn) bellBtn.style.display = 'none'; return; }
 
-      const vapidKey = VAPID_KEY || '';
       const newSub = await reg.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(vapidKey),
+        applicationServerKey: urlBase64ToUint8Array(VAPID_KEY || ''),
       });
 
       await fetch('/api/push/subscribe', {
@@ -295,11 +239,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function urlBase64ToUint8Array(base64: string): Uint8Array {
+  function urlBase64ToUint8Array(base64: string): Uint8Array<ArrayBuffer> {
     const padding = '='.repeat((4 - base64.length % 4) % 4);
     const b64 = (base64 + padding).replace(/-/g, '+').replace(/_/g, '/');
     const raw = atob(b64);
-    return Uint8Array.from([...raw].map((c) => c.charCodeAt(0)));
+    const arr = new Uint8Array(raw.length);
+    for (let i = 0; i < raw.length; i++) arr[i] = raw.charCodeAt(i);
+    return arr;
   }
 
   initPush().catch(() => {});

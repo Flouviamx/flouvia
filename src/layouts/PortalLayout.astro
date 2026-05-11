@@ -11,7 +11,7 @@ const { title } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="es" id="html-root">
+<html lang="es">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="description" content="Portal de Clientes Flouvia" />
@@ -36,16 +36,6 @@ const { title } = Astro.props;
 		<script is:inline define:vars={{ vapidKey: import.meta.env.PUBLIC_VAPID_KEY ?? '' }}>
 		  window.__VAPID_KEY__ = vapidKey;
 		</script>
-
-		<!-- Dark mode: apply before paint to avoid flash -->
-		<script is:inline>
-		  (function() {
-		    try {
-		      const theme = localStorage.getItem('flouvia-theme');
-		      if (theme === 'dark') document.getElementById('html-root').setAttribute('data-theme', 'dark');
-		    } catch(e) {}
-		  })();
-		</script>
 	</head>
 	<body>
         <PortalNavbar />
@@ -61,10 +51,10 @@ const { title } = Astro.props;
     /* ============================================================
        TU CSS GLOBAL COMPLETO (Recuperado y Blindado)
        ============================================================ */
-    *, *::before, *::after { box-sizing: border-box; } 
-    
+    *, *::before, *::after { box-sizing: border-box; }
+
     html, body {
-        width: 100%; 
+        width: 100%;
         position: relative;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -76,42 +66,42 @@ const { title } = Astro.props;
 
     :root {
         --color-bg: #ffffff;
-        --color-bg-soft: #fcfcfc; 
-        --color-blue-icy: #f4f6f9; 
+        --color-bg-soft: #fcfcfc;
+        --color-blue-icy: #f4f6f9;
         --color-blue-deep: #0a192f;
         --color-glass-blue: rgba(10, 25, 47, 0.85);
-        
+
         --color-text: #050505;
         --color-text-muted: #555555;
-        --color-border: rgba(0, 0, 0, 0.08); 
-        
+        --color-border: rgba(0, 0, 0, 0.08);
+
         --font-sans: 'Inter', system-ui, sans-serif;
         --font-serif: 'Instrument Serif', serif;
-        
+
         --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
         --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05);
         --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
-        
+
         /* Tus físicas de la Navbar para que coincidan */
         --ease-pro: cubic-bezier(0.19, 1, 0.22, 1);
         --ease-morph: cubic-bezier(0.68, -0.6, 0.32, 1.6);
     }
 
-    body { 
-        background-color: var(--color-bg); 
-        color: var(--color-text); 
-        font-family: var(--font-sans); 
-        margin: 0; 
+    body {
+        background-color: var(--color-bg);
+        color: var(--color-text);
+        font-family: var(--font-sans);
+        margin: 0;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
     }
 
-    .portal-main { 
-        flex-grow: 1; 
+    .portal-main {
+        flex-grow: 1;
         padding-top: 140px; /* Ajuste para tu Navbar Elite */
-        display: flex; 
-        flex-direction: column; 
+        display: flex;
+        flex-direction: column;
     }
 
     /* TUS CLASES DE IDENTIDAD */
@@ -119,180 +109,30 @@ const { title } = Astro.props;
     .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; }
     .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: #222; }
     .eyebrow { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
-    
+
     /* ANIMACIONES */
-    .reveal-blur { 
-        opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(8px); 
-        animation: reveal 1s var(--ease-spring) forwards; animation-delay: var(--delay, 0s); 
+    .reveal-blur {
+        opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(8px);
+        animation: reveal 1s var(--ease-spring) forwards; animation-delay: var(--delay, 0s);
     }
-    .reveal-fade { 
-        opacity: 0; transform: translateY(30px) scale(0.98); 
-        animation: revealFade 1s var(--ease-spring) forwards; animation-delay: var(--delay, 0s); 
+    .reveal-fade {
+        opacity: 0; transform: translateY(30px) scale(0.98);
+        animation: revealFade 1s var(--ease-spring) forwards; animation-delay: var(--delay, 0s);
     }
-    
+
     /* Forzamos que corran en el portal */
     .reveal-blur, .reveal-fade { animation-play-state: running !important; }
 
     @keyframes reveal { to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
     @keyframes revealFade { to { opacity: 1; transform: translateY(0) scale(1); } }
 
-    .btn-luxe { 
-        position: relative; display: inline-flex; background: var(--color-text); color: #fff; 
-        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem; 
+    .btn-luxe {
+        position: relative; display: inline-flex; background: var(--color-text); color: #fff;
+        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem;
         font-weight: 600; transition: all 0.5s var(--ease-spring); overflow: hidden; justify-content: center;
         box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 10px 20px rgba(0,0,0,0.08);
     }
     .btn-luxe:hover { transform: translateY(-4px); box-shadow: 0 6px 12px rgba(0,0,0,0.08), 0 15px 30px rgba(0,0,0,0.15); }
 
     .squircle { border-radius: 24px; transform: translateZ(0); overflow: hidden; }
-
-    /* ════════════════════════════════════════════════════════════
-       DARK MODE — tokens cross-portal + overrides por componente
-       ════════════════════════════════════════════════════════════ */
-
-    /* Transición suave al cambiar tema */
-    html { transition: background-color .35s, color .35s; }
-
-    html[data-theme="dark"] {
-      color-scheme: dark;
-      --dm-bg:      #070e1a;
-      --dm-card:    #0d1826;
-      --dm-card2:   #121f32;
-      --dm-text:    #e2eaf5;
-      --dm-muted:   #7a91b0;
-      --dm-dim:     #3a4d66;
-      --dm-border:  rgba(255,255,255,0.07);
-      --dm-border2: rgba(255,255,255,0.11);
-      --dm-green:   #10b981;
-      --dm-blue:    #4d9fff;
-    }
-
-    /* ── Fondos de página ── */
-    html[data-theme="dark"] body,
-    html[data-theme="dark"] .db-root,
-    html[data-theme="dark"] .os-page,
-    html[data-theme="dark"] .env-root,
-    html[data-theme="dark"] .priv-page,
-    html[data-theme="dark"] .up-root,
-    html[data-theme="dark"] .pure-white-wrapper,
-    html[data-theme="dark"] .cl-root {
-      background: var(--dm-bg) !important;
-      color: var(--dm-text) !important;
-    }
-
-    /* ── Cards / panels ── */
-    html[data-theme="dark"] .db-card,
-    html[data-theme="dark"] .os-card,
-    html[data-theme="dark"] .bv-card,
-    html[data-theme="dark"] .tl-card,
-    html[data-theme="dark"] .cl-card,
-    html[data-theme="dark"] .priv-card,
-    html[data-theme="dark"] .up-card,
-    html[data-theme="dark"] .env-card,
-    html[data-theme="dark"] .sp-card,
-    html[data-theme="dark"] .fact-card {
-      background: var(--dm-card) !important;
-      border-color: var(--dm-border) !important;
-    }
-
-    /* ── PortalHeader ── */
-    html[data-theme="dark"] .ph-title { color: var(--dm-text) !important; }
-    html[data-theme="dark"] .ph-sub   { color: var(--dm-muted) !important; }
-    html[data-theme="dark"] .ph-back  {
-      background: rgba(255,255,255,0.05) !important;
-      border-color: var(--dm-border) !important;
-      color: var(--dm-muted) !important;
-    }
-    html[data-theme="dark"] .ph-back:hover { background: rgba(255,255,255,0.09) !important; color: var(--dm-text) !important; }
-
-    /* ── Dashboard específico ── */
-    html[data-theme="dark"] .db-title,
-    html[data-theme="dark"] .db-name  { color: var(--dm-text) !important; }
-    html[data-theme="dark"] .db-sub,
-    html[data-theme="dark"] .db-greeting { color: var(--dm-muted) !important; }
-    html[data-theme="dark"] .db-tag  { background: rgba(255,255,255,0.04) !important; border-color: var(--dm-border) !important; color: var(--dm-muted) !important; }
-    html[data-theme="dark"] .db-tag strong { color: var(--dm-text) !important; }
-    html[data-theme="dark"] .db-proj-name { color: var(--dm-text) !important; }
-    html[data-theme="dark"] .db-rm-title  { color: var(--dm-muted) !important; }
-    html[data-theme="dark"] .db-rm-active .db-rm-title { color: var(--dm-text) !important; }
-    html[data-theme="dark"] .db-rm-dot  { background: var(--dm-card2) !important; border-color: var(--dm-dim) !important; }
-    html[data-theme="dark"] .db-rm-done .db-rm-dot,
-    html[data-theme="dark"] .db-rm-active .db-rm-dot { background: var(--dm-text) !important; border-color: var(--dm-text) !important; }
-    html[data-theme="dark"] .db-rm-line { background: var(--dm-border) !important; }
-    html[data-theme="dark"] .db-rf { stroke: var(--dm-text) !important; }
-    html[data-theme="dark"] .db-rt { stroke: rgba(255,255,255,0.06) !important; }
-    html[data-theme="dark"] .db-pct,
-    html[data-theme="dark"] .db-cnt { color: var(--dm-text) !important; }
-    html[data-theme="dark"] .db-pct-sym,
-    html[data-theme="dark"] .db-pct-lbl { color: var(--dm-muted) !important; }
-    html[data-theme="dark"] .db-fin-sym,
-    html[data-theme="dark"] .db-fin-cur { color: var(--dm-muted) !important; }
-    html[data-theme="dark"] .db-fin-num,
-    html[data-theme="dark"] .db-fin-label { color: var(--dm-text) !important; }
-    html[data-theme="dark"] .db-vault-row:hover,
-    html[data-theme="dark"] .db-svc-row:hover { background: var(--dm-card2) !important; border-color: var(--dm-border2) !important; }
-    html[data-theme="dark"] .db-svc-lbl,
-    html[data-theme="dark"] .db-fname { color: var(--dm-text) !important; }
-    html[data-theme="dark"] .db-svc-sub,
-    html[data-theme="dark"] .db-fsize { color: var(--dm-muted) !important; }
-    html[data-theme="dark"] .db-ghost-btn {
-      border-color: var(--dm-border2) !important;
-      color: var(--dm-muted) !important;
-    }
-    html[data-theme="dark"] .db-ghost-btn:hover { background: var(--dm-card2) !important; color: var(--dm-text) !important; }
-    html[data-theme="dark"] .db-pay-btn { background: var(--dm-text) !important; color: #070e1a !important; }
-    html[data-theme="dark"] .db-pay-btn:hover { background: #c0cfe8 !important; }
-    html[data-theme="dark"] .db-notif-strip { background: rgba(255,255,255,0.03) !important; border-color: var(--dm-border) !important; }
-    html[data-theme="dark"] .db-notif-title { color: var(--dm-text) !important; }
-    html[data-theme="dark"] .db-notif-msg   { color: var(--dm-muted) !important; }
-    html[data-theme="dark"] .db-health-bar-wrap { background: rgba(255,255,255,0.06) !important; }
-    html[data-theme="dark"] .db-act-row:hover { background: var(--dm-card2) !important; border-color: var(--dm-border) !important; }
-    html[data-theme="dark"] .db-act-title { color: var(--dm-text) !important; }
-    html[data-theme="dark"] .db-act-sub   { color: var(--dm-muted) !important; }
-    html[data-theme="dark"] .db-act-icon-wrap { background: rgba(255,255,255,0.05) !important; }
-    html[data-theme="dark"] .db-mono { color: var(--dm-muted) !important; }
-
-    /* ── Roadmap + Calendario — pure-white-wrapper ── */
-    html[data-theme="dark"] .noise-overlay { opacity: 0 !important; }
-    html[data-theme="dark"] .timeline-wrapper,
-    html[data-theme="dark"] .cal-split-grid { color: var(--dm-text) !important; }
-
-    /* ── Entorno ── */
-    html[data-theme="dark"] .env-var-row,
-    html[data-theme="dark"] .env-deploy-row { border-color: var(--dm-border) !important; }
-    html[data-theme="dark"] .env-var-row:hover,
-    html[data-theme="dark"] .env-deploy-row:hover { background: var(--dm-card2) !important; }
-
-    /* ── Bóveda ── */
-    html[data-theme="dark"] .bv-row-wrap:hover { background: var(--dm-card2) !important; }
-    html[data-theme="dark"] .bv-toolbar,
-    html[data-theme="dark"] .bv-col-header { border-color: var(--dm-border) !important; }
-
-    /* ── Soporte ── */
-    html[data-theme="dark"] .sp-ticket-row:hover { background: var(--dm-card2) !important; }
-    html[data-theme="dark"] .sp-form-row input,
-    html[data-theme="dark"] .sp-form-row textarea,
-    html[data-theme="dark"] .sp-form-row select {
-      background: var(--dm-card2) !important;
-      border-color: var(--dm-border2) !important;
-      color: var(--dm-text) !important;
-    }
-
-    /* ── Changelog ── */
-    html[data-theme="dark"] .cl-card { background: var(--dm-card) !important; border-color: var(--dm-border) !important; }
-    html[data-theme="dark"] .cl-node { background: var(--dm-card) !important; border-color: var(--dm-dim) !important; }
-    html[data-theme="dark"] .cl-node-active { background: var(--dm-text) !important; border-color: var(--dm-text) !important; }
-    html[data-theme="dark"] .cl-line { background: linear-gradient(to bottom, var(--dm-border2), transparent) !important; }
-    html[data-theme="dark"] .cl-title { color: var(--dm-text) !important; }
-    html[data-theme="dark"] .cl-date,
-    html[data-theme="dark"] .cl-desc  { color: var(--dm-muted) !important; }
-    html[data-theme="dark"] .cl-version { background: rgba(255,255,255,0.07) !important; color: var(--dm-text) !important; }
-    html[data-theme="dark"] .cl-count-num { color: var(--dm-text) !important; }
-    html[data-theme="dark"] .cl-count-badge {
-      background: rgba(255,255,255,0.05) !important;
-      border-color: var(--dm-border) !important;
-    }
-
-    /* ── Portal Footer (ya es dark, solo ajuste hover) ── */
-    html[data-theme="dark"] .pf-root { background: #030810 !important; }
 </style>
