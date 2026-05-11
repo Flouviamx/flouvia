@@ -48,12 +48,104 @@ const formatDate = (iso: string | null) => {
   return new Date(iso).toLocaleDateString(lang === 'en' ? 'en-US' : 'es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
 };
 
-const [{ data: proyecto }, { data: finanza }, { data: roadmapRows }, { data: archivos }] = await Promise.all([
+const [
+  { data: proyecto },
+  { data: finanza },
+  { data: roadmapRows },
+  { data: archivos },
+  { data: ticketRows },
+  { data: notifRows },
+] = await Promise.all([
   supabase.from('proyectos').select('*').eq('email_cliente', email).single(),
   supabase.from('finanzas_config').select('*').eq('email_cliente', email).single(),
   supabase.from('roadmap').select('*').eq('email_cliente', email).order('orden_index'),
-  supabase.from('boveda_archivos').select('*').eq('email_cliente', email).limit(2),
+  supabase.from('boveda_archivos').select('nombre,tipo,created_at').eq('email_cliente', email).order('created_at', { ascending: false }).limit(3),
+  supabase.from('tickets').select('ticket_ref,title,status,created_at').eq('email_cliente', email).order('created_at', { ascending: false }).limit(5),
+  supabase.from('notificaciones').select('id,titulo,mensaje,tipo,leida,created_at').eq('email_cliente', email).order('created_at', { ascending: false }).limit(6),
 ]);
+
+// Fetch Vercel deploys if project has an ID
+const vercelProjectId = proyecto?.vercel_project_id;
+const vercelToken = import.meta.env.VERCEL_TOKEN;
+let recentDeploys: any[] = [];
+if (vercelProjectId && vercelToken) {
+  try {
+    const vRes = await fetch(
+      `https://api.vercel.com/v6/deployments?projectId=${vercelProjectId}&limit=5`,
+      { headers: { Authorization: `Bearer ${vercelToken}` }, signal: AbortSignal.timeout(4000) }
+    );
+    if (vRes.ok) {
+      const vJson = await vRes.json();
+      recentDeploys = (vJson.deployments ?? []).map((d: any) => ({
+        sha:    (d.meta?.githubCommitSha ?? d.uid ?? '').slice(0, 7),
+        msg:    d.meta?.githubCommitMessage?.split('\n')[0] ?? d.name ?? 'Deploy',
+        status: d.state,
+        when:   d.created,
+      }));
+    }
+  } catch { /* timeout ok */ }
+}
+
+// ── Health score (0–100) ──────────────────────────────────
+const uptimePct = parseFloat((proyecto?.uptime ?? '99.9').replace('%','')) || 99.9;
+const progress  = proyecto?.progreso ?? 0;
+const openTickets = (ticketRows ?? []).filter((t: any) => t.status === 'open').length;
+const lastDeployOk = recentDeploys.length > 0 && recentDeploys[0].status === 'READY';
+
+let healthScore = 0;
+healthScore += uptimePct >= 99.9 ? 30 : uptimePct >= 99.0 ? 20 : 10;
+healthScore += progress >= 75 ? 25 : progress >= 50 ? 18 : progress >= 25 ? 10 : 5;
+healthScore += recentDeploys.length === 0 ? 15 : lastDeployOk ? 25 : 10;
+healthScore += openTickets === 0 ? 20 : openTickets <= 2 ? 12 : 5;
+
+const healthLabel = healthScore >= 85
+  ? (lang === 'en' ? 'Excellent' : 'Excelente')
+  : healthScore >= 65
+    ? (lang === 'en' ? 'Good' : 'Bueno')
+    : (lang === 'en' ? 'Needs attention' : 'Requiere atención');
+const healthColor = healthScore >= 85 ? '#10b981' : healthScore >= 65 ? '#f59e0b' : '#ef4444';
+
+// ── Activity feed ─────────────────────────────────────────
+function timeAgo(ms: number, l: string): string {
+  const diff = Date.now() - ms;
+  const m = Math.floor(diff / 60000);
+  if (m < 60) return l === 'en' ? `${m}m ago` : `hace ${m} min`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return l === 'en' ? `${h}h ago` : `hace ${h} h`;
+  const d = Math.floor(h / 24);
+  return l === 'en' ? `${d}d ago` : `hace ${d} d`;
+}
+
+type ActivityItem = { type: 'deploy' | 'ticket' | 'upload'; title: string; sub: string; when: number; dot: string; };
+
+const activityItems: ActivityItem[] = [
+  ...recentDeploys.slice(0, 3).map((d: any) => ({
+    type: 'deploy' as const,
+    title: d.msg,
+    sub: d.sha ? `${d.sha} · ${d.status === 'READY' ? (lang === 'en' ? 'Deployed' : 'Desplegado') : d.status}` : d.status,
+    when: d.when,
+    dot: d.status === 'READY' ? '#10b981' : d.status === 'ERROR' ? '#ef4444' : '#f59e0b',
+  })),
+  ...(ticketRows ?? []).slice(0, 3).map((t: any) => ({
+    type: 'ticket' as const,
+    title: t.title,
+    sub: `${t.ticket_ref} · ${t.status === 'open' ? (lang === 'en' ? 'Open' : 'Abierto') : t.status === 'resolved' ? (lang === 'en' ? 'Resolved' : 'Resuelto') : (lang === 'en' ? 'Pending' : 'Pendiente')}`,
+    when: new Date(t.created_at).getTime(),
+    dot: t.status === 'resolved' ? '#10b981' : t.status === 'open' ? '#0055cc' : '#f59e0b',
+  })),
+  ...(archivos ?? []).slice(0, 2).map((a: any) => ({
+    type: 'upload' as const,
+    title: a.nombre,
+    sub: `${a.tipo?.toUpperCase() ?? 'FILE'} · ${lang === 'en' ? 'Vault' : 'Bóveda'}`,
+    when: new Date(a.created_at).getTime(),
+    dot: '#8b5cf6',
+  })),
+].sort((a, b) => b.when - a.when).slice(0, 7);
+
+// ── Notifications ─────────────────────────────────────────
+const notifications = (notifRows ?? []);
+const unreadNotifs  = notifications.filter((n: any) => !n.leida);
+const latestNotif   = notifications[0] ?? null;
 
 const fallbackPortalUrl = lang === 'en' ? "/en/portal/facturacion" : "/portal/facturacion";
 
@@ -108,7 +200,29 @@ const data = {
                     <span class="db-meta-dot"></span>
                     {t('portal.uptime')} {data.project.uptime}
                 </span>
+                {unreadNotifs.length > 0 && (
+                  <a href="#db-notif-panel" class="db-notif-chip" id="db-notif-chip">
+                    <span class="db-notif-dot"></span>
+                    <span>{unreadNotifs.length} {lang === 'en' ? 'new' : 'nuevas'}</span>
+                  </a>
+                )}
             </div>
+
+            {latestNotif && (
+              <div class="db-notif-strip" id="db-notif-panel">
+                <div class="db-notif-icon">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                </div>
+                <div class="db-notif-body">
+                  <span class="db-notif-title">{latestNotif.titulo}</span>
+                  {latestNotif.mensaje && <span class="db-notif-msg">{latestNotif.mensaje}</span>}
+                </div>
+                <span class="db-notif-when">{timeAgo(new Date(latestNotif.created_at).getTime(), lang)}</span>
+                <button class="db-notif-close" aria-label="Dismiss" id="db-notif-close">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </div>
+            )}
 
             <h1 class="db-title" id="db-title">
                 <span class="db-greeting">{t('portal.greeting')}</span>
@@ -140,6 +254,16 @@ const data = {
                             <div class="db-proj-meta">
                                 <span class="db-tag">{t('portal.stage')} <strong>{data.project.stage}</strong></span>
                                 <span class="db-tag">{lang === 'en' ? 'Deadline' : 'Entrega'}: <strong>{data.project.deadline}</strong></span>
+                            </div>
+                            <div class="db-health-row">
+                              <div class="db-health-bar-wrap">
+                                <div class="db-health-bar" id="db-health-bar" style={`--score:${healthScore}`}></div>
+                              </div>
+                              <span class="db-health-label" style={`color:${healthColor}`}>
+                                <span class="db-health-num" id="db-health-num">0</span>
+                                <span class="db-health-slash">/100 ·</span>
+                                <span class="db-health-txt">{healthLabel}</span>
+                              </span>
                             </div>
                         </div>
 
@@ -255,6 +379,41 @@ const data = {
                     </div>
                 </div>
             </div>
+
+            <!-- ACTIVIDAD RECIENTE -->
+            {activityItems.length > 0 && (
+              <div class="db-card db-c-activity" id="card-activity">
+                <div class="db-c-in">
+                  <div class="db-c-top">
+                    <span class="db-ey">{lang === 'en' ? 'RECENT ACTIVITY' : 'ACTIVIDAD RECIENTE'}</span>
+                    <span class="db-act-count">{activityItems.length} {lang === 'en' ? 'events' : 'eventos'}</span>
+                  </div>
+                  <div class="db-act-list">
+                    {activityItems.map((item) => (
+                      <div class="db-act-row">
+                        <div class="db-act-icon-wrap">
+                          <div class="db-act-dot" style={`background:${item.dot}`}></div>
+                          {item.type === 'deploy' && (
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+                          )}
+                          {item.type === 'ticket' && (
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                          )}
+                          {item.type === 'upload' && (
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                          )}
+                        </div>
+                        <div class="db-act-body">
+                          <span class="db-act-title">{item.title}</span>
+                          <span class="db-act-sub">{item.sub}</span>
+                        </div>
+                        <span class="db-act-when">{timeAgo(item.when, lang)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
 
         </div>
     </div>
@@ -527,6 +686,110 @@ const data = {
 .db-vault-empty { font-size: 0.82rem; color: var(--dim); margin: 1rem 0 0; text-align: center; }
 
 /* ══════════════════════════════════════════════════════════
+   NOTIFICATIONS
+══════════════════════════════════════════════════════════ */
+.db-notif-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em;
+    background: rgba(239,68,68,0.08); color: #dc2626;
+    border: 1px solid rgba(239,68,68,0.18);
+    padding: 3px 10px; border-radius: 100px;
+    text-decoration: none; transition: background .2s;
+}
+.db-notif-chip:hover { background: rgba(239,68,68,0.13); }
+.db-notif-dot {
+    width: 5px; height: 5px; border-radius: 50%; background: #ef4444;
+    animation: led-pulse 2s ease-in-out infinite;
+}
+
+.db-notif-strip {
+    display: flex; align-items: center; gap: 0.9rem;
+    background: rgba(0,0,0,0.025); border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 14px; padding: 0.75rem 1rem;
+    margin-bottom: 2rem; opacity: 0;
+}
+.db-notif-icon {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: #0a192f; color: rgba(255,255,255,0.8);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.db-notif-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.db-notif-title { font-size: 0.84rem; font-weight: 600; color: var(--text); }
+.db-notif-msg { font-size: 0.78rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.db-notif-when { font-size: 0.65rem; color: var(--dim); font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
+.db-notif-close {
+    background: none; border: none; cursor: pointer; color: var(--dim);
+    padding: 4px; border-radius: 6px; display: flex;
+    transition: color .2s, background .2s;
+}
+.db-notif-close:hover { color: var(--text); background: rgba(0,0,0,0.06); }
+
+/* ══════════════════════════════════════════════════════════
+   HEALTH SCORE
+══════════════════════════════════════════════════════════ */
+.db-health-row {
+    margin-top: 1.2rem; display: flex; flex-direction: column; gap: 6px;
+}
+.db-health-bar-wrap {
+    height: 4px; background: rgba(0,0,0,0.06); border-radius: 100px; overflow: hidden;
+}
+.db-health-bar {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, #10b981, #059669);
+    border-radius: 100px;
+    transition: width 1.8s cubic-bezier(0.16,1,0.3,1);
+}
+.db-health-label {
+    display: flex; align-items: baseline; gap: 4px;
+    font-size: 0.72rem; font-weight: 600;
+}
+.db-health-num { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; font-weight: 700; }
+.db-health-slash { color: var(--dim); font-weight: 400; }
+.db-health-txt { color: var(--muted); font-weight: 500; }
+
+/* ══════════════════════════════════════════════════════════
+   ACTIVITY FEED
+══════════════════════════════════════════════════════════ */
+.db-c-activity { grid-column: span 12; }
+
+.db-act-count {
+    font-size: 0.66rem; font-weight: 700; padding: 4px 11px; border-radius: 100px;
+    background: rgba(0,0,0,0.04); color: var(--muted);
+    border: 1px solid rgba(0,0,0,0.07);
+}
+
+.db-act-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 0.35rem;
+}
+
+.db-act-row {
+    display: flex; align-items: center; gap: 0.85rem;
+    padding: 0.75rem 0.9rem; border-radius: 12px;
+    border: 1px solid transparent;
+    transition: background .2s, border-color .2s;
+}
+.db-act-row:hover { background: var(--bg-soft); border-color: rgba(0,0,0,0.06); }
+
+.db-act-icon-wrap {
+    position: relative; width: 32px; height: 32px; flex-shrink: 0;
+    background: rgba(0,0,0,0.04); border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted);
+}
+.db-act-dot {
+    position: absolute; top: -2px; right: -2px;
+    width: 7px; height: 7px; border-radius: 50%;
+    border: 1.5px solid #fff;
+}
+
+.db-act-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.db-act-title { font-size: 0.82rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.db-act-sub { font-size: 0.66rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.db-act-when { font-size: 0.62rem; color: var(--dim); font-family: 'JetBrains Mono', monospace; white-space: nowrap; flex-shrink: 0; }
+
+/* ══════════════════════════════════════════════════════════
    KEYFRAMES
 ══════════════════════════════════════════════════════════ */
 @keyframes led-pulse {
@@ -548,6 +811,9 @@ const data = {
     .db-c-rm      { grid-column: span 6; }
     .db-c-vault   { grid-column: span 6; }
 }
+@media (max-width: 1024px) {
+    .db-c-activity { grid-column: span 12; }
+}
 @media (max-width: 720px) {
     .db-root { padding-bottom: 5rem; }
     .db-wrap { padding-top: 2.4rem; }
@@ -561,6 +827,8 @@ const data = {
     .db-fin-num { font-size: 2.4rem; }
     .db-meta-row { flex-wrap: wrap; gap: 0.5rem; }
     .db-c-top { flex-wrap: wrap; }
+    .db-act-list { grid-template-columns: 1fr; }
+    .db-notif-strip { flex-wrap: wrap; }
 }
 </style>
 
@@ -599,8 +867,19 @@ document.addEventListener("DOMContentLoaded", () => {
     /* 4 ── Subtítulo */
     tl.to("#db-sub", { opacity: 1, y: 0, duration: 0.7 }, 0.7);
 
-    /* 5 ── Cards stagger */
-    const cards = ["#card-project","#card-fin","#card-svc","#card-rm","#card-vault"];
+    /* 5 ── Notification strip */
+    const notifStrip = document.getElementById("db-notif-panel");
+    if (notifStrip) {
+        gsap.set(notifStrip, { y: -8, opacity: 0 });
+        tl.to(notifStrip, { y: 0, opacity: 1, duration: 0.55 }, 0.1);
+        document.getElementById("db-notif-close")?.addEventListener("click", () => {
+            gsap.to(notifStrip, { opacity: 0, height: 0, marginBottom: 0, padding: 0, duration: 0.35, ease: "power2.in",
+                onComplete: () => notifStrip.remove() });
+        });
+    }
+
+    /* 6 ── Cards stagger */
+    const cards = ["#card-project","#card-fin","#card-svc","#card-rm","#card-vault","#card-activity"].filter(id => document.querySelector(id));
     gsap.set(cards, { y: 32, opacity: 0, scale: 0.985 });
     tl.to(cards, {
         y: 0, opacity: 1, scale: 1,
@@ -647,6 +926,25 @@ document.addEventListener("DOMContentLoaded", () => {
     /* 11 ── Vault rows */
     gsap.set(".db-vault-row", { opacity: 0, y: 8 });
     tl.to(".db-vault-row", { opacity: 1, y: 0, duration: 0.5, stagger: 0.06, ease: "power2.out" }, 0.95);
+
+    /* 12 ── Health score bar + counter */
+    const healthBar = document.getElementById("db-health-bar");
+    const healthNum = document.getElementById("db-health-num");
+    if (healthBar && healthNum) {
+        const score = parseInt(healthBar.style.getPropertyValue("--score") || "0");
+        tl.to(healthBar, { width: score + "%", duration: 1.6, ease: "expo.out" }, 1.1);
+        const obj = { val: 0 };
+        tl.to(obj, { val: score, duration: 1.6, ease: "expo.out",
+            onUpdate() { healthNum.textContent = String(Math.round(obj.val)); }
+        }, 1.1);
+    }
+
+    /* 13 ── Activity rows */
+    const actRows = document.querySelectorAll(".db-act-row");
+    if (actRows.length) {
+        gsap.set(actRows, { opacity: 0, y: 10 });
+        tl.to(actRows, { opacity: 1, y: 0, duration: 0.5, stagger: 0.045, ease: "expo.out" }, 1.0);
+    }
 
 });
 

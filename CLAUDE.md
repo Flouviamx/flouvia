@@ -36,18 +36,23 @@ src/pages/
   nosotros.astro           → /nosotros
 
   # Portal de cliente (rutas protegidas por Clerk)
-  dashboard.astro          → /portal/dashboard
-  facturacion.astro        → /portal/facturacion
-  boveda.astro             → /portal/boveda
-  roadmap.astro            → /portal/roadmap
-  soporte.astro            → /portal/soporte
-  calendario.astro         → /portal/calendario
+  dashboard.astro          → /dashboard
+  facturacion.astro        → /facturacion
+  boveda.astro             → /boveda
+  boveda-upload.astro      → /boveda-upload
+  roadmap.astro            → /roadmap
+  soporte.astro            → /soporte
+  calendario.astro         → /calendario
+  entorno.astro            → /entorno
+  privacidad-portal.astro  → /privacidad-portal
 
   # API routes
-  pages/api/boveda/upload.ts   → POST /api/boveda/upload
+  pages/api/boveda/upload.ts      → POST /api/boveda/upload
+  pages/api/client/deploys.ts     → GET  /api/client/deploys
+  pages/api/soporte/ticket.ts     → POST /api/soporte/ticket
 ```
 
-Las rutas `/en/*` son el espejo en inglés (el middleware detecta el prefijo).
+Las rutas `/en/*` son el espejo en inglés — cada página portal tiene su mirror en `src/pages/en/`.
 
 ---
 
@@ -72,6 +77,13 @@ Para texto inline que no vale la pena agregar a ui.ts, usar ternario directo:
 {lang === 'en' ? 'Our Work' : 'Nuestro Trabajo'}
 ```
 
+**Language switcher** — el switch ES/EN en la Navbar usa `Astro.url.pathname` para mantenerse en la misma página:
+```ts
+const pathname = Astro.url.pathname;
+const esUrl = lang === 'en' ? (pathname.replace(/^\/en/, '') || '/') : pathname;
+const enUrl = lang === 'es' ? '/en' + pathname : pathname;
+```
+
 ---
 
 ## Auth — Clerk (invitation-only)
@@ -86,7 +98,7 @@ Para texto inline que no vale la pena agregar a ui.ts, usar ternario directo:
 
 **Sign-out automático:** La página `acceso-restringido` detecta el query `?signout=1` y ejecuta `window.Clerk.signOut()` para limpiar la sesión zombie.
 
-**Rutas protegidas:** Todas las rutas root-level (`/dashboard`, `/facturacion`, `/boveda`, `/soporte`, `/roadmap`, `/calendario`, `/entorno`, `/boveda-upload`) + sus mirrors `/portal/*` y `/en/*`.
+**Rutas protegidas:** Todas las rutas root-level (`/dashboard`, `/facturacion`, `/boveda`, `/soporte`, `/roadmap`, `/calendario`, `/entorno`, `/boveda-upload`, `/privacidad-portal`) + sus mirrors `/en/*`.
 
 **Flow de redirects:**
 - No autenticado en ruta protegida → `/login` (o `/en/login`)
@@ -113,17 +125,188 @@ Para texto inline que no vale la pena agregar a ui.ts, usar ternario directo:
 | Tabla | Descripción |
 |-------|-------------|
 | `perfiles` | Un registro por cliente. PK: `email_cliente` |
-| `proyectos` | Proyectos activos del cliente |
+| `proyectos` | Proyectos activos del cliente. Incluye `vercel_project_id` |
 | `finanzas_config` | Config de facturación (1 por cliente) |
 | `facturas` | Historial de facturas |
 | `boveda_archivos` | Metadata de archivos en Storage |
 | `roadmap` | Hitos del proyecto |
+| `tickets` | Tickets de soporte del portal (ver SQL abajo) |
+| `notificaciones` | Notificaciones para el cliente (ver SQL abajo) |
+
+**SQL — tabla tickets:**
+```sql
+create table tickets (
+  id          uuid        default gen_random_uuid() primary key,
+  email_cliente text      not null,
+  ticket_ref  text        not null,
+  title       text        not null,
+  category    text        not null default 'general',
+  descripcion text,
+  priority    text        not null default 'normal',
+  status      text        not null default 'open',
+  created_at  timestamptz default now()
+);
+create index on tickets(email_cliente, created_at desc);
+```
+
+**SQL — tabla notificaciones:**
+```sql
+create table notificaciones (
+  id          uuid        default gen_random_uuid() primary key,
+  email_cliente text      not null,
+  tipo        text        not null,  -- 'deploy'|'milestone'|'invoice'|'announcement'|'alert'
+  titulo      text        not null,
+  mensaje     text,
+  leida       boolean     default false,
+  created_at  timestamptz default now()
+);
+create index on notificaciones(email_cliente, leida, created_at desc);
+```
 
 **Patrón RLS:** Todas las tablas usan `email_cliente = current_setting('app.email_cliente', TRUE)`. El backend setea este valor antes de cada query.
 
 **Storage:** Bucket `boveda` — los archivos se guardan en `{email}/{timestamp}_{filename}`. Se sirven con signed URLs generadas en tiempo de lectura (no URLs públicas).
 
 **Schema completo:** `supabase/schema.sql`
+
+---
+
+## Integraciones externas
+
+### Vercel API
+- **Endpoint:** `GET https://api.vercel.com/v6/deployments?projectId={id}&limit=8`
+- **Auth:** `Authorization: Bearer ${VERCEL_TOKEN}`
+- **Scope del token:** Full Account o Projects — ambos funcionan
+- **Usado en:** `EntornoUI.astro` (deploy history) y `DashboardUI.astro` (activity feed)
+- **Pattern:** siempre `AbortSignal.timeout(5000)` — nunca bloquear el render
+- **Fallback:** array vacío si timeout o error
+
+### Google PageSpeed Insights (PSI)
+- **Endpoint:** `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url={url}&strategy=mobile&category=performance`
+- **Auth:** ninguna — API pública gratuita
+- **Datos:** CrUX p75 field data para LCP, CLS, INP (Core Web Vitals reales)
+- **Timeout:** 7s — PSI puede ser lento
+- **Usado en:** `EntornoUI.astro`
+
+### Make (webhooks)
+- **Webhook URL:** `https://hook.us2.make.com/yxof110p9eswdp0eayr7qihrqx6778dd`
+- **Trigger:** formulario de soporte enviado
+- **Flow:** form → `POST /api/soporte/ticket` → Supabase + Make en paralelo
+- **Make puede escribir a Supabase** para actualizar status de tickets o publicar notificaciones
+
+### Stripe
+- **Integración:** solo Customer Portal (URL en `finanzas_config.stripe_portal_url`)
+- **Card data:** `card_brand`, `card_last4`, `card_exp` en `finanzas_config`
+- **No hay Stripe SDK** en el proyecto — todo es link externo al portal de Stripe
+
+---
+
+## Portal — componentes compartidos
+
+### `PortalHeader.astro`
+Componente unificado de cabecera para todas las páginas del portal.
+
+**Props:**
+```ts
+interface Props {
+  title?: string;      // opcional — CalendarioUI no lo usa
+  titleEd?: string;    // parte editorial (Instrument Serif italic)
+  subtitle?: string;
+  backHref: string;
+  lang: 'es' | 'en';
+}
+```
+
+**Slots nombrados:**
+- `topbar-left` — contenido extra izquierda del topbar (ej: date strip en Soporte)
+- `topbar-right` — contenido extra derecha del topbar (ej: refresh button en Entorno)
+- `title-right` — elemento alineado a la derecha del título (ej: sprint count badge en Roadmap, upload button en Bóveda)
+
+**Usado en:** BovedaUI, BovedaUploadUI, CalendarioUI, EntornoUI, FacturacionUI, RoadmapUI, SoporteUI, PrivacidadPortalUI
+
+**GSAP de entrada:** back-arrow (blur + x), badge (blur + x), título (y), subtítulo (y) — DOMContentLoaded, no ScrollTrigger.
+
+### Componentes del portal
+
+| Archivo | Página | Notas clave |
+|---------|--------|-------------|
+| `DashboardUI.astro` | /dashboard | Bento grid. Fetch paralelo: proyecto, finanzas, roadmap, archivos, tickets, notificaciones, deploys Vercel. Health score computado server-side. Activity feed cross-portal. |
+| `EntornoUI.astro` | /entorno | Vercel deploys reales + PSI vitals reales + activity log derivado de deploys. Refresh button en `topbar-right`. |
+| `BovedaUI.astro` | /boveda | Signed URLs (1h expiry). Upload button en `title-right`. |
+| `BovedaUploadUI.astro` | /boveda-upload | `backHref` va a `/boveda`, no `/dashboard`. |
+| `FacturacionUI.astro` | /facturacion | Money counter GSAP. Stripe Portal link. |
+| `RoadmapUI.astro` | /roadmap | Sprint count badge en `title-right`. |
+| `SoporteUI.astro` | /soporte | Tickets leídos de Supabase (tabla `tickets`). Form → `/api/soporte/ticket`. Date strip en `topbar-left`. |
+| `CalendarioUI.astro` | /calendario | Calendly embed. PortalHeader sin `title` (solo topbar). |
+| `PrivacidadPortalUI.astro` | /privacidad-portal | Política de datos del portal. Auth-protected. Link desde PortalFooter. |
+
+---
+
+## API Routes del portal
+
+### `POST /api/soporte/ticket`
+Guarda ticket en Supabase y reenvía a Make.
+- Auth: `locals.auth()` — requiere sesión Clerk
+- Body: `{ category, subject, description, priority }`
+- Genera `ticket_ref` (TK-001, TK-002…) basado en count del cliente
+- Forwards a Make webhook (fire-and-forget, 8s timeout)
+
+### `GET /api/client/deploys`
+Obtiene deployments reales de Vercel para el cliente autenticado.
+- Lee `vercel_project_id` de tabla `proyectos`
+- Llama a Vercel API con `VERCEL_TOKEN`
+- Devuelve: `{ deploys: [{ sha, msg, branch, env, status, url, duration, when }] }`
+
+### `POST /api/boveda/upload`
+Upload de archivos al bucket `boveda` de Supabase Storage.
+- Rate limit: 10 subidas/minuto por usuario (in-memory)
+
+---
+
+## Variables de entorno (.env)
+
+```
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=    # SSR only — nunca al browser
+PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+CLERK_WEBHOOK_SECRET=
+VERCEL_TOKEN=                 # Para leer deployments del proyecto del cliente
+```
+
+---
+
+## Health Score (dashboard)
+
+Computed en `DashboardUI.astro` server-side. Rango 0–100:
+
+| Métrica | Puntos |
+|---------|--------|
+| Uptime ≥ 99.9% | 30 |
+| Uptime ≥ 99.0% | 20 |
+| Uptime < 99.0% | 10 |
+| Progreso ≥ 75% | 25 |
+| Progreso ≥ 50% | 18 |
+| Progreso ≥ 25% | 10 |
+| Progreso < 25% | 5 |
+| Último deploy exitoso (READY) | 25 |
+| Deploys existentes pero fallo | 10 |
+| Sin deploys registrados | 15 |
+| 0 tickets abiertos | 20 |
+| ≤ 2 tickets abiertos | 12 |
+| > 2 tickets abiertos | 5 |
+
+Color: verde (#10b981) ≥ 85, ámbar (#f59e0b) ≥ 65, rojo (#ef4444) < 65.
+
+---
+
+## Activity Feed (dashboard)
+
+Mezcla eventos de 3 fuentes, ordenados por fecha descendente, máx 7 items:
+- **Deploys** (Vercel API) — dot verde/rojo/ámbar según estado
+- **Tickets** (Supabase `tickets`) — dot azul/verde/ámbar según status
+- **Uploads** (Supabase `boveda_archivos`) — dot púrpura
 
 ---
 
@@ -141,18 +324,6 @@ Para texto inline que no vale la pena agregar a ui.ts, usar ternario directo:
 
 1. **CORS:** Solo permite origins `flouvia.com`, `www.flouvia.com`, `os.flouvia.com`
 2. **Clerk:** Protege rutas `/portal/*` y `/en/portal/*`
-
----
-
-## Variables de entorno (.env)
-
-```
-SUPABASE_URL=
-SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=    # SSR only — nunca al browser
-PUBLIC_CLERK_PUBLISHABLE_KEY=
-CLERK_SECRET_KEY=
-```
 
 ---
 
@@ -179,14 +350,16 @@ Sin `immediateRender: false`, GSAP aplica el estado `from` (opacity:0) inmediata
 - Siempre `once: true` en ScrollTrigger para que no re-anime al hacer scroll back
 - `window.addEventListener('load', () => setTimeout(() => ScrollTrigger.refresh(), 120))` — recalcular posiciones después de que cargan fuentes e imágenes
 
-**Pattern para secciones:**
+**Pattern portal — entrance timeline (sin ScrollTrigger):**
 ```ts
-// Timelines por sección — orquestadas, no simultáneas
-const tl = gsap.timeline({
-  scrollTrigger: { trigger: '.section', start: 'top 80%', once: true },
+// Patrón estándar de todas las páginas del portal
+document.addEventListener('DOMContentLoaded', () => {
+  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+  // PortalHeader se anima solo (tiene su propio script)
+  // Cards: set initial state → animate
+  gsap.set('.os-card', { y: 32, opacity: 0, scale: 0.985 });
+  tl.to('.os-card', { y: 0, opacity: 1, scale: 1, duration: 1.0, stagger: 0.07 }, 0.5);
 });
-tl.to(element1, { ...ir, opacity: 1, y: 0, duration: 1.2, ease: 'expo.out' }, 0);
-tl.to(element2, { ...ir, opacity: 1, y: 0, duration: 1.1, ease: 'expo.out' }, 0.1);
 ```
 
 **Section headings — SplitText line-mask (Apple-style):**
@@ -196,22 +369,17 @@ gsap.set(split.words, { yPercent: 115 });
 gsap.to(split.words, { ...ir, yPercent: 0, duration: 1.4, ease: 'expo.out', stagger: { amount: 0.45 } });
 ```
 
-**Pattern de revelación coreografiada (per-element timeline):**
-Para tarjetas/secciones con varios elementos hijos, no animar todos juntos. Crear un timeline por elemento padre y secuenciar los hijos con `'-=0.X'` overlap o tiempos absolutos. Ej: card aparece → categoría desliza → número aparece → logo aterriza → nombre fade.
-
 **Regla crítica — `clearProps` después de animaciones de entrada:**
 Cuando GSAP anima un elemento de `opacity:0 → 1` (o cualquier propiedad CSS que luego controla una clase), el inline style que deja GSAP tiene más especificidad que las reglas de clase. Esto rompe estados CSS como `.scrolled`, `.is-active`, etc.
-Solución: limpiar los props inline al terminar la animación de entrada:
 ```ts
 tl.to(element, {
   opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 1.1,
   onComplete: () => gsap.set(element, { clearProps: 'opacity,transform,filter' }),
 }, 0.45);
 ```
-Aplicar a **todos** los elementos cuyo estado visual cambia después vía clase CSS (navbar logo, pills, items del right side, etc.).
 
 **Ken Burns — NO usar `yPercent` con scrub:**
-`yPercent: -8` con scrub en imágenes de carrusel mueve la imagen hacia arriba conforme scrollea, revelando el fondo del contenedor en el borde inferior. Solo usar `scale` para Ken Burns, sin desplazamiento vertical scrubbed.
+Solo usar `scale` para Ken Burns, sin desplazamiento vertical scrubbed.
 
 ---
 
@@ -345,6 +513,7 @@ contactBtn.addEventListener('mouseleave', () => {
 | Sección entera (ej. protocolo) se encima al cargar, se arregla con refresh | Patrón `gsap.set(opacity:0) + gsap.to(opacity:1)` + ScrollTrigger calcula posiciones antes de fuentes/imgs | (a) Convertir a `gsap.from(..., { immediateRender:false })` para que el CSS quede visible si no dispara. (b) `ScrollTrigger.refresh()` después de `Promise.all([fonts.ready, window.load])` |
 | Hover/`is-active` no aplica `transform` después de la animación de entrada | GSAP deja inline `transform: matrix(...)` que tiene mayor especificidad que las pseudo-clases CSS | `onComplete: () => gsap.set(targets, { clearProps: 'opacity,transform' })` en el timeline |
 | `Clerk.signOut()` redirige al login en vez de quedarse en la página | Sin callback, el SDK navega a `signInUrl` automáticamente | Pasar callback como primer argumento: `Clerk.signOut(() => { /* limpiar */ })`. El callback inhibe la navegación default. |
+| `.throwOnError().catch()` falla en TypeScript | `throwOnError()` devuelve `PromiseLike`, no `Promise` — no tiene `.catch()` | Usar la query normal (sin `throwOnError`) — ya devuelve `{ data, error }` y `data` es null si hay error |
 
 ---
 
@@ -358,6 +527,8 @@ contactBtn.addEventListener('mouseleave', () => {
 | `src/components/PlantillaServicios.astro` | Template para páginas de servicio individual |
 | `src/components/PlantillaCasos.astro` | Template para casos de estudio |
 | `src/layouts/PortalLayout.astro` | Layout del portal de cliente |
+| `src/components/portal/PortalHeader.astro` | Header compartido de todas las páginas del portal |
+| `src/components/PortalFooter.astro` | Footer del portal — link a `/privacidad-portal` |
 
 ---
 
