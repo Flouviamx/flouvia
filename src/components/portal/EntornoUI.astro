@@ -138,15 +138,40 @@ const regions = [
   { name: 'South Am',  code: 'gru1', latency: 124, status: 'healthy' },
 ];
 
-// Mock activity log
-const activity = [
-  { time: '14:32:08', type: 'deploy', text: lang === 'en' ? 'Deployment ready · build cached'      : 'Despliegue listo · build cacheado',    color: 'green' },
-  { time: '14:31:42', type: 'build',  text: lang === 'en' ? 'Build completed in 24.6s'             : 'Build completado en 24.6s',            color: 'blue'  },
-  { time: '14:31:18', type: 'commit', text: lang === 'en' ? 'Pushed to main · 4b28187'             : 'Push a main · 4b28187',                color: 'muted' },
-  { time: '13:45:00', type: 'health', text: lang === 'en' ? 'Health check: all systems operational': 'Health check: sistemas operativos',     color: 'green' },
-  { time: '12:18:11', type: 'cache',  text: lang === 'en' ? 'Edge cache invalidated · 4 regions'   : 'Cache de edge invalidado · 4 regiones', color: 'blue'  },
-  { time: '11:02:55', type: 'deploy', text: lang === 'en' ? 'Production rollout 100%'              : 'Rollout a producción 100%',            color: 'green' },
-];
+// Activity log derivado de deploys reales
+function fmtTime(ms: number): string {
+  return new Date(ms).toLocaleTimeString(lang === 'en' ? 'en-US' : 'es-MX', {
+    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+  });
+}
+
+const activity = deploys.slice(0, 4).flatMap((d: any) => {
+  const entries: any[] = [];
+  if (d.sha) entries.push({
+    time:  fmtTime(d.when),
+    type:  'commit',
+    text:  `${lang === 'en' ? 'Push to' : 'Push a'} ${d.branch} · ${d.sha}`,
+    color: 'muted',
+  });
+  entries.push({
+    time:  fmtTime(d.when + 10000),
+    type:  d.status === 'ERROR' ? 'error' : 'deploy',
+    text:  d.status === 'READY'
+      ? `${lang === 'en' ? 'Deployment ready' : 'Despliegue listo'}${d.duration ? ` · ${d.duration}s` : ''}`
+      : d.status === 'ERROR'
+        ? (lang === 'en' ? 'Build failed · check logs' : 'Build fallido · revisa logs')
+        : (lang === 'en' ? 'Build in progress...' : 'Build en progreso...'),
+    color: d.status === 'READY' ? 'green' : d.status === 'ERROR' ? 'red' : 'amber',
+  });
+  return entries;
+}).slice(0, 8);
+
+// Fallback si no hay deploys reales
+if (!activity.length) {
+  activity.push(
+    { time: '--:--:--', type: 'health', text: lang === 'en' ? 'No deploy history found' : 'Sin historial de deploys', color: 'muted' }
+  );
+}
 ---
 
 <div class="env-root">
@@ -154,9 +179,8 @@ const activity = [
 
     <!-- TOPBAR -->
     <div class="env-topbar" id="env-topbar">
-      <a href={lang === 'en' ? '/en/dashboard' : '/dashboard'} class="env-back">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><polyline points="15 18 9 12 15 6"/></svg>
-        {t('entorno.back')}
+      <a href={lang === 'en' ? '/en/dashboard' : '/dashboard'} class="env-back" aria-label="Dashboard">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><polyline points="15 18 9 12 15 6"/></svg>
       </a>
       <div class="env-badge-row">
         <button class="env-refresh-btn" id="env-refresh">
@@ -172,18 +196,9 @@ const activity = [
 
     <!-- HEADER -->
     <div class="env-header">
-      <span class="env-eyebrow" id="env-eyebrow">
-        <span class="env-dot-line"></span>
-        {t('entorno.eyebrow')}
-      </span>
-      <h1 class="env-title" id="env-title">
-        <span class="env-title-1">{t('entorno.title')}</span>
-        <em class="env-title-2">{t('entorno.title_ed')}</em>
-      </h1>
+      <h1 class="env-title" id="env-title">{t('entorno.title')} <em class="env-title-ed">{t('entorno.title_ed')}</em></h1>
       <p class="env-sub" id="env-sub">{t('entorno.subtitle')}</p>
     </div>
-
-    <div class="env-rule" id="env-rule"></div>
 
     <!-- ROW 1: Live Preview + Status -->
     <div class="env-grid">
@@ -454,11 +469,14 @@ const activity = [
   margin-bottom: 2.4rem; opacity: 0;
 }
 .env-back {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 0.82rem; font-weight: 600; color: var(--muted);
-  text-decoration: none; transition: color .2s, transform .3s var(--ease);
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.07);
+  color: var(--muted); text-decoration: none;
+  transition: background .2s, color .2s, transform .3s var(--ease);
+  flex-shrink: 0;
 }
-.env-back:hover { color: var(--text); transform: translateX(-3px); }
+.env-back:hover { background: rgba(0,0,0,0.08); color: var(--text); transform: translateX(-2px); }
 
 .env-badge-row { display: flex; align-items: center; gap: 10px; }
 
@@ -489,35 +507,20 @@ const activity = [
 }
 
 /* ── HEADER ── */
-.env-header { margin-bottom: 0.6rem; }
-.env-eyebrow {
-  display: inline-flex; align-items: center; gap: 10px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.6rem; font-weight: 700;
-  letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--muted); margin-bottom: 1.1rem; opacity: 0;
-}
-.env-dot-line {
-  display: inline-block; width: 24px; height: 1px;
-  background: var(--muted); transform-origin: left;
-}
+.env-header { margin-bottom: 2rem; }
 .env-title {
-  font-size: clamp(2.6rem, 5.4vw, 4.4rem);
-  font-weight: 600; letter-spacing: -0.045em;
-  line-height: 1.04; margin: 0 0 0.95rem;
-  display: flex; flex-direction: column; gap: 0.05em;
-  overflow: hidden;
+  font-size: clamp(2.2rem, 4.4vw, 3.6rem);
+  font-weight: 600; letter-spacing: -0.04em;
+  line-height: 1.04; margin: 0 0 0.6rem; opacity: 0;
 }
-.env-title-1 { display: block; opacity: 0; }
-.env-title-2 { font-style: italic; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; color: var(--muted); opacity: 0; letter-spacing: -0.02em; font-size: 1.05em; }
+.env-title-ed {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic; font-weight: 400;
+  color: var(--muted); letter-spacing: -0.02em;
+}
 .env-sub {
   font-size: 1rem; color: var(--muted); margin: 0;
   font-weight: 400; opacity: 0; max-width: 520px; line-height: 1.5;
-}
-.env-rule {
-  height: 1px; margin: 1.6rem 0 1.8rem;
-  background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent);
-  transform: scaleX(0); transform-origin: left;
 }
 
 /* ── GRID ── */
@@ -967,6 +970,8 @@ const activity = [
 }
 .env-log-tag-green { color: #34d399; }
 .env-log-tag-blue  { color: #60a5fa; }
+.env-log-tag-amber { color: #fbbf24; }
+.env-log-tag-red   { color: #f87171; }
 .env-log-tag-muted { color: rgba(255,255,255,0.5); }
 .env-log-text {
   color: rgba(255,255,255,0.78); flex: 1;
@@ -1016,25 +1021,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   tl.to("#env-topbar", { opacity: 1, duration: 0.6 }, 0);
 
-  // Eyebrow with line draw
-  gsap.set("#env-eyebrow", { y: 8 });
-  tl.to("#env-eyebrow", { opacity: 1, y: 0, duration: 0.55 }, 0.1);
-  gsap.set(".env-dot-line", { scaleX: 0 });
-  tl.to(".env-dot-line", { scaleX: 1, duration: 0.6, ease: "power3.out" }, 0.2);
-
-  // Title SplitText
-  const titleEl = document.querySelector(".env-title-1") as HTMLElement | null;
-  if (titleEl) {
-    const split = SplitText.create(titleEl, { type: "chars" });
-    gsap.set(split.chars, { opacity: 0, y: 28, rotateX: -45, transformOrigin: "center bottom" });
-    tl.to(split.chars, {
-      opacity: 1, y: 0, rotateX: 0,
-      duration: 0.7, stagger: 0.022, ease: "back.out(1.8)"
-    }, 0.25);
-  }
-  tl.to(".env-title-2", { opacity: 1, duration: 0.6 }, 0.6);
-  tl.to("#env-sub",     { opacity: 1, duration: 0.6 }, 0.7);
-  tl.to("#env-rule",    { scaleX: 1, duration: 1.0, ease: "power3.out" }, 0.55);
+  // Title
+  gsap.set("#env-title", { y: 18 });
+  tl.to("#env-title", { opacity: 1, y: 0, duration: 0.9, ease: "expo.out" }, 0.15);
+  tl.to("#env-sub",   { opacity: 1, duration: 0.6, ease: "expo.out" }, 0.35);
 
   /* ── ROW 1 CARDS ── */
   gsap.set(["#card-preview", "#card-status"], { y: 28, opacity: 0, scale: 0.985 });
