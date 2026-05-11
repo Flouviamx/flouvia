@@ -27,6 +27,32 @@ const t = useTranslations(lang);
     </div>
     <div class="ph-right">
       <slot name="topbar-right" />
+
+      <!-- Dark mode toggle -->
+      <button class="ph-theme-btn" id="ph-theme-btn" aria-label="Toggle dark mode" title="Dark mode">
+        <!-- Sun icon (visible in dark mode) -->
+        <svg class="ph-icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <!-- Moon icon (visible in light mode) -->
+        <svg class="ph-icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+
+      <!-- Push notifications bell -->
+      <button class="ph-bell-btn" id="ph-bell-btn" aria-label="Notifications" title="Enable notifications" style="display:none">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span class="ph-bell-dot" id="ph-bell-dot" style="display:none"></span>
+      </button>
+
       <div class="ph-badge">
         <span class="ph-led" aria-hidden="true"></span>
         <span>{t('portal.secure')}</span>
@@ -120,6 +146,47 @@ const t = useTranslations(lang);
   60%      { box-shadow: 0 0 0 5px rgba(16,185,129,0); }
 }
 
+/* ── Dark / Bell toggle buttons ── */
+.ph-theme-btn,
+.ph-bell-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.08);
+  color: rgba(0,0,0,0.45); cursor: pointer; flex-shrink: 0;
+  transition: background .25s, color .25s, border-color .25s;
+  position: relative;
+}
+.ph-theme-btn:hover,
+.ph-bell-btn:hover {
+  background: rgba(0,0,0,0.09); color: #0a0e1a; border-color: rgba(0,0,0,0.15);
+}
+
+/* Sun/moon icon swap */
+.ph-icon-sun  { display: none; }
+.ph-icon-moon { display: block; }
+:global(html[data-theme="dark"]) .ph-icon-sun  { display: block; }
+:global(html[data-theme="dark"]) .ph-icon-moon { display: none; }
+
+/* Dark mode: invert button colors */
+:global(html[data-theme="dark"]) .ph-theme-btn,
+:global(html[data-theme="dark"]) .ph-bell-btn {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.55);
+}
+:global(html[data-theme="dark"]) .ph-theme-btn:hover,
+:global(html[data-theme="dark"]) .ph-bell-btn:hover {
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.9);
+}
+
+.ph-bell-dot {
+  position: absolute; top: 4px; right: 4px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #ef4444; border: 1.5px solid #fff;
+}
+:global(html[data-theme="dark"]) .ph-bell-dot { border-color: #0d1826; }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 640px) {
   .ph-title { font-size: clamp(1.9rem, 9vw, 2.8rem); }
@@ -148,15 +215,93 @@ document.addEventListener('DOMContentLoaded', () => {
   if (sub)   gsap.set(sub,   { y: 14, opacity: 0 });
 
   // Animación escalonada
-  tl.to(topbar, { opacity: 1, duration: 0.01 }, 0); // hace visible el contenedor sin animar
+  tl.to(topbar, { opacity: 1, duration: 0.01 }, 0);
   tl.to(back,   { x: 0, scale: 1, opacity: 1, filter: 'blur(0px)', duration: 0.65 }, 0.05);
   tl.to('.ph-badge', { x: 0, opacity: 1, filter: 'blur(0px)', duration: 0.65 }, 0.12);
 
   if (title) {
     tl.to(title, { y: 0, opacity: 1, duration: 1.0 }, 0.22);
-    // clearProps para que CSS posterior (hover, etc.) funcione sin conflicto
     tl.call(() => gsap.set(title, { clearProps: 'transform,opacity' }), [], '+=0.01');
   }
   if (sub) tl.to(sub, { y: 0, opacity: 1, duration: 0.75 }, 0.38);
+
+  // ── Dark mode toggle ──────────────────────────────────
+  const themeBtn = document.getElementById('ph-theme-btn');
+  themeBtn?.addEventListener('click', () => {
+    const html    = document.getElementById('html-root') as HTMLElement;
+    const isDark  = html.getAttribute('data-theme') === 'dark';
+    const next    = isDark ? 'light' : 'dark';
+    if (next === 'dark') html.setAttribute('data-theme', 'dark');
+    else                  html.removeAttribute('data-theme');
+    try { localStorage.setItem('flouvia-theme', next); } catch(e) {}
+
+    // Micro-animation en el botón
+    gsap.fromTo(themeBtn, { scale: 0.8, rotate: -30 }, { scale: 1, rotate: 0, duration: 0.4, ease: 'back.out(2)' });
+  });
+
+  // ── Push notifications bell ───────────────────────────
+  const bellBtn  = document.getElementById('ph-bell-btn')  as HTMLButtonElement | null;
+  const bellDot  = document.getElementById('ph-bell-dot');
+  const VAPID_KEY = (window as any).__VAPID_KEY__;
+
+  async function initPush() {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+
+    // Register SW
+    const reg = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+
+    const perm = Notification.permission;
+    if (perm === 'denied') return; // user blocked it — hide bell
+
+    // Show bell if push not yet subscribed
+    const existing = await reg.pushManager.getSubscription();
+    if (!existing && bellBtn) {
+      bellBtn.style.display = 'flex';
+    } else if (existing && bellDot) {
+      // Already subscribed — show active dot
+      if (bellBtn) bellBtn.style.display = 'flex';
+      bellDot.style.display = 'block';
+    }
+
+    bellBtn?.addEventListener('click', async () => {
+      const sub = await reg.pushManager.getSubscription();
+      if (sub) {
+        // Already subscribed → unsubscribe
+        await sub.unsubscribe();
+        await fetch('/api/push/subscribe', { method: 'DELETE', body: JSON.stringify({ endpoint: sub.endpoint }), headers: { 'Content-Type': 'application/json' } });
+        if (bellDot) bellDot.style.display = 'none';
+        gsap.fromTo(bellBtn, { scale: 0.85 }, { scale: 1, duration: 0.35, ease: 'back.out(2)' });
+        return;
+      }
+
+      // Request permission + subscribe
+      const result = await Notification.requestPermission();
+      if (result !== 'granted') { bellBtn.style.display = 'none'; return; }
+
+      const vapidKey = VAPID_KEY || '';
+      const newSub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(vapidKey),
+      });
+
+      await fetch('/api/push/subscribe', {
+        method: 'POST',
+        body: JSON.stringify(newSub.toJSON()),
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (bellDot) bellDot.style.display = 'block';
+      gsap.fromTo(bellBtn, { scale: 0.75, rotate: -20 }, { scale: 1, rotate: 0, duration: 0.5, ease: 'back.out(2.5)' });
+    });
+  }
+
+  function urlBase64ToUint8Array(base64: string): Uint8Array {
+    const padding = '='.repeat((4 - base64.length % 4) % 4);
+    const b64 = (base64 + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const raw = atob(b64);
+    return Uint8Array.from([...raw].map((c) => c.charCodeAt(0)));
+  }
+
+  initPush().catch(() => {});
 });
 </script>

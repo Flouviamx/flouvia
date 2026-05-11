@@ -1,0 +1,280 @@
+---
+// src/components/portal/ChangelogUI.astro
+// SQL:
+//   create table changelog (
+//     id          uuid    default gen_random_uuid() primary key,
+//     version     text    not null,
+//     title       text    not null,
+//     title_en    text,
+//     description text,
+//     description_en text,
+//     tags        text[], -- ['deploy','feature','fix','perf','design']
+//     published   boolean default true,
+//     published_at timestamptz default now()
+//   );
+//   create index on changelog(published_at desc);
+
+import { supabase } from '../../lib/supabase';
+import PortalHeader from './PortalHeader.astro';
+
+interface Props { lang: 'es' | 'en'; }
+const { lang } = Astro.props;
+
+const { data: entries } = await supabase
+  .from('changelog')
+  .select('*')
+  .eq('published', true)
+  .order('published_at', { ascending: false })
+  .limit(40);
+
+const rows = entries ?? [];
+
+const TAG_LABELS: Record<string, { es: string; en: string; color: string }> = {
+  deploy:  { es: 'Deploy',       en: 'Deploy',      color: '#10b981' },
+  feature: { es: 'Nueva función',en: 'Feature',     color: '#0055cc' },
+  fix:     { es: 'Corrección',   en: 'Fix',         color: '#ef4444' },
+  perf:    { es: 'Rendimiento',  en: 'Performance', color: '#f59e0b' },
+  design:  { es: 'Diseño',       en: 'Design',      color: '#8b5cf6' },
+  infra:   { es: 'Infraestructura', en: 'Infra',    color: '#64748b' },
+};
+
+function fmtDate(iso: string) {
+  return new Date(iso).toLocaleDateString(lang === 'en' ? 'en-US' : 'es-MX', {
+    day: 'numeric', month: 'long', year: 'numeric',
+  });
+}
+
+const t = {
+  title:    lang === 'en' ? 'Project'    : 'Proyecto',
+  titleEd:  lang === 'en' ? 'Changelog'  : 'Changelog',
+  subtitle: lang === 'en'
+    ? 'All updates, improvements and deployments to your project.'
+    : 'Todos los cambios, mejoras y despliegues de tu proyecto.',
+  empty: lang === 'en'
+    ? 'No entries yet. Updates will appear here.'
+    : 'Aún no hay entradas. Los cambios aparecerán aquí.',
+  updates: lang === 'en' ? 'updates' : 'actualizaciones',
+  back: lang === 'en' ? '/en/dashboard' : '/dashboard',
+};
+---
+
+<div class="cl-root">
+  <div class="cl-wrap">
+
+    <PortalHeader
+      title={t.title}
+      titleEd={t.titleEd}
+      subtitle={t.subtitle}
+      backHref={t.back}
+      lang={lang}
+    >
+      <div slot="title-right" class="cl-count-badge">
+        <span class="cl-count-num">{rows.length}</span>
+        <span class="cl-count-lbl">{t.updates}</span>
+      </div>
+    </PortalHeader>
+
+    {rows.length === 0 ? (
+      <div class="cl-empty">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <p>{t.empty}</p>
+      </div>
+    ) : (
+      <div class="cl-timeline" id="cl-timeline">
+        {rows.map((entry, i) => {
+          const tags: string[] = entry.tags ?? [];
+          const title   = lang === 'en' && entry.title_en   ? entry.title_en   : entry.title;
+          const desc    = lang === 'en' && entry.description_en ? entry.description_en : entry.description;
+          const isFirst = i === 0;
+
+          return (
+            <div class={`cl-entry ${isFirst ? 'cl-entry-latest' : ''}`}>
+              <!-- Track -->
+              <div class="cl-track">
+                <div class={`cl-node ${isFirst ? 'cl-node-active' : ''}`}></div>
+                {i < rows.length - 1 && <div class="cl-line"></div>}
+              </div>
+
+              <!-- Card -->
+              <div class="cl-card">
+                <div class="cl-card-top">
+                  <div class="cl-meta">
+                    <span class="cl-version">{entry.version}</span>
+                    <span class="cl-dot-sep">·</span>
+                    <time class="cl-date">{fmtDate(entry.published_at)}</time>
+                    {isFirst && (
+                      <span class="cl-latest-chip">
+                        {lang === 'en' ? 'Latest' : 'Más reciente'}
+                      </span>
+                    )}
+                  </div>
+                  {tags.length > 0 && (
+                    <div class="cl-tags">
+                      {tags.map((tag) => {
+                        const info = TAG_LABELS[tag] ?? { es: tag, en: tag, color: '#64748b' };
+                        return (
+                          <span class="cl-tag" style={`--tag-color:${info.color}`}>
+                            {lang === 'en' ? info.en : info.es}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                <h2 class="cl-title">{title}</h2>
+                {desc && <p class="cl-desc">{desc}</p>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    )}
+
+  </div>
+</div>
+
+<style>
+/* ── Root ── */
+.cl-root {
+  background: #ffffff;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+  padding-bottom: 8rem;
+}
+.cl-wrap { max-width: 860px; margin: 0 auto; padding: 3rem 5% 0; }
+
+/* ── Count badge ── */
+.cl-count-badge {
+  display: flex; align-items: baseline; gap: 5px;
+  background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.07);
+  padding: 6px 14px; border-radius: 100px;
+}
+.cl-count-num { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 700; color: #0a0e1a; }
+.cl-count-lbl { font-size: 0.66rem; font-weight: 600; color: #6e7d96; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* ── Empty ── */
+.cl-empty {
+  text-align: center; padding: 5rem 2rem;
+  color: #9aa5b4; display: flex; flex-direction: column; align-items: center; gap: 1rem;
+}
+.cl-empty p { font-size: 0.95rem; margin: 0; }
+
+/* ── Timeline ── */
+.cl-timeline { display: flex; flex-direction: column; }
+
+.cl-entry {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 0 1.5rem;
+  padding-bottom: 2rem;
+}
+.cl-entry:last-child { padding-bottom: 0; }
+
+/* Track */
+.cl-track { display: flex; flex-direction: column; align-items: center; padding-top: 4px; }
+.cl-node {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+  border: 2px solid rgba(0,0,0,0.15); background: #ffffff;
+  transition: all .3s;
+}
+.cl-node-active {
+  background: #0a0e1a; border-color: #0a0e1a;
+  box-shadow: 0 0 0 4px rgba(10,14,26,0.08);
+  animation: cl-pulse 2.5s ease-in-out infinite;
+}
+.cl-line {
+  flex-grow: 1; width: 1px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.04));
+  margin-top: 6px; min-height: 20px;
+}
+
+/* Card */
+.cl-card {
+  background: #ffffff; border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 18px; padding: 1.5rem 1.8rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.03);
+  transition: box-shadow .3s, border-color .3s, transform .3s cubic-bezier(.16,1,.3,1);
+  will-change: transform;
+}
+.cl-card:hover { box-shadow: 0 2px 6px rgba(0,0,0,0.05), 0 12px 28px rgba(0,0,0,0.07); border-color: rgba(0,0,0,0.11); transform: translateY(-2px); }
+.cl-entry-latest .cl-card { border-color: rgba(0,0,0,0.1); }
+
+.cl-card-top {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 0.6rem; margin-bottom: 0.9rem;
+}
+.cl-meta {
+  display: flex; align-items: center; gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.cl-version {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; font-weight: 700; color: #0a0e1a;
+  background: rgba(0,0,0,0.05); padding: 3px 9px; border-radius: 6px;
+  letter-spacing: 0.04em;
+}
+.cl-dot-sep { color: rgba(0,0,0,0.2); font-size: 0.65rem; }
+.cl-date { font-size: 0.74rem; color: #6e7d96; font-weight: 500; }
+.cl-latest-chip {
+  font-size: 0.58rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  background: rgba(16,185,129,0.09); color: #0d9966;
+  border: 1px solid rgba(16,185,129,0.2); padding: 2px 9px; border-radius: 100px;
+}
+
+/* Tags */
+.cl-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.cl-tag {
+  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 100px;
+  background: color-mix(in srgb, var(--tag-color) 10%, transparent);
+  color: var(--tag-color);
+  border: 1px solid color-mix(in srgb, var(--tag-color) 22%, transparent);
+}
+
+.cl-title {
+  font-size: clamp(1.1rem, 2vw, 1.4rem); font-weight: 600;
+  letter-spacing: -0.025em; color: #0a0e1a; margin: 0 0 0.6rem;
+  line-height: 1.3;
+}
+.cl-desc {
+  font-size: 0.9rem; color: #6e7d96; margin: 0; line-height: 1.65;
+}
+
+/* ── Keyframes ── */
+@keyframes cl-pulse {
+  0%,100% { box-shadow: 0 0 0 4px rgba(10,14,26,.08); }
+  50%      { box-shadow: 0 0 0 7px rgba(10,14,26,.03); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .cl-wrap { padding-top: 2rem; }
+  .cl-card { padding: 1.2rem 1.3rem; }
+  .cl-entry { grid-template-columns: 22px 1fr; gap: 0 1rem; }
+  .cl-card-top { flex-direction: column; align-items: flex-start; }
+  .cl-title { font-size: 1.05rem; }
+}
+</style>
+
+<script>
+import { gsap } from 'gsap';
+document.addEventListener('DOMContentLoaded', () => {
+  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+
+  // Nodes
+  const nodes = document.querySelectorAll('.cl-node');
+  gsap.set(nodes, { scale: 0, opacity: 0 });
+  tl.to(nodes, { scale: 1, opacity: 1, duration: 0.45, stagger: 0.06, ease: 'back.out(2)' }, 0.45);
+
+  // Lines
+  const lines = document.querySelectorAll('.cl-line');
+  gsap.set(lines, { scaleY: 0, transformOrigin: 'top' });
+  tl.to(lines, { scaleY: 1, duration: 0.5, stagger: 0.06, ease: 'power2.out' }, 0.55);
+
+  // Cards
+  const cards = document.querySelectorAll('.cl-card');
+  gsap.set(cards, { y: 20, opacity: 0 });
+  tl.to(cards, { y: 0, opacity: 1, duration: 0.7, stagger: 0.07 }, 0.4);
+});
+</script>
