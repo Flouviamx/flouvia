@@ -55,7 +55,6 @@ const isProtectedRoute = createRouteMatcher([
   '/entorno(.*)',
   '/boveda-upload(.*)',
   '/privacidad-portal(.*)',
-  '/changelog(.*)',
   // Portal-prefixed (rutas alternativas)
   '/portal/dashboard(.*)',
   '/portal/facturacion(.*)',
@@ -73,7 +72,6 @@ const isProtectedRoute = createRouteMatcher([
   '/en/entorno(.*)',
   '/en/boveda-upload(.*)',
   '/en/privacidad-portal(.*)',
-  '/en/changelog(.*)',
   '/en/portal/dashboard(.*)',
   '/en/portal/facturacion(.*)',
   '/en/portal/boveda(.*)',

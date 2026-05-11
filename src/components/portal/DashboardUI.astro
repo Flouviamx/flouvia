@@ -55,6 +55,7 @@ const [
   { data: archivos },
   { data: ticketRows },
   { data: notifRows },
+  { data: announcementRows },
 ] = await Promise.all([
   supabase.from('proyectos').select('*').eq('email_cliente', email).single(),
   supabase.from('finanzas_config').select('*').eq('email_cliente', email).single(),
@@ -62,6 +63,7 @@ const [
   supabase.from('boveda_archivos').select('nombre,tipo,created_at').eq('email_cliente', email).order('created_at', { ascending: false }).limit(3),
   supabase.from('tickets').select('ticket_ref,title,status,created_at').eq('email_cliente', email).order('created_at', { ascending: false }).limit(5),
   supabase.from('notificaciones').select('id,titulo,mensaje,tipo,leida,created_at').eq('email_cliente', email).order('created_at', { ascending: false }).limit(6),
+  supabase.from('announcements').select('id,titulo,mensaje,tipo').eq('activo', true).order('created_at', { ascending: false }).limit(3),
 ]);
 
 // Fetch Vercel deploys if project has an ID
@@ -233,6 +235,32 @@ const data = {
                 {t('portal.subtitle')} <strong>{data.project.deadline}</strong>
             </p>
         </header>
+
+        <!-- ═══════════════ ANNOUNCEMENTS ═══════════════ -->
+        {announcementRows && announcementRows.length > 0 && (
+          <div class="db-ann-wrap" id="db-ann-wrap">
+            {announcementRows.map((ann: any) => (
+              <div class="db-ann-card" id={`ann-${ann.id}`} data-ann-id={ann.id} data-ann-tipo={ann.tipo ?? 'info'}>
+                <div class="db-ann-icon" aria-hidden="true">
+                  {(ann.tipo === 'warning') ? (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  ) : (ann.tipo === 'success') ? (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  ) : (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  )}
+                </div>
+                <div class="db-ann-body">
+                  <span class="db-ann-title">{ann.titulo}</span>
+                  {ann.mensaje && <span class="db-ann-msg">{ann.mensaje}</span>}
+                </div>
+                <button class="db-ann-close" data-ann-close={ann.id} aria-label="Cerrar">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
 
         <!-- ═══════════════ GRID ═══════════════ -->
         <div class="db-grid">
@@ -790,6 +818,44 @@ const data = {
 .db-act-when { font-size: 0.62rem; color: var(--dim); font-family: 'JetBrains Mono', monospace; white-space: nowrap; flex-shrink: 0; }
 
 /* ══════════════════════════════════════════════════════════
+   ANNOUNCEMENTS
+══════════════════════════════════════════════════════════ */
+.db-ann-wrap {
+    display: flex; flex-direction: column; gap: 0.5rem;
+    margin-bottom: 1.8rem;
+}
+.db-ann-card {
+    display: flex; align-items: center; gap: 0.85rem;
+    padding: 0.8rem 1rem; border-radius: 14px;
+    border: 1px solid rgba(0,0,0,0.07);
+    background: rgba(0,0,0,0.02);
+    opacity: 0;
+    transition: background .2s, border-color .2s;
+}
+.db-ann-card[data-ann-tipo="warning"] {
+    background: rgba(245,158,11,0.05); border-color: rgba(245,158,11,0.2);
+}
+.db-ann-card[data-ann-tipo="success"] {
+    background: rgba(16,185,129,0.05); border-color: rgba(16,185,129,0.2);
+}
+.db-ann-icon {
+    width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+    background: var(--text); color: rgba(255,255,255,0.85);
+    display: flex; align-items: center; justify-content: center;
+}
+.db-ann-card[data-ann-tipo="warning"] .db-ann-icon { background: #d97706; }
+.db-ann-card[data-ann-tipo="success"] .db-ann-icon { background: #059669; }
+.db-ann-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.db-ann-title { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+.db-ann-msg { font-size: 0.78rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.db-ann-close {
+    background: none; border: none; cursor: pointer; color: var(--dim);
+    padding: 5px; border-radius: 6px; display: flex; flex-shrink: 0;
+    transition: color .2s, background .2s;
+}
+.db-ann-close:hover { color: var(--text); background: rgba(0,0,0,0.06); }
+
+/* ══════════════════════════════════════════════════════════
    KEYFRAMES
 ══════════════════════════════════════════════════════════ */
 @keyframes led-pulse {
@@ -866,6 +932,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* 4 ── Subtítulo */
     tl.to("#db-sub", { opacity: 1, y: 0, duration: 0.7 }, 0.7);
+
+    /* 4b ── Announcements (dismiss via localStorage) */
+    document.querySelectorAll<HTMLElement>(".db-ann-card").forEach((card, i) => {
+        const annId = card.dataset.annId;
+        if (annId && localStorage.getItem(`flouvia_ann_${annId}`)) {
+            card.remove();
+            return;
+        }
+        gsap.to(card, { opacity: 1, y: 0, duration: 0.5, delay: 0.05 * i, ease: "expo.out" });
+    });
+    const annWrap = document.getElementById("db-ann-wrap");
+    if (annWrap && annWrap.children.length === 0) annWrap.remove();
+
+    document.querySelectorAll<HTMLButtonElement>("[data-ann-close]").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const annId = btn.dataset.annClose;
+            const card = annId ? document.getElementById(`ann-${annId}`) : null;
+            if (!card) return;
+            if (annId) localStorage.setItem(`flouvia_ann_${annId}`, "1");
+            gsap.to(card, {
+                opacity: 0, height: 0, paddingTop: 0, paddingBottom: 0,
+                marginBottom: 0, duration: 0.35, ease: "power2.in",
+                onComplete: () => {
+                    card.remove();
+                    if (annWrap && annWrap.children.length === 0) annWrap.remove();
+                },
+            });
+        });
+    });
 
     /* 5 ── Notification strip */
     const notifStrip = document.getElementById("db-notif-panel");

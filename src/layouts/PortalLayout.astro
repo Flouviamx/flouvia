@@ -32,10 +32,6 @@ const { title } = Astro.props;
 
 		<title>{title}</title>
 
-		<!-- Inyectar VAPID public key para push notifications -->
-		<script is:inline define:vars={{ vapidKey: import.meta.env.PUBLIC_VAPID_KEY ?? '' }}>
-		  window.__VAPID_KEY__ = vapidKey;
-		</script>
 	</head>
 	<body>
         <PortalNavbar />

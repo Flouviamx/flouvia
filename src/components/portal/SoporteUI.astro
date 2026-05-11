@@ -51,9 +51,11 @@ const categories = [
   },
 ];
 
+const WA_NUMBER = '521234567890'; // ← actualiza con tu número real
+
 const { data: ticketRows } = await supabase
   .from('tickets')
-  .select('ticket_ref, title, status, created_at')
+  .select('ticket_ref, title, status, created_at, rating')
   .eq('email_cliente', email)
   .order('created_at', { ascending: false })
   .limit(8);
@@ -66,6 +68,7 @@ const recentTickets = (ticketRows ?? []).map((r: any) => ({
   title:  r.title,
   status: r.status as 'open' | 'resolved' | 'pending',
   date:   formatTicketDate(r.created_at),
+  rating: r.rating as 1 | 2 | 3 | null,
 }));
 ---
 
@@ -243,7 +246,38 @@ const recentTickets = (ticketRows ?? []).map((r: any) => ({
                       <span class="sp-ticket-date">{tk.date}</span>
                     </div>
                   </div>
-                  <span class={`sp-ticket-status sp-ts-${tk.status}`}>{t(`support.ticket.${tk.status}`)}</span>
+                  <div class="sp-ticket-right">
+                    <span class={`sp-ticket-status sp-ts-${tk.status}`}>{t(`support.ticket.${tk.status}`)}</span>
+
+                    {tk.status === 'resolved' && (
+                      <div class="sp-rating" data-ref={tk.id}>
+                        {tk.rating ? (
+                          <span class="sp-rated sp-rated-done" title={lang === 'en' ? 'Your rating' : 'Tu calificación'}>
+                            {tk.rating === 1 ? '😐' : tk.rating === 2 ? '😊' : '🤩'}
+                          </span>
+                        ) : (
+                          <div class="sp-rate-btns">
+                            <button class="sp-rate-btn" data-val="1" data-ref={tk.id} title="Regular">😐</button>
+                            <button class="sp-rate-btn" data-val="2" data-ref={tk.id} title="Bueno">😊</button>
+                            <button class="sp-rate-btn" data-val="3" data-ref={tk.id} title="Excelente">🤩</button>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    <a
+                      href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(`Hola, tengo una consulta sobre mi ticket ${tk.id} — ${tk.title}`)}`}
+                      class="sp-wa-btn"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="WhatsApp"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.531 5.859L.063 23.474a.5.5 0 0 0 .612.612l5.579-1.459A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.6a9.548 9.548 0 0 1-4.912-1.354l-.353-.21-3.658.957.975-3.564-.23-.365A9.549 9.549 0 0 1 2.4 12C2.4 6.698 6.698 2.4 12 2.4S21.6 6.698 21.6 12 17.302 21.6 12 21.6z"/>
+                      </svg>
+                    </a>
+                  </div>
                 </div>
               ))}
             </div>
@@ -462,6 +496,9 @@ const recentTickets = (ticketRows ?? []).map((r: any) => ({
 .sp-ticket-title { font-size: 0.9rem; font-weight: 500; }
 .sp-ticket-date  { font-size: 0.68rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
 
+.sp-ticket-right {
+    display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end;
+}
 .sp-ticket-status {
     font-size: 0.65rem; font-weight: 700;
     padding: 4px 11px; border-radius: 100px; flex-shrink: 0;
@@ -469,6 +506,30 @@ const recentTickets = (ticketRows ?? []).map((r: any) => ({
 .sp-ts-resolved { background: rgba(16,185,129,0.09); color: #0d9966; border: 1px solid rgba(16,185,129,0.2); }
 .sp-ts-open     { background: rgba(0,85,204,0.09);   color: var(--blue); border: 1px solid rgba(0,85,204,0.18); }
 .sp-ts-pending  { background: rgba(220,120,0,0.08);  color: #b86000;    border: 1px solid rgba(220,120,0,0.18); }
+
+/* ═══ RATING ═══ */
+.sp-rating { display: flex; align-items: center; }
+.sp-rate-btns { display: flex; gap: 2px; }
+.sp-rate-btn {
+    background: none; border: none; padding: 3px 4px; border-radius: 8px;
+    font-size: 1rem; cursor: pointer; line-height: 1;
+    transition: transform .15s, background .15s;
+}
+.sp-rate-btn:hover { transform: scale(1.25); background: rgba(0,0,0,0.04); }
+.sp-rated-done { font-size: 1rem; line-height: 1; }
+
+/* ═══ WHATSAPP BUTTON ═══ */
+.sp-wa-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+    background: rgba(37,211,102,0.1); border: 1px solid rgba(37,211,102,0.25);
+    color: #25d366; text-decoration: none;
+    transition: background .2s, transform .2s, border-color .2s;
+}
+.sp-wa-btn:hover {
+    background: rgba(37,211,102,0.18); border-color: rgba(37,211,102,0.4);
+    transform: scale(1.1);
+}
 
 .sp-tickets-empty {
     font-size: 0.88rem; color: var(--muted); padding: 2rem 0;
@@ -572,6 +633,31 @@ const recentTickets = (ticketRows ?? []).map((r: any) => ({
     const form = document.getElementById("supportForm") as HTMLFormElement | null;
     const formSuccess = document.getElementById("formSuccess");
     const btnText = document.getElementById("btnText");
+
+    // ── Rating buttons ────────────────────────────────────
+    document.querySelectorAll<HTMLButtonElement>(".sp-rate-btn").forEach(btn => {
+        btn.addEventListener("click", async () => {
+            const val = parseInt(btn.dataset.val || "0");
+            const ref = btn.dataset.ref || "";
+            const container = btn.closest(".sp-rating");
+            if (!container || !val || !ref) return;
+
+            btn.style.transform = "scale(1.4)";
+            await new Promise(r => setTimeout(r, 80));
+
+            try {
+                await fetch("/api/soporte/rating", {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ ticket_ref: ref, rating: val }),
+                });
+            } catch { /* fail silently */ }
+
+            const emoji = val === 1 ? "😐" : val === 2 ? "😊" : "🤩";
+            container.innerHTML = `<span class="sp-rated-done" style="font-size:1rem">${emoji}</span>`;
+            gsap.fromTo(container, { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2)" });
+        });
+    });
 
     form?.addEventListener("submit", async (e) => {
         e.preventDefault();
