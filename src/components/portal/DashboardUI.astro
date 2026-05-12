@@ -54,7 +54,6 @@ const [
   { data: roadmapRows },
   { data: archivos },
   { data: ticketRows },
-  { data: notifRows },
   { data: announcementRows },
 ] = await Promise.all([
   supabase.from('proyectos').select('*').eq('email_cliente', email).single(),
@@ -62,7 +61,6 @@ const [
   supabase.from('roadmap').select('*').eq('email_cliente', email).order('orden_index'),
   supabase.from('boveda_archivos').select('nombre,tipo,created_at').eq('email_cliente', email).order('created_at', { ascending: false }).limit(3),
   supabase.from('tickets').select('ticket_ref,title,status,created_at').eq('email_cliente', email).order('created_at', { ascending: false }).limit(5),
-  supabase.from('notificaciones').select('id,titulo,mensaje,tipo,leida,created_at').eq('email_cliente', email).order('created_at', { ascending: false }).limit(6),
   supabase.from('announcements').select('id,titulo,mensaje,tipo').eq('activo', true).order('created_at', { ascending: false }).limit(3),
 ]);
 
@@ -144,11 +142,6 @@ const activityItems: ActivityItem[] = [
   })),
 ].sort((a, b) => b.when - a.when).slice(0, 7);
 
-// ── Notifications ─────────────────────────────────────────
-const notifications = (notifRows ?? []);
-const unreadNotifs  = notifications.filter((n: any) => !n.leida);
-const latestNotif   = notifications[0] ?? null;
-
 const fallbackPortalUrl = lang === 'en' ? "/en/portal/facturacion" : "/portal/facturacion";
 
 const data = {
@@ -202,29 +195,7 @@ const data = {
                     <span class="db-meta-dot"></span>
                     {t('portal.uptime')} {data.project.uptime}
                 </span>
-                {unreadNotifs.length > 0 && (
-                  <a href="#db-notif-panel" class="db-notif-chip" id="db-notif-chip">
-                    <span class="db-notif-dot"></span>
-                    <span>{unreadNotifs.length} {lang === 'en' ? 'new' : 'nuevas'}</span>
-                  </a>
-                )}
             </div>
-
-            {latestNotif && (
-              <div class="db-notif-strip" id="db-notif-panel">
-                <div class="db-notif-icon">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                </div>
-                <div class="db-notif-body">
-                  <span class="db-notif-title">{latestNotif.titulo}</span>
-                  {latestNotif.mensaje && <span class="db-notif-msg">{latestNotif.mensaje}</span>}
-                </div>
-                <span class="db-notif-when">{timeAgo(new Date(latestNotif.created_at).getTime(), lang)}</span>
-                <button class="db-notif-close" aria-label="Dismiss" id="db-notif-close">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                </button>
-              </div>
-            )}
 
             <h1 class="db-title" id="db-title">
                 <span class="db-greeting">{t('portal.greeting')}</span>
@@ -714,45 +685,6 @@ const data = {
 .db-vault-empty { font-size: 0.82rem; color: var(--dim); margin: 1rem 0 0; text-align: center; }
 
 /* ══════════════════════════════════════════════════════════
-   NOTIFICATIONS
-══════════════════════════════════════════════════════════ */
-.db-notif-chip {
-    display: inline-flex; align-items: center; gap: 5px;
-    font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em;
-    background: rgba(239,68,68,0.08); color: #dc2626;
-    border: 1px solid rgba(239,68,68,0.18);
-    padding: 3px 10px; border-radius: 100px;
-    text-decoration: none; transition: background .2s;
-}
-.db-notif-chip:hover { background: rgba(239,68,68,0.13); }
-.db-notif-dot {
-    width: 5px; height: 5px; border-radius: 50%; background: #ef4444;
-    animation: led-pulse 2s ease-in-out infinite;
-}
-
-.db-notif-strip {
-    display: flex; align-items: center; gap: 0.9rem;
-    background: rgba(0,0,0,0.025); border: 1px solid rgba(0,0,0,0.07);
-    border-radius: 14px; padding: 0.75rem 1rem;
-    margin-bottom: 2rem; opacity: 0;
-}
-.db-notif-icon {
-    width: 30px; height: 30px; border-radius: 8px;
-    background: #0a192f; color: rgba(255,255,255,0.8);
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
-.db-notif-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
-.db-notif-title { font-size: 0.84rem; font-weight: 600; color: var(--text); }
-.db-notif-msg { font-size: 0.78rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.db-notif-when { font-size: 0.65rem; color: var(--dim); font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
-.db-notif-close {
-    background: none; border: none; cursor: pointer; color: var(--dim);
-    padding: 4px; border-radius: 6px; display: flex;
-    transition: color .2s, background .2s;
-}
-.db-notif-close:hover { color: var(--text); background: rgba(0,0,0,0.06); }
-
-/* ══════════════════════════════════════════════════════════
    HEALTH SCORE
 ══════════════════════════════════════════════════════════ */
 .db-health-row {
@@ -894,7 +826,7 @@ const data = {
     .db-meta-row { flex-wrap: wrap; gap: 0.5rem; }
     .db-c-top { flex-wrap: wrap; }
     .db-act-list { grid-template-columns: 1fr; }
-    .db-notif-strip { flex-wrap: wrap; }
+
 }
 </style>
 
@@ -962,18 +894,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    /* 5 ── Notification strip */
-    const notifStrip = document.getElementById("db-notif-panel");
-    if (notifStrip) {
-        gsap.set(notifStrip, { y: -8, opacity: 0 });
-        tl.to(notifStrip, { y: 0, opacity: 1, duration: 0.55 }, 0.1);
-        document.getElementById("db-notif-close")?.addEventListener("click", () => {
-            gsap.to(notifStrip, { opacity: 0, height: 0, marginBottom: 0, padding: 0, duration: 0.35, ease: "power2.in",
-                onComplete: () => notifStrip.remove() });
-        });
-    }
-
-    /* 6 ── Cards stagger */
+    /* 5 ── Cards stagger */
     const cards = ["#card-project","#card-fin","#card-svc","#card-rm","#card-vault","#card-activity"].filter(id => document.querySelector(id));
     gsap.set(cards, { y: 32, opacity: 0, scale: 0.985 });
     tl.to(cards, {

@@ -1247,23 +1247,17 @@ const t = useTranslations(lang);
                 const num     = card.querySelector<HTMLElement>('.card-num-luxury');
                 const ctaInner = card.querySelector<HTMLElement>('.cta-inner');
 
-                gsap.set(card, { y: 80, opacity: 0 });
-                if (img)      gsap.set(img,     { scale: 1.2 });
-                if (overlay)  gsap.set(overlay, { yPercent: 40, opacity: 0 });
-                if (num)      gsap.set(num,     { opacity: 0, x: -8 });
-                if (ctaInner) gsap.set(ctaInner.children, { opacity: 0, y: 18 });
-
                 const tl = gsap.timeline({
                     scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top 75%', once: true },
                     delay: 0.15 + i * 0.13,
                 });
 
-                tl.to(card, { ...ir, y: 0, opacity: 1, duration: 1.5, ease: 'expo.out' });
-                if (img)      tl.to(img,     { ...ir, scale: 1, duration: 2.0, ease: 'expo.out' }, 0);
-                if (overlay)  tl.to(overlay, { ...ir, yPercent: 0, opacity: 1, duration: 1.2, ease: 'expo.out' }, 0.35);
-                if (num)      tl.to(num,     { ...ir, opacity: 0.6, x: 0, duration: 1.0, ease: 'expo.out' }, 0.45);
-                if (ctaInner) tl.to(ctaInner.children, {
-                    ...ir, opacity: 1, y: 0, duration: 1.1, ease: 'expo.out', stagger: 0.12,
+                tl.from(card, { ...ir, y: 80, opacity: 0, duration: 1.5, ease: 'expo.out' });
+                if (img)      tl.from(img,     { ...ir, scale: 1.2, duration: 2.0, ease: 'expo.out' }, 0);
+                if (overlay)  tl.from(overlay, { ...ir, yPercent: 40, opacity: 0, duration: 1.2, ease: 'expo.out' }, 0.35);
+                if (num)      tl.from(num,     { ...ir, opacity: 0, x: -8, duration: 1.0, ease: 'expo.out' }, 0.45);
+                if (ctaInner) tl.from(ctaInner.children, {
+                    ...ir, opacity: 0, y: 18, duration: 1.1, ease: 'expo.out', stagger: 0.12,
                 }, 0.3);
             });
 
@@ -1645,13 +1639,18 @@ const t = useTranslations(lang);
             const cards = document.querySelectorAll('.vertical-card');
             if (track && cards.length) {
                 const observer = new IntersectionObserver(entries => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            cards.forEach(c => c.classList.remove('is-centered'));
-                            entry.target.classList.add('is-centered');
+                    // Pick the single entry with the highest intersection ratio
+                    let best: IntersectionObserverEntry | null = null;
+                    for (const entry of entries) {
+                        if (!best || entry.intersectionRatio > best.intersectionRatio) {
+                            best = entry;
                         }
-                    });
-                }, { root: track, threshold: 0.5 });
+                    }
+                    if (best && best.intersectionRatio > 0) {
+                        cards.forEach(c => c.classList.remove('is-centered'));
+                        best.target.classList.add('is-centered');
+                    }
+                }, { root: track, threshold: [0, 0.25, 0.5, 0.75, 1] });
                 cards.forEach(card => observer.observe(card));
                 setTimeout(() => { cards[0]?.classList.add('is-centered'); }, 100);
             }
