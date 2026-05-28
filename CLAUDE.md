@@ -395,7 +395,7 @@ Solo usar `scale` para Ken Burns, sin desplazamiento vertical scrubbed.
 --font-sans: 'Inter'
 --font-serif: 'Instrument Serif'
 --ease-ios: cubic-bezier(0.25, 1, 0.5, 1)
---ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05)
+--ease-spring: cubic-bezier(0.22, 1, 0.36, 1)   /* sin overshoot — suavizado (antes 1.05) */
 --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1)
 ```
 

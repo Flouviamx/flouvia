@@ -451,7 +451,7 @@ const t = useTranslations(lang);
         --font-serif: 'Instrument Serif', serif;
         
         --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
-        --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+        --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
         --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -468,19 +468,19 @@ const t = useTranslations(lang);
     .hero-status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: hero-status-pulse 2s infinite; }
     @keyframes hero-status-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
     
-    .reveal-blur { 
-        opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(8px); 
-        animation: reveal 1s var(--ease-spring) forwards; animation-play-state: paused; animation-delay: var(--delay, 0s); 
+    .reveal-blur {
+        opacity: 0; transform: translateY(18px); filter: blur(4px);
+        animation: reveal 0.9s var(--ease-smooth) forwards; animation-play-state: paused; animation-delay: var(--delay, 0s);
     }
     .reveal-blur.active { animation-play-state: running; }
-    @keyframes reveal { to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+    @keyframes reveal { to { opacity: 1; transform: translateY(0); filter: blur(0); } }
 
-    .reveal-fade { 
-        opacity: 0; transform: translateY(30px) scale(0.98); 
-        animation: revealFade 1s var(--ease-spring) forwards; animation-play-state: paused; animation-delay: var(--delay, 0s); 
+    .reveal-fade {
+        opacity: 0; transform: translateY(18px);
+        animation: revealFade 0.9s var(--ease-smooth) forwards; animation-play-state: paused; animation-delay: var(--delay, 0s);
     }
     .reveal-fade.active { animation-play-state: running; }
-    @keyframes revealFade { to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes revealFade { to { opacity: 1; transform: translateY(0); } }
 
     .btn-luxe { 
         position: relative; display: inline-flex; background: var(--color-text); color: #fff; 
@@ -714,11 +714,11 @@ const t = useTranslations(lang);
 
     @media (hover: hover) {
         .carousel-track:hover .vertical-card {
-            transform: scale(0.86); opacity: 0.45;
+            transform: scale(0.94); opacity: 0.68;
         }
         .carousel-track .vertical-card:hover {
-            transform: scale(1.06) translateY(-12px);
-            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+            transform: scale(1.03) translateY(-8px);
+            box-shadow: 0 36px 72px rgba(0,0,0,0.45);
             opacity: 1; z-index: 10;
         }
     }
@@ -1165,24 +1165,24 @@ const t = useTranslations(lang);
 
             const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
             if (heroStatus) {
-                tl.from(heroStatus, { opacity: 0, y: 12, filter: 'blur(6px)', duration: 1.1 }, 0);
+                tl.from(heroStatus, { opacity: 0, y: 10, filter: 'blur(4px)', duration: 1.0 }, 0);
             }
             if (heroEyebrow) {
-                tl.from(heroEyebrow, { opacity: 0, y: 14, letterSpacing: '7px', duration: 1.4 }, 0.1);
+                tl.from(heroEyebrow, { opacity: 0, y: 12, letterSpacing: '5px', duration: 1.1 }, 0.1);
             }
             if (heroTitle) {
                 const split = SplitText.create(heroTitle, { type: 'lines,words', linesClass: 'lx-line-mask' });
                 gsap.set(split.words, { yPercent: 105 });
                 tl.to(split.words, {
-                    yPercent: 0, duration: 1.5,
-                    stagger: { amount: 0.5, from: 'start' },
-                }, 0.35);
+                    yPercent: 0, duration: 1.1,
+                    stagger: { amount: 0.35, from: 'start' },
+                }, 0.3);
             }
             if (heroBottom && heroBottom.children.length > 0) {
                 tl.from(gsap.utils.toArray<HTMLElement>(heroBottom.children), {
-                    opacity: 0, y: 16, duration: 1.1, ease: 'power3.out',
-                    stagger: 0.12,
-                }, 1.0);
+                    opacity: 0, y: 12, duration: 1.0, ease: 'power3.out',
+                    stagger: 0.1,
+                }, 0.85);
             }
 
             }); // end requestAnimationFrame
@@ -1190,7 +1190,7 @@ const t = useTranslations(lang);
             const heroParallax = document.getElementById('hero-parallax');
             if (heroParallax) {
                 gsap.to(heroParallax, {
-                    yPercent: 28, opacity: 0.15,
+                    yPercent: 14, opacity: 0.5,
                     ease: 'none',
                     scrollTrigger: { trigger: '.hero-grand', start: 'top top', end: 'bottom 30%', scrub: 0.8 },
                 });
@@ -1201,8 +1201,8 @@ const t = useTranslations(lang);
                 const split = SplitText.create(h, { type: 'lines,words', linesClass: 'lx-line-mask' });
                 gsap.set(split.words, { yPercent: 115 });
                 gsap.to(split.words, {
-                    ...ir, yPercent: 0, duration: 1.4, ease: 'expo.out',
-                    stagger: { amount: 0.45, from: 'start' },
+                    ...ir, yPercent: 0, duration: 1.0, ease: 'expo.out',
+                    stagger: { amount: 0.3, from: 'start' },
                     scrollTrigger: { trigger: h, start: 'top 85%', once: true },
                 });
             });
@@ -1210,7 +1210,7 @@ const t = useTranslations(lang);
             /* ═══════ EYEBROWS — letter-spacing close + fade ═══════ */
             gsap.utils.toArray<HTMLElement>('section:not(.hero-grand) .eyebrow').forEach(eb => {
                 gsap.from(eb, {
-                    ...ir, opacity: 0, y: 12, letterSpacing: '8px', duration: 1.3, ease: 'expo.out',
+                    ...ir, opacity: 0, y: 10, letterSpacing: '5px', duration: 1.0, ease: 'expo.out',
                     scrollTrigger: { trigger: eb, start: 'top 88%', once: true },
                 });
             });
@@ -1256,22 +1256,22 @@ const t = useTranslations(lang);
                 const cat  = card.querySelector<HTMLElement>('.cell-label');
                 const name = card.querySelector<HTMLElement>('.tool-name');
 
-                gsap.set(card, { y: 50, opacity: 0 });
-                if (logo) gsap.set(logo, { y: 18, opacity: 0, scale: 0.92 });
+                gsap.set(card, { y: 28, opacity: 0 });
+                if (logo) gsap.set(logo, { y: 10, opacity: 0, scale: 0.97 });
                 if (num)  gsap.set(num, { opacity: 0, x: -6 });
                 if (cat)  gsap.set(cat, { opacity: 0, x: -6 });
-                if (name) gsap.set(name, { opacity: 0, y: 12 });
+                if (name) gsap.set(name, { opacity: 0, y: 10 });
 
                 const tl = gsap.timeline({
                     scrollTrigger: { trigger: '.spotlight-grid', start: 'top 80%', once: true },
-                    delay: i * 0.08,
+                    delay: i * 0.06,
                 });
 
-                tl.to(card, { ...ir, y: 0, opacity: 1, duration: 1.3, ease: 'expo.out' });
-                if (cat)  tl.to(cat,  { ...ir, opacity: 1, x: 0, duration: 0.9, ease: 'expo.out' }, '-=1.0');
-                if (num)  tl.to(num,  { ...ir, opacity: 1, x: 0, duration: 0.9, ease: 'expo.out' }, '-=0.95');
-                if (logo) tl.to(logo, { ...ir, y: 0, opacity: 0.55, scale: 1, duration: 1.0, ease: 'expo.out' }, '-=0.85');
-                if (name) tl.to(name, { ...ir, opacity: 1, y: 0, duration: 0.95, ease: 'expo.out' }, '-=0.7');
+                tl.to(card, { ...ir, y: 0, opacity: 1, duration: 0.9, ease: 'expo.out' });
+                if (cat)  tl.to(cat,  { ...ir, opacity: 1, x: 0, duration: 0.8, ease: 'expo.out' }, '-=0.7');
+                if (num)  tl.to(num,  { ...ir, opacity: 1, x: 0, duration: 0.8, ease: 'expo.out' }, '-=0.7');
+                if (logo) tl.to(logo, { ...ir, y: 0, opacity: 0.55, scale: 1, duration: 0.8, ease: 'expo.out' }, '-=0.6');
+                if (name) tl.to(name, { ...ir, opacity: 1, y: 0, duration: 0.8, ease: 'expo.out' }, '-=0.55');
             });
 
             /* Watermark slow parallax */
@@ -1321,13 +1321,13 @@ const t = useTranslations(lang);
                     delay: 0.15 + i * 0.13,
                 });
 
-                tl.from(card, { ...ir, y: 80, opacity: 0, duration: 1.5, ease: 'expo.out' });
-                if (img)      tl.from(img,     { ...ir, scale: 1.2, duration: 2.0, ease: 'expo.out' }, 0);
-                if (overlay)  tl.from(overlay, { ...ir, yPercent: 40, opacity: 0, duration: 1.2, ease: 'expo.out' }, 0.35);
-                if (num)      tl.from(num,     { ...ir, opacity: 0, x: -8, duration: 1.0, ease: 'expo.out' }, 0.45);
+                tl.from(card, { ...ir, y: 40, opacity: 0, duration: 1.0, ease: 'expo.out' });
+                if (img)      tl.from(img,     { ...ir, scale: 1.08, duration: 1.4, ease: 'expo.out' }, 0);
+                if (overlay)  tl.from(overlay, { ...ir, yPercent: 24, opacity: 0, duration: 0.9, ease: 'expo.out' }, 0.3);
+                if (num)      tl.from(num,     { ...ir, opacity: 0, x: -8, duration: 0.9, ease: 'expo.out' }, 0.4);
                 if (ctaInner) tl.from(ctaInner.children, {
-                    ...ir, opacity: 0, y: 18, duration: 1.1, ease: 'expo.out', stagger: 0.12,
-                }, 0.3);
+                    ...ir, opacity: 0, y: 14, duration: 1.0, ease: 'expo.out', stagger: 0.1,
+                }, 0.25);
             });
 
 
@@ -1355,10 +1355,10 @@ const t = useTranslations(lang);
                     },
                 });
 
-                if (num)   tl.from(num,   { ...ir, opacity: 0, x: -16,   duration: 1.0, ease: 'expo.out' }, 0);
-                if (h3)    tl.from(h3,    { ...ir, opacity: 0, y: 28,    duration: 1.2, ease: 'expo.out' }, 0.08);
-                if (p)     tl.from(p,     { ...ir, opacity: 0, y: 18,    duration: 1.1, ease: 'expo.out' }, 0.18);
-                if (arrow) tl.from(arrow, { ...ir, opacity: 0, scale: 0.7, duration: 1.0, ease: 'expo.out' }, 0.28);
+                if (num)   tl.from(num,   { ...ir, opacity: 0, x: -10,   duration: 0.9, ease: 'expo.out' }, 0);
+                if (h3)    tl.from(h3,    { ...ir, opacity: 0, y: 18,    duration: 1.0, ease: 'expo.out' }, 0.06);
+                if (p)     tl.from(p,     { ...ir, opacity: 0, y: 14,    duration: 0.9, ease: 'expo.out' }, 0.14);
+                if (arrow) tl.from(arrow, { ...ir, opacity: 0, scale: 0.82, duration: 0.9, ease: 'expo.out' }, 0.22);
             });
 
             /* ═══════════════════════════════════════════════════
@@ -1367,7 +1367,7 @@ const t = useTranslations(lang);
 
             /* Sticky col children stagger */
             gsap.from('.protocol-sticky-col > *:not(.proto-progress)', {
-                ...ir, y: 28, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: 0.1,
+                ...ir, y: 18, opacity: 0, duration: 1.0, ease: 'expo.out', stagger: 0.09,
                 scrollTrigger: { trigger: '.protocol-section', start: 'top 78%', once: true },
             });
 
@@ -1443,10 +1443,10 @@ const t = useTranslations(lang);
                     },
                 });
 
-                if (node) tl.from(node, { ...ir, scale: 0, opacity: 0, duration: 1.0, ease: 'expo.out' }, 0);
-                if (wm)   tl.from(wm,   { ...ir, opacity: 0, x: -18,   duration: 1.3, ease: 'expo.out' }, 0.08);
-                if (h4)   tl.from(h4,   { ...ir, opacity: 0, y: 22,    duration: 1.0, ease: 'expo.out' }, 0.18);
-                if (p)    tl.from(p,    { ...ir, opacity: 0, y: 18,    duration: 1.0, ease: 'expo.out' }, 0.28);
+                if (node) tl.from(node, { ...ir, scale: 0.4, opacity: 0, duration: 0.85, ease: 'expo.out' }, 0);
+                if (wm)   tl.from(wm,   { ...ir, opacity: 0, x: -10,   duration: 1.0, ease: 'expo.out' }, 0.08);
+                if (h4)   tl.from(h4,   { ...ir, opacity: 0, y: 16,    duration: 0.9, ease: 'expo.out' }, 0.16);
+                if (p)    tl.from(p,    { ...ir, opacity: 0, y: 14,    duration: 0.9, ease: 'expo.out' }, 0.24);
             });
 
             /* ═══════════════════════════════════════════════════
@@ -1458,23 +1458,23 @@ const t = useTranslations(lang);
                 const ctaText = ctaCard.querySelectorAll<HTMLElement>('.cta-text-side > *');
                 const ctaBtn  = ctaCard.querySelector<HTMLElement>('.cta-action-side');
 
-                gsap.set(ctaText, { opacity: 0, y: 26 });
-                if (ctaBtn) gsap.set(ctaBtn, { opacity: 0, y: 22 });
+                gsap.set(ctaText, { opacity: 0, y: 18 });
+                if (ctaBtn) gsap.set(ctaBtn, { opacity: 0, y: 16 });
 
                 const tl = gsap.timeline({
                     scrollTrigger: { trigger: ctaCard, start: 'top 82%', once: true },
                 });
 
                 tl.from(ctaCard, {
-                    ...ir, y: 70, scale: 0.92, opacity: 0,
-                    duration: 1.4, ease: 'expo.out',
+                    ...ir, y: 36, scale: 0.97, opacity: 0,
+                    duration: 1.0, ease: 'expo.out',
                 });
                 tl.to(ctaText, {
-                    ...ir, opacity: 1, y: 0, duration: 1.1, ease: 'expo.out', stagger: 0.12,
-                }, '-=0.9');
-                if (ctaBtn) tl.to(ctaBtn, {
-                    ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out',
+                    ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out', stagger: 0.1,
                 }, '-=0.7');
+                if (ctaBtn) tl.to(ctaBtn, {
+                    ...ir, opacity: 1, y: 0, duration: 0.9, ease: 'expo.out',
+                }, '-=0.6');
 
                 ctaCard.addEventListener('mousemove', e => {
                     const r = ctaCard.getBoundingClientRect();
@@ -1494,13 +1494,13 @@ const t = useTranslations(lang);
             const mEyebrow = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
             const mHeroBottom = document.querySelector<HTMLElement>('.hero-bottom');
             const tlm = gsap.timeline({ defaults: { ease: 'expo.out' } });
-            if (mEyebrow) tlm.from(mEyebrow, { opacity: 0, y: 10, letterSpacing: '6px', duration: 1.1 }, 0.1);
-            if (mHeroTitle) tlm.from(mHeroTitle, { opacity: 0, y: 24, duration: 1.2 }, 0.3);
+            if (mEyebrow) tlm.from(mEyebrow, { opacity: 0, y: 10, letterSpacing: '5px', duration: 1.0 }, 0.1);
+            if (mHeroTitle) tlm.from(mHeroTitle, { opacity: 0, y: 18, duration: 1.0 }, 0.28);
             if (mHeroBottom && mHeroBottom.children.length > 0) {
                 tlm.from(gsap.utils.toArray<HTMLElement>(mHeroBottom.children), {
-                    opacity: 0, y: 14, duration: 1.0, ease: 'power3.out',
-                    stagger: 0.1,
-                }, 0.85);
+                    opacity: 0, y: 12, duration: 0.9, ease: 'power3.out',
+                    stagger: 0.09,
+                }, 0.8);
             }
 
             /* SECTION HEADINGS — same line-mask reveal */
@@ -1570,13 +1570,13 @@ const t = useTranslations(lang);
             /* CASOS — cards (simpler for mobile, with image scale) */
             gsap.utils.toArray<HTMLElement>('.clients-vertical-carousel .vertical-card').forEach((card, i) => {
                 const img = card.querySelector<HTMLElement>('.carousel-image');
-                if (img) gsap.set(img, { scale: 1.15 });
+                if (img) gsap.set(img, { scale: 1.08 });
                 const tl = gsap.timeline({
                     scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top 80%', once: true },
-                    delay: i * 0.1,
+                    delay: i * 0.09,
                 });
-                tl.from(card, { ...ir, y: 50, opacity: 0, duration: 1.2, ease: 'expo.out' });
-                if (img) tl.to(img, { ...ir, scale: 1, duration: 1.6, ease: 'expo.out' }, 0);
+                tl.from(card, { ...ir, y: 30, opacity: 0, duration: 1.0, ease: 'expo.out' });
+                if (img) tl.to(img, { ...ir, scale: 1, duration: 1.3, ease: 'expo.out' }, 0);
             });
 
             /* SERVICES — rows */
@@ -1692,8 +1692,8 @@ const t = useTranslations(lang);
                 });
 
                 tl.from(mCtaCard, {
-                    ...ir, y: 50, scale: 0.94, opacity: 0,
-                    duration: 1.3, ease: 'expo.out',
+                    ...ir, y: 30, scale: 0.97, opacity: 0,
+                    duration: 1.0, ease: 'expo.out',
                 });
                 tl.to(ctaText, {
                     ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out', stagger: 0.1,
