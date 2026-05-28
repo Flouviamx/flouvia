@@ -20,7 +20,7 @@ const t     = (o: { es: string; en: string }) => isEn ? o.en : o.es;
 const root  = isEn ? '/en' : '';
 ---
 
-<Layout title={`${caso.brand} — Flouvia`}>
+<Layout title={`${caso.brand} — ${t(caso.category)} | Flouvia`} description={t(caso.desc)}>
   <Navbar />
 
   <main class="cs-page">

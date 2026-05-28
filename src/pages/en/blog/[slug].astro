@@ -19,7 +19,7 @@ const related = getRelated(post.slug);
 const postIdx = posts.indexOf(post) + 1;
 ---
 
-<Layout title={`${t(post.title)} — Flouvia Blog`}>
+<Layout title={`${t(post.title)} | Flouvia Blog`} description={t(post.excerpt)}>
   <Navbar />
 
   <!-- PROGRESS BAR -->

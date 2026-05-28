@@ -17,10 +17,10 @@ const fullName =
   `${user?.firstName || ""} ${user?.lastName || ""}`.trim() ||
   (lang === 'en' ? "Executive" : "Ejecutivo");
 
-const email = user?.emailAddresses[0]?.emailAddress || "flouvia.mx@gmail.com";
+const email = user?.emailAddresses[0]?.emailAddress || "hola@flouvia.com";
 
 // Auto-create perfil on first login
-if (user?.id && email !== "flouvia.mx@gmail.com") {
+if (user?.id && email !== "hola@flouvia.com") {
   try {
     const { data: existing } = await supabase
       .from('perfiles')

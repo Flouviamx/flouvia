@@ -11,7 +11,10 @@ const t = useTranslations(lang);
 const isEn = lang === 'en';
 ---
 
-<Layout title={`Flouvia | ${isEn ? 'Engineering Cases' : 'Casos de Ingeniería'}`}>
+<Layout
+    title={isEn ? 'Case studies — Engineering results | Flouvia' : 'Casos — Resultados de ingeniería | Flouvia'}
+    description={isEn ? 'El Zarco: −67% processing time. Setnpet: +42% conversion and 3× LTV retention. Real evidence of the systems we build.' : 'El Zarco: −67% en tiempo de proceso. Setnpet: +42% conversión y 3× retención LTV. Evidencia real de los sistemas que construimos.'}
+>
     <Navbar />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">

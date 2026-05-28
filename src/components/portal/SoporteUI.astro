@@ -12,7 +12,7 @@ const t = useTranslations(lang);
 
 const user = await Astro.locals.currentUser();
 const firstName = user?.firstName || "";
-const email = user?.emailAddresses[0]?.emailAddress || "flouvia.mx@gmail.com";
+const email = user?.emailAddresses[0]?.emailAddress || "hola@flouvia.com";
 
 const dateOptions: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };
 const today = new Date().toLocaleDateString(lang === 'en' ? 'en-US' : 'es-MX', dateOptions);

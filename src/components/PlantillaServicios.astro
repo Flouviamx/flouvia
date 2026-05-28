@@ -11,7 +11,10 @@ const t = useTranslations(lang);
 const isEn = lang === 'en';
 ---
 
-<Layout title={`Flouvia | ${t('serv.hero.badge')}`}>
+<Layout
+    title={isEn ? 'Services — E-commerce, B2B & automation engineering | Flouvia' : 'Servicios — Ingeniería e-commerce, B2B y automatización | Flouvia'}
+    description={isEn ? 'E-commerce engineering, B2B architecture, automation and CRO. Bespoke systems for operations that already sell and need to scale without breaking.' : 'E-commerce engineering, arquitectura B2B, automatización y CRO. Sistemas a medida para operaciones que ya venden y necesitan escalar sin romperse.'}
+>
     <Navbar />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">

@@ -3,20 +3,61 @@ import { getLangFromUrl } from '../i18n/utils';
 
 interface Props {
     title: string;
+    description?: string;
+    image?: string;
+    noindex?: boolean;
 }
 
-const { title } = Astro.props;
+const {
+    title,
+    description = 'Flouvia — infraestructura de revenue para marcas de e-commerce y B2B con operación establecida. Por aplicación: menos de 8 clientes activos al año.',
+    image = '/android-touch-icon-512.png',
+    noindex = false,
+} = Astro.props;
 
 // Detecta el idioma basado en la URL (/en/ o /)
 const lang = getLangFromUrl(Astro.url);
+
+// URLs absolutas para canonical / OG / hreflang
+const SITE      = Astro.site ?? new URL('https://flouvia.com');
+const pathname  = Astro.url.pathname;
+const esPath    = lang === 'en' ? (pathname.replace(/^\/en/, '') || '/') : pathname;
+const enPath    = lang === 'es' ? '/en' + (pathname === '/' ? '' : pathname) : pathname;
+const canonical = new URL(pathname, SITE).href;
+const ogImage   = new URL(image, SITE).href;
+const esURL     = new URL(esPath, SITE).href;
+const enURL     = new URL(enPath, SITE).href;
+const ogLocale  = lang === 'en' ? 'en_US' : 'es_MX';
 ---
 
 <!doctype html>
 <html lang={lang}>
     <head>
         <meta charset="UTF-8" />
-        <meta name="description" content="Flouvia Boutique - Engineering & Growth" />
-        
+        <meta name="description" content={description} />
+        <link rel="canonical" href={canonical} />
+        {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+        <!-- hreflang — relaciona las versiones ES/EN de cada página -->
+        <link rel="alternate" hreflang="es" href={esURL} />
+        <link rel="alternate" hreflang="en" href={enURL} />
+        <link rel="alternate" hreflang="x-default" href={esURL} />
+
+        <!-- Open Graph -->
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Flouvia" />
+        <meta property="og:locale" content={ogLocale} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonical} />
+        <meta property="og:image" content={ogImage} />
+
+        <!-- Twitter -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImage} />
+
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         
         <!-- Favicon — PNG first so mobile browsers pick it up for tabs -->

@@ -11,7 +11,7 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 
 const user = await Astro.locals.currentUser();
-const email = user?.emailAddresses[0]?.emailAddress || "flouvia.mx@gmail.com";
+const email = user?.emailAddresses[0]?.emailAddress || "hola@flouvia.com";
 
 const formatDate = (iso: string | null) => {
   if (!iso) return "—";

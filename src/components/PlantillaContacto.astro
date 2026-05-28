@@ -11,7 +11,10 @@ const t = useTranslations(lang);
 const isEn = lang === 'en';
 ---
 
-<Layout title={`Flouvia | ${isEn ? 'Start a Diagnosis' : 'Iniciar Diagnóstico'}`}>
+<Layout
+    title={isEn ? 'Apply to a project | Flouvia' : 'Aplicar a un proyecto | Flouvia'}
+    description={isEn ? 'Accepting projects for Q3. Tell us about your operation and we\'ll assess the fit. Free diagnosis for those who qualify.' : 'Aceptando proyectos para Q3. Cuéntanos tu operación y evaluamos si encaja. Diagnóstico sin costo para quienes califican.'}
+>
     <Navbar />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -59,7 +62,7 @@ const isEn = lang === 'en';
                         <span class="ec-label mono-font">STATUS</span>
                         <div class="system-status-pill">
                             <div class="pulse-dot-green"></div>
-                            <span>{isEn ? 'ACCEPTING Q2 PROJECTS' : 'ACEPTANDO PROYECTOS Q2'}</span>
+                            <span>{isEn ? 'ACCEPTING Q3 PROJECTS' : 'ACEPTANDO PROYECTOS Q3'}</span>
                         </div>
                     </div>
 
@@ -74,7 +77,7 @@ const isEn = lang === 'en';
                     
                     <div class="ec-block">
                         <span class="ec-label mono-font">DIRECT LINE</span>
-                        <a href="mailto:flouvia.mx@gmail.com" class="ec-data ec-link hover-underline">flouvia.mx@gmail.com</a>
+                        <a href="mailto:hola@flouvia.com" class="ec-data ec-link hover-underline">hola@flouvia.com</a>
                     </div>
 
                     <div class="ec-block">

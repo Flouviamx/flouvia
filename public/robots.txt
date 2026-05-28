@@ -1,0 +1,29 @@
+User-agent: *
+Allow: /
+
+# Áreas privadas / no indexables
+Disallow: /api/
+Disallow: /login
+Disallow: /portal/
+Disallow: /dashboard
+Disallow: /facturacion
+Disallow: /boveda
+Disallow: /boveda-upload
+Disallow: /soporte
+Disallow: /roadmap
+Disallow: /calendario
+Disallow: /entorno
+Disallow: /privacidad-portal
+Disallow: /en/login
+Disallow: /en/portal/
+Disallow: /en/dashboard
+Disallow: /en/facturacion
+Disallow: /en/boveda
+Disallow: /en/boveda-upload
+Disallow: /en/soporte
+Disallow: /en/roadmap
+Disallow: /en/calendario
+Disallow: /en/entorno
+Disallow: /en/privacidad-portal
+
+Sitemap: https://flouvia.com/sitemap-index.xml

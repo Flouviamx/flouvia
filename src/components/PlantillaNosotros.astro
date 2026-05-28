@@ -21,7 +21,10 @@ const parseSerifTitle = (title: string) => {
 };
 ---
 
-<Layout title={`Flouvia | ${t('about.hero.badge')}`}>
+<Layout
+    title={isEn ? 'About — The firm | Flouvia' : 'Nosotros — La firma | Flouvia'}
+    description={isEn ? 'Flouvia is a revenue-engineering firm. We design transactional systems for established brands — not templates for everyone.' : 'Flouvia es una firma de ingeniería de revenue. Diseñamos sistemas transaccionales para marcas establecidas, no plantillas para cualquiera.'}
+>
     <Navbar />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">

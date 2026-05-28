@@ -3,7 +3,7 @@ import webpush from 'web-push';
 
 const publicKey  = import.meta.env.PUBLIC_VAPID_KEY;
 const privateKey = import.meta.env.VAPID_PRIVATE_KEY;
-const email      = import.meta.env.VAPID_EMAIL || 'mailto:flouvia.mx@gmail.com';
+const email      = import.meta.env.VAPID_EMAIL || 'mailto:hola@flouvia.com';
 
 if (publicKey && privateKey) {
   webpush.setVapidDetails(email, publicKey, privateKey);

@@ -12,9 +12,11 @@ const enUrl = lang === 'es' ? '/en' + pathname : pathname;
 <header class="navbar-wrapper" id="navbar">
     <div class="top-bar" id="top-bar">
         <div class="top-bar-inner">
-            <span class="top-text">INGENIERÍA B2B & E-COMMERCE DE ALTO RENDIMIENTO</span>
+            <span class="top-text">{lang === 'en' ? 'E-COMMERCE & B2B ENGINEERING' : 'INGENIERÍA E-COMMERCE & B2B'}</span>
             <span class="top-dot desktop-only">·</span>
-            <span class="top-text desktop-only">PRIVATE GROWTH BOUTIQUE</span>
+            <span class="top-text desktop-only">{lang === 'en' ? 'BY APPLICATION ONLY' : 'PROYECTOS POR APLICACIÓN'}</span>
+            <span class="top-dot desktop-only">·</span>
+            <span class="top-text desktop-only">{lang === 'en' ? 'FEWER THAN 8 ACTIVE CLIENTS / YEAR' : 'MENOS DE 8 CLIENTES ACTIVOS AL AÑO'}</span>
         </div>
     </div>
 
@@ -109,7 +111,7 @@ const enUrl = lang === 'es' ? '/en' + pathname : pathname;
                 <p class="m-eyebrow">ESTUDIO DE INGENIERÍA DIGITAL</p>
                 <div class="m-legal">
                     <span>CDMX — OP. GLOBAL</span>
-                    <a href="mailto:flouvia.mx@gmail.com">flouvia.mx@gmail.com</a>
+                    <a href="mailto:hola@flouvia.com">hola@flouvia.com</a>
                 </div>
             </div>
         </div>

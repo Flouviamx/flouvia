@@ -18,10 +18,10 @@ export const ui = {
 
     // INICIO
     'hero.badge': 'PRIVATE GROWTH BOUTIQUE',
-    'hero.title1': 'Arquitectura digital',
-    'hero.title2': 'para escalar operaciones.',
-    'hero.desc': 'Construimos ecosistemas E-commerce y B2B. Eliminamos fricción, automatizamos inventarios y optimizamos la conversión de marcas líderes.',
-    'hero.cta': 'Agendar Auditoría',
+    'hero.title1': 'Construimos la infraestructura de revenue para marcas que ya venden y quieren',
+    'hero.title2': 'operar a otro nivel.',
+    'hero.desc': 'No trabajamos con startups sin tracción ni con marcas que buscan plantillas. Trabajamos con operaciones establecidas que necesitan sistemas a medida: Shopify Plus, portales B2B privados y automatizaciones que eliminan trabajo manual.',
+    'hero.cta': 'Aplicar a un proyecto',
     'tech.title': 'Nuestra',
     'tech.title_editorial': 'tecnología.',
     'tech.sub': 'Desplegamos infraestructura corporativa con las herramientas más potentes del ecosistema digital.',
@@ -342,10 +342,10 @@ export const ui = {
     
     // INICIO
     'hero.badge': 'PRIVATE GROWTH BOUTIQUE',
-    'hero.title1': 'Digital architecture',
-    'hero.title2': 'to scale operations.',
-    'hero.desc': 'We build E-commerce and B2B ecosystems. We eliminate friction, automate inventories, and optimize conversion for leading brands.',
-    'hero.cta': 'Schedule Audit',
+    'hero.title1': 'We build the revenue infrastructure for brands that already sell and want to',
+    'hero.title2': 'operate at another level.',
+    'hero.desc': 'We don\'t work with pre-traction startups or brands looking for templates. We work with established operations that need bespoke systems: Shopify Plus, private B2B portals, and automations that eliminate manual work.',
+    'hero.cta': 'Apply to a project',
     'tech.title': 'Our', 'tech.title_editorial': 'technology.',
     'tech.sub': 'We deploy corporate infrastructure with the most powerful tools in the digital ecosystem.',
     'proto.eyebrow': 'WORKING METHODOLOGY',

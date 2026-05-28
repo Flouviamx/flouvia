@@ -150,10 +150,10 @@ const titleHasDot = titleParts.length > 1;
 const servicesLink = isEn ? '/en/servicios' : '/servicios';
 const contactLink  = isEn ? '/en/contacto'  : '/contacto';
 
-const pageTitle = `Flouvia | ${title.replace('.', '')}`;
+const pageTitle = `${title.replace('.', '')} | Flouvia`;
 ---
 
-<Layout title={pageTitle}>
+<Layout title={pageTitle} description={desc}>
   <Navbar />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">

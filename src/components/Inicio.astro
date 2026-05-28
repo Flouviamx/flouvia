@@ -9,7 +9,10 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 ---
 
-<Layout title={`Flouvia | ${t('hero.badge')}`}>
+<Layout
+    title={lang === 'en' ? 'Flouvia — Revenue infrastructure for e-commerce & B2B' : 'Flouvia — Infraestructura de revenue para e-commerce y B2B'}
+    description={lang === 'en' ? 'We build Shopify Plus stores, private B2B portals and automation for brands with an established operation. By application — fewer than 8 active clients a year.' : 'Construimos tiendas Shopify Plus, portales B2B privados y automatización para marcas con operación establecida. Por aplicación: menos de 8 clientes activos al año.'}
+>
     <Navbar />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,6 +25,10 @@ const t = useTranslations(lang);
             <div class="container hero-container">
                 <div class="hero-content">
                     <div class="hero-text-zone" id="hero-parallax">
+                        <div class="hero-status" id="hero-status">
+                            <span class="hero-status-dot" aria-hidden="true"></span>
+                            <span>{lang === 'en' ? 'ACCEPTING Q3 PROJECTS' : 'ACEPTANDO PROYECTOS Q3'}</span>
+                        </div>
                         <p class="eyebrow reveal-blur" style="--delay: 0.1s;">
                             {t('hero.badge')}
                         </p>
@@ -38,11 +45,36 @@ const t = useTranslations(lang);
                         <div class="hero-action">
                             <a href="/contacto" class="btn-luxe">
                                 <span>{t('hero.cta')}</span>
+                                <span class="btn-arrow" aria-hidden="true">→</span>
                                 <div class="btn-shimmer"></div>
                             </a>
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- PROOF STRIP — evidencia (resultados reales) cerca del primer scroll -->
+        <section class="proof-strip">
+            <div class="container">
+                <a href={lang === 'en' ? '/en/casos/el-zarco' : '/casos/el-zarco'} class="proof-row">
+                    <span class="proof-name">El Zarco <span class="proof-cat">B2B</span></span>
+                    <span class="proof-metrics">
+                        <span class="proof-metric"><span class="proof-num editorial">−67%</span>{lang === 'en' ? 'processing time' : 'tiempo de proceso'}</span>
+                        <span class="proof-dot" aria-hidden="true">·</span>
+                        <span class="proof-metric"><span class="proof-num editorial">+25%</span>AOV</span>
+                    </span>
+                    <span class="proof-arrow" aria-hidden="true">→</span>
+                </a>
+                <a href={lang === 'en' ? '/en/casos/setnpet' : '/casos/setnpet'} class="proof-row">
+                    <span class="proof-name">Setnpet <span class="proof-cat">D2C</span></span>
+                    <span class="proof-metrics">
+                        <span class="proof-metric"><span class="proof-num editorial">+42%</span>{lang === 'en' ? 'conversion' : 'conversión'}</span>
+                        <span class="proof-dot" aria-hidden="true">·</span>
+                        <span class="proof-metric"><span class="proof-num editorial">3×</span>{lang === 'en' ? 'LTV retention' : 'retención LTV'}</span>
+                    </span>
+                    <span class="proof-arrow" aria-hidden="true">→</span>
+                </a>
             </div>
         </section>
 
@@ -264,7 +296,7 @@ const t = useTranslations(lang);
                         <div class="row-num">/01</div>
                         <div class="row-content">
                             <h3>E-commerce Engineering</h3>
-                            <p>{lang === 'en' ? 'We build transactional stores on Shopify Plus and Webflow. We maximize AOV through CRO architecture and native upsell flows.' : 'Construimos tiendas transaccionales en Shopify Plus y Webflow. Maximizamos el AOV mediante arquitectura CRO y flujos nativos de upsell.'}</p>
+                            <p>{lang === 'en' ? 'Every visit that doesn\'t convert is revenue you never recover. We rebuild the purchase flow so your store sells more to the same visitors — without depending on more traffic or third-party apps.' : 'Cada visita que no convierte es revenue que no recuperas. Reconstruimos el flujo de compra para que tu tienda venda más a los mismos visitantes, sin depender de más tráfico o apps de terceros.'}</p>
                         </div>
                         <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
                         <div class="animated-border"></div>
@@ -273,7 +305,7 @@ const t = useTranslations(lang);
                         <div class="row-num">/02</div>
                         <div class="row-content">
                             <h3>B2B Digital Architecture</h3>
-                            <p>{lang === 'en' ? 'We digitize wholesale operations. We develop closed B2B portals, dynamic pricing rules, protected catalogs, and ordering systems.' : 'Digitalizamos operaciones mayoristas. Desarrollamos portales B2B cerrados, reglas de precios dinámicos, catálogos protegidos y pedidos.'}</p>
+                            <p>{lang === 'en' ? 'Every order taken by WhatsApp or phone is time your team never recovers and an error waiting to happen. We build the B2B portal that lets your wholesalers order on their own — with their pricing and catalog — while your operation scales without hiring more people.' : 'Cada pedido que tomas por WhatsApp o teléfono es tiempo que tu equipo no recupera y un error esperando a pasar. Construimos el portal B2B que deja que tus mayoristas compren solos —con sus precios y su catálogo— mientras tu operación escala sin contratar más gente.'}</p>
                         </div>
                         <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
                         <div class="animated-border"></div>
@@ -282,7 +314,7 @@ const t = useTranslations(lang);
                         <div class="row-num">/03</div>
                         <div class="row-content">
                             <h3>Business Automation</h3>
-                            <p>{lang === 'en' ? 'We eliminate friction and human error. We integrate your E-commerce with your ERP and databases in real time.' : 'Eliminamos la fricción y el error humano. Integramos tu E-commerce con tu ERP y bases de datos en tiempo real.'}</p>
+                            <p>{lang === 'en' ? 'If your team still copies data between systems by hand, you\'re paying for errors and hours no one should spend. We connect your store, your ERP, and your databases so information flows on its own — no repetitive tasks, no out-of-sync inventory.' : 'Si tu equipo todavía copia datos entre sistemas a mano, estás pagando por errores y horas que nadie debería gastar. Conectamos tu tienda, tu ERP y tus bases de datos para que la información fluya sola: sin tareas repetitivas ni inventarios desincronizados.'}</p>
                         </div>
                         <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
                         <div class="animated-border"></div>
@@ -291,7 +323,7 @@ const t = useTranslations(lang);
                         <div class="row-num">/04</div>
                         <div class="row-content">
                             <h3>Conversion Rate Optimization</h3>
-                            <p>{lang === 'en' ? 'We audit your infrastructure with data, not opinions. We identify exact bottlenecks and implement mathematical improvements to scale your conversion.' : 'Auditamos tu infraestructura con datos, no opiniones. Identificamos los cuellos de botella exactos e implementamos mejoras para escalar tu conversión.'}</p>
+                            <p>{lang === 'en' ? 'Optimizing on opinions is burning budget blind. We audit your funnel with real data, find exactly where you\'re losing sales, and fix it — so you grow without spending more on traffic.' : 'Optimizar a base de opiniones es quemar presupuesto a ciegas. Auditamos tu embudo con datos reales, encontramos exactamente dónde pierdes ventas y lo arreglamos: para que crezcas sin gastar más en tráfico.'}</p>
                         </div>
                         <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
                         <div class="animated-border"></div>
@@ -369,12 +401,13 @@ const t = useTranslations(lang);
                 <div class="cta-card-blue cta-squircle texture-noise" id="cta-card">
                     <div class="cta-inner-flex">
                         <div class="cta-text-side">
-                            <p class="eyebrow" style="color: #64748b; letter-spacing: 4px;">{lang === 'en' ? 'THE NEXT STEP' : 'EL SIGUIENTE PASO'}</p>
-                            <h2 class="cta-title-luxe">{lang === 'en' ? 'Scale your' : 'Escale su'} <span class="editorial" style="color: #fff;">{lang === 'en' ? 'operation.' : 'operación.'}</span></h2>
+                            <p class="eyebrow" style="color: #64748b; letter-spacing: 4px;">{lang === 'en' ? 'LIMITED AVAILABILITY' : 'DISPONIBILIDAD LIMITADA'}</p>
+                            <h2 class="cta-title-luxe">{lang === 'en' ? 'Currently evaluating 2 projects for' : 'Actualmente evaluando 2 proyectos para'} <span class="editorial" style="color: #fff;">Q3.</span></h2>
+                            <p class="cta-scarcity-sub">{lang === 'en' ? 'If your operation qualifies, we begin the diagnosis this week.' : 'Si tu operación califica, iniciamos diagnóstico esta semana.'}</p>
                         </div>
                         <div class="cta-action-side">
                             <a href="/contacto" class="btn-glow-blue">
-                                <span>{lang === 'en' ? 'Schedule Diagnostics' : 'Agendar Diagnóstico'}</span>
+                                <span>{lang === 'en' ? 'See if I qualify →' : 'Ver si califico →'}</span>
                                 <div class="glow-effect"></div>
                             </a>
                         </div>
@@ -428,6 +461,12 @@ const t = useTranslations(lang);
     .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; }
     .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: #222; }
     .eyebrow { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
+
+    /* HERO STATUS — señal de exclusividad (cupo por trimestre) */
+    .hero-status { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 100px; border: 1px solid rgba(16,185,129,0.22); background: rgba(16,185,129,0.04); width: max-content; margin-bottom: 1.6rem; }
+    .hero-status span { font-size: 0.7rem; color: #059669; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .hero-status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: hero-status-pulse 2s infinite; }
+    @keyframes hero-status-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
     
     .reveal-blur { 
         opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(8px); 
@@ -448,8 +487,11 @@ const t = useTranslations(lang);
         padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem; 
         font-weight: 600; transition: all 0.5s var(--ease-spring); overflow: hidden; justify-content: center;
         box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 10px 20px rgba(0,0,0,0.08);
+        align-items: center; gap: 10px;
     }
     .btn-luxe span { position: relative; z-index: 2; }
+    .btn-arrow { position: relative; z-index: 2; display: inline-block; transition: transform 0.5s var(--ease-spring); }
+    .btn-luxe:hover .btn-arrow { transform: translateX(5px); }
     .btn-shimmer { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent); transform: skewX(-20deg); transition: 0s; z-index: 1;}
     .btn-luxe:hover { transform: translateY(-4px); box-shadow: 0 6px 12px rgba(0,0,0,0.08), 0 15px 30px rgba(0,0,0,0.15); }
     .btn-luxe:active { transform: scale(0.95); box-shadow: 0 2px 4px rgba(0,0,0,0.04); transition: 0.1s;}
@@ -476,7 +518,7 @@ const t = useTranslations(lang);
        ========================================================== */
     .hero-grand { padding: 13rem 0 7rem 0; min-height: 80vh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
     .hero-text-zone { transition: transform 0.1s ease-out, opacity 0.1s ease-out; }
-    .hero-title { font-size: clamp(3.2rem, 7vw, 6.8rem); line-height: 0.85; font-weight: 800; letter-spacing: -3px; margin-bottom: 4rem; color: #050505; }
+    .hero-title { font-size: clamp(2.3rem, 4.4vw, 4.2rem); line-height: 1.05; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 4rem; color: #050505; max-width: 900px; }
     .hero-title .title-bold, .hero-title .title-serif, .hero-title .editorial { color: #050505; }
     .lx-line-mask { overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; }
     .title-bold { display: inline; }
@@ -484,6 +526,21 @@ const t = useTranslations(lang);
 
     .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem; }
     .hero-desc { font-size: 1.15rem; color: var(--color-text-muted); max-width: 500px; line-height: 1.5; margin: 0; }
+
+    /* PROOF STRIP — evidencia */
+    .proof-strip { background: var(--color-bg); padding: 0 0 6rem; }
+    .proof-strip .container { display: flex; flex-direction: column; }
+    .proof-row { display: flex; align-items: center; gap: 2rem; justify-content: space-between; padding: 1.7rem 0.2rem; border-top: 1px solid var(--color-border); text-decoration: none; color: var(--color-text); transition: padding-left 0.55s var(--ease-smooth); }
+    .proof-row:last-child { border-bottom: 1px solid var(--color-border); }
+    .proof-row:hover { padding-left: 0.9rem; }
+    .proof-name { font-weight: 700; font-size: 1.05rem; letter-spacing: -0.3px; white-space: nowrap; min-width: 170px; }
+    .proof-cat { color: var(--color-text-muted); font-weight: 600; font-size: 0.72rem; letter-spacing: 1.5px; text-transform: uppercase; margin-left: 0.5rem; }
+    .proof-metrics { display: flex; align-items: baseline; gap: 1.1rem; flex: 1; color: var(--color-text-muted); font-size: 0.98rem; }
+    .proof-metric { display: inline-flex; align-items: baseline; gap: 0.4rem; }
+    .proof-num { font-size: 1.55rem; color: #050505; line-height: 1; }
+    .proof-dot { color: rgba(0,0,0,0.22); }
+    .proof-arrow { font-size: 1.1rem; color: var(--color-text-muted); transition: transform 0.5s var(--ease-spring), color 0.4s ease; flex-shrink: 0; }
+    .proof-row:hover .proof-arrow { transform: translateX(6px); color: #050505; }
 
     /* ==========================================================
        2. TECNOLOGÍA — Editorial Stack
@@ -906,7 +963,8 @@ const t = useTranslations(lang);
     .cta-card-blue:hover { transform: scale(1.02); }
     .cta-inner-flex { display: flex; justify-content: space-between; align-items: center; gap: 3rem; position: relative; z-index: 2;}
     .cta-text-side { flex: 1; }
-    .cta-title-luxe { font-size: clamp(2.5rem, 4vw, 3.8rem); font-weight: 800; color: #fff; line-height: 1.1; letter-spacing: -1.5px; margin: 0; }
+    .cta-title-luxe { font-size: clamp(1.9rem, 3vw, 2.8rem); font-weight: 800; color: #fff; line-height: 1.12; letter-spacing: -1.2px; margin: 0; max-width: 17ch; }
+    .cta-scarcity-sub { margin: 1.1rem 0 0; color: rgba(255,255,255,0.68); font-size: 1.05rem; line-height: 1.5; max-width: 460px; }
     
     .btn-glow-blue { 
         position: relative; background: #fff; color: var(--color-blue-deep); 
@@ -934,13 +992,19 @@ const t = useTranslations(lang);
     @media (max-width: 768px) {
         .hero-grand { padding-top: 11rem; padding-bottom: 4rem; min-height: auto; text-align: center; }
         .hero-content { display: flex; flex-direction: column; align-items: center; }
-        .hero-title { display: flex; flex-direction: column; gap: 0; margin-bottom: 2.5rem; }
-        .title-bold { display: block; font-size: 11.5vw; letter-spacing: -1.8px; line-height: 0.95; margin-bottom: -5px; }
-        .title-serif { display: block; font-size: 12.2vw; font-weight: 300; letter-spacing: -0.5px; line-height: 0.95; }
+        .hero-title { display: flex; flex-direction: column; gap: 0.2rem; margin-bottom: 2.5rem; max-width: 100%; }
+        .title-bold { display: block; font-size: clamp(1.9rem, 7.2vw, 2.7rem); letter-spacing: -1px; line-height: 1.1; margin-bottom: 0; }
+        .title-serif { display: block; font-size: clamp(2rem, 7.6vw, 2.8rem); font-weight: 300; letter-spacing: -0.5px; line-height: 1.05; }
         .hero-bottom { flex-direction: column; align-items: center; gap: 2.5rem; text-align: center; border-top: none; padding-top: 0;}
         .hero-desc { font-size: 1.1rem; padding: 0 5%; max-width: 95%; margin: 0 auto; line-height: 1.6;}
         .hero-action { width: 100%; padding: 0 5%; }
         .btn-luxe { width: 100%; padding: 18px 0; font-size: 1.05rem;}
+        .proof-strip { padding: 0 5% 4rem; }
+        .proof-row { flex-wrap: wrap; gap: 0.5rem 1rem; padding: 1.4rem 0; }
+        .proof-name { min-width: 0; width: 100%; font-size: 1rem; }
+        .proof-metrics { font-size: 0.88rem; gap: 0.7rem; width: 100%; }
+        .proof-num { font-size: 1.3rem; }
+        .proof-arrow { display: none; }
 
         /* TECNOLOGÍA */
         .tech-spotlight { padding: 4rem 0; overflow: hidden; width: 100%; position: relative; }
@@ -1038,7 +1102,8 @@ const t = useTranslations(lang);
         .cta-card-blue { padding: 4rem 2rem; box-shadow: 0 20px 40px rgba(5,11,20,0.25), inset 0 1px 0 rgba(255,255,255,0.08); }
         .cta-inner-flex { flex-direction: column; align-items: center; gap: 2.5rem; width: 100%; }
         .cta-text-side { display: flex; flex-direction: column; align-items: center; }
-        .cta-title-luxe { font-size: 2.8rem; text-align: center; line-height: 1; letter-spacing: -1.5px; margin-top: 0.5rem; }
+        .cta-title-luxe { font-size: 2rem; text-align: center; line-height: 1.1; letter-spacing: -1px; margin-top: 0.5rem; max-width: 100%; }
+        .cta-scarcity-sub { text-align: center; font-size: 1rem; margin-top: 0.9rem; }
         .cta-action-side { width: 100%; }
         .btn-glow-blue { width: 100%; padding: 20px 0; justify-content: center; font-size: 1.05rem; box-shadow: 0 10px 20px rgba(255,255,255,0.05); }
     }
@@ -1093,11 +1158,15 @@ const t = useTranslations(lang);
             /* HERO */
             requestAnimationFrame(() => {
 
+            const heroStatus = document.querySelector<HTMLElement>('.hero-status');
             const heroTitle = document.querySelector<HTMLElement>('.hero-title');
             const heroEyebrow = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
             const heroBottom = document.querySelector<HTMLElement>('.hero-bottom');
 
             const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+            if (heroStatus) {
+                tl.from(heroStatus, { opacity: 0, y: 12, filter: 'blur(6px)', duration: 1.1 }, 0);
+            }
             if (heroEyebrow) {
                 tl.from(heroEyebrow, { opacity: 0, y: 14, letterSpacing: '7px', duration: 1.4 }, 0.1);
             }
