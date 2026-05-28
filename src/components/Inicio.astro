@@ -33,8 +33,7 @@ const t = useTranslations(lang);
                             {t('hero.badge')}
                         </p>
                         <h1 class="hero-title reveal-blur" style="--delay: 0.2s;">
-                            <span class="title-bold">{t('hero.title1')}</span>
-                            <span class="editorial title-serif">{t('hero.title2')}</span>
+                            <span class="title-bold">{t('hero.title1')}</span> <span class="title-bold">{t('hero.title2')}</span>
                         </h1>
                     </div>
                     
@@ -83,7 +82,7 @@ const t = useTranslations(lang);
             <div class="container">
                 <div class="partners-header">
                     <div class="tech-header-row">
-                        <h2 class="section-heading">{t('tech.title')} <span class="editorial">{t('tech.title_editorial')}</span></h2>
+                        <h2 class="section-heading">{t('tech.title')} {t('tech.title_editorial')}</h2>
                         <div class="tech-count-wrap" aria-hidden="true">
                             <span class="tech-count-num" id="tech-counter">08</span>
                             <span class="tech-count-unit">tools</span>
@@ -233,7 +232,7 @@ const t = useTranslations(lang);
                     <div class="header-flex">
                         <div class="header-title-mobile">
                             <p class="eyebrow casos-eyebrow">{lang === 'en' ? 'OUR SYSTEMS' : 'NUESTROS SISTEMAS'}</p>
-                            <h2 class="section-heading">{lang === 'en' ? 'Engineering' : 'Casos de'} <span class="editorial">{lang === 'en' ? 'Cases.' : 'Ingeniería.'}</span></h2>
+                            <h2 class="section-heading">{lang === 'en' ? 'Engineering Cases.' : 'Casos de Ingeniería.'}</h2>
                         </div>
                         <div class="carousel-nav desktop-only">
                             <span class="nav-hint">{lang === 'en' ? 'Swipe →' : 'Desliza →'}</span>
@@ -275,7 +274,7 @@ const t = useTranslations(lang);
 
                     <a href="/contacto" class="vertical-card cta-vertical squircle">
                         <div class="cta-inner">
-                            <h3>{lang === 'en' ? 'Your project' : 'Tu proyecto'}<br><span class="editorial" style="color: #bae6fd;">{lang === 'en' ? 'here.' : 'aquí.'}</span></h3>
+                            <h3>{lang === 'en' ? 'Your project' : 'Tu proyecto'}<br>{lang === 'en' ? 'here.' : 'aquí.'}</h3>
                             <span class="btn-text-only">{lang === 'en' ? 'Start architecture' : 'Iniciar arquitectura'}</span>
                         </div>
                     </a>
@@ -288,7 +287,7 @@ const t = useTranslations(lang);
             <div class="container">
                 <div class="section-header">
                     <p class="eyebrow">{lang === 'en' ? 'OUR SERVICES' : 'NUESTROS SERVICIOS'}</p>
-                    <h2 class="section-heading">{lang === 'en' ? 'Applied' : 'Ingeniería'} <span class="editorial">{lang === 'en' ? 'Engineering.' : 'Aplicada.'}</span></h2>
+                    <h2 class="section-heading">{lang === 'en' ? 'Applied Engineering.' : 'Ingeniería Aplicada.'}</h2>
                 </div>
 
                 <div class="rows-wrapper">
@@ -337,7 +336,7 @@ const t = useTranslations(lang);
                 
                 <div class="protocol-sticky-col">
                     <p class="eyebrow">{t('proto.eyebrow')}</p>
-                    <h2 class="section-heading">{t('proto.title')} <br><span class="editorial">{t('proto.title_editorial')}</span></h2>
+                    <h2 class="section-heading">{t('proto.title')} <br>{t('proto.title_editorial')}</h2>
                     <p class="protocol-intro">{t('proto.desc')}</p>
 
                     <div class="proto-progress" aria-hidden="true">
@@ -402,7 +401,7 @@ const t = useTranslations(lang);
                     <div class="cta-inner-flex">
                         <div class="cta-text-side">
                             <p class="eyebrow" style="color: #64748b; letter-spacing: 4px;">{lang === 'en' ? 'LIMITED AVAILABILITY' : 'DISPONIBILIDAD LIMITADA'}</p>
-                            <h2 class="cta-title-luxe">{lang === 'en' ? 'Currently evaluating 2 projects for' : 'Actualmente evaluando 2 proyectos para'} <span class="editorial" style="color: #fff;">Q3.</span></h2>
+                            <h2 class="cta-title-luxe">{lang === 'en' ? 'Currently evaluating 2 projects for Q3.' : 'Actualmente evaluando 2 proyectos para Q3.'}</h2>
                             <p class="cta-scarcity-sub">{lang === 'en' ? 'If your operation qualifies, we begin the diagnosis this week.' : 'Si tu operación califica, iniciamos diagnóstico esta semana.'}</p>
                         </div>
                         <div class="cta-action-side">
@@ -482,19 +481,22 @@ const t = useTranslations(lang);
     .reveal-fade.active { animation-play-state: running; }
     @keyframes revealFade { to { opacity: 1; transform: translateY(0); } }
 
-    .btn-luxe { 
-        position: relative; display: inline-flex; background: var(--color-text); color: #fff; 
-        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem; 
-        font-weight: 600; transition: all 0.5s var(--ease-spring); overflow: hidden; justify-content: center;
+    .btn-luxe {
+        position: relative; display: inline-flex; background: var(--color-text); color: #fff;
+        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem;
+        font-weight: 600; overflow: hidden; justify-content: center;
+        transition: background 0.5s var(--ease-spring), box-shadow 0.5s var(--ease-spring), color 0.5s var(--ease-spring);
         box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 10px 20px rgba(0,0,0,0.08);
-        align-items: center; gap: 10px;
+        align-items: center; gap: 10px; will-change: transform;
     }
     .btn-luxe span { position: relative; z-index: 2; }
     .btn-arrow { position: relative; z-index: 2; display: inline-block; transition: transform 0.5s var(--ease-spring); }
     .btn-luxe:hover .btn-arrow { transform: translateX(5px); }
     .btn-shimmer { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent); transform: skewX(-20deg); transition: 0s; z-index: 1;}
-    .btn-luxe:hover { transform: translateY(-4px); box-shadow: 0 6px 12px rgba(0,0,0,0.08), 0 15px 30px rgba(0,0,0,0.15); }
-    .btn-luxe:active { transform: scale(0.95); box-shadow: 0 2px 4px rgba(0,0,0,0.04); transition: 0.1s;}
+    /* transform lo maneja el magnetic (GSAP) en desktop; el reposo usa box-shadow para profundidad */
+    .btn-luxe:hover { box-shadow: 0 8px 16px rgba(0,0,0,0.1), 0 20px 40px rgba(0,0,0,0.16); }
+    .btn-luxe:active { box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+    .btn-luxe:hover .btn-shimmer { left: 150%; transition: left 0.7s var(--ease-smooth); }
 
     .squircle { border-radius: 24px; transform: translateZ(0); overflow: hidden; }
     .cta-squircle { border-radius: 32px; transform: translateZ(0); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
@@ -516,13 +518,12 @@ const t = useTranslations(lang);
     /* ==========================================================
        ESCRITORIO
        ========================================================== */
-    .hero-grand { padding: 13rem 0 7rem 0; min-height: 80vh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
+    .hero-grand { padding: 12rem 0 6rem 0; min-height: 100svh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
     .hero-text-zone { transition: transform 0.1s ease-out, opacity 0.1s ease-out; }
-    .hero-title { font-size: clamp(2.3rem, 4.4vw, 4.2rem); line-height: 1.05; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 4rem; color: #050505; max-width: 900px; }
-    .hero-title .title-bold, .hero-title .title-serif, .hero-title .editorial { color: #050505; }
+    .hero-title { font-size: clamp(2.4rem, 4.6vw, 4.4rem); line-height: 1.06; font-weight: 800; letter-spacing: -1.8px; margin-bottom: 3.5rem; color: #050505; max-width: 980px; }
+    .hero-title .title-bold { color: #050505; }
     .lx-line-mask { overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; }
     .title-bold { display: inline; }
-    .title-serif { display: inline; font-size: 105%; }
 
     .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem; }
     .hero-desc { font-size: 1.15rem; color: var(--color-text-muted); max-width: 500px; line-height: 1.5; margin: 0; }
@@ -684,7 +685,6 @@ const t = useTranslations(lang);
     }
     .casos-eyebrow { color: rgba(255,255,255,0.32) !important; }
     .clients-vertical-carousel .section-heading { color: #ffffff; }
-    .clients-vertical-carousel .editorial { color: rgba(147,210,255,0.85) !important; }
     .header-flex { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; }
     .nav-hint {
         font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.4);
@@ -713,13 +713,12 @@ const t = useTranslations(lang);
     }
 
     @media (hover: hover) {
-        .carousel-track:hover .vertical-card {
-            transform: scale(0.94); opacity: 0.68;
-        }
+        /* Elevación limpia y sencilla — sólo la tarjeta activa reacciona,
+           sin atenuar al resto (eso se sentía brusco / "buggy"). */
         .carousel-track .vertical-card:hover {
-            transform: scale(1.03) translateY(-8px);
-            box-shadow: 0 36px 72px rgba(0,0,0,0.45);
-            opacity: 1; z-index: 10;
+            transform: translateY(-10px);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.48);
+            z-index: 10;
         }
     }
     
@@ -748,7 +747,7 @@ const t = useTranslations(lang);
     /* ==========================================================
        4. SERVICIOS — Editorial Rows
        ========================================================== */
-    .services-rows { padding: 9rem 0 5rem 0; background: var(--color-bg); position: relative; }
+    .services-rows { padding: 9rem 0 7rem 0; background: var(--color-bg); position: relative; }
     .rows-wrapper { margin-top: 5rem; border-top: 1px solid var(--color-border); }
 
     .service-row {
@@ -802,19 +801,18 @@ const t = useTranslations(lang);
        5. PROTOCOLO — Editorial Timeline
        ========================================================== */
     .protocol-section {
-        padding: 9rem 0 18rem 0;
+        padding: 9rem 0 12rem 0;
         background: var(--color-bg-soft);
         position: relative;
         overflow: clip; /* clip no crea scroll context — sticky funciona; hidden lo rompía */
     }
 
-    /* Subtle bg watermark like tech section */
+    /* Hairline superior — separa el protocolo del bloque anterior con sobriedad,
+       sin el watermark difuminado gigante que recargaba la sección */
     .protocol-section::before {
-        content: 'Protocol'; position: absolute; bottom: -8%; right: -3%;
-        font-family: var(--font-serif); font-style: italic;
-        font-size: 22vw; font-weight: 400; color: rgba(10,25,47,0.022);
-        pointer-events: none; white-space: nowrap; line-height: 1;
-        user-select: none; z-index: 0;
+        content: ''; position: absolute; top: 0; left: 5%; right: 5%;
+        height: 1px; background: var(--color-border);
+        pointer-events: none; z-index: 0;
     }
 
     .protocol-grid {
@@ -870,7 +868,7 @@ const t = useTranslations(lang);
         box-shadow: 0 0 0 6px rgba(10,25,47,0.06), 0 0 0 14px rgba(10,25,47,0.025);
     }
     .protocol-step.is-active .node-core { background: var(--color-blue-deep); transform: scale(1.4); }
-    .protocol-step.is-active .watermark-num { color: rgba(10,25,47,0.075); }
+    .protocol-step.is-active .watermark-num { color: rgba(10,25,47,0.5); }
     .protocol-step.is-active h4 { color: var(--color-blue-deep); }
 
     .protocol-timeline {
@@ -910,11 +908,11 @@ const t = useTranslations(lang);
     .step-content { position: relative; padding-top: 2px; min-height: 80px; }
 
     .watermark-num {
-        position: absolute; top: -50px; left: -18px;
+        position: absolute; top: -2.6rem; left: 0;
         font-family: var(--font-serif); font-style: italic;
-        font-size: 8rem; line-height: 1;
-        color: rgba(10,25,47,0.04); font-weight: 400; letter-spacing: -5px;
-        pointer-events: none; transition: all 0.7s var(--ease-spring); z-index: -1;
+        font-size: 2.4rem; line-height: 1;
+        color: rgba(10,25,47,0.22); font-weight: 400; letter-spacing: -1px;
+        pointer-events: none; transition: color 0.5s var(--ease-smooth), transform 0.55s var(--ease-spring); z-index: 0;
     }
 
     .step-content h4 {
@@ -933,7 +931,7 @@ const t = useTranslations(lang);
         box-shadow: 0 0 0 6px rgba(10,25,47,0.06), 0 0 0 12px rgba(10,25,47,0.025);
     }
     .protocol-step:hover .node-core { background: var(--color-blue-deep); transform: scale(1.4); }
-    .protocol-step:hover .watermark-num { color: rgba(10,25,47,0.075); transform: translateX(8px); }
+    .protocol-step:hover .watermark-num { color: rgba(10,25,47,0.45); transform: translateX(6px); }
     .protocol-step:hover h4 { color: var(--color-blue-deep); }
 
     /* ==========================================================
@@ -966,15 +964,18 @@ const t = useTranslations(lang);
     .cta-title-luxe { font-size: clamp(1.9rem, 3vw, 2.8rem); font-weight: 800; color: #fff; line-height: 1.12; letter-spacing: -1.2px; margin: 0; max-width: 17ch; }
     .cta-scarcity-sub { margin: 1.1rem 0 0; color: rgba(255,255,255,0.68); font-size: 1.05rem; line-height: 1.5; max-width: 460px; }
     
-    .btn-glow-blue { 
-        position: relative; background: #fff; color: var(--color-blue-deep); 
-        padding: 20px 44px; border-radius: 100px; text-decoration: none; font-size: 1.05rem; font-weight: 700; overflow: hidden; 
-        transition: 0.5s var(--ease-spring); display: inline-flex; align-items: center; justify-content: center; white-space: nowrap;
+    .btn-glow-blue {
+        position: relative; background: #fff; color: var(--color-blue-deep);
+        padding: 20px 44px; border-radius: 100px; text-decoration: none; font-size: 1.05rem; font-weight: 700; overflow: hidden;
+        transition: box-shadow 0.5s var(--ease-spring), background 0.5s var(--ease-spring);
+        display: inline-flex; align-items: center; justify-content: center; white-space: nowrap;
         box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 4px 6px rgba(255,255,255,0.05), 0 10px 20px rgba(255,255,255,0.1);
+        will-change: transform;
     }
     .btn-glow-blue span { position: relative; z-index: 2; }
-    .btn-glow-blue:hover { transform: translateY(-4px); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 10px 20px rgba(255,255,255,0.1), 0 20px 40px rgba(255,255,255,0.2); }
-    .btn-glow-blue:active { transform: scale(0.96); transition: 0.1s; }
+    /* transform lo maneja el magnetic (GSAP) en desktop */
+    .btn-glow-blue:hover { box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 14px 28px rgba(255,255,255,0.12), 0 26px 52px rgba(255,255,255,0.22); }
+    .btn-glow-blue:active { box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 4px 8px rgba(255,255,255,0.08); }
 
     @media (max-width: 1024px) {
         .hero-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; }
@@ -993,8 +994,7 @@ const t = useTranslations(lang);
         .hero-grand { padding-top: 11rem; padding-bottom: 4rem; min-height: auto; text-align: center; }
         .hero-content { display: flex; flex-direction: column; align-items: center; }
         .hero-title { display: flex; flex-direction: column; gap: 0.2rem; margin-bottom: 2.5rem; max-width: 100%; }
-        .title-bold { display: block; font-size: clamp(1.9rem, 7.2vw, 2.7rem); letter-spacing: -1px; line-height: 1.1; margin-bottom: 0; }
-        .title-serif { display: block; font-size: clamp(2rem, 7.6vw, 2.8rem); font-weight: 300; letter-spacing: -0.5px; line-height: 1.05; }
+        .title-bold { display: block; font-size: clamp(2rem, 7.6vw, 2.85rem); font-weight: 800; letter-spacing: -1px; line-height: 1.12; margin-bottom: 0; }
         .hero-bottom { flex-direction: column; align-items: center; gap: 2.5rem; text-align: center; border-top: none; padding-top: 0;}
         .hero-desc { font-size: 1.1rem; padding: 0 5%; max-width: 95%; margin: 0 auto; line-height: 1.6;}
         .hero-action { width: 100%; padding: 0 5%; }
@@ -1093,7 +1093,7 @@ const t = useTranslations(lang);
         .protocol-step { gap: 1.5rem; }
         .protocol-step:hover { transform: translateX(0); }
         .step-node { width: 20px; height: 20px; }
-        .watermark-num { font-size: 4rem; top: -20px; left: -10px; }
+        .watermark-num { font-size: 1.9rem; top: -2rem; left: 0; }
         .step-content h4 { font-size: 1.3rem; }
         .step-content p { font-size: 1rem; }
 
@@ -1190,9 +1190,9 @@ const t = useTranslations(lang);
             const heroParallax = document.getElementById('hero-parallax');
             if (heroParallax) {
                 gsap.to(heroParallax, {
-                    yPercent: 14, opacity: 0.5,
+                    yPercent: 7, opacity: 0.78,
                     ease: 'none',
-                    scrollTrigger: { trigger: '.hero-grand', start: 'top top', end: 'bottom 30%', scrub: 0.8 },
+                    scrollTrigger: { trigger: '.hero-grand', start: 'top top', end: 'bottom 30%', scrub: 1 },
                 });
             }
 
@@ -1305,8 +1305,8 @@ const t = useTranslations(lang);
 
             /* Background text parallax */
             gsap.to('.casos-bg-text', {
-                yPercent: -22, ease: 'none',
-                scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top bottom', end: 'bottom top', scrub: 0.9 },
+                yPercent: -16, ease: 'none',
+                scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top bottom', end: 'bottom top', scrub: 1 },
             });
 
             /* Cards: refined reveal — y+opacity + Ken Burns image + overlay slide */
@@ -1319,6 +1319,13 @@ const t = useTranslations(lang);
                 const tl = gsap.timeline({
                     scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top 75%', once: true },
                     delay: 0.15 + i * 0.13,
+                    // clearProps libera los inline styles de GSAP — sin esto el
+                    // transform/opacity residual bloquea los hovers (elevación de
+                    // la card + Ken Burns de la imagen no se aplicaban).
+                    onComplete: () => {
+                        const targets = [card, img, overlay, num].filter(Boolean) as HTMLElement[];
+                        if (targets.length) gsap.set(targets, { clearProps: 'opacity,transform' });
+                    },
                 });
 
                 tl.from(card, { ...ir, y: 40, opacity: 0, duration: 1.0, ease: 'expo.out' });
@@ -1482,6 +1489,26 @@ const t = useTranslations(lang);
                     ctaCard.style.setProperty('--cta-my', `${((e.clientY - r.top) / r.height) * 100}%`);
                 });
             }
+
+            /* ═══════════════════════════════════════════════════
+               MAGNETIC BUTTONS — los CTAs principales del home siguen
+               sutilmente el cursor (mismo lenguaje que el btn-contact de
+               la navbar). El transform lo controla GSAP; el reposo vuelve
+               con un ease suave, sin rebote.
+               ═══════════════════════════════════════════════════ */
+            const magneticBtns = gsap.utils.toArray<HTMLElement>('.btn-luxe, .btn-glow-blue');
+            magneticBtns.forEach(btn => {
+                const strength = 0.28;
+                btn.addEventListener('mousemove', e => {
+                    const r = btn.getBoundingClientRect();
+                    const dx = (e.clientX - r.left - r.width / 2) * strength;
+                    const dy = (e.clientY - r.top - r.height / 2) * strength;
+                    gsap.to(btn, { x: dx, y: dy, duration: 0.5, ease: 'power3.out' });
+                });
+                btn.addEventListener('mouseleave', () => {
+                    gsap.to(btn, { x: 0, y: 0, duration: 0.65, ease: 'power3.out' });
+                });
+            });
         });
 
         /* ═══════════════════════════════════════════════════
