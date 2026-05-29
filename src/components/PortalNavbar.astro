@@ -29,6 +29,7 @@ const enPath = lang === 'es' ? '/en' + currentPath : currentPath;
             <div class="pnav-left desktop-nav">
                 <div class="pnav-pill" id="pnav-pill">
                     <div class="pnav-pill-shimmer" aria-hidden="true"></div>
+                    <span class="pnav-indicator" id="pnav-indicator" aria-hidden="true"></span>
 
                     <!-- logo (aparece al hacer scroll) -->
                     <a href={lang === 'en' ? 'https://flouvia.com/en/' : 'https://flouvia.com/'} class="pnav-pill-logo" id="pnav-pill-logo" title="Ir al inicio">
@@ -124,6 +125,7 @@ const enPath = lang === 'es' ? '/en' + currentPath : currentPath;
         --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
         --ease-back: cubic-bezier(0.175, 0.885, 0.32, 1.275);
         --ease-morph:cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        --ease-spring:cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     /* ── TOP BAR ── */
@@ -164,26 +166,33 @@ const enPath = lang === 'es' ? '/en' + currentPath : currentPath;
     }
     .desktop-nav { display: flex; align-items: center; }
 
-    /* ── GLASS PILL ── */
+    /* ── GLASS PILL — Liquid Glass (iOS): frosted, blur alto, specular + rim ── */
     .pnav-pill {
         display: inline-flex; align-items: center;
-        background: rgba(255,255,255,0.65);
-        backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        background: linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.5) 48%, rgba(255,255,255,0.56) 100%);
+        backdrop-filter: blur(30px) saturate(1.9) brightness(1.04);
+        -webkit-backdrop-filter: blur(30px) saturate(1.9) brightness(1.04);
         padding: 4px 6px; border-radius: 100px;
-        border: 1px solid rgba(0,0,0,0.07);
+        border: 1px solid rgba(255,255,255,0.55);
         box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.9),
-            0 4px 20px rgba(0,0,0,0.04),
-            0 1px 3px rgba(0,0,0,0.03);
+            inset 0 1px 1px rgba(255,255,255,0.95),
+            inset 0 0 0 0.5px rgba(255,255,255,0.4),
+            inset 0 -6px 14px rgba(255,255,255,0.18),
+            0 10px 34px rgba(10,25,47,0.1),
+            0 2px 6px rgba(10,25,47,0.06);
         position: relative; overflow: hidden;
-        transition: box-shadow 0.6s var(--ease-expo), border-color 0.6s, background 0.6s, backdrop-filter 0.6s;
-        will-change: transform;
+        transition: box-shadow 0.7s var(--ease-spring), border-color 0.7s var(--ease-spring),
+                    background 0.7s var(--ease-spring), backdrop-filter 0.7s var(--ease-spring);
+        will-change: transform, filter;
     }
     .pnav-pill:hover {
         box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.9),
-            0 12px 40px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
-        border-color: rgba(0,0,0,0.1);
+            inset 0 1px 1px rgba(255,255,255,0.98),
+            inset 0 0 0 0.5px rgba(255,255,255,0.5),
+            inset 0 -6px 14px rgba(255,255,255,0.22),
+            0 18px 50px rgba(10,25,47,0.14),
+            0 3px 8px rgba(10,25,47,0.07);
+        border-color: rgba(255,255,255,0.7);
     }
     .pnav-pill-shimmer {
         position: absolute; inset: 0; border-radius: inherit;
@@ -194,12 +203,16 @@ const enPath = lang === 'es' ? '/en' + currentPath : currentPath;
         transform: translateX(100%); transition: transform 0.55s var(--ease-expo);
     }
     .pnav-wrapper.scrolled .pnav-pill {
-        background: rgba(10,25,47,0.92);
-        backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
-        border-color: rgba(255,255,255,0.1);
+        background: linear-gradient(180deg, rgba(24,46,80,0.62) 0%, rgba(10,25,47,0.5) 55%, rgba(8,20,38,0.58) 100%);
+        backdrop-filter: blur(34px) saturate(1.9) brightness(1.06);
+        -webkit-backdrop-filter: blur(34px) saturate(1.9) brightness(1.06);
+        border-color: rgba(255,255,255,0.14);
         box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.06),
-            0 16px 48px rgba(0,0,0,0.25), 0 2px 8px rgba(0,0,0,0.14);
+            inset 0 1px 0 rgba(255,255,255,0.22),
+            inset 0 0 0 0.5px rgba(255,255,255,0.08),
+            inset 0 -8px 18px rgba(0,0,0,0.22),
+            0 22px 60px rgba(0,0,0,0.34),
+            0 3px 10px rgba(0,0,0,0.18);
     }
 
     /* ── NAV LINKS ── */
@@ -207,33 +220,39 @@ const enPath = lang === 'es' ? '/en' + currentPath : currentPath;
         color: rgba(0,0,0,0.55); text-decoration: none;
         font-size: 9.5px; font-weight: 700; letter-spacing: 1px;
         padding: 8px 13px; position: relative; z-index: 1;
-        transition: color 0.3s var(--ease-expo);
+        transition: color 0.45s var(--ease-spring);
         display: flex; flex-direction: column; align-items: center;
     }
     .pnav-wrapper.scrolled .pnav-link { color: rgba(255,255,255,0.45); }
-
-    .pnav-link::before {
-        content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.055); border-radius: 100px; z-index: -1;
-        opacity: 0; transform: scale(0.82);
-        transition: opacity 0.35s var(--ease-expo), transform 0.35s var(--ease-back);
-    }
-    .pnav-wrapper.scrolled .pnav-link::before { background: rgba(255,255,255,0.12); }
-    .pnav-link:hover::before { opacity: 1; transform: scale(1); }
     .pnav-link:hover { color: rgba(0,0,0,0.95); }
     .pnav-wrapper.scrolled .pnav-link:hover { color: rgba(255,255,255,0.95); }
 
-    /* active dot */
-    .pnav-link::after {
-        content: ''; position: absolute; bottom: 1px; left: 50%;
-        transform: translateX(-50%) scale(0);
-        width: 4px; height: 4px; border-radius: 50%;
-        background: currentColor; opacity: 0;
-        transition: transform 0.4s var(--ease-back), opacity 0.3s;
-    }
+    /* active link — solo color; el fondo lo da el indicador deslizante */
     .pnav-link.pnav-active { color: rgba(0,0,0,0.95); }
-    .pnav-link.pnav-active::after { transform: translateX(-50%) scale(1); opacity: 0.8; }
     .pnav-wrapper.scrolled .pnav-link.pnav-active { color: #fff; }
+
+    /* ── INDICADOR DESLIZANTE — cápsula de vidrio que se mueve al link en hover
+       (estilo segmented control iOS). Descansa en el link activo; GSAP maneja
+       x/y/width/height. No crece de golpe: se desliza. */
+    .pnav-indicator {
+        position: absolute; top: 0; left: 0;
+        width: 0; height: 0; border-radius: 100px;
+        background: rgba(0,0,0,0.05);
+        box-shadow:
+            inset 0 1px 1px rgba(255,255,255,0.7),
+            inset 0 0 0 0.5px rgba(255,255,255,0.35),
+            inset 0 -3px 8px rgba(255,255,255,0.12);
+        opacity: 0; z-index: 0; pointer-events: none;
+        transition: background 0.6s var(--ease-spring), box-shadow 0.6s var(--ease-spring);
+        will-change: transform, width, height;
+    }
+    .pnav-wrapper.scrolled .pnav-indicator {
+        background: rgba(255,255,255,0.12);
+        box-shadow:
+            inset 0 1px 1px rgba(255,255,255,0.2),
+            inset 0 0 0 0.5px rgba(255,255,255,0.1),
+            inset 0 -3px 8px rgba(0,0,0,0.12);
+    }
 
     /* pill logo (aparece al scroll) */
     .pnav-pill-logo {
@@ -259,20 +278,39 @@ const enPath = lang === 'es' ? '/en' + currentPath : currentPath;
     .pnav-right { justify-content: flex-end; gap: 12px; }
     .pnav-lang-switch {
         display: flex; align-items: center;
-        background: rgba(255,255,255,0.65); backdrop-filter: blur(16px);
-        border: 1px solid rgba(0,0,0,0.08); border-radius: 100px; padding: 3px;
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), 0 2px 8px rgba(0,0,0,0.04);
-        transition: all 0.5s var(--ease-expo);
+        background: linear-gradient(180deg, rgba(255,255,255,0.62) 0%, rgba(255,255,255,0.42) 100%);
+        backdrop-filter: blur(24px) saturate(1.8) brightness(1.04);
+        -webkit-backdrop-filter: blur(24px) saturate(1.8) brightness(1.04);
+        border: 1px solid rgba(255,255,255,0.5); border-radius: 100px; padding: 3px;
+        box-shadow:
+            inset 0 1px 1px rgba(255,255,255,0.9),
+            inset 0 0 0 0.5px rgba(255,255,255,0.35),
+            0 4px 14px rgba(10,25,47,0.07);
+        transition: background 0.7s var(--ease-spring), border-color 0.7s var(--ease-spring),
+                    box-shadow 0.7s var(--ease-spring), backdrop-filter 0.7s var(--ease-spring);
     }
     .pnav-lang {
         padding: 5px 11px; font-size: 9px; font-weight: 800; letter-spacing: 1px;
         color: rgba(0,0,0,0.4); text-decoration: none; border-radius: 100px;
-        transition: all 0.35s var(--ease-expo);
+        transition: color 0.4s var(--ease-spring), background 0.45s var(--ease-spring),
+                    box-shadow 0.45s var(--ease-spring);
     }
-    .pnav-lang.active { color: #000; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    .pnav-wrapper.scrolled .pnav-lang-switch { background: rgba(10,25,47,0.92); border-color: rgba(255,255,255,0.1); box-shadow: none; }
+    .pnav-lang.active {
+        color: #000;
+        background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.86) 100%);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 2px 8px rgba(10,25,47,0.12);
+    }
+    .pnav-lang:not(.active):hover { color: rgba(0,0,0,0.78); }
+    .pnav-wrapper.scrolled .pnav-lang-switch {
+        background: linear-gradient(180deg, rgba(24,46,80,0.6) 0%, rgba(10,25,47,0.5) 100%);
+        border-color: rgba(255,255,255,0.14);
+        backdrop-filter: blur(30px) saturate(1.9) brightness(1.05);
+        -webkit-backdrop-filter: blur(30px) saturate(1.9) brightness(1.05);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.16), inset 0 0 0 0.5px rgba(255,255,255,0.07);
+    }
     .pnav-wrapper.scrolled .pnav-lang { color: rgba(255,255,255,0.35); }
-    .pnav-wrapper.scrolled .pnav-lang.active { background: #fff; color: var(--pn-dark); }
+    .pnav-wrapper.scrolled .pnav-lang:not(.active):hover { color: rgba(255,255,255,0.7); }
+    .pnav-wrapper.scrolled .pnav-lang.active { background: #fff; color: var(--pn-dark); box-shadow: 0 2px 10px rgba(0,0,0,0.25); }
 
     .pnav-user-wrap { transform: scale(1.08); display: flex; align-items: center; }
 
@@ -293,16 +331,26 @@ const enPath = lang === 'es' ? '/en' + currentPath : currentPath;
         .pnav-mobile-inner {
             display: flex; align-items: center; justify-content: space-between;
             height: 50px;
-            background: rgba(255,255,255,0.88);
-            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(0,0,0,0.08); border-radius: 100px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.74) 0%, rgba(255,255,255,0.54) 100%);
+            backdrop-filter: blur(30px) saturate(1.9) brightness(1.04);
+            -webkit-backdrop-filter: blur(30px) saturate(1.9) brightness(1.04);
+            border: 1px solid rgba(255,255,255,0.55); border-radius: 100px;
             padding: 0 8px 0 16px; width: 92%; max-width: 380px;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.95), 0 16px 40px rgba(0,0,0,0.08);
-            transition: all 0.6s var(--ease-expo);
+            box-shadow:
+                inset 0 1px 1px rgba(255,255,255,0.95),
+                inset 0 0 0 0.5px rgba(255,255,255,0.4),
+                inset 0 -6px 14px rgba(255,255,255,0.18),
+                0 16px 44px rgba(10,25,47,0.12);
+            transition: background 0.7s var(--ease-spring), border-color 0.7s var(--ease-spring),
+                        box-shadow 0.7s var(--ease-spring), backdrop-filter 0.7s var(--ease-spring);
         }
         .pnav-wrapper.scrolled .pnav-mobile-inner {
-            background: rgba(10,25,47,0.92); border-color: rgba(255,255,255,0.12);
-            box-shadow: 0 16px 48px rgba(0,0,0,0.25);
+            background: linear-gradient(180deg, rgba(24,46,80,0.66) 0%, rgba(10,25,47,0.56) 100%);
+            border-color: rgba(255,255,255,0.16);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.2),
+                inset 0 0 0 0.5px rgba(255,255,255,0.08),
+                0 18px 50px rgba(0,0,0,0.3);
         }
         .pnav-wrapper.menu-open .pnav-mobile-inner {
             background: rgba(255,255,255,0.04) !important;
@@ -431,6 +479,12 @@ const enPath = lang === 'es' ? '/en' + currentPath : currentPath;
     .squircle { border-radius: 100px; transform: translateZ(0); }
 </style>
 
+<!-- Gate global: el navbar del portal parte oculto antes del primer paint (cuando hay
+     JS sin reduced-motion) para que GSAP lo revele sin flash. -->
+<style is:global>
+    .js-anim #pnav { opacity: 0; }
+</style>
+
 <script>
 import { gsap } from "gsap";
 
@@ -441,24 +495,36 @@ document.addEventListener("DOMContentLoaded", () => {
     const right    = document.getElementById("pnav-right");
     const toggle   = document.getElementById("pnav-toggle");
     const topbar   = document.getElementById("pnav-topbar");
+    const mobile   = document.getElementById("pnav-mobile-inner");
 
-    /* ── ENTRANCE ANIMATION ── */
-    const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // recolocador del indicador — lo asigna el bloque NAV INDICATOR; lo llaman entrada y scroll.
+    let indicatorRelayout: ((animate?: boolean) => void) | null = null;
+    // hace que el indicador SIGA al link mientras el layout se mueve (transición del logo).
+    let indicatorFollow: ((ms?: number) => void) | null = null;
 
-    gsap.set(topbar, { y: -44 });
-    tl.to(topbar, { y: 0, duration: 0.65 }, 0);
+    /* ── ENTRANCE — reveal escalonado sutil (sin scale/elastic). Mismo patrón
+       anti-flash que el navbar público: el gate .js-anim tapa #pnav, ocultamos las
+       piezas, revelamos el contenedor y entran con stagger; clearProps al final. ── */
+    if (wrapper && !reducedMotion) {
+        const rightKids = right ? Array.from(right.children) : [];
+        const pieces = [topbar, pill, centerLogo, ...rightKids, mobile].filter(Boolean);
 
-    if (pill) {
-        gsap.set(pill, { opacity: 0, scale: 0.92, x: -10 });
-        tl.to(pill, { opacity: 1, scale: 1, x: 0, duration: 0.8 }, 0.18);
-    }
-    if (centerLogo) {
-        gsap.set(centerLogo, { opacity: 0, y: -8 });
-        tl.to(centerLogo, { opacity: 1, y: 0, duration: 0.7, clearProps: "opacity,transform" }, 0.25);
-    }
-    if (right) {
-        gsap.set(Array.from(right.children), { opacity: 0, x: 12 });
-        tl.to(Array.from(right.children), { opacity: 1, x: 0, duration: 0.65, stagger: 0.07 }, 0.3);
+        gsap.set(pieces, { opacity: 0, y: -10 });   // ocultas (navbar aún tapado por el gate)
+        gsap.set(wrapper, { opacity: 1 });          // revela contenedor; piezas siguen ocultas
+
+        const tl = gsap.timeline({
+            defaults: { ease: "power3.out", duration: 0.95 },
+            delay: 0.05,
+            onComplete: () => {
+                gsap.set(pieces, { clearProps: "transform,opacity" });
+                if (indicatorRelayout) indicatorRelayout(false);
+            },
+        });
+        tl.to(topbar,            { opacity: 1, y: 0, duration: 0.6 }, 0)
+          .to([pill, mobile],    { opacity: 1, y: 0, duration: 1.0 }, 0.1)
+          .to(centerLogo,        { opacity: 1, y: 0, duration: 0.9 }, "<0.07")
+          .to(rightKids,         { opacity: 1, y: 0, stagger: 0.08, duration: 0.75 }, "<0.05");
     }
 
     /* ── ACTIVE LINK ── */
@@ -470,20 +536,75 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    /* ── LINK HOVER — letterSpacing spring ── */
-    document.querySelectorAll<HTMLElement>(".pnav-link").forEach(link => {
-        link.addEventListener("mouseenter", () => {
-            gsap.to(link, { letterSpacing: "1.8px", duration: 0.35, ease: "power2.out" });
-        });
-        link.addEventListener("mouseleave", () => {
-            gsap.to(link, { letterSpacing: "1px", duration: 0.5, ease: "elastic.out(1, 0.45)" });
-        });
-    });
+    /* ── NAV INDICATOR — cápsula de vidrio que se desliza al link en hover
+       (estilo segmented control iOS). Descansa en el activo; vuelve al salir. ── */
+    const glassPill = document.getElementById("pnav-pill");
+    const indicator = document.getElementById("pnav-indicator");
+    if (glassPill && indicator) {
+        const navLinks = Array.from(glassPill.querySelectorAll<HTMLElement>(".pnav-link"));
+        const current  = glassPill.querySelector<HTMLElement>(".pnav-link.pnav-active");
+        let visible = false;
+        let target: HTMLElement | null = current;   // dónde DEBE estar el indicador (activo o hovered)
+
+        const rectOf = (el: HTMLElement) => {
+            const pr = glassPill.getBoundingClientRect();
+            const r  = el.getBoundingClientRect();
+            return { x: r.left - pr.left, y: r.top - pr.top, width: r.width, height: r.height };
+        };
+        // pega el indicador al link SIN animar (para seguir un layout en movimiento)
+        const snap = (el: HTMLElement | null) => {
+            if (!el) return;
+            gsap.set(indicator, { ...rectOf(el), opacity: 1 });
+            visible = true;
+        };
+        // mueve el indicador (animado) o lo oculta si no hay destino
+        const slide = (el: HTMLElement | null, animate = true) => {
+            target = el;
+            if (!el) { gsap.to(indicator, { opacity: 0, duration: animate ? 0.3 : 0, overwrite: true }); visible = false; return; }
+            if (!visible) {
+                gsap.set(indicator, rectOf(el));                          // aparece ya colocado
+                gsap.to(indicator, { opacity: 1, duration: animate ? 0.3 : 0, overwrite: true });
+            } else {
+                gsap.to(indicator, { ...rectOf(el), opacity: 1, duration: animate ? 0.5 : 0, ease: "power3.out", overwrite: true });
+            }
+            visible = true;
+        };
+
+        slide(current, false);
+        navLinks.forEach(l => l.addEventListener("mouseenter", () => slide(l)));
+        glassPill.addEventListener("mouseleave", () => slide(current));
+
+        indicatorRelayout = (animate = false) => slide(target, animate);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => indicatorRelayout && indicatorRelayout(false));
+        window.addEventListener("load", () => indicatorRelayout && indicatorRelayout(false), { once: true });
+        window.addEventListener("resize", () => indicatorRelayout && indicatorRelayout(false), { passive: true });
+
+        // SEGUIMIENTO: mientras el logo crece/encoge los links se mueven; el indicador
+        // se pega al target cuadro por cuadro → sin desfase ni salto.
+        let followRAF = 0, followUntil = 0;
+        const followTick = (now: number) => {
+            snap(target);
+            if (now < followUntil) { followRAF = requestAnimationFrame(followTick); }
+            else { followRAF = 0; }
+        };
+        indicatorFollow = (ms = 780) => {
+            followUntil = performance.now() + ms;
+            if (!followRAF) followRAF = requestAnimationFrame(followTick);
+        };
+    }
 
     /* ── SCROLL ── */
     if (wrapper) {
+        let wasScrolled = wrapper.classList.contains("scrolled");
         window.addEventListener("scroll", () => {
-            wrapper.classList.toggle("scrolled", window.scrollY > 50);
+            const isScrolled = window.scrollY > 50;
+            wrapper.classList.toggle("scrolled", isScrolled);
+            if (isScrolled !== wasScrolled) {
+                wasScrolled = isScrolled;
+                // el pill-logo aparece/desaparece (0.7s) y empuja los links → el indicador
+                // SIGUE al link durante toda la transición (sin desfase).
+                if (indicatorFollow) indicatorFollow();
+            }
         }, { passive: true });
     }
 

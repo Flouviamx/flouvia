@@ -26,6 +26,7 @@ const enUrl = lang === 'es' ? '/en' + pathname : pathname;
             <div class="nav-left desktop-nav">
                 <div class="glass-pill" id="glass-pill">
                     <div class="pill-shimmer" aria-hidden="true"></div>
+                    <span class="nav-indicator" id="nav-indicator" aria-hidden="true"></span>
                     <a href={lang === 'en' ? '/en/' : '/'} class="pill-logo" id="pill-logo">
                         <img src="/imgs/logo-flouvia-2.svg" alt="Flouvia" class="logo-pill-img" />
                     </a>
@@ -125,6 +126,7 @@ const enUrl = lang === 'es' ? '/en' + pathname : pathname;
         --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
         --ease-back: cubic-bezier(0.22, 1, 0.36, 1);
         --ease-morph:cubic-bezier(0.22, 1, 0.36, 1);
+        --ease-spring:cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     /* ── TOP BAR ── */
@@ -159,31 +161,34 @@ const enUrl = lang === 'es' ? '/en' + pathname : pathname;
     }
     .desktop-nav { display: flex; align-items: center; }
 
-    /* ── GLASS PILL — gradient sutil, sombras refinadas ── */
+    /* ── GLASS PILL — Liquid Glass (iOS): translúcido, blur alto, specular + rim ── */
     .glass-pill {
         display: inline-flex; align-items: center;
-        background: linear-gradient(135deg, rgba(255,255,255,0.78) 0%, rgba(255,255,255,0.62) 100%);
-        backdrop-filter: blur(20px) saturate(1.4);
-        -webkit-backdrop-filter: blur(20px) saturate(1.4);
+        background:
+            linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.5) 48%, rgba(255,255,255,0.56) 100%);
+        backdrop-filter: blur(30px) saturate(1.9) brightness(1.04);
+        -webkit-backdrop-filter: blur(30px) saturate(1.9) brightness(1.04);
         padding: 4px 6px; border-radius: 100px;
-        border: 1px solid rgba(0,0,0,0.06);
+        border: 1px solid rgba(255,255,255,0.55);
         box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.95),
-            inset 0 -1px 0 rgba(0,0,0,0.02),
-            0 6px 24px rgba(10,25,47,0.06),
-            0 1px 3px rgba(0,0,0,0.04);
+            inset 0 1px 1px rgba(255,255,255,0.95),     /* specular top */
+            inset 0 0 0 0.5px rgba(255,255,255,0.4),     /* rim light */
+            inset 0 -6px 14px rgba(255,255,255,0.18),
+            0 10px 34px rgba(10,25,47,0.1),
+            0 2px 6px rgba(10,25,47,0.06);
         position: relative; overflow: hidden;
-        transition: box-shadow 0.6s var(--ease-expo), border-color 0.6s var(--ease-expo),
-                    background 0.6s var(--ease-expo), backdrop-filter 0.6s;
+        transition: box-shadow 0.7s var(--ease-spring), border-color 0.7s var(--ease-spring),
+                    background 0.7s var(--ease-spring), backdrop-filter 0.7s var(--ease-spring);
         will-change: transform, filter;
     }
     .glass-pill:hover {
         box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.95),
-            inset 0 -1px 0 rgba(0,0,0,0.02),
-            0 14px 44px rgba(10,25,47,0.1),
-            0 2px 6px rgba(0,0,0,0.05);
-        border-color: rgba(0,0,0,0.09);
+            inset 0 1px 1px rgba(255,255,255,0.98),
+            inset 0 0 0 0.5px rgba(255,255,255,0.5),
+            inset 0 -6px 14px rgba(255,255,255,0.22),
+            0 18px 50px rgba(10,25,47,0.14),
+            0 3px 8px rgba(10,25,47,0.07);
+        border-color: rgba(255,255,255,0.7);
     }
 
     /* shimmer sweep */
@@ -198,15 +203,17 @@ const enUrl = lang === 'es' ? '/en' + pathname : pathname;
     }
 
     .navbar-wrapper.scrolled .glass-pill {
-        background: linear-gradient(135deg, rgba(13,30,55,0.92) 0%, rgba(8,20,38,0.88) 100%);
-        backdrop-filter: blur(28px) saturate(1.6);
-        -webkit-backdrop-filter: blur(28px) saturate(1.6);
-        border-color: rgba(255,255,255,0.08);
+        background:
+            linear-gradient(180deg, rgba(24,46,80,0.62) 0%, rgba(10,25,47,0.5) 55%, rgba(8,20,38,0.58) 100%);
+        backdrop-filter: blur(34px) saturate(1.9) brightness(1.06);
+        -webkit-backdrop-filter: blur(34px) saturate(1.9) brightness(1.06);
+        border-color: rgba(255,255,255,0.14);
         box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.1),
-            inset 0 -1px 0 rgba(0,0,0,0.2),
-            0 18px 52px rgba(0,0,0,0.28),
-            0 2px 8px rgba(0,0,0,0.14);
+            inset 0 1px 0 rgba(255,255,255,0.22),        /* specular top */
+            inset 0 0 0 0.5px rgba(255,255,255,0.08),     /* rim light */
+            inset 0 -8px 18px rgba(0,0,0,0.22),
+            0 22px 60px rgba(0,0,0,0.34),
+            0 3px 10px rgba(0,0,0,0.18);
     }
 
     /* ── NAV LINKS ── */
@@ -214,37 +221,38 @@ const enUrl = lang === 'es' ? '/en' + pathname : pathname;
         color: rgba(0,0,0,0.55); text-decoration: none;
         font-size: 9.5px; font-weight: 700; letter-spacing: 1px;
         padding: 8px 14px; position: relative; z-index: 1;
-        transition: color 0.3s var(--ease-expo), opacity 0.3s;
+        transition: color 0.45s var(--ease-spring), opacity 0.3s;
         display: flex; flex-direction: column; align-items: center; gap: 0;
     }
     .navbar-wrapper.scrolled .nav-link { color: rgba(255,255,255,0.45); }
-
-    /* hover background bubble */
-    .nav-link::before {
-        content: ''; position: absolute; top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0,0,0,0.055); border-radius: 100px; z-index: -1;
-        opacity: 0; transform: scale(0.82);
-        transition: opacity 0.35s var(--ease-expo), transform 0.35s var(--ease-back), background 0.4s;
-    }
-    .navbar-wrapper.scrolled .nav-link::before { background: rgba(255,255,255,0.1); }
-    .nav-link:hover::before { opacity: 1; transform: scale(1); }
     .nav-link:hover { color: rgba(0,0,0,0.95); }
     .navbar-wrapper.scrolled .nav-link:hover { color: rgba(255,255,255,0.95); }
 
-    /* ── ACTIVE LINK — filled pill background con depth (no dot) ── */
-    .nav-link.nav-active {
-        color: rgba(0,0,0,0.95);
-    }
-    .nav-link.nav-active::before {
-        opacity: 1; transform: scale(1);
-        background: rgba(0,0,0,0.08);
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(0,0,0,0.03);
-    }
+    /* ── ACTIVE LINK — solo color; el fondo lo da el indicador deslizante ── */
+    .nav-link.nav-active { color: rgba(0,0,0,0.95); }
     .navbar-wrapper.scrolled .nav-link.nav-active { color: #fff; }
-    .navbar-wrapper.scrolled .nav-link.nav-active::before {
-        background: rgba(255,255,255,0.14);
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
+
+    /* ── INDICADOR DESLIZANTE — cápsula de vidrio que se mueve al link en hover
+       (estilo segmented control iOS). Posición/tamaño los maneja GSAP (x,y,width,
+       height); por defecto descansa en el link activo. No crece de golpe: se desliza. */
+    .nav-indicator {
+        position: absolute; top: 0; left: 0;
+        width: 0; height: 0; border-radius: 100px;
+        background: rgba(0,0,0,0.05);
+        box-shadow:
+            inset 0 1px 1px rgba(255,255,255,0.7),
+            inset 0 0 0 0.5px rgba(255,255,255,0.35),
+            inset 0 -3px 8px rgba(255,255,255,0.12);
+        opacity: 0; z-index: 0; pointer-events: none;
+        transition: background 0.6s var(--ease-spring), box-shadow 0.6s var(--ease-spring);
+        will-change: transform, width, height;
+    }
+    .navbar-wrapper.scrolled .nav-indicator {
+        background: rgba(255,255,255,0.12);
+        box-shadow:
+            inset 0 1px 1px rgba(255,255,255,0.2),
+            inset 0 0 0 0.5px rgba(255,255,255,0.1),
+            inset 0 -3px 8px rgba(0,0,0,0.12);
     }
 
     /* pill-logo */
@@ -274,39 +282,70 @@ const enUrl = lang === 'es' ? '/en' + pathname : pathname;
 
     .lang-switch {
         display: flex; align-items: center;
-        background: rgba(255,255,255,0.65); backdrop-filter: blur(16px);
-        border: 1px solid rgba(0,0,0,0.08); border-radius: 100px; padding: 3px;
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), 0 2px 8px rgba(0,0,0,0.04);
-        transition: all 0.5s var(--ease-expo);
+        background: linear-gradient(180deg, rgba(255,255,255,0.62) 0%, rgba(255,255,255,0.42) 100%);
+        backdrop-filter: blur(24px) saturate(1.8) brightness(1.04);
+        -webkit-backdrop-filter: blur(24px) saturate(1.8) brightness(1.04);
+        border: 1px solid rgba(255,255,255,0.5); border-radius: 100px; padding: 3px;
+        box-shadow:
+            inset 0 1px 1px rgba(255,255,255,0.9),
+            inset 0 0 0 0.5px rgba(255,255,255,0.35),
+            0 4px 14px rgba(10,25,47,0.07);
+        transition: background 0.7s var(--ease-spring), border-color 0.7s var(--ease-spring),
+                    box-shadow 0.7s var(--ease-spring), backdrop-filter 0.7s var(--ease-spring);
     }
     .lang-option {
         padding: 5px 11px; font-size: 9px; font-weight: 800; letter-spacing: 1px;
         color: rgba(0,0,0,0.4); text-decoration: none; border-radius: 100px;
-        transition: all 0.35s var(--ease-expo); z-index: 2;
+        transition: color 0.4s var(--ease-spring), background 0.45s var(--ease-spring),
+                    box-shadow 0.45s var(--ease-spring); z-index: 2;
     }
     .lang-option.active {
-        color: #000; background: #fff;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        color: #000;
+        background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.86) 100%);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 2px 8px rgba(10,25,47,0.12);
     }
+    .lang-option:not(.active):hover { color: rgba(0,0,0,0.78); }
     .navbar-wrapper.scrolled .lang-switch {
-        background: rgba(10,25,47,0.9); border-color: rgba(255,255,255,0.1);
-        backdrop-filter: blur(28px); box-shadow: none;
+        background: linear-gradient(180deg, rgba(24,46,80,0.6) 0%, rgba(10,25,47,0.5) 100%);
+        border-color: rgba(255,255,255,0.14);
+        backdrop-filter: blur(30px) saturate(1.9) brightness(1.05);
+        -webkit-backdrop-filter: blur(30px) saturate(1.9) brightness(1.05);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.16), inset 0 0 0 0.5px rgba(255,255,255,0.07);
     }
     .navbar-wrapper.scrolled .lang-option { color: rgba(255,255,255,0.35); }
-    .navbar-wrapper.scrolled .lang-option.active { background: #fff; color: var(--nb-dark); }
+    .navbar-wrapper.scrolled .lang-option:not(.active):hover { color: rgba(255,255,255,0.7); }
+    .navbar-wrapper.scrolled .lang-option.active { background: #fff; color: var(--nb-dark); box-shadow: 0 2px 10px rgba(0,0,0,0.25); }
 
     .mini-pill {
         display: flex; align-items: center; justify-content: center;
-        background: rgba(255,255,255,0.65); backdrop-filter: blur(16px);
-        border: 1px solid rgba(0,0,0,0.08); border-radius: 100px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.62) 0%, rgba(255,255,255,0.42) 100%);
+        backdrop-filter: blur(24px) saturate(1.8) brightness(1.04);
+        -webkit-backdrop-filter: blur(24px) saturate(1.8) brightness(1.04);
+        border: 1px solid rgba(255,255,255,0.5); border-radius: 100px;
         padding: 9px 13px; color: rgba(0,0,0,0.6);
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), 0 2px 8px rgba(0,0,0,0.04);
-        transition: all 0.4s var(--ease-expo);
+        box-shadow:
+            inset 0 1px 1px rgba(255,255,255,0.9),
+            inset 0 0 0 0.5px rgba(255,255,255,0.35),
+            0 4px 14px rgba(10,25,47,0.07);
+        transition: background 0.55s var(--ease-spring), color 0.45s var(--ease-spring),
+                    transform 0.5s var(--ease-spring), box-shadow 0.55s var(--ease-spring),
+                    border-color 0.55s var(--ease-spring);
         text-decoration: none;
     }
-    .mini-pill:hover { background: rgba(255,255,255,0.9); color: #000; transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 8px 20px rgba(0,0,0,0.1); }
-    .navbar-wrapper.scrolled .mini-pill { background: rgba(10,25,47,0.9); border-color: rgba(255,255,255,0.12); color: rgba(255,255,255,0.7); box-shadow: none; }
-    .navbar-wrapper.scrolled .mini-pill:hover { background: rgba(10,25,47,1); color: #fff; }
+    .mini-pill:hover {
+        color: #000; transform: translateY(-2px);
+        background: linear-gradient(180deg, rgba(255,255,255,0.62) 0%, rgba(255,255,255,0.4) 100%);
+        box-shadow:
+            inset 0 1px 1px rgba(255,255,255,0.98),
+            inset 0 0 0 0.5px rgba(255,255,255,0.5),
+            0 12px 28px rgba(10,25,47,0.14);
+    }
+    .navbar-wrapper.scrolled .mini-pill {
+        background: linear-gradient(180deg, rgba(24,46,80,0.6) 0%, rgba(10,25,47,0.5) 100%);
+        border-color: rgba(255,255,255,0.14); color: rgba(255,255,255,0.7);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.16), inset 0 0 0 0.5px rgba(255,255,255,0.07);
+    }
+    .navbar-wrapper.scrolled .mini-pill:hover { color: #fff; transform: translateY(-2px); background: linear-gradient(180deg, rgba(30,56,95,0.72) 0%, rgba(14,32,58,0.64) 100%); }
     .login-icon { transition: transform 0.45s var(--ease-expo); }
     .mini-pill:hover .login-icon { transform: scale(1.08); }
 
@@ -351,16 +390,26 @@ const enUrl = lang === 'es' ? '/en' + pathname : pathname;
         .mobile-pill-inner {
             display: flex; align-items: center; justify-content: space-between;
             height: 50px;
-            background: rgba(255,255,255,0.88);
-            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(0,0,0,0.08); border-radius: 100px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.74) 0%, rgba(255,255,255,0.54) 100%);
+            backdrop-filter: blur(30px) saturate(1.9) brightness(1.04);
+            -webkit-backdrop-filter: blur(30px) saturate(1.9) brightness(1.04);
+            border: 1px solid rgba(255,255,255,0.55); border-radius: 100px;
             padding: 0 8px 0 16px; width: 92%; max-width: 380px;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.95), 0 16px 40px rgba(0,0,0,0.08);
-            transition: all 0.6s var(--ease-expo);
+            box-shadow:
+                inset 0 1px 1px rgba(255,255,255,0.95),
+                inset 0 0 0 0.5px rgba(255,255,255,0.4),
+                inset 0 -6px 14px rgba(255,255,255,0.18),
+                0 16px 44px rgba(10,25,47,0.12);
+            transition: background 0.7s var(--ease-spring), border-color 0.7s var(--ease-spring),
+                        box-shadow 0.7s var(--ease-spring), backdrop-filter 0.7s var(--ease-spring);
         }
         .navbar-wrapper.scrolled .mobile-pill-inner {
-            background: rgba(10,25,47,0.92); border-color: rgba(255,255,255,0.12);
-            box-shadow: 0 16px 48px rgba(0,0,0,0.25);
+            background: linear-gradient(180deg, rgba(24,46,80,0.66) 0%, rgba(10,25,47,0.56) 100%);
+            border-color: rgba(255,255,255,0.16);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.2),
+                inset 0 0 0 0.5px rgba(255,255,255,0.08),
+                0 18px 50px rgba(0,0,0,0.3);
         }
         .pill-left-group { display: flex; align-items: center; gap: 16px; height: 100%; }
 
@@ -509,90 +558,59 @@ const enUrl = lang === 'es' ? '/en' + pathname : pathname;
     .squircle { border-radius: 100px; transform: translateZ(0); }
 </style>
 
+<!-- Gate global: el navbar parte oculto antes del primer paint (cuando hay JS sin
+     reduced-motion) para que GSAP lo revele sin flash. -->
+<style is:global>
+    .js-anim #navbar { opacity: 0; }
+</style>
+
 <script>
 import { gsap } from "gsap";
 
 document.addEventListener("DOMContentLoaded", () => {
-    const navbar   = document.getElementById("navbar");
-    const toggle   = document.getElementById("menu-toggle");
-    const pill     = document.getElementById("glass-pill");
-    const mainLogo = document.getElementById("main-logo");
-    const navRight = document.getElementById("nav-right");
-    const topBar   = document.getElementById("top-bar");
-    const contactBtn = document.querySelector<HTMLElement>(".btn-contact");
+    const navbar = document.getElementById("navbar");
+    const toggle = document.getElementById("menu-toggle");
 
     /* ═══════════════════════════════════════════════════
-       ENTRANCE — multi-capa cinemático
-       Pattern: pill scales → content reveals → right enters
+       ENTRANCE — reveal escalonado sutil de las piezas internas.
+       El CSS (.js-anim #navbar) oculta el navbar completo antes del primer paint.
+       Ocultamos las piezas (mientras el contenedor sigue en opacity:0 por el gate),
+       luego revelamos el contenedor y las dejamos entrar con un stagger suave.
+       Sin blur/scale/drama — solo fade + leve bajada. Al terminar, clearProps en
+       las piezas para que .scrolled / :hover gobiernen; el navbar conserva su
+       opacity:1 inline (gana sobre el gate).
        ═══════════════════════════════════════════════════ */
-    const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // recolocador del indicador deslizante — lo asigna el bloque NAV INDICATOR;
+    // lo llaman la entrada (onComplete) y el scroll (cambio claro→oscuro).
+    let indicatorRelayout: ((animate?: boolean) => void) | null = null;
+    // hace que el indicador SIGA al link mientras el layout se mueve (transición del logo).
+    let indicatorFollow: ((ms?: number) => void) | null = null;
 
-    // 1. Top bar — slides down con sus elementos internos staggered
-    if (topBar) {
-        gsap.set(topBar, { y: -44 });
-        gsap.set(topBar.querySelectorAll(".top-text, .top-dot"), { opacity: 0, y: -4 });
-        tl.to(topBar, { y: 0, duration: 0.85 }, 0);
-        tl.to(topBar.querySelectorAll(".top-text, .top-dot"), {
-            opacity: 1, y: 0, duration: 0.7, stagger: 0.06,
-        }, 0.25);
-    }
+    if (navbar && !reducedMotion) {
+        const topBar    = document.getElementById("top-bar");
+        const pill      = document.getElementById("glass-pill");
+        const mainLogo  = document.getElementById("main-logo");
+        const navRight  = document.getElementById("nav-right");
+        const rightKids = navRight ? Array.from(navRight.children) : [];
+        const mobile    = document.getElementById("mobile-pill");
+        const pieces    = [topBar, pill, mainLogo, ...rightKids, mobile].filter(Boolean);
 
-    // 2. Glass pill — escala desde 0.5 horizontalmente con drop sutil + blur
-    if (pill) {
-        const navLinks   = pill.querySelectorAll(".nav-link");
-        const pillLogo   = pill.querySelector(".pill-logo");
+        gsap.set(pieces, { opacity: 0, y: -10 });   // ocultas (navbar aún tapado por el gate)
+        gsap.set(navbar, { opacity: 1 });           // revela contenedor; piezas siguen ocultas
 
-        gsap.set(pill, {
-            opacity: 0, scaleX: 0.82, scaleY: 0.94, y: -10,
-            filter: "blur(4px)", transformOrigin: "center center",
+        const tl = gsap.timeline({
+            defaults: { ease: "power3.out", duration: 0.95 },
+            delay: 0.05,
+            onComplete: () => {
+                gsap.set(pieces, { clearProps: "transform,opacity" });
+                if (indicatorRelayout) indicatorRelayout(false); // recolocar tras settle
+            },
         });
-        gsap.set(navLinks, { opacity: 0, y: 10, filter: "blur(2px)" });
-
-        tl.to(pill, {
-            opacity: 1, scaleX: 1, scaleY: 1, y: 0,
-            filter: "blur(0px)", duration: 1.0,
-            onComplete: () => gsap.set(pill, { clearProps: "opacity,transform,filter" }),
-        }, 0.2);
-
-        // Links revelan desde dentro del pill con stagger orgánico
-        tl.to(navLinks, {
-            opacity: 1, y: 0, filter: "blur(0px)",
-            duration: 0.7, stagger: 0.05,
-            onComplete: () => gsap.set(navLinks, { clearProps: "opacity,transform,filter" }),
-        }, 0.6);
-    }
-
-    // 3. Center logo — drop desde arriba con scale + blur (Apple-style)
-    if (mainLogo) {
-        gsap.set(mainLogo, {
-            opacity: 0, y: -14, scale: 1.05, filter: "blur(6px)",
-        });
-        tl.to(mainLogo, {
-            opacity: 1, y: 0, scale: 1, filter: "blur(0px)",
-            duration: 1.0,
-            onComplete: () => gsap.set(mainLogo, { clearProps: "opacity,transform,filter" }),
-        }, 0.45);
-    }
-
-    // 4. Right side — cada item desde arriba con scale (no desde el lado para sentirse más coherente)
-    if (navRight) {
-        const rightItems = Array.from(navRight.children) as HTMLElement[];
-        gsap.set(rightItems, { opacity: 0, y: -10, scale: 0.94, filter: "blur(3px)" });
-        tl.to(rightItems, {
-            opacity: 1, y: 0, scale: 1, filter: "blur(0px)",
-            duration: 0.85, stagger: 0.07,
-            onComplete: () => gsap.set(rightItems, { clearProps: "opacity,transform,filter" }),
-        }, 0.6);
-    }
-
-    // 5. Contact button — pulse de glow al final (microdetalle premium)
-    if (contactBtn) {
-        tl.fromTo(contactBtn,
-            { boxShadow: "0 4px 16px rgba(10,25,47,0), inset 0 1px 0 rgba(255,255,255,0)" },
-            { boxShadow: "0 4px 16px rgba(10,25,47,0.2), inset 0 1px 0 rgba(255,255,255,0.08)",
-              duration: 1.0, ease: "expo.out" },
-            1.1
-        );
+        tl.to(topBar,                 { opacity: 1, y: 0, duration: 0.6 }, 0)
+          .to([pill, mobile],         { opacity: 1, y: 0, duration: 1.0 }, 0.1)
+          .to(mainLogo,               { opacity: 1, y: 0, duration: 0.9 }, "<0.07")
+          .to(rightKids,              { opacity: 1, y: 0, stagger: 0.08, duration: 0.75 }, "<0.05");
     }
 
     /* ═══════════════════════════════════════════════════
@@ -610,39 +628,121 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     /* ═══════════════════════════════════════════════════
-       MAGNETIC HOVER en btn-contact
+       NAV INDICATOR — cápsula de vidrio que se desliza al link en hover
+       (estilo segmented control iOS). Por defecto descansa en el link activo;
+       al pasar el mouse se desliza (x/y/width/height vía GSAP) y al salir regresa.
+       Nunca crece de golpe: morph suave. Se recalcula en fuentes/resize/scroll.
        ═══════════════════════════════════════════════════ */
-    if (contactBtn) {
-        const strength = 0.15; // intensidad del magnetismo (sutil)
-        contactBtn.addEventListener("mousemove", (e) => {
-            const r = contactBtn.getBoundingClientRect();
-            const dx = (e.clientX - r.left - r.width / 2) * strength;
-            const dy = (e.clientY - r.top - r.height / 2) * strength;
-            gsap.to(contactBtn, { x: dx, y: dy, duration: 0.5, ease: "power3.out" });
-        });
-        contactBtn.addEventListener("mouseleave", () => {
-            gsap.to(contactBtn, { x: 0, y: 0, duration: 0.6, ease: "power3.out" });
-        });
+    const glassPill = document.getElementById("glass-pill");
+    const indicator = document.getElementById("nav-indicator");
+    if (glassPill && indicator) {
+        const navLinks = Array.from(glassPill.querySelectorAll<HTMLElement>(".nav-link"));
+        const current  = glassPill.querySelector<HTMLElement>(".nav-link.nav-active"); // link activo (fijo por página)
+        let visible = false;
+        let target: HTMLElement | null = current;   // dónde DEBE estar el indicador (activo o hovered)
+
+        const rectOf = (el: HTMLElement) => {
+            const pr = glassPill.getBoundingClientRect();
+            const r  = el.getBoundingClientRect();
+            return { x: r.left - pr.left, y: r.top - pr.top, width: r.width, height: r.height };
+        };
+        // pega el indicador al link SIN animar (para seguir un layout en movimiento)
+        const snap = (el: HTMLElement | null) => {
+            if (!el) return;
+            gsap.set(indicator, { ...rectOf(el), opacity: 1 });
+            visible = true;
+        };
+        // mueve el indicador (animado) o lo oculta si no hay destino
+        const slide = (el: HTMLElement | null, animate = true) => {
+            target = el;
+            if (!el) { gsap.to(indicator, { opacity: 0, duration: animate ? 0.3 : 0, overwrite: true }); visible = false; return; }
+            if (!visible) {
+                gsap.set(indicator, rectOf(el));                          // aparece ya colocado (no crece desde la esquina)
+                gsap.to(indicator, { opacity: 1, duration: animate ? 0.3 : 0, overwrite: true });
+            } else {
+                gsap.to(indicator, { ...rectOf(el), opacity: 1, duration: animate ? 0.5 : 0, ease: "power3.out", overwrite: true });
+            }
+            visible = true;
+        };
+
+        slide(current, false);
+        navLinks.forEach(l => l.addEventListener("mouseenter", () => slide(l)));
+        glassPill.addEventListener("mouseleave", () => slide(current));
+
+        // recolocar (sin animar) cuando cambian las medidas reales
+        indicatorRelayout = (animate = false) => slide(target, animate);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => indicatorRelayout && indicatorRelayout(false));
+        window.addEventListener("load", () => indicatorRelayout && indicatorRelayout(false), { once: true });
+        window.addEventListener("resize", () => indicatorRelayout && indicatorRelayout(false), { passive: true });
+
+        // SEGUIMIENTO: mientras el logo crece/encoge (transición CSS 0.7s) los links se
+        // mueven; el indicador se pega al target cuadro por cuadro → sin desfase ni salto.
+        let followRAF = 0, followUntil = 0;
+        const followTick = (now: number) => {
+            snap(target);
+            if (now < followUntil) { followRAF = requestAnimationFrame(followTick); }
+            else { followRAF = 0; }
+        };
+        indicatorFollow = (ms = 780) => {
+            followUntil = performance.now() + ms;
+            if (!followRAF) followRAF = requestAnimationFrame(followTick);
+        };
     }
 
     /* ═══════════════════════════════════════════════════
-       LINK HOVER — letterSpacing spring (mantenido)
+       LANG SWITCH — crossfade + prefetch (sin sensación de recarga)
+       Precargamos el destino al primer indicio de intención (hover/touch) para que
+       la navegación sea casi instantánea, y hacemos un fade-out corto del contenido
+       al hacer click. El destino entra con su propio gate .js-anim → se lee como
+       crossfade en vez de flash blanco. Con reduced-motion → navegación normal.
        ═══════════════════════════════════════════════════ */
-    document.querySelectorAll<HTMLElement>(".nav-link").forEach(link => {
-        link.addEventListener("mouseenter", () => {
-            gsap.to(link, { letterSpacing: "1.6px", duration: 0.4, ease: "power2.out" });
+    const langLinks = document.querySelectorAll<HTMLAnchorElement>(".lang-option, .lang-option-m");
+    const prefetched = new Set<string>();
+    const prefetch = (href: string) => {
+        if (!href || prefetched.has(href)) return;
+        prefetched.add(href);
+        const link = document.createElement("link");
+        link.rel = "prefetch";
+        link.href = href;
+        document.head.appendChild(link);
+    };
+    langLinks.forEach(a => {
+        const href = a.getAttribute("href") || "";
+        a.addEventListener("mouseenter", () => prefetch(href), { once: true });
+        a.addEventListener("touchstart", () => prefetch(href), { once: true, passive: true });
+
+        a.addEventListener("click", (e) => {
+            if (a.classList.contains("active")) { e.preventDefault(); return; } // idioma actual → no recargar
+            const dest = a.href;
+            if (!dest || dest === window.location.href || reducedMotion) return; // sin anim → navegación normal
+            e.preventDefault();
+            prefetch(href);
+            gsap.to(document.body, {
+                opacity: 0, duration: 0.16, ease: "power1.out",
+                onComplete: () => { window.location.href = dest; },
+            });
         });
-        link.addEventListener("mouseleave", () => {
-            gsap.to(link, { letterSpacing: "1px", duration: 0.45, ease: "power2.out" });
-        });
+    });
+    // bfcache (botón atrás): la página se restaura con el opacity:0 inline pegado →
+    // lo limpiamos al volver para no dejar la pantalla en blanco.
+    window.addEventListener("pageshow", (e) => {
+        if ((e as PageTransitionEvent).persisted) gsap.set(document.body, { clearProps: "opacity" });
     });
 
     /* ═══════════════════════════════════════════════════
        SCROLL — toggle scrolled class
        ═══════════════════════════════════════════════════ */
     if (navbar) {
+        let wasScrolled = navbar.classList.contains("scrolled");
         window.addEventListener("scroll", () => {
-            navbar.classList.toggle("scrolled", window.scrollY > 50);
+            const isScrolled = window.scrollY > 50;
+            navbar.classList.toggle("scrolled", isScrolled);
+            if (isScrolled !== wasScrolled) {
+                wasScrolled = isScrolled;
+                // el pill-logo aparece/desaparece (transición 0.7s) y empuja los links →
+                // el indicador SIGUE al link durante toda la transición (sin desfase).
+                if (indicatorFollow) indicatorFollow();
+            }
         }, { passive: true });
     }
 

@@ -9,57 +9,208 @@ import { getLangFromUrl, useTranslations } from '../i18n/utils';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const isEn = lang === 'en';
+
+const SITE = 'https://flouvia.com';
+const servPath = isEn ? '/en/servicios' : '/servicios';
+
+// ── Schema Service (uno por servicio) — citable por AI Overviews ──
+const services = isEn ? [
+    { anchor: 'ecommerce',  name: 'E-commerce Engineering — Shopify Plus', serviceType: 'E-commerce Engineering',
+      description: 'Transactional store builds on Shopify Plus. Headless architecture with Next.js and Hydrogen, native themes, checkout engineering, and migrations from Magento or VTEX without SEO loss.' },
+    { anchor: 'b2b',        name: 'B2B Digital Architecture', serviceType: 'B2B E-commerce',
+      description: 'Private B2B portals on Shopify Plus with role-based access, dynamic pricing, SKU quick-order, and native two-way ERP integration.' },
+    { anchor: 'automation', name: 'Business Automation', serviceType: 'Business Process Automation',
+      description: 'E-commerce operations automation: native ERP integration (SAP, NetSuite, Dynamics), workflow orchestration with Make, and data centralization in Airtable.' },
+    { anchor: 'cro',        name: 'Conversion Rate Optimization (CRO)', serviceType: 'Conversion Rate Optimization',
+      description: 'Data-driven conversion optimization: forensic UX audit, A/B testing, heatmaps, and Klaviyo retention flows. Average increases of +34% in conversion rate.' },
+] : [
+    { anchor: 'ecommerce',  name: 'E-commerce Engineering — Shopify Plus', serviceType: 'E-commerce Engineering',
+      description: 'Construcción de tiendas transaccionales en Shopify Plus. Arquitectura headless con Next.js y Hydrogen, themes nativos, checkout engineering y migraciones desde Magento o VTEX sin pérdida de SEO.' },
+    { anchor: 'b2b',        name: 'B2B Digital Architecture', serviceType: 'B2B E-commerce',
+      description: 'Portales B2B privados sobre Shopify Plus con acceso por rol, precios dinámicos, quick-order por SKU e integración ERP nativa bidireccional.' },
+    { anchor: 'automation', name: 'Business Automation', serviceType: 'Business Process Automation',
+      description: 'Automatización de operaciones e-commerce: integración ERP nativa (SAP, NetSuite, Dynamics), orquestación de flujos con Make y centralización de datos en Airtable.' },
+    { anchor: 'cro',        name: 'Conversion Rate Optimization (CRO)', serviceType: 'Conversion Rate Optimization',
+      description: 'Optimización de conversión basada en datos: auditoría UX forense, A/B testing, heatmaps y flujos de retención en Klaviyo. Incrementos promedio de +34% en tasa de conversión.' },
+];
+
+const serviceSchemas = services.map((s) => ({
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: s.name,
+    description: s.description,
+    provider: { '@id': `${SITE}/#organization` },
+    areaServed: [
+        { '@type': 'Country', name: isEn ? 'Mexico' : 'México' },
+        { '@type': 'Country', name: 'United States' },
+    ],
+    serviceType: s.serviceType,
+    url: `${SITE}${servPath}#${s.anchor}`,
+}));
+
+// ── FAQ — fuente única para render + FAQPage schema ──
+const faqs = isEn ? [
+    { q: 'How much does an e-commerce project with Flouvia cost?',
+      a: 'Flouvia projects are high-value and vary by complexity. We don’t work with budgets under $30,000 MXN. The process starts with a free 30-min diagnosis where we assess fit before making any commercial proposal.' },
+    { q: 'When do I need Shopify Plus instead of standard Shopify?',
+      a: 'Shopify Plus is necessary when your operation exceeds $500k USD a year, you need a custom checkout, native ERP integrations, B2B portals with differentiated pricing, or advanced flow automation. For smaller operations, standard Shopify can be enough.' },
+    { q: 'How long does it take to build a B2B portal on Shopify Plus?',
+      a: 'A B2B portal with role-based access, dynamic pricing, and a protected catalog takes 8 to 14 weeks. With native ERP integration (SAP, NetSuite, Dynamics), it’s 12 to 16 weeks. Timing depends on the complexity of the business rules and available APIs.' },
+    { q: 'Do you work with companies outside Mexico?',
+      a: 'Yes. Flouvia operates with clients in Mexico and the United States. The operation is 100% remote and digital. We handle projects in both markets with teams in CDMX as the development hub.' },
+    { q: 'What is CRO and how does it improve my e-commerce?',
+      a: 'CRO (Conversion Rate Optimization) is the process of analyzing your users’ real behavior — heatmaps, session recordings, A/B tests — to identify where you lose sales and build data-backed improvements. In our projects we’ve achieved average increases of +34% in conversion rate.' },
+    { q: 'Do you provide maintenance after delivering the project?',
+      a: 'Yes. We offer technical maintenance and post-launch support plans that include latency monitoring, security updates, and CRO iterations. The systems we build are made to evolve, not to stay static.' },
+    { q: 'How do you integrate Shopify Plus with an ERP like SAP or NetSuite?',
+      a: 'We build bespoke two-way API connectors — we don’t use generic ones. The integration syncs inventory, orders, pricing, and customers in real time between Shopify Plus and the ERP. Integration takes 6 to 10 weeks depending on flow complexity.' },
+] : [
+    { q: '¿Cuánto cuesta un proyecto de e-commerce con Flouvia?',
+      a: 'Los proyectos de Flouvia son de alto valor y varían según complejidad. No trabajamos con presupuestos menores a $30,000 MXN. El proceso empieza con un diagnóstico gratuito de 30 min donde evaluamos si hay fit antes de hacer cualquier propuesta económica.' },
+    { q: '¿Cuándo necesito Shopify Plus en lugar de Shopify estándar?',
+      a: 'Shopify Plus es necesario cuando tu operación supera los $500k USD anuales, necesitas checkout personalizado, integraciones ERP nativas, portales B2B con precios diferenciados, o automatizaciones avanzadas de flujo. Para operaciones menores, Shopify estándar puede ser suficiente.' },
+    { q: '¿Cuánto tiempo tarda construir un portal B2B en Shopify Plus?',
+      a: 'Un portal B2B con acceso por rol, precios dinámicos y catálogo protegido tarda entre 8 y 14 semanas. Con integración ERP nativa (SAP, NetSuite, Dynamics), el plazo es de 12 a 16 semanas. El tiempo depende de la complejidad de las reglas de negocio y las APIs disponibles.' },
+    { q: '¿Trabajan con empresas fuera de México?',
+      a: 'Sí. Flouvia opera con clientes en México y Estados Unidos. La operación es 100% remota y digital. Manejamos proyectos en ambos mercados con equipos en CDMX como hub de desarrollo.' },
+    { q: '¿Qué es CRO y cómo mejora mi e-commerce?',
+      a: 'CRO (Conversion Rate Optimization) es el proceso de analizar el comportamiento real de tus usuarios — heatmaps, grabaciones de sesión, A/B tests — para identificar dónde pierdes ventas y construir mejoras con datos. En nuestros proyectos hemos logrado incrementos promedio de +34% en tasa de conversión.' },
+    { q: '¿Hacen mantenimiento después de entregar el proyecto?',
+      a: 'Sí. Ofrecemos esquemas de mantenimiento técnico y soporte post-lanzamiento que incluyen monitoreo de latencia, actualizaciones de seguridad e iteraciones de CRO. Los sistemas que construimos están hechos para evolucionar, no para quedarse estáticos.' },
+    { q: '¿Cómo integran Shopify Plus con un ERP como SAP o NetSuite?',
+      a: 'Desarrollamos conectores API bidireccionales a medida — no usamos conectores genéricos. La integración sincroniza inventario, pedidos, precios y clientes en tiempo real entre Shopify Plus y el ERP. El proceso de integración toma entre 6 y 10 semanas dependiendo de la complejidad de los flujos.' },
+];
+
+const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+};
+
+// ── Comparison table rows ──
+const cmpHead = isEn
+    ? ['Criterion', 'Flouvia', 'Traditional agency', 'Freelancer / Generic agency']
+    : ['Criterio', 'Flouvia', 'Agencia tradicional', 'Freelancer / Agencia genérica'];
+const cmpRows = isEn ? [
+    ['Code', 'Native, no apps', 'Mix of apps and code', 'Templates + apps'],
+    ['Specialization', 'E-commerce & transactional B2B only', 'E-commerce + other services', 'All kinds of projects'],
+    ['ERP integrations', 'Yes — native two-way API', 'Depends on the project', 'Rare or superficial'],
+    ['Client volume', 'Max. 8 projects/year', '10–30 at once', 'No defined limit'],
+    ['Measurable result', '+34% CR · −67% process time', 'Project delivery', 'Site delivery'],
+    ['Who it’s for', 'Established operation with traction', 'Mid-size projects', 'Any client'],
+] : [
+    ['Código', 'Nativo, sin apps', 'Mix de apps y código', 'Plantillas + apps'],
+    ['Especialización', 'Solo e-commerce y B2B transaccional', 'E-commerce + otros servicios', 'Todo tipo de proyectos'],
+    ['Integraciones ERP', 'Sí — API nativa bidireccional', 'Depende del proyecto', 'Raro o superficial'],
+    ['Volumen de clientes', 'Máx. 8 proyectos/año', '10–30 simultáneos', 'Sin límite definido'],
+    ['Resultado medible', '+34% CR · −67% tiempo proceso', 'Entrega del proyecto', 'Entrega del sitio'],
+    ['Para quién', 'Operación establecida con tracción', 'Proyectos medianos', 'Cualquier cliente'],
+];
+
+// ── Caso / métrica discreta por servicio (número en serif italic, sin caja) ──
+const proofs = isEn ? [
+    { metric: '+42%', text: 'conversion · Setnpet, after a headless rebuild on Shopify Plus.' },
+    { metric: '6h → 0', text: 'manual work · El Zarco, with a B2B portal on Shopify Plus.' },
+    { metric: '−67%', text: 'process time · El Zarco, after automating its order flow.' },
+    { metric: '+42%', text: 'conversion · Setnpet, after a CRO audit and flow rebuild.' },
+] : [
+    { metric: '+42%', text: 'conversión · Setnpet, tras reconstrucción headless en Shopify Plus.' },
+    { metric: '6 h → 0', text: 'intervención manual · El Zarco, con portal B2B en Shopify Plus.' },
+    { metric: '−67%', text: 'tiempo de proceso · El Zarco, tras automatizar su flujo de pedidos.' },
+    { metric: '+42%', text: 'conversión · Setnpet, tras auditoría CRO y reconstrucción de flujo.' },
+];
+
+// ── Índice editorial de servicios (un capítulo por servicio) ──
+const serviceRows = [
+    { n: '1', anchor: 'ecommerce',  href: isEn ? '/en/servicios/ecommerce' : '/servicios/ecommerce' },
+    { n: '2', anchor: 'b2b',        href: isEn ? '/en/servicios/b2b' : '/servicios/b2b' },
+    { n: '3', anchor: 'automation', href: isEn ? '/en/servicios/automatizacion' : '/servicios/automatizacion' },
+    { n: '4', anchor: 'cro',        href: isEn ? '/en/servicios/growth' : '/servicios/growth' },
+].map((s, i) => ({
+    ...s,
+    proof: proofs[i],
+    cat: t(`serv.${s.n}.cat` as any),
+    title: t(`serv.${s.n}.title` as any),
+    desc: t(`serv.${s.n}.desc` as any),
+    btn: t(`serv.${s.n}.btn` as any),
+    caps: [1, 2, 3, 4].map((d) => ({ t: t(`serv.${s.n}.d${d}.t` as any), d: t(`serv.${s.n}.d${d}.d` as any) })),
+    stack: [t(`serv.${s.n}.t1` as any), t(`serv.${s.n}.t2` as any), t(`serv.${s.n}.t3` as any)],
+}));
 ---
 
 <Layout
-    title={isEn ? 'Services — E-commerce, B2B & automation engineering | Flouvia' : 'Servicios — Ingeniería e-commerce, B2B y automatización | Flouvia'}
-    description={isEn ? 'E-commerce engineering, B2B architecture, automation and CRO. Bespoke systems for operations that already sell and need to scale without breaking.' : 'E-commerce engineering, arquitectura B2B, automatización y CRO. Sistemas a medida para operaciones que ya venden y necesitan escalar sin romperse.'}
+    title={isEn ? 'E-commerce, B2B & Automation Engineering in CDMX | Flouvia — Shopify Plus' : 'Servicios de E-commerce, B2B y Automatización en CDMX | Flouvia — Shopify Plus'}
+    description={isEn ? 'E-commerce engineering, B2B architecture, automation and CRO on Shopify Plus. Bespoke systems for operations that already sell and need to scale without breaking.' : 'Ingeniería e-commerce, arquitectura B2B, automatización y CRO en Shopify Plus. Sistemas a medida para operaciones que ya venden y necesitan escalar sin romperse.'}
 >
     <Navbar />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    {serviceSchemas.map((s) => (
+        <script type="application/ld+json" is:inline set:html={JSON.stringify(s)} />
+    ))}
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />
 
     <main class="flouvia-masterpiece page-bg-unified">
 
+        <!-- ════════ HERO (estándar inicio) ════════ -->
         <section class="hero-grand">
             <div class="serv-watermark" aria-hidden="true">Servicios</div>
             <div class="container hero-container">
                 <div class="hero-content">
                     <div class="hero-text-zone" id="hero-parallax">
-                        <p class="eyebrow reveal-blur" style="--delay: 0.1s;">
-                            {t('serv.hero.badge')}
-                        </p>
-                        <h1 class="hero-title reveal-blur" style="--delay: 0.2s;">
-                            <span class="title-bold">{t('serv.hero.title1')}</span><br>
-                            <span class="editorial title-serif">{t('serv.hero.title2')}</span>
+                        <div class="hero-status hero-anim">
+                            <span class="hero-status-dot" aria-hidden="true"></span>
+                            <span>{isEn ? 'ACCEPTING Q3 PROJECTS' : 'ACEPTANDO PROYECTOS Q3'}</span>
+                        </div>
+                        <p class="eyebrow hero-anim">{t('serv.hero.badge')}</p>
+                        <h1 class="hero-title hero-anim">
+                            <span class="title-bold">{t('serv.hero.title1')}</span>
+                            <span class="title-soft">{t('serv.hero.title2')}</span>
                         </h1>
                     </div>
-                    
-                    <div class="hero-bottom reveal-blur" style="--delay: 0.4s;">
+
+                    <div class="hero-bottom hero-anim">
                         <p class="hero-desc">{t('serv.hero.desc')}</p>
+                        <div class="hero-action">
+                            <a href="/contacto" class="btn-luxe">
+                                <span>{isEn ? 'See if I qualify' : 'Ver si califico'}</span>
+                                <span class="btn-arrow" aria-hidden="true">→</span>
+                                <div class="btn-shimmer"></div>
+                            </a>
+                            <a href="#servicios-showcase" class="btn-ghost">
+                                <span>{isEn ? 'Explore services' : 'Explorar servicios'}</span>
+                                <span class="btn-arrow-down" aria-hidden="true">↓</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- ════════ PHILOSOPHY (dark band) ════════ -->
         <section class="philosophy-blueprint dark-section">
             <div class="bp-watermark" aria-hidden="true">{isEn ? 'Why' : 'Por qué'}</div>
             <div class="texture-noise-micro"></div>
-            
+
             <div class="bp-line-x bp-line-top"></div>
             <div class="bp-line-x bp-line-bottom"></div>
 
             <div class="container relative-z">
-                <div class="blueprint-grid blueprint-reveal">
-                    
+                <div class="blueprint-grid">
+
                     <div class="bp-col bp-header-col">
                         <div class="bp-content">
                             <span class="p-badge">{t('serv.why.badge')}</span>
                             <h2 class="p-title">{t('serv.why.title')} <br><span class="editorial text-dim">{t('serv.why.title_ed')}</span></h2>
-                            
-                            <a href="/contacto" class="sleek-btn-light bp-fade-up" style="--delay: 0.5s;">
+
+                            <a href="/contacto" class="sleek-btn-light">
                                 <span>{t('serv.why.btn')}</span>
                                 <div class="m-circle-light">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -68,27 +219,27 @@ const isEn = lang === 'en';
                         </div>
                         <div class="bp-line-y"></div>
                     </div>
-                    
+
                     <div class="bp-col">
-                        <div class="bp-content bp-fade-up" style="--delay: 0.6s;">
+                        <div class="bp-content">
                             <span class="bp-num">01</span>
                             <span class="p-val-title">{t('serv.why.1.title')}</span>
                             <p>{t('serv.why.1.desc')}</p>
                         </div>
                         <div class="bp-line-y"></div>
                     </div>
-                    
+
                     <div class="bp-col">
-                        <div class="bp-content bp-fade-up" style="--delay: 0.7s;">
+                        <div class="bp-content">
                             <span class="bp-num">02</span>
                             <span class="p-val-title">{t('serv.why.2.title')}</span>
                             <p>{t('serv.why.2.desc')}</p>
                         </div>
                         <div class="bp-line-y"></div>
                     </div>
-                    
+
                     <div class="bp-col bp-last">
-                        <div class="bp-content bp-fade-up" style="--delay: 0.8s;">
+                        <div class="bp-content">
                             <span class="bp-num">03</span>
                             <span class="p-val-title">{t('serv.why.3.title')}</span>
                             <p>{t('serv.why.3.desc')}</p>
@@ -98,396 +249,157 @@ const isEn = lang === 'en';
             </div>
         </section>
 
-        <section class="services-showcase">
+        <!-- ════════ SERVICIOS — índice editorial ════════ -->
+        <section class="services-index" id="servicios-showcase">
             <div class="container">
-                
-                <div class="master-service-row" id="s1">
-                    <div class="ms-left">
-                        <div class="ms-sticky-content">
-                            <span class="ms-index">{t('serv.1.cat')}</span>
-                            <div class="ms-progress-track">
-                                <div class="ms-progress-bar"></div>
-                            </div>
-                            <a href={isEn ? '/en/servicios/ecommerce' : '/servicios/ecommerce'} class="magnetic-btn-minimal">
-                                <span class="btn-text">{t('serv.1.btn')}</span>
-                                <div class="m-circle">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                                </div>
+                {serviceRows.map((s) => (
+                    <article class="svc-chapter" id={s.anchor}>
+                        <div class="svc-head">
+                            <span class="svc-eyebrow">
+                                <span class="svc-num editorial">/0{s.n}</span>
+                                <span class="svc-cat">{s.cat.replace(/^\d+\s*—\s*/, '')}</span>
+                            </span>
+                            <a href={s.href} class="svc-cta">
+                                <span>{s.btn}</span>
+                                <span class="svc-cta-arrow" aria-hidden="true">→</span>
                             </a>
                         </div>
-                    </div>
-                    <div class="ms-right">
-                        <div class="ms-content-wrap reveal-up">
-                            <h2 class="ms-massive-title">{t('serv.1.title')}</h2>
-                            <p class="ms-main-desc">{t('serv.1.desc')}</p>
-                            
-                            <div class="bento-modules-grid">
-                                <div class="b-module squircle-math">
-                                    <div class="b-mod-icon">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <rect x="3" y="3" width="18" height="18" rx="4" stroke-opacity="0.3"></rect>
-                                            <path d="M9 3v18M15 3v18" stroke-opacity="1"></path>
-                                            <path d="M3 9h18M3 15h18" stroke-opacity="0.3"></path>
-                                        </svg>
-                                    </div>
-                                    <h3>{t('serv.1.d1.t')}</h3>
-                                    <p>{t('serv.1.d1.d')}</p>
-                                </div>
-                                <div class="b-module squircle-math">
-                                    <div class="b-mod-icon">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <path d="M12 2L2 7l10 5 10-5-10-5z" stroke-opacity="1"></path>
-                                            <path d="M2 17l10 5 10-5" stroke-opacity="0.3"></path>
-                                            <path d="M2 12l10 5 10-5" stroke-opacity="0.6"></path>
-                                        </svg>
-                                    </div>
-                                    <h3>{t('serv.1.d2.t')}</h3>
-                                    <p>{t('serv.1.d2.d')}</p>
-                                </div>
-                                <div class="b-module squircle-math">
-                                    <div class="b-mod-icon">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <rect x="5" y="8" width="14" height="12" rx="2" stroke-opacity="1"></rect>
-                                            <path d="M8 8V6a4 4 0 0 1 8 0v2" stroke-opacity="0.3"></path>
-                                            <circle cx="12" cy="14" r="1" stroke-opacity="1"></circle>
-                                        </svg>
-                                    </div>
-                                    <h3>{t('serv.1.d3.t')}</h3>
-                                    <p>{t('serv.1.d3.d')}</p>
-                                </div>
-                                <div class="b-module squircle-math">
-                                    <div class="b-mod-icon">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <polyline points="16 16 22 12 16 8" stroke-opacity="1"></polyline>
-                                            <line x1="22" y1="12" x2="2" y2="12" stroke-opacity="0.3"></line>
-                                            <path d="M8 4L2 12l6 8" stroke-opacity="0.3"></path>
-                                        </svg>
-                                    </div>
-                                    <h3>{t('serv.1.d4.t')}</h3>
-                                    <p>{t('serv.1.d4.d')}</p>
-                                </div>
-                            </div>
 
-                            <div class="dna-footer">
-                                <span class="dna-label">STACK DNA:</span>
-                                <div class="dna-pills">
-                                    <span>{t('serv.1.t1')}</span>
-                                    <span>{t('serv.1.t2')}</span>
-                                    <span>{t('serv.1.t3')}</span>
+                        <h2 class="svc-title">{s.title}</h2>
+                        <p class="svc-desc">{s.desc}</p>
+                        <p class="svc-proof"><span class="svc-proof-metric editorial">{s.proof.metric}</span> {s.proof.text}</p>
+
+                        <div class="svc-caps">
+                            {s.caps.map((c, ci) => (
+                                <div class="svc-cap">
+                                    <span class="svc-cap-idx editorial">·0{ci + 1}</span>
+                                    <div class="svc-cap-text">
+                                        <h3>{c.t}</h3>
+                                        <p>{c.d}</p>
+                                    </div>
                                 </div>
-                            </div>
+                            ))}
                         </div>
-                    </div>
-                </div>
 
-                <div class="master-service-row" id="s2">
-                    <div class="ms-left">
-                        <div class="ms-sticky-content">
-                            <span class="ms-index">{t('serv.2.cat')}</span>
-                            <div class="ms-progress-track">
-                                <div class="ms-progress-bar"></div>
-                            </div>
-                            <a href={isEn ? '/en/servicios/b2b' : '/servicios/b2b'} class="magnetic-btn-minimal">
-                                <span class="btn-text">{t('serv.2.btn')}</span>
-                                <div class="m-circle">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                                </div>
-                            </a>
+                        <div class="svc-stack">
+                            <span class="svc-stack-label">STACK</span>
+                            <div class="svc-stack-pills">{s.stack.map((p) => (<span>{p}</span>))}</div>
                         </div>
-                    </div>
-                    <div class="ms-right">
-                        <div class="ms-content-wrap reveal-up">
-                            <h2 class="ms-massive-title">{t('serv.2.title')}</h2>
-                            <p class="ms-main-desc">{t('serv.2.desc')}</p>
-                            
-                            <div class="bento-modules-grid">
-                                <div class="b-module squircle-math">
-                                    <div class="b-mod-icon">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <rect x="3" y="11" width="18" height="11" rx="2" stroke-opacity="1"></rect>
-                                            <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke-opacity="0.3"></path>
-                                            <circle cx="12" cy="16" r="1" stroke-opacity="1"></circle>
-                                        </svg>
-                                    </div>
-                                    <h3>{t('serv.2.d1.t')}</h3>
-                                    <p>{t('serv.2.d1.d')}</p>
-                                </div>
-                                <div class="b-module squircle-math">
-                                    <div class="b-mod-icon">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <line x1="4" y1="21" x2="4" y2="14" stroke-opacity="0.3"></line>
-                                            <line x1="4" y1="10" x2="4" y2="3" stroke-opacity="1"></line>
-                                            <line x1="12" y1="21" x2="12" y2="12" stroke-opacity="0.3"></line>
-                                            <line x1="12" y1="8" x2="12" y2="3" stroke-opacity="1"></line>
-                                            <line x1="20" y1="21" x2="20" y2="16" stroke-opacity="0.3"></line>
-                                            <line x1="20" y1="12" x2="20" y2="3" stroke-opacity="1"></line>
-                                            <circle cx="4" cy="12" r="2" stroke-opacity="1"></circle>
-                                            <circle cx="12" cy="10" r="2" stroke-opacity="1"></circle>
-                                            <circle cx="20" cy="14" r="2" stroke-opacity="1"></circle>
-                                        </svg>
-                                    </div>
-                                    <h3>{t('serv.2.d2.t')}</h3>
-                                    <p>{t('serv.2.d2.d')}</p>
-                                </div>
-                                <div class="b-module squircle-math">
-                                    <div class="b-mod-icon">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" stroke-opacity="1"></polygon>
-                                            <path d="M13 2L3 14h9v8l9-12h-9z" stroke-opacity="0.3"></path>
-                                        </svg>
-                                    </div>
-                                    <h3>{t('serv.2.d3.t')}</h3>
-                                    <p>{t('serv.2.d3.d')}</p>
-                                </div>
-                                <div class="b-module squircle-math">
-                                    <div class="b-mod-icon">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke-opacity="1"></path>
-                                            <polyline points="3.27 6.96 12 12.01 20.73 6.96" stroke-opacity="0.3"></polyline>
-                                            <line x1="12" y1="22.08" x2="12" y2="12" stroke-opacity="0.3"></line>
-                                        </svg>
-                                    </div>
-                                    <h3>{t('serv.2.d4.t')}</h3>
-                                    <p>{t('serv.2.d4.d')}</p>
-                                </div>
-                            </div>
-
-                            <div class="dna-footer">
-                                <span class="dna-label">STACK DNA:</span>
-                                <div class="dna-pills">
-                                    <span>{t('serv.2.t1')}</span>
-                                    <span>{t('serv.2.t2')}</span>
-                                    <span>{t('serv.2.t3')}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="master-service-row" id="s3">
-                    <div class="ms-left">
-                        <div class="ms-sticky-content">
-                            <span class="ms-index">{t('serv.3.cat')}</span>
-                            <div class="ms-progress-track">
-                                <div class="ms-progress-bar"></div>
-                            </div>
-                            <a href={isEn ? '/en/servicios/automatizacion' : '/servicios/automatizacion'} class="magnetic-btn-minimal">
-                                <span class="btn-text">{t('serv.3.btn')}</span>
-                                <div class="m-circle">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="ms-right">
-                        <div class="ms-content-wrap reveal-up">
-                            <h2 class="ms-massive-title">{t('serv.3.title')}</h2>
-                            <p class="ms-main-desc">{t('serv.3.desc')}</p>
-                            
-                            <div class="bento-modules-grid">
-                                <div class="b-module squircle-math">
-                                    <div class="b-mod-icon">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <ellipse cx="12" cy="5" rx="9" ry="3" stroke-opacity="1"></ellipse>
-                                            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" stroke-opacity="0.3"></path>
-                                            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" stroke-opacity="0.6"></path>
-                                        </svg>
-                                    </div>
-                                    <h3>{t('serv.3.d1.t')}</h3>
-                                    <p>{t('serv.3.d1.d')}</p>
-                                </div>
-                                <div class="b-module squircle-math">
-                                    <div class="b-mod-icon">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <rect x="3" y="3" width="7" height="7" rx="1" stroke-opacity="1"></rect>
-                                            <rect x="14" y="3" width="7" height="7" rx="1" stroke-opacity="0.3"></rect>
-                                            <rect x="14" y="14" width="7" height="7" rx="1" stroke-opacity="1"></rect>
-                                            <rect x="3" y="14" width="7" height="7" rx="1" stroke-opacity="0.3"></rect>
-                                        </svg>
-                                    </div>
-                                    <h3>{t('serv.3.d2.t')}</h3>
-                                    <p>{t('serv.3.d2.d')}</p>
-                                </div>
-                                <div class="b-module squircle-math">
-                                    <div class="b-mod-icon">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke-opacity="1"></path>
-                                            <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke-opacity="0.3"></path>
-                                        </svg>
-                                    </div>
-                                    <h3>{t('serv.3.d3.t')}</h3>
-                                    <p>{t('serv.3.d3.d')}</p>
-                                </div>
-                                <div class="b-module squircle-math">
-                                    <div class="b-mod-icon">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2" stroke-opacity="1"></rect>
-                                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke-opacity="0.3"></path>
-                                        </svg>
-                                    </div>
-                                    <h3>{t('serv.3.d4.t')}</h3>
-                                    <p>{t('serv.3.d4.d')}</p>
-                                </div>
-                            </div>
-
-                            <div class="dna-footer">
-                                <span class="dna-label">STACK DNA:</span>
-                                <div class="dna-pills">
-                                    <span>{t('serv.3.t1')}</span>
-                                    <span>{t('serv.3.t2')}</span>
-                                    <span>{t('serv.3.t3')}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="master-service-row" id="s4" style="border-bottom: none; padding-bottom: 2rem;">
-                    <div class="ms-left">
-                        <div class="ms-sticky-content">
-                            <span class="ms-index">{t('serv.4.cat')}</span>
-                            <div class="ms-progress-track">
-                                <div class="ms-progress-bar"></div>
-                            </div>
-                            <a href={isEn ? '/en/servicios/growth' : '/servicios/growth'} class="magnetic-btn-minimal">
-                                <span class="btn-text">{t('serv.4.btn')}</span>
-                                <div class="m-circle">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="ms-right">
-                        <div class="ms-content-wrap reveal-up">
-                            <h2 class="ms-massive-title">{t('serv.4.title')}</h2>
-                            <p class="ms-main-desc">{t('serv.4.desc')}</p>
-                            
-                            <div class="bento-modules-grid">
-                                <div class="b-module squircle-math">
-                                    <div class="b-mod-icon">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <circle cx="11" cy="11" r="8" stroke-opacity="1"></circle>
-                                            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-opacity="0.3"></line>
-                                            <path d="M11 8v6M8 11h6" stroke-opacity="0.3"></path>
-                                        </svg>
-                                    </div>
-                                    <h3>{t('serv.4.d1.t')}</h3>
-                                    <p>{t('serv.4.d1.d')}</p>
-                                </div>
-                                <div class="b-module squircle-math">
-                                    <div class="b-mod-icon">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <path d="M16 3h5v5" stroke-opacity="1"></path>
-                                            <path d="M8 3H3v5" stroke-opacity="0.3"></path>
-                                            <path d="M12 22v-8.3a4 4 0 0 0-1.17-2.83L3 3" stroke-opacity="0.3"></path>
-                                            <path d="M15 9l6-6" stroke-opacity="1"></path>
-                                        </svg>
-                                    </div>
-                                    <h3>{t('serv.4.d2.t')}</h3>
-                                    <p>{t('serv.4.d2.d')}</p>
-                                </div>
-                                <div class="b-module squircle-math">
-                                    <div class="b-mod-icon">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke-opacity="0.3"></path>
-                                            <circle cx="12" cy="12" r="3" stroke-opacity="1"></circle>
-                                        </svg>
-                                    </div>
-                                    <h3>{t('serv.4.d3.t')}</h3>
-                                    <p>{t('serv.4.d3.d')}</p>
-                                </div>
-                                <div class="b-module squircle-math">
-                                    <div class="b-mod-icon">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <path d="M21 2v6h-6" stroke-opacity="1"></path>
-                                            <path d="M3 12a9 9 0 0 1 15-6.7L21 8" stroke-opacity="1"></path>
-                                            <path d="M3 22v-6h6" stroke-opacity="0.3"></path>
-                                            <path d="M21 12a9 9 0 0 1-15 6.7L3 16" stroke-opacity="0.3"></path>
-                                        </svg>
-                                    </div>
-                                    <h3>{t('serv.4.d4.t')}</h3>
-                                    <p>{t('serv.4.d4.d')}</p>
-                                </div>
-                            </div>
-
-                            <div class="dna-footer">
-                                <span class="dna-label">STACK DNA:</span>
-                                <div class="dna-pills">
-                                    <span>{t('serv.4.t1')}</span>
-                                    <span>{t('serv.4.t2')}</span>
-                                    <span>{t('serv.4.t3')}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                    </article>
+                ))}
             </div>
         </section>
 
+        <!-- ════════ WHY FLOUVIA (cards) ════════ -->
         <section class="why-flouvia-hardware">
             <div class="container">
-                <div class="wf-header reveal-fade">
+                <div class="wf-header">
                     <p class="eyebrow">{t('serv.choose.badge')}</p>
-                    <h2 class="wf-title">
-                        {t('serv.choose.title')} <span class="editorial">{t('serv.choose.title_ed')}</span>
+                    <h2 class="wf-title section-heading">
+                        {t('serv.choose.title')} {t('serv.choose.title_ed')}
                     </h2>
                 </div>
 
                 <div class="wf-hardware-grid">
-                    
-                    <div class="hw-card squircle-math reveal-up tilt-card" style="--delay: 0.1s;">
+                    <div class="hw-card">
                         <div class="hw-glow-overlay"></div>
                         <div class="hw-inner">
                             <span class="hw-num">/01</span>
-                            <div class="hw-text-zone">
-                                <h3>{t('serv.choose.1.title')}</h3>
-                                <p>{t('serv.choose.1.desc')}</p>
-                            </div>
+                            <div class="hw-text-zone"><h3>{t('serv.choose.1.title')}</h3><p>{t('serv.choose.1.desc')}</p></div>
                         </div>
                     </div>
-
-                    <div class="hw-card squircle-math reveal-up tilt-card" style="--delay: 0.2s;">
+                    <div class="hw-card">
                         <div class="hw-glow-overlay"></div>
                         <div class="hw-inner">
                             <span class="hw-num">/02</span>
-                            <div class="hw-text-zone">
-                                <h3>{t('serv.choose.2.title')}</h3>
-                                <p>{t('serv.choose.2.desc')}</p>
-                            </div>
+                            <div class="hw-text-zone"><h3>{t('serv.choose.2.title')}</h3><p>{t('serv.choose.2.desc')}</p></div>
                         </div>
                     </div>
-
-                    <div class="hw-card squircle-math reveal-up tilt-card" style="--delay: 0.3s;">
+                    <div class="hw-card">
                         <div class="hw-glow-overlay"></div>
                         <div class="hw-inner">
                             <span class="hw-num">/03</span>
-                            <div class="hw-text-zone">
-                                <h3>{t('serv.choose.3.title')}</h3>
-                                <p>{t('serv.choose.3.desc')}</p>
-                            </div>
+                            <div class="hw-text-zone"><h3>{t('serv.choose.3.title')}</h3><p>{t('serv.choose.3.desc')}</p></div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
 
+        <!-- ════════ COMPARISON TABLE ════════ -->
+        <section class="comparison-section">
+            <div class="cmp-watermark" aria-hidden="true">{isEn ? 'Firm' : 'Firma'}</div>
+            <div class="container relative-z">
+                <div class="cmp-header">
+                    <p class="eyebrow">{isEn ? 'EVALUATION' : 'EVALUACIÓN'}</p>
+                    <h2 class="section-heading">{isEn ? 'Why a specialized firm?' : '¿Por qué una firma especializada?'}</h2>
+                    <p class="section-sub">{isEn ? 'The difference between building a store and building a system that scales.' : 'La diferencia entre construir una tienda y construir un sistema que escala.'}</p>
+                </div>
+
+                <div class="cmp-scroll">
+                    <table class="cmp-table">
+                        <thead>
+                            <tr>
+                                {cmpHead.map((h, i) => (
+                                    <th class={i === 1 ? 'cmp-flouvia-col' : ''}>{h}</th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {cmpRows.map((row) => (
+                                <tr>
+                                    {row.map((cell, i) => (
+                                        i === 0
+                                            ? <th scope="row">{cell}</th>
+                                            : <td class={i === 1 ? 'cmp-flouvia-col' : ''}>{cell}</td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════ FAQ ════════ -->
+        <section class="faq-section">
+            <div class="container">
+                <div class="faq-header">
+                    <p class="eyebrow">FAQ</p>
+                    <h2 class="section-heading">{isEn ? 'Frequently asked questions' : 'Preguntas frecuentes'}</h2>
+                </div>
+
+                <div class="faq-list">
+                    {faqs.map((f) => (
+                        <details class="faq-item">
+                            <summary class="faq-q">
+                                <span>{f.q}</span>
+                                <span class="faq-icon" aria-hidden="true"></span>
+                            </summary>
+                            <div class="faq-a"><p>{f.a}</p></div>
+                        </details>
+                    ))}
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════ CTA FINAL (escasez) ════════ -->
         <section class="cta-final-clean">
             <div class="container">
-                <div class="cta-box-refined squircle-pro reveal-blur">
+                <div class="cta-box-refined squircle-pro">
                     <div class="texture-noise-micro"></div>
                     <div class="cta-flex relative-z">
                         <div class="cta-text">
-                            <p class="eyebrow" style="color: rgba(255,255,255,0.6); letter-spacing: 4px;">
-                                {isEn ? 'THE NEXT STEP' : 'EL SIGUIENTE PASO'}
-                            </p>
+                            <p class="eyebrow cta-eyebrow">{isEn ? 'LIMITED AVAILABILITY — Q3' : 'DISPONIBILIDAD LIMITADA — Q3'}</p>
                             <h2 class="cta-title">
-                                {isEn ? 'Scale your' : 'Escale su'} <span class="editorial" style="color: #fff;">{isEn ? 'operation.' : 'operación.'}</span>
+                                {isEn ? '2 projects available this quarter.' : '2 proyectos disponibles este trimestre.'}
+                                <span class="cta-title-soft">{isEn ? 'Does your operation qualify?' : '¿Tu operación califica?'}</span>
                             </h2>
+                            <p class="cta-body">{isEn ? 'We don’t take on projects without a prior diagnosis. If your operation already has traction and you need the technical infrastructure for the next level, let’s start with a free 30-minute session.' : 'No aceptamos proyectos sin diagnóstico previo. Si tu operación ya tiene tracción y necesitas la infraestructura técnica para el siguiente nivel, comencemos con una sesión de 30 minutos sin costo.'}</p>
                         </div>
                         <a href="/contacto" class="btn-luxe-main">
-                            <span>{isEn ? 'Schedule Diagnostics' : 'Agendar Diagnóstico'}</span>
+                            <span>{isEn ? 'See if I qualify' : 'Ver si califico'}</span>
+                            <span class="btn-arrow" aria-hidden="true">→</span>
                         </a>
                     </div>
                 </div>
@@ -501,35 +413,34 @@ const isEn = lang === 'en';
 </Layout>
 
 <style is:global>
-    *, *::before, *::after { box-sizing: border-box; } 
-    
+    *, *::before, *::after { box-sizing: border-box; }
+
     html, body {
-        width: 100%; 
+        width: 100%;
         position: relative;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
         -webkit-tap-highlight-color: transparent;
     }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
     ::selection { background: #0a192f; color: #ffffff; }
 
     :root {
         --color-bg: #ffffff;
-        --color-bg-soft: #fcfcfc; 
-        --color-blue-icy: #f4f6f9; 
+        --color-bg-soft: #fcfcfc;
+        --color-blue-icy: #f4f6f9;
         --color-blue-deep: #0a192f;
         --color-glass-blue: rgba(10, 25, 47, 0.85);
-        
         --color-text: #050505;
-        --color-text-muted: #555555;
-        --color-border: rgba(0, 0, 0, 0.08); 
-        
+        --color-text-muted: #555556;
+        --color-border: rgba(0, 0, 0, 0.08);
         --font-sans: 'Inter', system-ui, sans-serif;
         --font-serif: 'Instrument Serif', serif;
-        
         --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
-        --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+        --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
         --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -539,46 +450,41 @@ const isEn = lang === 'en';
     .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; }
     .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: #222; }
     .eyebrow { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
-    
-    .reveal-blur { 
-        opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(8px); 
-        animation: reveal 1s var(--ease-spring) forwards; animation-play-state: paused; animation-delay: var(--delay, 0s); 
-    }
-    .reveal-blur.active { animation-play-state: running; }
-    @keyframes reveal { to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
 
-    .reveal-fade { 
-        opacity: 0; transform: translateY(30px) scale(0.98); 
-        animation: revealFade 1s var(--ease-spring) forwards; animation-play-state: paused; animation-delay: var(--delay, 0s); 
-    }
-    .reveal-fade.active { animation-play-state: running; }
-    @keyframes revealFade { to { opacity: 1; transform: translateY(0) scale(1); } }
+    /* Hero gate: oculto sólo con JS sin reduced-motion (clase .js-anim del Layout) */
+    .js-anim .hero-anim { opacity: 0; }
 
-    .btn-luxe { 
-        position: relative; display: inline-flex; background: var(--color-text); color: #fff; 
-        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem; 
-        font-weight: 600; transition: all 0.5s var(--ease-spring); overflow: hidden; justify-content: center;
+    /* HERO STATUS — señal de exclusividad */
+    .hero-status { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 100px; border: 1px solid rgba(16,185,129,0.22); background: rgba(16,185,129,0.04); width: max-content; margin-bottom: 1.6rem; }
+    .hero-status span { font-size: 0.7rem; color: #059669; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .hero-status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: hero-status-pulse 2s infinite; }
+    @keyframes hero-status-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    .btn-luxe {
+        position: relative; display: inline-flex; background: var(--color-text); color: #fff;
+        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem;
+        font-weight: 600; overflow: hidden; justify-content: center;
+        transition: transform 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth);
         box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 10px 20px rgba(0,0,0,0.08);
+        align-items: center; gap: 10px; will-change: transform;
     }
     .btn-luxe span { position: relative; z-index: 2; }
-    .btn-shimmer { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent); transform: skewX(-20deg); transition: 0s; z-index: 1;}
-    .btn-luxe:hover { transform: translateY(-4px); box-shadow: 0 6px 12px rgba(0,0,0,0.08), 0 15px 30px rgba(0,0,0,0.15); }
-    .btn-luxe:active { transform: scale(0.95); box-shadow: 0 2px 4px rgba(0,0,0,0.04); transition: 0.1s;}
+    .btn-arrow { position: relative; z-index: 2; display: inline-block; transition: transform 0.6s var(--ease-smooth); }
+    .btn-luxe:hover .btn-arrow { transform: translateX(4px); }
+    .btn-shimmer { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent); transform: skewX(-20deg); transition: 0s; z-index: 1;}
+    .btn-luxe:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(0,0,0,0.12), 0 24px 48px rgba(0,0,0,0.16); }
+    .btn-luxe:active { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+    .btn-luxe:hover .btn-shimmer { left: 150%; transition: left 0.9s var(--ease-smooth); }
 
-    .squircle { border-radius: 24px; transform: translateZ(0); overflow: hidden; }
-    .cta-squircle { border-radius: 32px; transform: translateZ(0); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
-    .lx-line-mask { overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; }
+    .squircle-pro { border-radius: 36px; overflow: hidden; transform: translateZ(0); }
 </style>
 
 <style>
-    /* ==========================================================
-       ESTILOS LOCALES
-       ========================================================== */
     .page-bg-unified { background: #fdfdfd; }
     .relative-z { position: relative; z-index: 2; }
 
     /* ── Watermarks ── */
-    .serv-watermark {
+    .serv-watermark, .cmp-watermark {
         position: absolute; right: -3vw; bottom: -2vw;
         font-family: var(--font-serif); font-style: italic;
         font-size: clamp(10rem, 20vw, 28rem);
@@ -586,6 +492,7 @@ const isEn = lang === 'en';
         line-height: 1; pointer-events: none; user-select: none;
         letter-spacing: -0.04em; z-index: 0;
     }
+    .cmp-watermark { font-size: clamp(8rem, 16vw, 20rem); right: auto; left: -2vw; top: -1vw; bottom: auto; }
     .bp-watermark {
         position: absolute; right: -3vw; bottom: -2vw;
         font-family: var(--font-serif); font-style: italic;
@@ -595,239 +502,141 @@ const isEn = lang === 'en';
         letter-spacing: -0.04em; z-index: 0;
     }
 
-    .reveal-up { 
-        opacity: 0; transform: translateY(60px); 
-        animation: rev-u 1s var(--ease-smooth) forwards; 
-        animation-play-state: paused; 
-    }
-    .reveal-up.active { animation-play-state: running; }
-    @keyframes rev-u { to { opacity: 1; transform: translateY(0); } }
-
-    .squircle-math { border-radius: 20px; overflow: hidden; transform: translateZ(0); }
-    .squircle-pro { border-radius: 36px; overflow: hidden; transform: translateZ(0); }
-
-    .texture-noise-micro { 
-        position: absolute; inset: 0; 
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); 
-        opacity: 0.04; mix-blend-mode: overlay; pointer-events: none; 
+    .texture-noise-micro {
+        position: absolute; inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        opacity: 0.04; mix-blend-mode: overlay; pointer-events: none;
     }
 
-    /* 1. HERO (INDEX STYLE EXACTO) */
-    .hero-grand { padding: 13rem 0 7rem 0; min-height: 80vh; display: flex; align-items: center; background: var(--color-bg); position: relative; overflow: clip; }
+    .section-heading { font-size: clamp(2.3rem, 4.4vw, 3.4rem); font-weight: 800; letter-spacing: -1.5px; margin: 0 0 1rem 0; line-height: 1.05; }
+    .section-sub { font-size: 1.05rem; color: var(--color-text-muted); margin: 0; line-height: 1.55; }
+
+    /* 1. HERO (estándar inicio) */
+    .hero-grand { padding: 10rem 0 5rem 0; min-height: 100svh; display: flex; align-items: center; background: var(--color-bg); position: relative; overflow: clip; }
     .hero-text-zone { transition: transform 0.1s ease-out, opacity 0.1s ease-out; }
-    .hero-title { font-size: clamp(3.2rem, 7vw, 6.8rem); line-height: 0.85; font-weight: 800; letter-spacing: -3px; margin-bottom: 4rem; color: #050505; }
-    .hero-title .title-bold, .hero-title .title-serif, .hero-title .editorial { color: #050505; }
-    .lx-line-mask { overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; }
-    .title-bold { display: inline; }
-    .title-serif { display: inline; font-size: 105%; color: #94a3b8;}
+    .hero-title { font-size: clamp(1.9rem, 3.6vw, 3.4rem); line-height: 1.14; font-weight: 800; letter-spacing: -1.2px; margin-bottom: 2.75rem; color: #050505; max-width: 880px; }
+    .hero-title .title-bold { color: #050505; }
+    .hero-title .title-soft { color: #050505; }
     .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem; }
-    .hero-desc { font-size: 1.15rem; color: var(--color-text-muted); max-width: 500px; line-height: 1.5; margin: 0; }
+    .hero-desc { font-size: 1.1rem; color: var(--color-text-muted); max-width: 480px; line-height: 1.55; margin: 0; }
+    .hero-action { display: flex; align-items: center; gap: 1.6rem; flex-shrink: 0; }
+    .btn-ghost { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--color-text); font-weight: 600; font-size: 0.9rem; padding: 14px 4px; transition: color 0.4s var(--ease-smooth); }
+    .btn-ghost .btn-arrow-down { transition: transform 0.5s var(--ease-smooth); display: inline-block; }
+    .btn-ghost:hover { color: var(--color-text-muted); }
+    .btn-ghost:hover .btn-arrow-down { transform: translateY(4px); }
 
-    /* 2. PHILOSOPHY */
+    /* 2. PHILOSOPHY (dark) */
     .dark-section { background: var(--color-blue-deep); color: #fff; padding: 5rem 0; position: relative; overflow: hidden; }
-    .bp-line-x { position: absolute; left: 0; width: 0; height: 1px; background: rgba(255,255,255,0.1); transition: width 1.5s var(--ease-smooth); }
+    .bp-line-x { position: absolute; left: 0; width: 0; height: 1px; background: rgba(255,255,255,0.1); }
     .bp-line-top { top: 0; }
     .bp-line-bottom { bottom: 0; }
-    .blueprint-reveal.active .bp-line-top { width: 100%; }
-    .blueprint-reveal.active .bp-line-bottom { width: 100%; }
-
     .blueprint-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; }
     .bp-col { position: relative; padding: 4rem 2.5rem; }
     .bp-header-col { padding-left: 0; display: flex; flex-direction: column; justify-content: space-between; }
     .bp-last { padding-right: 0; }
-
-    .bp-line-y { position: absolute; top: 0; right: 0; width: 1px; height: 0; background: rgba(255,255,255,0.1); transition: height 1.5s var(--ease-smooth) 0.3s; }
-    .blueprint-reveal.active .bp-line-y { height: 100%; }
-
+    .bp-line-y { position: absolute; top: 0; right: 0; width: 1px; height: 0; background: rgba(255,255,255,0.1); }
     .p-badge { font-size: 0.6rem; font-weight: 800; letter-spacing: 2px; border: 1px solid rgba(255,255,255,0.15); padding: 5px 12px; border-radius: 100px; margin-bottom: 1.5rem; display: inline-block; background: rgba(255,255,255,0.03); }
     .p-title { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; margin: 0; line-height: 1; }
     .text-dim { color: rgba(255,255,255,0.4); }
-
-    .sleek-btn-light { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; font-weight: 700; font-size: 0.8rem; padding: 10px 0; margin-top: 2rem; }
+    .sleek-btn-light { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; font-weight: 700; font-size: 0.8rem; padding: 10px 0; margin-top: 2rem; transition: gap 0.4s var(--ease-smooth); }
     .m-circle-light { width: 36px; height: 36px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.4s var(--ease-smooth); background: rgba(255,255,255,0.05); }
-    .sleek-btn-light:hover .m-circle-light { background: #fff; color: var(--color-blue-deep); transform: scale(1.1) translateX(5px); }
-
+    .sleek-btn-light:hover .m-circle-light { background: #fff; color: var(--color-blue-deep); transform: translateX(5px); }
     .bp-num { font-family: var(--font-serif); font-style: italic; font-size: 1.2rem; color: rgba(255,255,255,0.3); display: block; margin-bottom: 1.5rem; }
     .bp-content .p-val-title { display: block; font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 0.8rem; }
     .bp-content p { font-size: 0.95rem; color: #94a3b8; line-height: 1.5; margin: 0; }
 
-    .bp-fade-up { opacity: 0; transform: translateY(20px); transition: opacity 1s ease, transform 1s var(--ease-smooth); transition-delay: var(--delay, 0s); }
-    .blueprint-reveal.active .bp-fade-up { opacity: 1; transform: translateY(0); }
+    /* 3. SERVICIOS — índice editorial */
+    .services-index { padding: 2rem 0 1rem; scroll-margin-top: 100px; }
+    .svc-chapter { padding: 5.5rem 0; border-bottom: 1px solid var(--color-border); scroll-margin-top: 100px; }
+    .svc-chapter:last-child { border-bottom: none; }
 
-    /* 3. SERVICES SHOWCASE */
-    .services-showcase { padding: 0; }
-    .master-service-row { display: grid; grid-template-columns: 320px 1fr; gap: 6rem; padding: 6rem 0; border-bottom: 1px solid var(--color-border); }
-    
-    .ms-sticky-content { position: sticky; top: 140px; display: flex; flex-direction: column; gap: 2rem; }
-    .ms-index { font-size: 0.7rem; font-weight: 800; letter-spacing: 2px; color: var(--color-text); }
-    .ms-progress-track { width: 1px; height: 120px; background: rgba(0,0,0,0.08); position: relative; }
-    .ms-progress-bar { width: 100%; height: 0%; background: var(--color-text); position: absolute; top: 0; transition: height 0.1s linear; }
+    .svc-head { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-bottom: 1.75rem; }
+    .svc-eyebrow { display: inline-flex; align-items: baseline; gap: 1rem; }
+    .svc-num { font-size: 1.5rem; color: #cbd5e1; letter-spacing: -0.02em; }
+    .svc-cat { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: #999; }
 
-    .magnetic-btn-minimal { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--color-text); font-weight: 700; font-size: 0.8rem; padding: 10px 0; }
-    .m-circle { width: 36px; height: 36px; border: 1.5px solid rgba(0,0,0,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.4s var(--ease-smooth); background: #ffffff; }
-    .magnetic-btn-minimal:hover .m-circle { background: var(--color-text); color: #fff; border-color: var(--color-text); transform: scale(1.1) translateX(5px); }
+    .svc-cta { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--color-text); font-weight: 700; font-size: 0.82rem; white-space: nowrap; padding: 11px 22px; border: 1px solid rgba(0,0,0,0.16); border-radius: 100px; background: transparent; transition: background 0.45s var(--ease-smooth), color 0.45s var(--ease-smooth), border-color 0.45s var(--ease-smooth), transform 0.45s var(--ease-smooth); }
+    .svc-cta-arrow { display: inline-block; transition: transform 0.5s var(--ease-smooth); }
+    .svc-cta:hover { background: var(--color-text); color: #fff; border-color: var(--color-text); transform: translateY(-2px); }
+    .svc-cta:hover .svc-cta-arrow { transform: translateX(4px); }
 
-    .ms-massive-title { font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 800; letter-spacing: -3px; line-height: 0.95; margin: 0 0 2.5rem 0; color: var(--color-text); }
-    .ms-main-desc { font-size: 1.25rem; color: var(--color-text-muted); line-height: 1.6; max-width: 750px; margin: 0 0 4.5rem 0; font-weight: 400; }
+    .svc-title { font-size: clamp(2.2rem, 4.4vw, 3.6rem); font-weight: 800; letter-spacing: -1.8px; line-height: 1.0; margin: 0 0 1.5rem 0; color: var(--color-text); }
+    .svc-desc { font-size: 1.15rem; color: var(--color-text-muted); line-height: 1.6; max-width: 760px; margin: 0 0 1.1rem 0; }
 
-    /* BENTO MODULES — premium editorial cards */
-    .bento-modules-grid {
-        display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;
-        margin-bottom: 4rem;
-        counter-reset: bento;
-    }
-    .b-module {
-        background: linear-gradient(180deg, #ffffff 0%, #fafbfd 100%);
-        border: 1px solid rgba(10,25,47,0.06);
-        padding: 2.4rem 2.4rem 2.2rem;
-        display: flex; flex-direction: column;
-        transition:
-            transform 0.7s cubic-bezier(0.16,1,0.3,1),
-            box-shadow 0.7s cubic-bezier(0.16,1,0.3,1),
-            border-color 0.45s ease;
-        box-shadow:
-            inset 0 1px 0 rgba(255,255,255,1),
-            0 1px 2px rgba(10,25,47,0.02),
-            0 8px 24px -8px rgba(10,25,47,0.03);
-        position: relative;
-        overflow: hidden;
-        border-radius: 20px;
-        counter-increment: bento;
-        isolation: isolate;
-    }
-    /* Número editorial top-right */
-    .b-module::before {
-        content: "/0" counter(bento);
-        position: absolute;
-        top: 1.65rem; right: 1.85rem;
-        font-family: var(--font-serif);
-        font-style: italic; font-weight: 400;
-        font-size: 1.05rem;
-        color: rgba(10,25,47,0.18);
-        letter-spacing: -0.3px;
-        transition: color 0.5s ease, transform 0.6s cubic-bezier(0.16,1,0.3,1);
-        z-index: 2; pointer-events: none;
-    }
-    /* Línea acento top que se revela en hover */
-    .b-module::after {
-        content: ''; position: absolute;
-        top: 0; left: 0; right: 0; height: 1px;
-        background: linear-gradient(90deg,
-            transparent 0%,
-            rgba(10,25,47,0.28) 20%,
-            rgba(10,25,47,0.28) 80%,
-            transparent 100%);
-        transform: scaleX(0);
-        transform-origin: center;
-        transition: transform 0.8s cubic-bezier(0.16,1,0.3,1);
-        z-index: 3; pointer-events: none;
-    }
-    .b-module:hover {
-        border-color: rgba(10,25,47,0.1);
-        transform: translateY(-6px);
-        box-shadow:
-            inset 0 1px 0 rgba(255,255,255,1),
-            0 2px 8px rgba(10,25,47,0.04),
-            0 28px 56px -14px rgba(10,25,47,0.14);
-    }
-    .b-module:hover::before {
-        color: rgba(10,25,47,0.45);
-        transform: translateX(-2px);
-    }
-    .b-module:hover::after { transform: scaleX(1); }
+    /* Caso / métrica discreta (sin caja) */
+    .svc-proof { font-size: 0.95rem; color: var(--color-text-muted); margin: 0 0 3rem 0; max-width: 760px; }
+    .svc-proof-metric { font-size: 1.15rem; color: var(--color-blue-deep); margin-right: 0.15rem; }
 
-    .b-mod-icon {
-        width: 50px; height: 50px;
-        background: linear-gradient(180deg, #ffffff 0%, #f3f5f8 100%);
-        border-radius: 13px;
-        display: flex; align-items: center; justify-content: center;
-        color: var(--color-blue-deep);
-        margin-bottom: 2.2rem;
-        border: 1px solid rgba(10,25,47,0.06);
-        box-shadow:
-            inset 0 1px 0 rgba(255,255,255,1),
-            0 3px 8px rgba(10,25,47,0.03);
-        transition:
-            transform 0.55s cubic-bezier(0.16,1,0.3,1),
-            box-shadow 0.55s cubic-bezier(0.16,1,0.3,1),
-            border-color 0.4s ease;
-        position: relative; z-index: 2;
-    }
-    .b-mod-icon svg { width: 22px; height: 22px; }
-    .b-module:hover .b-mod-icon {
-        transform: scale(1.05) translateY(-2px);
-        box-shadow:
-            inset 0 1px 0 rgba(255,255,255,1),
-            0 10px 22px rgba(10,25,47,0.1);
-        border-color: rgba(10,25,47,0.1);
-    }
+    /* Capacidades — lista de texto editorial con hairlines */
+    .svc-caps { display: grid; grid-template-columns: 1fr 1fr; gap: 0 5rem; margin-bottom: 3rem; }
+    .svc-cap { display: flex; gap: 1.25rem; padding: 1.6rem 0; border-top: 1px solid var(--color-border); }
+    .svc-cap-idx { font-size: 0.95rem; color: #cbd5e1; flex-shrink: 0; padding-top: 0.15rem; }
+    .svc-cap-text h3 { font-size: 1.05rem; font-weight: 700; color: var(--color-text); margin: 0 0 0.4rem 0; letter-spacing: -0.3px; }
+    .svc-cap-text p { font-size: 0.95rem; color: var(--color-text-muted); line-height: 1.6; margin: 0; }
 
-    .b-module h3 {
-        font-size: 1.1rem; font-weight: 700;
-        color: var(--color-text);
-        margin: 0 0 0.65rem 0;
-        letter-spacing: -0.35px;
-        line-height: 1.3;
-        padding-right: 2.4rem;
-        position: relative; z-index: 2;
-    }
-    .b-module p {
-        font-size: 0.93rem;
-        color: #5a6677;
-        line-height: 1.6;
-        margin: 0;
-        font-weight: 400;
-        position: relative; z-index: 2;
-    }
-
-    /* DNA Footer refinado */
-    .dna-footer {
-        display: flex; align-items: center; gap: 2rem;
-        border-top: 1px solid rgba(10,25,47,0.06);
-        padding-top: 1.8rem;
-    }
-    .dna-label {
-        font-size: 0.6rem; font-weight: 700;
-        color: rgba(10,25,47,0.32);
-        letter-spacing: 2px;
-    }
-    .dna-pills { display: flex; flex-wrap: wrap; gap: 14px; }
-    .dna-pills span {
-        font-size: 0.78rem; font-weight: 500;
-        color: rgba(10,25,47,0.55);
-        letter-spacing: -0.1px;
-        position: relative;
-    }
-    .dna-pills span:not(:last-child)::after {
-        content: '·';
-        margin-left: 14px;
-        color: rgba(10,25,47,0.2);
-    }
+    /* Stack — línea sobria */
+    .svc-stack { display: flex; align-items: center; gap: 1.5rem; }
+    .svc-stack-label { font-size: 0.6rem; font-weight: 800; letter-spacing: 2px; color: rgba(10,25,47,0.3); text-transform: uppercase; }
+    .svc-stack-pills { display: flex; flex-wrap: wrap; gap: 14px; }
+    .svc-stack-pills span { font-size: 0.8rem; font-weight: 500; color: rgba(10,25,47,0.55); }
+    .svc-stack-pills span:not(:last-child)::after { content: '·'; margin-left: 14px; color: rgba(10,25,47,0.2); }
 
     /* 4. WHY FLOUVIA HARDWARE */
-    .why-flouvia-hardware { padding: 6rem 0 8rem 0; background: #ffffff; position: relative; overflow: clip; }
-    .wf-header { text-align: center; margin-bottom: 6rem; }
-    .wf-title { font-size: clamp(2.8rem, 5vw, 4.5rem); font-weight: 800; letter-spacing: -2px; margin: 0; line-height: 1; }
-
-    .wf-hardware-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; perspective: 1000px; }
-    .hw-card { position: relative; background: #fcfcfc; border: 1px solid rgba(0,0,0,0.06); padding: 3rem 2.5rem; display: flex; flex-direction: column; transition: transform 0.2s ease-out, box-shadow 0.2s ease-out; box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 10px 20px rgba(0,0,0,0.02); transform-style: preserve-3d; }
-    
+    .why-flouvia-hardware { padding: 7rem 0 8rem 0; background: #ffffff; position: relative; overflow: clip; }
+    .wf-header { text-align: center; margin-bottom: 5rem; }
+    .wf-title { margin: 0; }
+    .wf-hardware-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; }
+    .hw-card { position: relative; background: #fcfcfc; border: 1px solid rgba(0,0,0,0.06); padding: 3rem 2.5rem; display: flex; flex-direction: column; border-radius: 24px; transition: transform 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth), border-color 0.45s ease, background 0.45s ease; box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 10px 20px rgba(0,0,0,0.02); }
     .hw-glow-overlay { position: absolute; inset: 0; background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.9), transparent 40%); opacity: 0; transition: opacity 0.5s ease; pointer-events: none; z-index: 1; border-radius: inherit; }
-    .hw-card:hover { box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 25px 50px rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.12); background: #ffffff; }
+    .hw-card:hover { transform: translateY(-6px); box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 25px 50px rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.12); background: #ffffff; }
     .hw-card:hover .hw-glow-overlay { opacity: 1; }
-    .hw-inner { position: relative; z-index: 2; transform: translateZ(30px); }
-
+    .hw-inner { position: relative; z-index: 2; }
     .hw-num { font-family: var(--font-serif); font-style: italic; font-size: 2.2rem; color: #cbd5e1; display: block; margin-bottom: 3rem; }
     .hw-text-zone h3 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 1rem 0; color: var(--color-text); }
     .hw-text-zone p { font-size: 1.05rem; color: var(--color-text-muted); line-height: 1.6; margin: 0; }
 
-    /* 5. CTA FINAL REFINED */
-    .cta-final-clean { padding: 2rem 0 10rem 0; }
-    .cta-box-refined { background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%); padding: 6rem; position: relative; overflow: hidden; box-shadow: 0 40px 80px rgba(10,25,47,0.25); }
+    /* 5. COMPARISON TABLE */
+    .comparison-section { padding: 6rem 0; background: var(--color-bg-soft); position: relative; overflow: clip; }
+    .cmp-header { text-align: center; max-width: 640px; margin: 0 auto 3.5rem; }
+    .cmp-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 24px; }
+    .cmp-table { width: 100%; border-collapse: collapse; min-width: 720px; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 30px 80px -30px rgba(10,25,47,0.12); }
+    .cmp-table th, .cmp-table td { text-align: left; padding: 1.25rem 1.5rem; font-size: 0.92rem; line-height: 1.4; vertical-align: top; border-bottom: 1px solid rgba(10,25,47,0.06); }
+    .cmp-table thead th { font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--color-text-muted); background: #fafbfd; }
+    .cmp-table tbody th[scope="row"] { font-weight: 700; color: var(--color-text); width: 22%; }
+    .cmp-table td { color: #5a6677; font-weight: 500; }
+    .cmp-table tbody tr:last-child th, .cmp-table tbody tr:last-child td { border-bottom: none; }
+    .cmp-flouvia-col { background: rgba(10,25,47,0.025); color: var(--color-blue-deep) !important; font-weight: 700 !important; box-shadow: inset 2px 0 0 var(--color-blue-deep), inset -2px 0 0 var(--color-blue-deep); }
+    .cmp-table thead th.cmp-flouvia-col { color: var(--color-blue-deep); background: rgba(10,25,47,0.05); }
+
+    /* 6. FAQ */
+    .faq-section { padding: 6rem 0 7rem; background: var(--color-bg); }
+    .faq-header { text-align: center; margin-bottom: 3.5rem; }
+    .faq-list { max-width: 820px; margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid var(--color-border); }
+    .faq-item:first-child { border-top: 1px solid var(--color-border); }
+    .faq-q { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding: 1.6rem 0; font-size: 1.1rem; font-weight: 700; color: var(--color-text); letter-spacing: -0.3px; }
+    .faq-q::-webkit-details-marker { display: none; }
+    .faq-icon { position: relative; width: 16px; height: 16px; flex-shrink: 0; }
+    .faq-icon::before, .faq-icon::after { content: ''; position: absolute; background: var(--color-text); transition: transform 0.4s var(--ease-smooth), opacity 0.4s var(--ease-smooth); }
+    .faq-icon::before { top: 7px; left: 0; width: 16px; height: 2px; }
+    .faq-icon::after { left: 7px; top: 0; width: 2px; height: 16px; }
+    .faq-item[open] .faq-icon::after { transform: rotate(90deg); opacity: 0; }
+    .faq-a { overflow: hidden; }
+    .faq-a p { margin: 0; padding: 0 3rem 1.8rem 0; font-size: 1rem; line-height: 1.65; color: var(--color-text-muted); max-width: 680px; }
+
+    /* 7. CTA FINAL */
+    .cta-final-clean { padding: 3rem 0 10rem 0; }
+    .cta-box-refined { background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%); padding: 5.5rem; position: relative; overflow: hidden; box-shadow: 0 40px 80px rgba(10,25,47,0.25); }
     .cta-flex { display: flex; justify-content: space-between; align-items: center; gap: 4rem; }
-    .cta-title { font-size: clamp(3rem, 5vw, 4rem); font-weight: 800; color: #fff; letter-spacing: -2px; line-height: 1; margin: 0; }
-    .btn-luxe-main { background: #fff; color: var(--color-blue-deep); padding: 20px 44px; border-radius: 100px; text-decoration: none; font-size: 1.1rem; font-weight: 700; transition: all 0.4s var(--ease-smooth); box-shadow: 0 10px 30px rgba(255,255,255,0.1); display: block; text-align: center; }
-    .btn-luxe-main:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 20px 40px rgba(255,255,255,0.2); }
+    .cta-text { max-width: 640px; }
+    .cta-eyebrow { color: rgba(255,255,255,0.55) !important; letter-spacing: 4px; margin-bottom: 1.4rem; }
+    .cta-title { font-size: clamp(2rem, 3.6vw, 3rem); font-weight: 800; color: #fff; letter-spacing: -1.5px; line-height: 1.08; margin: 0 0 1.4rem 0; }
+    .cta-title-soft { display: block; color: rgba(255,255,255,0.55); }
+    .cta-body { font-size: 1.05rem; color: rgba(255,255,255,0.7); line-height: 1.6; margin: 0; max-width: 540px; }
+    .btn-luxe-main { background: #fff; color: var(--color-blue-deep); padding: 20px 40px; border-radius: 100px; text-decoration: none; font-size: 1.05rem; font-weight: 700; transition: transform 0.5s var(--ease-smooth), box-shadow 0.5s var(--ease-smooth); box-shadow: 0 10px 30px rgba(0,0,0,0.18); display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0; white-space: nowrap; }
+    .btn-luxe-main .btn-arrow { transition: transform 0.5s var(--ease-smooth); }
+    .btn-luxe-main:hover { transform: translateY(-3px); box-shadow: 0 20px 44px rgba(0,0,0,0.28); }
+    .btn-luxe-main:hover .btn-arrow { transform: translateX(4px); }
 
     /* RESPONSIVE */
     @media (max-width: 1024px) {
@@ -835,84 +644,63 @@ const isEn = lang === 'en';
         .bp-line-y { display: none; }
         .bp-col { padding: 3rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .bp-last { border-bottom: none; }
-
-        .master-service-row { grid-template-columns: 1fr; gap: 4rem; padding: 5rem 0; }
-        .ms-sticky-content { position: relative; top: 0; flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-border); padding-bottom: 1rem; }
-        .ms-progress-track { display: none; }
+        .svc-caps { grid-template-columns: 1fr; gap: 0; }
         .wf-hardware-grid { grid-template-columns: 1fr; }
+        .hero-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; }
+        .cta-flex { flex-direction: column; align-items: flex-start; gap: 2.5rem; }
     }
 
     @media (max-width: 768px) {
-        .hero-grand { padding-top: 11rem; padding-bottom: 4rem; min-height: auto; text-align: center; }
-        .hero-content { display: flex; flex-direction: column; align-items: center; }
-        .hero-title { display: flex; flex-direction: column; gap: 0; margin-bottom: 2.5rem; }
-        .title-bold { display: block; font-size: 11.5vw; letter-spacing: -1.8px; line-height: 0.95; margin-bottom: -43px; }
-        .title-serif { display: block; font-size: 12.2vw; font-weight: 300; letter-spacing: -0.5px; line-height: 0.95; }
-        .hero-bottom { flex-direction: column; align-items: center; gap: 2.5rem; text-align: center; border-top: none; padding-top: 0;}
-        .hero-desc { font-size: 1.1rem; padding: 0 5%; max-width: 95%; margin: 0 auto; line-height: 1.6;}
-        .hero-actions-wrapper { width: 100%; padding: 0 5%; justify-content: center; }
-        .btn-luxe { width: 100%; padding: 18px 0; font-size: 1.05rem; display: flex; justify-content: center;}
+        .hero-grand { padding-top: 9rem; padding-bottom: 4rem; min-height: auto; }
+        .hero-title { font-size: 8.5vw; margin-bottom: 2.5rem; max-width: 100%; }
+        .hero-bottom { gap: 2.2rem; }
+        .hero-desc { font-size: 1.05rem; }
+        .hero-action { width: 100%; flex-direction: column; align-items: stretch; gap: 1rem; }
+        .btn-luxe { width: 100%; padding: 18px 0; font-size: 1.05rem; }
+        .btn-ghost { justify-content: center; }
 
         .dark-section { padding: 3rem 0; }
         .bp-col { padding: 2rem 0; }
         .p-title { font-size: 2rem; }
         .sleek-btn-light { margin-top: 1rem; }
 
-        .services-showcase { padding: 2rem 0; }
-        .master-service-row { padding: 3rem 0; gap: 2rem; border-bottom: 1px solid rgba(0,0,0,0.1); }
-        .ms-massive-title { font-size: 2.2rem; margin-bottom: 1rem; }
-        .ms-main-desc { font-size: 1.1rem; margin-bottom: 2rem; }
-        
-        .bento-modules-grid { grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2rem; }
-        .b-module { padding: 1.5rem; }
-        .b-mod-icon { width: 36px; height: 36px; margin-bottom: 1rem; }
-        .b-mod-icon svg { width: 16px; height: 16px; }
-        .b-module h3 { font-size: 1.05rem; margin-bottom: 0.5rem; }
-        .b-module p { font-size: 0.9rem; }
-
-        .dna-footer { padding-top: 1.5rem; flex-direction: column; align-items: flex-start; gap: 1rem; }
+        .services-index { padding: 1rem 0; }
+        .svc-chapter { padding: 3rem 0; }
+        .svc-head { flex-direction: column; align-items: flex-start; gap: 1rem; margin-bottom: 1.25rem; }
+        .svc-title { font-size: 2rem; margin-bottom: 1rem; }
+        .svc-desc { font-size: 1.05rem; }
+        .svc-proof { margin-bottom: 2rem; font-size: 0.92rem; }
+        .svc-caps { margin-bottom: 2rem; }
+        .svc-cap { padding: 1.3rem 0; }
+        .svc-stack { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
 
         .why-flouvia-hardware { padding: 4rem 0; }
         .wf-header { margin-bottom: 3rem; }
-        .wf-title { font-size: 2.2rem; }
         .wf-hardware-grid { gap: 1.5rem; }
         .hw-card { padding: 2rem 1.5rem; }
         .hw-num { font-size: 1.8rem; margin-bottom: 1.5rem; }
         .hw-text-zone h3 { font-size: 1.3rem; }
         .hw-text-zone p { font-size: 1rem; }
 
+        .comparison-section { padding: 4rem 0; }
+        .cmp-header { margin-bottom: 2.5rem; }
+        .faq-section { padding: 4rem 0; }
+        .faq-q { font-size: 1rem; padding: 1.3rem 0; gap: 1rem; }
+        .faq-a p { padding-right: 0; }
+
         .cta-final-clean { padding: 2rem 0 6rem 0; }
-        .cta-box-refined { padding: 3rem 1.5rem; border-radius: 24px; }
-        .cta-flex { flex-direction: column; text-align: center; gap: 2rem; }
-        .cta-title { font-size: 2rem; }
-        .btn-luxe-main { width: 100%; padding: 16px 32px; font-size: 1rem; }
+        .cta-box-refined { padding: 3rem 1.6rem; border-radius: 28px; }
+        .cta-title { font-size: 1.7rem; }
+        .btn-luxe-main { width: 100%; justify-content: center; }
     }
 </style>
 
 <script>
     import { gsap } from 'gsap';
     import { ScrollTrigger } from 'gsap/ScrollTrigger';
-    import { SplitText } from 'gsap/SplitText';
-    gsap.registerPlugin(ScrollTrigger, SplitText);
+    gsap.registerPlugin(ScrollTrigger);
 
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    // ── Kill ALL CSS reveal animations + reset to visible state ──
-    // GSAP will explicitly hide via gsap.set() and animate in via gsap.to()
-    document.querySelectorAll<HTMLElement>(
-        '.reveal-blur, .reveal-fade, .reveal-up, .bp-fade-up, .blueprint-reveal'
-    ).forEach(el => {
-        el.style.animation = 'none';
-        el.style.opacity = '1';
-        el.style.filter = 'none';
-        el.style.transform = 'none';
-    });
-    // Disable CSS transitions on blueprint lines (GSAP will animate width/height)
-    document.querySelectorAll<HTMLElement>('.bp-line-x, .bp-line-y').forEach(el => {
-        el.style.transition = 'none';
-    });
-
-    // ── Robust ScrollTrigger refresh (waits for fonts + window.load) ──
+    // Recalcular posiciones tras fuentes + carga para que los triggers ya pasados disparen.
     const robustRefresh = () => {
         const winLoad = new Promise<void>((resolve) => {
             if (document.readyState === 'complete') resolve();
@@ -925,236 +713,134 @@ const isEn = lang === 'en';
     };
     robustRefresh();
 
-    if (!reduced) {
-        const mm = gsap.matchMedia();
+    document.addEventListener('DOMContentLoaded', () => {
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduced) return;
 
-        // Helper to safely create SplitText (returns null if element missing)
-        const splitWords = (el: HTMLElement | null) => {
-            if (!el) return null;
-            const split = SplitText.create(el, { type: 'lines,words', linesClass: 'lx-line-mask' });
-            gsap.set(split.words, { yPercent: 110 });
-            return split;
+        const EASE = 'power2.out';
+        const DUR = 0.9;
+        const Y = 14;
+
+        /* HERO — entrada en carga (gate .js-anim ya lo tiene en opacity:0) */
+        const heroAnim = gsap.utils.toArray<HTMLElement>('.hero-anim');
+        if (heroAnim.length) {
+            gsap.set(heroAnim, { opacity: 0, y: 12 });
+            gsap.timeline({ defaults: { ease: 'power2.out' } })
+                .to('.hero-status',             { opacity: 1, y: 0, duration: 0.9 }, 0)
+                .to('.hero-text-zone .eyebrow', { opacity: 1, y: 0, duration: 0.9 }, 0.1)
+                .to('.hero-title',              { opacity: 1, y: 0, duration: 1.1 }, 0.2)
+                .to('.hero-bottom',             { opacity: 1, y: 0, duration: 1.0 }, 0.42);
+        }
+
+        /* Reveal robusto (sin parpadeo): oculta con set, revela una vez en onEnter. */
+        const reveal = (
+            targets: string | HTMLElement | NodeListOf<Element> | HTMLElement[],
+            opts: { trigger?: string | HTMLElement; start?: string; y?: number; dur?: number; stagger?: number; delay?: number } = {}
+        ) => {
+            const els = gsap.utils.toArray<HTMLElement>(targets as any);
+            if (!els.length) return;
+            const y = opts.y ?? Y;
+            gsap.set(els, { opacity: 0, y });
+            ScrollTrigger.create({
+                trigger: opts.trigger ?? els[0],
+                start: opts.start ?? 'top 85%',
+                once: true,
+                onEnter: () => gsap.to(els, {
+                    opacity: 1, y: 0, duration: opts.dur ?? DUR, ease: EASE,
+                    stagger: opts.stagger ?? 0.08, delay: opts.delay ?? 0,
+                    clearProps: 'transform,opacity',
+                }),
+            });
+        };
+        const revealEach = (selector: string, opts: { start?: string; y?: number; dur?: number } = {}) => {
+            gsap.utils.toArray<HTMLElement>(selector).forEach(el => {
+                reveal(el, { trigger: el, start: opts.start, y: opts.y, dur: opts.dur, stagger: 0 });
+            });
         };
 
-        // ── DESKTOP ────────────────────────────────────────────────────
+        const mm = gsap.matchMedia();
+
+        /* Parallax leve del hero (solo desktop) */
         mm.add('(min-width: 769px)', () => {
-
-            // HERO ───────────────────────────────────────────────
-            const heroTitle   = document.querySelector<HTMLElement>('.hero-title');
-            const heroEyebrow = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
-            const heroBottom  = document.querySelector<HTMLElement>('.hero-bottom');
-
-            // Hide immediately so nothing flashes
-            if (heroEyebrow) gsap.set(heroEyebrow, { opacity: 0, y: 14 });
-            if (heroBottom)  gsap.set(heroBottom.children, { opacity: 0, y: 16 });
-            const heroSplit = heroTitle ? SplitText.create(heroTitle, {
-                type: 'lines,words', linesClass: 'lx-line-mask',
-            }) : null;
-            if (heroSplit) gsap.set(heroSplit.words, { yPercent: 105 });
-
-            const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-            if (heroEyebrow) tl.to(heroEyebrow, { opacity: 1, y: 0, duration: 1.4 }, 0.1);
-            if (heroSplit)   tl.to(heroSplit.words, {
-                yPercent: 0, duration: 1.5, stagger: { amount: 0.5, from: 'start' },
-            }, 0.35);
-            if (heroBottom && heroBottom.children.length > 0) {
-                tl.to(heroBottom.children, {
-                    opacity: 1, y: 0, duration: 1.1, ease: 'power3.out', stagger: 0.12,
-                }, 1.0);
-            }
-
-            // Hero parallax
             const heroParallax = document.getElementById('hero-parallax');
             if (heroParallax) {
                 gsap.to(heroParallax, {
-                    yPercent: 28, opacity: 0.15, ease: 'none',
-                    scrollTrigger: { trigger: '.hero-grand', start: 'top top', end: 'bottom 30%', scrub: 0.8 },
+                    yPercent: 5, opacity: 0.85, ease: 'none',
+                    scrollTrigger: { trigger: '.hero-grand', start: 'top top', end: 'bottom 30%', scrub: 1 },
                 });
-            }
-
-            // PHILOSOPHY BLUEPRINT ───────────────────────────────
-            const bpSection = document.querySelector<HTMLElement>('.philosophy-blueprint');
-            if (bpSection) {
-                const bpLineTop    = bpSection.querySelector<HTMLElement>('.bp-line-top');
-                const bpLineBottom = bpSection.querySelector<HTMLElement>('.bp-line-bottom');
-                const bpLineYs     = bpSection.querySelectorAll<HTMLElement>('.bp-line-y');
-                const bpBadge      = bpSection.querySelector<HTMLElement>('.p-badge');
-                const bpTitle      = bpSection.querySelector<HTMLElement>('.p-title');
-                const bpBtn        = bpSection.querySelector<HTMLElement>('.sleek-btn-light');
-                const bpCols       = bpSection.querySelectorAll<HTMLElement>('.bp-col:not(.bp-header-col) .bp-content');
-
-                // Hide all immediately
-                if (bpLineTop)    gsap.set(bpLineTop,    { width: 0 });
-                if (bpLineBottom) gsap.set(bpLineBottom, { width: 0 });
-                gsap.set(bpLineYs, { height: 0 });
-                if (bpBadge) gsap.set(bpBadge, { opacity: 0, y: 16 });
-                if (bpBtn)   gsap.set(bpBtn,   { opacity: 0, y: 12 });
-                gsap.set(bpCols, { opacity: 0, y: 20 });
-                const bpSplit = splitWords(bpTitle);
-
-                const bpTl = gsap.timeline({
-                    scrollTrigger: { trigger: bpSection, start: 'top 85%', once: true },
-                });
-                if (bpLineTop)    bpTl.to(bpLineTop,    { width: '100%', duration: 1.5, ease: 'expo.out' }, 0);
-                if (bpLineBottom) bpTl.to(bpLineBottom, { width: '100%', duration: 1.5, ease: 'expo.out' }, 0.3);
-                bpLineYs.forEach((line, i) => {
-                    bpTl.to(line, { height: '100%', duration: 1.2, ease: 'expo.out' }, 0.4 + i * 0.1);
-                });
-                if (bpBadge) bpTl.to(bpBadge, { opacity: 1, y: 0, duration: 0.9, ease: 'expo.out' }, 0.25);
-                if (bpSplit) bpTl.to(bpSplit.words, {
-                    yPercent: 0, duration: 1.3, ease: 'expo.out', stagger: { amount: 0.4 },
-                }, 0.4);
-                if (bpBtn) bpTl.to(bpBtn, { opacity: 1, y: 0, duration: 0.9, ease: 'expo.out' }, 0.75);
-                bpCols.forEach((col, i) => {
-                    bpTl.to(col, { opacity: 1, y: 0, duration: 1.0, ease: 'expo.out' }, 0.5 + i * 0.12);
-                });
-            }
-
-            // SERVICES ROWS ──────────────────────────────────────
-            document.querySelectorAll<HTMLElement>('.master-service-row').forEach((row) => {
-                const stickyContent = row.querySelector<HTMLElement>('.ms-sticky-content');
-                const title   = row.querySelector<HTMLElement>('.ms-massive-title');
-                const desc    = row.querySelector<HTMLElement>('.ms-main-desc');
-                const modules = row.querySelectorAll<HTMLElement>('.b-module');
-                const dna     = row.querySelector<HTMLElement>('.dna-footer');
-
-                if (stickyContent) gsap.set(stickyContent, { opacity: 0, x: -24 });
-                if (desc) gsap.set(desc, { opacity: 0, y: 18 });
-                gsap.set(modules, { opacity: 0, y: 28 });
-                if (dna) gsap.set(dna, { opacity: 0 });
-                const titleSplit = splitWords(title);
-
-                const rowTl = gsap.timeline({
-                    scrollTrigger: { trigger: row, start: 'top 85%', once: true },
-                });
-                if (stickyContent) rowTl.to(stickyContent, { opacity: 1, x: 0, duration: 1.0, ease: 'expo.out' }, 0);
-                if (titleSplit)    rowTl.to(titleSplit.words, {
-                    yPercent: 0, duration: 1.4, ease: 'expo.out', stagger: { amount: 0.35 },
-                }, 0.1);
-                if (desc) rowTl.to(desc, { opacity: 1, y: 0, duration: 1.1, ease: 'expo.out' }, 0.5);
-                modules.forEach((mod, j) => {
-                    rowTl.to(mod, { opacity: 1, y: 0, duration: 1.0, ease: 'expo.out' }, 0.7 + j * 0.07);
-                });
-                if (dna) rowTl.to(dna, { opacity: 1, duration: 0.8, ease: 'expo.out' }, 1.1);
-            });
-
-            // WHY FLOUVIA HARDWARE ───────────────────────────────
-            const wfSection = document.querySelector<HTMLElement>('.why-flouvia-hardware');
-            if (wfSection) {
-                const eyebrow = wfSection.querySelector<HTMLElement>('.eyebrow');
-                const wfTitle = wfSection.querySelector<HTMLElement>('.wf-title');
-                const cards   = wfSection.querySelectorAll<HTMLElement>('.hw-card');
-
-                if (eyebrow) gsap.set(eyebrow, { opacity: 0, y: 14 });
-                gsap.set(cards, { opacity: 0, y: 30 });
-                const wfSplit = splitWords(wfTitle);
-
-                const wfTl = gsap.timeline({
-                    scrollTrigger: { trigger: wfSection, start: 'top 85%', once: true },
-                });
-                if (eyebrow) wfTl.to(eyebrow, { opacity: 1, y: 0, duration: 1.2, ease: 'expo.out' }, 0);
-                if (wfSplit) wfTl.to(wfSplit.words, {
-                    yPercent: 0, duration: 1.4, ease: 'expo.out', stagger: { amount: 0.4 },
-                }, 0.2);
-                cards.forEach((card, i) => {
-                    wfTl.to(card, { opacity: 1, y: 0, duration: 1.1, ease: 'expo.out' }, 0.55 + i * 0.1);
-                });
-            }
-
-            // CTA FINAL ──────────────────────────────────────────
-            const ctaSection = document.querySelector<HTMLElement>('.cta-final-clean');
-            if (ctaSection) {
-                const ctaBox     = ctaSection.querySelector<HTMLElement>('.cta-box-refined');
-                const ctaEyebrow = ctaSection.querySelector<HTMLElement>('.eyebrow');
-                const ctaTitle   = ctaSection.querySelector<HTMLElement>('.cta-title');
-                const ctaBtn     = ctaSection.querySelector<HTMLElement>('.btn-luxe-main');
-
-                if (ctaBox)     gsap.set(ctaBox,     { opacity: 0, y: 30, scale: 0.97 });
-                if (ctaEyebrow) gsap.set(ctaEyebrow, { opacity: 0, y: 12 });
-                if (ctaBtn)     gsap.set(ctaBtn,     { opacity: 0, y: 16 });
-                const ctaSplit = splitWords(ctaTitle);
-
-                const ctaTl = gsap.timeline({
-                    scrollTrigger: { trigger: ctaSection, start: 'top 85%', once: true },
-                });
-                if (ctaBox)     ctaTl.to(ctaBox,     { opacity: 1, y: 0, scale: 1, duration: 1.3, ease: 'expo.out' }, 0);
-                if (ctaEyebrow) ctaTl.to(ctaEyebrow, { opacity: 1, y: 0, duration: 1.0, ease: 'expo.out' }, 0.35);
-                if (ctaSplit)   ctaTl.to(ctaSplit.words, {
-                    yPercent: 0, duration: 1.3, ease: 'expo.out', stagger: { amount: 0.3 },
-                }, 0.45);
-                if (ctaBtn)     ctaTl.to(ctaBtn,     { opacity: 1, y: 0, duration: 1.0, ease: 'expo.out' }, 0.85);
             }
         });
 
-        // ── MOBILE ─────────────────────────────────────────────────────
-        mm.add('(max-width: 768px)', () => {
-            const mHeroTitle  = document.querySelector<HTMLElement>('.hero-title');
-            const mEyebrow    = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
-            const mHeroBottom = document.querySelector<HTMLElement>('.hero-bottom');
+        /* Encabezados + eyebrows */
+        revealEach('section:not(.hero-grand) .eyebrow', { y: 10, dur: 0.9, start: 'top 90%' });
+        revealEach('.section-heading', { y: 16, dur: 1.0, start: 'top 88%' });
 
-            if (mEyebrow)    gsap.set(mEyebrow,    { opacity: 0, y: 10 });
-            if (mHeroTitle)  gsap.set(mHeroTitle,  { opacity: 0, y: 24 });
-            if (mHeroBottom) gsap.set(mHeroBottom.children, { opacity: 0, y: 14 });
+        /* PHILOSOPHY (dark) — líneas + columnas */
+        const bp = document.querySelector<HTMLElement>('.philosophy-blueprint');
+        if (bp) {
+            const lineTop = bp.querySelector<HTMLElement>('.bp-line-top');
+            const lineBottom = bp.querySelector<HTMLElement>('.bp-line-bottom');
+            const lineYs = bp.querySelectorAll<HTMLElement>('.bp-line-y');
+            const badge = bp.querySelector<HTMLElement>('.p-badge');
+            const title = bp.querySelector<HTMLElement>('.p-title');
+            const btn = bp.querySelector<HTMLElement>('.sleek-btn-light');
+            const cols = bp.querySelectorAll<HTMLElement>('.bp-col:not(.bp-header-col) .bp-content');
 
-            const tlm = gsap.timeline({ defaults: { ease: 'expo.out' } });
-            if (mEyebrow)   tlm.to(mEyebrow,   { opacity: 1, y: 0, duration: 1.1 }, 0.1);
-            if (mHeroTitle) tlm.to(mHeroTitle, { opacity: 1, y: 0, duration: 1.2 }, 0.3);
-            if (mHeroBottom && mHeroBottom.children.length > 0) {
-                tlm.to(mHeroBottom.children, {
-                    opacity: 1, y: 0, duration: 1.0, ease: 'power3.out', stagger: 0.1,
-                }, 0.85);
-            }
+            if (lineTop) gsap.set(lineTop, { width: 0 });
+            if (lineBottom) gsap.set(lineBottom, { width: 0 });
+            gsap.set(lineYs, { height: 0 });
+            const fade = [badge, title, btn].filter(Boolean) as HTMLElement[];
+            gsap.set(fade, { opacity: 0, y: 16 });
+            gsap.set(cols, { opacity: 0, y: 20 });
+
+            const tl = gsap.timeline({ scrollTrigger: { trigger: bp, start: 'top 82%', once: true } });
+            if (lineTop) tl.to(lineTop, { width: '100%', duration: 1.2, ease: 'power3.inOut' }, 0);
+            if (lineBottom) tl.to(lineBottom, { width: '100%', duration: 1.2, ease: 'power3.inOut' }, 0.15);
+            lineYs.forEach((l, i) => tl.to(l, { height: '100%', duration: 1.0, ease: 'power3.inOut' }, 0.3 + i * 0.08));
+            tl.to(fade, { opacity: 1, y: 0, duration: DUR, ease: EASE, stagger: 0.1 }, 0.25);
+            tl.to(cols, { opacity: 1, y: 0, duration: DUR, ease: EASE, stagger: 0.1 }, 0.4);
+        }
+
+        /* SERVICIOS — índice editorial (capítulo por servicio) */
+        document.querySelectorAll<HTMLElement>('.svc-chapter').forEach((row) => {
+            const head = row.querySelectorAll<HTMLElement>('.svc-head, .svc-title, .svc-desc, .svc-proof');
+            const caps = row.querySelectorAll<HTMLElement>('.svc-cap');
+            const stack = row.querySelector<HTMLElement>('.svc-stack');
+
+            gsap.set(head, { opacity: 0, y: 16 });
+            gsap.set(caps, { opacity: 0, y: 16 });
+            if (stack) gsap.set(stack, { opacity: 0, y: 10 });
+
+            const tl = gsap.timeline({ scrollTrigger: { trigger: row, start: 'top 82%', once: true } });
+            tl.to(head, { opacity: 1, y: 0, duration: DUR, ease: EASE, stagger: 0.07, clearProps: 'transform,opacity' }, 0);
+            tl.to(caps, { opacity: 1, y: 0, duration: DUR, ease: EASE, stagger: 0.06, clearProps: 'transform,opacity' }, 0.2);
+            if (stack) tl.to(stack, { opacity: 1, y: 0, duration: DUR, ease: EASE, clearProps: 'transform,opacity' }, 0.45);
         });
-    }
 
-    // ── SCROLL PROGRESS BARS ────────────────────────────────────────
-    window.addEventListener('scroll', () => {
-        document.querySelectorAll('.master-service-row').forEach(section => {
-            const bar = section.querySelector('.ms-progress-bar') as HTMLElement;
-            if (!bar) return;
-            const rect = section.getBoundingClientRect();
-            if (rect.top <= 140 && rect.bottom >= 0) {
-                const total = (section as HTMLElement).offsetHeight;
-                const pct = Math.min(Math.max((Math.abs(rect.top - 140) / (total - 140)) * 100, 0), 100);
-                bar.style.height = `${pct}%`;
-            } else if (rect.top > 140) {
-                bar.style.height = '0%';
-            } else {
-                bar.style.height = '100%';
-            }
-        });
-    }, { passive: true });
+        /* WHY FLOUVIA cards */
+        reveal('.wf-hardware-grid .hw-card', { trigger: '.wf-hardware-grid', y: 28, dur: 1.0, stagger: 0.1, start: 'top 82%' });
 
-    // ── 3D TILT (APPLE GLOW) ────────────────────────────────────────
-    if (window.innerWidth > 768) {
-        document.querySelectorAll('.tilt-card').forEach(card => {
+        /* COMPARISON table */
+        reveal('.cmp-scroll', { trigger: '.comparison-section', y: 24, dur: 1.0, start: 'top 80%' });
+
+        /* FAQ items */
+        reveal('.faq-item', { trigger: '.faq-list', y: 16, dur: 0.85, stagger: 0.06, start: 'top 84%' });
+
+        /* CTA final */
+        const cta = document.querySelector<HTMLElement>('.cta-box-refined');
+        if (cta) {
+            reveal(cta, { trigger: cta, y: 24, dur: 1.0, start: 'top 84%' });
+            reveal(cta.querySelectorAll('.cta-text > *, .btn-luxe-main'), { trigger: cta, y: 16, dur: 0.9, stagger: 0.08, delay: 0.15, start: 'top 84%' });
+        }
+    });
+
+    /* HW CARD — mouse glow (microinteracción sobria, sin tilt 3D) */
+    if (window.matchMedia('(hover: hover)').matches) {
+        document.querySelectorAll<HTMLElement>('.hw-card').forEach(card => {
             card.addEventListener('mousemove', e => {
                 const rect = card.getBoundingClientRect();
-                const x = (e as MouseEvent).clientX - rect.left;
-                const y = (e as MouseEvent).clientY - rect.top;
-                (card as HTMLElement).style.setProperty('--mouse-x', `${x}px`);
-                (card as HTMLElement).style.setProperty('--mouse-y', `${y}px`);
-                const cx = rect.width / 2, cy = rect.height / 2;
-                const rx = ((y - cy) / cy) * -5, ry = ((x - cx) / cx) * 5;
-                (card as HTMLElement).style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02, 1.02, 1.02)`;
-            });
-            card.addEventListener('mouseleave', () => {
-                (card as HTMLElement).style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-            });
-        });
-    }
-
-    // ── MAGNETIC BUTTONS ────────────────────────────────────────────
-    if (window.innerWidth > 1024) {
-        document.querySelectorAll('.magnetic-btn-minimal, .sleek-btn-light').forEach(btn => {
-            btn.addEventListener('mousemove', e => {
-                const rect = btn.getBoundingClientRect();
-                const x = (e as MouseEvent).clientX - rect.left - rect.width / 2;
-                const y = (e as MouseEvent).clientY - rect.top - rect.height / 2;
-                (btn as HTMLElement).style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
-            });
-            btn.addEventListener('mouseleave', () => {
-                (btn as HTMLElement).style.transform = 'translate(0, 0)';
+                card.style.setProperty('--mouse-x', `${(e as MouseEvent).clientX - rect.left}px`);
+                card.style.setProperty('--mouse-y', `${(e as MouseEvent).clientY - rect.top}px`);
             });
         });
     }

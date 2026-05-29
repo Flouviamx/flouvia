@@ -20,7 +20,7 @@ Node requerido: **>=22.12.0** (ver `.nvmrc`)
 | Adapter | `@astrojs/vercel` — deploy en Vercel |
 | Auth | Clerk (`@clerk/astro`) |
 | DB / Storage | Supabase (PostgreSQL + Storage bucket `boveda`) |
-| Animaciones | GSAP 3 + ScrollTrigger + SplitText |
+| Animaciones | GSAP 3 + ScrollTrigger (SplitText eliminado) |
 | Tipografía | Instrument Serif (serif/editorial) + Inter (sans) |
 
 ---
@@ -189,10 +189,13 @@ create index on notificaciones(email_cliente, leida, created_at desc);
 - **Usado en:** `EntornoUI.astro`
 
 ### Make (webhooks)
-- **Webhook URL:** `https://hook.us2.make.com/yxof110p9eswdp0eayr7qihrqx6778dd`
-- **Trigger:** formulario de soporte enviado
-- **Flow:** form → `POST /api/soporte/ticket` → Supabase + Make en paralelo
-- **Make puede escribir a Supabase** para actualizar status de tickets o publicar notificaciones
+Hay **dos webhooks distintos**:
+- **Soporte** (portal): `https://hook.us2.make.com/yxof110p9eswdp0eayr7qihrqx6778dd`
+  - Trigger: formulario de soporte enviado. Flow: form → `POST /api/soporte/ticket` → Supabase + Make en paralelo.
+  - Make puede escribir a Supabase para actualizar status de tickets o publicar notificaciones.
+- **Contacto** (`PlantillaContacto.astro`): `https://hook.us2.make.com/ov4rrddtdx739hnl7dp2mks216171q8m`
+  - Trigger: solicitud del formulario por pasos. Fire-and-forget desde el cliente (no pasa por API route).
+  - Payload completo y caveat de `data-value` en la sección "Página de Contacto".
 
 ### Stripe
 - **Integración:** solo Customer Portal (URL en `finanzas_config.stripe_portal_url`)
@@ -327,59 +330,77 @@ Mezcla eventos de 3 fuentes, ordenados por fecha descendente, máx 7 items:
 
 ---
 
-## Animaciones — GSAP
+## Animaciones — GSAP (home / `Inicio.astro`)
 
-**Regla crítica — siempre usar `immediateRender: false` en animaciones con ScrollTrigger:**
+> **Filosofía actual (mayo 2026):** minimalista, sutil, smooth. El usuario rechazó
+> explícitamente: SplitText "frase construyéndose", botones magnetic, entradas
+> cinemáticas multicapa y cualquier blur/scale dramático. **Un solo estándar para
+> todo el sitio.** Esta sección reemplaza las reglas viejas (SplitText, magnetic,
+> `immediateRender:false`, coreografías) — no reintroducir esos patrones.
+
+**Estándar único de entrada:** `fade + leve subida`. `ease: 'power2.out'`,
+duración `0.85–1.1s`, `y: 10–24px`, stagger `0.05–0.1s`. Sin blur, sin scale, sin
+SplitText.
+
+**Tokens nuevos relevantes:** `EASE='power2.out'`, `DUR=0.9`, `Y=14` (definidos en el
+script). `expo.out`/`power3.inOut` solo quedan para animaciones **scrub** (track del
+protocolo, barra de progreso, parallax) — no para reveals.
+
+### Patrón anti-parpadeo (reveal on scroll) — CRÍTICO
+Los reveals **ocultan el elemento de entrada con `gsap.set` y lo revelan UNA vez con
+`gsap.to` desde `onEnter`**. NO usar `gsap.from(..., {immediateRender:false})`:
+ese patrón dejaba el elemento visible hasta el primer scroll y entonces lo "saltaba"
+a `opacity:0` para re-animarlo → se veía "recargar al hacer scroll".
+
 ```ts
-const ir = { immediateRender: false } as const;
-
-gsap.from('.elemento', {
-  ...ir,          // ← siempre spread esto
-  y: 40, opacity: 0, duration: 1.2, ease: 'expo.out',
-  scrollTrigger: { trigger: '.section', start: 'top 80%', once: true },
-});
+const reveal = (targets, opts) => {
+  const els = gsap.utils.toArray(targets);
+  if (!els.length) return;
+  gsap.set(els, { opacity: 0, y: opts.y ?? 14 });          // oculto de entrada
+  ScrollTrigger.create({
+    trigger: opts.trigger ?? els[0], start: opts.start ?? 'top 85%', once: true,
+    onEnter: () => gsap.to(els, {                            // revela 1 vez
+      opacity: 1, y: 0, duration: opts.dur ?? 0.9, ease: 'power2.out',
+      stagger: opts.stagger ?? 0.08, delay: opts.delay ?? 0,
+      clearProps: 'transform,opacity',                       // libera para hovers/.is-active
+    }),
+  });
+};
 ```
-Sin `immediateRender: false`, GSAP aplica el estado `from` (opacity:0) inmediatamente y si ScrollTrigger no dispara, el elemento queda invisible para siempre.
+- `clearProps: 'transform,opacity'` al final → libera el inline para que `:hover` y
+  `.is-active` apliquen sus propios transforms.
+- `ScrollTrigger.create({ once: true })` (no en el tween) → dispara onEnter una sola vez.
+- Las animaciones de scroll NO dependen de `.js-anim`: si el elemento está bajo el
+  fold, `gsap.set` lo oculta sin que el usuario lo vea; arriba del fold dispara al cargar.
 
-**Reglas de animación del proyecto:**
-- Easing: siempre `expo.out` o `power3.out` — nunca `back.out` (se siente juguetón, no premium)
-- Duraciones: 1.0–1.5s desktop, 0.9–1.2s mobile
-- Stagger: 0.08–0.15s — ritmo deliberado
-- NO usar `clipPath` para reveals (causa artefactos de 1px en algunos browsers)
-- NO usar 3D (`rotateX`/`rotateY`) en elementos dentro de contenedores `overflow-x: auto`
-- Siempre `once: true` en ScrollTrigger para que no re-anime al hacer scroll back
-- `window.addEventListener('load', () => setTimeout(() => ScrollTrigger.refresh(), 120))` — recalcular posiciones después de que cargan fuentes e imágenes
+### Anti-FOUC (hero + navbar) — gate `.js-anim`
+Elementos que animan **en carga** (hero, navbar) NO deben tener `opacity:0` permanente
+en CSS (causaba "pantalla blanca hasta refresh" y flash visible→oculto→anima).
+- `Layout.astro` tiene un `<script is:inline>` en el `<head>` que añade `js-anim` a
+  `<html>` **antes del primer paint** (solo si NO hay `prefers-reduced-motion`).
+- CSS global oculta: `.js-anim .hero-anim { opacity:0 }` (Inicio) y
+  `.js-anim #navbar { opacity:0 }` (Navbar). Debe ir en `<style is:global>` porque
+  `.js-anim` vive en `<html>` y Astro scopea los selectores normales.
+- GSAP revela con `.to()`/`fromTo()`. **Sin `clearProps` de `opacity`** en estos
+  (dejamos el `opacity:1` inline para que gane sobre el gate; sí se puede limpiar el
+  `transform`).
+- Sin JS o con reduced-motion → la clase nunca se añade → todo visible por defecto.
 
-**Pattern portal — entrance timeline (sin ScrollTrigger):**
-```ts
-// Patrón estándar de todas las páginas del portal
-document.addEventListener('DOMContentLoaded', () => {
-  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-  // PortalHeader se anima solo (tiene su propio script)
-  // Cards: set initial state → animate
-  gsap.set('.os-card', { y: 32, opacity: 0, scale: 0.985 });
-  tl.to('.os-card', { y: 0, opacity: 1, scale: 1, duration: 1.0, stagger: 0.07 }, 0.5);
-});
-```
+### robustRefresh
+Tras `Promise.all([window load, document.fonts.ready])` → `ScrollTrigger.refresh()`
+(con `setTimeout 120ms`). Recalcula posiciones después de fuentes/imágenes para que
+los triggers ya pasados disparen su `onEnter` y nada quede invisible.
 
-**Section headings — SplitText line-mask (Apple-style):**
-```ts
-const split = SplitText.create(heading, { type: 'lines,words', linesClass: 'lx-line-mask' });
-gsap.set(split.words, { yPercent: 115 });
-gsap.to(split.words, { ...ir, yPercent: 0, duration: 1.4, ease: 'expo.out', stagger: { amount: 0.45 } });
-```
+### Reduced-motion
+`if (prefers-reduced-motion) return;` al inicio del `DOMContentLoaded` → no se anima
+nada y todo queda visible (la clase `.js-anim` tampoco se añade).
 
-**Regla crítica — `clearProps` después de animaciones de entrada:**
-Cuando GSAP anima un elemento de `opacity:0 → 1` (o cualquier propiedad CSS que luego controla una clase), el inline style que deja GSAP tiene más especificidad que las reglas de clase. Esto rompe estados CSS como `.scrolled`, `.is-active`, etc.
-```ts
-tl.to(element, {
-  opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 1.1,
-  onComplete: () => gsap.set(element, { clearProps: 'opacity,transform,filter' }),
-}, 0.45);
-```
-
-**Ken Burns — NO usar `yPercent` con scrub:**
-Solo usar `scale` para Ken Burns, sin desplazamiento vertical scrubbed.
+### Otras reglas vigentes
+- `once: true` en los ScrollTrigger de reveal (no re-anima al volver a subir).
+- NO `clipPath` para reveals; NO 3D (`rotateX/Y`) dentro de `overflow-x:auto`.
+- Ken Burns (carrusel casos): solo `scale` en hover (CSS), sin `yPercent` scrubbed.
+- "Nota dev": el flash blanco en `npm run dev` es FOUC propio de Astro (inyecta
+  estilos por JS). En producción el CSS va en `<link>` del `<head>` y no ocurre.
 
 ---
 
@@ -410,7 +431,14 @@ Solo usar `scale` para Ken Burns, sin desplazamiento vertical scrubbed.
 **Tipografía editorial:**
 - Cualquier número o "tier" debe ir en **`Instrument Serif italic`** — nunca números en sans bold.
   - Ej: `<span class="editorial">.js</span>`, `<span class="tool-tier"> Plus</span>`, `/01` en serif italic
-- Headings tienen una palabra-acento en serif italic (`<span class="editorial">`) que rompe el bold sans
+- **Títulos = una sola tipografía (Inter bold). REGLA ACTUAL (mayo 2026):** los H1/H2/headings van
+  **completos en `Inter` bold**, sin palabra-acento en serif italic. Esto **anula** la regla vieja
+  de "palabra-acento en serif que rompe el bold sans". El serif italic se reserva para **números,
+  tiers y watermarks**, no para texto de títulos.
+  - Ej aplicado en Contacto: H1 "Aplica. / Evaluamos el fit." y el H2 de éxito "Nos ponemos / en
+    contacto." son 100% bold sans (se eliminaron `.title-accent`/`.ds-serif`).
+  - Nota: en `Inicio.astro` algunos `section-heading` aún traen acento serif heredado; migrarlos a
+    una sola tipografía cuando se toquen.
 - Eyebrows: `0.65rem`, weight 800, letter-spacing 3px, uppercase, color `#888`
 
 **Watermarks de fondo:**
@@ -423,28 +451,38 @@ Solo usar `scale` para Ken Burns, sin desplazamiento vertical scrubbed.
 - Shadows luxe: `0 24px 60px rgba(0,0,0,0.35)` para cards en dark, `0 30px 80px -30px rgba(10,25,47,0.08)` para containers en light
 
 **Easings — qué usar/no usar:**
-- ✅ `expo.out`, `power3.out`, `power3.inOut` — premium
-- ❌ `back.out` (rebotes) — se siente juguetón, no luxury
-- ❌ Spring/elastic — too bouncy
+- ✅ `power2.out` — estándar de TODAS las entradas del home (sutil, sin overshoot)
+- ✅ `expo.out` / `power3.inOut` — solo para animaciones **scrub** (track, barra de progreso, parallax)
+- ❌ `back.out` (rebotes), spring/elastic — juguetón, no luxury
 
 **Hover states luxury:**
-- Translate sutil (4-8px), nunca scale dramático (max 1.06)
-- Cambios de color graduales (0.4-0.55s)
-- El mouse glow tracker `--mouse-x/y` para revelar áreas
+- Translate sutil (3-8px), nunca scale dramático (max 1.06)
+- Botones (`.btn-luxe`, `.btn-glow-blue`, `.btn-contact`): elevación `translateY(-3px)` en CSS — **NO magnetic** (el usuario lo rechazó; se eliminó de home y navbar)
+- Cambios de color graduales (0.4-0.6s)
+- El mouse glow tracker `--cta-mx/y` (CTA) / `--mouse-x/y` para revelar áreas — microinteracción sobria, se mantiene
 
 ---
 
 ## Mapa de secciones del index
 
 ```
-Hero (white)        — clamp(3.2rem, 7vw, 6.8rem) title, SplitText word reveal on load
-Tech (white)        — Editorial grid 4-col, cards 280px alto, hover dark navy
-Casos (dark navy)   — Carrusel horizontal scroll-snap, Ken Burns en imágenes
+Hero (white)        — clamp(1.9rem, 3.6vw, 3.4rem) title (reducido), fade en carga,
+                      cabe completo en 100svh. Status pill "Aceptando proyectos Q3".
+Tech (white)        — Tira de logos minimalista: 8 logos grises (.strip-logo) en
+                      grid 4-col centrado, sin tarjetas ni hover navy. Header centrado.
+Casos (dark navy)   — Carrusel horizontal scroll-snap, Ken Burns (scale) en hover
 Servicios (white)   — Lista vertical de 4 rows, números editorial serif italic 2.6rem
 Protocolo (gray)    — Sticky 2-col + timeline track con gradient + step counter
 CTA (gray + dark)   — Card oscura con mouse-tracking glow
-Footer (dark navy)  — Watermark "Flouvia" 26vw, statement editorial, edition tag
+Footer (dark navy)  — Watermark "Flouvia" 26vw. Grid 5fr/7fr: columna de marca
+                      (logo, tagline sans, descripción-entity, status badge) +
+                      3 nav cols (/01 TRABAJO · /02 LA FIRMA · /03 CONTACTO).
+                      El correo es el CTA protagonista (en /03). Ver Footer pattern.
 ```
+
+> **Eliminado (mayo 2026):** la "proof-strip" (filas El Zarco −67% / Setnpet +42%
+> que iban debajo del hero) y el grid editorial de tarjetas del bloque Tech (con
+> hover navy, números y labels). El bloque Tech ahora es solo la tira de logos.
 
 **Pattern de "active step" (Protocolo y similar):**
 - ScrollTrigger sin scrub con `start: 'top 55%'` y `end: 'bottom 45%'` para detectar qué paso es el más visible
@@ -452,13 +490,60 @@ Footer (dark navy)  — Watermark "Flouvia" 26vw, statement editorial, edition t
 - Contador "01 / 04" en sticky col se actualiza con animación `fromTo` (y: -10 → 0, opacity: 0 → 1)
 - Barra de progreso (1px de alto) con scrub para llenarse conforme avanza el scroll
 
-**Footer pattern:**
-- Watermark `Flouvia` en serif italic, `26vw` (light dark theme con `rgba(255,255,255,0.025)`)
-- Eyebrow + edición ("2026 · Edición") en row superior
-- Statement editorial grande (`clamp(1.7rem, 2.2vw, 2.3rem)`) con palabra-accent en serif italic
-- Numeración `/01 /02 /03` en serif italic encima de cada nav col
-- Hairlines con `linear-gradient(transparent, rgba(255,255,255,0.18) 20%, ..., transparent)` — bordes desvanecen
-- Master timeline con `defaults: { ease: 'expo.out' }`, todas las animaciones en cascada con tiempos absolutos
+**Footer pattern** (`src/components/Footer.astro` — rediseñado mayo 2026):
+
+> **Objetivo del rediseño:** dar protagonismo al correo (antes era un link pequeño
+> perdido al pie de la columna de marca) y reordenar el contenido con eje de
+> exclusividad. El correo es ahora el **CTA principal** del footer.
+
+**Estructura (de arriba a abajo):**
+1. `.top-hairline` — línea con gradient que desvanece a los lados.
+2. `.footer-watermark` — `Flouvia` en serif italic, `26vw`, `rgba(255,255,255,0.025)`.
+3. `.footer-meta-row` — eyebrow ("ESTUDIO · CIUDAD DE MÉXICO") + edición ("2026 · Edición", número en serif italic).
+4. `.footer-grid` (`grid-template-columns: 5fr 7fr; gap: 6rem`):
+   - **`.brand-column`** (izquierda): logo SVG → **tagline** (`.footer-statement`,
+     `clamp(1.7rem, 2.2vw, 2.3rem)`, **100% sans/Inter — SIN palabra-accent serif**;
+     el usuario rechazó "B2B" en serif italic) → **descripción** (texto tipo
+     *entity definition* para AI SEO, incluye escasez "menos de 8 clientes activos al
+     año") → **`.footer-status-badge`** (punto verde `pulse-server` + "ACEPTANDO
+     PROYECTOS Q3").
+   - **`.navigation-columns`** (derecha, `grid-template-columns: 1fr 1fr 1.7fr; gap: 2.5rem`):
+     - `/01 TRABAJO` → Servicios · Casos · Blog
+     - `/02 LA FIRMA` → Nosotros · Portal de Clientes (`/login`)
+     - `/03 CONTACTO` (`.contact-col`, más ancha) → `.contact-location`
+       ("CDMX — Operación global") + **`.minimal-email-link` = correo protagonista**
+       (`hola@flouvia.com`, `clamp(1.4rem, 1.9vw, 1.8rem)`, weight 600, subrayado +
+       flecha SVG animada) + `.contact-note` ("Respuesta en menos de 24 h.").
+5. `.footer-divider` — hairline con gradient.
+6. `.footer-bottom` (flex space-between): copyright (© 2026 **Flouvia** en serif italic
+   + "Todos los derechos reservados.") · `.footer-socials` (IG/FB/LinkedIn como íconos
+   circulares compactos) · `.legal-right` (Privacidad · Términos).
+
+**Tipografía — casing unificado (regla del proyecto):**
+- **Etiquetas-sistema en MAYÚSCULAS:** eyebrow, `/01 /02 /03` col-titles, status badge.
+- **Links en Title Case:** Servicios, Casos, Blog, Nosotros, Portal de Clientes
+  (hardcodeados con ternario `isEn ?`, **NO** `t()` — las claves `nav.*` devuelven
+  mayúsculas y romperían el casing). Por eso `useTranslations`/`t` ya no se importa aquí.
+- Numeración `/01 /02 /03` y el "2026" de edición y el "Flouvia" del copyright: serif italic.
+
+**Hairlines:** `linear-gradient(to right, transparent, rgba(255,255,255,0.18) 20%, ... 80%, transparent)` — bordes desvanecen.
+
+**Animación de entrada:** master timeline con `defaults: { ease: 'power2.out' }`
+(sutil, NO `expo.out`), patrón anti-parpadeo (`gsap.set` oculta + `gsap.to` revela
+una vez en `onEnter`, `ScrollTrigger once:true`, `start: 'top 88%'`). `fadeSel`
+incluye: eyebrow, edition, logo, statement, description, **footer-status-badge**,
+nav-col (stagger), footer-bottom > * (stagger). Hairline y divider animan `scaleX`.
+Reduced-motion → return temprano, todo visible.
+
+**Scarcity placeholders (actualizar por trimestre):** el status badge "ACEPTANDO
+PROYECTOS Q3" y la descripción "menos de 8 clientes activos al año" son valores
+hardcodeados — revisar cada trimestre.
+
+> **Eliminado en el rediseño (mayo 2026):** la columna `/03 Redes` con links de texto
+> (las redes pasaron a íconos en `.footer-bottom`); el botón destacado "Aplicar a un
+> proyecto" (el usuario prefirió que el correo solo cargue ese rol); el indicador
+> "SISTEMAS OPERATIVOS" y el link "CDMX" de la barra inferior; los links "Inicio" y
+> "Contacto Privado"; la palabra-accent serif del statement.
 
 ---
 
@@ -469,35 +554,66 @@ Footer (dark navy)  — Watermark "Flouvia" 26vw, statement editorial, edition t
 - Logo pequeño dentro de la píldora aparece: `.pill-logo { max-width: 0; opacity: 0 }` → `.scrolled .pill-logo { max-width: 150px; opacity: 1 }`
 - La transición es 100% CSS (no GSAP) — GSAP solo maneja la animación de entrada. Crítico: limpiar inline styles con `clearProps` al terminar entrada o el CSS de `.scrolled` no puede sobreescribir.
 
-**Animación de entrada cinemática (multi-capa):**
-```ts
-// Pill crece desde scaleX:0.5 con blur
-gsap.set(pill, { opacity:0, scaleX:0.5, scaleY:0.85, y:-16, filter:'blur(8px)', transformOrigin:'center center' });
-tl.to(pill, { opacity:1, scaleX:1, scaleY:1, y:0, filter:'blur(0px)', duration:1.2,
-  onComplete: () => gsap.set(pill, { clearProps:'opacity,transform,filter' }) }, 0.2);
-// Logo cae desde arriba con scale + blur (Apple-style)
-gsap.set(mainLogo, { opacity:0, y:-22, scale:1.18, filter:'blur(14px)' });
-tl.to(mainLogo, { opacity:1, y:0, scale:1, filter:'blur(0px)', duration:1.1,
-  onComplete: () => gsap.set(mainLogo, { clearProps:'opacity,transform,filter' }) }, 0.45);
-// Links del pill: stagger desde abajo
-tl.to(navLinks, { opacity:1, y:0, filter:'blur(0px)', duration:0.8, stagger:0.055,
-  onComplete: () => gsap.set(navLinks, { clearProps:'opacity,transform,filter' }) }, 0.65);
-```
+**Animación de entrada (mayo 2026 — reveal escalonado):** timeline GSAP que revela las
+piezas internas en stagger sutil (top-bar → glass-pill/mobile-pill → main-logo → hijos
+de `#nav-right`), `power3.out`, `y:-10`, stagger `0.07`. **NO** la coreografía cinemática
+vieja (logo cayendo con blur, pill escalando). Patrón anti-flash: el gate
+`.js-anim #navbar{opacity:0}` tapa el navbar antes del paint; se ocultan las piezas con
+`gsap.set` **mientras el contenedor sigue tapado**, luego se revela el contenedor
+(`gsap.set(navbar,{opacity:1})`) y entran las piezas. `onComplete` →
+`clearProps:'transform,opacity'` en las piezas (para que `.scrolled`/`:hover` gobiernen);
+el navbar conserva su `opacity:1` inline (gana sobre el gate). Reduced-motion → todo visible.
 
-**Active link:** Filled pill via `::before` pseudo-element con `background: rgba(0,0,0,0.08)` (light) / `rgba(255,255,255,0.14)` (dark). No usar dot/underline.
+**Estética de las píldoras — Liquid Glass (iOS):** `.glass-pill`, `.lang-switch`,
+`.mini-pill` y `.mobile-pill-inner` usan el mismo lenguaje: fill translúcido en
+`linear-gradient(180deg,...)`, `backdrop-filter: blur(24-34px) saturate(1.8-1.9)
+brightness(1.04-1.06)`, **rim light** (`inset 0 0 0 0.5px rgba(255,255,255,.35-.4)`),
+**specular top** (`inset 0 1px 1px rgba(255,255,255,.9+)`) y sombra profunda suave.
+Estado `.scrolled` = versión navy translúcida con los mismos insets. Transición
+claro→oscuro: `0.7s var(--ease-spring)` por propiedad (no `all`). `--btn-contact` se
+deja navy sólido (no glass) a propósito.
 
-**Magnetic hover en btn-contact:**
-```ts
-contactBtn.addEventListener('mousemove', (e) => {
-  const r = contactBtn.getBoundingClientRect();
-  const dx = (e.clientX - r.left - r.width/2) * 0.25;
-  const dy = (e.clientY - r.top - r.height/2) * 0.25;
-  gsap.to(contactBtn, { x:dx, y:dy, duration:0.45, ease:'power3.out' });
-});
-contactBtn.addEventListener('mouseleave', () => {
-  gsap.to(contactBtn, { x:0, y:0, duration:0.6, ease:'elastic.out(1, 0.5)' });
-});
-```
+**Hover de los nav-links — indicador deslizante (NO burbuja que crece):** el usuario
+rechazó el `::before` que escalaba ("se hace grande"). Ahora hay **un solo** elemento
+`#nav-indicator` (cápsula de vidrio) dentro de `.glass-pill`; GSAP lo desliza (`x,y,
+width,height`, `power3.out` ~0.5s) al `.nav-link` en `mouseenter` y lo regresa al link
+activo en `mouseleave` del pill. Detalles: posición **relativa al pill**
+(`rect.left - pillRect.left`) → inmune al transform de la entrada; flag `visible` para
+que aparezca ya colocado (no "crecer desde la esquina") en páginas sin link activo;
+se recoloca en `fonts.ready`, `load` y `resize` (`indicatorRelayout`). **Al cambiar
+`.scrolled`** el `pill-logo` aparece/desaparece y empuja los links durante su transición
+CSS de 0.7s → en vez de un `setTimeout` que reacomoda al final (causaba un desfase
+visible: el indicador se quedaba en la posición vieja y luego saltaba), un loop de
+`requestAnimationFrame` (`indicatorFollow`, ~780ms) **pega** el indicador al link con
+`gsap.set` cuadro por cuadro (`snap`), así lo **sigue** mientras el layout se mueve.
+`target` = link activo o el hovered; `slide` anima (hover/relayout), `snap` es instantáneo
+(seguimiento). `indicatorRelayout`/`indicatorFollow` se declaran arriba del callback.
+
+**Active link:** lo marca el `#nav-indicator` descansando sobre el `.nav-active` (ya no
+hay `::before` por link). `.nav-active` solo cambia el color del texto. No usar dot/underline.
+
+**Hover btn-contact:** 100% CSS (`.btn-contact:hover` → shimmer + flecha). **El
+magnetic se eliminó** (el usuario lo rechazó). El hover de los nav-links es el indicador
+deslizante (arriba) + fade de color; se eliminó el letterSpacing/translateY del hover.
+
+**PortalNavbar (`PortalNavbar.astro`) — mismo sistema:** la navbar del portal replica
+el navbar público: píldoras Liquid Glass (`.pnav-pill`, `.pnav-lang-switch`,
+`.pnav-mobile-inner`), indicador deslizante `#pnav-indicator` (reemplazó el `::before`
+que crecía **y** el dot `::after` del activo), entrada con reveal escalonado (se quitó
+el scale/elastic) y transición scroll por-propiedad a `--ease-spring`. Para el anti-flash
+se añadió el gate `.js-anim` al `<head>` de `PortalLayout.astro` (script `is:inline`
+pre-paint) + `<style is:global>.js-anim #pnav{opacity:0}` en el componente. El
+`UserButton` de Clerk se deja intacto (no glass).
+
+**Lang switch ES↔EN — crossfade + prefetch (sin sensación de recarga):** el sitio **NO**
+usa View Transitions (se evaluó y se descartó: `ClientRouter` obligaría a reescribir el
+init de ~17 páginas públicas, el código FOUC-frágil del proyecto). En su lugar, el script
+del navbar: (1) **precarga** el destino del otro idioma con `<link rel="prefetch">` al
+primer indicio de intención (`mouseenter`/`touchstart`, `once`); (2) al click hace
+`gsap.to(document.body,{opacity:0,duration:0.16})` → navega en `onComplete`. El destino
+entra con su propio gate `.js-anim` → se lee como crossfade. Guard `pageshow` con
+`event.persisted` limpia el `opacity:0` inline al volver por bfcache (si no, pantalla en
+blanco). Reduced-motion o idioma activo → navegación normal sin fade.
 
 ---
 
@@ -505,15 +621,16 @@ contactBtn.addEventListener('mouseleave', () => {
 
 | Bug | Causa raíz | Fix |
 |-----|-----------|-----|
-| Elemento invisible en primera carga | `gsap.set(opacity:0)` + ScrollTrigger que no dispara | Usar `gsap.from(..., { immediateRender:false })` — elementos visibles en CSS hasta que el tween arranca |
-| Logo/elemento no responde a clase `.scrolled` | GSAP deja inline style `opacity:1` al terminar entrada | `onComplete: () => gsap.set(el, { clearProps:'opacity,transform,filter' })` |
+| **Las cosas "se recargan" al primer scroll** (home) | `gsap.from(..., {immediateRender:false})` deja el elemento visible hasta que el trigger dispara; en el primer scroll lo salta a `opacity:0` y lo re-anima | **Patrón actual:** `gsap.set(els,{opacity:0,y})` + `ScrollTrigger.create({once:true, onEnter: () => gsap.to(els,{opacity:1,...})})`. Oculto de entrada → revela 1 vez sin parpadeo. Ver sección Animaciones. |
+| **Pantalla en blanco al cargar / hasta refresh** (hero, navbar) | `opacity:0` permanente en CSS esperando a que el JS anime → flash visible→oculto→anima | Gate `.js-anim`: script `is:inline` en `<head>` del Layout añade la clase antes del paint; `.js-anim .hero-anim/#navbar { opacity:0 }` en `<style is:global>`; GSAP revela con `.to()` **sin** limpiar opacity. Sin JS/reduced-motion → visible. |
+| **Nota:** flash blanco SOLO en `npm run dev` | Astro dev inyecta los estilos de componentes por JS (FOUC de dev) | No es bug de producción — ahí el CSS va en `<link>` del `<head>`. Verificar con el build (`dist/client/index.html`). |
+| Logo/elemento no responde a clase `.scrolled` | GSAP deja inline style `opacity:1` al terminar entrada | `onComplete: () => gsap.set(el, { clearProps:'transform' })` (no limpiar opacity si hay gate `.js-anim`) |
 | `position: sticky` no funciona en sección | `overflow: hidden` en el contenedor padre crea scroll container | Cambiar a `overflow: clip` — recorta visualmente sin crear scroll container |
 | Línea gris en borde inferior de carrusel | `yPercent: -8` con scrub mueve imagen hacia arriba revelando fondo | Eliminar scrub de yPercent, solo usar scale para Ken Burns |
-| Footer invisible hasta refresh | `gsap.set(opacity:0)` + posiciones calculadas antes de que carguen fuentes | Convertir a `gsap.from()` con `immediateRender:false` + solo un listener `DOMContentLoaded` |
-| Sección entera (ej. protocolo) se encima al cargar, se arregla con refresh | Patrón `gsap.set(opacity:0) + gsap.to(opacity:1)` + ScrollTrigger calcula posiciones antes de fuentes/imgs | (a) Convertir a `gsap.from(..., { immediateRender:false })` para que el CSS quede visible si no dispara. (b) `ScrollTrigger.refresh()` después de `Promise.all([fonts.ready, window.load])` |
-| Hover/`is-active` no aplica `transform` después de la animación de entrada | GSAP deja inline `transform: matrix(...)` que tiene mayor especificidad que las pseudo-clases CSS | `onComplete: () => gsap.set(targets, { clearProps: 'opacity,transform' })` en el timeline |
+| Hover/`is-active` no aplica `transform` después del reveal | GSAP deja inline `transform: matrix(...)` con más especificidad que las pseudo-clases | `clearProps: 'transform,opacity'` en el `gsap.to` del reveal (ya incluido en el helper `reveal`) |
 | `Clerk.signOut()` redirige al login en vez de quedarse en la página | Sin callback, el SDK navega a `signInUrl` automáticamente | Pasar callback como primer argumento: `Clerk.signOut(() => { /* limpiar */ })`. El callback inhibe la navegación default. |
 | `.throwOnError().catch()` falla en TypeScript | `throwOnError()` devuelve `PromiseLike`, no `Promise` — no tiene `.catch()` | Usar la query normal (sin `throwOnError`) — ya devuelve `{ data, error }` y `data` es null si hay error |
+| Estilos de librería con DOM inyectado en runtime no aplican (ej: intl-tel-input, tipografía del prefijo `+52` no empata) | Astro **scopea** los selectores del `<style>` no-global a `.sel[data-astro-cid]`; el DOM que inyecta la librería por JS no trae ese atributo → el selector nunca matchea | Mover esos selectores a `<style is:global>`. Verificable en el CSS compilado: scoped sale `.iti…[data-astro-cid-…]`, global sale `.iti…{` a secas |
 
 ---
 
@@ -524,11 +641,111 @@ contactBtn.addEventListener('mouseleave', () => {
 | `src/components/Inicio.astro` | Landing page completa — hero, tech, casos, servicios, protocolo, CTA |
 | `src/components/Navbar.astro` | Navbar con glassmorphism y dark-mode adaptativo |
 | `src/components/WhatsApp.astro` | Botón flotante WhatsApp con dark-section detection |
+| `src/components/PlantillaContacto.astro` | Página `/contacto` (y `/en/contacto`) — hero estándar home + formulario por pasos. Ver sección "Página de Contacto". |
 | `src/components/PlantillaServicios.astro` | Template para páginas de servicio individual |
 | `src/components/PlantillaCasos.astro` | Template para casos de estudio |
 | `src/layouts/PortalLayout.astro` | Layout del portal de cliente |
 | `src/components/portal/PortalHeader.astro` | Header compartido de todas las páginas del portal |
 | `src/components/PortalFooter.astro` | Footer del portal — link a `/privacidad-portal` |
+
+---
+
+## Página de Contacto (`PlantillaContacto.astro`)
+
+> Sirve `/contacto` y `/en/contacto` (ambos `prerender:true`, mismo componente; idioma por
+> `getLangFromUrl`). Reescrita mayo 2026 bajo el eje de **firma selectiva** ([[flouvia-brand-voice]])
+> y el estándar de animación minimalista del sitio.
+
+### Estructura (3 secciones)
+```
+Hero (white, 100svh)   — mismo estándar que la home: status pill de escasez + eyebrow +
+                         H1 bold (una sola tipografía, sin serif) + hero-bottom (desc + CTA scroll).
+                         CTA "Iniciar solicitud ↓" hace scroll a #form-zone.
+Trust strip (NAVY)     — banda oscura estilo Casos: radial-gradient navy + watermark serif
+                         "Evidencia". 3 métricas reales (−67% El Zarco · +42% / 3× Setnpet) en
+                         serif italic BLANCO + nota de escasez. Sin testimonio (no inventar).
+Executive contact      — grid 320px/1fr: sidebar sticky + formulario por pasos (#form-zone).
+                         Watermark serif "Aplica" muy faint detrás; overflow:clip.
+```
+
+### Lenguaje visual = "editorial" (igual que Inicio), NO "dashboard"
+La sección se rediseñó (mayo 2026) para igualar la estética del home tras feedback de que el look
+"mono/dashboard" se sentía off-brand:
+- **Sin JetBrains Mono en labels** — todos los eyebrows/labels van en `Inter` 800 uppercase letterspaced
+  (`.ec-label`, `.sp-label`, `.sf-group label`, `.ds-eyebrow`, `.ds-next-label`, `.tm-case`). El mono
+  solo queda en afordances de teclado (`.chip-key`, `.kbd-hint kbd`).
+- **Números en Instrument Serif italic**: contador de paso (`.sp-current`), `/01…/05` grande por pregunta
+  (`.dq-index`, eco de los `/01` de los service-rows del home), reloj CDMX (`.ec-clock`) y métricas del
+  trust strip (`.tm-val`).
+- **Contraste claro/oscuro**: la franja de Evidencia es navy (mismo `radial-gradient` que la sección Casos).
+- **Hairlines difuminadas** en las orillas (`linear-gradient(transparent, border 10%, border 90%, transparent)`)
+  vía `::before` en `.step-nav` y `.ds-next` — patrón del footer/tech del home (no usar borde sólido).
+- **Watermarks** serif italic gigantes y faint: "Evidencia" (navy, blanco 0.035) y "Aplica" (form, navy 0.022).
+
+### Hero
+- Status pill (`.hero-status`) = escasez explícita: **"2 CUPOS DISPONIBLES · Q3" / "2 SLOTS OPEN · Q3"**
+  (placeholder por trimestre — ver [[flouvia-scarcity-placeholders]]).
+- Eyebrow: "PROCESO DE APLICACIÓN" / "APPLICATION PROCESS".
+- H1: "Aplica. / Evaluamos el fit." — **bold sans en ambos versos** (regla de una sola tipografía).
+- Animación: gate `.js-anim .hero-anim{opacity:0}` + timeline GSAP `power2.out` (igual que `Inicio.astro`),
+  parallax leve solo desktop. Reduced-motion → return temprano, todo visible.
+
+### Sidebar ejecutivo (`.ec-sidebar`, sticky)
+Bloques `.ec-block`: STATUS (pill escasez) · **QUIÉN APLICA** (criterio ✓/✕ = inversión de poder +
+auto-selección) · HEADQUARTERS (+ reloj CDMX en vivo, `Intl.DateTimeFormat` cada 1s) · DIRECT LINE
+(`hola@flouvia.com`) · SOCIAL (**URLs reales**: `linkedin.com/company/flouvia/`, `instagram.com/flouvia.mx/`).
+En ≤1024px pasa a fila wrap; en ≤768px a columna.
+
+### Formulario por pasos (typeform-style) — CRÍTICO
+**Una pregunta a la vez**, no scroll vertical. 5 pasos `.dq-step` dentro de `.dq-stage`; solo el activo
+se muestra (`.is-active` = display, `.is-visible` = opacity/translateY). Transición = fade-out → swap →
+fade-in vía CSS (no GSAP), `var(--ease-smooth)`. Toda la lógica vive en el `<script is:inline>`
+(stepper + chips + submit + reloj); el `<script>` con GSAP solo hace el reveal del hero/trust/sidebar.
+
+- **Progreso** (`.sp-progress`): contador serif "PASO 01/05" + barra `scaleX` — Goal Gradient.
+- **Navegación**: `#stepBack` (oculto en paso 0) + `#stepNext` (texto "Continuar" → en el último paso el
+  script lo cambia a **"Aplicar a proyecto"**). Enter en inputs text/email/tel avanza; en textarea no.
+- **Chips** (`.q-chips[data-field]`): selección setea el `<input hidden id="field-{field}">`; **auto-avanzan**
+  (~420ms) salvo en el último paso. Grupo opcional → `data-optional` (no valida, no auto-avanza al ser último).
+- **Validación por paso** (`validateStep`): inputs `[required]` + chips no-opcionales. Falla → marca
+  `.invalid`/`.chips-invalid` + `#stepError`. Se limpia al editar.
+- **Pasos**: 01 Datos (WhatsApp opcional, intl-tel-input) · 02 Operación (DTC / B2B / Ambos / Compleja —
+  sin "Otro") · 03 Problema (textarea con placeholder de ejemplo) · 04 Horizonte (Lo antes posible / 1–3
+  meses — sin "explorando") · 05 Presupuesto **en MXN, opcional** ($30k–$80k / $80k–$200k / +$200k / no claro).
+- **Submit** → Make webhook (ver abajo) → fade-out form → `#diagSuccess`.
+- **Success state** (Zeigarnik): eyebrow + H2 bold (sin serif) + regla + sub + **"EN LAS PRÓXIMAS 24H" vs
+  "LO QUE NO PASA"** (cierra el ciclo / quita ansiedad post-envío). Animado por JS (array `els` con delays).
+
+### Microinteracciones (estilo Typeform)
+- **Entrada escalonada por paso**: cada `.dq-step.is-visible > *` (título → desc → cuerpo) entra con
+  fade+subida y `transition-delay` por `nth-child` (no GSAP — CSS puro).
+- **Chips con tecla**: el `<script is:inline>` inyecta en cada `.q-chip` un `.chip-key` (1,2,3…), el
+  `.chip-text` y un `.chip-check` (✓ que aparece al seleccionar). Teclas **1–9 seleccionan** y **Enter
+  avanza** en pasos de chips (listener en `document`, con guard si hay un `<button>` enfocado para no
+  duplicar el avance). Pop sutil al seleccionar (`@keyframes chip-pop`).
+- **Hint de teclado** `.kbd-hint` ("↵ Enter") en la nav; oculto en ≤768px.
+- **Contador con bump** (`.sp-current.bump`) + **shine** que recorre la barra (`.sp-bar.pulse`) al cambiar
+  de paso (`updateUI(true)`; en carga `updateUI(false)` sin animar).
+- Inputs: `caret-color` navy + label que se oscurece con `:focus-within`.
+
+### Integraciones
+- **intl-tel-input v23** (CDN): input `#whatsapp`, `initialCountry:auto` (geoIp → fallback `mx`),
+  `separateDialCode`. Al enviar: `itiInstance.getNumber()`.
+  - ⚠️ **Sus estilos (`.iti*`) DEBEN ir en `<style is:global>`**, no en el `<style>` scoped: el DOM lo
+    inyecta la librería en runtime y NO trae el atributo `data-astro-cid`, así que los selectores scoped
+    (`.iti…[data-astro-cid]`) nunca aplican. El prefijo (`+52`) se iguala a los dígitos tecleados con
+    `font-family/size/weight/color` idénticos al `.diag-form input` (Inter 1.1rem / 500 / #0a0e1a).
+- **Make webhook (contacto)**: `POST https://hook.us2.make.com/ov4rrddtdx739hnl7dp2mks216171q8m`
+  (DISTINTO del de soporte). Payload: `{nombre, email, whatsapp, tipo_negocio, problema, urgencia,
+  presupuesto, timestamp, fuente:'flouvia.com/contacto'}`. Fire-and-forget (`.catch` silencioso) — el
+  success se muestra aunque falle. ⚠️ Los `data-value` de los chips son la fuente de verdad del payload;
+  si cambian (p. ej. `ambos-canales`, `1-3-meses`, `30k-80k-mxn`), **actualizar el escenario de Make**.
+
+### SEO
+- `pageTitle`/`pageDesc` localizados (ES/EN) en frontmatter, con keywords e-commerce/B2B + "CDMX" + "firma
+  boutique" + "diagnóstico gratuito 30 min".
+- **Schema `ContactPage`** (JSON-LD, `<script type="application/ld+json" is:inline set:html={...}>`):
+  localizado por idioma, `@id #contactpage`, `mainEntity → {SITE}/#organization`, `breadcrumb` y `inLanguage`.
 
 ---
 

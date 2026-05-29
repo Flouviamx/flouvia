@@ -1,9 +1,8 @@
 ---
 // Footer Flouvia — Editorial Luxury (Apple / Bottega aesthetic)
-import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { getLangFromUrl } from '../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
 const isEn = lang === 'en';
 ---
 
@@ -25,23 +24,18 @@ const isEn = lang === 'en';
                 <img src="/imgs/logo-flouvia-1.svg" alt="Flouvia" class="footer-logo-svg" />
 
                 <h3 class="footer-statement">
-                    {isEn ? 'Digital engineering' : 'Ingeniería digital'} <span class="editorial">{isEn ? 'that converts.' : 'que convierte.'}</span>
+                    {isEn ? 'E-commerce & B2B engineering.' : 'Ingeniería e-commerce y B2B.'}
                 </h3>
 
                 <p class="description">
                     {isEn
-                        ? 'We design high-conversion transactional ecosystems for leading brands in B2B and E-commerce.'
-                        : 'Diseñamos ecosistemas transaccionales de alta conversión para marcas líderes en B2B y E-commerce.'}
+                        ? 'Boutique firm based in Mexico City. We build Shopify Plus stores, private B2B portals and automations for brands with established operations. By application — fewer than 8 active clients a year.'
+                        : 'Firma boutique con sede en CDMX. Construimos tiendas Shopify Plus, portales B2B privados y automatizaciones para marcas con operación establecida. Proyectos por aplicación — menos de 8 clientes activos al año.'}
                 </p>
 
-                <div class="contact-action">
-                    <a href="mailto:hola@flouvia.com" class="minimal-email-link">
-                        <span class="email-text">hola@flouvia.com</span>
-                        <svg class="email-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                            <polyline points="12 5 19 12 12 19"></polyline>
-                        </svg>
-                    </a>
+                <div class="footer-status-badge">
+                    <span class="dot-online"></span>
+                    <span class="status-text">{isEn ? 'ACCEPTING PROJECTS Q3' : 'ACEPTANDO PROYECTOS Q3'}</span>
                 </div>
             </div>
 
@@ -50,19 +44,15 @@ const isEn = lang === 'en';
                 <div class="nav-col">
                     <div class="col-head">
                         <span class="col-num">/01</span>
-                        <h4 class="col-title">{isEn ? 'Portfolio' : 'Portafolio'}</h4>
+                        <h4 class="col-title">{isEn ? 'Work' : 'Trabajo'}</h4>
                     </div>
                     <nav class="nav-links">
-                        <a href={isEn ? '/en/' : '/'} class="link-item">
-                            <span>{isEn ? 'Home' : 'Inicio'}</span>
-                            <span class="link-arrow">→</span>
-                        </a>
                         <a href={isEn ? '/en/servicios' : '/servicios'} class="link-item">
-                            <span>{t('nav.services')}</span>
+                            <span>{isEn ? 'Services' : 'Servicios'}</span>
                             <span class="link-arrow">→</span>
                         </a>
                         <a href={isEn ? '/en/casos' : '/casos'} class="link-item">
-                            <span>{t('nav.cases')}</span>
+                            <span>{isEn ? 'Cases' : 'Casos'}</span>
                             <span class="link-arrow">→</span>
                         </a>
                         <a href={isEn ? '/en/blog' : '/blog'} class="link-item">
@@ -75,61 +65,36 @@ const isEn = lang === 'en';
                 <div class="nav-col">
                     <div class="col-head">
                         <span class="col-num">/02</span>
-                        <h4 class="col-title">{isEn ? 'Studio' : 'Estudio'}</h4>
+                        <h4 class="col-title">{isEn ? 'The Firm' : 'La Firma'}</h4>
                     </div>
                     <nav class="nav-links">
                         <a href={isEn ? '/en/nosotros' : '/nosotros'} class="link-item">
-                            <span>{t('nav.about')}</span>
+                            <span>{isEn ? 'About' : 'Nosotros'}</span>
                             <span class="link-arrow">→</span>
                         </a>
                         <a href={isEn ? '/en/login' : '/login'} class="link-item">
                             <span>{isEn ? 'Client Portal' : 'Portal de Clientes'}</span>
                             <span class="link-arrow">→</span>
                         </a>
-                        <a href={isEn ? '/en/contacto' : '/contacto'} class="link-item">
-                            <span>{isEn ? 'Private Contact' : 'Contacto Privado'}</span>
-                            <span class="link-arrow">→</span>
-                        </a>
                     </nav>
                 </div>
 
-                <div class="nav-col">
+                <div class="nav-col contact-col">
                     <div class="col-head">
                         <span class="col-num">/03</span>
-                        <h4 class="col-title">{isEn ? 'Socials' : 'Redes'}</h4>
+                        <h4 class="col-title">{isEn ? 'Contact' : 'Contacto'}</h4>
                     </div>
-                    <div class="social-links">
-                        <a href="https://www.instagram.com/flouvia.mx/" class="social-item" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
-                            <span class="social-text">Instagram</span>
-                            <div class="s-icon-wrap">
-                                <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                                </svg>
-                            </div>
-                        </a>
 
-                        <a href="https://www.facebook.com/flouvia" class="social-item" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
-                            <span class="social-text">Facebook</span>
-                            <div class="s-icon-wrap">
-                                <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                                </svg>
-                            </div>
-                        </a>
+                    <p class="contact-location">{isEn ? 'Mexico City — Global operation' : 'CDMX — Operación global'}</p>
 
-                        <a href="https://www.linkedin.com/company/flouvia/" class="social-item" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
-                            <span class="social-text">LinkedIn</span>
-                            <div class="s-icon-wrap">
-                                <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                                    <rect x="2" y="9" width="4" height="12"></rect>
-                                    <circle cx="4" cy="4" r="2"></circle>
-                                </svg>
-                            </div>
-                        </a>
-                    </div>
+                    <a href="mailto:hola@flouvia.com" class="minimal-email-link">
+                        <span class="email-text">hola@flouvia.com</span>
+                        <svg class="email-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <p class="contact-note">{isEn ? 'Reply within 24h.' : 'Respuesta en menos de 24 h.'}</p>
                 </div>
 
             </div>
@@ -140,18 +105,35 @@ const isEn = lang === 'en';
 
         <div class="footer-bottom">
             <div class="legal-left">
-                <p class="copyright">&copy; <span class="copy-year">2026</span> <span class="editorial">Flouvia</span> Boutique.</p>
-                <span class="dot-separator">·</span>
-                <div class="status-indicator">
-                    <span class="dot-online"></span>
-                    <span class="status-text">{isEn ? 'SYSTEMS OPERATIONAL' : 'SISTEMAS OPERATIVOS'}</span>
-                </div>
+                <p class="copyright">&copy; <span class="copy-year">2026</span> <span class="editorial">Flouvia</span>. {isEn ? 'All rights reserved.' : 'Todos los derechos reservados.'}</p>
+            </div>
+
+            <div class="footer-socials">
+                <a href="https://www.instagram.com/flouvia.mx/" class="social-icon-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                    <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                </a>
+                <a href="https://www.facebook.com/flouvia" class="social-icon-link" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+                    <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                    </svg>
+                </a>
+                <a href="https://www.linkedin.com/company/flouvia/" class="social-icon-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+                    <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                        <rect x="2" y="9" width="4" height="12"></rect>
+                        <circle cx="4" cy="4" r="2"></circle>
+                    </svg>
+                </a>
             </div>
 
             <div class="legal-right">
                 <a href={isEn ? '/en/privacy' : '/privacidad'} class="legal-link">{isEn ? 'Privacy' : 'Privacidad'}</a>
+                <span class="legal-dot">·</span>
                 <a href={isEn ? '/en/terms' : '/terminos'} class="legal-link">{isEn ? 'Terms' : 'Términos'}</a>
-                <a href="#" class="legal-link">CDMX</a>
             </div>
         </div>
 
@@ -250,48 +232,31 @@ const isEn = lang === 'en';
         margin: 0 0 1.5rem 0;
         max-width: 95%;
     }
-    .footer-statement .editorial {
-        font-family: var(--font-serif); font-style: italic; font-weight: 400;
-        letter-spacing: -0.5px;
-        color: rgba(255,255,255,0.7);
-        margin-left: 0.15em;
-    }
-
     .description {
         color: var(--text-muted);
         font-size: 1.05rem;
         line-height: 1.65;
         font-weight: 400;
         letter-spacing: -0.1px;
-        margin: 0 0 3rem 0;
+        margin: 0 0 2.25rem 0;
         max-width: 90%;
     }
 
-    /* Email link refinado */
-    .minimal-email-link {
-        display: inline-flex; align-items: center; gap: 14px;
-        text-decoration: none; color: var(--text-main);
-        padding-bottom: 10px;
-        border-bottom: 1px solid var(--hairline);
-        transition: border-color 0.5s var(--ease-apple);
+    /* ── Status badge — "Aceptando proyectos Q3" ── */
+    .footer-status-badge {
+        display: inline-flex; align-items: center; gap: 9px;
+        background: rgba(255,255,255,0.03); padding: 7px 14px; border-radius: 100px;
+        border: 1px solid rgba(255,255,255,0.06);
         width: max-content;
     }
-    .email-text {
-        font-size: 1.05rem; font-weight: 500; letter-spacing: 0.3px;
-        transition: transform 0.5s var(--ease-spring);
+    .footer-status-badge .status-text {
+        letter-spacing: 1.2px; font-weight: 700;
+        color: #94a3b8; font-size: 0.65rem; text-transform: uppercase;
     }
-    .email-arrow {
-        width: 16px; height: 16px; opacity: 0.55; color: var(--text-muted);
-        transition: all 0.5s var(--ease-spring);
-    }
-    .minimal-email-link:hover { border-bottom-color: rgba(255,255,255,0.45); }
-    .minimal-email-link:hover .email-text { transform: translateX(4px); }
-    .minimal-email-link:hover .email-arrow { opacity: 1; transform: translateX(8px); color: #fff; }
-    .minimal-email-link:active { transform: scale(0.98); transition: 0.1s; }
 
     /* ── Bloque derecho: nav columns ── */
     .navigation-columns {
-        display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem;
+        display: grid; grid-template-columns: 1fr 1fr 1.7fr; gap: 2.5rem;
         padding-top: 0.5rem;
     }
 
@@ -332,27 +297,39 @@ const isEn = lang === 'en';
     .link-item:hover span:first-child { transform: translateX(4px); }
     .link-item:hover .link-arrow { opacity: 1; transform: translateX(0); }
 
-    /* ── Redes sociales ── */
-    .social-links { display: flex; flex-direction: column; gap: 1.1rem; }
-
-    .social-item {
-        display: inline-flex; align-items: center; gap: 12px;
-        color: var(--text-muted); text-decoration: none;
-        font-size: 0.98rem; font-weight: 500;
-        transition: color 0.4s var(--ease-apple);
-        width: max-content;
+    /* ── Columna Contacto — correo protagonista (A2) ── */
+    .contact-location {
+        color: var(--text-dim);
+        font-size: 0.85rem; font-weight: 500; letter-spacing: 0.2px;
+        margin: 0 0 1.5rem 0;
     }
-    .s-icon-wrap {
-        width: 30px; height: 30px; border-radius: 50%;
-        background: rgba(255,255,255,0.03);
-        display: flex; align-items: center; justify-content: center;
+
+    .minimal-email-link {
+        display: inline-flex; align-items: center; gap: 14px;
+        text-decoration: none; color: var(--text-main);
+        padding-bottom: 14px;
+        border-bottom: 1px solid rgba(255,255,255,0.14);
+        transition: border-color 0.5s var(--ease-apple);
+        width: max-content; max-width: 100%;
+    }
+    .email-text {
+        font-size: clamp(1.4rem, 1.9vw, 1.8rem); font-weight: 600; letter-spacing: -0.5px;
+        transition: transform 0.5s var(--ease-spring);
+    }
+    .email-arrow {
+        width: 20px; height: 20px; opacity: 0.6; color: var(--text-muted);
         transition: all 0.5s var(--ease-spring);
     }
-    .social-icon { width: 14px; height: 14px; opacity: 0.6; transition: all 0.4s var(--ease-apple); }
+    .minimal-email-link:hover { border-bottom-color: rgba(255,255,255,0.45); }
+    .minimal-email-link:hover .email-text { transform: translateX(4px); }
+    .minimal-email-link:hover .email-arrow { opacity: 1; transform: translateX(8px); color: #fff; }
+    .minimal-email-link:active { transform: scale(0.98); transition: 0.1s; }
 
-    .social-item:hover { color: #fff; }
-    .social-item:hover .s-icon-wrap { background: rgba(255,255,255,0.1); transform: translateX(4px); }
-    .social-item:hover .social-icon { opacity: 1; }
+    .contact-note {
+        color: var(--text-dim);
+        font-size: 0.8rem; font-weight: 500; letter-spacing: 0.1px;
+        margin: 0.9rem 0 0 0;
+    }
 
     /* ── Divider entre grid y bottom ── */
     .footer-divider {
@@ -368,6 +345,7 @@ const isEn = lang === 'en';
     .footer-bottom {
         display: flex; justify-content: space-between; align-items: center;
         font-size: 0.8rem; color: var(--text-dim); font-weight: 500;
+        gap: 1.5rem;
     }
 
     .legal-left { display: flex; align-items: center; gap: 1.25rem; }
@@ -376,17 +354,19 @@ const isEn = lang === 'en';
         font-family: var(--font-serif); font-style: italic; font-weight: 400;
         color: rgba(255,255,255,0.7);
     }
-    .dot-separator { opacity: 0.4; font-size: 0.85rem; line-height: 1; }
 
-    .status-indicator {
-        display: flex; align-items: center; gap: 8px;
-        background: rgba(255,255,255,0.03); padding: 5px 12px; border-radius: 100px;
-        border: 1px solid rgba(255,255,255,0.06);
+    /* ── Redes (íconos compactos en la barra inferior) ── */
+    .footer-socials { display: flex; align-items: center; gap: 0.5rem; }
+    .social-icon-link {
+        width: 32px; height: 32px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        background: rgba(255,255,255,0.03);
+        color: var(--text-muted);
+        transition: background 0.45s var(--ease-apple), color 0.4s var(--ease-apple), transform 0.5s var(--ease-spring);
     }
-    .status-text {
-        letter-spacing: 1.2px; font-weight: 700;
-        color: #94a3b8; font-size: 0.65rem;
-    }
+    .social-icon { width: 15px; height: 15px; opacity: 0.7; transition: opacity 0.4s var(--ease-apple); }
+    .social-icon-link:hover { background: rgba(255,255,255,0.1); color: #fff; transform: translateY(-2px); }
+    .social-icon-link:hover .social-icon { opacity: 1; }
 
     .dot-online {
         width: 6px; height: 6px; background-color: #10b981; border-radius: 50%;
@@ -399,7 +379,8 @@ const isEn = lang === 'en';
         100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
     }
 
-    .legal-right { display: flex; gap: 2rem; align-items: center; }
+    .legal-right { display: flex; gap: 1rem; align-items: center; }
+    .legal-dot { opacity: 0.4; }
     .legal-link {
         color: var(--text-dim); text-decoration: none;
         transition: color 0.4s var(--ease-apple);
@@ -434,27 +415,22 @@ const isEn = lang === 'en';
 
         .footer-logo-svg { width: 110px; margin-bottom: 2rem; }
         .footer-statement { font-size: 1.55rem; line-height: 1.2; margin-bottom: 1.25rem; }
-        .description { font-size: 1rem; line-height: 1.6; margin-bottom: 2.5rem; }
-        .minimal-email-link { width: 100%; justify-content: space-between; }
+        .description { font-size: 1rem; line-height: 1.6; margin-bottom: 2rem; }
 
         .navigation-columns {
             grid-template-columns: 1fr 1fr;
             row-gap: 3rem; column-gap: 1.5rem;
         }
-        .navigation-columns .nav-col:nth-child(3) { grid-column: span 2; }
+        .navigation-columns .contact-col { grid-column: span 2; }
         .col-head { margin-bottom: 1.75rem; }
         .link-item { padding: 4px 0; width: 100%; justify-content: space-between; }
         .link-arrow { opacity: 0.35; transform: translateX(0); }
-        .social-item { width: 100%; justify-content: space-between; padding: 4px 0; }
-        .s-icon-wrap { background: rgba(255,255,255,0.05); }
-        .social-icon { opacity: 0.8; }
+        .minimal-email-link { width: 100%; justify-content: space-between; }
 
         .footer-divider { margin: 1rem 0 2rem 0; }
-        .footer-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; }
-        .legal-left { flex-direction: column; align-items: flex-start; gap: 1rem; }
-        .dot-separator { display: none; }
-        .status-indicator { padding: 6px 12px; }
-        .legal-right { gap: 1.75rem; flex-wrap: wrap; }
+        .footer-bottom { flex-direction: column; align-items: flex-start; gap: 1.75rem; }
+        .footer-socials { order: 3; }
+        .legal-right { gap: 0.85rem; flex-wrap: wrap; }
 
         .footer-watermark { font-size: 56vw; bottom: -12vw; right: -8vw; }
     }
@@ -466,38 +442,46 @@ const isEn = lang === 'en';
 
     gsap.registerPlugin(ScrollTrigger);
 
-    // Usando gsap.from() con immediateRender:false:
-    // Los elementos permanecen visibles en CSS. Solo se ocultan cuando
-    // el tween comienza a correr. Si ScrollTrigger no dispara, nunca se ocultan.
-    const ir = { immediateRender: false } as const;
+    // Patrón anti-parpadeo (igual que Inicio.astro): se OCULTA de entrada con
+    // gsap.set y se revela UNA vez en onEnter con gsap.to. Nunca usar
+    // gsap.from + immediateRender:false (dejaba el footer visible hasta el primer
+    // scroll y entonces lo re-animaba). El footer siempre está bajo el fold, así
+    // que el set inicial no se ve. Con reduced-motion no se anima (queda visible).
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const initFooterAnimations = () => {
         const footer = document.querySelector<HTMLElement>('.footer-premium');
-        if (!footer) return;
+        if (!footer || reducedMotion) return;
 
-        // Solo scaleX necesita set explícito (valor 0 no es el CSS default)
+        const fadeSel = [
+            '.footer-eyebrow', '.footer-edition', '.footer-logo-svg', '.footer-statement',
+            '.description', '.footer-status-badge', '.nav-col', '.footer-bottom > *',
+        ].map(s => '.footer-premium ' + s).join(', ');
+
+        // Estado inicial oculto
         gsap.set('.footer-premium .top-hairline',  { scaleX: 0, transformOrigin: 'left center' });
         gsap.set('.footer-premium .footer-divider', { scaleX: 0, transformOrigin: 'center' });
+        gsap.set(fadeSel, { opacity: 0, y: 16 });
 
-        const st = {
+        ScrollTrigger.create({
             trigger: footer,
-            start: 'top 92%', // más permisivo — dispara antes para evitar que se quede atascado
+            start: 'top 88%',
             once: true,
-        };
-
-        const tl = gsap.timeline({ scrollTrigger: st, defaults: { ease: 'expo.out' } });
-
-        tl
-            .to('.footer-premium .top-hairline',  { ...ir, scaleX: 1, duration: 1.2 }, 0)
-            .from('.footer-premium .footer-eyebrow', { ...ir, opacity: 0, y: 14, duration: 1.0 }, 0.15)
-            .from('.footer-premium .footer-edition', { ...ir, opacity: 0, y: 14, duration: 1.0 }, 0.22)
-            .from('.footer-premium .footer-logo-svg', { ...ir, opacity: 0, y: 24, duration: 1.1 }, 0.32)
-            .from('.footer-premium .footer-statement', { ...ir, opacity: 0, y: 22, duration: 1.1 }, 0.42)
-            .from('.footer-premium .description',    { ...ir, opacity: 0, y: 18, duration: 1.0 }, 0.55)
-            .from('.footer-premium .contact-action', { ...ir, opacity: 0, y: 18, duration: 1.0 }, 0.65)
-            .from('.footer-premium .nav-col',        { ...ir, opacity: 0, y: 24, duration: 1.0, stagger: 0.1 }, 0.50)
-            .to('.footer-premium .footer-divider',   { ...ir, scaleX: 1, duration: 1.1 }, 0.95)
-            .from('.footer-premium .footer-bottom > *', { ...ir, opacity: 0, y: 14, duration: 0.9, stagger: 0.08 }, 1.05);
+            onEnter: () => {
+                const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+                tl
+                    .to('.footer-premium .top-hairline',   { scaleX: 1, duration: 1.0 }, 0)
+                    .to('.footer-premium .footer-eyebrow', { opacity: 1, y: 0, duration: 0.9, clearProps: 'transform,opacity' }, 0.1)
+                    .to('.footer-premium .footer-edition', { opacity: 1, y: 0, duration: 0.9, clearProps: 'transform,opacity' }, 0.16)
+                    .to('.footer-premium .footer-logo-svg', { opacity: 1, y: 0, duration: 1.0, clearProps: 'transform,opacity' }, 0.24)
+                    .to('.footer-premium .footer-statement', { opacity: 1, y: 0, duration: 1.0, clearProps: 'transform,opacity' }, 0.32)
+                    .to('.footer-premium .description',     { opacity: 1, y: 0, duration: 0.9, clearProps: 'transform,opacity' }, 0.42)
+                    .to('.footer-premium .footer-status-badge', { opacity: 1, y: 0, duration: 0.9, clearProps: 'transform,opacity' }, 0.5)
+                    .to('.footer-premium .nav-col',         { opacity: 1, y: 0, duration: 0.9, stagger: 0.09, clearProps: 'transform,opacity' }, 0.4)
+                    .to('.footer-premium .footer-divider',  { scaleX: 1, duration: 1.0 }, 0.75)
+                    .to('.footer-premium .footer-bottom > *', { opacity: 1, y: 0, duration: 0.85, stagger: 0.07, clearProps: 'transform,opacity' }, 0.85);
+            },
+        });
 
         // Refresh después de que carguen fuentes/imágenes
         window.addEventListener('load', () => setTimeout(() => ScrollTrigger.refresh(), 100), { once: true });

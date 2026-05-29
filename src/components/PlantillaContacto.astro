@@ -5,46 +5,83 @@ import Navbar from './Navbar.astro';
 import Footer from './Footer.astro';
 import WhatsApp from './WhatsApp.astro';
 
-import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { getLangFromUrl } from '../i18n/utils';
 const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
 const isEn = lang === 'en';
+
+// ── SEO ────────────────────────────────────────────────────────────────
+const pageTitle = isEn
+    ? 'Apply to an E-commerce or B2B Project — Flouvia | Mexico City'
+    : 'Aplicar a un Proyecto de E-commerce o B2B — Flouvia | CDMX';
+const pageDesc = isEn
+    ? 'Request your free 30-min diagnosis. We assess fit with your e-commerce or B2B operation. Projects by application — Flouvia, a boutique firm in Mexico City.'
+    : 'Solicita tu diagnóstico gratuito de 30 min. Evaluamos si hay fit con tu operación e-commerce o B2B. Proyectos por aplicación — Flouvia, firma boutique en CDMX.';
+
+// ── Schema.org ContactPage ───────────────────────────────────────────────
+const SITE = 'https://flouvia.com';
+const contactUrl = isEn ? `${SITE}/en/contacto` : `${SITE}/contacto`;
+const contactSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    '@id': `${contactUrl}#contactpage`,
+    name: isEn ? 'Apply to a Project — Flouvia' : 'Aplicar a un Proyecto — Flouvia',
+    description: isEn
+        ? 'Application process for e-commerce and B2B projects with Flouvia. Free 30-minute diagnosis for established operations in Mexico and the U.S.'
+        : 'Proceso de aplicación para proyectos de e-commerce y B2B con Flouvia. Diagnóstico gratuito de 30 minutos para operaciones establecidas en México y EE.UU.',
+    url: contactUrl,
+    inLanguage: isEn ? 'en' : 'es',
+    mainEntity: { '@id': `${SITE}/#organization` },
+    breadcrumb: {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            { '@type': 'ListItem', position: 1, name: isEn ? 'Home' : 'Inicio', item: isEn ? `${SITE}/en` : SITE },
+            { '@type': 'ListItem', position: 2, name: isEn ? 'Apply to a project' : 'Aplicar a un proyecto', item: contactUrl },
+        ],
+    },
+};
 ---
 
-<Layout
-    title={isEn ? 'Apply to a project | Flouvia' : 'Aplicar a un proyecto | Flouvia'}
-    description={isEn ? 'Accepting projects for Q3. Tell us about your operation and we\'ll assess the fit. Free diagnosis for those who qualify.' : 'Aceptando proyectos para Q3. Cuéntanos tu operación y evaluamos si encaja. Diagnóstico sin costo para quienes califican.'}
->
+<Layout title={pageTitle} description={pageDesc}>
     <Navbar />
+
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(contactSchema)} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.4/build/css/intlTelInput.css">
 
     <main class="flouvia-masterpiece">
-        
+
+        <!-- ============================================================
+             1. HERO — estándar de la home + inversión de poder
+             ============================================================ -->
         <section class="hero-grand">
             <div class="container hero-container">
                 <div class="hero-content">
                     <div class="hero-text-zone" id="hero-parallax">
-                        <p class="eyebrow reveal-blur" style="--delay: 0.1s;">
-                            {isEn ? 'INQUIRIES & DIAGNOSTICS' : 'CONSULTAS Y DIAGNÓSTICOS'}
+                        <div class="hero-status hero-anim" id="hero-status">
+                            <span class="hero-status-dot" aria-hidden="true"></span>
+                            <span>{isEn ? '2 SLOTS OPEN · Q3' : '2 CUPOS DISPONIBLES · Q3'}</span>
+                        </div>
+                        <p class="eyebrow hero-anim">
+                            {isEn ? 'APPLICATION PROCESS' : 'PROCESO DE APLICACIÓN'}
                         </p>
-                        <h1 class="hero-title reveal-blur" style="--delay: 0.2s;">
-                            <span class="title-bold">{isEn ? 'Let’s talk' : 'Hablemos'}</span><br>
-                            <span class="editorial title-serif">{isEn ? 'Engineering.' : 'de Ingeniería.'}</span>
+                        <h1 class="hero-title hero-anim">
+                            <span class="title-bold">{isEn ? 'Apply.' : 'Aplica.'}</span><br>
+                            <span class="title-bold">{isEn ? 'We assess the fit.' : 'Evaluamos el fit.'}</span>
                         </h1>
                     </div>
-                    
-                    <div class="hero-bottom reveal-blur" style="--delay: 0.4s;">
+
+                    <div class="hero-bottom hero-anim">
                         <p class="hero-desc">
-                            {isEn ? 'High-growth systems start with a precise diagnosis. Tell us about your architecture and let’s find the bottlenecks.' : 'Los sistemas de alto crecimiento comienzan con un diagnóstico preciso. Cuéntanos sobre tu arquitectura y encontremos los cuellos de botella.'}
+                            {isEn ? 'We read every application before replying. If there’s a fit with what we build, we get back to you within 24h with the next steps — no pitch, no pressure.' : 'Leemos cada solicitud antes de responder. Si hay fit con lo que construimos, te contactamos en menos de 24h con los próximos pasos — sin pitch, sin presión.'}
                         </p>
                         <div class="hero-action">
                             <a href="#form-zone" class="btn-luxe">
-                                <span>{isEn ? 'Start the Process' : 'Iniciar Proceso'}</span>
+                                <span>{isEn ? 'Start application' : 'Iniciar solicitud'}</span>
+                                <span class="btn-arrow" aria-hidden="true">↓</span>
                                 <div class="btn-shimmer"></div>
                             </a>
                         </div>
@@ -53,17 +90,57 @@ const isEn = lang === 'en';
             </div>
         </section>
 
+        <!-- ============================================================
+             2. EVIDENCIA — métricas reales justo antes del formulario
+             ============================================================ -->
+        <section class="trust-strip">
+            <div class="trust-watermark" aria-hidden="true">{isEn ? 'Evidence' : 'Evidencia'}</div>
+            <div class="container">
+                <p class="eyebrow trust-eyebrow">{isEn ? 'EVIDENCE' : 'EVIDENCIA'}</p>
+                <div class="trust-metrics">
+                    <div class="trust-metric">
+                        <span class="tm-val">−67%</span>
+                        <span class="tm-label">{isEn ? 'Order processing time' : 'Tiempo de proceso de pedidos'}</span>
+                        <span class="tm-case">El Zarco · B2B</span>
+                    </div>
+                    <div class="trust-metric">
+                        <span class="tm-val">+42%</span>
+                        <span class="tm-label">{isEn ? 'Conversion rate' : 'Tasa de conversión'}</span>
+                        <span class="tm-case">Setnpet · E-commerce</span>
+                    </div>
+                    <div class="trust-metric">
+                        <span class="tm-val">3×</span>
+                        <span class="tm-label">{isEn ? 'LTV retention in 90 days' : 'Retención LTV en 90 días'}</span>
+                        <span class="tm-case">Setnpet · E-commerce</span>
+                    </div>
+                </div>
+                <p class="trust-note">{isEn ? 'Real numbers from projects we built. We take fewer than 8 brands a year to keep this level of work.' : 'Números de proyectos reales que construimos. Tomamos menos de 8 marcas al año para sostener este nivel.'}</p>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             3. INTERFAZ DE CONTACTO — sidebar + formulario por pasos
+             ============================================================ -->
         <section class="executive-contact" id="form-zone">
+            <div class="contact-watermark" aria-hidden="true">{isEn ? 'Apply' : 'Aplica'}</div>
             <div class="container ec-grid">
-                
-                <div class="ec-sidebar reveal-fade" style="--delay: 0.1s;">
-                    
+
+                <div class="ec-sidebar">
+
                     <div class="ec-block">
                         <span class="ec-label mono-font">STATUS</span>
                         <div class="system-status-pill">
                             <div class="pulse-dot-green"></div>
-                            <span>{isEn ? 'ACCEPTING Q3 PROJECTS' : 'ACEPTANDO PROYECTOS Q3'}</span>
+                            <span>{isEn ? '2 SLOTS OPEN · Q3' : '2 CUPOS DISPONIBLES · Q3'}</span>
                         </div>
+                    </div>
+
+                    <div class="ec-block">
+                        <span class="ec-label mono-font">{isEn ? 'WHO APPLIES' : 'QUIÉN APLICA'}</span>
+                        <ul class="criteria">
+                            <li class="crit-yes">{isEn ? 'Established operations with real sales and traction' : 'Operaciones establecidas con ventas y tracción real'}</li>
+                            <li class="crit-no">{isEn ? 'Startups without sales or template-shopping projects' : 'Startups sin ventas o proyectos que buscan plantillas'}</li>
+                        </ul>
                     </div>
 
                     <div class="ec-block">
@@ -74,7 +151,7 @@ const isEn = lang === 'en';
                             <span class="mono-font ec-clock" id="cdmx-clock">00:00:00</span>
                         </div>
                     </div>
-                    
+
                     <div class="ec-block">
                         <span class="ec-label mono-font">DIRECT LINE</span>
                         <a href="mailto:hola@flouvia.com" class="ec-data ec-link hover-underline">hola@flouvia.com</a>
@@ -83,14 +160,14 @@ const isEn = lang === 'en';
                     <div class="ec-block">
                         <span class="ec-label mono-font">SOCIAL</span>
                         <div class="ec-social-flex">
-                            <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn" class="social-icon-link">
+                            <a href="https://www.linkedin.com/company/flouvia/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="social-icon-link">
                                 <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
                                     <rect x="2" y="9" width="4" height="12"></rect>
                                     <circle cx="4" cy="4" r="2"></circle>
                                 </svg>
                             </a>
-                            <a href="https://instagram.com" target="_blank" aria-label="Instagram" class="social-icon-link">
+                            <a href="https://www.instagram.com/flouvia.mx/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="social-icon-link">
                                 <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
@@ -103,150 +180,185 @@ const isEn = lang === 'en';
                 </div>
 
                 <div class="ec-form-zone">
-                    <form name="contacto" action="/" method="POST" data-netlify="true" class="diag-form">
+                    <form name="contacto" action="/" method="POST" data-netlify="true" class="diag-form" id="diagForm" novalidate>
 
                         <input type="hidden" name="form-name" value="contacto" />
                         <input type="hidden" name="tipo_negocio" id="field-tipo_negocio" />
                         <input type="hidden" name="urgencia"     id="field-urgencia" />
                         <input type="hidden" name="presupuesto"  id="field-presupuesto" />
 
-                        <!-- 01 — DATOS DE CONTACTO -->
-                        <div class="dq-block reveal-fade" style="--delay:0.05s;">
-                            <div class="dq-head">
-                                <span class="dq-num mono-font">01</span>
-                                <div class="dq-meta">
-                                    <h3 class="dq-title">{isEn ? 'CONTACT DETAILS' : 'DATOS DE CONTACTO'}</h3>
-                                    <p class="dq-desc">{isEn ? `Full name, email and WhatsApp. We'll respond through whichever is fastest.` : 'Nombre completo, correo y WhatsApp. Respondemos por el canal más rápido.'}</p>
+                        <!-- Progreso (Goal Gradient) -->
+                        <div class="stepper-head">
+                            <div class="sp-progress">
+                                <div class="sp-meta">
+                                    <span class="sp-label mono-font">{isEn ? 'STEP' : 'PASO'}</span>
+                                    <span class="sp-count">
+                                        <span class="sp-current">01</span>
+                                        <span class="sp-divider">/</span>
+                                        <span class="sp-total">05</span>
+                                    </span>
                                 </div>
+                                <div class="sp-bar"><div class="sp-fill"></div></div>
                             </div>
-                            <div class="dq-body">
-                                <div class="sf-row">
-                                    <div class="sf-group">
-                                        <label for="name" class="mono-font">{isEn ? 'FULL NAME' : 'NOMBRE'}</label>
-                                        <div class="input-wrapper">
-                                            <input type="text" id="name" name="nombre" placeholder={isEn ? 'Your full name' : 'Tu nombre completo'} required />
-                                            <div class="focus-border"></div>
+                        </div>
+
+                        <!-- Escenario de pasos: una pregunta a la vez -->
+                        <div class="dq-stage">
+
+                            <!-- 01 — DATOS DE CONTACTO -->
+                            <div class="dq-step is-active is-visible" data-step="0">
+                                <span class="dq-index" aria-hidden="true">/01</span>
+                                <div class="dq-head">
+                                    <h3 class="dq-title">{isEn ? 'Who are we talking to?' : '¿Con quién hablamos?'}</h3>
+                                    <p class="dq-desc">{isEn ? 'Name, email, and WhatsApp if you prefer that channel.' : 'Nombre, correo y WhatsApp si prefieres ese canal.'}</p>
+                                </div>
+                                <div class="dq-body">
+                                    <div class="sf-row">
+                                        <div class="sf-group">
+                                            <label for="name" class="mono-font">{isEn ? 'FULL NAME' : 'NOMBRE'}</label>
+                                            <div class="input-wrapper">
+                                                <input type="text" id="name" name="nombre" placeholder={isEn ? 'Your full name' : 'Tu nombre completo'} required />
+                                                <div class="focus-border"></div>
+                                            </div>
+                                        </div>
+                                        <div class="sf-group">
+                                            <label for="email" class="mono-font">{isEn ? 'EMAIL' : 'CORREO'}</label>
+                                            <div class="input-wrapper">
+                                                <input type="email" id="email" name="email" placeholder="email@empresa.com" required />
+                                                <div class="focus-border"></div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="sf-group">
-                                        <label for="email" class="mono-font">{isEn ? 'EMAIL' : 'CORREO'}</label>
+                                        <label for="whatsapp" class="mono-font">{isEn ? 'WHATSAPP · OPTIONAL' : 'WHATSAPP · OPCIONAL'}</label>
                                         <div class="input-wrapper">
-                                            <input type="email" id="email" name="email" placeholder="email@empresa.com" required />
+                                            <input type="tel" id="whatsapp" name="whatsapp" />
                                             <div class="focus-border"></div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="sf-group">
-                                    <label for="whatsapp" class="mono-font">WHATSAPP</label>
-                                    <div class="input-wrapper">
-                                        <input type="tel" id="whatsapp" name="whatsapp" />
-                                        <div class="focus-border"></div>
+                            </div>
+
+                            <!-- 02 — TU OPERACIÓN HOY -->
+                            <div class="dq-step" data-step="1">
+                                <span class="dq-index" aria-hidden="true">/02</span>
+                                <div class="dq-head">
+                                    <h3 class="dq-title">{isEn ? 'How does your business operate today?' : '¿Cómo opera tu negocio hoy?'}</h3>
+                                    <p class="dq-desc">{isEn ? 'Pick the one that best describes your model.' : 'Selecciona el que mejor describe tu modelo.'}</p>
+                                </div>
+                                <div class="dq-body">
+                                    <div class="q-chips" data-field="tipo_negocio">
+                                        <button type="button" class="q-chip" data-value="dtc-ecommerce">{isEn ? 'DTC / Direct e-commerce' : 'DTC / E-commerce directo'}</button>
+                                        <button type="button" class="q-chip" data-value="mayorista-b2b">{isEn ? 'Wholesale B2B' : 'Mayorista B2B'}</button>
+                                        <button type="button" class="q-chip" data-value="ambos-canales">{isEn ? 'Both channels (DTC + B2B)' : 'Ambos canales (DTC + B2B)'}</button>
+                                        <button type="button" class="q-chip" data-value="operacion-compleja">{isEn ? 'Complex enterprise operation' : 'Empresa con operación compleja'}</button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- 02 — TIPO DE NEGOCIO -->
-                        <div class="dq-block reveal-fade" style="--delay:0.1s;">
-                            <div class="dq-head">
-                                <span class="dq-num mono-font">02</span>
-                                <div class="dq-meta">
-                                    <h3 class="dq-title">{isEn ? 'BUSINESS TYPE' : 'TIPO DE NEGOCIO'}</h3>
-                                    <p class="dq-desc">{isEn ? 'How would you best describe your operation?' : '¿Cómo describirías mejor tu operación?'}</p>
+                            <!-- 03 — QUÉ NECESITAS RESOLVER -->
+                            <div class="dq-step" data-step="2">
+                                <span class="dq-index" aria-hidden="true">/03</span>
+                                <div class="dq-head">
+                                    <h3 class="dq-title">{isEn ? 'What do you need to solve?' : '¿Qué necesitas resolver?'}</h3>
+                                    <p class="dq-desc">{isEn ? 'Describe your operation today and what you need to work differently. The more concrete, the more useful the diagnosis.' : 'Describe tu operación hoy y qué necesitas que funcione diferente. Entre más concreto, más útil es el diagnóstico.'}</p>
                                 </div>
-                            </div>
-                            <div class="dq-body">
-                                <div class="q-chips" data-field="tipo_negocio">
-                                    <button type="button" class="q-chip" data-value="dtc-ecommerce">{isEn ? 'DTC / E-commerce' : 'DTC / E-commerce'}</button>
-                                    <button type="button" class="q-chip" data-value="mayorista-b2b">{isEn ? 'Wholesale B2B' : 'Mayorista B2B'}</button>
-                                    <button type="button" class="q-chip" data-value="operacion-compleja">{isEn ? 'Complex Enterprise Operation' : 'Empresa con operación compleja'}</button>
-                                    <button type="button" class="q-chip" data-value="otro">{isEn ? 'Other' : 'Otro'}</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 03 — PROBLEMA PRINCIPAL -->
-                        <div class="dq-block reveal-fade" style="--delay:0.15s;">
-                            <div class="dq-head">
-                                <span class="dq-num mono-font">03</span>
-                                <div class="dq-meta">
-                                    <h3 class="dq-title">{isEn ? 'MAIN PROBLEM' : 'PROBLEMA PRINCIPAL'}</h3>
-                                    <p class="dq-desc">{isEn ? 'The most important question. Write freely — this shapes our first message to you.' : 'La pregunta más importante. Escribe con libertad. Le da el ángulo exacto a nuestro primer mensaje.'}</p>
-                                </div>
-                            </div>
-                            <div class="dq-body">
-                                <div class="sf-group">
-                                    <div class="input-wrapper">
-                                        <textarea id="problema" name="problema" rows="3" placeholder={isEn ? 'Describe the main challenge you need to solve...' : 'Describe el reto principal que necesitas resolver...'} required></textarea>
-                                        <div class="focus-border"></div>
+                                <div class="dq-body">
+                                    <div class="sf-group">
+                                        <div class="input-wrapper">
+                                            <textarea id="problema" name="problema" rows="3" placeholder={isEn ? 'E.g. We process 200 B2B orders a month over WhatsApp. We want a portal where clients order on their own without going through the team...' : 'Ej: Tenemos 200 pedidos B2B al mes que se gestionan por WhatsApp. Queremos un portal donde los clientes pidan solos sin pasar por el equipo...'} required></textarea>
+                                            <div class="focus-border"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- 04 — URGENCIA -->
-                        <div class="dq-block reveal-fade" style="--delay:0.2s;">
-                            <div class="dq-head">
-                                <span class="dq-num mono-font">04</span>
-                                <div class="dq-meta">
-                                    <h3 class="dq-title">{isEn ? 'WHEN DO YOU NEED THIS SOLVED?' : '¿CUÁNDO NECESITAS RESOLVERLO?'}</h3>
-                                    <p class="dq-desc">{isEn ? 'Helps us separate ready-to-buy from early research. Prioritizes your time.' : 'Diferencia quién está listo de quién está explorando. Prioriza tu tiempo.'}</p>
+                            <!-- 04 — HORIZONTE -->
+                            <div class="dq-step" data-step="3">
+                                <span class="dq-index" aria-hidden="true">/04</span>
+                                <div class="dq-head">
+                                    <h3 class="dq-title">{isEn ? 'When do you need this solved?' : '¿Cuándo necesitas resolverlo?'}</h3>
+                                    <p class="dq-desc">{isEn ? 'We prioritize projects with a defined start. What’s your horizon?' : 'Priorizamos proyectos con arranque definido. ¿Cuál es tu horizonte?'}</p>
+                                </div>
+                                <div class="dq-body">
+                                    <div class="q-chips" data-field="urgencia">
+                                        <button type="button" class="q-chip" data-value="lo-antes-posible">{isEn ? 'As soon as possible' : 'Lo antes posible'}</button>
+                                        <button type="button" class="q-chip" data-value="1-3-meses">{isEn ? '1–3 months' : '1–3 meses'}</button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="dq-body">
-                                <div class="q-chips" data-field="urgencia">
-                                    <button type="button" class="q-chip" data-value="lo-antes-posible">{isEn ? 'As soon as possible' : 'Lo antes posible'}</button>
-                                    <button type="button" class="q-chip" data-value="1-2-meses">{isEn ? '1–2 months' : '1–2 meses'}</button>
-                                    <button type="button" class="q-chip" data-value="explorando">{isEn ? 'Just exploring' : 'Estoy explorando'}</button>
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- 05 — PRESUPUESTO (OPCIONAL) -->
-                        <div class="dq-block reveal-fade" style="--delay:0.25s;">
-                            <div class="dq-head">
-                                <span class="dq-num mono-font">05</span>
-                                <div class="dq-meta">
+                            <!-- 05 — PRESUPUESTO (OPCIONAL, MXN) -->
+                            <div class="dq-step" data-step="4">
+                                <span class="dq-index" aria-hidden="true">/05</span>
+                                <div class="dq-head">
                                     <h3 class="dq-title">
-                                        {isEn ? 'DO YOU HAVE A BUDGET?' : '¿TIENEN PRESUPUESTO DESTINADO?'}
+                                        {isEn ? 'Approximate budget' : 'Presupuesto aproximado'}
+                                        <span class="dq-cur">(MXN)</span>
                                         <span class="dq-opt">{isEn ? 'OPTIONAL' : 'OPCIONAL'}</span>
                                     </h3>
-                                    <p class="dq-desc">{isEn ? `No commitment. Just helps us skip calls that won't be a fit.` : 'Sin compromiso. Solo para no hacerte perder tiempo en una llamada sin fit.'}</p>
+                                    <p class="dq-desc">{isEn ? 'No commitment. Helps us validate fit before a call.' : 'Sin compromiso. Nos ayuda a validar fit antes de una llamada.'}</p>
+                                </div>
+                                <div class="dq-body">
+                                    <div class="q-chips" data-field="presupuesto" data-optional>
+                                        <button type="button" class="q-chip" data-value="30k-80k-mxn">$30k – $80k MXN</button>
+                                        <button type="button" class="q-chip" data-value="80k-200k-mxn">$80k – $200k MXN</button>
+                                        <button type="button" class="q-chip" data-value="mas-200k-mxn">{isEn ? 'Over $200k MXN' : 'Más de $200k MXN'}</button>
+                                        <button type="button" class="q-chip" data-value="no-claro">{isEn ? 'Not sure yet' : 'No lo tengo claro'}</button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="dq-body">
-                                <div class="q-chips" data-field="presupuesto">
-                                    <button type="button" class="q-chip" data-value="menos-30k">{isEn ? 'Under $30k' : 'Menos de $30k'}</button>
-                                    <button type="button" class="q-chip" data-value="30k-80k">$30k – $80k</button>
-                                    <button type="button" class="q-chip" data-value="mas-80k">{isEn ? 'Over $80k' : 'Más de $80k'}</button>
-                                    <button type="button" class="q-chip" data-value="no-claro">{isEn ? 'Not sure yet' : 'No lo tengo claro'}</button>
-                                </div>
-                            </div>
+
                         </div>
 
-                        <!-- SUBMIT -->
-                        <div class="dq-submit reveal-fade" style="--delay:0.3s;">
-                            <button type="submit" id="diagSubmitBtn" class="btn-submit-luxe">
-                                <span id="diagBtnText">{isEn ? 'Send Diagnosis' : 'Enviar diagnóstico'}</span>
-                                <div class="submit-icon-wrapper">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                                </div>
+                        <!-- Navegación entre pasos -->
+                        <div class="step-nav">
+                            <button type="button" class="step-back is-hidden" id="stepBack">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                                <span>{isEn ? 'Back' : 'Atrás'}</span>
                             </button>
-                            <p class="dq-privacy">{isEn ? 'We respond within 24 hours. No spam, no hard selling.' : 'Respondemos en menos de 24h. Sin spam, sin ventas agresivas.'}</p>
+                            <div class="step-nav-right">
+                                <span class="step-error" id="stepError"></span>
+                                <span class="kbd-hint" id="kbdHint"><kbd>↵</kbd>{isEn ? 'Enter' : 'Enter'}</span>
+                                <button type="button" id="stepNext" class="btn-submit-luxe">
+                                    <span id="stepNextText">{isEn ? 'Continue' : 'Continuar'}</span><!-- último paso: script fija "Aplicar a proyecto" -->
+                                    <div class="submit-icon-wrapper">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                    </div>
+                                </button>
+                            </div>
                         </div>
+                        <p class="dq-privacy">{isEn ? 'No pitch, no automated replies. We read every application personally and respond within 24h.' : 'Sin pitch, sin respuestas automáticas. Leemos cada solicitud personalmente y respondemos en menos de 24 h.'}</p>
 
                     </form>
 
-                    <!-- SUCCESS STATE -->
+                    <!-- SUCCESS STATE (Zeigarnik — cierra el ciclo) -->
                     <div class="diag-success" id="diagSuccess">
                         <div class="ds-inner">
-                            <p class="ds-eyebrow mono-font">{isEn ? 'MESSAGE SENT' : 'ENVIADO'}</p>
+                            <p class="ds-eyebrow mono-font">{isEn ? 'APPLICATION RECEIVED' : 'SOLICITUD RECIBIDA'}</p>
                             <h2 class="ds-headline">
-                                {isEn ? 'We\'ll be in' : 'Nos ponemos'}
-                                <br/><em class="ds-serif">{isEn ? 'touch soon.' : 'en contacto.'}</em>
+                                {isEn ? 'We’ll be in' : 'Nos ponemos'}
+                                <br/>{isEn ? 'touch soon.' : 'en contacto.'}
                             </h2>
                             <div class="ds-rule"></div>
-                            <p class="ds-sub">{isEn ? 'We read every submission personally. Expect a response within 24 hours — no spam, no automated replies.' : 'Leemos cada solicitud personalmente. Te respondemos en menos de 24h, sin respuestas automáticas.'}</p>
+                            <p class="ds-sub">{isEn ? 'A real person reads every application. We’ll get back to you within 24 hours.' : 'Una persona real lee cada solicitud. Te respondemos en menos de 24 horas.'}</p>
+
+                            <div class="ds-next">
+                                <div class="ds-next-col">
+                                    <span class="ds-next-label mono-font">{isEn ? 'IN THE NEXT 24H' : 'EN LAS PRÓXIMAS 24H'}</span>
+                                    <ul class="ds-next-list">
+                                        <li>{isEn ? 'A person reads your application — not a bot.' : 'Una persona lee tu solicitud, no un bot.'}</li>
+                                        <li>{isEn ? 'You get next steps, or an honest no.' : 'Recibes próximos pasos, o un no honesto.'}</li>
+                                    </ul>
+                                </div>
+                                <div class="ds-next-col">
+                                    <span class="ds-next-label mono-font">{isEn ? 'WHAT WON’T HAPPEN' : 'LO QUE NO PASA'}</span>
+                                    <ul class="ds-next-list ds-next-no">
+                                        <li>{isEn ? 'No automated email sequences.' : 'Sin secuencias automáticas de correo.'}</li>
+                                        <li>{isEn ? 'No surprise sales calls.' : 'Sin llamadas de venta sorpresa.'}</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -261,35 +373,37 @@ const isEn = lang === 'en';
 </Layout>
 
 <style is:global>
-    *, *::before, *::after { box-sizing: border-box; } 
-    
+    *, *::before, *::after { box-sizing: border-box; }
+
     html, body {
-        width: 100%; 
+        width: 100%;
         position: relative;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
         -webkit-tap-highlight-color: transparent;
     }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
     ::selection { background: #0a192f; color: #ffffff; }
 
     :root {
         --color-bg: #ffffff;
-        --color-bg-soft: #fcfcfc; 
-        --color-blue-icy: #f4f6f9; 
+        --color-bg-soft: #fcfcfc;
+        --color-blue-icy: #f4f6f9;
         --color-blue-deep: #0a192f;
         --color-glass-blue: rgba(10, 25, 47, 0.85);
-        
+
         --color-text: #050505;
-        --color-text-muted: #555555;
-        --color-border: rgba(0, 0, 0, 0.08); 
-        
+        --color-text-muted: #555556;
+        --color-border: rgba(0, 0, 0, 0.08);
+
         --font-sans: 'Inter', system-ui, sans-serif;
         --font-serif: 'Instrument Serif', serif;
-        
+
         --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
-        --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+        --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
         --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -299,108 +413,124 @@ const isEn = lang === 'en';
     .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; }
     .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: #222; }
     .eyebrow { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
-    
-    .reveal-blur { 
-        opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(8px); 
-        animation: reveal 1s var(--ease-spring) forwards; animation-play-state: paused; animation-delay: var(--delay, 0s); 
-    }
-    .reveal-blur.active { animation-play-state: running; }
-    @keyframes reveal { to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+    .mono-font { font-family: 'JetBrains Mono', monospace; }
 
-    .reveal-fade { 
-        opacity: 0; transform: translateY(30px) scale(0.98); 
-        animation: revealFade 1s var(--ease-spring) forwards; animation-play-state: paused; animation-delay: var(--delay, 0s); 
-    }
-    .reveal-fade.active { animation-play-state: running; }
-    @keyframes revealFade { to { opacity: 1; transform: translateY(0) scale(1); } }
+    /* Gate anti-FOUC — el hero parte oculto SOLO con JS y sin reduced-motion. */
+    .js-anim .hero-anim { opacity: 0; }
 
-    .btn-luxe { 
-        position: relative; display: inline-flex; background: var(--color-text); color: #fff; 
-        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem; 
-        font-weight: 600; transition: all 0.5s var(--ease-spring); overflow: hidden; justify-content: center;
+    /* HERO STATUS — escasez explícita (cupo por trimestre) */
+    .hero-status { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 100px; border: 1px solid rgba(16,185,129,0.22); background: rgba(16,185,129,0.04); width: max-content; margin-bottom: 1.6rem; }
+    .hero-status span { font-size: 0.7rem; color: #059669; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .hero-status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: hero-status-pulse 2s infinite; }
+    @keyframes hero-status-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    .btn-luxe {
+        position: relative; display: inline-flex; background: var(--color-text); color: #fff;
+        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem;
+        font-weight: 600; overflow: hidden; justify-content: center;
+        transition: transform 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth);
         box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 10px 20px rgba(0,0,0,0.08);
+        align-items: center; gap: 10px; will-change: transform;
     }
     .btn-luxe span { position: relative; z-index: 2; }
-    .btn-shimmer { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent); transform: skewX(-20deg); transition: 0s; z-index: 1;}
-    .btn-luxe:hover { transform: translateY(-4px); box-shadow: 0 6px 12px rgba(0,0,0,0.08), 0 15px 30px rgba(0,0,0,0.15); }
-    .btn-luxe:active { transform: scale(0.95); box-shadow: 0 2px 4px rgba(0,0,0,0.04); transition: 0.1s;}
+    .btn-arrow { position: relative; z-index: 2; display: inline-block; transition: transform 0.6s var(--ease-smooth); }
+    .btn-shimmer { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent); transform: skewX(-20deg); transition: 0s; z-index: 1;}
+    .btn-luxe:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(0,0,0,0.12), 0 24px 48px rgba(0,0,0,0.16); }
+    .btn-luxe:active { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+    .btn-luxe:hover .btn-shimmer { left: 150%; transition: left 0.9s var(--ease-smooth); }
 
     .squircle { border-radius: 24px; transform: translateZ(0); overflow: hidden; }
-    .cta-squircle { border-radius: 32px; transform: translateZ(0); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
-</style>
 
-<style>
     /* ==========================================================
-       ESTILOS PRO PARA EL INPUT DE TELÉFONO (INTL-TEL-INPUT)
-       (CON FORZADO DE TIPOGRAFÍA ABSOLUTO)
+       INTL-TEL-INPUT — DEBE ir en is:global: el DOM lo inyecta la
+       librería en runtime y NO trae el atributo de scope de Astro,
+       así que los selectores scoped (.iti…[data-astro-cid]) no aplican.
        ========================================================== */
-    .iti, .iti * { 
-        font-family: 'Inter', system-ui, sans-serif !important; 
-    }
+    .iti, .iti * { font-family: 'Inter', system-ui, sans-serif !important; }
     .iti { width: 100%; display: block; }
-    .iti__country-list { 
-        border-radius: 12px; 
+    .iti__country-list {
+        border-radius: 12px;
         border: 1px solid var(--color-border);
         box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         font-size: 0.95rem;
         color: var(--color-text);
         z-index: 9999;
     }
-    .iti__selected-flag { background-color: transparent !important; padding-left: 0; outline: none;}
-    .iti__selected-dial-code { 
-        color: #000 !important; 
-        font-weight: 500 !important; 
-        font-size: 1.15rem !important; 
-        padding-left: 4px;
+    .iti__selected-flag { background-color: transparent !important; padding-left: 0; outline: none; display: flex; align-items: center; }
+    /* El prefijo (+52) debe verse EXACTAMENTE igual que los dígitos que teclea
+       el prospecto: mismo font, tamaño, peso y color. */
+    .iti__selected-dial-code {
+        font-family: var(--font-sans) !important;
+        color: #0a0e1a !important;
+        font-weight: 500 !important;
+        font-size: 1.1rem !important;
+        letter-spacing: -0.01em !important;
+        line-height: 1 !important;
+        padding-left: 6px;
     }
-    .iti__arrow { border-top-color: #94a3b8; }
+    .iti__arrow { border-top-color: #94a3b8; margin-left: 6px; }
     .iti--show-selected-dial-code.iti--show-flags .iti__selected-flag { padding-right: 12px; }
+</style>
 
-    /* ==========================================================
-       ANIMACIÓN LOCAL (REVEAL-UP) PARA EL FORMULARIO
-       ========================================================== */
-    .reveal-up { 
-        opacity: 0; transform: translateY(40px); 
-        animation: rev-u 1s var(--ease-spring) forwards; 
-        animation-play-state: paused; animation-delay: var(--delay, 0s); 
-    }
-    .reveal-up.active { animation-play-state: running; }
-    @keyframes rev-u { to { opacity: 1; transform: translateY(0); } }
-
+<style>
     /* ==========================================================
        1. HERO
        ========================================================== */
-    .hero-grand { padding: 13rem 0 7rem 0; min-height: 80vh; display: flex; align-items: center; position: relative;}
+    .hero-grand { padding: 10rem 0 4rem 0; min-height: 100svh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
     .hero-text-zone { transition: transform 0.1s ease-out, opacity 0.1s ease-out; }
-    .hero-title { font-size: clamp(3.2rem, 7vw, 6.8rem); line-height: 0.85; font-weight: 800; letter-spacing: -3px; margin-bottom: 4rem; color: #050505; }
-    .hero-title .title-bold, .hero-title .title-serif, .hero-title .editorial { color: #050505; }
-    .lx-line-mask { overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; }
-    .title-bold { display: inline; }
-    .title-serif { display: inline; font-size: 105%; color: #94a3b8;}
+    .hero-title { font-size: clamp(1.9rem, 3.6vw, 3.4rem); line-height: 1.14; font-weight: 800; letter-spacing: -1.2px; margin-bottom: 2.75rem; color: #050505; max-width: 880px; }
+    .hero-title .title-bold { color: #050505; display: inline; }
+
     .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem; }
-    .hero-desc { font-size: 1.15rem; color: var(--color-text-muted); max-width: 500px; line-height: 1.5; margin: 0; }
+    .hero-desc { font-size: 1.1rem; color: var(--color-text-muted); max-width: 480px; line-height: 1.55; margin: 0; }
+
+    /* Flecha de scroll (↓) — baja en hover en vez de ir a la derecha */
+    .hero-action .btn-luxe:hover .btn-arrow { transform: translateY(3px); }
 
     /* ==========================================================
-       2. EXECUTIVE CONTACT INTERFACE
+       2. TRUST STRIP — evidencia (autoridad)
        ========================================================== */
-    .executive-contact { padding: 2rem 0 10rem 0; }
-    .ec-grid { display: grid; grid-template-columns: 320px 1fr; gap: 7rem; align-items: start; }
+    /* Franja oscura estilo "Casos" — contraste claro/oscuro del inicio */
+    .trust-strip { position: relative; overflow: hidden; padding: 3.5rem 0; background: radial-gradient(ellipse at 20% 50%, #112240 0%, #0a192f 65%, #050b14 100%); }
+    .trust-strip .container { position: relative; z-index: 1; }
+    .trust-watermark { position: absolute; top: 50%; left: -2%; transform: translateY(-50%); font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 20vw; line-height: 1; color: rgba(255,255,255,0.035); white-space: nowrap; pointer-events: none; user-select: none; z-index: 0; }
+    .trust-eyebrow { color: rgba(255,255,255,0.34) !important; margin-bottom: 1.9rem; }
+    .trust-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+    .trust-metric { display: flex; align-items: baseline; gap: 0.7rem; flex-wrap: wrap; }
+    .tm-val { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: clamp(1.9rem, 2.8vw, 2.4rem); line-height: 1; color: #ffffff; letter-spacing: -0.5px; }
+    .tm-label { font-size: 0.9rem; color: rgba(255,255,255,0.82); font-weight: 500; }
+    .tm-case { flex-basis: 100%; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.4); font-family: var(--font-sans); }
+    .trust-note { margin: 2rem 0 0; font-size: 0.85rem; color: rgba(255,255,255,0.55); line-height: 1.55; max-width: 640px; }
+
+    /* ==========================================================
+       3. EXECUTIVE CONTACT INTERFACE
+       ========================================================== */
+    .executive-contact { padding: 6rem 0 10rem 0; position: relative; overflow: clip; }
+    .contact-watermark { position: absolute; right: -4%; top: 4rem; font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 26vw; line-height: 1; color: rgba(10,25,47,0.022); white-space: nowrap; pointer-events: none; user-select: none; z-index: 0; }
+    .ec-grid { display: grid; grid-template-columns: 320px 1fr; gap: 7rem; align-items: start; position: relative; z-index: 1; }
 
     /* SIDEBAR */
-    .ec-sidebar { position: sticky; top: 140px; display: flex; flex-direction: column; gap: 3.5rem; }
+    .ec-sidebar { position: sticky; top: 140px; display: flex; flex-direction: column; gap: 3rem; }
     .ec-block { display: flex; flex-direction: column; gap: 0.6rem; }
-    .ec-label { font-size: 0.65rem; color: #888; letter-spacing: 2px; }
-    
+    .ec-label { font-family: var(--font-sans); font-size: 0.62rem; font-weight: 800; color: #9aa6b2; letter-spacing: 3px; text-transform: uppercase; }
     .ec-data { font-size: 1.15rem; font-weight: 500; color: #000; margin: 0; }
-    
+
     .system-status-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 100px; border: 1px solid rgba(16, 185, 129, 0.2); background: rgba(16, 185, 129, 0.03); width: max-content; margin-top: 0.2rem;}
     .system-status-pill span { font-size: 0.7rem; color: #059669; font-weight: 600; letter-spacing: 0.5px; }
     .pulse-dot-green { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16, 185, 129, 0.6); animation: pulse-green 2s infinite; }
     @keyframes pulse-green { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-    .local-time-wrapper { display: flex; align-items: baseline; gap: 8px; }
-    .ec-time-label { font-size: 0.65rem; color: #94a3b8; }
-    .ec-clock { font-size: 0.95rem; font-weight: 700; color: #000; }
+    /* Criterio de selección (inversión de poder + auto-selección) */
+    .criteria { list-style: none; margin: 0.3rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.7rem; }
+    .criteria li { position: relative; padding-left: 1.6rem; font-size: 0.9rem; line-height: 1.45; color: #0a0e1a; }
+    .criteria li::before { position: absolute; left: 0; top: 0; font-weight: 700; }
+    .crit-yes::before { content: '✓'; color: #059669; }
+    .crit-no { color: #8895a7; }
+    .crit-no::before { content: '✕'; color: #c4495a; }
+
+    .local-time-wrapper { display: flex; align-items: baseline; gap: 10px; }
+    .ec-time-label { font-family: var(--font-sans); font-size: 0.6rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: #b0bcc8; }
+    .ec-clock { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 1.2rem; color: var(--color-blue-deep); letter-spacing: -0.3px; }
 
     .ec-link { text-decoration: none; color: #000; transition: color 0.3s ease; }
     .hover-underline { position: relative; display: inline-block; width: max-content; }
@@ -408,60 +538,91 @@ const isEn = lang === 'en';
     .hover-underline:hover::after { transform: scaleX(1); transform-origin: bottom left; }
 
     .ec-social-flex { display: flex; gap: 1rem; align-items: center; margin-top: 0.5rem;}
-    .social-icon-link { 
-        color: #64748b; transition: all 0.3s var(--ease-spring); 
+    .social-icon-link {
+        color: #64748b; transition: all 0.3s var(--ease-spring);
         display: flex; align-items: center; justify-content: center;
         padding: 10px; border-radius: 50%; background: #f8fafc; border: 1px solid var(--color-border);
     }
     .social-icon-link:hover { color: #000; background: #fff; border-color: #000; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05);}
 
-    /* ── DIAGNOSTIC FORM ── */
+    /* ── FORM ZONE ── */
     .ec-form-zone { padding-top: 0; position: relative; }
-
     .diag-form { display: flex; flex-direction: column; }
     .diag-form.hidden { display: none; }
 
-    /* Question blocks */
-    .dq-block {
-        padding: 2.8rem 0 2.8rem 2rem;
-        border-bottom: 1px solid rgba(0,0,0,0.05);
-        display: flex; flex-direction: column; gap: 1.8rem;
-        border-left: 1.5px solid rgba(0,0,0,0.06);
-        transition: border-left-color 0.4s var(--ease-smooth), border-bottom-color 0.4s ease;
-        position: relative;
-    }
-    .dq-block:first-of-type { padding-top: 0; }
-    .dq-block:last-of-type  { border-bottom: none; }
-    .dq-block:hover { border-left-color: #0a0e1a; }
+    /* Progreso */
+    .stepper-head { margin-bottom: 0.5rem; }
+    .sp-progress { max-width: 340px; }
+    .sp-meta { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 0.85rem; }
+    .sp-label { font-family: var(--font-sans); font-size: 0.62rem; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: rgba(10,25,47,0.4); }
+    .sp-count { display: inline-flex; align-items: baseline; gap: 0.35rem; font-family: var(--font-serif); font-style: italic; font-weight: 400; color: var(--color-blue-deep); line-height: 1; }
+    .sp-current { font-size: 2rem; display: inline-block; min-width: 1.6ch; }
+    .sp-divider { font-size: 1.2rem; color: rgba(10,25,47,0.25); }
+    .sp-total { font-size: 1.2rem; color: rgba(10,25,47,0.45); }
+    .sp-bar { position: relative; width: 100%; height: 1px; background: rgba(10,25,47,0.08); overflow: hidden; }
+    .sp-fill { position: absolute; inset: 0; transform: scaleX(0.2); transform-origin: left center; background: linear-gradient(to right, var(--color-blue-deep), #1a3a6e); transition: transform 0.6s var(--ease-smooth); }
+    /* brillo sutil que recorre la barra al avanzar */
+    .sp-bar::after { content: ''; position: absolute; top: 0; left: -40%; width: 40%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent); opacity: 0; }
+    .sp-bar.pulse::after { animation: sp-shine 0.7s var(--ease-smooth); }
+    @keyframes sp-shine { 0% { left: -40%; opacity: 0.9; } 100% { left: 110%; opacity: 0; } }
 
-    .dq-head { display: flex; gap: 1.6rem; align-items: flex-start; }
-    .dq-num {
-        font-size: 0.58rem; font-weight: 700; letter-spacing: 0.16em;
-        color: #c4cdd9; min-width: 18px; padding-top: 3px;
-        font-family: 'JetBrains Mono', monospace;
+    /* contador con bump al cambiar de paso */
+    @keyframes sp-bump { 0% { transform: translateY(-7px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+    .sp-current.bump { animation: sp-bump 0.42s var(--ease-smooth); }
+
+    /* Escenario de pasos — una pregunta a la vez */
+    .dq-stage { position: relative; min-height: 320px; margin-top: 3rem; }
+    .dq-step {
+        display: none; flex-direction: column; gap: 1.8rem;
+        opacity: 0; transform: translateY(8px);
+        transition: opacity 0.4s var(--ease-smooth), transform 0.4s var(--ease-smooth);
     }
-    .dq-meta { display: flex; flex-direction: column; gap: 0.5rem; }
+    .dq-step.is-active { display: flex; }
+    .dq-step.is-visible { opacity: 1; transform: translateY(0); }
+
+    /* Entrada escalonada de cada elemento del paso (título → desc → cuerpo) */
+    .dq-step > * { opacity: 0; transform: translateY(13px); transition: opacity 0.55s var(--ease-smooth), transform 0.55s var(--ease-smooth); }
+    .dq-step.is-visible > * { opacity: 1; transform: none; }
+    .dq-step.is-visible > *:nth-child(1) { transition-delay: 0.06s; }
+    .dq-step.is-visible > *:nth-child(2) { transition-delay: 0.15s; }
+    .dq-step.is-visible > *:nth-child(3) { transition-delay: 0.24s; }
+
+    @media (prefers-reduced-motion: reduce) {
+        .dq-step, .dq-step > * { transition: none; }
+        .sp-current.bump { animation: none; }
+    }
+
+    /* índice editorial grande por pregunta (eco de los /01 del inicio) */
+    .dq-index {
+        font-family: var(--font-serif); font-style: italic; font-weight: 400;
+        font-size: clamp(2rem, 3vw, 2.7rem); line-height: 1; letter-spacing: -1px;
+        color: rgba(10,25,47,0.16); display: block; margin-bottom: 0.1rem;
+    }
+    .dq-head { display: flex; flex-direction: column; gap: 0.7rem; }
     .dq-title {
-        font-size: 0.62rem; font-weight: 700; letter-spacing: 0.14em;
-        color: #0a0e1a; text-transform: uppercase; margin: 0;
-        display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap;
+        font-size: clamp(1.55rem, 2.7vw, 2.15rem); font-weight: 700;
+        letter-spacing: -0.6px; line-height: 1.16; color: #0a0e1a; margin: 0;
+        display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap;
     }
+    .dq-cur { font-size: 0.95rem; font-weight: 600; color: #8895a7; letter-spacing: 0; }
     .dq-opt {
-        font-size: 0.53rem; font-weight: 700; letter-spacing: 0.1em;
+        font-size: 0.55rem; font-weight: 700; letter-spacing: 0.1em;
         color: #94a3b8; background: #f4f6f9; border-radius: 100px;
-        padding: 3px 10px; text-transform: uppercase; border: 1px solid rgba(0,0,0,0.05);
+        padding: 4px 11px; text-transform: uppercase; border: 1px solid rgba(0,0,0,0.05);
+        transform: translateY(-2px);
     }
-    .dq-desc { font-size: 0.88rem; color: #8895a7; margin: 0; line-height: 1.65; max-width: 480px; }
-
+    .dq-desc { font-size: 1rem; color: #8895a7; margin: 0; line-height: 1.6; max-width: 520px; }
     .dq-body { display: flex; flex-direction: column; gap: 1.6rem; }
 
     /* Inputs */
     .sf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2.8rem; }
     .sf-group { display: flex; flex-direction: column; gap: 0.85rem; }
     .sf-group label {
-        font-size: 0.58rem; color: #b0bcc8; letter-spacing: 0.16em;
-        text-transform: uppercase; font-family: 'JetBrains Mono', monospace;
+        font-family: var(--font-sans); font-size: 0.58rem; font-weight: 800; color: #b0bcc8; letter-spacing: 0.16em;
+        text-transform: uppercase;
+        transition: color 0.35s var(--ease-smooth);
     }
+    .sf-group:focus-within label { color: #0a0e1a; }
 
     .input-wrapper { position: relative; width: 100%; }
 
@@ -469,15 +630,18 @@ const isEn = lang === 'en';
     .diag-form textarea {
         width: 100%; background: transparent; border: none;
         border-bottom: 1px solid rgba(0,0,0,0.08); padding: 10px 0 14px;
-        font-family: var(--font-sans); font-size: 1.05rem;
+        font-family: var(--font-sans); font-size: 1.1rem;
         font-weight: 500; color: #0a0e1a; outline: none; border-radius: 0;
         transition: border-color 0.3s ease;
         appearance: none; -webkit-appearance: none;
+        caret-color: var(--color-blue-deep);
     }
     .diag-form input::placeholder,
-    .diag-form textarea::placeholder { color: #dde2e9; font-weight: 400; font-size: 0.98rem; }
+    .diag-form textarea::placeholder { color: #dde2e9; font-weight: 400; font-size: 1rem; }
     .diag-form input:hover,
     .diag-form textarea:hover { border-bottom-color: rgba(0,0,0,0.2); }
+    .diag-form input.invalid,
+    .diag-form textarea.invalid { border-bottom-color: #ef4444; }
 
     .focus-border {
         position: absolute; bottom: 0; left: 0; width: 0%; height: 1.5px;
@@ -487,37 +651,87 @@ const isEn = lang === 'en';
 
     .diag-form textarea { resize: none; overflow: hidden; min-height: 48px; line-height: 1.65; }
 
-    /* Chip buttons */
-    .q-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    /* Chips */
+    .q-chips { display: flex; flex-wrap: wrap; gap: 0.7rem; }
     .q-chip {
-        padding: 10px 20px; border-radius: 100px;
+        display: inline-flex; align-items: center; gap: 0.6rem;
+        padding: 11px 18px 11px 12px; border-radius: 100px;
         border: 1px solid rgba(0,0,0,0.09);
         background: rgba(0,0,0,0.015); color: #8895a7;
-        font-size: 0.83rem; font-weight: 500; letter-spacing: -0.01em;
-        cursor: pointer; transition: all 0.22s var(--ease-smooth);
+        font-size: 0.9rem; font-weight: 500; letter-spacing: -0.01em;
+        cursor: pointer; transition: border-color 0.22s var(--ease-smooth), color 0.22s var(--ease-smooth), background 0.22s var(--ease-smooth), transform 0.32s var(--ease-spring), box-shadow 0.32s var(--ease-spring);
         font-family: var(--font-sans);
     }
     .q-chip:hover {
         border-color: rgba(0,0,0,0.2); color: #0a0e1a;
-        background: #f4f6f9; transform: translateY(-1px);
+        background: #f4f6f9; transform: translateY(-2px);
     }
     .q-chip.selected {
         background: #0a0e1a; border-color: #0a0e1a; color: #fff;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(10,14,26,0.18);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(10,14,26,0.22);
+        animation: chip-pop 0.3s var(--ease-spring);
+    }
+    @keyframes chip-pop { 0% { transform: translateY(-2px) scale(1); } 45% { transform: translateY(-2px) scale(1.045); } 100% { transform: translateY(-2px) scale(1); } }
+    .q-chips.chips-invalid .q-chip { border-color: rgba(239,68,68,0.4); }
+
+    /* badge de tecla numérica (estilo Typeform) */
+    .chip-key {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 20px; height: 20px; border-radius: 6px; flex-shrink: 0;
+        font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; font-weight: 700;
+        background: rgba(0,0,0,0.05); color: #9aa6b2; border: 1px solid rgba(0,0,0,0.06);
+        transition: all 0.22s var(--ease-smooth);
+    }
+    .q-chip:hover .chip-key { color: #0a0e1a; border-color: rgba(0,0,0,0.12); }
+    .q-chip.selected .chip-key { background: rgba(255,255,255,0.16); color: #fff; border-color: transparent; }
+    .chip-text { line-height: 1; }
+    /* check que aparece al seleccionar */
+    .chip-check { display: inline-flex; align-items: center; width: 0; opacity: 0; transform: scale(0.5); overflow: hidden; transition: width 0.25s var(--ease-spring), opacity 0.25s var(--ease-smooth), transform 0.25s var(--ease-spring); }
+    .chip-check svg { width: 15px; height: 15px; stroke: #fff; }
+    .q-chip.selected .chip-check { width: 15px; opacity: 1; transform: scale(1); margin-left: -0.1rem; }
+
+    /* hint de teclado (Enter) */
+    .kbd-hint { display: inline-flex; align-items: center; gap: 0.45rem; font-size: 0.72rem; color: #b0bcc8; font-weight: 500; white-space: nowrap; user-select: none; }
+    .kbd-hint kbd {
+        display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px;
+        font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #8895a7;
+        background: #f4f6f9; border: 1px solid rgba(0,0,0,0.08); border-bottom-width: 2px; border-radius: 5px;
     }
 
-    /* Submit */
-    .dq-submit { padding: 3rem 0 0 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; }
-    .dq-privacy { font-size: 0.74rem; color: #c4cdd9; margin: 0; letter-spacing: -0.01em; }
+    /* Navegación */
+    .step-nav {
+        display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+        margin-top: 3.5rem; padding-top: 2rem; position: relative;
+    }
+    /* hairline que se difumina en las orillas (estilo footer/tech del inicio) */
+    .step-nav::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--color-border) 10%, var(--color-border) 90%, transparent); }
+    .step-nav-right { display: flex; align-items: center; gap: 1.3rem; margin-left: auto; }
+    .step-back {
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        background: none; border: none; cursor: pointer;
+        color: #8895a7; font-family: var(--font-sans); font-size: 0.9rem; font-weight: 600;
+        transition: color 0.3s ease, transform 0.4s var(--ease-spring);
+        padding: 8px 4px;
+    }
+    .step-back svg { transition: transform 0.4s var(--ease-spring); }
+    .step-back:hover { color: #0a0e1a; }
+    .step-back:hover svg { transform: translateX(-3px); }
+    .step-back.is-hidden { visibility: hidden; pointer-events: none; }
+
+    .step-error {
+        font-size: 0.8rem; color: #ef4444; font-weight: 500;
+        opacity: 0; transition: opacity 0.3s ease; text-align: right; max-width: 220px;
+    }
+    .step-error.show { opacity: 1; }
 
     .btn-submit-luxe {
         background: #0a0e1a; color: #fff; border: none;
         padding: 17px 22px 17px 34px; border-radius: 100px;
         display: inline-flex; align-items: center; gap: 20px;
         cursor: pointer; font-family: var(--font-sans); font-size: 0.95rem; font-weight: 600;
-        transition: all 0.4s var(--ease-spring); box-shadow: 0 4px 16px rgba(10,14,26,0.16);
-        letter-spacing: -0.01em;
+        transition: transform 0.4s var(--ease-spring), box-shadow 0.4s var(--ease-spring);
+        box-shadow: 0 4px 16px rgba(10,14,26,0.16); letter-spacing: -0.01em; white-space: nowrap;
     }
     .submit-icon-wrapper {
         width: 33px; height: 33px; background: rgba(255,255,255,0.1); border-radius: 50%;
@@ -528,334 +742,452 @@ const isEn = lang === 'en';
     .btn-submit-luxe:hover .submit-icon-wrapper { transform: translateX(4px); background: rgba(255,255,255,0.22); }
     .btn-submit-luxe:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
+    .dq-privacy { font-size: 0.78rem; color: #9aa6b2; margin: 1.3rem 0 0; letter-spacing: -0.01em; line-height: 1.5; max-width: 480px; }
+
     /* ── SUCCESS STATE ── */
-    .diag-success {
-        display: none;
-        align-items: flex-start;
-        justify-content: center;
-        flex-direction: column;
-        padding: 0 0 0 2rem;
-    }
+    .diag-success { display: none; align-items: flex-start; justify-content: center; flex-direction: column; }
     .diag-success.visible { display: flex; }
-
     .ds-inner { display: flex; flex-direction: column; gap: 1.6rem; }
-
     .ds-eyebrow {
-        font-size: 0.58rem; font-weight: 700; letter-spacing: 0.18em;
+        font-family: var(--font-sans); font-size: 0.6rem; font-weight: 800; letter-spacing: 0.2em;
         color: #c4cdd9; text-transform: uppercase;
-        font-family: 'JetBrains Mono', monospace;
     }
-    .ds-headline {
-        font-size: clamp(2.8rem, 5vw, 4.2rem);
-        font-weight: 700; letter-spacing: -0.04em;
-        line-height: 1.05; color: #0a0e1a; margin: 0;
-    }
-    .ds-serif {
-        font-family: var(--font-serif);
-        font-style: italic; font-weight: 400;
-        color: #0a0e1a;
-    }
-    .ds-rule {
-        width: 48px; height: 1.5px;
-        background: #0a0e1a;
-        border-radius: 2px;
-        transform-origin: left;
-    }
-    .ds-sub {
-        font-size: 0.95rem; color: #8895a7;
-        margin: 0; line-height: 1.7; max-width: 400px;
-    }
+    .ds-headline { font-size: clamp(2.8rem, 5vw, 4.2rem); font-weight: 700; letter-spacing: -0.04em; line-height: 1.05; color: #0a0e1a; margin: 0; }
+    .ds-rule { width: 48px; height: 1.5px; background: #0a0e1a; border-radius: 2px; transform-origin: left; }
+    .ds-sub { font-size: 0.95rem; color: #8895a7; margin: 0; line-height: 1.7; max-width: 420px; }
+
+    .ds-next { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; margin-top: 1rem; padding-top: 2rem; max-width: 560px; }
+    .ds-next::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--color-border) 8%, var(--color-border) 92%, transparent); }
+    .ds-next-label { display: block; font-family: var(--font-sans); font-size: 0.58rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: #9aa6b2; margin-bottom: 0.9rem; }
+    .ds-next-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+    .ds-next-list li { position: relative; padding-left: 1.4rem; font-size: 0.9rem; line-height: 1.45; color: #0a0e1a; }
+    .ds-next-list li::before { content: '✓'; position: absolute; left: 0; top: 0; color: #059669; font-weight: 700; }
+    .ds-next-no li { color: #8895a7; }
+    .ds-next-no li::before { content: '✕'; color: #c4495a; }
 
     /* ==========================================================
        RESPONSIVO
        ========================================================== */
     @media (max-width: 1024px) {
-        .ec-grid { grid-template-columns: 1fr; gap: 5rem; }
-        .ec-sidebar { position: relative; top: 0; flex-direction: row; flex-wrap: wrap; gap: 4rem; border-bottom: 1px solid var(--color-border); padding-bottom: 4rem;}
+        .ec-grid { grid-template-columns: 1fr; gap: 4rem; }
+        .ec-sidebar { position: relative; top: 0; flex-direction: row; flex-wrap: wrap; gap: 2.5rem 4rem; border-bottom: 1px solid var(--color-border); padding-bottom: 3.5rem;}
+        .ec-sidebar .ec-block { flex: 1 1 200px; }
         .hero-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; }
     }
 
     @media (max-width: 768px) {
         .hero-grand { padding-top: 11rem; padding-bottom: 4rem; min-height: auto; text-align: center; }
         .hero-content { display: flex; flex-direction: column; align-items: center; }
-        .hero-title { display: flex; flex-direction: column; gap: 0; margin-bottom: 2.5rem; }
-        .title-bold { display: block; font-size: 11.5vw; letter-spacing: -1.8px; line-height: 0.95; margin-bottom: -5px; }
-        .title-serif { display: block; font-size: 12.2vw; font-weight: 300; letter-spacing: -0.5px; line-height: 0.95; }
+        .hero-status { margin-left: auto; margin-right: auto; }
+        .hero-title { display: flex; flex-direction: column; gap: 0.2rem; margin-bottom: 2.5rem; max-width: 100%; }
+        .hero-title .title-bold { display: block; font-size: clamp(2rem, 7.6vw, 2.85rem); font-weight: 800; letter-spacing: -1px; line-height: 1.12; }
         .hero-bottom { flex-direction: column; align-items: center; gap: 2.5rem; text-align: center; border-top: none; padding-top: 0;}
         .hero-desc { font-size: 1.1rem; padding: 0 5%; max-width: 95%; margin: 0 auto; line-height: 1.6;}
         .hero-action { width: 100%; padding: 0 5%; }
         .btn-luxe { width: 100%; padding: 18px 0; font-size: 1.05rem;}
 
-        .executive-contact { padding: 2rem 0 6rem 0; }
-        .ec-sidebar { flex-direction: column; gap: 3rem; padding-bottom: 3rem; }
+        .trust-strip { padding: 3.5rem 0; }
+        .trust-metrics { grid-template-columns: 1fr; gap: 2rem; }
+        .trust-eyebrow { margin-bottom: 2rem; }
 
+        .executive-contact { padding: 4rem 0 6rem 0; }
+        .ec-sidebar { flex-direction: column; gap: 2.5rem; padding-bottom: 3rem; }
+
+        .dq-stage { min-height: 360px; margin-top: 2.5rem; }
         .sf-row { grid-template-columns: 1fr; gap: 2rem; }
-        .dq-block { padding: 2.2rem 0; }
-        .q-chip { padding: 10px 18px; font-size: 0.82rem; }
-        .dq-submit { align-items: stretch; }
-        .btn-submit-luxe { width: 100%; justify-content: space-between; padding: 16px 20px 16px 24px; }
+        .q-chip { padding: 10px 16px 10px 10px; font-size: 0.85rem; }
+
+        .step-nav { margin-top: 2.5rem; gap: 1rem; }
+        .step-nav-right { gap: 0.8rem; }
+        .step-error { display: none; }
+        .kbd-hint { display: none; }
+        .btn-submit-luxe { padding: 15px 18px 15px 26px; gap: 14px; font-size: 0.9rem; }
+        .step-back span { display: none; }
+
+        .ds-next { grid-template-columns: 1fr; gap: 1.75rem; }
     }
 </style>
 
 <script>
     import { gsap } from 'gsap';
     import { ScrollTrigger } from 'gsap/ScrollTrigger';
-    import { SplitText } from 'gsap/SplitText';
-    gsap.registerPlugin(ScrollTrigger, SplitText);
+    gsap.registerPlugin(ScrollTrigger);
 
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const robustRefresh = () => {
+        const winLoad = new Promise<void>((resolve) => {
+            if (document.readyState === 'complete') resolve();
+            else window.addEventListener('load', () => resolve(), { once: true });
+        });
+        const fontsReady = (document as any).fonts?.ready ?? Promise.resolve();
+        Promise.all([winLoad, fontsReady]).then(() => {
+            setTimeout(() => ScrollTrigger.refresh(), 120);
+        });
+    };
+    robustRefresh();
 
-    document.querySelectorAll<HTMLElement>('.hero-title, .hero-text-zone .eyebrow, .hero-bottom').forEach(el => {
-        el.style.animation = 'none';
-        el.style.opacity = '1';
-        el.style.filter = 'none';
-        el.style.transform = 'none';
-    });
+    document.addEventListener('DOMContentLoaded', () => {
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduced) return;
 
-    if (!reduced) {
+        const EASE = 'power2.out';
+        const DUR = 0.9;
+        const Y = 14;
+
+        /* ─── HERO — entrada en carga (estándar de la home) ─── */
+        const heroAnim = gsap.utils.toArray<HTMLElement>('.hero-anim');
+        if (heroAnim.length) {
+            gsap.set(heroAnim, { opacity: 0, y: 12 });
+            gsap.timeline({ defaults: { ease: EASE } })
+                .to('.hero-status',             { opacity: 1, y: 0, duration: 0.9 }, 0)
+                .to('.hero-text-zone .eyebrow', { opacity: 1, y: 0, duration: 0.9 }, 0.1)
+                .to('.hero-title',              { opacity: 1, y: 0, duration: 1.1 }, 0.2)
+                .to('.hero-bottom',             { opacity: 1, y: 0, duration: 1.0 }, 0.42);
+        }
+
+        /* ─── Reveal on scroll (patrón anti-parpadeo) ─── */
+        const reveal = (
+            targets: string | HTMLElement | NodeListOf<Element> | HTMLElement[],
+            opts: { trigger?: string | HTMLElement; start?: string; y?: number; dur?: number; stagger?: number; delay?: number } = {}
+        ) => {
+            const els = gsap.utils.toArray<HTMLElement>(targets as any);
+            if (!els.length) return;
+            gsap.set(els, { opacity: 0, y: opts.y ?? Y });
+            ScrollTrigger.create({
+                trigger: opts.trigger ?? els[0],
+                start: opts.start ?? 'top 85%',
+                once: true,
+                onEnter: () => gsap.to(els, {
+                    opacity: 1, y: 0, duration: opts.dur ?? DUR, ease: EASE,
+                    stagger: opts.stagger ?? 0.08, delay: opts.delay ?? 0,
+                    clearProps: 'transform,opacity',
+                }),
+            });
+        };
+
+        reveal('.trust-strip .trust-eyebrow', { trigger: '.trust-strip', y: 12, dur: 0.9, start: 'top 85%' });
+        reveal('.trust-strip .trust-metric',  { trigger: '.trust-strip', y: 16, dur: 0.95, stagger: 0.1, start: 'top 82%' });
+        reveal('.trust-strip .trust-note',    { trigger: '.trust-strip', y: 12, dur: 0.9, delay: 0.15, start: 'top 82%' });
+        reveal('.ec-sidebar .ec-block', { trigger: '.executive-contact', y: 14, dur: 0.9, stagger: 0.08, start: 'top 82%' });
+        reveal('.stepper-head',          { trigger: '.executive-contact', y: 14, dur: 0.95, start: 'top 80%' });
+
+        /* Parallax muy leve del hero (solo desktop) */
         const mm = gsap.matchMedia();
-
         mm.add('(min-width: 769px)', () => {
-            const heroTitle = document.querySelector<HTMLElement>('.hero-title');
-            const heroEyebrow = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
-            const heroBottom = document.querySelector<HTMLElement>('.hero-bottom');
-
-            const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-            if (heroEyebrow) {
-                tl.from(heroEyebrow, { opacity: 0, y: 14, letterSpacing: '7px', duration: 1.4 }, 0.1);
-            }
-            if (heroTitle) {
-                const split = SplitText.create(heroTitle, { type: 'lines,words', linesClass: 'lx-line-mask' });
-                gsap.set(split.words, { yPercent: 105 });
-                tl.to(split.words, {
-                    yPercent: 0, duration: 1.5,
-                    stagger: { amount: 0.5, from: 'start' },
-                }, 0.35);
-            }
-            if (heroBottom && heroBottom.children.length > 0) {
-                tl.from(gsap.utils.toArray<HTMLElement>(heroBottom.children), {
-                    opacity: 0, y: 16, duration: 1.1, ease: 'power3.out',
-                    stagger: 0.12,
-                }, 1.0);
-            }
-
             const heroParallax = document.getElementById('hero-parallax');
             if (heroParallax) {
                 gsap.to(heroParallax, {
-                    yPercent: 28, opacity: 0.15, ease: 'none',
-                    scrollTrigger: { trigger: '.hero-grand', start: 'top top', end: 'bottom 30%', scrub: 0.8 },
+                    yPercent: 4, opacity: 0.85, ease: 'none',
+                    scrollTrigger: { trigger: '.hero-grand', start: 'top top', end: 'bottom 30%', scrub: 1 },
                 });
             }
         });
-
-        mm.add('(max-width: 768px)', () => {
-            const mHeroTitle = document.querySelector<HTMLElement>('.hero-title');
-            const mEyebrow = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
-            const mHeroBottom = document.querySelector<HTMLElement>('.hero-bottom');
-            const tlm = gsap.timeline({ defaults: { ease: 'expo.out' } });
-            if (mEyebrow) tlm.from(mEyebrow, { opacity: 0, y: 10, letterSpacing: '6px', duration: 1.1 }, 0.1);
-            if (mHeroTitle) tlm.from(mHeroTitle, { opacity: 0, y: 24, duration: 1.2 }, 0.3);
-            if (mHeroBottom && mHeroBottom.children.length > 0) {
-                tlm.from(gsap.utils.toArray<HTMLElement>(mHeroBottom.children), {
-                    opacity: 0, y: 14, duration: 1.0, ease: 'power3.out',
-                    stagger: 0.1,
-                }, 0.85);
-            }
-        });
-    }
+    });
 </script>
 
 <script is:inline src="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.4/build/js/intlTelInput.min.js"></script>
 <script is:inline>
     document.addEventListener('DOMContentLoaded', () => {
-        
-        /* =========================================
-           1. FORMATEO PRO DE CAMPOS (NOMBRE, EMAIL)
-           ========================================= */
-        const nameInput = document.getElementById('name');
-        if(nameInput) {
-            nameInput.addEventListener('input', function(e) {
-                // Elimina números y símbolos, deja solo letras y espacios
-                let val = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
-                // Capitaliza automáticamente la primera letra de cada palabra
-                val = val.replace(/\b\w/g, char => char.toUpperCase());
+
+        var isEn = document.documentElement.lang === 'en';
+        var T = {
+            continue: isEn ? 'Continue' : 'Continuar',
+            send:     isEn ? 'Apply to project' : 'Aplicar a proyecto',
+            errFields: isEn ? 'Please complete the fields above.' : 'Completa los campos para continuar.',
+            errChoose: isEn ? 'Pick an option to continue.' : 'Selecciona una opción para continuar.',
+        };
+
+        /* 1. FORMATEO DE CAMPOS (NOMBRE, EMAIL) */
+        var nameInput = document.getElementById('name');
+        if (nameInput) {
+            nameInput.addEventListener('input', function () {
+                var val = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+                val = val.replace(/\b\w/g, function (c) { return c.toUpperCase(); });
                 this.value = val;
             });
         }
-
-        const emailInput = document.getElementById('email');
-        if(emailInput) {
-            emailInput.addEventListener('input', function() {
-                // Fuerza minúsculas y elimina espacios
+        var emailInput = document.getElementById('email');
+        if (emailInput) {
+            emailInput.addEventListener('input', function () {
                 this.value = this.value.toLowerCase().replace(/\s/g, '');
             });
         }
 
-
-        /* =========================================
-           2. INTL-TEL-INPUT (WHATSAPP)
-           ========================================= */
+        /* 2. INTL-TEL-INPUT (WHATSAPP) */
         var itiInstance = null;
-        const phoneInput = document.querySelector("#whatsapp");
+        var phoneInput = document.querySelector('#whatsapp');
         if (phoneInput) {
             itiInstance = window.intlTelInput(phoneInput, {
-                initialCountry: "auto",
+                initialCountry: 'auto',
                 strictMode: true,
                 formatOnDisplay: true,
-                geoIpLookup: function(callback) {
-                    fetch("https://ipapi.co/json")
-                        .then(function(res) { return res.json(); })
-                        .then(function(data) { callback(data.country_code); })
-                        .catch(function() { callback("mx"); });
+                geoIpLookup: function (callback) {
+                    fetch('https://ipapi.co/json')
+                        .then(function (res) { return res.json(); })
+                        .then(function (data) { callback(data.country_code); })
+                        .catch(function () { callback('mx'); });
                 },
                 separateDialCode: true,
                 dropdownContainer: document.body,
-                utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.4/build/js/utils.js",
+                utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.4/build/js/utils.js',
             });
         }
 
-        /* =========================================
-           3. CHIP SELECTION
-           ========================================= */
-        document.querySelectorAll('.q-chips').forEach(function(group) {
-            group.querySelectorAll('.q-chip').forEach(function(chip) {
-                chip.addEventListener('click', function() {
-                    group.querySelectorAll('.q-chip').forEach(function(c) { c.classList.remove('selected'); });
-                    chip.classList.add('selected');
-                    var fieldId = 'field-' + group.getAttribute('data-field');
-                    var hidden = document.getElementById(fieldId);
-                    if (hidden) hidden.value = chip.getAttribute('data-value');
+        /* 3. STEPPER — una pregunta a la vez */
+        var form        = document.getElementById('diagForm');
+        var steps       = Array.prototype.slice.call(document.querySelectorAll('.dq-step'));
+        var total       = steps.length;
+        var current     = 0;
+        var transitioning = false;
+
+        var spCurrent   = document.querySelector('.sp-current');
+        var spFill      = document.querySelector('.sp-fill');
+        var spBar       = document.querySelector('.sp-bar');
+        var backBtn     = document.getElementById('stepBack');
+        var nextBtn     = document.getElementById('stepNext');
+        var nextText    = document.getElementById('stepNextText');
+        var errorEl     = document.getElementById('stepError');
+
+        function pad(n) { return ('0' + n).slice(-2); }
+
+        function updateUI(animate) {
+            if (spCurrent) {
+                spCurrent.textContent = pad(current + 1);
+                if (animate) {
+                    spCurrent.classList.remove('bump');
+                    void spCurrent.offsetWidth;
+                    spCurrent.classList.add('bump');
+                }
+            }
+            if (spFill) spFill.style.transform = 'scaleX(' + ((current + 1) / total) + ')';
+            if (spBar && animate) {
+                spBar.classList.remove('pulse');
+                void spBar.offsetWidth;
+                spBar.classList.add('pulse');
+            }
+            if (backBtn) backBtn.classList.toggle('is-hidden', current === 0);
+            if (nextText) nextText.textContent = (current === total - 1) ? T.send : T.continue;
+        }
+
+        function clearError() { if (errorEl) errorEl.classList.remove('show'); }
+        function showError(msg) {
+            if (!errorEl) return;
+            errorEl.textContent = msg;
+            errorEl.classList.add('show');
+        }
+
+        function focusFirst(stepEl) {
+            var field = stepEl.querySelector('input:not([type=hidden]), textarea');
+            if (field) { try { field.focus({ preventScroll: true }); } catch (e) { field.focus(); } }
+        }
+
+        steps.forEach(function (s) {
+            s.querySelectorAll('input, textarea').forEach(function (inp) {
+                inp.addEventListener('input', function () { inp.classList.remove('invalid'); clearError(); });
+            });
+        });
+
+        function validateStep(idx) {
+            var stepEl = steps[idx];
+            var ok = true;
+
+            stepEl.querySelectorAll('input[required], textarea[required]').forEach(function (inp) {
+                var valid = inp.value.trim() !== '' && (typeof inp.checkValidity !== 'function' || inp.checkValidity());
+                if (!valid) { inp.classList.add('invalid'); ok = false; }
+            });
+
+            stepEl.querySelectorAll('.q-chips').forEach(function (group) {
+                if (group.hasAttribute('data-optional')) return;
+                var hidden = document.getElementById('field-' + group.getAttribute('data-field'));
+                if (!hidden || !hidden.value) { group.classList.add('chips-invalid'); ok = false; }
+            });
+
+            if (!ok) {
+                var hasChips = stepEl.querySelector('.q-chips:not([data-optional])');
+                showError(hasChips ? T.errChoose : T.errFields);
+            }
+            return ok;
+        }
+
+        function goTo(target) {
+            if (transitioning || target < 0 || target >= total || target === current) return;
+            clearError();
+            transitioning = true;
+
+            var outEl = steps[current];
+            outEl.classList.remove('is-visible');
+
+            window.setTimeout(function () {
+                outEl.classList.remove('is-active');
+                var inEl = steps[target];
+                inEl.classList.add('is-active');
+                void inEl.offsetWidth;
+                inEl.classList.add('is-visible');
+                current = target;
+                updateUI(true);
+                focusFirst(inEl);
+                window.setTimeout(function () { transitioning = false; }, 380);
+            }, 380);
+        }
+
+        function next() {
+            if (transitioning) return;
+            if (!validateStep(current)) return;
+            if (current === total - 1) { submitForm(); return; }
+            goTo(current + 1);
+        }
+        function prev() { if (current > 0) goTo(current - 1); }
+
+        if (nextBtn) nextBtn.addEventListener('click', next);
+        if (backBtn) backBtn.addEventListener('click', prev);
+
+        steps.forEach(function (s) {
+            s.querySelectorAll('input[type=text], input[type=email], input[type=tel]').forEach(function (inp) {
+                inp.addEventListener('keydown', function (ev) {
+                    if (ev.key === 'Enter') { ev.preventDefault(); next(); }
                 });
             });
         });
 
-        /* =========================================
-           4. ANIMACIONES Y PARALLAX
-           ========================================= */
-        const reveal = () => {
-            const observer = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
+        if (form) form.addEventListener('submit', function (ev) { ev.preventDefault(); next(); });
+
+        /* 4. CHIPS — badge de tecla + check + selección + auto-avance */
+        var CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+
+        document.querySelectorAll('.q-chips').forEach(function (group) {
+            group.querySelectorAll('.q-chip').forEach(function (chip, i) {
+                // Inyecta estructura: [tecla] etiqueta [check]
+                var label = chip.textContent.trim();
+                chip.innerHTML =
+                    '<span class="chip-key" aria-hidden="true">' + (i + 1) + '</span>' +
+                    '<span class="chip-text">' + label + '</span>' +
+                    '<span class="chip-check" aria-hidden="true">' + CHECK_SVG + '</span>';
+
+                chip.addEventListener('click', function () {
+                    group.querySelectorAll('.q-chip').forEach(function (c) { c.classList.remove('selected'); });
+                    chip.classList.add('selected');
+                    group.classList.remove('chips-invalid');
+                    clearError();
+
+                    var hidden = document.getElementById('field-' + group.getAttribute('data-field'));
+                    if (hidden) hidden.value = chip.getAttribute('data-value');
+
+                    var stepEl = chip.closest('.dq-step');
+                    var idx = steps.indexOf(stepEl);
+                    if (idx === current && idx < total - 1) {
+                        window.setTimeout(function () { goTo(current + 1); }, 420);
                     }
                 });
-            }, { threshold: 0.08 });
-            document.querySelectorAll('.reveal-blur, .reveal-fade, .reveal-up').forEach(el => observer.observe(el));
-        }
-        reveal();
+            });
+        });
 
-        /* =========================================
-           5. TEXTAREA AUTO-RESIZE
-           ========================================= */
-        const textarea = document.getElementById('problema');
+        /* Teclado en pasos de chips: 1–9 seleccionan, Enter avanza */
+        document.addEventListener('keydown', function (ev) {
+            if (transitioning) return;
+            var stepEl = steps[current];
+            var group = stepEl && stepEl.querySelector('.q-chips');
+            if (!group) return; // pasos de texto: el Enter lo maneja el input
+            if (ev.key === 'Enter') {
+                // si hay un botón enfocado (chip o "Continuar"), deja que él maneje Enter
+                if (document.activeElement && document.activeElement.tagName === 'BUTTON') return;
+                ev.preventDefault(); next(); return;
+            }
+            var n = parseInt(ev.key, 10);
+            if (!isNaN(n) && n >= 1) {
+                var chips = group.querySelectorAll('.q-chip');
+                if (n <= chips.length) { ev.preventDefault(); chips[n - 1].click(); }
+            }
+        });
+
+        /* 5. TEXTAREA AUTO-RESIZE */
+        var textarea = document.getElementById('problema');
         if (textarea) {
-            textarea.addEventListener('input', function() {
+            textarea.addEventListener('input', function () {
                 this.style.height = 'auto';
-                this.style.height = (this.scrollHeight) + 'px';
+                this.style.height = this.scrollHeight + 'px';
             });
         }
 
-        /* =========================================
-           6. SUBMIT → MAKE WEBHOOK
-           ========================================= */
-        const diagForm    = document.querySelector('.diag-form');
-        const diagSuccess = document.getElementById('diagSuccess');
-        const diagBtn     = document.getElementById('diagSubmitBtn');
-        const diagBtnText = document.getElementById('diagBtnText');
+        /* 6. SUBMIT → MAKE WEBHOOK */
+        var diagSuccess = document.getElementById('diagSuccess');
 
-        if (diagForm) {
-            diagForm.addEventListener('submit', async function(ev) {
-                ev.preventDefault();
-                if (!diagBtn || !diagBtnText) return;
+        function submitForm() {
+            if (!nextBtn || !nextText) return;
+            nextBtn.disabled = true;
+            nextText.textContent = '…';
 
-                diagBtn.disabled = true;
-                diagBtnText.textContent = '…';
+            var whatsappNumber = '';
+            if (itiInstance) { try { whatsappNumber = itiInstance.getNumber(); } catch (e) {} }
 
-                var whatsappNumber = '';
-                if (itiInstance) {
-                    try { whatsappNumber = itiInstance.getNumber(); } catch(e) {}
-                }
-
-                var payload = {
-                    nombre:       (document.getElementById('name') || {}).value || '',
-                    email:        (document.getElementById('email') || {}).value || '',
-                    whatsapp:     whatsappNumber,
-                    tipo_negocio: (document.getElementById('field-tipo_negocio') || {}).value || '',
-                    problema:     (document.getElementById('problema') || {}).value || '',
-                    urgencia:     (document.getElementById('field-urgencia') || {}).value || '',
-                    presupuesto:  (document.getElementById('field-presupuesto') || {}).value || '',
-                    timestamp:    new Date().toISOString(),
-                    fuente:       'flouvia.com/contacto',
-                };
-
-                try {
-                    await fetch('https://hook.us2.make.com/ov4rrddtdx739hnl7dp2mks216171q8m', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload),
-                    });
-                } catch(e) { /* fail silently — no bloqueamos el success */ }
-
-                // Bloquear la altura del contenedor para evitar el salto del footer
-                var formZone = document.querySelector('.ec-form-zone');
-                if (formZone) {
-                    formZone.style.minHeight = diagForm.offsetHeight + 'px';
-                }
-
-                // Fade out del formulario
-                diagForm.style.transition = 'opacity 0.38s ease, transform 0.38s ease';
-                diagForm.style.opacity = '0';
-                diagForm.style.transform = 'translateY(-10px)';
-
-                setTimeout(function() {
-                    diagForm.classList.add('hidden');
-
-                    if (diagSuccess) {
-                        // Animar cada elemento del success individualmente
-                        var eyebrow  = diagSuccess.querySelector('.ds-eyebrow');
-                        var headline = diagSuccess.querySelector('.ds-headline');
-                        var rule     = diagSuccess.querySelector('.ds-rule');
-                        var sub      = diagSuccess.querySelector('.ds-sub');
-
-                        [eyebrow, headline, rule, sub].forEach(function(el) {
-                            if (el) { el.style.opacity = '0'; el.style.transform = 'translateY(18px)'; }
-                        });
-                        if (rule) rule.style.transform = 'scaleX(0)';
-
-                        diagSuccess.classList.add('visible');
-
-                        var delays = [0, 80, 200, 300];
-                        [eyebrow, headline, rule, sub].forEach(function(el, i) {
-                            if (!el) return;
-                            setTimeout(function() {
-                                el.style.transition = 'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1)';
-                                el.style.opacity = '1';
-                                el.style.transform = i === 2 ? 'scaleX(1)' : 'translateY(0)';
-                                if (i === 2) el.style.transformOrigin = 'left';
-                            }, delays[i]);
-                        });
-                    }
-                }, 400);
-            });
-        }
-
-        const updateClock = () => {
-            const clockEl = document.getElementById('cdmx-clock');
-            if (!clockEl) return;
-            
-            const now = new Date();
-            const options = { 
-                timeZone: 'America/Mexico_City',
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit',
-                hour12: false
+            var payload = {
+                nombre:       (document.getElementById('name') || {}).value || '',
+                email:        (document.getElementById('email') || {}).value || '',
+                whatsapp:     whatsappNumber,
+                tipo_negocio: (document.getElementById('field-tipo_negocio') || {}).value || '',
+                problema:     (document.getElementById('problema') || {}).value || '',
+                urgencia:     (document.getElementById('field-urgencia') || {}).value || '',
+                presupuesto:  (document.getElementById('field-presupuesto') || {}).value || '',
+                timestamp:    new Date().toISOString(),
+                fuente:       'flouvia.com/contacto',
             };
-            
-            const formatter = new Intl.DateTimeFormat('en-US', options);
-            clockEl.textContent = formatter.format(now) + ' CST';
-        };
-        
+
+            fetch('https://hook.us2.make.com/ov4rrddtdx739hnl7dp2mks216171q8m', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            }).catch(function () { /* fail silently */ });
+
+            var formZone = document.querySelector('.ec-form-zone');
+            if (formZone) formZone.style.minHeight = form.offsetHeight + 'px';
+
+            form.style.transition = 'opacity 0.38s ease, transform 0.38s ease';
+            form.style.opacity = '0';
+            form.style.transform = 'translateY(-10px)';
+
+            window.setTimeout(function () {
+                form.classList.add('hidden');
+                if (!diagSuccess) return;
+
+                var els = [
+                    diagSuccess.querySelector('.ds-eyebrow'),
+                    diagSuccess.querySelector('.ds-headline'),
+                    diagSuccess.querySelector('.ds-rule'),
+                    diagSuccess.querySelector('.ds-sub'),
+                    diagSuccess.querySelector('.ds-next'),
+                ];
+
+                els.forEach(function (el) {
+                    if (el) { el.style.opacity = '0'; el.style.transform = 'translateY(18px)'; }
+                });
+                var rule = els[2];
+                if (rule) rule.style.transform = 'scaleX(0)';
+
+                diagSuccess.classList.add('visible');
+
+                var delays = [0, 80, 200, 300, 380];
+                els.forEach(function (el, i) {
+                    if (!el) return;
+                    window.setTimeout(function () {
+                        el.style.transition = 'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1)';
+                        el.style.opacity = '1';
+                        el.style.transform = i === 2 ? 'scaleX(1)' : 'translateY(0)';
+                        if (i === 2) el.style.transformOrigin = 'left';
+                    }, delays[i]);
+                });
+            }, 400);
+        }
+
+        updateUI(false);
+
+        /* 7. RELOJ CDMX */
+        function updateClock() {
+            var clockEl = document.getElementById('cdmx-clock');
+            if (!clockEl) return;
+            var formatter = new Intl.DateTimeFormat('en-US', {
+                timeZone: 'America/Mexico_City',
+                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false,
+            });
+            clockEl.textContent = formatter.format(new Date()) + ' CST';
+        }
         updateClock();
         setInterval(updateClock, 1000);
     });

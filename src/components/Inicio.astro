@@ -25,19 +25,19 @@ const t = useTranslations(lang);
             <div class="container hero-container">
                 <div class="hero-content">
                     <div class="hero-text-zone" id="hero-parallax">
-                        <div class="hero-status" id="hero-status">
+                        <div class="hero-status hero-anim" id="hero-status">
                             <span class="hero-status-dot" aria-hidden="true"></span>
                             <span>{lang === 'en' ? 'ACCEPTING Q3 PROJECTS' : 'ACEPTANDO PROYECTOS Q3'}</span>
                         </div>
-                        <p class="eyebrow reveal-blur" style="--delay: 0.1s;">
+                        <p class="eyebrow hero-anim">
                             {t('hero.badge')}
                         </p>
-                        <h1 class="hero-title reveal-blur" style="--delay: 0.2s;">
+                        <h1 class="hero-title hero-anim">
                             <span class="title-bold">{t('hero.title1')}</span> <span class="title-bold">{t('hero.title2')}</span>
                         </h1>
                     </div>
-                    
-                    <div class="hero-bottom reveal-blur" style="--delay: 0.4s;">
+
+                    <div class="hero-bottom hero-anim">
                         <p class="hero-desc">
                             {t('hero.desc')}
                         </p>
@@ -53,174 +53,29 @@ const t = useTranslations(lang);
             </div>
         </section>
 
-        <!-- PROOF STRIP — evidencia (resultados reales) cerca del primer scroll -->
-        <section class="proof-strip">
-            <div class="container">
-                <a href={lang === 'en' ? '/en/casos/el-zarco' : '/casos/el-zarco'} class="proof-row">
-                    <span class="proof-name">El Zarco <span class="proof-cat">B2B</span></span>
-                    <span class="proof-metrics">
-                        <span class="proof-metric"><span class="proof-num editorial">−67%</span>{lang === 'en' ? 'processing time' : 'tiempo de proceso'}</span>
-                        <span class="proof-dot" aria-hidden="true">·</span>
-                        <span class="proof-metric"><span class="proof-num editorial">+25%</span>AOV</span>
-                    </span>
-                    <span class="proof-arrow" aria-hidden="true">→</span>
-                </a>
-                <a href={lang === 'en' ? '/en/casos/setnpet' : '/casos/setnpet'} class="proof-row">
-                    <span class="proof-name">Setnpet <span class="proof-cat">D2C</span></span>
-                    <span class="proof-metrics">
-                        <span class="proof-metric"><span class="proof-num editorial">+42%</span>{lang === 'en' ? 'conversion' : 'conversión'}</span>
-                        <span class="proof-dot" aria-hidden="true">·</span>
-                        <span class="proof-metric"><span class="proof-num editorial">3×</span>{lang === 'en' ? 'LTV retention' : 'retención LTV'}</span>
-                    </span>
-                    <span class="proof-arrow" aria-hidden="true">→</span>
-                </a>
-            </div>
-        </section>
-
         <section class="tech-spotlight">
-            <div class="tech-watermark" aria-hidden="true">Stack</div>
             <div class="container">
-                <div class="partners-header">
-                    <div class="tech-header-row">
-                        <h2 class="section-heading">{t('tech.title')} {t('tech.title_editorial')}</h2>
-                        <div class="tech-count-wrap" aria-hidden="true">
-                            <span class="tech-count-num" id="tech-counter">08</span>
-                            <span class="tech-count-unit">tools</span>
-                        </div>
-                    </div>
-                    <div class="tech-header-rule" id="tech-rule"></div>
+                <div class="tech-header">
+                    <p class="eyebrow">{lang === 'en' ? 'OUR TECHNOLOGY' : 'NUESTRA TECNOLOGÍA'}</p>
+                    <h2 class="section-heading">{t('tech.title')} {t('tech.title_editorial')}</h2>
                     <p class="section-sub">{t('tech.sub')}</p>
                 </div>
 
-                <div class="tech-scroll-hint">
-                    <span class="scroll-pill">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                        {lang === 'en' ? 'Swipe to explore' : 'Desliza para explorar'}
-                    </span>
-                </div>
-
-                <div class="spotlight-grid" id="tech-grid">
-
-                    <div class="tech-card">
-                        <div class="card-content">
-                            <div class="tc-head">
-                                <span class="cell-label">COMMERCE ENGINE</span>
-                                <span class="tc-num">01</span>
-                            </div>
-                            <div class="logo-slot">
-                                <img src="/imgs/Logo-Shopify.png" alt="Shopify" class="tc-logo" />
-                            </div>
-                            <div class="tc-foot">
-                                <p class="tool-name">Shopify<span class="tool-tier"> Plus</span></p>
-                            </div>
-                        </div>
+                <div class="tech-stack">
+                    <div class="logo-strip" id="logo-strip">
+                        <img src="/imgs/Logo-Shopify.png" alt="Shopify Plus" class="strip-logo" />
+                        <img src="/imgs/Logo-Aritable.png" alt="Airtable" class="strip-logo" />
+                        <img src="/imgs/Logo-make.png" alt="Make" class="strip-logo" />
+                        <img src="/imgs/Logo-next.png" alt="Next.js" class="strip-logo" />
+                        <img src="/imgs/Logo-sanity.png" alt="Sanity" class="strip-logo" />
+                        <img src="/imgs/Logo-vercel.png" alt="Vercel" class="strip-logo" />
+                        <img src="/imgs/Logo-stripe.png" alt="Stripe" class="strip-logo" />
+                        <img src="/imgs/Logo-klaviyo.png" alt="Klaviyo" class="strip-logo" />
                     </div>
-
-                    <div class="tech-card">
-                        <div class="card-content">
-                            <div class="tc-head">
-                                <span class="cell-label">DATA LOGISTICS</span>
-                                <span class="tc-num">02</span>
-                            </div>
-                            <div class="logo-slot">
-                                <img src="/imgs/Logo-Aritable.png" alt="Airtable" class="tc-logo" />
-                            </div>
-                            <div class="tc-foot">
-                                <p class="tool-name">Airtable</p>
-                            </div>
-                        </div>
+                    <div class="stack-meta">
+                        <span class="stack-count">08</span>
+                        <span class="stack-label">{lang === 'en' ? 'tools in production' : 'herramientas en producción'}</span>
                     </div>
-
-                    <div class="tech-card">
-                        <div class="card-content">
-                            <div class="tc-head">
-                                <span class="cell-label">AUTOMATION</span>
-                                <span class="tc-num">03</span>
-                            </div>
-                            <div class="logo-slot">
-                                <img src="/imgs/Logo-make.png" alt="Make" class="tc-logo" />
-                            </div>
-                            <div class="tc-foot">
-                                <p class="tool-name">Make</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tech-card">
-                        <div class="card-content">
-                            <div class="tc-head">
-                                <span class="cell-label">FRONTEND FRAMEWORK</span>
-                                <span class="tc-num">04</span>
-                            </div>
-                            <div class="logo-slot">
-                                <img src="/imgs/Logo-next.png" alt="Next.js" class="tc-logo" />
-                            </div>
-                            <div class="tc-foot">
-                                <p class="tool-name">Next<span class="tool-tier">.js</span></p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tech-card">
-                        <div class="card-content">
-                            <div class="tc-head">
-                                <span class="cell-label">HEADLESS CMS</span>
-                                <span class="tc-num">05</span>
-                            </div>
-                            <div class="logo-slot">
-                                <img src="/imgs/Logo-sanity.png" alt="Sanity" class="tc-logo" />
-                            </div>
-                            <div class="tc-foot">
-                                <p class="tool-name">Sanity</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tech-card">
-                        <div class="card-content">
-                            <div class="tc-head">
-                                <span class="cell-label">DEPLOYMENT CLOUD</span>
-                                <span class="tc-num">06</span>
-                            </div>
-                            <div class="logo-slot">
-                                <img src="/imgs/Logo-vercel.png" alt="Vercel" class="tc-logo" />
-                            </div>
-                            <div class="tc-foot">
-                                <p class="tool-name">Vercel</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tech-card">
-                        <div class="card-content">
-                            <div class="tc-head">
-                                <span class="cell-label">PAYMENTS API</span>
-                                <span class="tc-num">07</span>
-                            </div>
-                            <div class="logo-slot">
-                                <img src="/imgs/Logo-stripe.png" alt="Stripe" class="tc-logo" />
-                            </div>
-                            <div class="tc-foot">
-                                <p class="tool-name">Stripe</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tech-card">
-                        <div class="card-content">
-                            <div class="tc-head">
-                                <span class="cell-label">RETENTION ENGINE</span>
-                                <span class="tc-num">08</span>
-                            </div>
-                            <div class="logo-slot">
-                                <img src="/imgs/Logo-klaviyo.png" alt="Klaviyo" class="tc-logo" />
-                            </div>
-                            <div class="tc-foot">
-                                <p class="tool-name">Klaviyo</p>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </section>
@@ -425,13 +280,15 @@ const t = useTranslations(lang);
     *, *::before, *::after { box-sizing: border-box; } 
     
     html, body {
-        width: 100%; 
+        width: 100%;
         position: relative;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
         -webkit-tap-highlight-color: transparent;
     }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
     ::selection { background: #0a192f; color: #ffffff; }
 
@@ -467,42 +324,32 @@ const t = useTranslations(lang);
     .hero-status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: hero-status-pulse 2s infinite; }
     @keyframes hero-status-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
     
-    .reveal-blur {
-        opacity: 0; transform: translateY(18px); filter: blur(4px);
-        animation: reveal 0.9s var(--ease-smooth) forwards; animation-play-state: paused; animation-delay: var(--delay, 0s);
-    }
-    .reveal-blur.active { animation-play-state: running; }
-    @keyframes reveal { to { opacity: 1; transform: translateY(0); filter: blur(0); } }
-
-    .reveal-fade {
-        opacity: 0; transform: translateY(18px);
-        animation: revealFade 0.9s var(--ease-smooth) forwards; animation-play-state: paused; animation-delay: var(--delay, 0s);
-    }
-    .reveal-fade.active { animation-play-state: running; }
-    @keyframes revealFade { to { opacity: 1; transform: translateY(0); } }
+    /* El hero parte oculto SOLO cuando hay JS sin reduced-motion (clase .js-anim
+       puesta por un script inline antes del paint). GSAP lo revela. Sin JS o con
+       reduced-motion, queda visible por defecto → nunca hay "pantalla en blanco". */
+    .js-anim .hero-anim { opacity: 0; }
 
     .btn-luxe {
         position: relative; display: inline-flex; background: var(--color-text); color: #fff;
         padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem;
         font-weight: 600; overflow: hidden; justify-content: center;
-        transition: background 0.5s var(--ease-spring), box-shadow 0.5s var(--ease-spring), color 0.5s var(--ease-spring);
+        transition: transform 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth);
         box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 10px 20px rgba(0,0,0,0.08);
         align-items: center; gap: 10px; will-change: transform;
     }
     .btn-luxe span { position: relative; z-index: 2; }
-    .btn-arrow { position: relative; z-index: 2; display: inline-block; transition: transform 0.5s var(--ease-spring); }
-    .btn-luxe:hover .btn-arrow { transform: translateX(5px); }
-    .btn-shimmer { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent); transform: skewX(-20deg); transition: 0s; z-index: 1;}
-    /* transform lo maneja el magnetic (GSAP) en desktop; el reposo usa box-shadow para profundidad */
-    .btn-luxe:hover { box-shadow: 0 8px 16px rgba(0,0,0,0.1), 0 20px 40px rgba(0,0,0,0.16); }
-    .btn-luxe:active { box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
-    .btn-luxe:hover .btn-shimmer { left: 150%; transition: left 0.7s var(--ease-smooth); }
+    .btn-arrow { position: relative; z-index: 2; display: inline-block; transition: transform 0.6s var(--ease-smooth); }
+    .btn-luxe:hover .btn-arrow { transform: translateX(4px); }
+    .btn-shimmer { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent); transform: skewX(-20deg); transition: 0s; z-index: 1;}
+    /* Elevación sutil y suave en reposo→hover (sin magnetic) */
+    .btn-luxe:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(0,0,0,0.12), 0 24px 48px rgba(0,0,0,0.16); }
+    .btn-luxe:active { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+    .btn-luxe:hover .btn-shimmer { left: 150%; transition: left 0.9s var(--ease-smooth); }
 
     .squircle { border-radius: 24px; transform: translateZ(0); overflow: hidden; }
     .cta-squircle { border-radius: 32px; transform: translateZ(0); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
 
     /* Scroll hints — hidden on desktop, shown only on mobile */
-    .tech-scroll-hint,
     .carousel-mobile-hint { display: none; }
 
     .scroll-pill {
@@ -518,155 +365,82 @@ const t = useTranslations(lang);
     /* ==========================================================
        ESCRITORIO
        ========================================================== */
-    .hero-grand { padding: 12rem 0 6rem 0; min-height: 100svh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
+    .hero-grand { padding: 10rem 0 4rem 0; min-height: 100svh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
     .hero-text-zone { transition: transform 0.1s ease-out, opacity 0.1s ease-out; }
-    .hero-title { font-size: clamp(2.4rem, 4.6vw, 4.4rem); line-height: 1.06; font-weight: 800; letter-spacing: -1.8px; margin-bottom: 3.5rem; color: #050505; max-width: 980px; }
+    .hero-title { font-size: clamp(1.9rem, 3.6vw, 3.4rem); line-height: 1.14; font-weight: 800; letter-spacing: -1.2px; margin-bottom: 2.75rem; color: #050505; max-width: 880px; }
     .hero-title .title-bold { color: #050505; }
     .lx-line-mask { overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; }
     .title-bold { display: inline; }
 
     .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem; }
-    .hero-desc { font-size: 1.15rem; color: var(--color-text-muted); max-width: 500px; line-height: 1.5; margin: 0; }
-
-    /* PROOF STRIP — evidencia */
-    .proof-strip { background: var(--color-bg); padding: 0 0 6rem; }
-    .proof-strip .container { display: flex; flex-direction: column; }
-    .proof-row { display: flex; align-items: center; gap: 2rem; justify-content: space-between; padding: 1.7rem 0.2rem; border-top: 1px solid var(--color-border); text-decoration: none; color: var(--color-text); transition: padding-left 0.55s var(--ease-smooth); }
-    .proof-row:last-child { border-bottom: 1px solid var(--color-border); }
-    .proof-row:hover { padding-left: 0.9rem; }
-    .proof-name { font-weight: 700; font-size: 1.05rem; letter-spacing: -0.3px; white-space: nowrap; min-width: 170px; }
-    .proof-cat { color: var(--color-text-muted); font-weight: 600; font-size: 0.72rem; letter-spacing: 1.5px; text-transform: uppercase; margin-left: 0.5rem; }
-    .proof-metrics { display: flex; align-items: baseline; gap: 1.1rem; flex: 1; color: var(--color-text-muted); font-size: 0.98rem; }
-    .proof-metric { display: inline-flex; align-items: baseline; gap: 0.4rem; }
-    .proof-num { font-size: 1.55rem; color: #050505; line-height: 1; }
-    .proof-dot { color: rgba(0,0,0,0.22); }
-    .proof-arrow { font-size: 1.1rem; color: var(--color-text-muted); transition: transform 0.5s var(--ease-spring), color 0.4s ease; flex-shrink: 0; }
-    .proof-row:hover .proof-arrow { transform: translateX(6px); color: #050505; }
+    .hero-desc { font-size: 1.1rem; color: var(--color-text-muted); max-width: 480px; line-height: 1.55; margin: 0; }
 
     /* ==========================================================
-       2. TECNOLOGÍA — Editorial Stack
+       2. TECNOLOGÍA — Tira de logos minimalista
        ========================================================== */
     .tech-spotlight {
-        padding: 10rem 0 9rem;
+        padding: 9rem 0;
         background: var(--color-bg);
-        position: relative; overflow: hidden;
-    }
-    .tech-spotlight .partners-header { margin-bottom: 5rem; position: relative; z-index: 1; }
-    .section-heading { font-size: clamp(2.5rem, 5vw, 3.8rem); font-weight: 800; letter-spacing: -2px; margin: 0 0 0.5rem 0; line-height: 1; }
-    .section-sub { font-size: 1.05rem; color: var(--color-text-muted); margin: 0; line-height: 1.5;}
-
-    /* Tech header — editorial layout */
-    .tech-header-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.25rem; gap: 2rem; }
-    .tech-count-wrap { display: flex; flex-direction: column; align-items: flex-end; line-height: 1; flex-shrink: 0; }
-    .tech-count-num {
-        font-family: var(--font-serif); font-style: italic;
-        font-size: 5.5rem; font-weight: 400; color: rgba(0,0,0,0.08); line-height: 0.9;
-        letter-spacing: -3px;
-    }
-    .tech-count-unit { font-size: 0.6rem; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: #b8b8b8; margin-top: 6px; }
-    .tech-header-rule {
-        height: 1px;
-        background: linear-gradient(90deg, var(--color-blue-deep) 0%, rgba(0,0,0,0.08) 60%, transparent 100%);
-        margin-bottom: 1.75rem; transform-origin: left center; transform: scaleX(0);
-    }
-
-    /* Section watermark */
-    .tech-watermark {
-        position: absolute; bottom: -8%; right: -3%;
-        font-family: var(--font-serif); font-style: italic;
-        font-size: 22vw; font-weight: 400; color: rgba(0,0,0,0.025);
-        pointer-events: none; white-space: nowrap; line-height: 1;
-        user-select: none; z-index: 0; will-change: transform;
-    }
-
-    /* GRID — refined editorial */
-    .spotlight-grid {
-        display: grid; grid-template-columns: repeat(4, 1fr);
-        gap: 1px; background: rgba(0,0,0,0.06);
-        border: 1px solid rgba(0,0,0,0.06); border-radius: 28px; overflow: hidden;
         position: relative;
-        --grid-mx: 50%; --grid-my: 50%;
-        box-shadow: 0 30px 80px -30px rgba(10,25,47,0.08);
     }
-    .spotlight-grid::after {
-        content: ''; position: absolute; inset: 0; border-radius: inherit;
-        background: radial-gradient(800px circle at var(--grid-mx) var(--grid-my), rgba(10,25,47,0.04) 0%, transparent 50%);
-        pointer-events: none; z-index: 10; opacity: 0; transition: opacity 0.5s ease;
-    }
-    .spotlight-grid:hover::after { opacity: 1; }
+    .tech-header { max-width: 760px; margin: 0 auto 4.5rem; text-align: center; }
+    .tech-header .eyebrow { margin-bottom: 1.2rem; }
+    .section-heading { font-size: clamp(2.3rem, 4.4vw, 3.4rem); font-weight: 800; letter-spacing: -1.5px; margin: 0 0 1rem 0; line-height: 1.05; }
+    .section-sub { font-size: 1.05rem; color: var(--color-text-muted); margin: 0; line-height: 1.55;}
+    .tech-header .section-sub { max-width: 540px; margin: 0 auto; }
 
-    /* CARD — luxe editorial */
-    .tech-card {
-        position: relative; background: #fdfdfd; min-height: 280px;
-        transition: background 0.5s var(--ease-smooth);
+    /* Stack — marco editorial con hairlines que se desvanecen en las orillas */
+    .tech-stack {
+        max-width: 920px;
+        margin: 0 auto;
+        position: relative;
+        padding-top: 3.5rem;
     }
-
-    .tech-card::before {
-        content: ""; position: absolute; top: var(--mouse-y); left: var(--mouse-x);
-        transform: translate(-50%, -50%); width: 380px; height: 380px;
-        background: radial-gradient(circle, rgba(255,255,255,0.14) 0%, transparent 60%);
-        opacity: 0; transition: opacity 0.35s ease; z-index: 0; pointer-events: none;
+    /* Hairline superior del marco (se desvanece en los extremos, estilo footer) */
+    .tech-stack::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+        background: linear-gradient(90deg, transparent, var(--color-border) 18%, var(--color-border) 82%, transparent);
     }
 
-    .tech-card:hover { background: #0a1929; z-index: 2; }
-    .tech-card:hover::before { opacity: 1; }
-
-    .card-content {
-        position: relative; z-index: 1; padding: 2rem 2rem 1.75rem;
-        display: flex; flex-direction: column; height: 100%; min-height: 280px;
+    /* Logo strip — sobrio, gris, sin cajas */
+    .logo-strip {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 3.5rem 2rem;
+        align-items: center;
     }
-
-    .tc-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
-    .cell-label {
-        font-size: 0.58rem; font-weight: 800; letter-spacing: 2px;
-        color: #999; text-transform: uppercase;
-        transition: color 0.4s var(--ease-smooth); line-height: 1.3;
-    }
-    .tc-num {
-        font-family: var(--font-serif); font-style: italic;
-        font-size: 1.6rem; font-weight: 400;
-        color: rgba(10,25,47,0.18);
-        transition: color 0.4s; flex-shrink: 0; line-height: 0.9;
-        letter-spacing: -1px;
-    }
-
-    .logo-slot {
-        flex: 1; display: flex; align-items: center; justify-content: center;
-        min-height: 80px; padding: 1rem 0;
-    }
-    .tc-logo {
-        height: 38px; width: auto; max-width: 140px;
+    .strip-logo {
+        height: 30px; width: auto; max-width: 130px;
         object-fit: contain; object-position: center;
-        opacity: 0.55;
-        filter: grayscale(1) contrast(0.9);
-        transition: opacity 0.5s var(--ease-spring), filter 0.5s var(--ease-smooth), transform 0.5s var(--ease-spring);
+        margin: 0 auto;
+        opacity: 0.4;
+        filter: grayscale(1);
+        transition: opacity 0.6s var(--ease-smooth), filter 0.6s var(--ease-smooth);
     }
-    .tech-card:hover .tc-logo {
-        opacity: 1;
-        filter: grayscale(0) contrast(1);
-        transform: scale(1.08) translateY(-2px);
-    }
-
-    .tc-foot {
-        margin-top: auto; padding-top: 1.5rem;
-        border-top: 1px solid rgba(0,0,0,0.06); transition: border-color 0.4s;
-    }
-    .tool-name {
-        font-size: 1.45rem; font-weight: 800; letter-spacing: -0.5px;
-        margin: 0; color: var(--color-text);
-        transition: color 0.4s var(--ease-smooth); line-height: 1.1;
-    }
-    .tool-tier {
-        font-family: var(--font-serif); font-style: italic;
-        font-weight: 400; font-size: 1.2rem; color: rgba(10,25,47,0.5);
-        transition: color 0.4s var(--ease-smooth);
+    @media (hover: hover) {
+        /* Spotlight: al pasar sobre la tira, los demás se atenúan; el activo resalta */
+        .logo-strip:hover .strip-logo { opacity: 0.16; }
+        .logo-strip .strip-logo:hover { opacity: 0.9; filter: grayscale(0); }
     }
 
-    .tech-card:hover .cell-label { color: rgba(255,255,255,0.4); }
-    .tech-card:hover .tc-num { color: rgba(147,210,255,0.4); }
-    .tech-card:hover .tc-foot { border-top-color: rgba(255,255,255,0.1); }
-    .tech-card:hover .tool-name { color: #fff; }
-    .tech-card:hover .tool-tier { color: rgba(147,210,255,0.7); }
+    /* Detalle editorial — conteo en serif italic, bajo su propia hairline */
+    .stack-meta {
+        position: relative;
+        margin-top: 3.5rem; padding-top: 1.75rem;
+        display: flex; align-items: baseline; justify-content: center; gap: 0.6rem;
+    }
+    .stack-meta::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+        background: linear-gradient(90deg, transparent, var(--color-border) 18%, var(--color-border) 82%, transparent);
+    }
+    .stack-count {
+        font-family: var(--font-serif); font-style: italic; font-weight: 400;
+        font-size: 1.5rem; color: var(--color-blue-deep); line-height: 1; letter-spacing: -0.5px;
+    }
+    .stack-label {
+        font-size: 0.7rem; font-weight: 800; letter-spacing: 2.5px;
+        text-transform: uppercase; color: #999;
+    }
 
     /* ==========================================================
        3. CARRUSEL CASOS
@@ -834,7 +608,6 @@ const t = useTranslations(lang);
     .proto-progress {
         margin-top: 3rem;
         max-width: 280px;
-        opacity: 0; /* GSAP entrance */
     }
     .proto-progress-meta {
         display: flex; align-items: baseline; justify-content: space-between;
@@ -967,15 +740,14 @@ const t = useTranslations(lang);
     .btn-glow-blue {
         position: relative; background: #fff; color: var(--color-blue-deep);
         padding: 20px 44px; border-radius: 100px; text-decoration: none; font-size: 1.05rem; font-weight: 700; overflow: hidden;
-        transition: box-shadow 0.5s var(--ease-spring), background 0.5s var(--ease-spring);
+        transition: transform 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth);
         display: inline-flex; align-items: center; justify-content: center; white-space: nowrap;
         box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 4px 6px rgba(255,255,255,0.05), 0 10px 20px rgba(255,255,255,0.1);
         will-change: transform;
     }
     .btn-glow-blue span { position: relative; z-index: 2; }
-    /* transform lo maneja el magnetic (GSAP) en desktop */
-    .btn-glow-blue:hover { box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 14px 28px rgba(255,255,255,0.12), 0 26px 52px rgba(255,255,255,0.22); }
-    .btn-glow-blue:active { box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 4px 8px rgba(255,255,255,0.08); }
+    .btn-glow-blue:hover { transform: translateY(-3px); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 14px 28px rgba(255,255,255,0.12), 0 26px 52px rgba(255,255,255,0.22); }
+    .btn-glow-blue:active { transform: translateY(-1px); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 4px 8px rgba(255,255,255,0.08); }
 
     @media (max-width: 1024px) {
         .hero-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; }
@@ -999,37 +771,18 @@ const t = useTranslations(lang);
         .hero-desc { font-size: 1.1rem; padding: 0 5%; max-width: 95%; margin: 0 auto; line-height: 1.6;}
         .hero-action { width: 100%; padding: 0 5%; }
         .btn-luxe { width: 100%; padding: 18px 0; font-size: 1.05rem;}
-        .proof-strip { padding: 0 5% 4rem; }
-        .proof-row { flex-wrap: wrap; gap: 0.5rem 1rem; padding: 1.4rem 0; }
-        .proof-name { min-width: 0; width: 100%; font-size: 1rem; }
-        .proof-metrics { font-size: 0.88rem; gap: 0.7rem; width: 100%; }
-        .proof-num { font-size: 1.3rem; }
-        .proof-arrow { display: none; }
-
         /* TECNOLOGÍA */
-        .tech-spotlight { padding: 4rem 0; overflow: hidden; width: 100%; position: relative; }
-        .tech-watermark { font-size: 40vw; bottom: -5%; right: -5%; }
-        .tech-count-num { font-size: 2.6rem; }
-        .tech-count-unit { display: none; }
-        .tech-scroll-hint {
-            display: flex; margin: 1rem 0 1.2rem; padding: 0 5%;
+        .tech-spotlight { padding: 4.5rem 0; }
+        .tech-header { margin-bottom: 2.75rem; }
+        .tech-stack { padding-top: 2.5rem; }
+        .logo-strip {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem 1.5rem; padding: 0 8%;
         }
-        .spotlight-grid {
-            display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
-            gap: 12px; padding: 0.5rem 5% 1.5rem;
-            scrollbar-width: none;
-            border-radius: 0; border: none; background: transparent;
-        }
-        .spotlight-grid::-webkit-scrollbar { display: none; }
-        .tech-card { min-width: 185px; scroll-snap-align: start; border-radius: 20px; min-height: 196px; border: 1px solid rgba(0,0,0,0.07); flex-shrink: 0; }
-        .tech-card::before { display: none; }
-        .card-content { min-height: 196px; }
-        .tc-mark { opacity: 0.6; }
-        .tech-card:active { background: #0a1929; transition: 0.15s; }
-        .tech-card:active .cell-label { color: rgba(255,255,255,0.4); }
-        .tech-card:active .tc-mark { color: #fff; opacity: 1; }
-        .tech-card:active .tc-foot { border-top-color: rgba(255,255,255,0.1); }
-        .tech-card:active .tool-name { color: #fff; }
+        .strip-logo { height: 26px; opacity: 0.5; }
+        .stack-meta { margin-top: 2.5rem; padding-top: 1.5rem; }
+        .stack-count { font-size: 1.3rem; }
+        .stack-label { font-size: 0.65rem; letter-spacing: 2px; }
 
         /* CARRUSEL CASOS */
         .clients-vertical-carousel {
@@ -1112,15 +865,11 @@ const t = useTranslations(lang);
 <script>
     import { gsap } from 'gsap';
     import { ScrollTrigger } from 'gsap/ScrollTrigger';
-    import { SplitText } from 'gsap/SplitText';
 
-    gsap.registerPlugin(ScrollTrigger, SplitText);
+    gsap.registerPlugin(ScrollTrigger);
 
-    // Recalculate positions after fonts + images load.
-    // Two-stage: first refresh post-load (catches images), second after fonts.ready
-    // (catches font swaps that shift baseline). Without this, ScrollTrigger uses
-    // pre-layout positions and triggers fire at the wrong scroll Y → elements
-    // stay invisible until manual refresh.
+    // Recalcular posiciones después de que carguen fuentes + imágenes, para que
+    // los ScrollTrigger disparen en el punto correcto desde el inicio.
     const robustRefresh = () => {
         const winLoad = new Promise<void>((resolve) => {
             if (document.readyState === 'complete') resolve();
@@ -1136,285 +885,133 @@ const t = useTranslations(lang);
     document.addEventListener('DOMContentLoaded', () => {
         const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        // Hero animates on page load (not scroll) — must start visible
-        document.querySelectorAll<HTMLElement>('.hero-title, .hero-text-zone .eyebrow, .hero-bottom').forEach(el => {
-            el.style.animation = 'none';
-            el.style.opacity   = '1';
-            el.style.transform = 'none';
-            el.style.filter    = 'none';
-        });
-
+        // Con reduced-motion la clase .js-anim nunca se añade (script inline del
+        // Layout), así que todo queda visible vía CSS. No animamos nada.
         if (reduced) return;
 
-        // Key: immediateRender: false — elements stay visible until ScrollTrigger fires.
-        // This prevents the "stuck invisible" bug entirely.
-        const ir = { immediateRender: false } as const;
+        /* ═══════ HERO — entrada en carga (compartida desktop/móvil) ═══════
+           El CSS (.js-anim .hero-anim) ya los tiene en opacity:0 desde antes del
+           primer paint, así que animamos con .to() — sin doble salto, sin flash. */
+        const heroAnim = gsap.utils.toArray<HTMLElement>('.hero-anim');
+        if (heroAnim.length) {
+            gsap.set(heroAnim, { opacity: 0, y: 12 });
+            gsap.timeline({ defaults: { ease: 'power2.out' } })
+                .to('.hero-status',             { opacity: 1, y: 0, duration: 0.9 }, 0)
+                .to('.hero-text-zone .eyebrow', { opacity: 1, y: 0, duration: 0.9 }, 0.1)
+                .to('.hero-title',              { opacity: 1, y: 0, duration: 1.1 }, 0.2)
+                .to('.hero-bottom',             { opacity: 1, y: 0, duration: 1.0 }, 0.42);
+        }
+
+        // ── Estándar único de animación de entrada ──────────────────
+        // Mismo lenguaje en todo el sitio: fade + leve subida, suave, sutil.
+        const EASE = 'power2.out';
+        const DUR  = 0.9;
+        const Y    = 14;
+
+        /* Reveal robusto (sin parpadeo): el elemento se OCULTA de entrada con
+           gsap.set y solo se revela UNA vez cuando su trigger entra al viewport.
+           Antes usábamos gsap.from + immediateRender:false, que dejaba el elemento
+           visible hasta el primer scroll y entonces lo "saltaba" a opacity:0 para
+           re-animarlo → se veía recargar. Con set+onEnter eso ya no pasa.
+           Failsafe anti "invisible para siempre": robustRefresh() recalcula
+           posiciones tras fuentes+carga, así que todo trigger ya pasado dispara su
+           onEnter; y si no hay JS/hay reduced-motion, el CSS deja todo visible. */
+        const reveal = (
+            targets: string | HTMLElement | NodeListOf<Element> | HTMLElement[],
+            opts: { trigger?: string | HTMLElement; start?: string; y?: number; dur?: number; stagger?: number; delay?: number } = {}
+        ) => {
+            const els = gsap.utils.toArray<HTMLElement>(targets as any);
+            if (!els.length) return;
+            const y = opts.y ?? Y;
+            gsap.set(els, { opacity: 0, y });
+            ScrollTrigger.create({
+                trigger: opts.trigger ?? els[0],
+                start: opts.start ?? 'top 85%',
+                once: true,
+                onEnter: () => gsap.to(els, {
+                    opacity: 1, y: 0, duration: opts.dur ?? DUR, ease: EASE,
+                    stagger: opts.stagger ?? 0.08, delay: opts.delay ?? 0,
+                    clearProps: 'transform,opacity',
+                }),
+            });
+        };
+
+        // Reveal por-elemento (cada uno con su propio trigger/posición)
+        const revealEach = (
+            selector: string,
+            opts: { start?: string; y?: number; dur?: number } = {}
+        ) => {
+            gsap.utils.toArray<HTMLElement>(selector).forEach(el => {
+                reveal(el, { trigger: el, start: opts.start, y: opts.y, dur: opts.dur, stagger: 0 });
+            });
+        };
 
         const mm = gsap.matchMedia();
 
         /* ─── DESKTOP ──────────────────────────────────────────────── */
         mm.add('(min-width: 769px)', () => {
 
-            /* HERO */
-            requestAnimationFrame(() => {
-
-            const heroStatus = document.querySelector<HTMLElement>('.hero-status');
-            const heroTitle = document.querySelector<HTMLElement>('.hero-title');
-            const heroEyebrow = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
-            const heroBottom = document.querySelector<HTMLElement>('.hero-bottom');
-
-            const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-            if (heroStatus) {
-                tl.from(heroStatus, { opacity: 0, y: 10, filter: 'blur(4px)', duration: 1.0 }, 0);
-            }
-            if (heroEyebrow) {
-                tl.from(heroEyebrow, { opacity: 0, y: 12, letterSpacing: '5px', duration: 1.1 }, 0.1);
-            }
-            if (heroTitle) {
-                const split = SplitText.create(heroTitle, { type: 'lines,words', linesClass: 'lx-line-mask' });
-                gsap.set(split.words, { yPercent: 105 });
-                tl.to(split.words, {
-                    yPercent: 0, duration: 1.1,
-                    stagger: { amount: 0.35, from: 'start' },
-                }, 0.3);
-            }
-            if (heroBottom && heroBottom.children.length > 0) {
-                tl.from(gsap.utils.toArray<HTMLElement>(heroBottom.children), {
-                    opacity: 0, y: 12, duration: 1.0, ease: 'power3.out',
-                    stagger: 0.1,
-                }, 0.85);
-            }
-
-            }); // end requestAnimationFrame
-
+            /* Parallax muy leve del hero al hacer scroll */
             const heroParallax = document.getElementById('hero-parallax');
             if (heroParallax) {
                 gsap.to(heroParallax, {
-                    yPercent: 7, opacity: 0.78,
-                    ease: 'none',
+                    yPercent: 4, opacity: 0.85, ease: 'none',
                     scrollTrigger: { trigger: '.hero-grand', start: 'top top', end: 'bottom 30%', scrub: 1 },
                 });
             }
 
-            /* ═══════ SECTION HEADINGS — line-mask word reveal (Apple-style) ═══════ */
-            gsap.utils.toArray<HTMLElement>('.section-heading').forEach(h => {
-                const split = SplitText.create(h, { type: 'lines,words', linesClass: 'lx-line-mask' });
-                gsap.set(split.words, { yPercent: 115 });
-                gsap.to(split.words, {
-                    ...ir, yPercent: 0, duration: 1.0, ease: 'expo.out',
-                    stagger: { amount: 0.3, from: 'start' },
-                    scrollTrigger: { trigger: h, start: 'top 85%', once: true },
+            /* Encabezados + eyebrows */
+            revealEach('section:not(.hero-grand) .section-heading', { y: 16, dur: 1.0, start: 'top 86%' });
+            revealEach('section:not(.hero-grand) .eyebrow',         { y: 10, dur: 0.9, start: 'top 90%' });
+
+            /* TECH — subtítulo + tira de logos */
+            reveal('.tech-spotlight .section-sub', { trigger: '.tech-spotlight', y: 12, dur: 0.9, start: 'top 82%' });
+            reveal('.strip-logo', { trigger: '#logo-strip', y: 12, dur: 0.9, stagger: 0.06, start: 'top 85%' });
+            reveal('.stack-meta', { trigger: '#logo-strip', y: 10, dur: 0.9, delay: 0.2, start: 'top 85%' });
+
+            /* CASOS — tarjetas (el Ken Burns/elevación es hover en CSS) */
+            reveal('.clients-vertical-carousel .vertical-card', {
+                trigger: '.clients-vertical-carousel', y: 24, dur: 1.0, stagger: 0.1, start: 'top 78%',
+            });
+
+            /* SERVICIOS — filas (reveal sobrio por fila) */
+            gsap.utils.toArray<HTMLElement>('.service-row').forEach((row) => {
+                reveal(row.querySelectorAll('.row-num, .row-content h3, .row-content p, .arrow-circle'), {
+                    trigger: row, y: 14, dur: 0.9, stagger: 0.06, start: 'top 86%',
                 });
             });
 
-            /* ═══════ EYEBROWS — letter-spacing close + fade ═══════ */
-            gsap.utils.toArray<HTMLElement>('section:not(.hero-grand) .eyebrow').forEach(eb => {
-                gsap.from(eb, {
-                    ...ir, opacity: 0, y: 10, letterSpacing: '5px', duration: 1.0, ease: 'expo.out',
-                    scrollTrigger: { trigger: eb, start: 'top 88%', once: true },
-                });
+            /* PROTOCOLO — columna sticky + indicador de progreso */
+            reveal('.protocol-sticky-col > *:not(.proto-progress)', {
+                trigger: '.protocol-section', y: 16, dur: 1.0, stagger: 0.09, start: 'top 80%',
             });
+            reveal('.proto-progress', { trigger: '.protocol-section', y: 14, dur: 1.0, delay: 0.3, start: 'top 78%' });
 
-            /* ═══════════════════════════════════════════════════
-                              TECH SECTION
-               ═══════════════════════════════════════════════════ */
-
-            /* Header rule draw */
-            const techRule = document.getElementById('tech-rule');
-            if (techRule) {
-                gsap.to(techRule, {
-                    scaleX: 1, duration: 1.6, ease: 'power3.inOut',
-                    scrollTrigger: { trigger: '.tech-spotlight', start: 'top 78%', once: true },
-                });
-            }
-
-            /* Counter count-up */
-            const techCounter = document.getElementById('tech-counter');
-            if (techCounter) {
-                ScrollTrigger.create({
-                    trigger: '.tech-spotlight', start: 'top 78%', once: true,
-                    onEnter: () => {
-                        const obj = { val: 0 };
-                        gsap.to(obj, {
-                            val: 8, duration: 1.8, ease: 'power3.out', delay: 0.3,
-                            onUpdate: () => { techCounter.textContent = String(Math.round(obj.val)).padStart(2, '0'); },
-                        });
-                    },
-                });
-            }
-
-            /* Sub-text fade */
-            gsap.from('.tech-spotlight .section-sub', {
-                ...ir, opacity: 0, y: 16, duration: 1.1, ease: 'expo.out',
-                scrollTrigger: { trigger: '.tech-spotlight', start: 'top 80%', once: true },
-            });
-
-            /* Cards: orchestrated reveal — card lifts, then logo settles, then number fades */
-            gsap.utils.toArray<HTMLElement>('.tech-spotlight .tech-card').forEach((card, i) => {
-                const logo = card.querySelector<HTMLElement>('.tc-logo');
-                const num  = card.querySelector<HTMLElement>('.tc-num');
-                const cat  = card.querySelector<HTMLElement>('.cell-label');
-                const name = card.querySelector<HTMLElement>('.tool-name');
-
-                gsap.set(card, { y: 28, opacity: 0 });
-                if (logo) gsap.set(logo, { y: 10, opacity: 0, scale: 0.97 });
-                if (num)  gsap.set(num, { opacity: 0, x: -6 });
-                if (cat)  gsap.set(cat, { opacity: 0, x: -6 });
-                if (name) gsap.set(name, { opacity: 0, y: 10 });
-
-                const tl = gsap.timeline({
-                    scrollTrigger: { trigger: '.spotlight-grid', start: 'top 80%', once: true },
-                    delay: i * 0.06,
-                });
-
-                tl.to(card, { ...ir, y: 0, opacity: 1, duration: 0.9, ease: 'expo.out' });
-                if (cat)  tl.to(cat,  { ...ir, opacity: 1, x: 0, duration: 0.8, ease: 'expo.out' }, '-=0.7');
-                if (num)  tl.to(num,  { ...ir, opacity: 1, x: 0, duration: 0.8, ease: 'expo.out' }, '-=0.7');
-                if (logo) tl.to(logo, { ...ir, y: 0, opacity: 0.55, scale: 1, duration: 0.8, ease: 'expo.out' }, '-=0.6');
-                if (name) tl.to(name, { ...ir, opacity: 1, y: 0, duration: 0.8, ease: 'expo.out' }, '-=0.55');
-            });
-
-            /* Watermark slow parallax */
-            gsap.to('.tech-watermark', {
-                yPercent: -18, ease: 'none',
-                scrollTrigger: { trigger: '.tech-spotlight', start: 'top bottom', end: 'bottom top', scrub: 0.8 },
-            });
-
-            /* Grid glow follows cursor */
-            const techGrid = document.getElementById('tech-grid');
-            if (techGrid) {
-                techGrid.addEventListener('mousemove', e => {
-                    const r = techGrid.getBoundingClientRect();
-                    techGrid.style.setProperty('--grid-mx', `${((e.clientX - r.left) / r.width) * 100}%`);
-                    techGrid.style.setProperty('--grid-my', `${((e.clientY - r.top) / r.height) * 100}%`);
-                });
-            }
-
-            /* Per-card radial glow */
-            document.querySelectorAll<HTMLElement>('.tech-card').forEach(card => {
-                card.addEventListener('mousemove', e => {
-                    const rect = card.getBoundingClientRect();
-                    card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-                    card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
-                });
-            });
-
-            /* ═══════════════════════════════════════════════════
-                              CASOS SECTION
-               ═══════════════════════════════════════════════════ */
-
-            /* Background text parallax */
-            gsap.to('.casos-bg-text', {
-                yPercent: -16, ease: 'none',
-                scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top bottom', end: 'bottom top', scrub: 1 },
-            });
-
-            /* Cards: refined reveal — y+opacity + Ken Burns image + overlay slide */
-            gsap.utils.toArray<HTMLElement>('.clients-vertical-carousel .vertical-card').forEach((card, i) => {
-                const img     = card.querySelector<HTMLElement>('.carousel-image');
-                const overlay = card.querySelector<HTMLElement>('.card-overlay');
-                const num     = card.querySelector<HTMLElement>('.card-num-luxury');
-                const ctaInner = card.querySelector<HTMLElement>('.cta-inner');
-
-                const tl = gsap.timeline({
-                    scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top 75%', once: true },
-                    delay: 0.15 + i * 0.13,
-                    // clearProps libera los inline styles de GSAP — sin esto el
-                    // transform/opacity residual bloquea los hovers (elevación de
-                    // la card + Ken Burns de la imagen no se aplicaban).
-                    onComplete: () => {
-                        const targets = [card, img, overlay, num].filter(Boolean) as HTMLElement[];
-                        if (targets.length) gsap.set(targets, { clearProps: 'opacity,transform' });
-                    },
-                });
-
-                tl.from(card, { ...ir, y: 40, opacity: 0, duration: 1.0, ease: 'expo.out' });
-                if (img)      tl.from(img,     { ...ir, scale: 1.08, duration: 1.4, ease: 'expo.out' }, 0);
-                if (overlay)  tl.from(overlay, { ...ir, yPercent: 24, opacity: 0, duration: 0.9, ease: 'expo.out' }, 0.3);
-                if (num)      tl.from(num,     { ...ir, opacity: 0, x: -8, duration: 0.9, ease: 'expo.out' }, 0.4);
-                if (ctaInner) tl.from(ctaInner.children, {
-                    ...ir, opacity: 0, y: 14, duration: 1.0, ease: 'expo.out', stagger: 0.1,
-                }, 0.25);
-            });
-
-
-            /* ═══════════════════════════════════════════════════
-                            SERVICES SECTION
-               ═══════════════════════════════════════════════════ */
-
-            gsap.utils.toArray<HTMLElement>('.service-row').forEach((row, i) => {
-                const num   = row.querySelector<HTMLElement>('.row-num');
-                const h3    = row.querySelector<HTMLElement>('.row-content h3');
-                const p     = row.querySelector<HTMLElement>('.row-content p');
-                const arrow = row.querySelector<HTMLElement>('.arrow-circle');
-
-                // Patrón gsap.from + immediateRender:false → elementos visibles en CSS
-                // hasta que el tween arranca. Si ScrollTrigger no dispara, no quedan
-                // invisibles permanentes.
-                const tl = gsap.timeline({
-                    scrollTrigger: { trigger: row, start: 'top 86%', once: true },
-                    delay: i * 0.04,
-                    // clearProps al final → libera inline styles para que los
-                    // transforms del :hover (translateX, rotate, etc.) puedan aplicar.
-                    onComplete: () => {
-                        const targets = [num, h3, p, arrow].filter(Boolean) as HTMLElement[];
-                        if (targets.length) gsap.set(targets, { clearProps: 'opacity,transform' });
-                    },
-                });
-
-                if (num)   tl.from(num,   { ...ir, opacity: 0, x: -10,   duration: 0.9, ease: 'expo.out' }, 0);
-                if (h3)    tl.from(h3,    { ...ir, opacity: 0, y: 18,    duration: 1.0, ease: 'expo.out' }, 0.06);
-                if (p)     tl.from(p,     { ...ir, opacity: 0, y: 14,    duration: 0.9, ease: 'expo.out' }, 0.14);
-                if (arrow) tl.from(arrow, { ...ir, opacity: 0, scale: 0.82, duration: 0.9, ease: 'expo.out' }, 0.22);
-            });
-
-            /* ═══════════════════════════════════════════════════
-                           PROTOCOL SECTION
-               ═══════════════════════════════════════════════════ */
-
-            /* Sticky col children stagger */
-            gsap.from('.protocol-sticky-col > *:not(.proto-progress)', {
-                ...ir, y: 18, opacity: 0, duration: 1.0, ease: 'expo.out', stagger: 0.09,
-                scrollTrigger: { trigger: '.protocol-section', start: 'top 78%', once: true },
-            });
-
-            /* Progress indicator entrance */
-            gsap.to('.proto-progress', {
-                ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out', delay: 0.5,
-                scrollTrigger: { trigger: '.protocol-section', start: 'top 78%', once: true },
-            });
-
-            /* Timeline track draws as user scrolls */
+            /* PROTOCOLO — el track se dibuja con el scroll */
             const timelineTrack = document.querySelector('.timeline-track');
             if (timelineTrack) {
                 gsap.set(timelineTrack, { transformOrigin: 'top center', scaleY: 0 });
                 gsap.to(timelineTrack, {
                     scaleY: 1, ease: 'none',
-                    scrollTrigger: {
-                        trigger: '.protocol-section', start: 'top 60%', end: 'bottom 75%', scrub: 0.6,
-                    },
+                    scrollTrigger: { trigger: '.protocol-section', start: 'top 60%', end: 'bottom 75%', scrub: 0.6 },
                 });
             }
 
-            /* Progress bar fills as user scrolls through the protocol section */
+            /* PROTOCOLO — barra de progreso se llena con el scroll */
             const progressFill = document.querySelector<HTMLElement>('.proto-progress-fill');
             if (progressFill) {
                 gsap.to(progressFill, {
                     scaleX: 1, ease: 'none',
-                    scrollTrigger: {
-                        trigger: '.protocol-section', start: 'top 50%', end: 'bottom 70%', scrub: 0.4,
-                    },
+                    scrollTrigger: { trigger: '.protocol-section', start: 'top 50%', end: 'bottom 70%', scrub: 0.4 },
                 });
             }
 
-            /* Active step detection — sets .is-active and updates the counter */
+            /* PROTOCOLO — paso activo + contador */
             const protoSteps = gsap.utils.toArray<HTMLElement>('.protocol-step');
             const protoCurrent = document.querySelector<HTMLElement>('.proto-current');
             protoSteps.forEach((step, idx) => {
                 ScrollTrigger.create({
-                    trigger: step,
-                    start: 'top 55%',
-                    end: 'bottom 45%',
+                    trigger: step, start: 'top 55%', end: 'bottom 45%',
                     onEnter:     () => { step.classList.add('is-active');    setProtoCount(idx); },
                     onEnterBack: () => { step.classList.add('is-active');    setProtoCount(idx); },
                     onLeave:     () => { step.classList.remove('is-active'); },
@@ -1426,62 +1023,25 @@ const t = useTranslations(lang);
                 const next = String(idx + 1).padStart(2, '0');
                 if (protoCurrent.textContent === next) return;
                 gsap.fromTo(protoCurrent,
-                    { y: -10, opacity: 0 },
-                    { y: 0, opacity: 1, duration: 0.5, ease: 'expo.out',
+                    { y: -8, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.45, ease: EASE,
                       onStart: () => { protoCurrent.textContent = next; } });
             }
 
-            /* Steps: choreographed reveal — node bounce, watermark slide, h4 then p.
-               Patrón gsap.from + immediateRender:false → si ScrollTrigger calcula
-               posiciones antes de que carguen fuentes, los elementos NO se quedan
-               invisibles encimados. clearProps al final libera transforms inline
-               para que .is-active / :hover apliquen sus propios transforms. */
+            /* PROTOCOLO — pasos (reveal por paso) */
             protoSteps.forEach((step) => {
-                const node = step.querySelector<HTMLElement>('.step-node');
-                const wm   = step.querySelector<HTMLElement>('.watermark-num');
-                const h4   = step.querySelector<HTMLElement>('h4');
-                const p    = step.querySelector<HTMLElement>('p');
-
-                const tl = gsap.timeline({
-                    scrollTrigger: { trigger: step, start: 'top 86%', once: true },
-                    onComplete: () => {
-                        const targets = [node, wm, h4, p].filter(Boolean) as HTMLElement[];
-                        if (targets.length) gsap.set(targets, { clearProps: 'opacity,transform' });
-                    },
+                reveal(step.querySelectorAll('.watermark-num, h4, p'), {
+                    trigger: step, y: 14, dur: 0.9, stagger: 0.07, start: 'top 86%',
                 });
-
-                if (node) tl.from(node, { ...ir, scale: 0.4, opacity: 0, duration: 0.85, ease: 'expo.out' }, 0);
-                if (wm)   tl.from(wm,   { ...ir, opacity: 0, x: -10,   duration: 1.0, ease: 'expo.out' }, 0.08);
-                if (h4)   tl.from(h4,   { ...ir, opacity: 0, y: 16,    duration: 0.9, ease: 'expo.out' }, 0.16);
-                if (p)    tl.from(p,    { ...ir, opacity: 0, y: 14,    duration: 0.9, ease: 'expo.out' }, 0.24);
             });
 
-            /* ═══════════════════════════════════════════════════
-                                CTA SECTION
-               ═══════════════════════════════════════════════════ */
-
+            /* CTA — entrada sutil + glow que sigue el cursor */
             const ctaCard = document.getElementById('cta-card') as HTMLElement | null;
             if (ctaCard) {
-                const ctaText = ctaCard.querySelectorAll<HTMLElement>('.cta-text-side > *');
-                const ctaBtn  = ctaCard.querySelector<HTMLElement>('.cta-action-side');
-
-                gsap.set(ctaText, { opacity: 0, y: 18 });
-                if (ctaBtn) gsap.set(ctaBtn, { opacity: 0, y: 16 });
-
-                const tl = gsap.timeline({
-                    scrollTrigger: { trigger: ctaCard, start: 'top 82%', once: true },
+                reveal(ctaCard, { trigger: ctaCard, y: 24, dur: 1.0, stagger: 0, start: 'top 82%' });
+                reveal(ctaCard.querySelectorAll('.cta-text-side > *, .cta-action-side'), {
+                    trigger: ctaCard, y: 12, dur: 0.9, stagger: 0.08, delay: 0.15, start: 'top 82%',
                 });
-
-                tl.from(ctaCard, {
-                    ...ir, y: 36, scale: 0.97, opacity: 0,
-                    duration: 1.0, ease: 'expo.out',
-                });
-                tl.to(ctaText, {
-                    ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out', stagger: 0.1,
-                }, '-=0.7');
-                if (ctaBtn) tl.to(ctaBtn, {
-                    ...ir, opacity: 1, y: 0, duration: 0.9, ease: 'expo.out',
-                }, '-=0.6');
 
                 ctaCard.addEventListener('mousemove', e => {
                     const r = ctaCard.getBoundingClientRect();
@@ -1489,158 +1049,40 @@ const t = useTranslations(lang);
                     ctaCard.style.setProperty('--cta-my', `${((e.clientY - r.top) / r.height) * 100}%`);
                 });
             }
-
-            /* ═══════════════════════════════════════════════════
-               MAGNETIC BUTTONS — los CTAs principales del home siguen
-               sutilmente el cursor (mismo lenguaje que el btn-contact de
-               la navbar). El transform lo controla GSAP; el reposo vuelve
-               con un ease suave, sin rebote.
-               ═══════════════════════════════════════════════════ */
-            const magneticBtns = gsap.utils.toArray<HTMLElement>('.btn-luxe, .btn-glow-blue');
-            magneticBtns.forEach(btn => {
-                const strength = 0.28;
-                btn.addEventListener('mousemove', e => {
-                    const r = btn.getBoundingClientRect();
-                    const dx = (e.clientX - r.left - r.width / 2) * strength;
-                    const dy = (e.clientY - r.top - r.height / 2) * strength;
-                    gsap.to(btn, { x: dx, y: dy, duration: 0.5, ease: 'power3.out' });
-                });
-                btn.addEventListener('mouseleave', () => {
-                    gsap.to(btn, { x: 0, y: 0, duration: 0.65, ease: 'power3.out' });
-                });
-            });
         });
 
-        /* ═══════════════════════════════════════════════════
-                            MOBILE
-           ═══════════════════════════════════════════════════ */
+        /* ─── MOBILE ───────────────────────────────────────────────── */
         mm.add('(max-width: 768px)', () => {
 
-            /* MOBILE HERO — on-load timeline */
-            const mHeroTitle = document.querySelector<HTMLElement>('.hero-title');
-            const mEyebrow = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
-            const mHeroBottom = document.querySelector<HTMLElement>('.hero-bottom');
-            const tlm = gsap.timeline({ defaults: { ease: 'expo.out' } });
-            if (mEyebrow) tlm.from(mEyebrow, { opacity: 0, y: 10, letterSpacing: '5px', duration: 1.0 }, 0.1);
-            if (mHeroTitle) tlm.from(mHeroTitle, { opacity: 0, y: 18, duration: 1.0 }, 0.28);
-            if (mHeroBottom && mHeroBottom.children.length > 0) {
-                tlm.from(gsap.utils.toArray<HTMLElement>(mHeroBottom.children), {
-                    opacity: 0, y: 12, duration: 0.9, ease: 'power3.out',
-                    stagger: 0.09,
-                }, 0.8);
-            }
+            /* (El hero se anima en el bloque compartido de arriba) */
 
-            /* SECTION HEADINGS — same line-mask reveal */
-            gsap.utils.toArray<HTMLElement>('.section-heading').forEach(h => {
-                const split = SplitText.create(h, { type: 'lines,words', linesClass: 'lx-line-mask' });
-                gsap.set(split.words, { yPercent: 115 });
-                gsap.to(split.words, {
-                    ...ir, yPercent: 0, duration: 1.2, ease: 'expo.out',
-                    stagger: { amount: 0.4, from: 'start' },
-                    scrollTrigger: { trigger: h, start: 'top 88%', once: true },
-                });
+            /* Encabezados + eyebrows */
+            revealEach('section:not(.hero-grand) .section-heading', { y: 16, dur: 1.0, start: 'top 88%' });
+            revealEach('section:not(.hero-grand) .eyebrow',         { y: 10, dur: 0.9, start: 'top 92%' });
+
+            /* TECH */
+            reveal('.tech-spotlight .section-sub', { trigger: '.tech-spotlight', y: 12, dur: 0.9, start: 'top 86%' });
+            reveal('.strip-logo', { trigger: '#logo-strip', y: 10, dur: 0.8, stagger: 0.05, start: 'top 88%' });
+            reveal('.stack-meta', { trigger: '#logo-strip', y: 10, dur: 0.85, delay: 0.18, start: 'top 88%' });
+
+            /* CASOS — tarjetas */
+            reveal('.clients-vertical-carousel .vertical-card', {
+                trigger: '.clients-vertical-carousel', y: 22, dur: 0.95, stagger: 0.08, start: 'top 82%',
             });
 
-            /* EYEBROWS */
-            gsap.utils.toArray<HTMLElement>('section:not(.hero-grand) .eyebrow').forEach(eb => {
-                gsap.from(eb, {
-                    ...ir, opacity: 0, y: 10, letterSpacing: '6px', duration: 1.1, ease: 'expo.out',
-                    scrollTrigger: { trigger: eb, start: 'top 90%', once: true },
-                });
-            });
-
-            /* TECH — header rule */
-            const mTechRule = document.getElementById('tech-rule');
-            if (mTechRule) {
-                gsap.to(mTechRule, {
-                    scaleX: 1, duration: 1.4, ease: 'power3.inOut',
-                    scrollTrigger: { trigger: '.tech-spotlight', start: 'top 82%', once: true },
-                });
-            }
-
-            /* TECH — counter */
-            const mTechCounter = document.getElementById('tech-counter');
-            if (mTechCounter) {
-                ScrollTrigger.create({
-                    trigger: '.tech-spotlight', start: 'top 82%', once: true,
-                    onEnter: () => {
-                        const obj = { val: 0 };
-                        gsap.to(obj, {
-                            val: 8, duration: 1.5, ease: 'power3.out', delay: 0.2,
-                            onUpdate: () => { mTechCounter.textContent = String(Math.round(obj.val)).padStart(2, '0'); },
-                        });
-                    },
-                });
-            }
-
-            /* TECH — sub */
-            gsap.from('.tech-spotlight .section-sub', {
-                ...ir, opacity: 0, y: 14, duration: 1.0, ease: 'expo.out',
-                scrollTrigger: { trigger: '.tech-spotlight', start: 'top 84%', once: true },
-            });
-
-            /* TECH — cards */
-            gsap.utils.toArray<HTMLElement>('.tech-spotlight .tech-card').forEach((card, i) => {
-                gsap.from(card, {
-                    ...ir, y: 30, opacity: 0,
-                    duration: 1.1, ease: 'expo.out', delay: i * 0.05,
-                    scrollTrigger: { trigger: card, start: 'top 92%', once: true },
-                });
-            });
-
-            /* CASOS — bg parallax (lighter) */
-            gsap.to('.casos-bg-text', {
-                yPercent: -12, ease: 'none',
-                scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top bottom', end: 'bottom top', scrub: 1.2 },
-            });
-
-            /* CASOS — cards (simpler for mobile, with image scale) */
-            gsap.utils.toArray<HTMLElement>('.clients-vertical-carousel .vertical-card').forEach((card, i) => {
-                const img = card.querySelector<HTMLElement>('.carousel-image');
-                if (img) gsap.set(img, { scale: 1.08 });
-                const tl = gsap.timeline({
-                    scrollTrigger: { trigger: '.clients-vertical-carousel', start: 'top 80%', once: true },
-                    delay: i * 0.09,
-                });
-                tl.from(card, { ...ir, y: 30, opacity: 0, duration: 1.0, ease: 'expo.out' });
-                if (img) tl.to(img, { ...ir, scale: 1, duration: 1.3, ease: 'expo.out' }, 0);
-            });
-
-            /* SERVICES — rows */
+            /* SERVICIOS — filas */
             gsap.utils.toArray<HTMLElement>('.service-row').forEach((row) => {
-                const h3 = row.querySelector<HTMLElement>('.row-content h3');
-                const p = row.querySelector<HTMLElement>('.row-content p');
-                const arrow = row.querySelector<HTMLElement>('.arrow-circle');
-                const num = row.querySelector<HTMLElement>('.row-num');
-
-                if (num)   gsap.set(num,   { opacity: 0, x: -10 });
-                if (h3)    gsap.set(h3,    { opacity: 0, y: 22 });
-                if (p)     gsap.set(p,     { opacity: 0, y: 16 });
-                if (arrow) gsap.set(arrow, { opacity: 0, scale: 0.7 });
-
-                const tl = gsap.timeline({
-                    scrollTrigger: { trigger: row, start: 'top 90%', once: true },
+                reveal(row.querySelectorAll('.row-num, .row-content h3, .row-content p, .arrow-circle'), {
+                    trigger: row, y: 14, dur: 0.85, stagger: 0.05, start: 'top 90%',
                 });
-
-                if (num)   tl.to(num,   { ...ir, opacity: 1, x: 0, duration: 0.9, ease: 'expo.out' }, 0);
-                if (h3)    tl.to(h3,    { ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out' }, 0.06);
-                if (p)     tl.to(p,     { ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out' }, 0.14);
-                if (arrow) tl.to(arrow, { ...ir, opacity: 1, scale: 1, duration: 0.9, ease: 'expo.out' }, 0.22);
             });
 
-            /* PROTOCOL — sticky col */
-            gsap.from('.protocol-sticky-col > *:not(.proto-progress)', {
-                ...ir, y: 22, opacity: 0, duration: 1.0, ease: 'expo.out', stagger: 0.1,
-                scrollTrigger: { trigger: '.protocol-section', start: 'top 84%', once: true },
+            /* PROTOCOLO — columna sticky + progreso */
+            reveal('.protocol-sticky-col > *:not(.proto-progress)', {
+                trigger: '.protocol-section', y: 16, dur: 0.95, stagger: 0.1, start: 'top 84%',
             });
+            reveal('.proto-progress', { trigger: '.protocol-section', y: 14, dur: 0.9, delay: 0.3, start: 'top 84%' });
 
-            /* PROTOCOL — progress indicator entrance */
-            gsap.to('.proto-progress', {
-                ...ir, opacity: 1, y: 0, duration: 0.9, ease: 'expo.out', delay: 0.4,
-                scrollTrigger: { trigger: '.protocol-section', start: 'top 84%', once: true },
-            });
-
-            /* PROTOCOL — track scrub */
             const mTrack = document.querySelector('.timeline-track');
             if (mTrack) {
                 gsap.set(mTrack, { transformOrigin: 'top center', scaleY: 0 });
@@ -1649,8 +1091,6 @@ const t = useTranslations(lang);
                     scrollTrigger: { trigger: '.protocol-section', start: 'top 70%', end: 'bottom 85%', scrub: 0.8 },
                 });
             }
-
-            /* PROTOCOL — progress bar fill scrub */
             const mProgressFill = document.querySelector<HTMLElement>('.proto-progress-fill');
             if (mProgressFill) {
                 gsap.to(mProgressFill, {
@@ -1659,14 +1099,11 @@ const t = useTranslations(lang);
                 });
             }
 
-            /* PROTOCOL — active step + counter */
             const mProtoSteps = gsap.utils.toArray<HTMLElement>('.protocol-step');
             const mProtoCurrent = document.querySelector<HTMLElement>('.proto-current');
             mProtoSteps.forEach((step, idx) => {
                 ScrollTrigger.create({
-                    trigger: step,
-                    start: 'top 60%',
-                    end: 'bottom 50%',
+                    trigger: step, start: 'top 60%', end: 'bottom 50%',
                     onEnter:     () => { step.classList.add('is-active');    setMProtoCount(idx); },
                     onEnterBack: () => { step.classList.add('is-active');    setMProtoCount(idx); },
                     onLeave:     () => { step.classList.remove('is-active'); },
@@ -1678,69 +1115,34 @@ const t = useTranslations(lang);
                 const next = String(idx + 1).padStart(2, '0');
                 if (mProtoCurrent.textContent === next) return;
                 gsap.fromTo(mProtoCurrent,
-                    { y: -8, opacity: 0 },
-                    { y: 0, opacity: 1, duration: 0.4, ease: 'expo.out',
+                    { y: -6, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.4, ease: EASE,
                       onStart: () => { mProtoCurrent.textContent = next; } });
             }
 
-            /* PROTOCOL — steps */
             mProtoSteps.forEach((step) => {
-                const node = step.querySelector<HTMLElement>('.step-node');
-                const wm = step.querySelector<HTMLElement>('.watermark-num');
-                const h4 = step.querySelector<HTMLElement>('h4');
-                const p = step.querySelector<HTMLElement>('p');
-
-                if (node) gsap.set(node, { scale: 0, opacity: 0 });
-                if (wm)   gsap.set(wm, { opacity: 0, x: -12 });
-                if (h4)   gsap.set(h4, { opacity: 0, y: 18 });
-                if (p)    gsap.set(p,  { opacity: 0, y: 14 });
-
-                const tl = gsap.timeline({
-                    scrollTrigger: { trigger: step, start: 'top 90%', once: true },
+                reveal(step.querySelectorAll('.watermark-num, h4, p'), {
+                    trigger: step, y: 14, dur: 0.85, stagger: 0.06, start: 'top 90%',
                 });
-
-                if (node) tl.to(node, { ...ir, scale: 1, opacity: 1, duration: 0.9, ease: 'expo.out' }, 0);
-                if (wm)   tl.to(wm,   { ...ir, opacity: 1, x: 0, duration: 1.1, ease: 'expo.out' }, 0.06);
-                if (h4)   tl.to(h4,   { ...ir, opacity: 1, y: 0, duration: 0.9, ease: 'expo.out' }, 0.14);
-                if (p)    tl.to(p,    { ...ir, opacity: 1, y: 0, duration: 0.9, ease: 'expo.out' }, 0.22);
             });
 
             /* CTA */
             const mCtaCard = document.getElementById('cta-card') as HTMLElement | null;
             if (mCtaCard) {
-                const ctaText = mCtaCard.querySelectorAll<HTMLElement>('.cta-text-side > *');
-                const ctaBtn = mCtaCard.querySelector<HTMLElement>('.cta-action-side');
-
-                gsap.set(ctaText, { opacity: 0, y: 20 });
-                if (ctaBtn) gsap.set(ctaBtn, { opacity: 0, y: 18 });
-
-                const tl = gsap.timeline({
-                    scrollTrigger: { trigger: mCtaCard, start: 'top 86%', once: true },
+                reveal(mCtaCard, { trigger: mCtaCard, y: 22, dur: 0.95, stagger: 0, start: 'top 86%' });
+                reveal(mCtaCard.querySelectorAll('.cta-text-side > *, .cta-action-side'), {
+                    trigger: mCtaCard, y: 12, dur: 0.85, stagger: 0.08, delay: 0.12, start: 'top 86%',
                 });
-
-                tl.from(mCtaCard, {
-                    ...ir, y: 30, scale: 0.97, opacity: 0,
-                    duration: 1.0, ease: 'expo.out',
-                });
-                tl.to(ctaText, {
-                    ...ir, opacity: 1, y: 0, duration: 1.0, ease: 'expo.out', stagger: 0.1,
-                }, '-=0.8');
-                if (ctaBtn) tl.to(ctaBtn, {
-                    ...ir, opacity: 1, y: 0, duration: 0.9, ease: 'expo.out',
-                }, '-=0.6');
             }
 
-            /* CAROUSEL CENTER DETECTION (legacy is-centered class) */
+            /* CARRUSEL — detección de tarjeta centrada (clase is-centered) */
             const track = document.querySelector('.carousel-track-wrapper');
             const cards = document.querySelectorAll('.vertical-card');
             if (track && cards.length) {
                 const observer = new IntersectionObserver(entries => {
-                    // Pick the single entry with the highest intersection ratio
                     let best: IntersectionObserverEntry | null = null;
                     for (const entry of entries) {
-                        if (!best || entry.intersectionRatio > best.intersectionRatio) {
-                            best = entry;
-                        }
+                        if (!best || entry.intersectionRatio > best.intersectionRatio) best = entry;
                     }
                     if (best && best.intersectionRatio > 0) {
                         cards.forEach(c => c.classList.remove('is-centered'));

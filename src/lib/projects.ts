@@ -1,5 +1,5 @@
 export const clientProjects = {
-  "hola@flouvia.com": {
+  "flouvia.mx@gmail.com": {
     name: "Tu Nombre o Proyecto",
     phase: "Fase de Pruebas",
     progress: 100,

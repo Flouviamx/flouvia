@@ -34,6 +34,16 @@ const ogLocale  = lang === 'en' ? 'en_US' : 'es_MX';
 <html lang={lang}>
     <head>
         <meta charset="UTF-8" />
+
+        <!-- Gate de animación: marca <html> ANTES del primer paint para que los
+             elementos animados (hero, navbar) partan ocultos sin flash. Sin JS o
+             con reduced-motion, la clase nunca se añade y todo queda visible. -->
+        <script is:inline>
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.documentElement.classList.add('js-anim');
+            }
+        </script>
+
         <meta name="description" content={description} />
         <link rel="canonical" href={canonical} />
         {noindex && <meta name="robots" content="noindex, nofollow" />}
