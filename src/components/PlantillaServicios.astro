@@ -93,22 +93,23 @@ const faqSchema = {
 
 // ── Comparison table rows ──
 const cmpHead = isEn
-    ? ['Criterion', 'Flouvia', 'Traditional agency', 'Freelancer / Generic agency']
-    : ['Criterio', 'Flouvia', 'Agencia tradicional', 'Freelancer / Agencia genérica'];
+    ? ['Criterion', 'Flouvia', 'Traditional agency', 'Freelancer / Generic']
+    : ['Criterio', 'Flouvia', 'Agencia tradicional', 'Freelancer / Genérica'];
+// tones: 'pos' (✓) · 'mid' (~) · 'neg' (✗) · 'none' (descriptivo, sin ícono)
 const cmpRows = isEn ? [
-    ['Code', 'Native, no apps', 'Mix of apps and code', 'Templates + apps'],
-    ['Specialization', 'E-commerce & transactional B2B only', 'E-commerce + other services', 'All kinds of projects'],
-    ['ERP integrations', 'Yes — native two-way API', 'Depends on the project', 'Rare or superficial'],
-    ['Client volume', 'Max. 8 projects/year', '10–30 at once', 'No defined limit'],
-    ['Measurable result', '+34% CR · −67% process time', 'Project delivery', 'Site delivery'],
-    ['Who it’s for', 'Established operation with traction', 'Mid-size projects', 'Any client'],
+    { c: 'Code',                cells: [['pos', 'Native, no apps'], ['mid', 'Mix of apps & code'], ['neg', 'Templates + apps']] },
+    { c: 'Specialization',      cells: [['pos', 'E-commerce & B2B only'], ['mid', 'E-commerce + others'], ['neg', 'All kinds of projects']] },
+    { c: 'ERP integrations',    cells: [['pos', 'Native two-way API'], ['mid', 'Depends on project'], ['neg', 'Rare or superficial']] },
+    { c: 'Client volume',       cells: [['pos', 'Max. 8 projects / year'], ['mid', '10–30 at once'], ['neg', 'No defined limit']] },
+    { c: 'Measurable result',   cells: [['pos', '+34% CR · −67% time'], ['mid', 'Project delivery'], ['neg', 'Site delivery']] },
+    { c: 'Who it’s for',        cells: [['none', 'Established operation'], ['none', 'Mid-size projects'], ['none', 'Any client']] },
 ] : [
-    ['Código', 'Nativo, sin apps', 'Mix de apps y código', 'Plantillas + apps'],
-    ['Especialización', 'Solo e-commerce y B2B transaccional', 'E-commerce + otros servicios', 'Todo tipo de proyectos'],
-    ['Integraciones ERP', 'Sí — API nativa bidireccional', 'Depende del proyecto', 'Raro o superficial'],
-    ['Volumen de clientes', 'Máx. 8 proyectos/año', '10–30 simultáneos', 'Sin límite definido'],
-    ['Resultado medible', '+34% CR · −67% tiempo proceso', 'Entrega del proyecto', 'Entrega del sitio'],
-    ['Para quién', 'Operación establecida con tracción', 'Proyectos medianos', 'Cualquier cliente'],
+    { c: 'Código',              cells: [['pos', 'Nativo, sin apps'], ['mid', 'Mix de apps y código'], ['neg', 'Plantillas + apps']] },
+    { c: 'Especialización',     cells: [['pos', 'Solo e-commerce y B2B'], ['mid', 'E-commerce + otros'], ['neg', 'Todo tipo de proyectos']] },
+    { c: 'Integraciones ERP',   cells: [['pos', 'API nativa bidireccional'], ['mid', 'Depende del proyecto'], ['neg', 'Raro o superficial']] },
+    { c: 'Volumen de clientes', cells: [['pos', 'Máx. 8 proyectos / año'], ['mid', '10–30 simultáneos'], ['neg', 'Sin límite definido']] },
+    { c: 'Resultado medible',   cells: [['pos', '+34% CR · −67% tiempo'], ['mid', 'Entrega del proyecto'], ['neg', 'Entrega del sitio']] },
+    { c: 'Para quién',          cells: [['none', 'Operación con tracción'], ['none', 'Proyectos medianos'], ['none', 'Cualquier cliente']] },
 ];
 
 // ── Caso / métrica discreta por servicio (número en serif italic, sin caja) ──
@@ -341,17 +342,31 @@ const serviceRows = [
                         <thead>
                             <tr>
                                 {cmpHead.map((h, i) => (
-                                    <th class={i === 1 ? 'cmp-flouvia-col' : ''}>{h}</th>
+                                    <th class={i === 1 ? 'cmp-col-flouvia' : ''}>
+                                        {i === 1
+                                            ? <span class="cmp-flouvia-head"><span class="cmp-flouvia-dot" aria-hidden="true"></span>{h}<span class="cmp-flouvia-badge">{isEn ? 'Recommended' : 'Recomendado'}</span></span>
+                                            : h}
+                                    </th>
                                 ))}
                             </tr>
                         </thead>
                         <tbody>
                             {cmpRows.map((row) => (
                                 <tr>
-                                    {row.map((cell, i) => (
-                                        i === 0
-                                            ? <th scope="row">{cell}</th>
-                                            : <td class={i === 1 ? 'cmp-flouvia-col' : ''}>{cell}</td>
+                                    <th scope="row">{row.c}</th>
+                                    {row.cells.map(([tone, text], i) => (
+                                        <td class={i === 0 ? 'cmp-col-flouvia' : ''}>
+                                            <span class="cmp-cell">
+                                                {tone !== 'none' && (
+                                                    <span class={`cmp-ic cmp-ic-${tone}`} aria-hidden="true">
+                                                        {tone === 'pos' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>}
+                                                        {tone === 'mid' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>}
+                                                        {tone === 'neg' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>}
+                                                    </span>
+                                                )}
+                                                <span class="cmp-cell-text">{text}</span>
+                                            </span>
+                                        </td>
                                     ))}
                                 </tr>
                             ))}
@@ -595,18 +610,36 @@ const serviceRows = [
     .hw-text-zone h3 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 1rem 0; color: var(--color-text); }
     .hw-text-zone p { font-size: 1.05rem; color: var(--color-text-muted); line-height: 1.6; margin: 0; }
 
-    /* 5. COMPARISON TABLE */
+    /* 5. COMPARISON TABLE — columna Flouvia elevada */
     .comparison-section { padding: 6rem 0; background: var(--color-bg-soft); position: relative; overflow: clip; }
-    .cmp-header { text-align: center; max-width: 640px; margin: 0 auto 3.5rem; }
-    .cmp-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 24px; }
-    .cmp-table { width: 100%; border-collapse: collapse; min-width: 720px; background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 30px 80px -30px rgba(10,25,47,0.12); }
-    .cmp-table th, .cmp-table td { text-align: left; padding: 1.25rem 1.5rem; font-size: 0.92rem; line-height: 1.4; vertical-align: top; border-bottom: 1px solid rgba(10,25,47,0.06); }
-    .cmp-table thead th { font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--color-text-muted); background: #fafbfd; }
-    .cmp-table tbody th[scope="row"] { font-weight: 700; color: var(--color-text); width: 22%; }
+    .cmp-header { text-align: center; max-width: 640px; margin: 0 auto 4rem; }
+    .cmp-scroll { overflow-x: auto; overflow-y: visible; -webkit-overflow-scrolling: touch; padding: 22px 22px 30px; }
+    .cmp-table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 760px; }
+    .cmp-table th, .cmp-table td { text-align: left; padding: 1.2rem 1.6rem; font-size: 0.92rem; line-height: 1.4; vertical-align: middle; border-bottom: 1px solid var(--color-border); }
+    .cmp-table thead th { font-size: 0.68rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: var(--color-text-muted); padding-top: 1.4rem; padding-bottom: 1.4rem; vertical-align: bottom; }
+    .cmp-table tbody th[scope="row"] { font-weight: 700; color: var(--color-text); width: 24%; }
     .cmp-table td { color: #5a6677; font-weight: 500; }
     .cmp-table tbody tr:last-child th, .cmp-table tbody tr:last-child td { border-bottom: none; }
-    .cmp-flouvia-col { background: rgba(10,25,47,0.025); color: var(--color-blue-deep) !important; font-weight: 700 !important; box-shadow: inset 2px 0 0 var(--color-blue-deep), inset -2px 0 0 var(--color-blue-deep); }
-    .cmp-table thead th.cmp-flouvia-col { color: var(--color-blue-deep); background: rgba(10,25,47,0.05); }
+    /* hover de fila (no afecta la columna Flouvia) */
+    .cmp-table tbody tr:hover th[scope="row"], .cmp-table tbody tr:hover td:not(.cmp-col-flouvia) { background: rgba(10,25,47,0.018); }
+
+    /* Columna Flouvia: card blanca elevada sobre el fondo soft */
+    .cmp-col-flouvia { background: #fff; position: relative; z-index: 1; box-shadow: -14px 0 26px -20px rgba(10,25,47,0.35), 14px 0 26px -20px rgba(10,25,47,0.35); }
+    .cmp-col-flouvia .cmp-cell-text { color: var(--color-blue-deep); font-weight: 700; }
+    thead th.cmp-col-flouvia { background: var(--color-blue-deep); color: #fff; border-bottom: none; border-top-left-radius: 16px; border-top-right-radius: 16px; box-shadow: -14px 0 26px -20px rgba(10,25,47,0.35), 14px 0 26px -20px rgba(10,25,47,0.35), 0 -12px 26px -18px rgba(10,25,47,0.4); }
+    tbody tr:last-child td.cmp-col-flouvia { border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; box-shadow: -14px 0 26px -20px rgba(10,25,47,0.35), 14px 0 26px -20px rgba(10,25,47,0.35), 0 16px 30px -18px rgba(10,25,47,0.32); }
+    .cmp-flouvia-head { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .cmp-flouvia-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px rgba(16,185,129,0.7); }
+    .cmp-flouvia-badge { font-size: 0.56rem; font-weight: 800; letter-spacing: 0.8px; padding: 3px 8px; border-radius: 100px; background: rgba(255,255,255,0.14); color: #fff; }
+
+    /* Celdas: ícono + texto */
+    .cmp-cell { display: inline-flex; align-items: center; gap: 10px; }
+    .cmp-ic { width: 18px; height: 18px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .cmp-ic svg { width: 12px; height: 12px; }
+    .cmp-ic-pos { background: rgba(16,185,129,0.12); color: #0f9d6b; }
+    .cmp-col-flouvia .cmp-ic-pos { background: rgba(16,185,129,0.16); color: #0a8a5f; }
+    .cmp-ic-mid { background: rgba(10,25,47,0.06); color: #94a3b8; }
+    .cmp-ic-neg { background: transparent; color: #cbd2db; }
 
     /* 6. FAQ */
     .faq-section { padding: 6rem 0 7rem; background: var(--color-bg); }
@@ -823,8 +856,44 @@ const serviceRows = [
         /* COMPARISON table */
         reveal('.cmp-scroll', { trigger: '.comparison-section', y: 24, dur: 1.0, start: 'top 80%' });
 
-        /* FAQ items */
+        /* FAQ items — reveal en scroll */
         reveal('.faq-item', { trigger: '.faq-list', y: 16, dur: 0.85, stagger: 0.06, start: 'top 84%' });
+
+        /* FAQ — acordeón con despliegue de altura suave (una sola abierta) */
+        const faqItems = gsap.utils.toArray<HTMLElement>('.faq-item');
+        const closeFaq = (item: HTMLElement) => {
+            const panel = item.querySelector<HTMLElement>('.faq-a');
+            if (!panel) return;
+            gsap.set(panel, { height: panel.offsetHeight });
+            gsap.to(panel, {
+                height: 0, opacity: 0, duration: 0.4, ease: 'power2.inOut',
+                onComplete: () => { item.removeAttribute('open'); gsap.set(panel, { clearProps: 'height,opacity' }); },
+            });
+        };
+        const openFaq = (item: HTMLElement) => {
+            const panel = item.querySelector<HTMLElement>('.faq-a');
+            if (!panel) return;
+            item.setAttribute('open', '');
+            gsap.set(panel, { height: 'auto', opacity: 1 });
+            const h = panel.offsetHeight;
+            gsap.fromTo(panel,
+                { height: 0, opacity: 0 },
+                { height: h, opacity: 1, duration: 0.55, ease: 'power2.out',
+                  onComplete: () => gsap.set(panel, { height: 'auto' }) });
+        };
+        faqItems.forEach((item) => {
+            const summary = item.querySelector<HTMLElement>('.faq-q');
+            if (!summary) return;
+            summary.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (item.hasAttribute('open')) {
+                    closeFaq(item);
+                } else {
+                    faqItems.forEach((o) => { if (o !== item && o.hasAttribute('open')) closeFaq(o); });
+                    openFaq(item);
+                }
+            });
+        });
 
         /* CTA final */
         const cta = document.querySelector<HTMLElement>('.cta-box-refined');

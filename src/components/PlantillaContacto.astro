@@ -128,7 +128,6 @@ const contactSchema = {
                 <div class="ec-sidebar">
 
                     <div class="ec-block">
-                        <span class="ec-label mono-font">STATUS</span>
                         <div class="system-status-pill">
                             <div class="pulse-dot-green"></div>
                             <span>{isEn ? '2 SLOTS OPEN · Q3' : '2 CUPOS DISPONIBLES · Q3'}</span>
@@ -136,45 +135,16 @@ const contactSchema = {
                     </div>
 
                     <div class="ec-block">
-                        <span class="ec-label mono-font">{isEn ? 'WHO APPLIES' : 'QUIÉN APLICA'}</span>
+                        <span class="ec-label">{isEn ? 'WHO APPLIES' : 'QUIÉN APLICA'}</span>
                         <ul class="criteria">
-                            <li class="crit-yes">{isEn ? 'Established operations with real sales and traction' : 'Operaciones establecidas con ventas y tracción real'}</li>
-                            <li class="crit-no">{isEn ? 'Startups without sales or template-shopping projects' : 'Startups sin ventas o proyectos que buscan plantillas'}</li>
+                            <li class="crit-yes">{isEn ? 'Operations with sales and real traction' : 'Operación con ventas y tracción real'}</li>
+                            <li class="crit-no">{isEn ? 'Templates or projects without sales' : 'Plantillas o proyectos sin ventas'}</li>
                         </ul>
                     </div>
 
                     <div class="ec-block">
-                        <span class="ec-label mono-font">HEADQUARTERS</span>
-                        <p class="ec-data">Ciudad de México.</p>
-                        <div class="local-time-wrapper">
-                            <span class="mono-font ec-time-label">LOCAL TIME:</span>
-                            <span class="mono-font ec-clock" id="cdmx-clock">00:00:00</span>
-                        </div>
-                    </div>
-
-                    <div class="ec-block">
-                        <span class="ec-label mono-font">DIRECT LINE</span>
+                        <span class="ec-label">{isEn ? 'DIRECT LINE' : 'LÍNEA DIRECTA'}</span>
                         <a href="mailto:hola@flouvia.com" class="ec-data ec-link hover-underline">hola@flouvia.com</a>
-                    </div>
-
-                    <div class="ec-block">
-                        <span class="ec-label mono-font">SOCIAL</span>
-                        <div class="ec-social-flex">
-                            <a href="https://www.linkedin.com/company/flouvia/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="social-icon-link">
-                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                                    <rect x="2" y="9" width="4" height="12"></rect>
-                                    <circle cx="4" cy="4" r="2"></circle>
-                                </svg>
-                            </a>
-                            <a href="https://www.instagram.com/flouvia.mx/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="social-icon-link">
-                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                                </svg>
-                            </a>
-                        </div>
                     </div>
 
                 </div>
@@ -457,15 +427,28 @@ const contactSchema = {
         z-index: 9999;
     }
     .iti__selected-flag { background-color: transparent !important; padding-left: 0; outline: none; display: flex; align-items: center; }
-    /* El prefijo (+52) debe verse EXACTAMENTE igual que los dígitos que teclea
-       el prospecto: mismo font, tamaño, peso y color. */
+
+    /* El prefijo (+52) y los dígitos que teclea el prospecto DEBEN verse idénticos:
+       mismo font, tamaño, peso, color, letter-spacing y line-height (baseline). */
+    .iti input,
+    .iti input[type="tel"],
+    #whatsapp {
+        font-family: 'Inter', system-ui, sans-serif !important;
+        font-size: 1.1rem !important;
+        font-weight: 500 !important;
+        letter-spacing: -0.01em !important;
+        color: #0a0e1a !important;
+        line-height: 1.5 !important;
+        font-feature-settings: normal !important;
+    }
     .iti__selected-dial-code {
-        font-family: var(--font-sans) !important;
+        font-family: 'Inter', system-ui, sans-serif !important;
         color: #0a0e1a !important;
         font-weight: 500 !important;
         font-size: 1.1rem !important;
         letter-spacing: -0.01em !important;
-        line-height: 1 !important;
+        line-height: 1.5 !important;
+        font-feature-settings: normal !important;
         padding-left: 6px;
     }
     .iti__arrow { border-top-color: #94a3b8; margin-left: 6px; }
@@ -509,9 +492,9 @@ const contactSchema = {
     .contact-watermark { position: absolute; right: -4%; top: 4rem; font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 26vw; line-height: 1; color: rgba(10,25,47,0.022); white-space: nowrap; pointer-events: none; user-select: none; z-index: 0; }
     .ec-grid { display: grid; grid-template-columns: 320px 1fr; gap: 7rem; align-items: start; position: relative; z-index: 1; }
 
-    /* SIDEBAR */
-    .ec-sidebar { position: sticky; top: 140px; display: flex; flex-direction: column; gap: 3rem; }
-    .ec-block { display: flex; flex-direction: column; gap: 0.6rem; }
+    /* SIDEBAR — mínima y aireada (cupo · criterio · correo) */
+    .ec-sidebar { position: sticky; top: 150px; display: flex; flex-direction: column; gap: 3.5rem; }
+    .ec-block { display: flex; flex-direction: column; gap: 0.9rem; }
     .ec-label { font-family: var(--font-sans); font-size: 0.62rem; font-weight: 800; color: #9aa6b2; letter-spacing: 3px; text-transform: uppercase; }
     .ec-data { font-size: 1.15rem; font-weight: 500; color: #000; margin: 0; }
 
@@ -528,22 +511,10 @@ const contactSchema = {
     .crit-no { color: #8895a7; }
     .crit-no::before { content: '✕'; color: #c4495a; }
 
-    .local-time-wrapper { display: flex; align-items: baseline; gap: 10px; }
-    .ec-time-label { font-family: var(--font-sans); font-size: 0.6rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: #b0bcc8; }
-    .ec-clock { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 1.2rem; color: var(--color-blue-deep); letter-spacing: -0.3px; }
-
-    .ec-link { text-decoration: none; color: #000; transition: color 0.3s ease; }
+    .ec-link { text-decoration: none; color: #000; transition: color 0.3s ease; font-size: 1.15rem; font-weight: 500; }
     .hover-underline { position: relative; display: inline-block; width: max-content; }
     .hover-underline::after { content: ''; position: absolute; width: 100%; transform: scaleX(0); height: 1px; bottom: 0; left: 0; background-color: #000; transform-origin: bottom right; transition: transform 0.4s var(--ease-spring); }
     .hover-underline:hover::after { transform: scaleX(1); transform-origin: bottom left; }
-
-    .ec-social-flex { display: flex; gap: 1rem; align-items: center; margin-top: 0.5rem;}
-    .social-icon-link {
-        color: #64748b; transition: all 0.3s var(--ease-spring);
-        display: flex; align-items: center; justify-content: center;
-        padding: 10px; border-radius: 50%; background: #f8fafc; border: 1px solid var(--color-border);
-    }
-    .social-icon-link:hover { color: #000; background: #fff; border-color: #000; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05);}
 
     /* ── FORM ZONE ── */
     .ec-form-zone { padding-top: 0; position: relative; }
@@ -1177,18 +1148,5 @@ const contactSchema = {
         }
 
         updateUI(false);
-
-        /* 7. RELOJ CDMX */
-        function updateClock() {
-            var clockEl = document.getElementById('cdmx-clock');
-            if (!clockEl) return;
-            var formatter = new Intl.DateTimeFormat('en-US', {
-                timeZone: 'America/Mexico_City',
-                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false,
-            });
-            clockEl.textContent = formatter.format(new Date()) + ' CST';
-        }
-        updateClock();
-        setInterval(updateClock, 1000);
     });
 </script>

@@ -690,10 +690,11 @@ La sección se rediseñó (mayo 2026) para igualar la estética del home tras fe
 - Animación: gate `.js-anim .hero-anim{opacity:0}` + timeline GSAP `power2.out` (igual que `Inicio.astro`),
   parallax leve solo desktop. Reduced-motion → return temprano, todo visible.
 
-### Sidebar ejecutivo (`.ec-sidebar`, sticky)
-Bloques `.ec-block`: STATUS (pill escasez) · **QUIÉN APLICA** (criterio ✓/✕ = inversión de poder +
-auto-selección) · HEADQUARTERS (+ reloj CDMX en vivo, `Intl.DateTimeFormat` cada 1s) · DIRECT LINE
-(`hola@flouvia.com`) · SOCIAL (**URLs reales**: `linkedin.com/company/flouvia/`, `instagram.com/flouvia.mx/`).
+### Sidebar (`.ec-sidebar`, sticky) — mínima y aireada
+Decisión (mayo 2026): sidebar **mínima** — solo 3 bloques `.ec-block` con harto aire (`gap:3.5rem`):
+pill de escasez ("2 cupos · Q3") · **QUIÉN APLICA** (criterio ✓/✕ = inversión de poder + auto-selección) ·
+**LÍNEA DIRECTA** (`hola@flouvia.com`). Se **eliminaron** sede + reloj CDMX en vivo y los íconos de redes
+(se sentían "dashboard"/cargados; las redes ya están en el footer). Sin elemento humano (firma/foto).
 En ≤1024px pasa a fila wrap; en ≤768px a columna.
 
 ### Formulario por pasos (typeform-style) — CRÍTICO
