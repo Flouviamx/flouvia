@@ -711,14 +711,14 @@ const contactSchema = {
 
     /* Navegación */
     .step-nav {
-        display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+        display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1.5rem;
         margin-top: 3.5rem; padding-top: 2rem; position: relative;
     }
     /* hairline que se difumina en las orillas (estilo footer/tech del inicio) */
     .step-nav::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--color-border) 10%, var(--color-border) 90%, transparent); }
-    .step-nav-right { display: flex; align-items: center; gap: 1.3rem; margin-left: auto; }
+    .step-nav-right { display: flex; align-items: center; gap: 1.3rem; justify-self: center; }
     .step-back {
-        display: inline-flex; align-items: center; gap: 0.5rem;
+        display: inline-flex; align-items: center; gap: 0.5rem; justify-self: start;
         background: none; border: none; cursor: pointer;
         color: #8895a7; font-family: var(--font-sans); font-size: 0.9rem; font-weight: 600;
         transition: color 0.3s ease, transform 0.4s var(--ease-spring);
@@ -786,7 +786,7 @@ const contactSchema = {
     }
 
     @media (max-width: 768px) {
-        .hero-grand { padding-top: 8rem; padding-bottom: 3rem; min-height: auto; text-align: center; }
+        .hero-grand { padding-top: 11rem; padding-bottom: 4rem; min-height: auto; text-align: center; }
         .hero-content { display: flex; flex-direction: column; align-items: center; }
         .hero-status { margin-left: auto; margin-right: auto; }
         .hero-title { display: flex; flex-direction: column; gap: 0.2rem; margin-bottom: 2.5rem; max-width: 100%; }
@@ -819,7 +819,6 @@ const contactSchema = {
     }
 
     @media (max-width: 480px) {
-        .hero-grand { padding-top: 6.5rem; padding-bottom: 2.5rem; }
         .hero-title .title-bold { font-size: clamp(1.9rem, 9vw, 2.6rem); }
         .executive-contact { padding: 1.5rem 0 4.5rem 0; }
         .ec-grid { gap: 2rem; }
