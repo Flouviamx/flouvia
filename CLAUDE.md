@@ -246,6 +246,55 @@ interface Props {
 | `SoporteUI.astro` | /soporte | Tickets leídos de Supabase (tabla `tickets`). Form → `/api/soporte/ticket`. Date strip en `topbar-left`. |
 | `CalendarioUI.astro` | /calendario | Calendly embed. PortalHeader sin `title` (solo topbar). |
 | `PrivacidadPortalUI.astro` | /privacidad-portal | Política de datos del portal. Auth-protected. Link desde PortalFooter. |
+| `LoginUI.astro` | /login · /portal/login · /en/login | Rediseñada mayo 2026. Ver sección "Página de Login" abajo. |
+
+---
+
+## Página de Login (`LoginUI.astro`)
+
+> Rediseñada mayo 2026. Archivo único (`src/components/portal/LoginUI.astro`) que alimenta
+> `/login`, `/portal/login` y `/en/login`. Sigue la misma estética que el home:
+> claro editorial, Inter bold en headings, serif italic solo en números/watermark.
+
+### Decisiones de diseño
+- **Sin tarjeta (card):** la `card` de Clerk tiene `background: transparent`, `box-shadow: none`,
+  `border: none`. El formulario vive directamente sobre el fondo `--color-bg-soft` (sin caja flotante).
+- **Inputs como líneas:** `border-bottom: 1px solid` con transición a navy en `:focus`. Sin `border-radius`,
+  sin fondo. Estética Aesop/Stripe, no dashboard.
+- **Layout split:** `grid-template-columns: 1.05fr 0.95fr`. Izquierda = bloque de marca.
+  Derecha = formulario borderless.
+- **Watermark:** "Acceso" / "Access" en serif italic, `26vw`, `rgba(0,0,0,0.025)`, `bottom-right`,
+  mismo patrón que el resto del sitio.
+
+### Bloque de marca (izquierda)
+- Eyebrow (clave `login.eyebrow`): "ENTORNO PRIVADO" / "PRIVATE ENVIRONMENT".
+- H1 100% Inter bold sin palabra-acento serif (regla de una sola tipografía en headings).
+- Badge de exclusividad: "ACCESO POR INVITACIÓN" + nota de escasez "Menos de **8** clientes al año"
+  (el `8` en `.editorial` serif italic — OK porque es número, no heading).
+- Badge de seguridad: "ENCRIPTACIÓN END-TO-END" / "END-TO-END ENCRYPTION" con dot verde pulsante.
+
+### Maquillaje profundo de Clerk (`<style is:global>`)
+- **Deben ir en `<style is:global>`** porque el DOM de Clerk no lleva `data-astro-cid`
+  (ver sección "Bugs conocidos").
+- Variables `appearance`: `colorBackground: "transparent"`, `colorInputBackground: "transparent"`,
+  `borderRadius: "0px"` (los radios los controlamos nosotros por elemento).
+- Botones sociales: `border-radius: 12px`, hairline `rgba(0,0,0,0.1)`, hover eleva `translateY(-2px)`.
+- Divisor "o": hairline difuminada con `linear-gradient` (patrón footer/tech del home).
+- Labels: uppercase, weight 700, letterspaced (estilo eyebrow del sitio).
+- Botón primario: navy `#0a192f`, `border-radius: 12px`, sombra luxe, hover `translateY(-3px)`
+  con `var(--ease-spring)`.
+
+### Animación de entrada
+- Gate `.js-anim .login-anim { opacity: 0 }` en `<style is:global>` (PortalLayout añade `.js-anim`
+  pre-paint — ver `PortalLayout.astro`).
+- `power2.out`, `duration 0.95s`, `y: 14`, `stagger: 0.09` — estándar único del sitio.
+- Reduced-motion → set `opacity:1, y:0` inmediato y return. Sin FOUC.
+- Sin `expo.out`, sin `scale`, sin `blur` (reglas de mayo 2026).
+
+### Responsive (≤920px)
+- Grid colapsa a una columna; marca arriba, formulario abajo.
+- `max-width` del form-wrap sube a `440px` centrado a la izquierda.
+- Watermark pasa a `42vw` para seguir visible sin ocupar toda la pantalla.
 
 ---
 
@@ -581,6 +630,43 @@ hardcodeados — revisar cada trimestre.
 
 ---
 
+**PortalFooter pattern** (`src/components/PortalFooter.astro` — rediseñado mayo 2026):
+
+> **Objetivo:** footer del portal de clientes autenticados. Visual coherente con el
+> footer público (mismo dark navy radial-gradient, watermark, eyebrow, numeración /0X
+> serif, hairlines) pero escalado a herramienta logueada — sin correo enorme ni CTA
+> de marketing, con las páginas del portal completas y logout.
+
+**Estructura:**
+1. `.pf-hairline` — hairline con gradient que desvanece.
+2. `.pf-watermark` — "Flouvia" serif italic, `17vw`, `rgba(255,255,255,0.022)`.
+3. `.pf-meta` — eyebrow `FLOUVIA OS · PORTAL DE CLIENTES` + badge `● SISTEMAS OPERATIVOS` (LED pulse verde).
+4. `.pf-grid` (`5fr 7fr`):
+   - **`.pf-brand-col`**: logo SVG + **statement 100% sans/Inter** "Tu operación, en un solo lugar." (SIN serif italic — misma regla que el footer público) + correo `hola@flouvia.com →`.
+   - **`.pf-nav-cols`** (`repeat(3, 1fr)`):
+     - `/01 PORTAL` → Dashboard · Bóveda · Facturación · Calendario
+     - `/02 HERRAMIENTAS` → Roadmap · Entorno · Changelog · Soporte
+     - `/03 CUENTA` → Sitio Público · Cerrar sesión (logout)
+5. `.pf-divider` — hairline con gradient.
+6. `.pf-bottom` — copyright + Privacidad · Términos.
+
+**Tipografía — mismas reglas que el footer público:**
+- Etiquetas-sistema en MAYÚSCULAS (eyebrow, `/0X` col-titles, badge).
+- Links en Title Case (hardcodeados con ternario `isEn ?`).
+- Statement 100% sans — sin acento serif italic.
+- Números de edición y "Flouvia" del copyright: serif italic (`.pf-ed`).
+
+**Logout:** `window.Clerk.signOut(cb)` vía `<script>` (botón `#pf-signout`). Se pasa
+callback para inhibir la navegación default del SDK y redirigir al home. NO usar
+`<SignOutButton>` de `@clerk/astro/components` — no está exportado por esa versión y
+rompe el build.
+
+**Montaje:** ya está en `PortalLayout.astro` línea 59 → aparece en todas las páginas del portal automáticamente.
+
+**Animación:** CSS `animation: pf-fadein 0.9s var(--pf-ease) both` (no GSAP — el portal usa CSS animations para entradas simples). `prefers-reduced-motion` desactiva la animación y el LED pulse.
+
+---
+
 ## Navbar — patterns
 
 **Logo transition (desktop):**
@@ -690,7 +776,7 @@ navbars (público y portal); el switch del portal también recibió el crossfade
 | `src/components/PlantillaCaso.astro` | Template **compartido** del caso individual (`/casos/{slug}` y `/en/casos/{slug}`). Ambas `[slug].astro` son wrappers que le pasan `caso/next/isEn/root`. Lee todo de `data/casos.ts`. Ver "Página de Casos". |
 | `src/layouts/PortalLayout.astro` | Layout del portal de cliente |
 | `src/components/portal/PortalHeader.astro` | Header compartido de todas las páginas del portal |
-| `src/components/PortalFooter.astro` | Footer del portal — link a `/privacidad-portal` |
+| `src/components/PortalFooter.astro` | Footer del portal — dark navy coherente con el footer público. Ver "PortalFooter pattern" |
 | `src/pages/blog/index.astro` | Listing del blog — hero con status pill, grid cards, CTA contextual. `prerender:true`. |
 | `src/pages/blog/[slug].astro` | Artículo individual — hero, banner, sidebar TOC, article, author card, related, CTA. `prerender:true`. |
 | `src/data/blog.ts` | Fuente única de posts + `export const AUTHOR` (nombre, initial, rol, LinkedIn, bio). |
@@ -737,6 +823,14 @@ cta: {                       // CTA contextual al cierre — distinto por artíc
 - **Schema `Blog`** (JSON-LD) inyectado en la página con `blogPost[]` que lista todos los artículos.
 - Title SEO: "Blog de Ingeniería E-commerce y B2B | Flouvia — CDMX".
 - Scarcity placeholders (actualizar por trimestre): hero status pill + CTA badge → ver [[flouvia-scarcity-placeholders]].
+
+#### Barra de filtros — Liquid Glass segmented control (mayo 2026)
+Las pills de categoría (Todos / B2B / E-commerce / Automatización) usan el mismo lenguaje visual que el navbar:
+- **Contenedor `.filter-glass`** (id `filter-glass`): Liquid Glass — `backdrop-filter: blur(30px) saturate(1.9)`, fill translúcido, rim light + specular top + sombra profunda suave. Shimmer sweep al hover del contenedor.
+- **Indicador `.filter-indicator`** (id `filter-indicator`): cápsula de vidrio interna que desliza entre categorías con GSAP (`power3.out`, 0.48s). Mismo patrón que `#nav-indicator` del navbar.
+- **Pills `.filter-pill`**: sin borde propio, sin fondo propio — solo cambian `color`. `z-index: 1` para quedar sobre el indicador. `text-transform: uppercase`, `letter-spacing: 0.8px`.
+- **JS**: `slideIndicator` se define antes de los click handlers; posiciona en el activo inicial (sin animar), desliza en hover/click, vuelve al activo en `mouseleave`. Se recoloca en `fonts.ready`, `load`, `resize`. Con `reduced-motion` el indicador no se crea.
+- **NO cambió la estructura HTML** de la barra — solo estética.
 
 ### Artículo — `/blog/{slug}` y `/en/blog/{slug}`
 - **Hero**: breadcrumb, cat-badge + post-num, H1, meta-row (autor + fecha + tags). Gate `.js-anim .post-anim{opacity:0}` + timeline `power2.out`.

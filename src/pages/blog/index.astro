@@ -86,7 +86,9 @@ const blogSchema = {
     <!-- FILTER -->
     <div class="filter-bar">
       <div class="container">
-        <div class="filter-pills">
+        <div class="filter-glass" id="filter-glass" role="group" aria-label={isEn ? 'Filter by category' : 'Filtrar por categoría'}>
+          <div class="pill-shimmer" aria-hidden="true"></div>
+          <span class="filter-indicator" id="filter-indicator" aria-hidden="true"></span>
           {categories.map((cat, i) => (
             <button
               class={`filter-pill ${i === 0 ? 'active' : ''}`}
@@ -253,18 +255,57 @@ const blogSchema = {
   background: var(--color-bg);
   border-bottom: 1px solid var(--color-border);
 }
-.filter-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* Liquid Glass container — mismo lenguaje que .glass-pill del navbar */
+.filter-glass {
+  display: inline-flex; align-items: center;
+  background: linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.5) 48%, rgba(255,255,255,0.56) 100%);
+  backdrop-filter: blur(30px) saturate(1.9) brightness(1.04);
+  -webkit-backdrop-filter: blur(30px) saturate(1.9) brightness(1.04);
+  padding: 4px 6px; border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.55);
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,0.95),
+    inset 0 0 0 0.5px rgba(255,255,255,0.4),
+    inset 0 -6px 14px rgba(255,255,255,0.18),
+    0 10px 34px rgba(10,25,47,0.08),
+    0 2px 6px rgba(10,25,47,0.05);
+  position: relative; overflow: hidden;
+  transition: box-shadow 0.7s var(--ease-spring), border-color 0.7s var(--ease-spring);
+}
+
+/* shimmer sweep al hover del contenedor */
+.pill-shimmer {
+  position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%);
+  transform: translateX(-100%); pointer-events: none; z-index: 0; transition: transform 0s;
+}
+.filter-glass:hover .pill-shimmer {
+  transform: translateX(100%); transition: transform 0.55s var(--ease-smooth);
+}
+
+/* Indicador deslizante — cápsula de vidrio, posición/tamaño manejados por GSAP */
+.filter-indicator {
+  position: absolute; top: 0; left: 0;
+  width: 0; height: 0; border-radius: 100px;
+  background: rgba(10,25,47,0.07);
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,0.7),
+    inset 0 0 0 0.5px rgba(255,255,255,0.35),
+    inset 0 -3px 8px rgba(255,255,255,0.12);
+  opacity: 0; z-index: 0; pointer-events: none;
+  will-change: transform, width, height;
+}
+
 .filter-pill {
-  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px;
-  color: var(--color-text-muted); background: transparent;
-  border: 1px solid var(--color-border); border-radius: 50px;
+  position: relative; z-index: 1;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+  color: rgba(0,0,0,0.45); background: transparent; border: none; border-radius: 100px;
   padding: 8px 18px; cursor: pointer;
-  transition: all 0.3s var(--ease-smooth);
+  transition: color 0.4s var(--ease-spring);
 }
-.filter-pill:hover { color: var(--color-text); border-color: rgba(0,0,0,0.2); }
-.filter-pill.active {
-  background: var(--color-blue-deep); color: #fff; border-color: var(--color-blue-deep);
-}
+.filter-pill:hover { color: rgba(0,0,0,0.85); }
+.filter-pill.active { color: rgba(0,0,0,0.92); font-weight: 800; }
 
 /* BLOG BODY */
 .blog-body { padding: 5rem 0 6rem; background: var(--color-bg-soft); }
@@ -426,8 +467,11 @@ const blogSchema = {
   .posts-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
-  .blog-hero { padding: 11rem 0 4rem; }
-  .blog-title { letter-spacing: -1.5px; }
+  .blog-hero { padding: 8.5rem 0 3rem; text-align: center; }
+  .blog-status { margin-left: auto; margin-right: auto; }
+  .blog-desc { margin-left: auto; margin-right: auto; }
+  .blog-hero-meta { display: flex; justify-content: center; }
+  .blog-title { letter-spacing: -1.5px; font-size: clamp(2.2rem, 9vw, 3.2rem); }
   .blog-body { padding: 3rem 0 4rem; }
   .featured-body { padding: 2rem; }
   .featured-title { font-size: 1.5rem; }
@@ -456,7 +500,54 @@ const robustRefresh = () => {
 robustRefresh();
 
 document.addEventListener('DOMContentLoaded', () => {
-  // ── FILTRO (siempre activo, incluso con reduced-motion) ──
+  // reduced-motion — al inicio para que todo el bloque lo use
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── INDICADOR DESLIZANTE — definir primero para usarlo en click handlers ──
+  const glass     = document.getElementById('filter-glass');
+  const indicator = document.getElementById('filter-indicator');
+  let slideIndicator: ((el: HTMLElement, animate?: boolean) => void) | null = null;
+
+  if (glass && indicator && !reduced) {
+    const rectOf = (el: HTMLElement) => {
+      const gr = glass.getBoundingClientRect();
+      const r  = el.getBoundingClientRect();
+      return { x: r.left - gr.left, y: r.top - gr.top, width: r.width, height: r.height };
+    };
+
+    let indicatorVisible = false;
+    slideIndicator = (el: HTMLElement, animate = true) => {
+      if (!indicatorVisible) {
+        gsap.set(indicator, { ...rectOf(el), opacity: 1 });
+        indicatorVisible = true;
+      } else {
+        gsap.to(indicator, { ...rectOf(el), opacity: 1, duration: animate ? 0.48 : 0, ease: 'power3.out', overwrite: true });
+      }
+    };
+
+    // posición inicial (sin animar)
+    const initialActive = glass.querySelector<HTMLElement>('.filter-pill.active');
+    if (initialActive) slideIndicator(initialActive, false);
+
+    // hover: desliza al pill; mouseleave: vuelve al activo
+    const pills2 = glass.querySelectorAll<HTMLButtonElement>('.filter-pill');
+    pills2.forEach(p => p.addEventListener('mouseenter', () => slideIndicator!(p)));
+    glass.addEventListener('mouseleave', () => {
+      const active = glass.querySelector<HTMLElement>('.filter-pill.active');
+      if (active) slideIndicator!(active);
+    });
+
+    // recolocar al cambiar layout
+    const relayout = () => {
+      const active = glass.querySelector<HTMLElement>('.filter-pill.active');
+      if (active) slideIndicator!(active, false);
+    };
+    if (document.fonts?.ready) document.fonts.ready.then(() => relayout());
+    window.addEventListener('load', relayout, { once: true });
+    window.addEventListener('resize', relayout, { passive: true });
+  }
+
+  // ── FILTRO — lógica de visibilidad + mueve el indicador al hacer click ──
   const pills = document.querySelectorAll<HTMLButtonElement>('.filter-pill');
   const featured = document.querySelector<HTMLElement>('.featured-wrapper');
   const cards = document.querySelectorAll<HTMLElement>('.post-card-wrapper');
@@ -467,11 +558,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const filter = pill.dataset.filter;
       if (featured) featured.classList.toggle('hidden', filter !== 'all' && featured.dataset.category !== filter);
       cards.forEach(card => card.classList.toggle('hidden', filter !== 'all' && card.dataset.category !== filter));
+      if (slideIndicator) slideIndicator(pill);
     });
   });
 
-  // Con reduced-motion la clase .js-anim nunca se añade → todo visible. No animamos.
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Con reduced-motion → no animamos nada (la clase .js-anim tampoco se añade).
   if (reduced) return;
 
   const EASE = 'power2.out';

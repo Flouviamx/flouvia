@@ -642,7 +642,14 @@ const aboutSchema = {
 
         .values-monolith-section { padding: 4rem 0; }
         .values-monolith-section .section-header { margin-bottom: 2.5rem; }
-        .monolith-card { padding: 2.5rem; }
+        /* PRINCIPIOS → scroll horizontal con snap */
+        .monolith-grid {
+            display: flex; gap: 1rem; overflow-x: auto;
+            scroll-snap-type: x mandatory; scrollbar-width: none;
+            margin: 0 -1.5rem; padding: 0 1.5rem 1rem;
+        }
+        .monolith-grid::-webkit-scrollbar { display: none; }
+        .monolith-card { flex: 0 0 80%; scroll-snap-align: center; padding: 2.5rem; }
         .m-top-zone { margin-bottom: 2rem;}
 
         .thin-metrics-section { padding: 4rem 0; }
@@ -653,14 +660,17 @@ const aboutSchema = {
         .thin-desc { font-size: 0.95rem; line-height: 1.4; }
         .thin-src { font-size: 0.62rem; }
 
-        .advantage-sober-banner.global-gap-reduced { padding: 2.25rem 0; }
-        .adv-b-title { font-size: 2.3rem; }
+        .advantage-sober-banner.global-gap-reduced { padding: 2.5rem 0; }
+        /* ¿POR QUÉ FLOUVIA? → centrado */
+        .adv-banner-flex { flex-direction: column; align-items: center; text-align: center; gap: 1.5rem; }
+        .adv-b-right { border-left: none; padding-left: 0; flex-direction: column; align-items: center; gap: 1.25rem; }
+        .adv-b-title { font-size: 2.3rem; white-space: normal; }
         .adv-b-desc { font-size: 1.05rem; }
 
         .testimonials-slider-pro { padding: 4rem 0; width: 100%; overflow: hidden; }
         .header-flex { margin-bottom: 0.5rem; }
         .header-title-mobile h2 { font-size: 2.2rem; margin-bottom: 0.5rem; letter-spacing: -1px; }
-        .t-scroll-hint { display: flex; margin-top: 1rem; }
+        .t-scroll-hint { display: flex; justify-content: center; margin-top: 1rem; margin-bottom: 2rem; }
         .t-track-wrapper { padding: 2rem 0 3rem 5%; scroll-padding-left: 5%; scroll-behavior: smooth; }
         .t-track { gap: 14px; }
         .t-card-pro {

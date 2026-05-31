@@ -675,13 +675,10 @@ const serviceRows = [
     }
 
     @media (max-width: 768px) {
-        .hero-grand { padding-top: 8.5rem; padding-bottom: 4rem; min-height: auto; text-align: center; }
-        .hero-content { display: flex; flex-direction: column; align-items: center; }
-        .hero-status { margin-left: auto; margin-right: auto; }
-        .hero-text-zone { max-width: 100%; }
+        .hero-grand { padding-top: 9rem; padding-bottom: 4rem; min-height: auto; }
         .hero-title { font-size: 8.5vw; margin-bottom: 2.5rem; max-width: 100%; }
-        .hero-bottom { flex-direction: column; align-items: center; text-align: center; border-top: none; padding-top: 0; gap: 2.2rem; }
-        .hero-desc { font-size: 1.05rem; margin-left: auto; margin-right: auto; }
+        .hero-bottom { gap: 2.2rem; }
+        .hero-desc { font-size: 1.05rem; }
         .hero-action { width: 100%; flex-direction: column; align-items: stretch; gap: 1rem; }
         .btn-luxe { width: 100%; padding: 18px 0; font-size: 1.05rem; }
         .btn-ghost { justify-content: center; }
@@ -703,36 +700,20 @@ const serviceRows = [
 
         .why-flouvia-hardware { padding: 4rem 0; }
         .wf-header { margin-bottom: 3rem; }
-        /* cards "por qué nuestra firma" → scroll horizontal con snap */
-        .wf-hardware-grid {
-            display: flex; grid-template-columns: none; gap: 1rem; overflow-x: auto;
-            scroll-snap-type: x mandatory; scrollbar-width: none;
-            margin: 0 -1.5rem; padding: 0 1.5rem 1rem;
-        }
-        .wf-hardware-grid::-webkit-scrollbar { display: none; }
-        .hw-card { flex: 0 0 80%; scroll-snap-align: center; padding: 2rem 1.5rem; }
+        .wf-hardware-grid { gap: 1.5rem; }
+        .hw-card { padding: 2rem 1.5rem; }
         .hw-num { font-size: 1.8rem; margin-bottom: 1.5rem; }
         .hw-text-zone h3 { font-size: 1.3rem; }
         .hw-text-zone p { font-size: 1rem; }
 
         .comparison-section { padding: 4rem 0; }
         .cmp-header { margin-bottom: 2.5rem; }
-        /* tabla comparativa → scroll horizontal limpio (borde a borde) */
-        .cmp-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -1.5rem; padding: 0 1.5rem 0.75rem; scrollbar-width: none; }
-        .cmp-scroll::-webkit-scrollbar { display: none; }
-        .cmp-frame { min-width: 560px; max-width: none; }
-        .cmp-table th, .cmp-table td { padding: 0.85rem 0.9rem; font-size: 0.82rem; }
-        .cmp-table thead th { font-size: 0.56rem; letter-spacing: 1px; }
-        .cmp-table tbody th[scope="row"] { width: 28%; }
         .faq-section { padding: 4rem 0; }
         .faq-q { font-size: 1rem; padding: 1.3rem 0; gap: 1rem; }
         .faq-a p { padding-right: 0; }
 
         .cta-final-clean { padding: 2rem 0 6rem 0; }
-        .cta-box-refined { padding: 3rem 1.6rem; border-radius: 28px; text-align: center; }
-        .cta-flex { flex-direction: column; align-items: center; text-align: center; gap: 2rem; }
-        .cta-text { max-width: 100%; }
-        .cta-body { margin-left: auto; margin-right: auto; }
+        .cta-box-refined { padding: 3rem 1.6rem; border-radius: 28px; }
         .cta-title { font-size: 1.7rem; }
         .btn-luxe-main { width: 100%; justify-content: center; }
     }

@@ -806,8 +806,8 @@ const t = useTranslations(lang);
             width: 78vw;
             height: 58vh; max-height: 460px;
             scroll-snap-align: center;
-            transform: scale(0.84) translateY(16px);
-            opacity: 0.45;
+            transform: scale(0.9);
+            opacity: 0.6;
             transition: transform 0.55s var(--ease-ios), opacity 0.55s var(--ease-ios), box-shadow 0.55s ease;
             transform-origin: center center;
             flex-shrink: 0;
@@ -1133,22 +1133,29 @@ const t = useTranslations(lang);
                 });
             }
 
-            /* CARRUSEL — detección de tarjeta centrada (clase is-centered) */
-            const track = document.querySelector('.carousel-track-wrapper');
-            const cards = document.querySelectorAll('.vertical-card');
+            /* CARRUSEL — la tarjeta cuyo centro está más cerca del centro del
+               carril se marca como .is-centered. Cálculo por scroll (rAF), robusto
+               y sin el parpadeo del IntersectionObserver anterior. */
+            const track = document.querySelector('.carousel-track-wrapper') as HTMLElement | null;
+            const cards = Array.from(document.querySelectorAll<HTMLElement>('.vertical-card'));
             if (track && cards.length) {
-                const observer = new IntersectionObserver(entries => {
-                    let best: IntersectionObserverEntry | null = null;
-                    for (const entry of entries) {
-                        if (!best || entry.intersectionRatio > best.intersectionRatio) best = entry;
+                let rafId = 0;
+                const updateCentered = () => {
+                    const mid = track.scrollLeft + track.clientWidth / 2;
+                    let best = cards[0]; let bestDist = Infinity;
+                    for (const card of cards) {
+                        const center = card.offsetLeft + card.offsetWidth / 2;
+                        const dist = Math.abs(center - mid);
+                        if (dist < bestDist) { bestDist = dist; best = card; }
                     }
-                    if (best && best.intersectionRatio > 0) {
-                        cards.forEach(c => c.classList.remove('is-centered'));
-                        best.target.classList.add('is-centered');
-                    }
-                }, { root: track, threshold: [0, 0.25, 0.5, 0.75, 1] });
-                cards.forEach(card => observer.observe(card));
-                setTimeout(() => { cards[0]?.classList.add('is-centered'); }, 100);
+                    cards.forEach(c => c.classList.toggle('is-centered', c === best));
+                };
+                track.addEventListener('scroll', () => {
+                    if (rafId) return;
+                    rafId = requestAnimationFrame(() => { rafId = 0; updateCentered(); });
+                }, { passive: true });
+                window.addEventListener('resize', updateCentered, { passive: true });
+                updateCentered();
             }
         });
     });

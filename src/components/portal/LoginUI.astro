@@ -9,198 +9,396 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
+const isEn = lang === 'en';
 
 // El login SIEMPRE vive en flouvia.com/login.
 // Después de auth, redirige a os.flouvia.com/dashboard (dominio absoluto).
-const loginPath = lang === 'en' ? '/en/login' : '/login';
+const loginPath = isEn ? '/en/login' : '/login';
 // URL relativa para evitar el mecanismo __clerk_handshake (solo ocurre con URLs absolutas cross-domain)
-const redirectPath = lang === 'en' ? '/en/dashboard' : '/dashboard';
+const redirectPath = isEn ? '/en/dashboard' : '/dashboard';
 ---
 
-<div class="pure-white-wrapper">
-    <div class="noise-overlay"></div>
+<section class="login-root">
+    <!-- Watermark editorial serif (como el resto del sitio) -->
+    <span class="login-watermark" aria-hidden="true">{isEn ? 'Access' : 'Acceso'}</span>
 
-    <div class="container-master">
-        <div class="split-grid">
-            
-            <div class="brand-side">
-                <span class="apple-eyebrow gsap-reveal">{t('login.eyebrow')}</span>
-                <h1 class="hero-heading gsap-reveal">
-                    {t('login.title1')} <br />
-                    <span class="editorial">{t('login.title2')}</span>
-                </h1>
-                <p class="brand-description gsap-reveal">
-                    {t('login.desc')}
+    <div class="login-inner">
+
+        <!-- LADO MARCA -->
+        <div class="brand-col">
+            <span class="login-anim eyebrow">{t('login.eyebrow')}</span>
+
+            <h1 class="login-anim brand-heading">
+                {t('login.title1')}<br />
+                {t('login.title2')}
+            </h1>
+
+            <p class="login-anim brand-desc">{t('login.desc')}</p>
+
+            <!-- Escasez / exclusividad (real: el portal es invitation-only) -->
+            <div class="login-anim scarcity">
+                <span class="scarcity-badge">
+                    <span class="dot-invite"></span>
+                    {isEn ? 'ACCESS BY INVITATION' : 'ACCESO POR INVITACIÓN'}
+                </span>
+                <p class="scarcity-note">
+                    {isEn ? 'Fewer than ' : 'Menos de '}<span class="editorial">8</span>{isEn ? ' active clients a year.' : ' clientes activos al año.'}
                 </p>
-                <div class="secure-badge mt-4 gsap-reveal">
-                    <span class="dot-secure pulse"></span> {lang === 'en' ? 'END-TO-END ENCRYPTION' : 'ENCRIPTACIÓN END-TO-END'}
-                </div>
             </div>
+        </div>
 
-            <div class="login-side">
-                <div class="gsap-card">
-                    <SignIn 
-                        routing="path" 
+        <!-- LADO FORMULARIO (sin tarjeta — fundido en la página) -->
+        <div class="form-col">
+            <div class="login-anim form-wrap">
+                <span class="form-eyebrow">{isEn ? 'CLIENT PORTAL' : 'PORTAL DE CLIENTES'}</span>
+
+                <div class="form-mount">
+                    <SignIn
+                        routing="path"
                         path={loginPath}
                         forceRedirectUrl={redirectPath}
                         appearance={{
                             variables: {
-                                colorPrimary: "#0a192f", // Tu var(--color-blue-deep)
-                                colorBackground: "#ffffff", 
-                                colorText: "#050505", // Tu var(--color-text)
-                                colorInputBackground: "#f4f6f9", // Tu var(--color-blue-icy)
+                                colorPrimary: "#0a192f",
+                                colorBackground: "transparent",
+                                colorText: "#050505",
+                                colorTextSecondary: "#555556",
+                                colorInputBackground: "transparent",
                                 colorInputText: "#050505",
-                                borderRadius: "24px", // Para coincidir con tu squircle
-                                fontFamily: "'Inter', system-ui, sans-serif"
+                                colorDanger: "#ef4444",
+                                borderRadius: "0px",
+                                fontFamily: "'Inter', system-ui, sans-serif",
+                                fontSize: "0.95rem",
+                                spacingUnit: "1.05rem"
                             },
                             elements: {
-                                // Aquí le damos el estilo de "Apple Card" a la propia caja de Clerk
+                                rootBox: { width: "100%" },
+                                cardBox: { boxShadow: "none", border: "none", background: "transparent", width: "100%" },
                                 card: {
-                                    boxShadow: "0 20px 40px -8px rgba(10, 25, 47, 0.08), 0 1px 3px rgba(10, 25, 47, 0.03)",
-                                    border: "1px solid rgba(0,0,0,0.04)",
-                                    padding: "2.5rem"
+                                    boxShadow: "none",
+                                    border: "none",
+                                    background: "transparent",
+                                    padding: "0",
+                                    width: "100%"
                                 },
-                                headerTitle: { display: "none" }, 
+                                header: { display: "none" },
+                                headerTitle: { display: "none" },
                                 headerSubtitle: { display: "none" },
-                                dividerRow: { display: "none" },
-                                footer: { display: "none" }, // Quitamos el footer molesto de Clerk
-                                formFieldLabel: {
-                                    color: "#555555", // var(--color-text-muted)
-                                    fontSize: "0.8rem",
-                                    fontWeight: "600",
-                                    letterSpacing: "0.5px"
-                                },
-                                formFieldInput: {
-                                    border: "1px solid rgba(0,0,0,0.08)", 
-                                    transition: "all 0.3s ease",
-                                    padding: "0.8rem 1rem",
-                                    boxShadow: "none"
-                                },
-                                socialButtonsBlockButton: {
-                                    border: "1px solid rgba(0,0,0,0.08)",
-                                    backgroundColor: "#ffffff",
-                                    transition: "all 0.3s ease",
-                                    fontWeight: "600"
-                                },
-                                formButtonPrimary: {
-                                    boxShadow: "0 10px 20px rgba(10, 25, 47, 0.12)",
-                                    transition: "transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.05)",
-                                    padding: "1rem",
-                                    fontWeight: "600",
-                                    fontSize: "0.95rem"
-                                }
+                                footer: { display: "none" }
                             }
                         }}
                     />
                 </div>
-            </div>
 
+                <div class="secure-badge">
+                    <span class="dot-secure"></span>
+                    {isEn ? 'END-TO-END ENCRYPTION' : 'ENCRIPTACIÓN END-TO-END'}
+                </div>
+            </div>
         </div>
+
     </div>
-</div>
+</section>
 
 <style>
-    .pure-white-wrapper { 
+    .login-root {
         position: relative;
-        width: 100%; 
-        min-height: 100vh;
-        /* Espaciado equilibrado */
-        padding-top: 100px; 
-        padding-bottom: 4rem;
-        background-color: var(--color-bg-soft); /* Usando tu variable */
-        display: flex; align-items: center;
+        width: 100%;
+        /* .portal-main ya aporta padding-top:140px por la navbar fija — aquí solo
+           llenamos el espacio restante y centramos sin gap extra arriba. */
+        min-height: calc(100vh - 140px);
+        padding: 2rem 5% 4rem;
+        background-color: var(--color-bg-soft);
+        display: flex;
+        align-items: center;
+        overflow: clip;
     }
 
-    .noise-overlay {
-        position: absolute; inset: 0; pointer-events: none; z-index: 1;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); 
-        opacity: 0.03; mix-blend-mode: multiply;
+    /* Watermark serif italic gigante y faint (estándar del sitio) */
+    .login-watermark {
+        position: absolute;
+        bottom: -4vw;
+        right: -1vw;
+        font-family: var(--font-serif), serif;
+        font-style: italic;
+        font-size: 26vw;
+        line-height: 0.8;
+        color: rgba(0, 0, 0, 0.025);
+        pointer-events: none;
+        user-select: none;
+        z-index: 0;
+        white-space: nowrap;
     }
 
-    .container-master {
-        width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 5%;
-        position: relative; z-index: 2;
-    }
-
-    .split-grid {
+    .login-inner {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 1080px;
+        margin: 0 auto;
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 4rem;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 5rem;
         align-items: center;
     }
 
-    /* LADO IZQUIERDO */
-    .brand-side { display: flex; flex-direction: column; padding-right: 2rem;}
-    
-    .apple-eyebrow { 
-        font-size: 0.7rem; font-weight: 800; letter-spacing: 2px; 
-        color: var(--color-text-muted); text-transform: uppercase; 
-        margin-bottom: 1rem;
+    /* ---------- LADO MARCA ---------- */
+    .brand-col { display: flex; flex-direction: column; padding-right: 1rem; }
+
+    .eyebrow {
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #888;
+        margin-bottom: 1.4rem;
     }
 
-    .hero-heading {
-        font-size: clamp(2.5rem, 4vw, 4rem); 
-        line-height: 1; letter-spacing: -2px;
-        color: var(--color-text); 
-        margin: 0 0 1.5rem 0;
-        font-weight: 600;
+    .brand-heading {
+        font-family: var(--font-sans), sans-serif;
+        font-size: clamp(2.4rem, 4vw, 3.8rem);
+        line-height: 1.02;
+        letter-spacing: -0.02em;
+        font-weight: 700;
+        color: var(--color-text);
+        margin: 0 0 1.6rem;
     }
 
-    .brand-description {
-        font-size: 1.1rem; line-height: 1.6;
+    .brand-desc {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        color: var(--color-text-muted);
+        max-width: 32ch;
+        margin: 0 0 2.4rem;
+    }
+
+    .scarcity { display: flex; flex-direction: column; gap: 0.7rem; }
+
+    .scarcity-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--color-blue-deep);
+    }
+
+    .dot-invite {
+        width: 7px; height: 7px; border-radius: 50%;
+        background: var(--color-blue-deep);
+    }
+
+    .scarcity-note {
+        font-size: 0.9rem;
         color: var(--color-text-muted);
         margin: 0;
     }
+    .scarcity-note .editorial {
+        font-family: var(--font-serif), serif;
+        font-style: italic;
+        font-size: 1.15rem;
+        color: var(--color-text);
+    }
 
-    .mt-4 { margin-top: 2rem; }
-    .secure-badge { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 700; color: #10b981; letter-spacing: 1px;}
-    .dot-secure { width: 8px; height: 8px; background: #10b981; border-radius: 50%; }
-    .pulse { animation: breathe 2s infinite ease-in-out; }
+    /* ---------- LADO FORMULARIO ---------- */
+    .form-col { display: flex; justify-content: flex-end; }
 
-    /* LADO DERECHO */
-    .login-side {
+    .form-wrap { width: 100%; max-width: 380px; }
+
+    .form-eyebrow {
+        display: block;
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #888;
+        margin-bottom: 1.8rem;
+        padding-bottom: 1.4rem;
+        position: relative;
+    }
+    /* hairline difuminada bajo el eyebrow del form */
+    .form-eyebrow::after {
+        content: "";
+        position: absolute;
+        left: 0; bottom: 0;
+        width: 100%; height: 1px;
+        background: linear-gradient(to right, rgba(0,0,0,0.12), transparent);
+    }
+
+    .secure-badge {
         display: flex;
-        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+        margin-top: 2rem;
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #10b981;
     }
-    
-    .gsap-card {
-        width: 100%; max-width: 420px;
+    .dot-secure {
+        width: 7px; height: 7px; border-radius: 50%;
+        background: #10b981;
+        animation: breathe 2.4s infinite ease-in-out;
     }
 
-    /* Pseudo-estados para la UI de Clerk inyectada (Focus y Hover) */
-    :global(.cl-formFieldInput:focus) { 
-        border-color: var(--color-blue-deep) !important; 
-        box-shadow: 0 0 0 3px rgba(10, 25, 47, 0.08) !important; 
-        background-color: var(--color-bg) !important;
-    }
-    :global(.cl-socialButtonsBlockButton:hover) { background-color: var(--color-blue-icy) !important; }
-    :global(.cl-formButtonPrimary:hover) { transform: translateY(-2px) !important; }
+    @keyframes breathe { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 
-    @keyframes breathe { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-
-    /* RESPONSIVE */
-    @media (max-width: 960px) {
-        .split-grid { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
-        .brand-side { padding-right: 0; align-items: center;}
-        .login-side { justify-content: center; }
-        .brand-description { margin: 0 auto; }
-        .pure-white-wrapper { padding-top: 100px; align-items: flex-start;}
-        .hero-heading { font-size: clamp(2.5rem, 8vw, 3.5rem); }
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 920px) {
+        .login-root { align-items: flex-start; min-height: auto; padding-top: 1rem; }
+        .login-inner { grid-template-columns: 1fr; gap: 3rem; }
+        .brand-col { padding-right: 0; }
+        .brand-desc { max-width: none; }
+        .form-col { justify-content: flex-start; }
+        .form-wrap { max-width: 440px; }
+        .login-watermark { font-size: 42vw; bottom: 2vh; }
     }
+</style>
+
+<!-- Estilos del componente Clerk inyectado: van en is:global porque el DOM
+     de Clerk no lleva data-astro-cid (ver CLAUDE.md, bug de librerías inyectadas). -->
+<style is:global>
+    /* Anti-FOUC: gate .js-anim (PortalLayout lo añade pre-paint) */
+    .js-anim .login-anim { opacity: 0; }
+
+    /* --- Maquillaje profundo del formulario Clerk: borderless, líneas finas --- */
+    .form-mount .cl-main { gap: 1.3rem; }
+
+    /* Botones sociales (Google etc.) — limpios, hairline, sin caja pesada */
+    .form-mount .cl-socialButtons { gap: 0.6rem; }
+    .form-mount .cl-socialButtonsBlockButton {
+        border: 1px solid rgba(0,0,0,0.1) !important;
+        border-radius: 12px !important;
+        background: var(--color-bg) !important;
+        box-shadow: none !important;
+        padding: 0.85rem 1rem !important;
+        font-weight: 600 !important;
+        transition: border-color 0.4s var(--ease-ios), background 0.4s var(--ease-ios), transform 0.3s var(--ease-ios) !important;
+    }
+    .form-mount .cl-socialButtonsBlockButton:hover {
+        background: var(--color-bg-soft) !important;
+        border-color: rgba(10,25,47,0.35) !important;
+        transform: translateY(-2px) !important;
+    }
+
+    /* Divisor "o" — hairline difuminada */
+    .form-mount .cl-dividerRow { margin: 0.4rem 0; }
+    .form-mount .cl-dividerLine {
+        background: linear-gradient(to right, transparent, rgba(0,0,0,0.1), transparent) !important;
+        height: 1px !important;
+    }
+    .form-mount .cl-dividerText {
+        color: #999 !important;
+        font-size: 0.62rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 2px !important;
+        text-transform: uppercase !important;
+    }
+
+    /* Labels — eyebrow style */
+    .form-mount .cl-formFieldLabel {
+        color: var(--color-text-muted) !important;
+        font-size: 0.7rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.5px !important;
+        text-transform: uppercase !important;
+    }
+
+    /* INPUTS — la clave del rediseño: líneas, no cajas */
+    .form-mount .cl-formFieldInput,
+    .form-mount .cl-otpCodeFieldInput {
+        border: none !important;
+        border-bottom: 1px solid rgba(0,0,0,0.14) !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        padding: 0.7rem 0 !important;
+        font-size: 1rem !important;
+        transition: border-color 0.4s var(--ease-ios) !important;
+    }
+    .form-mount .cl-formFieldInput:hover,
+    .form-mount .cl-otpCodeFieldInput:hover {
+        border-bottom-color: rgba(0,0,0,0.3) !important;
+    }
+    .form-mount .cl-formFieldInput:focus,
+    .form-mount .cl-otpCodeFieldInput:focus {
+        border-bottom-color: var(--color-blue-deep) !important;
+        box-shadow: 0 1px 0 0 var(--color-blue-deep) !important;
+        background: transparent !important;
+    }
+    /* Botón mostrar/ocultar contraseña — alineado a la línea */
+    .form-mount .cl-formFieldInputShowPasswordButton { color: #999 !important; }
+
+    /* Link "olvidé mi contraseña" */
+    .form-mount .cl-formFieldAction {
+        font-size: 0.78rem !important;
+        font-weight: 600 !important;
+        color: var(--color-blue-deep) !important;
+    }
+
+    /* BOTÓN PRIMARIO — Flouvia navy, ancho completo */
+    .form-mount .cl-formButtonPrimary {
+        background: var(--color-blue-deep) !important;
+        border: none !important;
+        border-radius: 12px !important;
+        box-shadow: 0 10px 24px -8px rgba(10,25,47,0.4) !important;
+        padding: 1rem !important;
+        margin-top: 0.4rem !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
+        letter-spacing: 0.2px !important;
+        text-transform: none !important;
+        transition: transform 0.35s var(--ease-spring), box-shadow 0.35s var(--ease-spring) !important;
+    }
+    .form-mount .cl-formButtonPrimary:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 0 16px 32px -10px rgba(10,25,47,0.5) !important;
+    }
+    .form-mount .cl-formButtonPrimary:active { transform: translateY(-1px) !important; }
+
+    /* Vista previa de identidad (paso 2) + OTP */
+    .form-mount .cl-identityPreview {
+        border: 1px solid rgba(0,0,0,0.08) !important;
+        border-radius: 12px !important;
+        background: var(--color-bg) !important;
+    }
+
+    /* Mensajes de error — sobrios */
+    .form-mount .cl-formFieldErrorText,
+    .form-mount .cl-alertText { font-size: 0.78rem !important; }
+
+    /* Quita el badge "Secured by Clerk" / footer residual */
+    .form-mount .cl-footer,
+    .form-mount .cl-internal-1dauvpw,
+    .form-mount .cl-logoBox { display: none !important; }
 </style>
 
 <script>
     import { gsap } from "gsap";
 
     document.addEventListener("DOMContentLoaded", () => {
-        gsap.set([".gsap-reveal", ".gsap-card"], { autoAlpha: 1 });
-        gsap.set(".gsap-reveal", { y: 30, opacity: 0 });
-        gsap.set(".gsap-card", { y: 40, opacity: 0, scale: 0.98 });
+        const els = gsap.utils.toArray<HTMLElement>(".login-anim");
+        if (!els.length) return;
 
-        const tl = gsap.timeline({ defaults: { ease: "expo.out", duration: 1.2 } });
+        // Reduced-motion → todo visible (la clase .js-anim no se añadió, pero por si acaso)
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            gsap.set(els, { opacity: 1, y: 0 });
+            return;
+        }
 
-        tl
-            .to(".gsap-reveal", { y: 0, opacity: 1, stagger: 0.1 }, 0.2)
-            .to(".gsap-card", { y: 0, opacity: 1, scale: 1 }, 0.4);
+        // Estándar único del sitio: fade + leve subida, power2.out, sin scale/blur.
+        gsap.set(els, { opacity: 0, y: 14 });
+        gsap.to(els, {
+            opacity: 1,
+            y: 0,
+            duration: 0.95,
+            ease: "power2.out",
+            stagger: 0.09,
+            delay: 0.1,
+            clearProps: "transform",
+        });
     });
 </script>
