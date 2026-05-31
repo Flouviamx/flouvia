@@ -6,6 +6,7 @@ interface Props {
     description?: string;
     image?: string;
     noindex?: boolean;
+    ogType?: string;
 }
 
 const {
@@ -13,6 +14,7 @@ const {
     description = 'Flouvia — infraestructura de revenue para marcas de e-commerce y B2B con operación establecida. Por aplicación: menos de 8 clientes activos al año.',
     image = '/android-touch-icon-512.png',
     noindex = false,
+    ogType = 'website',
 } = Astro.props;
 
 // Detecta el idioma basado en la URL (/en/ o /)
@@ -42,6 +44,15 @@ const ogLocale  = lang === 'en' ? 'en_US' : 'es_MX';
             if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
                 document.documentElement.classList.add('js-anim');
             }
+            // Cambio de idioma: si venimos de un switch ES/EN, ocultamos el body antes del
+            // paint para restaurar el scroll sin que se vea el salto desde arriba. El navbar
+            // revela el body tras posicionar. Failsafe: revelar igual a los 1.5s.
+            try {
+                if (sessionStorage.getItem('flouviaLangScroll') !== null) {
+                    document.documentElement.classList.add('lang-restoring');
+                    setTimeout(function () { document.documentElement.classList.remove('lang-restoring'); }, 1500);
+                }
+            } catch (e) {}
         </script>
 
         <meta name="description" content={description} />
@@ -54,7 +65,7 @@ const ogLocale  = lang === 'en' ? 'en_US' : 'es_MX';
         <link rel="alternate" hreflang="x-default" href={esURL} />
 
         <!-- Open Graph -->
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content={ogType} />
         <meta property="og:site_name" content="Flouvia" />
         <meta property="og:locale" content={ogLocale} />
         <meta property="og:title" content={title} />
@@ -111,9 +122,13 @@ const ogLocale  = lang === 'en' ? 'en_US' : 'es_MX';
 
 <style is:global>
     /* Reset ultra limpio. El diseño pesado lo maneja tu index.astro */
-    *, *::before, *::after { 
-        box-sizing: border-box; 
-    } 
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
+
+    /* Cambio de idioma: oculta el body antes del paint para restaurar el scroll sin
+       mostrar el salto desde arriba. El navbar lo revela tras posicionar (o el failsafe). */
+    html.lang-restoring body { opacity: 0; }
     
     html, body {
         width: 100%; 

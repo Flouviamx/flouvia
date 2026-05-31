@@ -3,56 +3,99 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
-import WhatsApp from '../components/WhatsApp.astro';
 
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const isEn = lang === 'en';
 
-// Helper intacto: Para parsear la tipografía
-const parseSerifTitle = (title: string) => {
-    return title.split('*').map((part, index) => {
-        if (index % 2 !== 0) { 
-            return `<span class="editorial text-accent">${part}</span>`;
-        }
-        return part;
-    }).join('');
+// ── Schema AboutPage (entity signals para AI search) ───────────────
+const SITE = 'https://flouvia.com';
+const aboutSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    '@id': `${SITE}/nosotros#aboutpage`,
+    name: isEn ? 'About — The firm | Flouvia' : 'Nosotros — La firma | Flouvia',
+    description: isEn
+        ? 'Flouvia is a boutique e-commerce and B2B engineering firm founded in Mexico City in 2024. We build Shopify Plus stores, private B2B portals and automations for brands with an established operation. Fewer than 8 projects a year.'
+        : 'Flouvia es una firma boutique de ingeniería e-commerce y B2B fundada en Ciudad de México en 2024. Construimos tiendas en Shopify Plus, portales B2B privados y automatizaciones para marcas con operación establecida. Menos de 8 proyectos al año.',
+    url: isEn ? `${SITE}/en/nosotros` : `${SITE}/nosotros`,
+    inLanguage: isEn ? 'en' : 'es',
+    mainEntity: {
+        '@type': 'Organization',
+        '@id': `${SITE}/#organization`,
+        name: 'Flouvia',
+        url: SITE,
+        foundingDate: '2024',
+        foundingLocation: isEn ? 'Mexico City, Mexico' : 'Ciudad de México, México',
+        areaServed: isEn ? ['Mexico', 'United States'] : ['México', 'Estados Unidos'],
+        knowsAbout: ['Shopify Plus', 'E-commerce', 'B2B', 'Headless commerce', 'ERP automation'],
+    },
+    breadcrumb: {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            { '@type': 'ListItem', position: 1, name: isEn ? 'Home' : 'Inicio', item: isEn ? `${SITE}/en` : SITE },
+            { '@type': 'ListItem', position: 2, name: isEn ? 'About' : 'Nosotros', item: isEn ? `${SITE}/en/nosotros` : `${SITE}/nosotros` },
+        ],
+    },
+    mentions: [
+        {
+            '@type': 'Organization',
+            name: 'El Zarco',
+            description: isEn
+                ? 'B2B wholesale distributor with more than 150 active clients in Mexico City'
+                : 'Distribuidora mayorista B2B con más de 150 clientes activos en CDMX',
+        },
+        {
+            '@type': 'Organization',
+            name: 'Setnpet',
+            description: isEn
+                ? 'D2C e-commerce on Shopify Plus — headless architecture'
+                : 'E-commerce D2C en Shopify Plus — arquitectura headless',
+        },
+    ],
 };
 ---
 
 <Layout
     title={isEn ? 'About — The firm | Flouvia' : 'Nosotros — La firma | Flouvia'}
-    description={isEn ? 'Flouvia is a revenue-engineering firm. We design transactional systems for established brands — not templates for everyone.' : 'Flouvia es una firma de ingeniería de revenue. Diseñamos sistemas transaccionales para marcas establecidas, no plantillas para cualquiera.'}
+    description={isEn ? 'Flouvia is a boutique e-commerce & B2B engineering firm based in Mexico City. Shopify Plus, B2B portals and automation for brands with an established operation. Fewer than 8 projects a year.' : 'Flouvia es una firma boutique de ingeniería e-commerce y B2B con sede en CDMX. Shopify Plus, portales B2B y automatización para marcas con operación establecida. Menos de 8 proyectos al año.'}
 >
     <Navbar />
 
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(aboutSchema)} />
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <main class="flouvia-masterpiece">
-        
+
+        <!-- ══════════ HERO ══════════ -->
         <section class="hero-grand">
             <div class="container hero-container">
                 <div class="hero-content">
                     <div class="hero-text-zone" id="hero-parallax">
-                        <p class="eyebrow reveal-blur" style="--delay: 0.1s;">
+                        <div class="hero-status hero-anim" id="hero-status">
+                            <span class="hero-status-dot" aria-hidden="true"></span>
+                            <span>{t('about.hero.status')}</span>
+                        </div>
+                        <p class="eyebrow hero-anim">
                             {t('about.hero.badge')}
                         </p>
-                        <h1 class="hero-title reveal-blur" style="--delay: 0.2s;">
-                            <span class="title-bold">{t('about.hero.title1')}</span><br>
-                            <span class="editorial title-serif text-accent">{t('about.hero.title2')}</span>
+                        <h1 class="hero-title hero-anim">
+                            <span class="title-bold">{t('about.hero.title1')}</span> <span class="title-bold">{t('about.hero.title2')}</span>
                         </h1>
                     </div>
-                    
-                    <div class="hero-bottom reveal-blur" style="--delay: 0.4s;">
+
+                    <div class="hero-bottom hero-anim">
                         <p class="hero-desc">
                             {t('about.hero.desc')}
                         </p>
-                        <div class="hero-actions-wrapper">
-                            <a href="/contacto" class="btn-luxe">
+                        <div class="hero-action">
+                            <a href={isEn ? '/en/contacto' : '/contacto'} class="btn-luxe">
                                 <span>{t('about.cta.btn')}</span>
+                                <span class="btn-arrow" aria-hidden="true">→</span>
                                 <div class="btn-shimmer"></div>
                             </a>
                         </div>
@@ -61,28 +104,38 @@ const parseSerifTitle = (title: string) => {
             </div>
         </section>
 
+        <!-- ══════════ DEFINICIÓN DE ENTIDAD (AI SEO) ══════════ -->
+        <section class="entity-section">
+            <div class="container">
+                <div class="entity-flex">
+                    <p class="eyebrow reveal-fade">{isEn ? 'THE FIRM, IN ONE PARAGRAPH' : 'LA FIRMA, EN UN PÁRRAFO'}</p>
+                    <p class="entity-text reveal-fade">{t('about.entity')}</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════ MANIFIESTO ══════════ -->
         <section class="manifesto-section global-gap-reduced">
             <div class="container manifesto-grid">
-                
-                <div class="m-visual-side reveal-up" style="--delay: 0.1s;">
+
+                <div class="m-visual-side reveal-fade">
                     <div class="image-frame-luxe squircle">
-                        <img src="/imgs/nosotros1.jpg" alt="Manifesto Flouvia" class="parallax-inner-img" id="manifesto-img" />
+                        <img src="/imgs/nosotros1.jpg" alt={isEn ? 'Flouvia — engineering team in Mexico City' : 'Flouvia — equipo de ingeniería en Ciudad de México'} class="parallax-inner-img" id="manifesto-img" />
                         <div class="frame-glass-edge"></div>
                     </div>
                 </div>
 
                 <div class="m-text-side">
-                    <div class="sticky-text-wrapper reveal-fade" style="--delay: 0.2s;">
-                        <p class="eyebrow">{t('about.manifesto.badge')}</p>
-                        
-                        <h2 class="section-heading">
-                            {t('about.manifesto.title')} <br>
-                            <span class="editorial text-accent">{t('about.manifesto.title_ed')}</span>
+                    <div class="sticky-text-wrapper">
+                        <p class="eyebrow reveal-fade">{t('about.manifesto.badge')}</p>
+
+                        <h2 class="section-heading reveal-fade">
+                            {t('about.manifesto.title')} {t('about.manifesto.title_ed')}
                         </h2>
-                        
+
                         <div class="m-paragraphs mt-medium">
-                            <p class="m-lead-text">{t('about.manifesto.p1')}</p>
-                            <p class="m-body-text">{t('about.manifesto.p2')}</p>
+                            <p class="m-lead-text reveal-fade">{t('about.manifesto.p1')}</p>
+                            <p class="m-body-text reveal-fade">{t('about.manifesto.p2')}</p>
                         </div>
                     </div>
                 </div>
@@ -90,16 +143,17 @@ const parseSerifTitle = (title: string) => {
             </div>
         </section>
 
+        <!-- ══════════ ADN / PRINCIPIOS ══════════ -->
         <section class="values-monolith-section global-gap-reduced">
             <div class="container">
-                <div class="section-header reveal-fade" style="--delay: 0s;">
-                    <p class="eyebrow">{t('about.values.badge')}</p>
-                    <h2 class="section-heading">{t('about.values.title')} <span class="editorial">{t('about.values.title_ed')}</span></h2>
+                <div class="section-header">
+                    <p class="eyebrow reveal-fade">{t('about.values.badge')}</p>
+                    <h2 class="section-heading reveal-fade">{t('about.values.title')} {t('about.values.title_ed')}</h2>
                 </div>
 
                 <div class="monolith-grid">
-                    
-                    <div class="monolith-card squircle-math reveal-up" style="--delay: 0.1s;">
+
+                    <div class="monolith-card squircle-math reveal-up">
                         <div class="m-watermark">01</div>
                         <div class="m-card-inner">
                             <div class="m-top-zone">
@@ -112,7 +166,7 @@ const parseSerifTitle = (title: string) => {
                         </div>
                     </div>
 
-                    <div class="monolith-card squircle-math reveal-up" style="--delay: 0.2s;">
+                    <div class="monolith-card squircle-math reveal-up">
                         <div class="m-watermark">02</div>
                         <div class="m-card-inner">
                             <div class="m-top-zone">
@@ -125,7 +179,7 @@ const parseSerifTitle = (title: string) => {
                         </div>
                     </div>
 
-                    <div class="monolith-card squircle-math reveal-up" style="--delay: 0.3s;">
+                    <div class="monolith-card squircle-math reveal-up">
                         <div class="m-watermark">03</div>
                         <div class="m-card-inner">
                             <div class="m-top-zone">
@@ -142,84 +196,76 @@ const parseSerifTitle = (title: string) => {
             </div>
         </section>
 
+        <!-- ══════════ RESULTADOS (estáticos, con fuente) ══════════ -->
         <section class="thin-metrics-section global-gap-reduced">
             <div class="container">
-                <div class="metrics-top reveal-fade" style="--delay: 0s;">
-                    <p class="eyebrow">{t('about.metrics.badge')}</p>
-                    <h2 class="section-heading">{t('about.metrics.title')} <span class="editorial">{t('about.metrics.title_ed')}</span></h2>
+                <div class="metrics-top">
+                    <p class="eyebrow reveal-fade">{t('about.metrics.badge')}</p>
+                    <h2 class="section-heading reveal-fade">{t('about.metrics.title')} {t('about.metrics.title_ed')}</h2>
                 </div>
 
                 <div class="thin-grid">
-                    
-                    <div class="thin-card reveal-up" style="--delay: 0.1s;">
+
+                    <div class="thin-card thin-highlight reveal-up">
                         <div class="thin-data">
-                            <span class="thin-num counter editorial" data-target={t('about.m1.num').replace(/\D/g,'')}>0</span>
+                            <span class="thin-sym thin-pre">{t('about.m1.pre')}</span>
+                            <span class="thin-num editorial">{t('about.m1.num')}</span>
                             <span class="thin-sym">{t('about.m1.sym')}</span>
                         </div>
                         <p class="thin-desc">{t('about.m1.desc')}</p>
+                        <span class="thin-src">{t('about.m1.src')}</span>
                     </div>
 
-                    <div class="thin-card reveal-up" style="--delay: 0.15s;">
+                    <div class="thin-card thin-highlight reveal-up">
                         <div class="thin-data">
-                            <span class="thin-num counter editorial" data-target={t('about.m2.num').replace(/\D/g,'')}>0</span>
+                            <span class="thin-sym thin-pre">{t('about.m2.pre')}</span>
+                            <span class="thin-num editorial">{t('about.m2.num')}</span>
                             <span class="thin-sym">{t('about.m2.sym')}</span>
                         </div>
                         <p class="thin-desc">{t('about.m2.desc')}</p>
+                        <span class="thin-src">{t('about.m2.src')}</span>
                     </div>
 
-                    <div class="thin-card thin-highlight reveal-up" style="--delay: 0.2s;">
+                    <div class="thin-card thin-highlight reveal-up">
                         <div class="thin-data">
-                            <span class="thin-sym">+</span>
-                            <span class="thin-num counter editorial" data-target={t('about.m3.num').replace(/\D/g,'')}>0</span>
+                            <span class="thin-sym thin-pre">{t('about.m3.pre')}</span>
+                            <span class="thin-num editorial">{t('about.m3.num')}</span>
                             <span class="thin-sym">{t('about.m3.sym')}</span>
                         </div>
                         <p class="thin-desc">{t('about.m3.desc')}</p>
+                        <span class="thin-src">{t('about.m3.src')}</span>
                     </div>
 
-                    <div class="thin-card reveal-up" style="--delay: 0.25s;">
+                    <div class="thin-card reveal-up">
                         <div class="thin-data">
-                            <span class="thin-sym">+</span>
-                            <span class="thin-num counter editorial" data-target={t('about.m4.num').replace(/\D/g,'')}>0</span>
+                            <span class="thin-sym thin-pre">{t('about.m4.pre')}</span>
+                            <span class="thin-num editorial">{t('about.m4.num')}</span>
+                            <span class="thin-sym">{t('about.m4.sym')}</span>
                         </div>
                         <p class="thin-desc">{t('about.m4.desc')}</p>
-                    </div>
-
-                    <div class="thin-card thin-highlight reveal-up" style="--delay: 0.3s;">
-                        <div class="thin-data">
-                            <span class="thin-sym">$</span>
-                            <span class="thin-num counter editorial" data-target={t('about.m5.num').replace(/\D/g,'')}>0</span>
-                            <span class="thin-sym">{t('about.m5.sym')}</span>
-                        </div>
-                        <p class="thin-desc">{t('about.m5.desc')}</p>
-                    </div>
-
-                    <div class="thin-card reveal-up" style="--delay: 0.35s;">
-                        <div class="thin-data">
-                            <span class="thin-num counter editorial" data-target={t('about.m6.num').replace(/\D/g,'')}>0</span>
-                            <span class="thin-sym">{t('about.m6.sym')}</span>
-                        </div>
-                        <p class="thin-desc">{t('about.m6.desc')}</p>
+                        <span class="thin-src">{t('about.m4.src')}</span>
                     </div>
 
                 </div>
             </div>
         </section>
 
+        <!-- ══════════ ¿POR QUÉ FLOUVIA? ══════════ -->
         <section class="advantage-sober-banner global-gap-reduced">
             <div class="adv-pro-bg"></div>
             <div class="texture-noise-micro"></div>
             <div class="container relative-z">
-                <div class="adv-banner-flex reveal-fade" style="--delay: 0.1s;">
-                    
+                <div class="adv-banner-flex reveal-fade">
+
                     <div class="adv-b-left">
                         <h2 class="adv-b-title">{t('about.liquid.title')}</h2>
                     </div>
 
                     <div class="adv-b-right">
                         <p class="adv-b-desc">{t('about.liquid.desc')}</p>
-                        
-                        <a href="/contacto" class="btn-contact-sober">
-                            <span class="btn-text">{isEn ? 'Contact Us' : 'Contáctanos'}</span>
+
+                        <a href={isEn ? '/en/contacto' : '/contacto'} class="btn-contact-sober">
+                            <span class="btn-text">{t('about.liquid.cta')}</span>
                             <div class="arrow-circle-small">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                     <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -232,13 +278,14 @@ const parseSerifTitle = (title: string) => {
             </div>
         </section>
 
+        <!-- ══════════ TESTIMONIOS ══════════ -->
         <section class="testimonials-slider-pro global-gap-reduced">
             <div class="container">
-                <div class="section-header reveal-fade" style="--delay: 0s;">
+                <div class="section-header">
                     <div class="header-flex">
                         <div class="header-title-mobile">
-                            <p class="eyebrow">{t('about.reviews.badge')}</p>
-                            <h2 class="section-heading">{t('about.reviews.title')} <span class="editorial">{t('about.reviews.title_ed')}</span></h2>
+                            <p class="eyebrow reveal-fade">{t('about.reviews.badge')}</p>
+                            <h2 class="section-heading reveal-fade">{t('about.reviews.title')} {t('about.reviews.title_ed')}</h2>
                         </div>
                     </div>
                     <div class="t-scroll-hint">
@@ -250,18 +297,20 @@ const parseSerifTitle = (title: string) => {
                 </div>
             </div>
 
-            <div class="t-track-wrapper reveal-fade" style="--delay: 0.2s;">
+            <div class="t-track-wrapper reveal-fade">
                 <div class="t-track">
-                    
+
                     <div class="t-card-pro squircle-math">
                         <div class="t-quote-watermark">“</div>
                         <div class="t-content-wrapper">
+                            <span class="t-metric">{t('about.rev1.metric')}</span>
                             <p class="t-text">{t('about.rev1.text')}</p>
                             <div class="t-author-strip">
-                                <div class="t-avatar">G</div>
+                                <div class="t-avatar bg-dark">G</div>
                                 <div class="t-meta">
                                     <h4>{t('about.rev1.author')}</h4>
-                                    <span>{t('about.rev1.role')}</span>
+                                    <span class="t-role">{t('about.rev1.role')}</span>
+                                    <span class="t-context">{t('about.rev1.context')}</span>
                                 </div>
                             </div>
                         </div>
@@ -270,12 +319,14 @@ const parseSerifTitle = (title: string) => {
                     <div class="t-card-pro squircle-math">
                         <div class="t-quote-watermark">“</div>
                         <div class="t-content-wrapper">
+                            <span class="t-metric">{t('about.rev2.metric')}</span>
                             <p class="t-text">{t('about.rev2.text')}</p>
                             <div class="t-author-strip">
                                 <div class="t-avatar bg-dark">D</div>
                                 <div class="t-meta">
                                     <h4>{t('about.rev2.author')}</h4>
-                                    <span>{t('about.rev2.role')}</span>
+                                    <span class="t-role">{t('about.rev2.role')}</span>
+                                    <span class="t-context">{t('about.rev2.context')}</span>
                                 </div>
                             </div>
                         </div>
@@ -285,22 +336,26 @@ const parseSerifTitle = (title: string) => {
             </div>
         </section>
 
+        <!-- ══════════ CTA FINAL (escasez) ══════════ -->
         <section class="cta-final-clean global-gap-reduced">
             <div class="container">
-                <div class="cta-box-refined cta-squircle reveal-blur" style="--delay: 0.2s;">
+                <div class="cta-box-refined cta-squircle reveal-fade">
                     <div class="texture-noise-micro"></div>
                     <div class="cta-flex relative-z">
                         <div class="cta-text">
-                            <p class="eyebrow" style="color: rgba(255,255,255,0.6); letter-spacing: 4px;">
-                                {t('about.cta.badge')}
-                            </p>
+                            <p class="eyebrow cta-eyebrow">{t('about.cta.badge')}</p>
                             <h2 class="cta-title">
-                                {t('about.cta.title')} <br>
-                                <span class="editorial" style="color: rgba(255,255,255,0.9);">{t('about.cta.title_ed')}</span>
+                                {t('about.cta.title')}<br>
+                                {t('about.cta.title_ed')}
                             </h2>
+                            <p class="cta-body">{t('about.cta.body')}</p>
+                            <div class="cta-avail">
+                                <span class="cta-avail-dot" aria-hidden="true"></span>
+                                <span>{t('about.cta.avail')}</span>
+                            </div>
                         </div>
                         <div class="cta-action-side">
-                            <a href="/contacto" class="btn-luxe-main">
+                            <a href={isEn ? '/en/contacto' : '/contacto'} class="btn-luxe-main">
                                 <span>{t('about.cta.btn')}</span>
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                             </a>
@@ -313,39 +368,40 @@ const parseSerifTitle = (title: string) => {
     </main>
 
     <Footer />
-    <WhatsApp />
 </Layout>
 
 <style is:global>
-    *, *::before, *::after { box-sizing: border-box; } 
-    
+    *, *::before, *::after { box-sizing: border-box; }
+
     html, body {
-        width: 100%; 
+        width: 100%;
         position: relative;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
         -webkit-tap-highlight-color: transparent;
     }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
     ::selection { background: #0a192f; color: #ffffff; }
 
     :root {
         --color-bg: #ffffff;
-        --color-bg-soft: #fcfcfc; 
-        --color-blue-icy: #f4f6f9; 
+        --color-bg-soft: #fcfcfc;
+        --color-blue-icy: #f4f6f9;
         --color-blue-deep: #0a192f;
         --color-glass-blue: rgba(10, 25, 47, 0.85);
-        
+
         --color-text: #050505;
-        --color-text-muted: #555555;
-        --color-border: rgba(0, 0, 0, 0.08); 
-        
+        --color-text-muted: #555556;
+        --color-border: rgba(0, 0, 0, 0.08);
+
         --font-sans: 'Inter', system-ui, sans-serif;
         --font-serif: 'Instrument Serif', serif;
-        
+
         --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
-        --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+        --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
         --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -355,31 +411,33 @@ const parseSerifTitle = (title: string) => {
     .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; }
     .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: #222; }
     .eyebrow { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
-    
-    .reveal-blur { 
-        opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(8px); 
-        animation: reveal 1s var(--ease-spring) forwards; animation-play-state: paused; animation-delay: var(--delay, 0s); 
-    }
-    .reveal-blur.active { animation-play-state: running; }
-    @keyframes reveal { to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
 
-    .reveal-fade { 
-        opacity: 0; transform: translateY(30px) scale(0.98); 
-        animation: revealFade 1s var(--ease-spring) forwards; animation-play-state: paused; animation-delay: var(--delay, 0s); 
-    }
-    .reveal-fade.active { animation-play-state: running; }
-    @keyframes revealFade { to { opacity: 1; transform: translateY(0) scale(1); } }
+    /* HERO STATUS — señal de exclusividad (cupo por trimestre) */
+    .hero-status { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 100px; border: 1px solid rgba(16,185,129,0.22); background: rgba(16,185,129,0.04); width: max-content; margin-bottom: 1.6rem; }
+    .hero-status span { font-size: 0.7rem; color: #059669; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .hero-status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: hero-status-pulse 2s infinite; }
+    @keyframes hero-status-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-    .btn-luxe { 
-        position: relative; display: inline-flex; background: var(--color-text); color: #fff; 
-        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem; 
-        font-weight: 600; transition: all 0.5s var(--ease-spring); overflow: hidden; justify-content: center;
+    /* El hero parte oculto SOLO cuando hay JS sin reduced-motion (gate .js-anim
+       puesto por el script inline del Layout antes del paint). GSAP lo revela.
+       Sin JS o reduced-motion queda visible por defecto → nunca pantalla en blanco. */
+    .js-anim .hero-anim { opacity: 0; }
+
+    .btn-luxe {
+        position: relative; display: inline-flex; background: var(--color-text); color: #fff;
+        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem;
+        font-weight: 600; overflow: hidden; justify-content: center;
+        transition: transform 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth);
         box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 10px 20px rgba(0,0,0,0.08);
+        align-items: center; gap: 10px; will-change: transform;
     }
     .btn-luxe span { position: relative; z-index: 2; }
-    .btn-shimmer { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent); transform: skewX(-20deg); transition: 0s; z-index: 1;}
-    .btn-luxe:hover { transform: translateY(-4px); box-shadow: 0 6px 12px rgba(0,0,0,0.08), 0 15px 30px rgba(0,0,0,0.15); }
-    .btn-luxe:active { transform: scale(0.95); box-shadow: 0 2px 4px rgba(0,0,0,0.04); transition: 0.1s;}
+    .btn-arrow { position: relative; z-index: 2; display: inline-block; transition: transform 0.6s var(--ease-smooth); }
+    .btn-luxe:hover .btn-arrow { transform: translateX(4px); }
+    .btn-shimmer { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent); transform: skewX(-20deg); transition: 0s; z-index: 1;}
+    .btn-luxe:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(0,0,0,0.12), 0 24px 48px rgba(0,0,0,0.16); }
+    .btn-luxe:active { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+    .btn-luxe:hover .btn-shimmer { left: 150%; transition: left 0.9s var(--ease-smooth); }
 
     .squircle { border-radius: 24px; transform: translateZ(0); overflow: hidden; }
     .cta-squircle { border-radius: 32px; transform: translateZ(0); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
@@ -387,35 +445,39 @@ const parseSerifTitle = (title: string) => {
 
 <style>
     /* ==========================================================
-       ESTILOS LOCALES 
+       ESTILOS LOCALES
        ========================================================== */
-    .text-accent { color: var(--color-blue-deep) !important; }
-    .mono-font { font-family: 'JetBrains Mono', monospace; font-weight: 700; letter-spacing: -1px;}
-    .section-heading { font-size: clamp(2.5rem, 5vw, 3.8rem); font-weight: 800; letter-spacing: -2px; margin: 0 0 0.5rem 0; line-height: 1; color: #000; }
+    .section-heading { font-size: clamp(2.3rem, 4.4vw, 3.4rem); font-weight: 800; letter-spacing: -1.5px; margin: 0 0 1rem 0; line-height: 1.05; color: #000; }
     .mt-medium { margin-top: 2rem; }
 
-    .reveal-up { opacity: 0; transform: translateY(50px); transition: all 1s var(--ease-spring); transition-delay: var(--delay, 0s); }
-    .reveal-up.active { opacity: 1; transform: translateY(0); }
+    /* Reveal: el JS los oculta con gsap.set y los revela en onEnter. NO se
+       ocultan con opacity:0 permanente en CSS → sin JS / reduced-motion quedan
+       visibles (nunca contenido invisible para siempre). */
+    .reveal-fade, .reveal-up { will-change: opacity, transform; }
 
     .squircle-math { border-radius: 20px; overflow: hidden; transform: translateZ(0); }
-    .squircle-pro { border-radius: 36px; overflow: hidden; transform: translateZ(0); }
     .texture-noise-micro { position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.04; mix-blend-mode: overlay; pointer-events: none; }
     .relative-z { position: relative; z-index: 2; }
-    
+
     .global-gap-reduced { padding: 6rem 0; }
 
-    /* 1. HERO EXACTO DEL INDEX */
-    .hero-grand { padding: 13rem 0 7rem 0; min-height: 80vh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
+    /* 1. HERO — mismo estándar que el index */
+    .hero-grand { padding: 10rem 0 4rem 0; min-height: 100svh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
     .hero-text-zone { transition: transform 0.1s ease-out, opacity 0.1s ease-out; }
-    .hero-title { font-size: clamp(3.2rem, 7vw, 6.8rem); line-height: 0.85; font-weight: 800; letter-spacing: -3px; margin-bottom: 4rem; color: #050505; }
-    .hero-title .title-bold, .hero-title .title-serif, .hero-title .editorial, .hero-title .text-accent { color: #050505 !important; }
-    .lx-line-mask { overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; }
-    .title-bold { display: inline; }
-    .title-serif { display: inline; font-size: 105%; }
+    .hero-title { font-size: clamp(1.9rem, 3.6vw, 3.4rem); line-height: 1.14; font-weight: 800; letter-spacing: -1.2px; margin-bottom: 2.75rem; color: #050505; max-width: 880px; }
+    .hero-title .title-bold { color: #050505; display: inline; }
 
     .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem; }
-    .hero-desc { font-size: 1.15rem; color: var(--color-text-muted); max-width: 500px; line-height: 1.5; margin: 0; }
-    .hero-actions-wrapper { display: flex; align-items: center; gap: 3rem; }
+    .hero-desc { font-size: 1.1rem; color: var(--color-text-muted); max-width: 520px; line-height: 1.55; margin: 0; }
+
+    /* 1b. DEFINICIÓN DE ENTIDAD */
+    .entity-section { background: var(--color-bg); padding: 0 0 7rem 0; }
+    .entity-flex { max-width: 880px; padding-top: 3.5rem; position: relative; }
+    .entity-flex::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+        background: linear-gradient(90deg, var(--color-border), transparent);
+    }
+    .entity-text { font-size: clamp(1.3rem, 2.1vw, 1.7rem); line-height: 1.5; color: var(--color-text); font-weight: 500; letter-spacing: -0.4px; margin: 0; }
 
     /* 2. MANIFIESTO */
     .manifesto-section { background: var(--color-bg); }
@@ -429,18 +491,18 @@ const parseSerifTitle = (title: string) => {
     .m-text-side { display: flex; flex-direction: column; }
     .sticky-text-wrapper { position: sticky; top: 140px; }
     .m-paragraphs { display: flex; flex-direction: column; gap: 1.5rem; max-width: 550px;}
-    .m-lead-text { font-size: 1.5rem; color: var(--color-text); font-weight: 600; line-height: 1.4; margin: 0; letter-spacing: -0.5px;}
-    .m-body-text { font-size: 1.15rem; color: var(--color-text-muted); line-height: 1.6; margin: 0;}
+    .m-lead-text { font-size: 1.4rem; color: var(--color-text); font-weight: 600; line-height: 1.45; margin: 0; letter-spacing: -0.5px;}
+    .m-body-text { font-size: 1.12rem; color: var(--color-text-muted); line-height: 1.65; margin: 0;}
 
-    /* 3. VALORES DE LA MARCA */
+    /* 3. ADN / PRINCIPIOS */
     .values-monolith-section { background: #ffffff; }
     .values-monolith-section .section-header { margin-bottom: 5rem; }
     .monolith-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem;}
-    .monolith-card { background: #ffffff; padding: 3.5rem 3rem; display: flex; flex-direction: column; position: relative; transition: all 0.5s var(--ease-spring); box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 4px 20px rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.05); }
+    .monolith-card { background: #ffffff; padding: 3.5rem 3rem; display: flex; flex-direction: column; position: relative; transition: transform 0.5s var(--ease-spring), box-shadow 0.5s var(--ease-spring); box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 4px 20px rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.05); }
     .monolith-card:hover { transform: translateY(-8px); box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 30px 60px rgba(0,0,0,0.06); }
-    
-    .m-watermark { position: absolute; right: -10px; top: -20px; font-family: var(--font-serif); font-size: 14rem; color: rgba(0,0,0,0.02); line-height: 1; pointer-events: none; transition: transform 0.5s ease, color 0.5s ease; z-index: 0; }
-    .monolith-card:hover .m-watermark { color: rgba(10,25,47,0.04); transform: translateX(-10px); }
+
+    .m-watermark { position: absolute; right: 1.5rem; top: 1.5rem; font-family: var(--font-serif); font-style: italic; font-size: 2rem; color: rgba(10,25,47,0.18); line-height: 1; pointer-events: none; transition: transform 0.5s var(--ease-spring), color 0.5s ease; z-index: 0; letter-spacing: -1px; }
+    .monolith-card:hover .m-watermark { color: rgba(10,25,47,0.35); transform: translateX(4px); }
 
     .m-card-inner { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%; justify-content: space-between;}
     .m-top-zone { margin-bottom: 4rem;}
@@ -448,32 +510,35 @@ const parseSerifTitle = (title: string) => {
     .monolith-card:hover .m-progress-line { width: 100%; }
 
     .m-bottom-zone h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 1rem 0; color: #000;}
-    .m-bottom-zone p { font-size: 1.1rem; color: var(--color-text-muted); line-height: 1.6; margin: 0; font-weight: 400;}
+    .m-bottom-zone p { font-size: 1.08rem; color: var(--color-text-muted); line-height: 1.6; margin: 0; font-weight: 400;}
 
     /* 4. RESULTADOS */
     .thin-metrics-section { background: var(--color-bg); }
     .metrics-top { text-align: left; margin-bottom: 4rem; }
-    .thin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; border-top: 1px solid var(--color-border); padding-top: 4rem;}
-    .thin-card { display: flex; flex-direction: column; gap: 0.5rem; transition: transform 0.4s ease; }
+    .thin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.5rem 2rem; border-top: 1px solid var(--color-border); padding-top: 4rem;}
+    .thin-card { display: flex; flex-direction: column; gap: 0.65rem; transition: transform 0.4s ease; }
     .thin-card:hover { transform: translateY(-5px); }
 
-    .thin-data { display: flex; align-items: baseline; gap: 6px; }
-    .thin-num { font-size: clamp(3rem, 4vw, 4.5rem); font-weight: 400; color: #000; line-height: 0.9; letter-spacing: -1px;}
-    .thin-sym { font-size: 1.8rem; font-weight: 400; color: var(--color-text-muted); font-family: var(--font-serif); font-style: italic;}
-    .thin-desc { font-size: 1.15rem; color: var(--color-text-muted); line-height: 1.5; margin: 0; font-weight: 400; max-width: 250px;}
-    .thin-highlight .thin-num, .thin-highlight .thin-sym { color: var(--color-blue-deep); }
+    .thin-data { display: flex; align-items: baseline; gap: 4px; }
+    .thin-num { font-size: clamp(3rem, 4vw, 4.2rem); font-weight: 400; color: #000; line-height: 0.9; letter-spacing: -1px;}
+    .thin-sym { font-size: 1.7rem; font-weight: 400; color: var(--color-text-muted); font-family: var(--font-serif); font-style: italic;}
+    .thin-pre { color: var(--color-blue-deep); }
+    .thin-desc { font-size: 1.02rem; color: var(--color-text-muted); line-height: 1.45; margin: 0; font-weight: 400; }
+    .thin-src { font-size: 0.68rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #aaa; margin-top: 0.35rem; }
+    .thin-highlight .thin-num, .thin-highlight .thin-sym.thin-pre { color: var(--color-blue-deep); }
 
-    /* 5. POR QUÉ NOSOTROS */
+    /* 5. POR QUÉ FLOUVIA — banda delgada */
+    .advantage-sober-banner.global-gap-reduced { padding: 1.5rem 0; }
     .advantage-sober-banner { position: relative; color: #fff; overflow: hidden; z-index: 1; }
     .adv-pro-bg { position: absolute; inset: 0; background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%); z-index: -2; }
-    .adv-banner-flex { display: flex; align-items: center; justify-content: space-between; gap: 4rem; position: relative;}
-    .adv-b-left { flex: 0 0 35%; display: flex; flex-direction: column; gap: 1rem;}
-    .adv-b-title { font-size: clamp(2.8rem, 5vw, 4rem); font-weight: 800; letter-spacing: -1.5px; margin: 0; line-height: 1.1; }
-    .adv-b-right { flex: 1; display: flex; align-items: center; justify-content: space-between; gap: 3rem; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 4rem; height: 100%; }
-    .adv-b-desc { font-size: 1.25rem; color: rgba(255,255,255,0.75); line-height: 1.6; margin: 0; max-width: 480px; font-weight: 400;}
+    .adv-banner-flex { display: flex; align-items: center; justify-content: space-between; gap: 2.5rem; position: relative;}
+    .adv-b-left { flex: 0 0 auto; display: flex; flex-direction: column; gap: 0;}
+    .adv-b-title { font-size: clamp(1.5rem, 2.2vw, 2rem); font-weight: 800; letter-spacing: -0.8px; margin: 0; line-height: 1.1; white-space: nowrap; }
+    .adv-b-right { flex: 1; display: flex; align-items: center; justify-content: space-between; gap: 2.5rem; border-left: 1px solid rgba(255,255,255,0.12); padding-left: 2.5rem; }
+    .adv-b-desc { font-size: 0.96rem; color: rgba(255,255,255,0.72); line-height: 1.5; margin: 0; max-width: 640px; font-weight: 400;}
 
-    .btn-contact-sober { display: inline-flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); padding: 10px 14px 10px 24px; border-radius: 100px; text-decoration: none; color: #fff; font-weight: 600; font-size: 0.95rem; transition: all 0.4s var(--ease-smooth); white-space: nowrap; }
-    .arrow-circle-small { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; transition: all 0.4s var(--ease-smooth); }
+    .btn-contact-sober { display: inline-flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px 8px 20px; border-radius: 100px; text-decoration: none; color: #fff; font-weight: 600; font-size: 0.9rem; transition: background 0.4s var(--ease-smooth), color 0.4s var(--ease-smooth); white-space: nowrap; }
+    .arrow-circle-small { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; transition: background 0.4s var(--ease-smooth), color 0.4s var(--ease-smooth), transform 0.4s var(--ease-smooth); }
     .btn-contact-sober:hover { background: #fff; color: var(--color-blue-deep); }
     .btn-contact-sober:hover .arrow-circle-small { background: var(--color-blue-deep); color: #fff; transform: translateX(3px); }
 
@@ -493,56 +558,65 @@ const parseSerifTitle = (title: string) => {
     .t-track-wrapper { width: 100%; overflow-x: auto; padding: 2rem max(5%, calc((100vw - 1200px) / 2)); margin-top: -2rem; scroll-snap-type: x mandatory; scrollbar-width: none; }
     .t-track-wrapper::-webkit-scrollbar { display: none; }
     .t-track { display: flex; gap: 2.5rem; width: max-content; align-items: stretch; }
-    .t-card-pro { width: 550px; height: auto; min-height: 380px; scroll-snap-align: center; position: relative; background: #ffffff; border: 1px solid rgba(0,0,0,0.04); padding: 4.5rem; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.5s var(--ease-smooth); z-index: 1; box-shadow: 0 10px 30px rgba(0,0,0,0.02), inset 0 1px 0 rgba(255,255,255,1); overflow: hidden; }
+    .t-card-pro { width: 560px; height: auto; min-height: 380px; scroll-snap-align: center; position: relative; background: #ffffff; border: 1px solid rgba(0,0,0,0.04); padding: 4rem; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.5s var(--ease-smooth), box-shadow 0.5s var(--ease-smooth), border-color 0.5s var(--ease-smooth); z-index: 1; box-shadow: 0 10px 30px rgba(0,0,0,0.02), inset 0 1px 0 rgba(255,255,255,1); overflow: hidden; }
     @media (hover: hover) {
-        .t-track:hover .t-card-pro { transform: scale(0.98); opacity: 0.6; }
-        .t-track .t-card-pro:hover { transform: scale(1.02); opacity: 1; z-index: 10; box-shadow: 0 30px 60px rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.08);}
+        .t-track .t-card-pro:hover { transform: translateY(-8px); z-index: 10; box-shadow: 0 30px 60px rgba(0,0,0,0.08); border-color: rgba(0,0,0,0.08);}
     }
     .t-quote-watermark { position: absolute; top: -10px; left: 30px; font-family: var(--font-serif); font-size: 12rem; color: rgba(10,25,47,0.02); line-height: 1; pointer-events: none;}
     .t-content-wrapper { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%; justify-content: space-between;}
-    .t-text { font-size: 1.45rem; font-weight: 500; color: #050505; line-height: 1.5; margin: 0 0 3rem 0; letter-spacing: -0.5px;}
-    .t-author-strip { display: flex; align-items: center; gap: 1.2rem; border-top: 1px solid rgba(0,0,0,0.06); padding-top: 2.5rem;}
-    .t-avatar { width: 52px; height: 52px; border-radius: 50%; background: #f8fafc; border: 1px solid rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--color-blue-deep); font-size: 1.1rem;}
-    .bg-dark { background: var(--color-blue-deep); color: #fff; }
-    .t-meta h4 { margin: 0 0 4px 0; font-size: 1.1rem; font-weight: 800; color: #000; letter-spacing: -0.5px;}
-    .t-meta span { font-size: 0.9rem; color: #64748b; font-weight: 500; text-transform: uppercase; letter-spacing: 1px;}
+    .t-metric { font-family: var(--font-serif); font-style: italic; font-size: 1.35rem; color: var(--color-blue-deep); letter-spacing: -0.3px; display: block; margin-bottom: 1.5rem; }
+    .t-text { font-size: 1.3rem; font-weight: 500; color: #050505; line-height: 1.5; margin: 0 0 2.5rem 0; letter-spacing: -0.4px;}
+    .t-author-strip { display: flex; align-items: center; gap: 1.2rem; border-top: 1px solid rgba(0,0,0,0.06); padding-top: 2rem;}
+    .t-avatar { width: 52px; height: 52px; border-radius: 50%; background: #f8fafc; border: 1px solid rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--color-blue-deep); font-size: 1.1rem; flex-shrink: 0;}
+    .bg-dark { background: var(--color-blue-deep); color: #fff; border-color: transparent; }
+    .t-meta h4 { margin: 0 0 4px 0; font-size: 1.05rem; font-weight: 800; color: #000; letter-spacing: -0.5px;}
+    .t-meta .t-role { display: block; font-size: 0.82rem; color: #64748b; font-weight: 600; }
+    .t-meta .t-context { display: block; font-size: 0.72rem; color: #94a3b8; font-weight: 600; letter-spacing: 0.3px; margin-top: 2px; }
 
-    /* 7. CTA FINAL PREMIUM (REFINADO) */
+    /* 7. CTA FINAL */
     .cta-final-clean { padding-bottom: 6rem; }
-    .cta-box-refined { 
-        background: radial-gradient(100% 100% at 50% 100%, #152744 0%, #0a192f 100%);
-        padding: 5rem 6rem; 
-        position: relative; 
-        overflow: hidden; 
-        box-shadow: 0 20px 40px rgba(0,0,0,0.1); 
+    .cta-box-refined {
+        background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%);
+        padding: 5rem 6rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(5,11,20,0.15), 0 50px 100px rgba(5,11,20,0.25);
     }
     .cta-flex { display: flex; justify-content: space-between; align-items: center; gap: 4rem; }
-    .cta-title { font-size: clamp(3rem, 5vw, 4.5rem); font-weight: 700; color: #fff; letter-spacing: -1.5px; line-height: 0.95; margin: 0; }
-    
-    .btn-luxe-main { 
-        background: #fff; color: var(--color-blue-deep); padding: 16px 36px; border-radius: 100px; 
-        text-decoration: none; font-size: 1rem; font-weight: 700; transition: all 0.4s var(--ease-smooth); 
-        display: inline-flex; align-items: center; gap: 12px; border: 1px solid transparent; white-space: nowrap;
+    .cta-text { flex: 1; }
+    .cta-eyebrow { color: rgba(255,255,255,0.55); letter-spacing: 4px; }
+    .cta-title { font-size: clamp(2rem, 3.2vw, 3rem); font-weight: 800; color: #fff; letter-spacing: -1.2px; line-height: 1.12; margin: 0; }
+    .cta-body { margin: 1.4rem 0 0; color: rgba(255,255,255,0.68); font-size: 1.05rem; line-height: 1.6; max-width: 520px; }
+    .cta-avail { display: inline-flex; align-items: center; gap: 9px; margin-top: 1.8rem; padding: 8px 16px; border-radius: 100px; border: 1px solid rgba(16,185,129,0.25); background: rgba(16,185,129,0.06); }
+    .cta-avail span { font-size: 0.7rem; color: #34d399; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .cta-avail-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: hero-status-pulse 2s infinite; }
+
+    .btn-luxe-main {
+        background: #fff; color: var(--color-blue-deep); padding: 18px 40px; border-radius: 100px;
+        text-decoration: none; font-size: 1rem; font-weight: 700; transition: transform 0.5s var(--ease-smooth), box-shadow 0.5s var(--ease-smooth);
+        display: inline-flex; align-items: center; gap: 12px; white-space: nowrap;
+        box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 10px 20px rgba(255,255,255,0.1); will-change: transform;
     }
-    .btn-luxe-main svg { transition: transform 0.4s var(--ease-spring); }
-    .btn-luxe-main:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(255,255,255,0.15); background: transparent; color: #fff; border-color: #fff; }
+    .btn-luxe-main svg { transition: transform 0.5s var(--ease-spring); }
+    .btn-luxe-main:hover { transform: translateY(-3px); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 14px 28px rgba(255,255,255,0.16); }
     .btn-luxe-main:hover svg { transform: translateX(4px); }
 
 
     /* ==========================================================
-       MEDIA QUERIES RESPONSIVAS
+       MEDIA QUERIES
        ========================================================== */
     @media (max-width: 1024px) {
         .hero-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; }
         .desktop-only { display: none; }
         .manifesto-grid { grid-template-columns: 1fr; gap: 4rem; }
         .m-visual-side { order: -1; }
-        .image-frame-luxe { aspect-ratio: 16/9; } 
+        .image-frame-luxe { aspect-ratio: 16/9; }
+        .sticky-text-wrapper { position: relative; top: 0; }
         .monolith-grid { grid-template-columns: 1fr; gap: 2rem; }
-        .thin-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem 3rem; }
+        .thin-grid { grid-template-columns: repeat(2, 1fr); gap: 3rem; }
         .adv-banner-flex { flex-direction: column; align-items: flex-start; gap: 2rem; }
         .adv-b-right { border-left: none; padding-left: 0; flex-direction: column; align-items: flex-start; gap: 2rem;}
-        .cta-inner-flex { flex-direction: column; align-items: flex-start; gap: 3rem;}
+        .cta-flex { flex-direction: column; align-items: flex-start; gap: 2.5rem;}
         .cta-action-side { width: 100%;}
         .cta-box-refined { padding: 4rem; }
     }
@@ -551,32 +625,37 @@ const parseSerifTitle = (title: string) => {
         .global-gap-reduced { padding: 4rem 0; }
         .hero-grand { padding-top: 11rem; padding-bottom: 4rem; min-height: auto; text-align: center; }
         .hero-content { display: flex; flex-direction: column; align-items: center; }
-        .hero-title { display: flex; flex-direction: column; gap: 0; margin-bottom: 2.5rem; }
-        .title-bold { display: block; font-size: 11.5vw; letter-spacing: -1.8px; line-height: 0.95; margin-bottom: -43px; }
-        .title-serif { display: block; font-size: 12.2vw; font-weight: 300; letter-spacing: -0.5px; line-height: 0.95; }
+        .hero-status { margin-left: auto; margin-right: auto; }
+        .hero-title { display: flex; flex-direction: column; gap: 0.2rem; margin-bottom: 2.5rem; max-width: 100%; }
+        .title-bold { display: block; font-size: clamp(2rem, 7.6vw, 2.85rem); font-weight: 800; letter-spacing: -1px; line-height: 1.12; }
         .hero-bottom { flex-direction: column; align-items: center; gap: 2.5rem; text-align: center; border-top: none; padding-top: 0;}
         .hero-desc { font-size: 1.1rem; padding: 0 5%; max-width: 95%; margin: 0 auto; line-height: 1.6;}
-        .hero-actions-wrapper { width: 100%; justify-content: center; flex-direction: column; gap: 2rem; }
+        .hero-action { width: 100%; padding: 0 5%; }
         .btn-luxe { width: 100%; padding: 18px 0; font-size: 1.05rem;}
-        
+
+        .entity-section { padding-bottom: 4rem; }
+        .entity-flex { padding-top: 2.5rem; }
+
         .manifesto-section { padding: 4rem 0; }
-        .m-lead-text { font-size: 1.35rem; }
+        .m-lead-text { font-size: 1.3rem; }
         .image-frame-luxe { aspect-ratio: 1/1; }
 
         .values-monolith-section { padding: 4rem 0; }
+        .values-monolith-section .section-header { margin-bottom: 2.5rem; }
         .monolith-card { padding: 2.5rem; }
         .m-top-zone { margin-bottom: 2rem;}
 
         .thin-metrics-section { padding: 4rem 0; }
-        .thin-grid { grid-template-columns: repeat(2, 1fr); gap: 1.8rem 2rem; padding-top: 2.5rem; }
-        .thin-card { padding: 0.75rem 0; }
-        .thin-num { font-size: clamp(2.4rem, 9vw, 3.5rem); }
+        .metrics-top { margin-bottom: 2.5rem; }
+        .thin-grid { grid-template-columns: repeat(2, 1fr); gap: 2.2rem 1.5rem; padding-top: 2.5rem; }
+        .thin-num { font-size: clamp(2.4rem, 9vw, 3.4rem); }
         .thin-sym { font-size: 1.4rem; }
-        .thin-desc { font-size: 1rem; max-width: none; line-height: 1.4; }
+        .thin-desc { font-size: 0.95rem; line-height: 1.4; }
+        .thin-src { font-size: 0.62rem; }
 
-        .advantage-sober-banner { padding: 5rem 0; }
-        .adv-b-title { font-size: 2.5rem; }
-        .adv-b-desc { font-size: 1.1rem; }
+        .advantage-sober-banner.global-gap-reduced { padding: 2.25rem 0; }
+        .adv-b-title { font-size: 2.3rem; }
+        .adv-b-desc { font-size: 1.05rem; }
 
         .testimonials-slider-pro { padding: 4rem 0; width: 100%; overflow: hidden; }
         .header-flex { margin-bottom: 0.5rem; }
@@ -585,7 +664,7 @@ const parseSerifTitle = (title: string) => {
         .t-track-wrapper { padding: 2rem 0 3rem 5%; scroll-padding-left: 5%; scroll-behavior: smooth; }
         .t-track { gap: 14px; }
         .t-card-pro {
-            width: 78vw; flex-shrink: 0;
+            width: 80vw; flex-shrink: 0;
             padding: 2.5rem 2rem;
             transform: scale(0.92); opacity: 0.55;
             transform-origin: left center;
@@ -595,14 +674,17 @@ const parseSerifTitle = (title: string) => {
         }
         .t-card-pro.is-centered { transform: scale(1); opacity: 1; box-shadow: 0 20px 40px rgba(0,0,0,0.1); z-index: 2; }
         .t-quote-watermark { font-size: 8rem; top: -15px; left: 15px; }
-        .t-text { font-size: 1.2rem; margin-bottom: 1.5rem; }
+        .t-metric { font-size: 1.15rem; margin-bottom: 1rem; }
+        .t-text { font-size: 1.15rem; margin-bottom: 1.5rem; }
         .t-author-strip { padding-top: 1.5rem; }
         .t-avatar { width: 42px; height: 42px; font-size: 0.95rem; }
 
         .cta-final-clean { padding-bottom: 4rem; }
         .cta-box-refined { padding: 3rem 2rem; border-radius: 24px; text-align: center; }
-        .cta-flex { flex-direction: column; gap: 2.5rem; }
-        .cta-title { font-size: 2.2rem; }
+        .cta-flex { flex-direction: column; gap: 2.5rem; align-items: center; }
+        .cta-text { display: flex; flex-direction: column; align-items: center; }
+        .cta-title { font-size: 1.9rem; }
+        .cta-body { text-align: center; }
         .btn-luxe-main { width: 100%; justify-content: center; }
     }
 </style>
@@ -610,169 +692,153 @@ const parseSerifTitle = (title: string) => {
 <script>
     import { gsap } from 'gsap';
     import { ScrollTrigger } from 'gsap/ScrollTrigger';
-    import { SplitText } from 'gsap/SplitText';
-    gsap.registerPlugin(ScrollTrigger, SplitText);
 
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    gsap.registerPlugin(ScrollTrigger);
 
-    document.querySelectorAll<HTMLElement>('.hero-title, .hero-text-zone .eyebrow, .hero-bottom').forEach(el => {
-        el.style.animation = 'none';
-        el.style.opacity = '1';
-        el.style.filter = 'none';
-        el.style.transform = 'none';
-    });
+    // Recalcula posiciones tras fuentes + carga para que los ScrollTrigger
+    // disparen en el punto correcto desde el inicio.
+    const robustRefresh = () => {
+        const winLoad = new Promise<void>((resolve) => {
+            if (document.readyState === 'complete') resolve();
+            else window.addEventListener('load', () => resolve(), { once: true });
+        });
+        const fontsReady = (document as any).fonts?.ready ?? Promise.resolve();
+        Promise.all([winLoad, fontsReady]).then(() => {
+            setTimeout(() => ScrollTrigger.refresh(), 120);
+        });
+    };
+    robustRefresh();
 
-    if (!reduced) {
+    document.addEventListener('DOMContentLoaded', () => {
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // Sin animación: dejar todo visible y salir.
+        if (reduced) {
+            gsap.set('.reveal-fade, .reveal-up', { opacity: 1, y: 0 });
+            initCarousel();
+            return;
+        }
+
+        /* ─── HERO — entrada en carga (gate .js-anim ya los tiene en opacity:0) ─── */
+        const heroAnim = gsap.utils.toArray<HTMLElement>('.hero-anim');
+        if (heroAnim.length) {
+            gsap.set(heroAnim, { opacity: 0, y: 12 });
+            gsap.timeline({ defaults: { ease: 'power2.out' } })
+                .to('.hero-status',             { opacity: 1, y: 0, duration: 0.9 }, 0)
+                .to('.hero-text-zone .eyebrow', { opacity: 1, y: 0, duration: 0.9 }, 0.1)
+                .to('.hero-title',              { opacity: 1, y: 0, duration: 1.1 }, 0.2)
+                .to('.hero-bottom',             { opacity: 1, y: 0, duration: 1.0 }, 0.42);
+        }
+
+        // ── Estándar único de reveal: fade + leve subida, power2.out ──
+        const EASE = 'power2.out';
+        const DUR  = 0.9;
+
+        const reveal = (
+            targets: string | HTMLElement | NodeListOf<Element> | HTMLElement[],
+            opts: { trigger?: string | HTMLElement; start?: string; y?: number; dur?: number; stagger?: number } = {}
+        ) => {
+            const els = gsap.utils.toArray<HTMLElement>(targets as any);
+            if (!els.length) return;
+            gsap.set(els, { opacity: 0, y: opts.y ?? 14 });
+            ScrollTrigger.create({
+                trigger: opts.trigger ?? els[0],
+                start: opts.start ?? 'top 85%',
+                once: true,
+                onEnter: () => gsap.to(els, {
+                    opacity: 1, y: 0, duration: opts.dur ?? DUR, ease: EASE,
+                    stagger: opts.stagger ?? 0.08,
+                    clearProps: 'transform,opacity',
+                }),
+            });
+        };
+
+        const revealEach = (selector: string, opts: { start?: string; y?: number; dur?: number } = {}) => {
+            gsap.utils.toArray<HTMLElement>(selector).forEach(el => {
+                reveal(el, { trigger: el, start: opts.start, y: opts.y, dur: opts.dur, stagger: 0 });
+            });
+        };
+
         const mm = gsap.matchMedia();
 
+        /* ─── DESKTOP ─── */
         mm.add('(min-width: 769px)', () => {
-            const heroTitle = document.querySelector<HTMLElement>('.hero-title');
-            const heroEyebrow = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
-            const heroBottom = document.querySelector<HTMLElement>('.hero-bottom');
-
-            const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-            if (heroEyebrow) {
-                tl.from(heroEyebrow, { opacity: 0, y: 14, letterSpacing: '7px', duration: 1.4 }, 0.1);
-            }
-            if (heroTitle) {
-                const split = SplitText.create(heroTitle, { type: 'lines,words', linesClass: 'lx-line-mask' });
-                gsap.set(split.words, { yPercent: 105 });
-                tl.to(split.words, {
-                    yPercent: 0, duration: 1.5,
-                    stagger: { amount: 0.5, from: 'start' },
-                }, 0.35);
-            }
-            if (heroBottom && heroBottom.children.length > 0) {
-                tl.from(gsap.utils.toArray<HTMLElement>(heroBottom.children), {
-                    opacity: 0, y: 16, duration: 1.1, ease: 'power3.out',
-                    stagger: 0.12,
-                }, 1.0);
-            }
-
+            // Parallax muy leve del hero
             const heroParallax = document.getElementById('hero-parallax');
             if (heroParallax) {
                 gsap.to(heroParallax, {
-                    yPercent: 28, opacity: 0.15, ease: 'none',
-                    scrollTrigger: { trigger: '.hero-grand', start: 'top top', end: 'bottom 30%', scrub: 0.8 },
+                    yPercent: 4, opacity: 0.85, ease: 'none',
+                    scrollTrigger: { trigger: '.hero-grand', start: 'top top', end: 'bottom 30%', scrub: 1 },
                 });
             }
+
+            // Encabezados + eyebrows + textos
+            revealEach('section:not(.hero-grand) .section-heading', { y: 16, dur: 1.0, start: 'top 86%' });
+            revealEach('section:not(.hero-grand) .eyebrow',         { y: 10, dur: 0.9, start: 'top 90%' });
+            revealEach('.entity-text',  { y: 16, dur: 1.0 });
+            revealEach('.m-lead-text',  { y: 14 });
+            revealEach('.m-body-text',  { y: 14 });
+            revealEach('.m-visual-side',{ y: 18, dur: 1.0 });
+
+            // Tarjetas con stagger por grupo
+            reveal('.monolith-card', { trigger: '.monolith-grid', y: 18, stagger: 0.1 });
+            reveal('.thin-card',     { trigger: '.thin-grid',     y: 16, stagger: 0.08 });
+
+            reveal('.adv-banner-flex', { y: 18, dur: 1.0 });
+            reveal('.t-track-wrapper', { trigger: '.testimonials-slider-pro', y: 18, dur: 1.0, start: 'top 80%' });
+            reveal('.cta-box-refined', { y: 20, dur: 1.0, start: 'top 88%' });
         });
 
+        /* ─── MÓVIL ─── */
         mm.add('(max-width: 768px)', () => {
-            const mHeroTitle = document.querySelector<HTMLElement>('.hero-title');
-            const mEyebrow = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
-            const mHeroBottom = document.querySelector<HTMLElement>('.hero-bottom');
-            const tlm = gsap.timeline({ defaults: { ease: 'expo.out' } });
-            if (mEyebrow) tlm.from(mEyebrow, { opacity: 0, y: 10, letterSpacing: '6px', duration: 1.1 }, 0.1);
-            if (mHeroTitle) tlm.from(mHeroTitle, { opacity: 0, y: 24, duration: 1.2 }, 0.3);
-            if (mHeroBottom && mHeroBottom.children.length > 0) {
-                tlm.from(gsap.utils.toArray<HTMLElement>(mHeroBottom.children), {
-                    opacity: 0, y: 14, duration: 1.0, ease: 'power3.out',
-                    stagger: 0.1,
-                }, 0.85);
-            }
+            revealEach('section:not(.hero-grand) .section-heading', { y: 14, dur: 0.9 });
+            revealEach('section:not(.hero-grand) .eyebrow',         { y: 10, dur: 0.8 });
+            revealEach('.entity-text', { y: 14 });
+            revealEach('.m-lead-text', { y: 12 });
+            revealEach('.m-body-text', { y: 12 });
+            revealEach('.m-visual-side', { y: 16 });
+            revealEach('.monolith-card', { y: 14 });
+            revealEach('.thin-card', { y: 12 });
+            reveal('.adv-banner-flex', { y: 14 });
+            reveal('.t-track-wrapper', { trigger: '.testimonials-slider-pro', y: 14, start: 'top 85%' });
+            reveal('.cta-box-refined', { y: 16 });
+            initCarousel();
         });
-    }
-</script>
+    });
 
-<script is:inline>
-    document.addEventListener("DOMContentLoaded", () => {
+    // ── Carrusel móvil: marca la tarjeta centrada (escala/opacidad) ──
+    function initCarousel() {
+        if (typeof IntersectionObserver === 'undefined') return;
+        if (window.innerWidth > 1024) return;
+        const track = document.querySelector('.t-track-wrapper');
+        const cards = document.querySelectorAll('.t-card-pro');
+        if (!track || cards.length === 0) return;
 
-        // 1. REVEALS GLOBALES
-        if (typeof IntersectionObserver !== 'undefined') {
-            const observer = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            document.querySelectorAll('.reveal-blur, .reveal-fade, .reveal-up, .reveal-clip').forEach(el => {
-                if (!el.closest('.hero-grand')) observer.observe(el);
-            });
-        }
-
-        // 2. PARALLAX (imagen manifesto — hero ya lo maneja GSAP)
-        window.addEventListener('scroll', () => {
-            if (window.innerWidth > 1024) {
-                const scrollY = window.scrollY;
-
-                const imgParallax = document.getElementById('manifesto-img');
-                if (imgParallax && imgParallax.parentElement) {
-                    const rect = imgParallax.parentElement.getBoundingClientRect();
-                    if(rect.top < window.innerHeight && rect.bottom > 0) {
-                        const yPos = (rect.top - window.innerHeight/2) * -0.05;
-                        imgParallax.style.transform = `translateY(${yPos}px)`;
-                    }
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    cards.forEach(c => c.classList.remove('is-centered'));
+                    entry.target.classList.add('is-centered');
                 }
-            }
-        });
-
-        // 3. CONTADORES DE MÉTRICAS
-        if (typeof IntersectionObserver !== 'undefined') {
-            const counters = document.querySelectorAll('.counter');
-            const speed = 100; 
-
-            const counterObserver = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const target = entry.target;
-                        const endValAttr = target.getAttribute('data-target');
-                        if(!endValAttr) return;
-
-                        const endValue = Number(endValAttr);
-                        
-                        const updateCount = () => {
-                            const current = Number(target.innerHTML);
-                            const inc = endValue / speed;
-
-                            if (current < endValue) {
-                                target.innerHTML = Math.ceil(current + inc).toString();
-                                setTimeout(updateCount, 15);
-                            } else {
-                                target.innerHTML = endValue.toString();
-                            }
-                        };
-                        updateCount();
-                        counterObserver.unobserve(target);
-                    }
-                });
-            }, { threshold: 0.5 });
-
-            counters.forEach(counter => counterObserver.observe(counter));
-        }
-
-        // 4. CARRUSEL MÓVIL
-        const initCarouselPhysics = () => {
-            if (typeof IntersectionObserver === 'undefined') return;
-            const track = document.querySelector('.t-track-wrapper');
-            const cards = document.querySelectorAll('.t-card-pro');
-            
-            if(!track || cards.length === 0) return;
-
-            const carouselObserver = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        cards.forEach(c => c.classList.remove('is-centered'));
-                        entry.target.classList.add('is-centered');
-                    }
-                });
-            }, { 
-                root: track, 
-                threshold: 0.5 
             });
+        }, { root: track, threshold: 0.6 });
 
-            cards.forEach(card => carouselObserver.observe(card));
-            
-            setTimeout(() => {
-                if(cards[0]) cards[0].classList.add('is-centered');
-            }, 100);
-        };
+        cards.forEach(card => obs.observe(card));
+        setTimeout(() => { if (cards[0]) cards[0].classList.add('is-centered'); }, 100);
+    }
 
-        if (window.innerWidth <= 1024) {
-            initCarouselPhysics();
-        }
+    // Parallax suave de la imagen del manifiesto (solo desktop)
+    document.addEventListener('DOMContentLoaded', () => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const img = document.getElementById('manifesto-img');
+        if (!img) return;
+        window.addEventListener('scroll', () => {
+            if (window.innerWidth <= 1024 || !img.parentElement) return;
+            const rect = img.parentElement.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                const yPos = (rect.top - window.innerHeight / 2) * -0.05;
+                img.style.transform = `translateY(${yPos}px)`;
+            }
+        }, { passive: true });
     });
 </script>

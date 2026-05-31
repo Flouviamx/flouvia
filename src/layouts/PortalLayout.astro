@@ -21,6 +21,14 @@ const { title } = Astro.props;
 			if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 				document.documentElement.classList.add('js-anim');
 			}
+			// Cambio de idioma: ocultar el body antes del paint para restaurar el scroll
+			// sin mostrar el salto desde arriba. El navbar lo revela tras posicionar.
+			try {
+				if (sessionStorage.getItem('flouviaLangScroll') !== null) {
+					document.documentElement.classList.add('lang-restoring');
+					setTimeout(function () { document.documentElement.classList.remove('lang-restoring'); }, 1500);
+				}
+			} catch (e) {}
 		</script>
 
 		<meta name="description" content="Portal de Clientes Flouvia" />
@@ -57,6 +65,10 @@ const { title } = Astro.props;
        TU CSS GLOBAL COMPLETO (Recuperado y Blindado)
        ============================================================ */
     *, *::before, *::after { box-sizing: border-box; }
+
+    /* Cambio de idioma: oculta el body antes del paint para restaurar el scroll sin
+       mostrar el salto desde arriba. El navbar lo revela tras posicionar (o el failsafe). */
+    html.lang-restoring body { opacity: 0; }
 
     html, body {
         width: 100%;

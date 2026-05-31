@@ -3,7 +3,6 @@ export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
 import Navbar from '../../../components/Navbar.astro';
 import Footer from '../../../components/Footer.astro';
-import WhatsApp from '../../../components/WhatsApp.astro';
 import { posts, formatDate } from '../../../data/blog';
 
 const isEn = true;
@@ -20,19 +19,52 @@ const categories = [
   { es: 'E-commerce', en: 'E-commerce' },
   { es: 'Automatización', en: 'Automation' },
 ];
+
+const SITE = 'https://flouvia.com';
+const pageTitle = 'E-commerce & B2B Engineering Blog | Flouvia — Mexico City';
+const pageDesc = 'Applied-engineering perspectives on e-commerce, B2B architecture, automation and CRO. Based on real projects.';
+
+const blogSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  '@id': `${SITE}${root}/blog#blog`,
+  name: 'E-commerce & B2B Engineering Blog | Flouvia',
+  description: pageDesc,
+  url: `${SITE}${root}/blog`,
+  inLanguage: 'en-US',
+  publisher: {
+    '@type': 'Organization',
+    '@id': `${SITE}/#organization`,
+    name: 'Flouvia',
+    url: SITE,
+  },
+  blogPost: posts.map(p => ({
+    '@type': 'BlogPosting',
+    headline: t(p.title),
+    url: `${SITE}${root}/blog/${p.slug}`,
+    datePublished: p.date,
+    dateModified: p.dateModified,
+  })),
+};
 ---
 
-<Layout title="Blog — Flouvia" description="Essays on e-commerce engineering, B2B architecture, automation and CRO for operations that already sell.">
+<Layout title={pageTitle} description={pageDesc}>
   <Navbar />
+
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(blogSchema)} />
 
   <main class="blog-page">
 
     <section class="blog-hero">
       <div class="container">
-        <p class="eyebrow blog-eyebrow">INSIGHTS · PERSPECTIVES</p>
-        <h1 class="blog-title">The Flouvia <span class="editorial"> Blog.</span></h1>
-        <p class="blog-desc">Digital engineering, B2B strategy, and e-commerce analysis. No filler.</p>
-        <div class="blog-hero-meta">
+        <div class="blog-status blog-anim">
+          <span class="blog-status-dot" aria-hidden="true"></span>
+          <span>ACCEPTING Q3 PROJECTS</span>
+        </div>
+        <p class="eyebrow blog-eyebrow blog-anim">APPLIED ENGINEERING — NOTES FROM THE FIRM</p>
+        <h1 class="blog-title blog-anim">The Flouvia Blog.</h1>
+        <p class="blog-desc blog-anim">What we learn building real systems for established brands. No generics, no filler posts.</p>
+        <div class="blog-hero-meta blog-anim">
           <span class="post-count">{posts.length} articles</span>
         </div>
       </div>
@@ -122,11 +154,15 @@ const categories = [
       <div class="container">
         <div class="cta-inner squircle-cta">
           <div class="cta-text">
-            <p class="eyebrow" style="color: rgba(255,255,255,0.4);">WORK WITH US</p>
-            <h2>Ready to scale your <span class="editorial" style="color: #fff;">operation?</span></h2>
+            <p class="eyebrow" style="color: rgba(255,255,255,0.4);">DOES THIS SOUND LIKE YOUR OPERATION?</p>
+            <h2>We diagnose whether we can help.</h2>
+            <div class="cta-badge">
+              <span class="cta-badge-dot" aria-hidden="true"></span>
+              2 project slots open Q3
+            </div>
           </div>
           <a href="/en/contacto" class="cta-btn">
-            <span>Start architecture</span>
+            <span>Request a diagnosis</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="19" x2="19" y2="5"/><polyline points="9 5 19 5 19 15"/></svg>
           </a>
         </div>
@@ -136,7 +172,6 @@ const categories = [
   </main>
 
   <Footer />
-  <WhatsApp />
 </Layout>
 
 <style is:global>
@@ -148,7 +183,7 @@ const categories = [
     --font-serif: 'Instrument Serif', serif;
     --font-mono: 'JetBrains Mono', monospace;
     --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+    --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
   }
   *, *::before, *::after { box-sizing: border-box; }
   html, body { width: 100%; -webkit-font-smoothing: antialiased; margin: 0; }
@@ -158,15 +193,18 @@ const categories = [
   .eyebrow { font-size: 0.62rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
   .squircle { border-radius: 24px; overflow: hidden; transform: translateZ(0); }
   .squircle-cta { border-radius: 28px; overflow: hidden; }
+  .js-anim .blog-anim { opacity: 0; }
 </style>
 
 <style>
 .blog-page { width: 100%; overflow-x: clip; }
 .blog-hero { padding: 13rem 0 5rem; background: var(--color-bg); border-bottom: 1px solid var(--color-border); }
-.blog-eyebrow { opacity: 0; }
-.blog-title { font-size: clamp(3.5rem, 7vw, 6.5rem); font-weight: 800; letter-spacing: -3px; line-height: 0.9; margin: 0 0 2rem; color: var(--color-text); opacity: 0; }
-.blog-desc { font-size: 1.2rem; color: var(--color-text-muted); max-width: 520px; line-height: 1.5; margin: 0 0 2rem; opacity: 0; }
-.blog-hero-meta { opacity: 0; }
+.blog-status { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 100px; border: 1px solid rgba(16,185,129,0.22); background: rgba(16,185,129,0.04); width: max-content; margin-bottom: 1.6rem; }
+.blog-status span { font-size: 0.7rem; color: #059669; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.blog-status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: blog-status-pulse 2s infinite; }
+@keyframes blog-status-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+.blog-title { font-size: clamp(3rem, 6.4vw, 5.6rem); font-weight: 800; letter-spacing: -2.5px; line-height: 0.95; margin: 0 0 1.5rem; color: var(--color-text); }
+.blog-desc { font-size: 1.15rem; color: var(--color-text-muted); max-width: 560px; line-height: 1.55; margin: 0 0 2rem; }
 .post-count { font-size: 0.72rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #bbb; border: 1px solid var(--color-border); padding: 6px 14px; border-radius: 50px; }
 .filter-bar { padding: 2rem 0; background: var(--color-bg); border-bottom: 1px solid var(--color-border); }
 .filter-pills { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -212,12 +250,15 @@ const categories = [
 .card-excerpt { font-size: 0.93rem; line-height: 1.7; color: var(--color-text-muted); margin: 0; flex: 1; }
 .blog-cta { padding: 0 0 6rem; background: var(--color-bg-soft); }
 .cta-inner { background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%); padding: 4.5rem 5rem; display: flex; justify-content: space-between; align-items: center; gap: 3rem; position: relative; overflow: hidden; }
-.cta-text h2 { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 800; color: rgba(255,255,255,0.85); letter-spacing: -1px; margin: 0; line-height: 1.1; }
-.cta-btn { display: inline-flex; align-items: center; gap: 10px; background: #fff; color: var(--color-blue-deep); padding: 16px 32px; border-radius: 100px; text-decoration: none; font-size: 0.95rem; font-weight: 700; transition: all 0.4s var(--ease-smooth); white-space: nowrap; flex-shrink: 0; }
+.cta-text { position: relative; z-index: 1; }
+.cta-text h2 { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 800; color: rgba(255,255,255,0.92); letter-spacing: -1px; margin: 0; line-height: 1.1; }
+.cta-badge { display: inline-flex; align-items: center; gap: 8px; margin-top: 1.4rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: rgba(255,255,255,0.8); border: 1px solid rgba(16,185,129,0.3); background: rgba(16,185,129,0.08); padding: 6px 14px; border-radius: 50px; }
+.cta-badge-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px rgba(16,185,129,0.6); }
+.cta-btn { display: inline-flex; align-items: center; gap: 10px; background: #fff; color: var(--color-blue-deep); padding: 16px 32px; border-radius: 100px; text-decoration: none; font-size: 0.95rem; font-weight: 700; transition: all 0.4s var(--ease-smooth); white-space: nowrap; flex-shrink: 0; position: relative; z-index: 1; }
 .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(255,255,255,0.15); }
 .post-card-wrapper.hidden, .featured-wrapper.hidden { display: none; }
 @media (max-width: 1024px) { .featured-card { grid-template-columns: 1fr; } .featured-visual { min-height: 240px; } .posts-grid { grid-template-columns: 1fr; } }
-@media (max-width: 768px) { .blog-hero { padding: 11rem 0 4rem; } .blog-title { letter-spacing: -2px; } .blog-body { padding: 3rem 0 4rem; } .featured-body { padding: 2rem; } .featured-title { font-size: 1.5rem; } .card-body { padding: 1.5rem; } .cta-inner { flex-direction: column; padding: 3rem 2rem; text-align: center; } .cta-btn { width: 100%; justify-content: center; } .blog-cta { padding: 0 5% 4rem; } }
+@media (max-width: 768px) { .blog-hero { padding: 11rem 0 4rem; } .blog-title { letter-spacing: -1.5px; } .blog-body { padding: 3rem 0 4rem; } .featured-body { padding: 2rem; } .featured-title { font-size: 1.5rem; } .card-body { padding: 1.5rem; } .cta-inner { flex-direction: column; padding: 3rem 2rem; text-align: center; } .cta-badge { margin-left: auto; margin-right: auto; } .cta-btn { width: 100%; justify-content: center; } .blog-cta { padding: 0 5% 4rem; } }
 </style>
 
 <script>
@@ -225,24 +266,20 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
-document.addEventListener('DOMContentLoaded', () => {
-  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-  tl.to('.blog-eyebrow', { opacity: 1, y: 0, duration: 0.8 }, 0.1)
-    .from('.blog-title', { y: 40, duration: 1.1 }, 0.2)
-    .to('.blog-title', { opacity: 1, duration: 0.1 }, 0.2)
-    .to('.blog-desc', { opacity: 1, y: 0, duration: 0.8 }, 0.55)
-    .to('.blog-hero-meta', { opacity: 1, duration: 0.6 }, 0.7);
-  gsap.set('.blog-title', { opacity: 0 });
-
-  gsap.from('.featured-card', { y: 50, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: '.featured-wrapper', start: 'top 85%' } });
-  gsap.utils.toArray<HTMLElement>('.post-card').forEach((card, i) => {
-    gsap.from(card, { y: 40, opacity: 0, duration: 0.8, ease: 'power3.out', delay: i * 0.06, scrollTrigger: { trigger: card, start: 'top 88%' } });
+const robustRefresh = () => {
+  const winLoad = new Promise<void>((resolve) => {
+    if (document.readyState === 'complete') resolve();
+    else window.addEventListener('load', () => resolve(), { once: true });
   });
+  const fontsReady = (document as any).fonts?.ready ?? Promise.resolve();
+  Promise.all([winLoad, fontsReady]).then(() => setTimeout(() => ScrollTrigger.refresh(), 120));
+};
+robustRefresh();
 
+document.addEventListener('DOMContentLoaded', () => {
   const pills = document.querySelectorAll<HTMLButtonElement>('.filter-pill');
   const featured = document.querySelector<HTMLElement>('.featured-wrapper');
   const cards = document.querySelectorAll<HTMLElement>('.post-card-wrapper');
-
   pills.forEach(pill => {
     pill.addEventListener('click', () => {
       pills.forEach(p => p.classList.remove('active'));
@@ -252,5 +289,45 @@ document.addEventListener('DOMContentLoaded', () => {
       cards.forEach(card => card.classList.toggle('hidden', filter !== 'all' && card.dataset.category !== filter));
     });
   });
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced) return;
+
+  const EASE = 'power2.out';
+
+  const heroAnim = gsap.utils.toArray<HTMLElement>('.blog-anim');
+  if (heroAnim.length) {
+    gsap.set(heroAnim, { opacity: 0, y: 12 });
+    gsap.timeline({ defaults: { ease: EASE } })
+      .to('.blog-status',    { opacity: 1, y: 0, duration: 0.9 }, 0)
+      .to('.blog-eyebrow',   { opacity: 1, y: 0, duration: 0.9 }, 0.1)
+      .to('.blog-title',     { opacity: 1, y: 0, duration: 1.0 }, 0.2)
+      .to('.blog-desc',      { opacity: 1, y: 0, duration: 0.9 }, 0.4)
+      .to('.blog-hero-meta', { opacity: 1, y: 0, duration: 0.8 }, 0.55);
+  }
+
+  const reveal = (
+    targets: string | HTMLElement,
+    opts: { trigger?: string | HTMLElement; start?: string; y?: number; dur?: number; stagger?: number } = {}
+  ) => {
+    const els = gsap.utils.toArray<HTMLElement>(targets as any);
+    if (!els.length) return;
+    gsap.set(els, { opacity: 0, y: opts.y ?? 14 });
+    ScrollTrigger.create({
+      trigger: opts.trigger ?? els[0],
+      start: opts.start ?? 'top 85%',
+      once: true,
+      onEnter: () => gsap.to(els, {
+        opacity: 1, y: 0, duration: opts.dur ?? 0.9, ease: EASE,
+        stagger: opts.stagger ?? 0.08, clearProps: 'transform,opacity',
+      }),
+    });
+  };
+
+  reveal('.featured-card', { trigger: '.featured-wrapper', y: 24, dur: 1.0, start: 'top 85%' });
+  gsap.utils.toArray<HTMLElement>('.post-card').forEach((card) => {
+    reveal(card, { trigger: card, y: 16, dur: 0.9, start: 'top 90%' });
+  });
+  reveal('.cta-inner', { trigger: '.blog-cta', y: 24, dur: 1.0, start: 'top 88%' });
 });
 </script>

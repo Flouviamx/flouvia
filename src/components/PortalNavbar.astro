@@ -498,6 +498,29 @@ document.addEventListener("DOMContentLoaded", () => {
     const mobile   = document.getElementById("pnav-mobile-inner");
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /* ── RESTORE SCROLL tras cambio de idioma — volver a donde estabas (no reiniciar
+       arriba). El body viene oculto (html.lang-restoring, puesto en el <head> antes del
+       paint); posicionamos el scroll y lo revelamos con un crossfade en el mismo punto. ── */
+    let langScroll: number | null = null;
+    try {
+        const s = sessionStorage.getItem("flouviaLangScroll");
+        if (s !== null) { langScroll = parseInt(s, 10) || 0; sessionStorage.removeItem("flouviaLangScroll"); }
+    } catch (err) {}
+    if (langScroll !== null) {
+        const y = langScroll;
+        window.scrollTo(0, y);
+        requestAnimationFrame(() => window.scrollTo(0, y));
+        window.addEventListener("load", () => window.scrollTo(0, y), { once: true });
+        if (reducedMotion) {
+            document.documentElement.classList.remove("lang-restoring");
+        } else {
+            gsap.set(document.body, { opacity: 0 });
+            document.documentElement.classList.remove("lang-restoring");
+            gsap.to(document.body, { opacity: 1, duration: 0.25, ease: "power1.out" });
+        }
+    }
+
     // recolocador del indicador — lo asigna el bloque NAV INDICATOR; lo llaman entrada y scroll.
     let indicatorRelayout: ((animate?: boolean) => void) | null = null;
     // hace que el indicador SIGA al link mientras el layout se mueve (transición del logo).
@@ -592,6 +615,36 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!followRAF) followRAF = requestAnimationFrame(followTick);
         };
     }
+
+    /* ── LANG SWITCH — guarda scroll + crossfade/prefetch (mismo patrón que el público) ── */
+    const langLinks = document.querySelectorAll<HTMLAnchorElement>(".pnav-lang, .pnav-lang-m");
+    const prefetched = new Set<string>();
+    const prefetch = (href: string) => {
+        if (!href || prefetched.has(href)) return;
+        prefetched.add(href);
+        const link = document.createElement("link");
+        link.rel = "prefetch"; link.href = href;
+        document.head.appendChild(link);
+    };
+    langLinks.forEach(a => {
+        const href = a.getAttribute("href") || "";
+        a.addEventListener("mouseenter", () => prefetch(href), { once: true });
+        a.addEventListener("touchstart", () => prefetch(href), { once: true, passive: true });
+        a.addEventListener("click", (e) => {
+            if (a.classList.contains("active")) { e.preventDefault(); return; }
+            const dest = a.href;
+            if (!dest || dest === window.location.href) return;
+            try { sessionStorage.setItem("flouviaLangScroll", String(Math.round(window.scrollY))); } catch (err) {}
+            if (reducedMotion) return;
+            e.preventDefault();
+            prefetch(href);
+            gsap.to(document.body, { opacity: 0, duration: 0.16, ease: "power1.out",
+                onComplete: () => { window.location.href = dest; } });
+        });
+    });
+    window.addEventListener("pageshow", (e) => {
+        if ((e as PageTransitionEvent).persisted) gsap.set(document.body, { clearProps: "opacity" });
+    });
 
     /* ── SCROLL ── */
     if (wrapper) {

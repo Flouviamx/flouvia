@@ -3,46 +3,48 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from './Navbar.astro';
 import Footer from './Footer.astro';
-import WhatsApp from './WhatsApp.astro';
 
-import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { getLangFromUrl } from '../i18n/utils';
 const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
 const isEn = lang === 'en';
 ---
 
 <Layout
-    title={isEn ? 'Case studies — Engineering results | Flouvia' : 'Casos — Resultados de ingeniería | Flouvia'}
-    description={isEn ? 'El Zarco: −67% processing time. Setnpet: +42% conversion and 3× LTV retention. Real evidence of the systems we build.' : 'El Zarco: −67% en tiempo de proceso. Setnpet: +42% conversión y 3× retención LTV. Evidencia real de los sistemas que construimos.'}
+    title={isEn ? 'E-commerce & B2B case studies — El Zarco +25% AOV, Setnpet +42% Conversion | Flouvia' : 'Casos de E-commerce y B2B — El Zarco +25% AOV, Setnpet +42% Conversión | Flouvia'}
+    description={isEn ? 'Real e-commerce & B2B engineering case studies: El Zarco (B2B wholesale portal, −67% process time, +25% AOV) and Setnpet (+42% conversion, 3× LTV). Flouvia — boutique firm, CDMX.' : 'Casos reales de ingeniería e-commerce y B2B: El Zarco (portal mayorista B2B, −67% tiempo de proceso, +25% AOV) y Setnpet (+42% conversión, 3× LTV). Flouvia — firma boutique, CDMX.'}
 >
     <Navbar />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <main class="flouvia-masterpiece">
-        
+
         <section class="hero-grand">
             <div class="container hero-container">
                 <div class="hero-content">
                     <div class="hero-text-zone" id="hero-parallax">
-                        <p class="eyebrow reveal-blur" style="--delay: 0.1s;">
-                            {isEn ? 'PROVEN SYSTEMS' : 'SISTEMAS PROBADOS'}
+                        <div class="hero-status hero-anim">
+                            <span class="hero-status-dot" aria-hidden="true"></span>
+                            <span>{isEn ? 'ACCEPTING Q3 PROJECTS' : 'ACEPTANDO PROYECTOS Q3'}</span>
+                        </div>
+                        <p class="eyebrow hero-anim">
+                            {isEn ? 'DOCUMENTED RESULTS — 2 ACTIVE SYSTEMS' : 'RESULTADOS DOCUMENTADOS — 2 SISTEMAS ACTIVOS'}
                         </p>
-                        <h1 class="hero-title reveal-blur" style="--delay: 0.2s;">
-                            <span class="title-bold">{isEn ? 'Engineering' : 'Ingeniería'}</span><br>
-                            <span class="editorial title-serif">{isEn ? 'Case Studies.' : 'en Detalle.'}</span>
+                        <h1 class="hero-title hero-anim">
+                            <span class="title-bold">{isEn ? 'What we built.' : 'Lo que construimos.'}</span> <span class="title-bold">{isEn ? 'What it measured.' : 'Lo que midió.'}</span>
                         </h1>
                     </div>
-                    
-                    <div class="hero-bottom reveal-blur" style="--delay: 0.4s;">
+
+                    <div class="hero-bottom hero-anim">
                         <p class="hero-desc">
-                            {isEn ? 'Explore the technical architecture behind high-growth brands. We build systems, not just websites.' : 'Explora la arquitectura técnica detrás de marcas de alto crecimiento. Construimos sistemas, no solo sitios web.'}
+                            {isEn ? 'Each case includes the real problem, the architecture we implemented, and the measured results. No inflated metrics, no generic promises.' : 'Cada caso incluye el problema real, la arquitectura implementada y los resultados medidos. Sin métricas infladas, sin promesas genéricas.'}
                         </p>
-                        <div class="hero-actions-wrapper">
-                            <a href="/contacto" class="btn-luxe">
-                                <span>{isEn ? 'Contact Us' : 'Contáctanos'}</span>
+                        <div class="hero-action">
+                            <a href="#case-grid" class="btn-luxe">
+                                <span>{isEn ? 'Explore cases' : 'Explorar casos'}</span>
+                                <span class="btn-arrow btn-arrow-down" aria-hidden="true">↓</span>
                                 <div class="btn-shimmer"></div>
                             </a>
                         </div>
@@ -53,16 +55,21 @@ const isEn = lang === 'en';
 
         <section class="cases-gallery" id="case-grid">
             <div class="container">
+                <div class="avail-badge">
+                    <span class="avail-dot" aria-hidden="true"></span>
+                    {isEn ? 'Accepting Q3 projects — 2 slots available' : 'Aceptando proyectos Q3 — 2 slots disponibles'}
+                </div>
                 <div class="gallery-grid">
 
-                    <a href="/casos/el-zarco" class="case-card reveal-up">
+                    <a href="/casos/el-zarco" class="case-card">
                         <div class="case-visual">
                             <img src="/imgs/el-zarco.svg" alt="El Zarco B2B" class="case-img squircle" />
+                            <span class="active-badge"><span class="active-dot" aria-hidden="true"></span>{isEn ? 'Active system' : 'Sistema activo'}</span>
                         </div>
                         <div class="case-info">
                             <h2 class="case-brand">El Zarco</h2>
                             <p class="case-desc">{isEn ? 'Full-scale wholesale digitization. We engineered a custom logistics engine powered by APIs and Airtable.' : 'Digitalización mayorista a escala total. Desarrollamos un motor de logística mediante código custom y APIs conectadas a Airtable.'}</p>
-                            
+
                             <div class="case-metrics">
                                 <div class="metric">
                                     <span class="metric-val">+25%</span>
@@ -81,21 +88,22 @@ const isEn = lang === 'en';
                         </div>
                     </a>
 
-                    <a href="/casos/setnpet" class="case-card reveal-up" style="--delay: 0.1s;">
+                    <a href="/casos/setnpet" class="case-card">
                         <div class="case-visual">
                             <img src="/imgs/set-n-pet.svg" alt="Setnpet D2C" class="case-img squircle" />
+                            <span class="active-badge"><span class="active-dot" aria-hidden="true"></span>{isEn ? 'Active system' : 'Sistema activo'}</span>
                         </div>
                         <div class="case-info">
                             <h2 class="case-brand">Setnpet</h2>
                             <p class="case-desc">{isEn ? 'High-frequency D2C growth system. Focused on maximizing LTV through behavioral analytics.' : 'Sistema de crecimiento D2C de alta frecuencia. Enfocado en maximizar el valor de vida del cliente mediante analítica de comportamiento.'}</p>
-                            
+
                             <div class="case-metrics">
                                 <div class="metric">
                                     <span class="metric-val">+42%</span>
                                     <span class="metric-lbl">{isEn ? 'Conv. Rate' : 'Tasa Conv.'}</span>
                                 </div>
                                 <div class="metric">
-                                    <span class="metric-val">3x</span>
+                                    <span class="metric-val">3×</span>
                                     <span class="metric-lbl">{isEn ? 'Retention LTV' : 'Retención LTV'}</span>
                                 </div>
                             </div>
@@ -107,42 +115,56 @@ const isEn = lang === 'en';
                         </div>
                     </a>
 
+                    <a href="/contacto" class="case-card slot-card">
+                        <div class="slot-inner">
+                            <span class="slot-eyebrow">{isEn ? 'Q3 — 1 SLOT' : 'Q3 — 1 SLOT'}</span>
+                            <h2 class="slot-title">{isEn ? 'Your project here.' : 'Tu proyecto aquí.'}</h2>
+                            <p class="slot-desc">{isEn ? 'We\'re currently evaluating projects for Q3. The next case could be yours.' : 'Actualmente evaluando proyectos para Q3. El siguiente caso podría ser el tuyo.'}</p>
+                            <div class="slot-action">
+                                <span>{isEn ? 'See if I qualify' : 'Ver si califico'}</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
+                        </div>
+                    </a>
+
                 </div>
             </div>
         </section>
 
         <section class="engineering-genesis-section">
             <div class="container">
-                <div class="genesis-banner-wrapper reveal-fade">
-                    <div class="thin-line-top"></div>
+                <div class="genesis-banner-wrapper">
+                    <div class="thin-line thin-line-top"></div>
                     <div class="genesis-banner-content">
-                        <h3 class="banner-title">{isEn ? 'Inquire about your project architecture.' : 'Inicia la arquitectura de tu proyecto ahora.'}</h3>
+                        <h3 class="banner-title">{isEn ? 'Does your operation have a similar challenge?' : '¿Tu operación tiene un reto similar?'}</h3>
                         <a href="/contacto" class="banner-action-btn">
-                            <span>{isEn ? 'Start Genesis' : 'Iniciar Proyecto'}</span>
+                            <span>{isEn ? 'See if I qualify →' : 'Ver si califico →'}</span>
                         </a>
                     </div>
-                    <div class="thin-line-bottom"></div>
+                    <div class="thin-line thin-line-bottom"></div>
                 </div>
             </div>
         </section>
 
         <section class="cta-final-clean">
             <div class="container">
-                <div class="cta-squircle cta-box-refined reveal-blur">
+                <div class="cta-squircle cta-box-refined" id="cta-card">
                     <div class="texture-noise-micro"></div>
                     <div class="cta-flex relative-z">
                         <div class="cta-text">
                             <p class="eyebrow" style="color: rgba(255,255,255,0.5); letter-spacing: 4px;">
-                                {isEn ? 'READY TO SCALE?' : '¿LISTO PARA ESCALAR?'}
+                                {isEn ? 'Q3 AVAILABILITY' : 'DISPONIBILIDAD Q3'}
                             </p>
                             <h2 class="cta-title">
-                                {isEn ? 'Let’s build' : 'Construyamos'} <span class="editorial" style="color: rgba(255,255,255,0.8);">{isEn ? 'your edge.' : 'su ventaja.'}</span>
+                                {isEn ? 'The next case could be yours.' : 'El siguiente caso podría ser el tuyo.'}
                             </h2>
                         </div>
-                        <a href="/contacto" class="btn-luxe-main">
-                            <span>{isEn ? 'Start Architecture' : 'Iniciar Arquitectura'}</span>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                        </a>
+                        <div class="cta-action">
+                            <a href="/contacto" class="btn-luxe-main">
+                                <span>{isEn ? 'Request diagnosis →' : 'Solicitar diagnóstico →'}</span>
+                            </a>
+                            <span class="cta-badge"><span class="cta-badge-dot" aria-hidden="true"></span>{isEn ? '2 projects available' : '2 proyectos disponibles'}</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -151,14 +173,13 @@ const isEn = lang === 'en';
     </main>
 
     <Footer />
-    <WhatsApp />
 </Layout>
 
 <style is:global>
-    *, *::before, *::after { box-sizing: border-box; } 
-    
+    *, *::before, *::after { box-sizing: border-box; }
+
     html, body {
-        width: 100%; 
+        width: 100%;
         position: relative;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -166,24 +187,27 @@ const isEn = lang === 'en';
         -webkit-tap-highlight-color: transparent;
     }
 
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
     ::selection { background: #0a192f; color: #ffffff; }
 
     :root {
         --color-bg: #ffffff;
-        --color-bg-soft: #fcfcfc; 
-        --color-blue-icy: #f4f6f9; 
+        --color-bg-soft: #fcfcfc;
+        --color-blue-icy: #f4f6f9;
         --color-blue-deep: #0a192f;
         --color-glass-blue: rgba(10, 25, 47, 0.85);
-        
+
         --color-text: #050505;
-        --color-text-muted: #555555;
-        --color-border: rgba(0, 0, 0, 0.08); 
-        
+        --color-text-muted: #555556;
+        --color-border: rgba(0, 0, 0, 0.08);
+
         --font-sans: 'Inter', system-ui, sans-serif;
         --font-serif: 'Instrument Serif', serif;
-        
+
         --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
-        --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+        --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
         --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -193,31 +217,34 @@ const isEn = lang === 'en';
     .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; }
     .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: #222; }
     .eyebrow { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
-    
-    .reveal-blur { 
-        opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(8px); 
-        animation: reveal 1s var(--ease-spring) forwards; animation-play-state: paused; animation-delay: var(--delay, 0s); 
-    }
-    .reveal-blur.active { animation-play-state: running; }
-    @keyframes reveal { to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
 
-    .reveal-fade { 
-        opacity: 0; transform: translateY(30px) scale(0.98); 
-        animation: revealFade 1s var(--ease-spring) forwards; animation-play-state: paused; animation-delay: var(--delay, 0s); 
-    }
-    .reveal-fade.active { animation-play-state: running; }
-    @keyframes revealFade { to { opacity: 1; transform: translateY(0) scale(1); } }
+    /* HERO STATUS — señal de exclusividad (cupo por trimestre) */
+    .hero-status { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 100px; border: 1px solid rgba(16,185,129,0.22); background: rgba(16,185,129,0.04); width: max-content; margin-bottom: 1.6rem; }
+    .hero-status span { font-size: 0.7rem; color: #059669; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .hero-status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: hero-status-pulse 2s infinite; }
+    @keyframes hero-status-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-    .btn-luxe { 
-        position: relative; display: inline-flex; background: var(--color-text); color: #fff; 
-        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem; 
-        font-weight: 600; transition: all 0.5s var(--ease-spring); overflow: hidden; justify-content: center;
+    /* El hero parte oculto SOLO cuando hay JS sin reduced-motion (clase .js-anim
+       puesta por un script inline antes del paint). GSAP lo revela. Sin JS o con
+       reduced-motion, queda visible por defecto → nunca hay "pantalla en blanco". */
+    .js-anim .hero-anim { opacity: 0; }
+
+    .btn-luxe {
+        position: relative; display: inline-flex; background: var(--color-text); color: #fff;
+        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem;
+        font-weight: 600; overflow: hidden; justify-content: center;
+        transition: transform 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth);
         box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 10px 20px rgba(0,0,0,0.08);
+        align-items: center; gap: 10px; will-change: transform;
     }
     .btn-luxe span { position: relative; z-index: 2; }
-    .btn-shimmer { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent); transform: skewX(-20deg); transition: 0s; z-index: 1;}
-    .btn-luxe:hover { transform: translateY(-4px); box-shadow: 0 6px 12px rgba(0,0,0,0.08), 0 15px 30px rgba(0,0,0,0.15); }
-    .btn-luxe:active { transform: scale(0.95); box-shadow: 0 2px 4px rgba(0,0,0,0.04); transition: 0.1s;}
+    .btn-arrow { position: relative; z-index: 2; display: inline-block; transition: transform 0.6s var(--ease-smooth); }
+    .btn-luxe:hover .btn-arrow { transform: translateX(4px); }
+    .btn-luxe:hover .btn-arrow-down { transform: translateY(4px); }
+    .btn-shimmer { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent); transform: skewX(-20deg); transition: 0s; z-index: 1;}
+    .btn-luxe:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(0,0,0,0.12), 0 24px 48px rgba(0,0,0,0.16); }
+    .btn-luxe:active { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+    .btn-luxe:hover .btn-shimmer { left: 150%; transition: left 0.9s var(--ease-smooth); }
 
     .squircle { border-radius: 24px; transform: translateZ(0); overflow: hidden; }
     .cta-squircle { border-radius: 32px; transform: translateZ(0); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
@@ -225,43 +252,51 @@ const isEn = lang === 'en';
 
 <style>
     /* ==========================================================
-       ESTILOS LOCALES 
+       ESTILOS LOCALES
        ========================================================== */
     .texture-noise-micro { position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.04; mix-blend-mode: overlay; pointer-events: none; z-index: 1;}
     .relative-z { position: relative; z-index: 2; }
-    .global-gap-reduced { padding: 6rem 0; }
 
-    .reveal-up { 
-        opacity: 0; transform: translateY(40px); 
-        animation: rev-u 1s var(--ease-spring) forwards; 
-        animation-play-state: paused; animation-delay: var(--delay, 0s); 
-    }
-    .reveal-up.active { animation-play-state: running; }
-    @keyframes rev-u { to { opacity: 1; transform: translateY(0); } }
-
-    /* HERO EXACTO DE INDEX */
-    .hero-grand { padding: 13rem 0 7rem 0; min-height: 80vh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
+    /* HERO — mismo estándar editorial que el home (Inter bold, una sola tipografía) */
+    .hero-grand { padding: 10rem 0 4rem 0; min-height: 100svh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
     .hero-text-zone { transition: transform 0.1s ease-out, opacity 0.1s ease-out; }
-    .hero-title { font-size: clamp(3.2rem, 7vw, 6.8rem); line-height: 0.85; font-weight: 800; letter-spacing: -3px; margin-bottom: 4rem; color: #050505; }
-    .hero-title .title-bold, .hero-title .title-serif, .hero-title .editorial { color: #050505; }
-    .lx-line-mask { overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; }
+    .hero-title { font-size: clamp(1.9rem, 3.6vw, 3.4rem); line-height: 1.14; font-weight: 800; letter-spacing: -1.2px; margin-bottom: 2.75rem; color: #050505; max-width: 880px; }
+    .hero-title .title-bold { color: #050505; }
     .title-bold { display: inline; }
-    .title-serif { display: inline; font-size: 105%; }
     .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem; }
-    .hero-desc { font-size: 1.15rem; color: var(--color-text-muted); max-width: 500px; line-height: 1.5; margin: 0; }
-    .hero-actions-wrapper { display: flex; align-items: center; gap: 3rem; }
+    .hero-desc { font-size: 1.1rem; color: var(--color-text-muted); max-width: 480px; line-height: 1.55; margin: 0; }
 
     /* CASES GRID */
-    /* Aquí se añade el gap (padding-top) para separar el hero de las tarjetas */
     .cases-gallery { padding: 6rem 0 4rem 0; }
+
+    /* Badge de disponibilidad — escasez en el momento de lectura (Loss Aversion) */
+    .avail-badge {
+        display: inline-flex; align-items: center; gap: 9px;
+        font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+        color: #059669; background: rgba(16,185,129,0.04);
+        border: 1px solid rgba(16,185,129,0.22); border-radius: 100px;
+        padding: 8px 16px; margin-bottom: 3rem;
+    }
+    .avail-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: hero-status-pulse 2s infinite; }
+
     .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6rem 4rem; }
     .case-card { text-decoration: none; color: inherit; display: block; cursor: pointer; }
-    .case-visual { width: 100%; display: block; margin-bottom: 2.5rem; transition: transform 0.5s var(--ease-spring), box-shadow 0.5s var(--ease-spring); }
-    .case-img { width: 100%; height: auto; display: block; border: 1px solid rgba(0,0,0,0.04); transition: transform 0.5s var(--ease-spring), box-shadow 0.5s var(--ease-spring); }
-    
+    .case-visual { position: relative; width: 100%; display: block; margin-bottom: 2.5rem; transition: transform 0.6s var(--ease-smooth); }
+
+    /* Badge "Sistema activo" sobre la imagen — señal de cliente en operación */
+    .active-badge {
+        position: absolute; top: 1rem; left: 1rem; z-index: 2;
+        display: inline-flex; align-items: center; gap: 7px;
+        font-size: 0.6rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase;
+        color: #fff; background: rgba(10,25,47,0.72); backdrop-filter: blur(8px);
+        border-radius: 100px; padding: 6px 12px;
+    }
+    .active-dot { width: 5px; height: 5px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px rgba(16,185,129,0.7); animation: hero-status-pulse 2s infinite; }
+    .case-img { width: 100%; height: auto; display: block; border: 1px solid rgba(0,0,0,0.04); transition: box-shadow 0.6s var(--ease-smooth); }
+
     .case-card:hover .case-visual { transform: translateY(-8px); }
     .case-card:hover .case-img { box-shadow: 0 25px 50px rgba(0,0,0,0.08); }
-    
+
     .case-card:hover .case-read-more { color: var(--color-blue-deep); }
     .case-card:hover .case-read-more span::after { transform: scaleX(1); transform-origin: bottom left; }
     .case-card:hover .case-read-more svg { transform: translateX(6px); }
@@ -272,53 +307,81 @@ const isEn = lang === 'en';
 
     .case-metrics { display: flex; gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 1.8rem; }
     .metric { display: flex; flex-direction: column; gap: 0.3rem; }
-    .metric-val { font-family: var(--font-sans); font-size: 1.8rem; font-weight: 700; color: var(--color-blue-deep); }
+    /* Números en serif italic — regla editorial del sitio (nunca números en sans bold) */
+    .metric-val { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 2.2rem; color: var(--color-blue-deep); line-height: 1; letter-spacing: -0.5px; }
     .metric-lbl { font-size: 0.7rem; color: var(--color-text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; }
 
     .case-read-more {
         display: inline-flex; align-items: center; gap: 10px; margin-top: 2.5rem;
         font-size: 0.8rem; font-weight: 700; color: var(--color-text);
         text-transform: uppercase; letter-spacing: 1px; position: relative;
-        transition: color 0.4s var(--ease-spring);
+        transition: color 0.4s var(--ease-smooth);
     }
     .case-read-more span { position: relative; }
     .case-read-more span::after {
-        content: ''; position: absolute; width: 100%; transform: scaleX(0); 
-        height: 1.5px; bottom: -2px; left: 0; background-color: var(--color-blue-deep); 
-        transform-origin: bottom right; transition: transform 0.4s var(--ease-spring);
+        content: ''; position: absolute; width: 100%; transform: scaleX(0);
+        height: 1.5px; bottom: -2px; left: 0; background-color: var(--color-blue-deep);
+        transform-origin: bottom right; transition: transform 0.4s var(--ease-smooth);
     }
-    .case-read-more svg { transition: transform 0.4s var(--ease-spring); }
+    .case-read-more svg { transition: transform 0.4s var(--ease-smooth); }
+
+    /* SLOT CARD — tercer card "Tu proyecto aquí" (Mimetic Desire + escasez) */
+    .slot-card { grid-column: 1 / -1; }
+    .slot-inner {
+        display: flex; flex-direction: column; align-items: center; text-align: center;
+        gap: 0.9rem; padding: 4.5rem 2rem;
+        border: 1.5px dashed rgba(10,25,47,0.2); border-radius: 28px;
+        background: var(--color-bg-soft);
+        transition: border-color 0.5s var(--ease-smooth), background 0.5s var(--ease-smooth), transform 0.5s var(--ease-smooth);
+    }
+    .slot-card:hover .slot-inner { border-color: rgba(10,25,47,0.42); background: #fafbfc; transform: translateY(-4px); }
+    .slot-eyebrow { font-size: 0.62rem; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: #059669; }
+    .slot-title { font-family: var(--font-sans); font-size: 2.2rem; font-weight: 800; letter-spacing: -1.2px; color: var(--color-text); margin: 0.3rem 0 0; }
+    .slot-desc { font-size: 1.05rem; color: var(--color-text-muted); line-height: 1.5; margin: 0; max-width: 460px; }
+    .slot-action {
+        display: inline-flex; align-items: center; gap: 10px; margin-top: 1.2rem;
+        font-size: 0.8rem; font-weight: 700; color: var(--color-blue-deep);
+        text-transform: uppercase; letter-spacing: 1px;
+    }
+    .slot-action svg { transition: transform 0.4s var(--ease-smooth); }
+    .slot-card:hover .slot-action svg { transform: translateX(6px); }
 
     /* THIN BANNER */
     .engineering-genesis-section { padding: 4rem 0 4rem 0; }
     .genesis-banner-wrapper { position: relative; width: 100%; overflow: hidden;}
-    .thin-line-top, .thin-line-bottom { width: 100%; height: 0.5px; background: var(--color-blue-deep); transform: scaleX(0); transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1); }
-    .reveal-fade.active .thin-line-top, .reveal-fade.active .thin-line-bottom { transform: scaleX(1); }
+    .thin-line { width: 100%; height: 0.5px; background: var(--color-blue-deep); transform: scaleX(0); transform-origin: left center; }
     .genesis-banner-content { display: flex; justify-content: space-between; align-items: center; padding: 3rem 0; gap: 3rem; }
     .banner-title { font-size: 1.8rem; font-weight: 500; color: var(--color-blue-deep); margin: 0; letter-spacing: -0.8px; max-width: 70%;}
-    .banner-action-btn { background: var(--color-blue-deep); color: #fff; padding: 16px 38px; border-radius: 100px; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: all 0.4s var(--ease-spring); flex-shrink: 0; box-shadow: 0 4px 6px rgba(10, 25, 47, 0.05); }
-    .banner-action-btn:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(10, 25, 47, 0.2); }
+    .banner-action-btn { background: var(--color-blue-deep); color: #fff; padding: 16px 38px; border-radius: 100px; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: transform 0.5s var(--ease-smooth), box-shadow 0.5s var(--ease-smooth); flex-shrink: 0; box-shadow: 0 4px 6px rgba(10, 25, 47, 0.05); }
+    .banner-action-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(10, 25, 47, 0.2); }
 
     /* CTA FINAL PREMIUM */
     .cta-final-clean { padding: 3rem 0 6rem 0; }
-    .cta-box-refined { 
+    .cta-box-refined {
         background: radial-gradient(100% 100% at 50% 100%, #152744 0%, #0a192f 100%);
-        padding: 4rem 6rem; 
-        position: relative; 
-        overflow: hidden; 
-        box-shadow: 0 20px 40px rgba(0,0,0,0.1); 
+        padding: 4rem 6rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         border-radius: 40px;
     }
     .cta-flex { display: flex; justify-content: space-between; align-items: center; gap: 4rem; }
-    .cta-title { font-size: clamp(3rem, 5vw, 4.5rem); font-weight: 700; color: #fff; letter-spacing: -1.5px; line-height: 0.95; margin: 0; }
-    
-    .btn-luxe-main { 
-        background: #fff; color: var(--color-blue-deep); padding: 16px 36px; border-radius: 100px; 
-        text-decoration: none; font-size: 1rem; font-weight: 700; transition: all 0.4s var(--ease-smooth); 
+    .cta-title { font-size: clamp(2rem, 3.2vw, 3rem); font-weight: 800; color: #fff; letter-spacing: -1.2px; line-height: 1.05; margin: 0; max-width: 16ch; }
+    .cta-action { display: flex; flex-direction: column; align-items: flex-end; gap: 1.1rem; flex-shrink: 0; }
+    .cta-badge {
+        display: inline-flex; align-items: center; gap: 8px;
+        font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+        color: rgba(255,255,255,0.6);
+    }
+    .cta-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: hero-status-pulse 2s infinite; }
+
+    .btn-luxe-main {
+        background: #fff; color: var(--color-blue-deep); padding: 16px 36px; border-radius: 100px;
+        text-decoration: none; font-size: 1rem; font-weight: 700; transition: transform 0.5s var(--ease-smooth), box-shadow 0.5s var(--ease-smooth), background 0.5s var(--ease-smooth), color 0.5s var(--ease-smooth), border-color 0.5s var(--ease-smooth);
         display: inline-flex; align-items: center; gap: 12px; border: 1px solid transparent;
     }
-    .btn-luxe-main svg { transition: transform 0.4s var(--ease-spring); }
-    .btn-luxe-main:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(255,255,255,0.15); background: transparent; color: #fff; border-color: #fff; }
+    .btn-luxe-main svg { transition: transform 0.5s var(--ease-smooth); }
+    .btn-luxe-main:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(255,255,255,0.15); background: transparent; color: #fff; border-color: #fff; }
     .btn-luxe-main:hover svg { transform: translateX(4px); }
 
     @media (max-width: 1024px) {
@@ -331,20 +394,22 @@ const isEn = lang === 'en';
     @media (max-width: 768px) {
         .hero-grand { padding-top: 11rem; padding-bottom: 4rem; min-height: auto; text-align: center; }
         .hero-content { display: flex; flex-direction: column; align-items: center; }
-        .hero-title { display: flex; flex-direction: column; gap: 0; margin-bottom: 2.5rem; }
-        .title-bold { display: block; font-size: 11.5vw; letter-spacing: -1.8px; line-height: 0.95; margin-bottom: -43px; }
-        .title-serif { display: block; font-size: 12.2vw; font-weight: 300; letter-spacing: -0.5px; line-height: 0.95; }
+        .hero-status { margin-left: auto; margin-right: auto; }
+        .hero-title { display: flex; flex-direction: column; gap: 0.2rem; margin-bottom: 2.5rem; max-width: 100%; }
+        .title-bold { display: block; font-size: clamp(2rem, 7.6vw, 2.85rem); font-weight: 800; letter-spacing: -1px; line-height: 1.12; margin-bottom: 0; }
         .hero-bottom { flex-direction: column; align-items: center; gap: 2.5rem; text-align: center; border-top: none; padding-top: 0;}
         .hero-desc { font-size: 1.1rem; padding: 0 5%; max-width: 95%; margin: 0 auto; line-height: 1.6;}
-        
-        .hero-actions-wrapper { width: 100%; justify-content: center; flex-direction: column; gap: 2rem; }
+        .hero-action { width: 100%; padding: 0 5%; }
         .btn-luxe { width: 100%; padding: 18px 0; font-size: 1.05rem;}
 
         .cases-gallery { padding: 3rem 0; }
         .gallery-grid { grid-template-columns: 1fr; gap: 4rem; }
-        
+
         .case-metrics { gap: 2rem; }
-        .metric-val { font-size: 1.6rem; }
+        .metric-val { font-size: 1.9rem; }
+
+        .slot-inner { padding: 3.5rem 1.5rem; }
+        .slot-title { font-size: 1.8rem; }
 
         .engineering-genesis-section { padding-bottom: 4rem; }
         .genesis-banner-content { flex-direction: column; text-align: center; gap: 2rem; padding: 3rem 5%; }
@@ -354,6 +419,8 @@ const isEn = lang === 'en';
         .cta-final-clean { padding-bottom: 4rem; }
         .cta-box-refined { padding: 3rem 1.5rem; border-radius: 24px; text-align: center;}
         .cta-flex { flex-direction: column; gap: 2rem; }
+        .cta-title { font-size: 2.1rem; max-width: 100%; }
+        .cta-action { align-items: center; width: 100%; }
         .btn-luxe-main { width: 100%; display: flex; justify-content: center; }
     }
 </style>
@@ -361,78 +428,110 @@ const isEn = lang === 'en';
 <script>
     import { gsap } from 'gsap';
     import { ScrollTrigger } from 'gsap/ScrollTrigger';
-    import { SplitText } from 'gsap/SplitText';
-    gsap.registerPlugin(ScrollTrigger, SplitText);
+    gsap.registerPlugin(ScrollTrigger);
 
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    // GSAP controls hero — fully clear CSS fallback (.reveal-blur leaves filter+transform behind)
-    document.querySelectorAll<HTMLElement>('.hero-title, .hero-text-zone .eyebrow, .hero-bottom').forEach(el => {
-        el.style.animation = 'none';
-        el.style.opacity = '1';
-        el.style.filter = 'none';
-        el.style.transform = 'none';
-    });
-
-    // Fallback reveals for non-hero elements
-    const revealObserver = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) { entry.target.classList.add('active'); revealObserver.unobserve(entry.target); }
+    // Recalcular posiciones tras fuentes + imágenes — mismo patrón que el home.
+    const robustRefresh = () => {
+        const winLoad = new Promise<void>((resolve) => {
+            if (document.readyState === 'complete') resolve();
+            else window.addEventListener('load', () => resolve(), { once: true });
         });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal-blur, .reveal-fade, .reveal-up').forEach(el => {
-        if (!el.closest('.hero-grand')) revealObserver.observe(el);
-    });
+        const fontsReady = (document as any).fonts?.ready ?? Promise.resolve();
+        Promise.all([winLoad, fontsReady]).then(() => {
+            setTimeout(() => ScrollTrigger.refresh(), 120);
+        });
+    };
+    robustRefresh();
 
-    if (!reduced) {
+    document.addEventListener('DOMContentLoaded', () => {
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        // Con reduced-motion la clase .js-anim nunca se añade → todo visible vía CSS.
+        if (reduced) return;
+
+        /* ═══════ HERO — entrada en carga (gate .js-anim .hero-anim) ═══════ */
+        const heroAnim = gsap.utils.toArray<HTMLElement>('.hero-anim');
+        if (heroAnim.length) {
+            gsap.set(heroAnim, { opacity: 0, y: 12 });
+            gsap.timeline({ defaults: { ease: 'power2.out' } })
+                .to('.hero-status',             { opacity: 1, y: 0, duration: 0.9 }, 0)
+                .to('.hero-text-zone .eyebrow', { opacity: 1, y: 0, duration: 0.9 }, 0.1)
+                .to('.hero-title',              { opacity: 1, y: 0, duration: 1.1 }, 0.2)
+                .to('.hero-bottom',             { opacity: 1, y: 0, duration: 1.0 }, 0.42);
+        }
+
+        // ── Estándar único de animación de entrada: fade + leve subida ──
+        const EASE = 'power2.out';
+        const DUR  = 0.9;
+        const Y    = 14;
+
+        /* Reveal robusto (sin parpadeo): oculta de entrada con gsap.set y revela
+           UNA vez cuando el trigger entra al viewport. */
+        const reveal = (
+            targets: string | HTMLElement | NodeListOf<Element> | HTMLElement[],
+            opts: { trigger?: string | HTMLElement; start?: string; y?: number; dur?: number; stagger?: number; delay?: number } = {}
+        ) => {
+            const els = gsap.utils.toArray<HTMLElement>(targets as any);
+            if (!els.length) return;
+            const y = opts.y ?? Y;
+            gsap.set(els, { opacity: 0, y });
+            ScrollTrigger.create({
+                trigger: opts.trigger ?? els[0],
+                start: opts.start ?? 'top 85%',
+                once: true,
+                onEnter: () => gsap.to(els, {
+                    opacity: 1, y: 0, duration: opts.dur ?? DUR, ease: EASE,
+                    stagger: opts.stagger ?? 0.08, delay: opts.delay ?? 0,
+                    clearProps: 'transform,opacity',
+                }),
+            });
+        };
+
         const mm = gsap.matchMedia();
 
+        const buildReveals = () => {
+            /* Badge de disponibilidad */
+            reveal('.avail-badge', { trigger: '.cases-gallery', y: 12, dur: 0.85, start: 'top 88%' });
+
+            /* CASOS — tarjetas (incluye el slot card) */
+            reveal('.case-card', { trigger: '.gallery-grid', y: 24, dur: 1.0, stagger: 0.1, start: 'top 82%' });
+
+            /* BANNER — contenido + líneas que se dibujan */
+            reveal('.genesis-banner-content > *', { trigger: '.genesis-banner-wrapper', y: 14, dur: 0.9, stagger: 0.1, start: 'top 85%' });
+            const lines = gsap.utils.toArray<HTMLElement>('.thin-line');
+            if (lines.length) {
+                gsap.set(lines, { scaleX: 0 });
+                ScrollTrigger.create({
+                    trigger: '.genesis-banner-wrapper', start: 'top 85%', once: true,
+                    onEnter: () => gsap.to(lines, { scaleX: 1, duration: 1.3, ease: 'power3.inOut', stagger: 0.08 }),
+                });
+            }
+
+            /* CTA final — caja + contenido interno */
+            const ctaCard = document.getElementById('cta-card');
+            if (ctaCard) {
+                reveal(ctaCard, { trigger: ctaCard, y: 24, dur: 1.0, stagger: 0, start: 'top 82%' });
+                reveal(ctaCard.querySelectorAll('.cta-text > *, .cta-action'), {
+                    trigger: ctaCard, y: 12, dur: 0.9, stagger: 0.08, delay: 0.15, start: 'top 82%',
+                });
+            }
+        };
+
+        /* ─── DESKTOP ─── */
         mm.add('(min-width: 769px)', () => {
-            const heroTitle = document.querySelector<HTMLElement>('.hero-title');
-            const heroEyebrow = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
-            const heroBottom = document.querySelector<HTMLElement>('.hero-bottom');
-
-            const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-            if (heroEyebrow) {
-                tl.from(heroEyebrow, { opacity: 0, y: 14, letterSpacing: '7px', duration: 1.4 }, 0.1);
-            }
-            if (heroTitle) {
-                const split = SplitText.create(heroTitle, { type: 'lines,words', linesClass: 'lx-line-mask' });
-                gsap.set(split.words, { yPercent: 105 });
-                tl.to(split.words, {
-                    yPercent: 0, duration: 1.5,
-                    stagger: { amount: 0.5, from: 'start' },
-                }, 0.35);
-            }
-            if (heroBottom && heroBottom.children.length > 0) {
-                tl.from(gsap.utils.toArray<HTMLElement>(heroBottom.children), {
-                    opacity: 0, y: 16, duration: 1.1, ease: 'power3.out',
-                    stagger: 0.12,
-                }, 1.0);
-            }
-
+            /* Parallax muy leve del hero al hacer scroll */
             const heroParallax = document.getElementById('hero-parallax');
             if (heroParallax) {
                 gsap.to(heroParallax, {
-                    yPercent: 28, opacity: 0.15, ease: 'none',
-                    scrollTrigger: { trigger: '.hero-grand', start: 'top top', end: 'bottom 30%', scrub: 0.8 },
+                    yPercent: 4, opacity: 0.85, ease: 'none',
+                    scrollTrigger: { trigger: '.hero-grand', start: 'top top', end: 'bottom 30%', scrub: 1 },
                 });
             }
+            buildReveals();
         });
 
+        /* ─── MOBILE ─── */
         mm.add('(max-width: 768px)', () => {
-            const mHeroTitle = document.querySelector<HTMLElement>('.hero-title');
-            const mEyebrow = document.querySelector<HTMLElement>('.hero-text-zone .eyebrow');
-            const mHeroBottom = document.querySelector<HTMLElement>('.hero-bottom');
-            const tlm = gsap.timeline({ defaults: { ease: 'expo.out' } });
-            if (mEyebrow) tlm.from(mEyebrow, { opacity: 0, y: 10, letterSpacing: '6px', duration: 1.1 }, 0.1);
-            if (mHeroTitle) tlm.from(mHeroTitle, { opacity: 0, y: 24, duration: 1.2 }, 0.3);
-            if (mHeroBottom && mHeroBottom.children.length > 0) {
-                tlm.from(gsap.utils.toArray<HTMLElement>(mHeroBottom.children), {
-                    opacity: 0, y: 14, duration: 1.0, ease: 'power3.out',
-                    stagger: 0.1,
-                }, 0.85);
-            }
+            buildReveals();
         });
-    }
+    });
 </script>

@@ -3,8 +3,7 @@ export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
-import WhatsApp from '../../components/WhatsApp.astro';
-import { posts, getRelated, formatDate } from '../../data/blog';
+import { posts, getRelated, formatDate, AUTHOR } from '../../data/blog';
 
 export function getStaticPaths() {
   return posts.map(post => ({ params: { slug: post.slug }, props: { post } }));
@@ -17,10 +16,44 @@ const lang: 'es' | 'en' = 'es';
 const root = '';
 const related = getRelated(post.slug);
 const postIdx = posts.indexOf(post) + 1;
+
+// ── Schema Article (BlogPosting) — autor real + dateModified + about ──
+const SITE = 'https://flouvia.com';
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  '@id': `${SITE}${root}/blog/${post.slug}#article`,
+  headline: t(post.title),
+  description: t(post.excerpt),
+  datePublished: post.date,
+  dateModified: post.dateModified,
+  author: {
+    '@type': 'Person',
+    name: AUTHOR.name,
+    jobTitle: t(AUTHOR.role),
+    url: AUTHOR.url,
+    ...(AUTHOR.linkedin ? { sameAs: [AUTHOR.linkedin] } : {}),
+    worksFor: { '@id': `${SITE}/#organization` },
+  },
+  publisher: {
+    '@type': 'Organization',
+    '@id': `${SITE}/#organization`,
+    name: 'Flouvia',
+    url: SITE,
+    logo: { '@type': 'ImageObject', url: `${SITE}/android-touch-icon-512.png` },
+  },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE}${root}/blog/${post.slug}` },
+  isPartOf: { '@id': `${SITE}${root}/blog#blog` },
+  about: post.about.map(a => ({ '@type': 'Thing', name: t(a) })),
+  keywords: post.tags.join(', '),
+  inLanguage: 'es-MX',
+};
 ---
 
-<Layout title={`${t(post.title)} | Flouvia Blog`} description={t(post.excerpt)}>
+<Layout title={`${t(post.title)} | Flouvia Blog`} description={t(post.excerpt)} ogType="article">
   <Navbar />
+
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleSchema)} />
 
   <!-- PROGRESS BAR -->
   <div class="progress-bar" id="progress-bar"></div>
@@ -30,7 +63,7 @@ const postIdx = posts.indexOf(post) + 1;
     <!-- HERO -->
     <section class="post-hero">
       <div class="container">
-        <nav class="breadcrumb">
+        <nav class="breadcrumb post-anim">
           <a href="/">Flouvia</a>
           <span class="bc-sep">›</span>
           <a href={`${root}/blog`}>Blog</a>
@@ -38,16 +71,16 @@ const postIdx = posts.indexOf(post) + 1;
           <span>{t(post.category)}</span>
         </nav>
 
-        <div class="post-meta-top">
+        <div class="post-meta-top post-anim">
           <span class="cat-badge" style={`background: ${post.categoryBg}; color: ${post.categoryColor};`}>
             {t(post.category)}
           </span>
           <span class="post-num-badge">/{String(postIdx).padStart(2, '0')}</span>
         </div>
 
-        <h1 class="post-title">{t(post.title)}</h1>
+        <h1 class="post-title post-anim">{t(post.title)}</h1>
 
-        <div class="post-meta-row">
+        <div class="post-meta-row post-anim">
           <div class="author-block">
             <div class="author-avatar">{post.authorInitial}</div>
             <div>
@@ -93,14 +126,32 @@ const postIdx = posts.indexOf(post) + 1;
       </div>
     </section>
 
+    <!-- AUTHOR -->
+    <section class="author-section">
+      <div class="container">
+        <div class="author-card">
+          <div class="author-card-avatar">{AUTHOR.initial}</div>
+          <div class="author-card-body">
+            <span class="author-card-label">{isEn ? 'WRITTEN BY' : 'ESCRITO POR'}</span>
+            <h3 class="author-card-name">{AUTHOR.name}</h3>
+            <p class="author-card-role">{t(AUTHOR.role)}</p>
+            <p class="author-card-bio">{t(AUTHOR.bio)}</p>
+            {AUTHOR.linkedin && (
+              <a href={AUTHOR.linkedin} class="author-card-link" target="_blank" rel="noopener">LinkedIn →</a>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- RELATED POSTS -->
     {related.length > 0 && (
       <section class="related-section">
         <div class="container">
           <p class="eyebrow">{isEn ? 'KEEP READING' : 'SEGUIR LEYENDO'}</p>
-          <h2 class="related-title">{isEn ? 'Related' : 'Artículos'} <span class="editorial">{isEn ? 'articles.' : 'relacionados.'}</span></h2>
+          <h2 class="related-title">{isEn ? 'Related articles.' : 'Artículos relacionados.'}</h2>
           <div class="related-grid">
-            {related.map((rp, i) => (
+            {related.map((rp) => (
               <a href={`${root}/blog/${rp.slug}`} class="related-card squircle">
                 <div class="related-visual" style={`background: ${rp.categoryBg}`}>
                   <div class="banner-grid-lines" aria-hidden="true"></div>
@@ -118,16 +169,16 @@ const postIdx = posts.indexOf(post) + 1;
       </section>
     )}
 
-    <!-- CTA -->
+    <!-- CTA contextual -->
     <section class="post-cta">
       <div class="container">
         <div class="cta-box squircle-cta">
           <div class="cta-left">
-            <p class="eyebrow" style="color: rgba(255,255,255,0.4);">{isEn ? 'THE NEXT STEP' : 'EL SIGUIENTE PASO'}</p>
-            <h2>{isEn ? 'Scale your' : 'Escale su'} <span class="editorial" style="color:#fff;">{isEn ? 'operation.' : 'operación.'}</span></h2>
+            <p class="eyebrow" style="color: rgba(255,255,255,0.45);">{t(post.cta.eyebrow)}</p>
+            <h2>{t(post.cta.title)}</h2>
           </div>
           <a href={`${root}/contacto`} class="cta-btn">
-            <span>{isEn ? 'Schedule diagnostics' : 'Agendar diagnóstico'}</span>
+            <span>{t(post.cta.button)}</span>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="19" x2="19" y2="5"/><polyline points="9 5 19 5 19 15"/></svg>
           </a>
         </div>
@@ -137,7 +188,6 @@ const postIdx = posts.indexOf(post) + 1;
   </main>
 
   <Footer />
-  <WhatsApp />
 </Layout>
 
 <style is:global>
@@ -152,7 +202,7 @@ const postIdx = posts.indexOf(post) + 1;
     --font-serif: 'Instrument Serif', serif;
     --font-mono: 'JetBrains Mono', monospace;
     --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+    --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
   }
   *, *::before, *::after { box-sizing: border-box; }
   html, body { width: 100%; -webkit-font-smoothing: antialiased; margin: 0; }
@@ -162,6 +212,9 @@ const postIdx = posts.indexOf(post) + 1;
   .eyebrow { font-size: 0.62rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
   .squircle { border-radius: 20px; overflow: hidden; transform: translateZ(0); }
   .squircle-cta { border-radius: 28px; overflow: hidden; }
+
+  /* Gate anti-flash del hero del artículo */
+  .js-anim .post-anim { opacity: 0; }
 
   /* ARTICLE TYPOGRAPHY */
   .post-article { line-height: 1.8; color: #1a1a1a; }
@@ -183,6 +236,12 @@ const postIdx = posts.indexOf(post) + 1;
     font-size: 1.05rem; line-height: 1.8; color: #2d2d2d;
     margin: 0 0 1.4rem;
   }
+  .post-article a {
+    color: var(--color-blue-deep); text-decoration: underline;
+    text-underline-offset: 3px; text-decoration-thickness: 1px;
+    font-weight: 600; transition: opacity 0.2s;
+  }
+  .post-article a:hover { opacity: 0.65; }
   .post-article ul {
     margin: 0.5rem 0 1.5rem; padding: 0; list-style: none;
     display: flex; flex-direction: column; gap: 0.6rem;
@@ -206,6 +265,24 @@ const postIdx = posts.indexOf(post) + 1;
     font-size: 1.25rem; color: var(--color-blue-deep);
     margin: 0; line-height: 1.5; font-weight: 400;
   }
+
+  /* TABLES — formato más citado por AI */
+  .post-article .table-wrap {
+    overflow-x: auto; margin: 2rem 0 2.4rem;
+    border: 1px solid var(--color-border); border-radius: 14px;
+  }
+  .post-article table { width: 100%; border-collapse: collapse; font-size: 0.95rem; min-width: 480px; }
+  .post-article thead th {
+    font-size: 0.64rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase;
+    color: var(--color-blue-deep); text-align: left; padding: 0.95rem 1.1rem;
+    background: rgba(10,25,47,0.03); border-bottom: 1.5px solid rgba(10,25,47,0.15);
+  }
+  .post-article tbody td {
+    padding: 0.85rem 1.1rem; border-bottom: 1px solid var(--color-border);
+    color: #2d2d2d; vertical-align: top; line-height: 1.5;
+  }
+  .post-article tbody tr:last-child td { border-bottom: none; }
+  .post-article tbody td:first-child { font-weight: 600; color: var(--color-text); }
 
   /* TOC links are injected by JS so they need global scope */
   .toc a {
@@ -356,6 +433,35 @@ const postIdx = posts.indexOf(post) + 1;
 .back-link svg { transition: transform 0.3s; flex-shrink: 0; }
 .back-link:hover svg { transform: translateX(-3px); }
 
+/* AUTHOR CARD */
+.author-section { padding: 0 0 5rem; background: var(--color-bg-soft); }
+.author-card {
+  display: flex; gap: 1.6rem; align-items: flex-start;
+  max-width: 760px; margin: 0 auto;
+  background: #fff; border: 1px solid var(--color-border); border-radius: 22px;
+  padding: 2.2rem 2.4rem; box-shadow: 0 2px 14px rgba(0,0,0,0.04);
+}
+.author-card-avatar {
+  width: 56px; height: 56px; border-radius: 50%; flex-shrink: 0;
+  background: var(--color-blue-deep); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 800;
+}
+.author-card-label {
+  font-size: 0.58rem; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase;
+  color: #bbb; display: block; margin-bottom: 0.5rem;
+}
+.author-card-name { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.4px; margin: 0; color: var(--color-text); }
+.author-card-role { font-size: 0.8rem; font-weight: 600; color: var(--color-blue-deep); margin: 0.2rem 0 0.9rem; }
+.author-card-bio { font-size: 0.95rem; line-height: 1.65; color: var(--color-text-muted); margin: 0; }
+.author-card-link {
+  display: inline-block; margin-top: 1rem;
+  font-size: 0.78rem; font-weight: 700; color: var(--color-blue-deep);
+  text-decoration: none; border-bottom: 1px solid rgba(10,25,47,0.25); padding-bottom: 2px;
+  transition: border-color 0.2s;
+}
+.author-card-link:hover { border-color: var(--color-blue-deep); }
+
 /* RELATED */
 .related-section { padding: 6rem 0; background: var(--color-bg); }
 .related-title {
@@ -396,7 +502,7 @@ const postIdx = posts.indexOf(post) + 1;
   padding: 4.5rem 5rem;
   display: flex; justify-content: space-between; align-items: center; gap: 3rem;
 }
-.cta-left h2 { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 800; color: rgba(255,255,255,0.85); letter-spacing: -1px; margin: 0; line-height: 1.1; }
+.cta-left h2 { font-size: clamp(1.9rem, 3.2vw, 2.8rem); font-weight: 800; color: rgba(255,255,255,0.92); letter-spacing: -1px; margin: 0; line-height: 1.12; max-width: 18ch; }
 .cta-btn {
   display: inline-flex; align-items: center; gap: 10px;
   background: #fff; color: var(--color-blue-deep);
@@ -421,7 +527,9 @@ const postIdx = posts.indexOf(post) + 1;
   .post-banner-inner { height: 200px; }
   .post-body { padding: 3rem 0 4rem; }
   .post-meta-row { flex-direction: column; align-items: flex-start; }
+  .author-card { flex-direction: column; gap: 1.1rem; padding: 1.8rem; }
   .cta-box { flex-direction: column; padding: 3rem 2rem; }
+  .cta-left h2 { max-width: 100%; }
   .cta-btn { width: 100%; justify-content: center; }
   .post-cta { padding: 0 5% 4rem; }
   .related-section { padding: 4rem 0; }
@@ -438,8 +546,18 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
+const robustRefresh = () => {
+  const winLoad = new Promise<void>((resolve) => {
+    if (document.readyState === 'complete') resolve();
+    else window.addEventListener('load', () => resolve(), { once: true });
+  });
+  const fontsReady = (document as any).fonts?.ready ?? Promise.resolve();
+  Promise.all([winLoad, fontsReady]).then(() => setTimeout(() => ScrollTrigger.refresh(), 120));
+};
+robustRefresh();
+
 document.addEventListener('DOMContentLoaded', () => {
-  // Reading progress bar
+  // ── Reading progress bar (siempre) ──
   const bar = document.getElementById('progress-bar');
   const article = document.getElementById('post-article');
   if (bar && article) {
@@ -452,7 +570,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
   }
 
-  // Build TOC from h2 elements in article
+  // ── TOC desde los h2 (siempre) ──
   const toc = document.getElementById('toc');
   const articleEl = document.getElementById('post-article');
   if (toc && articleEl) {
@@ -478,37 +596,55 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-
   function setActive(id: string) {
     document.querySelectorAll('.toc a').forEach(a => {
       a.classList.toggle('toc-active', a.getAttribute('href') === `#${id}`);
     });
   }
 
-  // GSAP entrance animations
-  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-  tl.from('.breadcrumb', { opacity: 0, y: 10, duration: 0.7 }, 0.1)
-    .from('.post-meta-top', { opacity: 0, y: 12, duration: 0.8 }, 0.25)
-    .from('.post-title', { opacity: 0, y: 30, duration: 1.1 }, 0.35)
-    .from('.post-meta-row', { opacity: 0, y: 12, duration: 0.8 }, 0.7);
+  // Con reduced-motion la clase .js-anim nunca se añade → todo visible. No animamos.
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced) return;
 
-  gsap.from('.post-banner-inner', {
-    opacity: 0, scale: 0.97, y: 20, duration: 1, ease: 'expo.out',
-    scrollTrigger: { trigger: '.post-banner', start: 'top 90%' }
-  });
-  gsap.from('.post-sidebar', {
-    opacity: 0, x: -20, duration: 0.9, ease: 'expo.out',
-    scrollTrigger: { trigger: '.post-body', start: 'top 80%' }
-  });
-  gsap.from('.post-article', {
-    opacity: 0, y: 20, duration: 1, ease: 'expo.out',
-    scrollTrigger: { trigger: '.post-body', start: 'top 80%' }
-  });
-  gsap.utils.toArray<HTMLElement>('.related-card').forEach((card, i) => {
-    gsap.from(card, {
-      opacity: 0, y: 30, duration: 0.8, ease: 'power3.out', delay: i * 0.08,
-      scrollTrigger: { trigger: card, start: 'top 88%' }
+  const EASE = 'power2.out';
+
+  // ── HERO — entrada en carga (estándar único: fade + leve subida) ──
+  const heroAnim = gsap.utils.toArray<HTMLElement>('.post-anim');
+  if (heroAnim.length) {
+    gsap.set(heroAnim, { opacity: 0, y: 12 });
+    gsap.timeline({ defaults: { ease: EASE } })
+      .to('.breadcrumb',     { opacity: 1, y: 0, duration: 0.8 }, 0)
+      .to('.post-meta-top',  { opacity: 1, y: 0, duration: 0.85 }, 0.12)
+      .to('.post-title',     { opacity: 1, y: 0, duration: 1.0 }, 0.22)
+      .to('.post-meta-row',  { opacity: 1, y: 0, duration: 0.85 }, 0.42);
+  }
+
+  // ── Reveal robusto (sin parpadeo) ──
+  const reveal = (
+    targets: string | HTMLElement,
+    opts: { trigger?: string | HTMLElement; start?: string; y?: number; dur?: number; stagger?: number } = {}
+  ) => {
+    const els = gsap.utils.toArray<HTMLElement>(targets as any);
+    if (!els.length) return;
+    gsap.set(els, { opacity: 0, y: opts.y ?? 14 });
+    ScrollTrigger.create({
+      trigger: opts.trigger ?? els[0],
+      start: opts.start ?? 'top 85%',
+      once: true,
+      onEnter: () => gsap.to(els, {
+        opacity: 1, y: 0, duration: opts.dur ?? 0.9, ease: EASE,
+        stagger: opts.stagger ?? 0.08, clearProps: 'transform,opacity',
+      }),
     });
+  };
+
+  reveal('.post-banner-inner', { trigger: '.post-banner', y: 22, dur: 1.0, start: 'top 90%' });
+  reveal('.post-sidebar', { trigger: '.post-body', y: 16, dur: 0.95, start: 'top 82%' });
+  reveal('.post-article', { trigger: '.post-body', y: 18, dur: 1.0, start: 'top 82%' });
+  reveal('.author-card', { trigger: '.author-section', y: 20, dur: 0.95, start: 'top 88%' });
+  gsap.utils.toArray<HTMLElement>('.related-card').forEach((card) => {
+    reveal(card, { trigger: card, y: 18, dur: 0.9, start: 'top 90%' });
   });
+  reveal('.cta-box', { trigger: '.post-cta', y: 22, dur: 1.0, start: 'top 88%' });
 });
 </script>

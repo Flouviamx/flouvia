@@ -572,6 +572,31 @@ document.addEventListener("DOMContentLoaded", () => {
     const toggle = document.getElementById("menu-toggle");
 
     /* ═══════════════════════════════════════════════════
+       RESTORE SCROLL tras cambio de idioma — volver a donde estabas (no reiniciar arriba).
+       El body viene oculto (html.lang-restoring, puesto en el <head> antes del paint);
+       posicionamos el scroll y lo revelamos con un crossfade en el MISMO punto.
+       ═══════════════════════════════════════════════════ */
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let langScroll: number | null = null;
+    try {
+        const s = sessionStorage.getItem("flouviaLangScroll");
+        if (s !== null) { langScroll = parseInt(s, 10) || 0; sessionStorage.removeItem("flouviaLangScroll"); }
+    } catch (err) {}
+    if (langScroll !== null) {
+        const y = langScroll;
+        window.scrollTo(0, y);                                          // restaura ya
+        requestAnimationFrame(() => window.scrollTo(0, y));             // tras el primer frame (layout)
+        window.addEventListener("load", () => window.scrollTo(0, y), { once: true }); // con fuentes/imágenes
+        if (prefersReduced) {
+            document.documentElement.classList.remove("lang-restoring");
+        } else {
+            gsap.set(document.body, { opacity: 0 });
+            document.documentElement.classList.remove("lang-restoring");
+            gsap.to(document.body, { opacity: 1, duration: 0.25, ease: "power1.out" });
+        }
+    }
+
+    /* ═══════════════════════════════════════════════════
        ENTRANCE — reveal escalonado sutil de las piezas internas.
        El CSS (.js-anim #navbar) oculta el navbar completo antes del primer paint.
        Ocultamos las piezas (mientras el contenedor sigue en opacity:0 por el gate),
@@ -714,7 +739,10 @@ document.addEventListener("DOMContentLoaded", () => {
         a.addEventListener("click", (e) => {
             if (a.classList.contains("active")) { e.preventDefault(); return; } // idioma actual → no recargar
             const dest = a.href;
-            if (!dest || dest === window.location.href || reducedMotion) return; // sin anim → navegación normal
+            if (!dest || dest === window.location.href) return;
+            // guarda la posición de scroll para restaurarla en la página destino (no reiniciar arriba)
+            try { sessionStorage.setItem("flouviaLangScroll", String(Math.round(window.scrollY))); } catch (err) {}
+            if (reducedMotion) return; // sin anim → navegación normal (pero ya guardamos scroll)
             e.preventDefault();
             prefetch(href);
             gsap.to(document.body, {

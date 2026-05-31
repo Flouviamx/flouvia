@@ -3,7 +3,6 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from './Navbar.astro';
 import Footer from './Footer.astro';
-import WhatsApp from './WhatsApp.astro';
 
 import { getLangFromUrl } from '../i18n/utils';
 const lang = getLangFromUrl(Astro.url);
@@ -127,7 +126,7 @@ const contactSchema = {
 
                 <div class="ec-sidebar">
 
-                    <div class="ec-block">
+                    <div class="ec-block ec-block-status">
                         <div class="system-status-pill">
                             <div class="pulse-dot-green"></div>
                             <span>{isEn ? '2 SLOTS OPEN · Q3' : '2 CUPOS DISPONIBLES · Q3'}</span>
@@ -143,8 +142,25 @@ const contactSchema = {
                     </div>
 
                     <div class="ec-block">
+                        <span class="ec-label">{isEn ? 'THE PROCESS' : 'EL PROCESO'}</span>
+                        <ul class="criteria">
+                            <li class="crit-yes">{isEn ? 'We reply in under 24 h' : 'Respondemos en menos de 24 h'}</li>
+                            <li class="crit-yes">{isEn ? 'A person reads every application' : 'Leemos cada solicitud a mano'}</li>
+                        </ul>
+                    </div>
+
+                    <div class="ec-block">
+                        <span class="ec-label">{isEn ? 'THE FIRM' : 'LA FIRMA'}</span>
+                        <p class="ec-firm">{isEn ? 'Fewer than ' : 'Menos de '}<span class="editorial ec-firm-num">8</span>{isEn ? ' clients a year' : ' clientes al año'}</p>
+                        <p class="ec-place">{isEn ? 'Mexico City · Global operation' : 'Ciudad de México · Operación global'}</p>
+                    </div>
+
+                    <div class="ec-block">
                         <span class="ec-label">{isEn ? 'DIRECT LINE' : 'LÍNEA DIRECTA'}</span>
-                        <a href="mailto:hola@flouvia.com" class="ec-data ec-link hover-underline">hola@flouvia.com</a>
+                        <a href="mailto:hola@flouvia.com" class="ec-link ec-mail hover-underline">
+                            <span>hola@flouvia.com</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </a>
                     </div>
 
                 </div>
@@ -339,7 +355,6 @@ const contactSchema = {
     </main>
 
     <Footer />
-    <WhatsApp />
 </Layout>
 
 <style is:global>
@@ -492,13 +507,37 @@ const contactSchema = {
     .contact-watermark { position: absolute; right: -4%; top: 4rem; font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 26vw; line-height: 1; color: rgba(10,25,47,0.022); white-space: nowrap; pointer-events: none; user-select: none; z-index: 0; }
     .ec-grid { display: grid; grid-template-columns: 320px 1fr; gap: 7rem; align-items: start; position: relative; z-index: 1; }
 
-    /* SIDEBAR — mínima y aireada (cupo · criterio · correo) */
-    .ec-sidebar { position: sticky; top: 150px; display: flex; flex-direction: column; gap: 3.5rem; }
-    .ec-block { display: flex; flex-direction: column; gap: 0.9rem; }
-    .ec-label { font-family: var(--font-sans); font-size: 0.62rem; font-weight: 800; color: #9aa6b2; letter-spacing: 3px; text-transform: uppercase; }
+    /* SIDEBAR — tarjeta Liquid Glass (iOS), secciones con hairlines */
+    .ec-sidebar {
+        position: sticky; top: 120px;
+        display: flex; flex-direction: column;
+        border-radius: 24px; overflow: hidden;
+        background: linear-gradient(180deg, rgba(255,255,255,0.74) 0%, rgba(248,250,252,0.55) 100%);
+        -webkit-backdrop-filter: blur(28px) saturate(1.8) brightness(1.04);
+        backdrop-filter: blur(28px) saturate(1.8) brightness(1.04);
+        box-shadow:
+            inset 0 0 0 1px rgba(10,25,47,0.05),
+            inset 0 1px 1px rgba(255,255,255,0.9),
+            0 2px 4px rgba(10,25,47,0.04),
+            0 22px 50px -18px rgba(10,25,47,0.18);
+    }
+    .ec-block { display: flex; flex-direction: column; gap: 0.85rem; padding: 1.4rem 1.55rem; position: relative; }
+    .ec-block + .ec-block::before { content: ''; position: absolute; top: 0; left: 1.55rem; right: 1.55rem; height: 1px; background: rgba(10,25,47,0.07); }
+    .ec-block-status { padding-top: 1.6rem; }
+    .ec-label { font-family: var(--font-sans); font-size: 0.6rem; font-weight: 800; color: #9aa6b2; letter-spacing: 2.5px; text-transform: uppercase; }
     .ec-data { font-size: 1.15rem; font-weight: 500; color: #000; margin: 0; }
 
-    .system-status-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 100px; border: 1px solid rgba(16, 185, 129, 0.2); background: rgba(16, 185, 129, 0.03); width: max-content; margin-top: 0.2rem;}
+    /* LA FIRMA — escasez (número editorial) + ubicación */
+    .ec-firm { margin: 0; font-size: 0.95rem; color: #0a0e1a; font-weight: 500; }
+    .ec-firm-num { font-size: 1.45rem; color: var(--color-blue-deep); letter-spacing: -0.5px; }
+    .ec-place { margin: 0; font-size: 0.85rem; color: #8895a7; line-height: 1.4; }
+
+    /* LÍNEA DIRECTA — correo con flecha */
+    .ec-mail { display: inline-flex; align-items: center; gap: 7px; font-size: 1.05rem; font-weight: 500; }
+    .ec-mail svg { color: #9aa6b2; transition: transform 0.35s var(--ease-spring), color 0.35s ease; }
+    .ec-mail:hover svg { transform: translateX(3px); color: #0a0e1a; }
+
+    .system-status-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 100px; border: 1px solid rgba(16, 185, 129, 0.2); background: rgba(16, 185, 129, 0.05); width: max-content; }
     .system-status-pill span { font-size: 0.7rem; color: #059669; font-weight: 600; letter-spacing: 0.5px; }
     .pulse-dot-green { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16, 185, 129, 0.6); animation: pulse-green 2s infinite; }
     @keyframes pulse-green { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
@@ -740,9 +779,9 @@ const contactSchema = {
        RESPONSIVO
        ========================================================== */
     @media (max-width: 1024px) {
-        .ec-grid { grid-template-columns: 1fr; gap: 4rem; }
-        .ec-sidebar { position: relative; top: 0; flex-direction: row; flex-wrap: wrap; gap: 2.5rem 4rem; border-bottom: 1px solid var(--color-border); padding-bottom: 3.5rem;}
-        .ec-sidebar .ec-block { flex: 1 1 200px; }
+        .ec-grid { grid-template-columns: 1fr; gap: 3rem; }
+        /* la tarjeta deja de ser sticky y se vuelve full-width arriba del form */
+        .ec-sidebar { position: relative; top: 0; }
         .hero-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; }
     }
 
@@ -757,12 +796,13 @@ const contactSchema = {
         .hero-action { width: 100%; padding: 0 5%; }
         .btn-luxe { width: 100%; padding: 18px 0; font-size: 1.05rem;}
 
-        .trust-strip { padding: 3.5rem 0; }
+        .trust-strip { padding: 3rem 0; }
         .trust-metrics { grid-template-columns: 1fr; gap: 2rem; }
         .trust-eyebrow { margin-bottom: 2rem; }
 
-        .executive-contact { padding: 4rem 0 6rem 0; }
-        .ec-sidebar { flex-direction: column; gap: 2.5rem; padding-bottom: 3rem; }
+        /* menos hueco entre la franja/header y la tarjeta de la sidebar */
+        .executive-contact { padding: 1.75rem 0 6rem 0; }
+        .ec-grid { gap: 2.25rem; }
 
         .dq-stage { min-height: 360px; margin-top: 2.5rem; }
         .sf-row { grid-template-columns: 1fr; gap: 2rem; }
@@ -776,6 +816,15 @@ const contactSchema = {
         .step-back span { display: none; }
 
         .ds-next { grid-template-columns: 1fr; gap: 1.75rem; }
+    }
+
+    @media (max-width: 480px) {
+        .hero-grand { padding-top: 8.5rem; padding-bottom: 3rem; }
+        .hero-title .title-bold { font-size: clamp(1.9rem, 9vw, 2.6rem); }
+        .executive-contact { padding: 1.5rem 0 4.5rem 0; }
+        .ec-grid { gap: 2rem; }
+        .dq-stage { min-height: 320px; }
+        .ds-headline { font-size: clamp(2.2rem, 9vw, 3rem); }
     }
 </style>
 
@@ -838,7 +887,7 @@ const contactSchema = {
         reveal('.trust-strip .trust-eyebrow', { trigger: '.trust-strip', y: 12, dur: 0.9, start: 'top 85%' });
         reveal('.trust-strip .trust-metric',  { trigger: '.trust-strip', y: 16, dur: 0.95, stagger: 0.1, start: 'top 82%' });
         reveal('.trust-strip .trust-note',    { trigger: '.trust-strip', y: 12, dur: 0.9, delay: 0.15, start: 'top 82%' });
-        reveal('.ec-sidebar .ec-block', { trigger: '.executive-contact', y: 14, dur: 0.9, stagger: 0.08, start: 'top 82%' });
+        reveal('.ec-sidebar', { trigger: '.executive-contact', y: 18, dur: 1.0, start: 'top 82%' });
         reveal('.stepper-head',          { trigger: '.executive-contact', y: 14, dur: 0.95, start: 'top 80%' });
 
         /* Parallax muy leve del hero (solo desktop) */

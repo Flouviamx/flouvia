@@ -1,3 +1,21 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Autor de la firma — fuente única de verdad para byline, schema Person y bio.
+// Reemplaza el viejo "Flouvia Team" / avatar "F" (señal nula para E-E-A-T).
+// ⚠️ LINKEDIN: pega tu URL en AUTHOR.linkedin para activar la señal `sameAs`
+//    (la más fuerte de E-E-A-T). Si queda vacía, el schema omite sameAs sin romperse.
+// ─────────────────────────────────────────────────────────────────────────────
+export const AUTHOR = {
+  name: 'André Valle Ortega',
+  initial: 'A',
+  role: { es: 'Fundador, Flouvia', en: 'Founder, Flouvia' },
+  url: 'https://flouvia.com/nosotros',
+  linkedin: '', // TODO: 'https://www.linkedin.com/in/tu-perfil/'
+  bio: {
+    es: 'André Valle Ortega es fundador de Flouvia, firma boutique de ingeniería e-commerce y B2B en CDMX. Ha implementado portales B2B en Shopify Plus y sistemas de automatización para distribuidoras y marcas D2C en México y Estados Unidos.',
+    en: 'André Valle Ortega is the founder of Flouvia, a boutique e-commerce and B2B engineering firm based in Mexico City. He has built B2B portals on Shopify Plus and automation systems for distributors and D2C brands across Mexico and the United States.',
+  },
+};
+
 export interface BlogPost {
   slug: string;
   category: { es: string; en: string };
@@ -9,8 +27,18 @@ export interface BlogPost {
   author: string;
   authorInitial: string;
   date: string;
+  /** Fecha de última edición — CRÍTICO para schema Article (AI prioriza lo reciente). Actualizar al editar. */
+  dateModified: string;
   readTime: number;
   tags: string[];
+  /** Temas principales para el campo `about` del schema (mejora extracción por AI). */
+  about: { es: string; en: string }[];
+  /** CTA contextual al cierre del artículo (Confirmation Bias — conecta con el tema). */
+  cta: {
+    eyebrow: { es: string; en: string };
+    title: { es: string; en: string };
+    button: { es: string; en: string };
+  };
   featured?: boolean;
 }
 
@@ -54,9 +82,19 @@ export const posts: BlogPost[] = [
 
 <h2>¿Shopify B2B o portal custom?</h2>
 <p>Shopify Plus tiene funcionalidades B2B nativas desde 2022 que cubren el 70% de los casos de uso: precios por empresa, catálogos asignados, checkout personalizado. Para el otro 30% —reglas de negocio complejas, integraciones legacy, lógica de aprobaciones— se construye una capa adicional sobre la API de Shopify.</p>
-<p>La decisión no es binaria. Es una arquitectura en capas donde Shopify es el motor de transacciones y los sistemas adicionales manejan la lógica de negocio específica.</p>
+<p>La decisión no es binaria. Es una arquitectura en capas donde Shopify es el motor de transacciones y los sistemas adicionales manejan la lógica de negocio específica. Esta tabla resume cuándo basta lo nativo y cuándo necesitas construir encima:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>¿Qué necesitas?</th><th>Shopify B2B nativo</th><th>Capa adicional (custom)</th></tr></thead>
+<tbody>
+<tr><td>Precios por empresa / segmento</td><td>✓ Nativo</td><td>Solo si las reglas son dinámicas</td></tr>
+<tr><td>Catálogos asignados por cliente</td><td>✓ Nativo</td><td>—</td></tr>
+<tr><td>Reglas de precio dinámicas (volumen, tier)</td><td>Limitado</td><td>✓ Requerido</td></tr>
+<tr><td>Integración con ERP / WMS legacy</td><td>API básica</td><td>✓ Requerido</td></tr>
+<tr><td>Flujos de aprobación de pedido</td><td>—</td><td>✓ Requerido</td></tr>
+</tbody></table></div>
 
 <h2>Resultados típicos</h2>
+<p>En <a href="/casos/el-zarco">El Zarco</a>, distribuidora mayorista con más de 150 clientes, la reducción fue del 67% —de 6 horas a menos de 2 horas diarias en gestión de pedidos—. <a href="/casos/el-zarco">Ver caso completo →</a></p>
 <ul>
 <li>Reducción del 60–80% en tiempo de gestión de pedidos por parte del equipo comercial.</li>
 <li>Eliminación de errores de precio en pedidos: cero discrepancias por tabla de Excel desactualizada.</li>
@@ -91,9 +129,19 @@ export const posts: BlogPost[] = [
 
 <h2>Shopify B2B or custom portal?</h2>
 <p>Shopify Plus has native B2B functionality since 2022 that covers 70% of use cases: company pricing, assigned catalogs, customized checkout. For the other 30% — complex business rules, legacy integrations, approval logic — an additional layer is built on top of Shopify's API.</p>
-<p>The decision is not binary. It is a layered architecture where Shopify is the transaction engine and additional systems handle the specific business logic.</p>
+<p>The decision is not binary. It is a layered architecture where Shopify is the transaction engine and additional systems handle the specific business logic. This table summarizes when native is enough and when you need to build on top:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>What you need</th><th>Native Shopify B2B</th><th>Additional layer (custom)</th></tr></thead>
+<tbody>
+<tr><td>Per-company / segment pricing</td><td>✓ Native</td><td>Only if rules are dynamic</td></tr>
+<tr><td>Catalogs assigned per client</td><td>✓ Native</td><td>—</td></tr>
+<tr><td>Dynamic price rules (volume, tier)</td><td>Limited</td><td>✓ Required</td></tr>
+<tr><td>Legacy ERP / WMS integration</td><td>Basic API</td><td>✓ Required</td></tr>
+<tr><td>Order approval flows</td><td>—</td><td>✓ Required</td></tr>
+</tbody></table></div>
 
 <h2>Typical results</h2>
+<p>At <a href="/en/casos/el-zarco">El Zarco</a>, a wholesale distributor with more than 150 clients, the reduction was 67% — from 6 hours to under 2 hours per day in order management. <a href="/en/casos/el-zarco">See the full case →</a></p>
 <ul>
 <li>60–80% reduction in order management time by the commercial team.</li>
 <li>Elimination of pricing errors in orders: zero discrepancies from outdated Excel sheets.</li>
@@ -103,11 +151,22 @@ export const posts: BlogPost[] = [
 
 <p>B2B digitization is not a technology project. It is a data architecture project that uses technology to execute.</p>`,
     },
-    author: 'Flouvia Team',
-    authorInitial: 'F',
+    author: AUTHOR.name,
+    authorInitial: AUTHOR.initial,
     date: '2026-04-15',
+    dateModified: '2026-05-30',
     readTime: 7,
     tags: ['B2B', 'Shopify Plus', 'Portales', 'Arquitectura'],
+    about: [
+      { es: 'Digitalización B2B', en: 'B2B digitization' },
+      { es: 'Arquitectura de datos', en: 'Data architecture' },
+      { es: 'Shopify Plus', en: 'Shopify Plus' },
+    ],
+    cta: {
+      eyebrow: { es: '¿TU OPERACIÓN SIGUE EN EXCEL Y WHATSAPP?', en: 'STILL RUNNING ON EXCEL AND WHATSAPP?' },
+      title: { es: 'Diagnosticamos tu arquitectura B2B sin costo.', en: 'We diagnose your B2B architecture, free.' },
+      button: { es: 'Solicitar diagnóstico B2B', en: 'Request a B2B diagnosis' },
+    },
     featured: true,
   },
 
@@ -125,10 +184,13 @@ export const posts: BlogPost[] = [
       en: '70% of visitors who add to cart never complete the purchase. We identify the most common friction patterns and how to eliminate them with data.',
     },
     content: {
-      es: `<p class="article-lead">El 70% de los visitantes que agregan un producto al carrito nunca completan la compra. Antes de invertir más en tráfico, hay cinco patrones de fricción que vale la pena eliminar.</p>
+      es: `<p class="article-lead">El 70% de los visitantes que agregan un producto al carrito nunca completan la compra. En la mayoría de tiendas que auditamos —incluyendo <a href="/casos/setnpet">Setnpet</a>, donde pasamos de 0.9% a 1.3% de conversión— el problema principal no estaba donde el dueño creía. Antes de invertir más en tráfico, hay cinco patrones de fricción que vale la pena eliminar.</p>
 
 <h2>Por qué el CRO es infraestructura, no táctica</h2>
 <p>La optimización de conversión se enseña como una serie de "trucos": agrega urgencia, pon testimonios, simplifica el checkout. La realidad es que el CRO de alto impacto requiere entender los datos de comportamiento de tus usuarios específicos —no las mejores prácticas genéricas de la industria.</p>
+
+<h2>Error 0: No saber cuál es tu tasa de conversión de referencia</h2>
+<p>Antes de los cinco errores hay uno más fundamental: optimizar sin un número base. Si no sabes que tu conversión actual es, por ejemplo, 1.1%, no puedes saber si un cambio mejoró algo o solo movió ruido. El primer paso de cualquier trabajo de CRO serio es establecer la línea base —por dispositivo, por fuente de tráfico y por categoría de producto— y solo entonces empezar a mover variables.</p>
 
 <h2>Error 1: No saber dónde se caen los usuarios</h2>
 <p>Sin un mapa de eventos en GA4 o Shopify Analytics que mida el funnel completo (sesión → producto → carrito → checkout → pago), cualquier optimización es a ciegas. El primer paso es instrumentar correctamente, no adivinar.</p>
@@ -151,10 +213,13 @@ export const posts: BlogPost[] = [
 <h2>Dónde empezar</h2>
 <p>Audita el funnel completo antes de tocar nada. Los datos te dirán dónde están las oportunidades reales. En la mayoría de tiendas que auditamos, el problema principal no está donde el dueño cree que está.</p>`,
 
-      en: `<p class="article-lead">70% of visitors who add a product to cart never complete the purchase. Before investing more in traffic, there are five friction patterns worth eliminating.</p>
+      en: `<p class="article-lead">70% of visitors who add a product to cart never complete the purchase. In most stores we audit — including <a href="/en/casos/setnpet">Setnpet</a>, where we moved conversion from 0.9% to 1.3% — the main problem wasn't where the owner believed it was. Before investing more in traffic, there are five friction patterns worth eliminating.</p>
 
 <h2>Why CRO is infrastructure, not tactics</h2>
 <p>Conversion optimization is taught as a series of "tricks": add urgency, add testimonials, simplify checkout. The reality is that high-impact CRO requires understanding the behavioral data of your specific users — not industry generic best practices.</p>
+
+<h2>Mistake 0: Not knowing your baseline conversion rate</h2>
+<p>Before the five mistakes there is a more fundamental one: optimizing without a baseline number. If you don't know your current conversion is, say, 1.1%, you can't tell whether a change improved anything or just moved noise. The first step of any serious CRO work is to establish the baseline — by device, by traffic source, and by product category — and only then start moving variables.</p>
 
 <h2>Mistake 1: Not knowing where users drop off</h2>
 <p>Without an event map in GA4 or Shopify Analytics measuring the complete funnel (session → product → cart → checkout → payment), any optimization is blind. The first step is to instrument correctly, not guess.</p>
@@ -177,11 +242,22 @@ export const posts: BlogPost[] = [
 <h2>Where to start</h2>
 <p>Audit the complete funnel before touching anything. The data will tell you where the real opportunities are. In most stores we audit, the main problem is not where the owner thinks it is.</p>`,
     },
-    author: 'Flouvia Team',
-    authorInitial: 'F',
+    author: AUTHOR.name,
+    authorInitial: AUTHOR.initial,
     date: '2026-03-28',
+    dateModified: '2026-05-30',
     readTime: 6,
     tags: ['CRO', 'Shopify', 'Conversión', 'Analytics'],
+    about: [
+      { es: 'Optimización de conversión (CRO)', en: 'Conversion rate optimization (CRO)' },
+      { es: 'Shopify', en: 'Shopify' },
+      { es: 'E-commerce', en: 'E-commerce' },
+    ],
+    cta: {
+      eyebrow: { es: '¿IDENTIFICASTE TU TIENDA EN ESTOS ERRORES?', en: 'RECOGNIZE YOUR STORE IN THESE MISTAKES?' },
+      title: { es: 'Auditamos tu embudo con datos reales.', en: 'We audit your funnel with real data.' },
+      button: { es: 'Solicitar auditoría CRO', en: 'Request a CRO audit' },
+    },
     featured: false,
   },
 
@@ -224,10 +300,23 @@ export const posts: BlogPost[] = [
 <li>Requieres transformaciones de datos que Make no puede manejar de forma nativa.</li>
 </ul>
 
+<h2>Make vs. Custom vs. Híbrido, lado a lado</h2>
+<p>Ninguna opción gana en todo. Depende de cinco criterios concretos:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Criterio</th><th>Make</th><th>Custom</th><th>Híbrido</th></tr></thead>
+<tbody>
+<tr><td>Volumen de operaciones</td><td>Bajo–medio</td><td>Alto</td><td>Medio–alto</td></tr>
+<tr><td>Complejidad de la lógica</td><td>Lineal</td><td>Ramificada</td><td>Mixta</td></tr>
+<tr><td>Mantenimiento</td><td>Cualquiera del equipo</td><td>Requiere dev</td><td>Dev + operador</td></tr>
+<tr><td>Costo a escala</td><td>Sube con el volumen</td><td>Fijo (servidor)</td><td>Optimizado</td></tr>
+<tr><td>Velocidad de implementación</td><td>Rápida</td><td>Lenta</td><td>Media</td></tr>
+</tbody></table></div>
+
 <h2>El modelo híbrido que funciona en práctica</h2>
 <p>La arquitectura más robusta que implementamos para e-commerces de volumen medio combina ambos enfoques:</p>
 <blockquote>Make maneja la orquestación y las integraciones con terceros. El código custom maneja la lógica de negocio y las transformaciones complejas. Cada herramienta hace lo que hace mejor.</blockquote>
 <p>Por ejemplo: Make captura el webhook de un nuevo pedido en Shopify y llama a una función serverless (Vercel, AWS Lambda) que aplica la lógica de negocio específica. La función procesa y devuelve el resultado, que Make distribuye a los sistemas destino.</p>
+<p>En <a href="/casos/el-zarco">El Zarco</a> implementamos exactamente este modelo: Make captura los webhooks de nuevos pedidos y llama a una función serverless que aplica la lógica de precios por tier antes de devolver el resultado a la operación. <a href="/casos/el-zarco">Ver caso completo →</a></p>
 
 <h2>La pregunta que debes hacerte primero</h2>
 <p>Antes de elegir la herramienta: si esta automatización falla a las 3am un domingo, ¿quién la puede arreglar? La respuesta determina qué herramienta usar. Si solo tu desarrollador senior puede, quizás Make es la respuesta. Si cualquier persona del equipo puede seguir un log de errores, también.</p>
@@ -259,21 +348,45 @@ export const posts: BlogPost[] = [
 <li>You need data transformations that Make can't handle natively.</li>
 </ul>
 
+<h2>Make vs. Custom vs. Hybrid, side by side</h2>
+<p>No single option wins on everything. It comes down to five concrete criteria:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Criterion</th><th>Make</th><th>Custom</th><th>Hybrid</th></tr></thead>
+<tbody>
+<tr><td>Operation volume</td><td>Low–medium</td><td>High</td><td>Medium–high</td></tr>
+<tr><td>Logic complexity</td><td>Linear</td><td>Branching</td><td>Mixed</td></tr>
+<tr><td>Maintenance</td><td>Anyone on the team</td><td>Requires a dev</td><td>Dev + operator</td></tr>
+<tr><td>Cost at scale</td><td>Rises with volume</td><td>Fixed (server)</td><td>Optimized</td></tr>
+<tr><td>Implementation speed</td><td>Fast</td><td>Slow</td><td>Medium</td></tr>
+</tbody></table></div>
+
 <h2>The hybrid model that works in practice</h2>
 <p>The most robust architecture we implement for mid-volume e-commerces combines both approaches:</p>
 <blockquote>Make handles orchestration and third-party integrations. Custom code handles business logic and complex transformations. Each tool does what it does best.</blockquote>
 <p>For example: Make captures a new Shopify order webhook and calls a serverless function (Vercel, AWS Lambda) that applies the specific business logic. The function processes and returns the result, which Make distributes to the destination systems.</p>
+<p>At <a href="/en/casos/el-zarco">El Zarco</a> we implemented exactly this model: Make captures new-order webhooks and calls a serverless function that applies tier-based pricing logic before returning the result to the operation. <a href="/en/casos/el-zarco">See the full case →</a></p>
 
 <h2>The question you must ask first</h2>
 <p>Before choosing the tool: if this automation fails at 3am on a Sunday, who can fix it? The answer determines which tool to use. If only your senior developer can, maybe Make is the answer. If anyone on the team can follow an error log, also.</p>
 
 <p>High-performance automation is not built by choosing the most expensive or most popular tool. It's built by precisely understanding which part of the operation needs to scale and designing accordingly.</p>`,
     },
-    author: 'Flouvia Team',
-    authorInitial: 'F',
+    author: AUTHOR.name,
+    authorInitial: AUTHOR.initial,
     date: '2026-03-10',
+    dateModified: '2026-05-30',
     readTime: 5,
     tags: ['Make', 'Automatización', 'APIs', 'Integración'],
+    about: [
+      { es: 'Automatización de procesos', en: 'Process automation' },
+      { es: 'Make (Integromat)', en: 'Make (Integromat)' },
+      { es: 'Funciones serverless', en: 'Serverless functions' },
+    ],
+    cta: {
+      eyebrow: { es: '¿NO SABES QUÉ AUTOMATIZACIÓN NECESITAS?', en: 'NOT SURE WHICH AUTOMATION YOU NEED?' },
+      title: { es: 'Evaluamos tu stack y te decimos qué tiene sentido construir.', en: 'We assess your stack and tell you what is worth building.' },
+      button: { es: 'Diagnóstico de automatización', en: 'Automation diagnosis' },
+    },
     featured: false,
   },
 ];

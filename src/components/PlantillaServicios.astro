@@ -3,7 +3,6 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from './Navbar.astro';
 import Footer from './Footer.astro';
-import WhatsApp from './WhatsApp.astro';
 
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 const lang = getLangFromUrl(Astro.url);
@@ -338,40 +337,35 @@ const serviceRows = [
                 </div>
 
                 <div class="cmp-scroll">
-                    <table class="cmp-table">
-                        <thead>
-                            <tr>
-                                {cmpHead.map((h, i) => (
-                                    <th class={i === 1 ? 'cmp-col-flouvia' : ''}>
-                                        {i === 1
-                                            ? <span class="cmp-flouvia-head"><span class="cmp-flouvia-dot" aria-hidden="true"></span>{h}<span class="cmp-flouvia-badge">{isEn ? 'Recommended' : 'Recomendado'}</span></span>
-                                            : h}
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {cmpRows.map((row) => (
+                    <div class="cmp-frame">
+                        <table class="cmp-table">
+                            <thead>
                                 <tr>
-                                    <th scope="row">{row.c}</th>
-                                    {row.cells.map(([tone, text], i) => (
-                                        <td class={i === 0 ? 'cmp-col-flouvia' : ''}>
-                                            <span class="cmp-cell">
-                                                {tone !== 'none' && (
-                                                    <span class={`cmp-ic cmp-ic-${tone}`} aria-hidden="true">
-                                                        {tone === 'pos' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>}
-                                                        {tone === 'mid' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>}
-                                                        {tone === 'neg' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>}
-                                                    </span>
-                                                )}
-                                                <span class="cmp-cell-text">{text}</span>
-                                            </span>
-                                        </td>
+                                    {cmpHead.map((h, i) => (
+                                        <th class={i === 1 ? 'cmp-col-flouvia' : ''}>
+                                            {i === 1
+                                                ? <span class="cmp-flouvia-head">{h}<span class="cmp-flouvia-badge">{isEn ? 'Recommended' : 'Recomendado'}</span></span>
+                                                : h}
+                                        </th>
                                     ))}
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {cmpRows.map((row) => (
+                                    <tr>
+                                        <th scope="row">{row.c}</th>
+                                        {row.cells.map(([tone, text], i) => (
+                                            <td class={i === 0 ? 'cmp-col-flouvia' : ''}>
+                                                {i === 0 && tone === 'pos'
+                                                    ? <span class="cmp-cell"><svg class="cmp-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span class="cmp-cell-text">{text}</span></span>
+                                                    : <span class="cmp-cell-text">{text}</span>}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>
@@ -424,7 +418,6 @@ const serviceRows = [
     </main>
 
     <Footer />
-    <WhatsApp />
 </Layout>
 
 <style is:global>
@@ -610,36 +603,34 @@ const serviceRows = [
     .hw-text-zone h3 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 1rem 0; color: var(--color-text); }
     .hw-text-zone p { font-size: 1.05rem; color: var(--color-text-muted); line-height: 1.6; margin: 0; }
 
-    /* 5. COMPARISON TABLE — columna Flouvia elevada */
-    .comparison-section { padding: 6rem 0; background: var(--color-bg-soft); position: relative; overflow: clip; }
-    .cmp-header { text-align: center; max-width: 640px; margin: 0 auto 4rem; }
-    .cmp-scroll { overflow-x: auto; overflow-y: visible; -webkit-overflow-scrolling: touch; padding: 22px 22px 30px; }
-    .cmp-table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 760px; }
-    .cmp-table th, .cmp-table td { text-align: left; padding: 1.2rem 1.6rem; font-size: 0.92rem; line-height: 1.4; vertical-align: middle; border-bottom: 1px solid var(--color-border); }
-    .cmp-table thead th { font-size: 0.68rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: var(--color-text-muted); padding-top: 1.4rem; padding-bottom: 1.4rem; vertical-align: bottom; }
-    .cmp-table tbody th[scope="row"] { font-weight: 700; color: var(--color-text); width: 24%; }
-    .cmp-table td { color: #5a6677; font-weight: 500; }
-    .cmp-table tbody tr:last-child th, .cmp-table tbody tr:last-child td { border-bottom: none; }
-    /* hover de fila (no afecta la columna Flouvia) */
-    .cmp-table tbody tr:hover th[scope="row"], .cmp-table tbody tr:hover td:not(.cmp-col-flouvia) { background: rgba(10,25,47,0.018); }
+    /* 5. COMPARISON TABLE — matriz editorial (blanco · hairlines que se desvanecen) */
+    .comparison-section { padding: 7rem 0; background: var(--color-bg); position: relative; overflow: clip; }
+    .cmp-header { text-align: center; max-width: 640px; margin: 0 auto 3.5rem; }
+    .cmp-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 2px; }
+    .cmp-frame { position: relative; max-width: 960px; margin: 0 auto; min-width: 700px; }
+    /* marco editorial: hairlines superior/inferior que se desvanecen en las orillas */
+    .cmp-frame::before, .cmp-frame::after { content: ''; position: absolute; left: 0; right: 0; height: 1px; background: linear-gradient(to right, transparent, rgba(10,25,47,0.16) 12%, rgba(10,25,47,0.16) 88%, transparent); pointer-events: none; }
+    .cmp-frame::before { top: 0; }
+    .cmp-frame::after { bottom: 0; }
+    .cmp-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+    .cmp-table th, .cmp-table td { text-align: left; padding: 1.25rem 1.6rem; font-size: 0.95rem; line-height: 1.45; vertical-align: middle; }
+    .cmp-table thead th { font-size: 0.62rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #9a9aa0; padding-top: 1.7rem; padding-bottom: 1.2rem; vertical-align: bottom; }
+    .cmp-table tbody th[scope="row"] { font-weight: 700; color: var(--color-text); width: 26%; }
+    .cmp-table tbody td { color: var(--color-text-muted); font-weight: 500; }
+    /* separadores de fila finos */
+    .cmp-table tbody th, .cmp-table tbody td { border-top: 1px solid rgba(10,25,47,0.07); }
+    .cmp-table tbody tr:hover th[scope="row"], .cmp-table tbody tr:hover td:not(.cmp-col-flouvia) { color: var(--color-text); }
 
-    /* Columna Flouvia: card blanca elevada sobre el fondo soft */
-    .cmp-col-flouvia { background: #fff; position: relative; z-index: 1; box-shadow: -14px 0 26px -20px rgba(10,25,47,0.35), 14px 0 26px -20px rgba(10,25,47,0.35); }
-    .cmp-col-flouvia .cmp-cell-text { color: var(--color-blue-deep); font-weight: 700; }
-    thead th.cmp-col-flouvia { background: var(--color-blue-deep); color: #fff; border-bottom: none; border-top-left-radius: 16px; border-top-right-radius: 16px; box-shadow: -14px 0 26px -20px rgba(10,25,47,0.35), 14px 0 26px -20px rgba(10,25,47,0.35), 0 -12px 26px -18px rgba(10,25,47,0.4); }
-    tbody tr:last-child td.cmp-col-flouvia { border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; box-shadow: -14px 0 26px -20px rgba(10,25,47,0.35), 14px 0 26px -20px rgba(10,25,47,0.35), 0 16px 30px -18px rgba(10,25,47,0.32); }
-    .cmp-flouvia-head { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .cmp-flouvia-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px rgba(16,185,129,0.7); }
-    .cmp-flouvia-badge { font-size: 0.56rem; font-weight: 800; letter-spacing: 0.8px; padding: 3px 8px; border-radius: 100px; background: rgba(255,255,255,0.14); color: #fff; }
+    /* Columna Flouvia — acento navy sutil (barra arriba + hairlines laterales + texto navy) */
+    .cmp-col-flouvia { border-left: 1px solid rgba(10,25,47,0.08); border-right: 1px solid rgba(10,25,47,0.08); }
+    thead th.cmp-col-flouvia { border-top: 2px solid var(--color-blue-deep); color: var(--color-blue-deep); padding-top: 1.5rem; }
+    .cmp-table tbody td.cmp-col-flouvia { color: var(--color-blue-deep); font-weight: 700; }
+    .cmp-flouvia-head { display: inline-flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+    .cmp-flouvia-badge { font-size: 0.55rem; font-weight: 800; letter-spacing: 0.6px; padding: 3px 8px; border-radius: 100px; background: rgba(10,25,47,0.06); color: var(--color-blue-deep); }
 
-    /* Celdas: ícono + texto */
-    .cmp-cell { display: inline-flex; align-items: center; gap: 10px; }
-    .cmp-ic { width: 18px; height: 18px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .cmp-ic svg { width: 12px; height: 12px; }
-    .cmp-ic-pos { background: rgba(16,185,129,0.12); color: #0f9d6b; }
-    .cmp-col-flouvia .cmp-ic-pos { background: rgba(16,185,129,0.16); color: #0a8a5f; }
-    .cmp-ic-mid { background: rgba(10,25,47,0.06); color: #94a3b8; }
-    .cmp-ic-neg { background: transparent; color: #cbd2db; }
+    /* Check navy (sin círculo) — solo en la columna Flouvia */
+    .cmp-cell { display: inline-flex; align-items: center; gap: 9px; }
+    .cmp-check { width: 15px; height: 15px; color: var(--color-blue-deep); flex-shrink: 0; }
 
     /* 6. FAQ */
     .faq-section { padding: 6rem 0 7rem; background: var(--color-bg); }

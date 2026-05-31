@@ -35,6 +35,10 @@ src/pages/
   contacto.astro           → /contacto
   nosotros.astro           → /nosotros
 
+  # Blog (prerender:true)
+  blog/index.astro         → /blog (listing)
+  blog/[slug].astro        → /blog/{slug} (artículo)
+
   # Portal de cliente (rutas protegidas por Clerk)
   dashboard.astro          → /dashboard
   facturacion.astro        → /facturacion
@@ -330,13 +334,41 @@ Mezcla eventos de 3 fuentes, ordenados por fecha descendente, máx 7 items:
 
 ---
 
-## Animaciones — GSAP (home / `Inicio.astro`)
+## Layout — props disponibles (`src/layouts/Layout.astro`)
+
+```ts
+interface Props {
+  title:        string;
+  description?: string;   // default: descripción genérica de Flouvia
+  image?:       string;   // default: /android-touch-icon-512.png
+  noindex?:     boolean;  // default: false
+  ogType?:      string;   // default: 'website' — usar 'article' en casos individuales
+}
+```
+
+El layout genera automáticamente: `canonical`, `hreflang` ES/EN/x-default, OG tags completos
+(title, description, url, image, locale, type, site_name) y Twitter card.
+
+**Uso con `ogType="article"`** — casos individuales (`PlantillaCaso.astro`):
+```astro
+<Layout title={pageTitle} description={pageDesc} image={caso.image} ogType="article">
+```
+El schema JSON-LD (`Article` + `BreadcrumbList`) se inyecta **en el componente**, no en el Layout,
+porque depende de datos dinámicos del caso.
+
+---
+
+## Animaciones — GSAP (estándar de todo el sitio)
 
 > **Filosofía actual (mayo 2026):** minimalista, sutil, smooth. El usuario rechazó
 > explícitamente: SplitText "frase construyéndose", botones magnetic, entradas
 > cinemáticas multicapa y cualquier blur/scale dramático. **Un solo estándar para
 > todo el sitio.** Esta sección reemplaza las reglas viejas (SplitText, magnetic,
 > `immediateRender:false`, coreografías) — no reintroducir esos patrones.
+>
+> Aplica a: `Inicio.astro`, `PlantillaCasos.astro`, `PlantillaCaso.astro`,
+> `PlantillaContacto.astro`, `PlantillaServicios.astro`, `PlantillaNosotros.astro`, `Footer.astro`,
+> `blog/index.astro`, `blog/[slug].astro` (y sus mirrors `/en/`).
 
 **Estándar único de entrada:** `fade + leve subida`. `ease: 'power2.out'`,
 duración `0.85–1.1s`, `y: 10–24px`, stagger `0.05–0.1s`. Sin blur, sin scale, sin
@@ -378,9 +410,11 @@ Elementos que animan **en carga** (hero, navbar) NO deben tener `opacity:0` perm
 en CSS (causaba "pantalla blanca hasta refresh" y flash visible→oculto→anima).
 - `Layout.astro` tiene un `<script is:inline>` en el `<head>` que añade `js-anim` a
   `<html>` **antes del primer paint** (solo si NO hay `prefers-reduced-motion`).
-- CSS global oculta: `.js-anim .hero-anim { opacity:0 }` (Inicio) y
-  `.js-anim #navbar { opacity:0 }` (Navbar). Debe ir en `<style is:global>` porque
-  `.js-anim` vive en `<html>` y Astro scopea los selectores normales.
+- CSS global oculta: `.js-anim .hero-anim { opacity:0 }` (Inicio/Contacto/Nosotros/Servicios),
+  `.js-anim #navbar { opacity:0 }` (Navbar), `.js-anim .cs-breadcrumb/…/cs-metrics { opacity:0 }`
+  (PlantillaCaso), `.js-anim .blog-anim { opacity:0 }` (blog listing),
+  `.js-anim .post-anim { opacity:0 }` (artículo de blog). Debe ir en
+  `<style is:global>` porque `.js-anim` vive en `<html>` y Astro scopea los selectores normales.
 - GSAP revela con `.to()`/`fromTo()`. **Sin `clearProps` de `opacity`** en estos
   (dejamos el `opacity:1` inline para que gane sobre el gate; sí se puede limpiar el
   `transform`).
@@ -615,6 +649,16 @@ entra con su propio gate `.js-anim` → se lee como crossfade. Guard `pageshow` 
 `event.persisted` limpia el `opacity:0` inline al volver por bfcache (si no, pantalla en
 blanco). Reduced-motion o idioma activo → navegación normal sin fade.
 
+**Preservar scroll al cambiar de idioma (no reiniciar arriba):** como es navegación real,
+la página destino cargaría en el top. Al click se guarda `sessionStorage['flouviaLangScroll']
+= scrollY`; el `<head>` de `Layout`/`PortalLayout` (script `is:inline`, antes del paint) ve
+el flag y añade `html.lang-restoring` → `html.lang-restoring body{opacity:0}` oculta todo
+para que no se vea el salto desde el top. El navbar (en `DOMContentLoaded`): lee y borra el
+flag, `window.scrollTo(0,y)` (ya, en el siguiente frame y en `load`), quita la clase y revela
+el body con un crossfade (`gsap` 0.25s). **Failsafe** en el head: `setTimeout 1500ms` quita
+`lang-restoring` aunque el navbar muera (no dejar el body en blanco). Implementado en AMBOS
+navbars (público y portal); el switch del portal también recibió el crossfade+prefetch.
+
 ---
 
 ## Bugs conocidos y sus fixes
@@ -640,13 +684,79 @@ blanco). Reduced-motion o idioma activo → navegación normal sin fade.
 |---------|-------------|
 | `src/components/Inicio.astro` | Landing page completa — hero, tech, casos, servicios, protocolo, CTA |
 | `src/components/Navbar.astro` | Navbar con glassmorphism y dark-mode adaptativo |
-| `src/components/WhatsApp.astro` | Botón flotante WhatsApp con dark-section detection |
 | `src/components/PlantillaContacto.astro` | Página `/contacto` (y `/en/contacto`) — hero estándar home + formulario por pasos. Ver sección "Página de Contacto". |
-| `src/components/PlantillaServicios.astro` | Template para páginas de servicio individual |
-| `src/components/PlantillaCasos.astro` | Template para casos de estudio |
+| `src/components/PlantillaServicios.astro` | Página `/servicios` (y `/en/servicios`) — rediseñada mayo 2026. Ver sección "Página de Servicios". |
+| `src/components/PlantillaCasos.astro` | Página `/casos` (listing). Hero estándar home + grid 2-col + slot card + CTAs de escasez. Ver "Página de Casos". |
+| `src/components/PlantillaCaso.astro` | Template **compartido** del caso individual (`/casos/{slug}` y `/en/casos/{slug}`). Ambas `[slug].astro` son wrappers que le pasan `caso/next/isEn/root`. Lee todo de `data/casos.ts`. Ver "Página de Casos". |
 | `src/layouts/PortalLayout.astro` | Layout del portal de cliente |
 | `src/components/portal/PortalHeader.astro` | Header compartido de todas las páginas del portal |
 | `src/components/PortalFooter.astro` | Footer del portal — link a `/privacidad-portal` |
+| `src/pages/blog/index.astro` | Listing del blog — hero con status pill, grid cards, CTA contextual. `prerender:true`. |
+| `src/pages/blog/[slug].astro` | Artículo individual — hero, banner, sidebar TOC, article, author card, related, CTA. `prerender:true`. |
+| `src/data/blog.ts` | Fuente única de posts + `export const AUTHOR` (nombre, initial, rol, LinkedIn, bio). |
+
+---
+
+## Página de Blog
+
+> Rediseñada mayo 2026: unificada con el estándar de animación/tipografía del home.
+> Archivos: `src/pages/blog/index.astro`, `src/pages/blog/[slug].astro` (y mirrors `/en/`).
+> Datos: `src/data/blog.ts`.
+
+### Autor — fuente única de verdad (`AUTHOR`)
+El objeto `AUTHOR` exportado desde `blog.ts` centraliza todos los campos del byline:
+```ts
+export const AUTHOR = {
+  name:    'André Valle Ortega',
+  initial: 'A',
+  role:    { es: 'Fundador, Flouvia', en: 'Founder, Flouvia' },
+  url:     'https://flouvia.com/nosotros',
+  linkedin: '',   // TODO: pegar URL de LinkedIn → activa sameAs en schema + author-card-link
+  bio:     { es: '…', en: '…' },
+};
+```
+Reemplaza el viejo "Flouvia Team / avatar F" (señal nula para E-E-A-T).
+**Regla:** cualquier cambio de autor o bio → editar solo `AUTHOR`. El byline, el author card al pie del artículo, y el schema `Person` lo leen de ahí automáticamente.
+
+### Modelo de datos (`BlogPost`)
+Campos añadidos en mayo 2026 (además de los que ya existían):
+```ts
+dateModified: string;        // CRÍTICO — actualizar al editar. AI prioriza contenido reciente.
+about: { es: string; en: string }[];  // temas para schema `about` (mejora extracción AI)
+cta: {                       // CTA contextual al cierre — distinto por artículo
+  eyebrow: { es; en };
+  title:   { es; en };
+  button:  { es; en };
+};
+```
+
+### Listing — `/blog` y `/en/blog`
+- **Hero estándar home**: status pill "ACEPTANDO PROYECTOS Q3" + eyebrow "INGENIERÍA APLICADA — PERSPECTIVAS DE LA FIRMA" + H1 bold 100% Inter + desc + post-count pill.
+- **Gate `.js-anim .blog-anim { opacity:0 }`** en `<style is:global>` + timeline GSAP `power2.out` en carga (igual patrón que home). Reveal de featured card, post cards y CTA con helper `reveal()`.
+- **CTA reescrito**: eyebrow "¿LEES ESTO Y RECONOCES TU OPERACIÓN?" + badge "● 2 proyectos disponibles Q3". Elimina el viejo "Listo para escalar tu ¿operación?" (typo + copy genérico).
+- **Schema `Blog`** (JSON-LD) inyectado en la página con `blogPost[]` que lista todos los artículos.
+- Title SEO: "Blog de Ingeniería E-commerce y B2B | Flouvia — CDMX".
+- Scarcity placeholders (actualizar por trimestre): hero status pill + CTA badge → ver [[flouvia-scarcity-placeholders]].
+
+### Artículo — `/blog/{slug}` y `/en/blog/{slug}`
+- **Hero**: breadcrumb, cat-badge + post-num, H1, meta-row (autor + fecha + tags). Gate `.js-anim .post-anim{opacity:0}` + timeline `power2.out`.
+- **Sidebar TOC**: sticky, construido por JS desde los `h2` del artículo. Activo con `toc-active` via ScrollTrigger. Oculto en mobile (≤1024px).
+- **Barra de progreso** de lectura (CSS width, listener scroll, no GSAP).
+- **Author card** al pie del artículo: avatar + "ESCRITO POR" + nombre + rol + bio + link LinkedIn (condicionado a que `AUTHOR.linkedin` no esté vacío).
+- **CTAs contextuales** por artículo: B2B → "Solicitar diagnóstico B2B", CRO → "Solicitar auditoría CRO", Automatización → "Diagnóstico de automatización". Ya no el genérico "Escale su operación."
+- **Schema `BlogPosting`** (JSON-LD): `author.@type: Person`, `datePublished`, `dateModified`, `about[]`, `publisher.@id`, `isPartOf`, `keywords`, `inLanguage`. `sameAs` se incluye solo si `AUTHOR.linkedin` no está vacío.
+- **`ogType="article"`** pasado al Layout.
+
+### Contenido — cambios específicos por artículo (mayo 2026)
+- **B2B Mayoristas**: tabla decisión "Shopify B2B nativo vs capa custom" (5 criterios). "Resultados típicos" con dato real El Zarco (67%) + link a `/casos/el-zarco`.
+- **5 Errores CRO**: "Error 0" (tasa de conversión de referencia) antes de los 5. Lead con link a `/casos/setnpet` (0.9%→1.3%).
+- **Make vs Custom**: tabla comparativa (Make / Custom / Híbrido × 5 criterios). Ejemplo del modelo híbrido con El Zarco.
+
+### Tipografía del artículo
+- Títulos en el listado: 100% Inter bold. **Eliminados** los acentos serif italic en related title, CTA heading.
+- Serif italic queda en: `.post-num-badge` (numeración `/01`), `.banner-title-watermark`, `.related-num`, `.cat-pill` / watermarks.
+- **Tablas** (`.table-wrap table`): formato más citado por AI; estilos en `<style is:global>` para que apliquen al HTML inyectado con `set:html`.
+- **Links inline** en el artículo: `color: var(--color-blue-deep)`, underline, weight 600 — en `<style is:global>` (misma razón: `set:html` no lleva `data-astro-cid`).
 
 ---
 
@@ -690,12 +800,20 @@ La sección se rediseñó (mayo 2026) para igualar la estética del home tras fe
 - Animación: gate `.js-anim .hero-anim{opacity:0}` + timeline GSAP `power2.out` (igual que `Inicio.astro`),
   parallax leve solo desktop. Reduced-motion → return temprano, todo visible.
 
-### Sidebar (`.ec-sidebar`, sticky) — mínima y aireada
-Decisión (mayo 2026): sidebar **mínima** — solo 3 bloques `.ec-block` con harto aire (`gap:3.5rem`):
-pill de escasez ("2 cupos · Q3") · **QUIÉN APLICA** (criterio ✓/✕ = inversión de poder + auto-selección) ·
-**LÍNEA DIRECTA** (`hola@flouvia.com`). Se **eliminaron** sede + reloj CDMX en vivo y los íconos de redes
-(se sentían "dashboard"/cargados; las redes ya están en el footer). Sin elemento humano (firma/foto).
-En ≤1024px pasa a fila wrap; en ≤768px a columna.
+### Sidebar (`.ec-sidebar`, sticky) — tarjeta Liquid Glass (iOS)
+Iteración (mayo 2026): primero se dejó mínima (3 bloques) pero "se veía vacía" → ahora es una **tarjeta
+de vidrio esmerilado** (mismo lenguaje iOS del navbar) con secciones separadas por hairlines internas:
+- **Glass**: `border-radius:24px`, `backdrop-filter: blur(28px) saturate(1.8) brightness(1.04)`, fill
+  `linear-gradient(180deg, rgba(255,255,255,.74), rgba(248,250,252,.55))`, rim+specular+sombra profunda
+  vía `box-shadow` (inset edge `rgba(10,25,47,.05)` para definirse sobre blanco). `overflow:hidden`.
+- **Secciones** (`.ec-block`, padding `1.4rem 1.55rem`, hairline entre cada una vía `+ ::before`):
+  (1) pill de escasez "2 cupos · Q3"; (2) **QUIÉN APLICA** ✓/✕ (`.criteria`); (3) **EL PROCESO** (✓
+  respondemos <24h · ✓ leemos a mano); (4) **LA FIRMA** (escasez "Menos de **8** al año" con el 8 en
+  serif italic `.ec-firm-num` + "CDMX · Operación global"); (5) **LÍNEA DIRECTA** (correo con flecha).
+- Reloj CDMX en vivo y los íconos de redes siguen **eliminados** (redes ya están en el footer). Sin
+  elemento humano (firma/foto).
+- **Reveal**: la tarjeta entra como **una sola pieza** (`reveal('.ec-sidebar')`), no bloque por bloque.
+- **Responsive**: ≤1024px deja de ser sticky y la tarjeta va full-width arriba del form (sigue en columna).
 
 ### Formulario por pasos (typeform-style) — CRÍTICO
 **Una pregunta a la vez**, no scroll vertical. 5 pasos `.dq-step` dentro de `.dq-stage`; solo el activo
@@ -750,9 +868,130 @@ fade-in vía CSS (no GSAP), `var(--ease-smooth)`. Toda la lógica vive en el `<s
 
 ---
 
+## Página de Casos
+
+> Rediseñada mayo 2026: unificada con la estética/animación del home y reescrita con eje de
+> escasez + AI SEO ([[flouvia-brand-voice]], [[flouvia-scarcity-placeholders]]). Animación =
+> estándar único del sitio (gate `.js-anim`, helper `reveal()` `power2.out`, `robustRefresh`,
+> reduced-motion). **Sin SplitText, sin `expo.out`/`back.out`, sin blur/scale.** Números en
+> Instrument Serif italic (se eliminó JetBrains Mono — ni siquiera se cargaba). Títulos 100%
+> Inter bold (sin acento serif).
+
+### Listing — `/casos` (`PlantillaCasos.astro`, sirve ES y `/en/casos`)
+- **Hero** estándar home: status pill + eyebrow "RESULTADOS DOCUMENTADOS — 2 SISTEMAS ACTIVOS"
+  + H1 bold "Lo que construimos. / Lo que midió." + CTA `#case-grid` "Explorar casos ↓".
+- **Badge de disponibilidad** (`.avail-badge`) arriba del grid (Loss Aversion en el momento de
+  lectura) + **badge "● Sistema activo"** (`.active-badge`) sobre cada imagen.
+- **Slot card** (`.slot-card`, `grid-column: 1/-1`, borde punteado) = tercer card "Tu proyecto
+  aquí" → `/contacto` (Mimetic Desire).
+- CTA intermedio "¿Tu operación tiene un reto similar?" + CTA final "El siguiente caso podría
+  ser el tuyo." con badge "● 2 proyectos disponibles".
+- Title/description con métricas (El Zarco +25% AOV · Setnpet +42%); el resto de OG/canonical
+  lo genera `Layout.astro`.
+
+### Detalle — `/casos/{slug}` (`PlantillaCaso.astro` — componente compartido)
+- **Una sola fuente de verdad.** `pages/casos/[slug].astro` y `pages/en/casos/[slug].astro` son
+  wrappers delgados que pasan `caso/next/isEn/root`. **No duplicar markup — editar el componente.**
+- Todo el contenido y metadatos viven en `src/data/casos.ts`. Campos relevantes del interface:
+
+```ts
+// Campos base (todos los casos los necesitan)
+tagline:    { es; en }  // "De X a Y" — visible en hero, no describir el proyecto
+resultsNote:{ es; en }  // "Resultados medidos a 90 días... Punto de partida: X"
+results[].desc          // Incluir antes/después con número y mecanismo de mejora
+
+// Campos SEO/schema (opcionales pero recomendados para AI-citeability)
+seoTitle:       { es; en }   // title con métricas: "Marca: Sistema — +X%, −Y% | Flouvia"
+seoDesc:        { es; en }   // description: "Caso de estudio: …resultado en N días: X, Y, Z"
+about:          { name, description, url }  // entidad cliente para schema Article
+datePublished:  string       // ISO date
+dateModified:   string       // ISO date — actualizar al tocar el caso
+
+// CTA de cierre conectado al reto del caso (fórmula "¿Tienes X?")
+cta: {
+  eyebrow: { es; en }  // "¿TIENES UN RETO SIMILAR?"
+  title:   { es; en }  // "Construimos lo mismo para tu operación."
+  sub:     { es; en }  // párrafo de sub-texto + propuesta
+}
+```
+
+- **Schema JSON-LD** (`Article` + `BreadcrumbList`) construido en el componente desde `caso`;
+  `mentions` se genera automáticamente desde `caso.stack`. `Layout` recibe `ogType="article"`.
+
+---
+
+## Página Nosotros (`PlantillaNosotros.astro`)
+
+> Sirve `/nosotros` y `/en/nosotros` (`prerender:true`). Rediseñada mayo 2026 bajo el
+> eje de AI SEO y señales de entidad. Es la página que Google AI Overviews extrae para
+> queries "quién es Flouvia" y "agencias boutique de ingeniería e-commerce en México".
+
+### Estructura (7 secciones)
+```
+Hero (white, 100svh)      — mismo estándar index: status pill + eyebrow + H1 bold sans
+                            + hero-bottom (desc + btn). Gate .js-anim + GSAP timeline.
+Entidad (white)           — Párrafo visible AI-extractable. Texto completo en el DOM.
+                            No solo en meta/schema — Google AI Overviews prefiere párrafos
+                            de texto visible en la primera mitad de la página.
+Manifiesto (white)        — Grid 2 col: imagen (parallax leve) + texto sticky. Subtítulo
+                            grande + 2 párrafos con consecuencia para el cliente.
+ADN / Principios (white)  — 3 tarjetas monolith: 01 Transparencia · 02 Código de Autor ·
+                            03 ROI. Watermark editorial /01/02/03 dentro de la tarjeta.
+Resultados (white)        — 4 métricas ESTÁTICAS con fuente visible. NO hay contadores JS.
+                            Valores: +42% CR (Setnpet), −67% tiempo (El Zarco), +25% AOV
+                            (El Zarco), <8 proyectos/año. Fuente citable por AI.
+¿Por qué Flouvia? (navy)  — Bandita slim (padding ~1.5rem). Título compacto izquierda +
+                            divisor + texto filtro-cliente + botón derecha. Una sola fila.
+Testimonios (white)       — Carrusel horizontal. Cada tarjeta: métrica ancla (serif italic)
+                            + quote + autor con .t-role + .t-context (empresa, industria,
+                            ciudad). Avatares en navy sólido con inicial.
+CTA final (navy)          — Escasez: "2 proyectos disponibles este trimestre" + badge
+                            "● ACEPTANDO PROYECTOS Q3 · 2 cupos". CTA "Solicitar diagnóstico".
+```
+
+### Schema JSON-LD
+`AboutPage` + `Organization` inline en el `<head>` vía `set:html`:
+- `foundingDate: '2024'`, `foundingLocation: 'Ciudad de México'`
+- `areaServed: ['México', 'Estados Unidos']`
+- `mentions`: El Zarco (distribuidora mayorista B2B) + Setnpet (D2C Shopify Plus)
+- `breadcrumb` localizado por idioma
+Actualizar `mentions` si se agregan nuevos casos de estudio.
+
+### Animaciones — igual que Inicio.astro
+- Hero: gate `.js-anim .hero-anim{opacity:0}` + GSAP timeline `power2.out` en carga.
+- Reveals on-scroll: `gsap.set` oculta + `ScrollTrigger {once:true, onEnter: gsap.to}`.
+  NO `gsap.from` con `immediateRender:false` (causa parpadeo al primer scroll).
+- `revealEach` por elemento para `.section-heading`, `.eyebrow`, textos del manifiesto.
+- Stagger grupal para `.monolith-card` y `.thin-card`.
+- Sin SplitText, sin contadores JS, sin blur, sin scale en reveals.
+
+### i18n — claves nuevas relevantes
+- `about.entity` — párrafo de definición de entidad (visible en DOM)
+- `about.m{1-4}.pre/num/sym/src` — métricas estáticas con fuente
+- `about.rev{1-2}.context` — contexto de empresa AI-citable en testimonios
+- `about.rev{1-2}.metric` — métrica ancla visible arriba del quote
+- `about.liquid.cta` — CTA del banner "¿Por qué Flouvia?"
+- `about.cta.avail/body` — badge de disponibilidad + cuerpo del CTA final
+
+### Tipografía
+- H1/H2 100% Inter bold (sin palabra-acento serif — igual que Inicio/Contacto post-mayo 2026).
+- Serif italic solo en: números de métricas (`.thin-num.editorial`), watermarks de tarjeta
+  (`.m-watermark`), métrica ancla de testimonios (`.t-metric`).
+- JetBrains Mono eliminado de esta página.
+
+### Scarcity placeholders (actualizar por trimestre)
+- `about.hero.status` — "ACEPTANDO PROYECTOS Q3"
+- `about.cta.badge` — "EL SIGUIENTE NIVEL — Q3"
+- `about.cta.avail` — "ACEPTANDO PROYECTOS Q3 · 2 cupos disponibles"
+- `about.cta.title` — "2 proyectos disponibles este trimestre."
+
+---
+
 ## Deployment
 
 - **Plataforma:** Vercel
 - **Modo:** SSR (server-side rendering) — `output: 'server'`
-- **Excepción:** `src/pages/index.astro` tiene `export const prerender = true` (estático)
+- **Páginas estáticas (`prerender:true`):** `index.astro`, `casos.astro`, `casos/[slug].astro`,
+  `en/casos/[slug].astro`, `contacto.astro`, `nosotros.astro`, `servicios.astro`,
+  `blog/index.astro`, `blog/[slug].astro` y mirrors `/en/*`.
 - Todas las API routes necesitan `export const prerender = false` al inicio del archivo
