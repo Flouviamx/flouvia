@@ -789,8 +789,9 @@ const contactSchema = {
         .hero-grand { padding-top: 11rem; padding-bottom: 4rem; min-height: auto; text-align: center; }
         .hero-content { display: flex; flex-direction: column; align-items: center; }
         .hero-status { margin-left: auto; margin-right: auto; }
-        .hero-title { display: flex; flex-direction: column; gap: 0.2rem; margin-bottom: 2.5rem; max-width: 100%; }
-        .hero-title .title-bold { display: block; font-size: clamp(2rem, 7.6vw, 2.85rem); font-weight: 800; letter-spacing: -1px; line-height: 1.12; }
+        .hero-title { display: flex; flex-direction: column; gap: 0; margin-bottom: 2.5rem; max-width: 100%; }
+        .hero-title .title-bold { display: block; font-size: clamp(2rem, 7.6vw, 2.85rem); font-weight: 800; letter-spacing: -1px; line-height: 1.12; margin: 0; }
+        .hero-title br { display: none; }
         .hero-bottom { flex-direction: column; align-items: center; gap: 2.5rem; text-align: center; border-top: none; padding-top: 0;}
         .hero-desc { font-size: 1.1rem; padding: 0 5%; max-width: 95%; margin: 0 auto; line-height: 1.6;}
         .hero-action { width: 100%; padding: 0 5%; }
