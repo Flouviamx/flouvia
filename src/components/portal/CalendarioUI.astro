@@ -41,7 +41,6 @@ const calendlyUrl = `${calendlyBase}?${params.toString()}`;
             <!-- ── COLUMNA IZQUIERDA ── -->
             <div class="col-left">
                 <div class="eyebrow-wrap">
-                    <div class="eyebrow-dot"></div>
                     <span class="eyebrow">{t('cal.eyebrow')}</span>
                 </div>
 
@@ -160,10 +159,10 @@ const calendlyUrl = `${calendlyBase}?${params.toString()}`;
     .col-left { padding-top: 1.5rem; }
 
     .eyebrow-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 1.8rem; }
-    .eyebrow-dot { width: 7px; height: 7px; background: #0066cc; border-radius: 50%; }
     .eyebrow {
-        font-size: 0.62rem; font-weight: 800; letter-spacing: 0.13em;
-        color: var(--color-text-muted); text-transform: uppercase;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 0.63rem; font-weight: 700; letter-spacing: 0.1em;
+        color: #6e7d96; text-transform: uppercase;
     }
 
     .cal-title {
