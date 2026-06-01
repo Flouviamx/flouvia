@@ -10,11 +10,11 @@ const isEn = lang === 'en';
 
 // ── SEO ────────────────────────────────────────────────────────────────
 const pageTitle = isEn
-    ? 'Apply to an E-commerce or B2B Project — Flouvia | Mexico City'
-    : 'Aplicar a un Proyecto de E-commerce o B2B — Flouvia | CDMX';
+    ? 'Value Diagnosis for E-commerce & B2B — Flouvia | Mexico City'
+    : 'Diagnóstico de Valor para E-commerce y B2B — Flouvia | CDMX';
 const pageDesc = isEn
-    ? 'Request your free 30-min diagnosis. We assess fit with your e-commerce or B2B operation. Projects by application — Flouvia, a boutique firm in Mexico City.'
-    : 'Solicita tu diagnóstico gratuito de 30 min. Evaluamos si hay fit con tu operación e-commerce o B2B. Proyectos por aplicación — Flouvia, firma boutique en CDMX.';
+    ? 'Before talking price, calculate what your problem costs. Free value diagnosis for e-commerce and B2B operations. Projects by application — Flouvia, a boutique firm in Mexico City.'
+    : 'Antes de hablar de precios, calcula cuánto te cuesta el problema. Diagnóstico de valor gratuito para operaciones e-commerce y B2B. Proyectos por aplicación — Flouvia, firma boutique en CDMX.';
 
 // ── Schema.org ContactPage ───────────────────────────────────────────────
 const SITE = 'https://flouvia.com';
@@ -65,21 +65,21 @@ const contactSchema = {
                             <span>{isEn ? '2 SLOTS OPEN · Q3' : '2 CUPOS DISPONIBLES · Q3'}</span>
                         </div>
                         <p class="eyebrow hero-anim">
-                            {isEn ? 'APPLICATION PROCESS' : 'PROCESO DE APLICACIÓN'}
+                            {isEn ? 'VALUE DIAGNOSIS — APPLICATION PROCESS' : 'DIAGNÓSTICO DE VALOR — PROCESO DE APLICACIÓN'}
                         </p>
                         <h1 class="hero-title hero-anim">
-                            <span class="title-bold">{isEn ? 'Apply.' : 'Aplica.'}</span><br>
-                            <span class="title-bold">{isEn ? 'We assess the fit.' : 'Evaluamos el fit.'}</span>
+                            <span class="title-bold">{isEn ? 'First we calculate' : 'Primero calculamos'}</span><br>
+                            <span class="title-bold">{isEn ? 'what the problem costs you.' : 'cuánto te cuesta el problema.'}</span>
                         </h1>
                     </div>
 
                     <div class="hero-bottom hero-anim">
                         <p class="hero-desc">
-                            {isEn ? 'We read every application before replying. If there’s a fit with what we build, we get back to you within 24h with the next steps — no pitch, no pressure.' : 'Leemos cada solicitud antes de responder. Si hay fit con lo que construimos, te contactamos en menos de 24h con los próximos pasos — sin pitch, sin presión.'}
+                            {isEn ? 'Before we talk price, we size the real problem you’re solving. In 5 questions, the diagnosis shows what it’s worth — and what it costs not to fix it.' : 'Antes de hablar de precios, dimensionamos el problema real que vas a resolver. En 5 preguntas, el diagnóstico te muestra cuánto vale — y cuánto cuesta no resolverlo.'}
                         </p>
                         <div class="hero-action">
                             <a href="#form-zone" class="btn-luxe">
-                                <span>{isEn ? 'Start application' : 'Iniciar solicitud'}</span>
+                                <span>{isEn ? 'Start diagnosis' : 'Iniciar diagnóstico'}</span>
                                 <span class="btn-arrow" aria-hidden="true">↓</span>
                                 <div class="btn-shimmer"></div>
                             </a>
@@ -149,6 +149,18 @@ const contactSchema = {
                         </ul>
                     </div>
 
+                    <div class="ec-block ec-pricing" id="ec-pricing" hidden>
+                        <span class="ec-label">{isEn ? 'METHODOLOGY' : 'METODOLOGÍA'}</span>
+                        <p class="ec-method-text">{isEn ? 'We charge 5%–10% of the value we generate in year one. Before proposing a price, we calculate that value with you.' : 'Cobramos 5%–10% del valor que generamos en el primer año. Antes de proponer un precio, lo calculamos contigo.'}</p>
+                        <span class="ec-label ec-ranges-label">{isEn ? 'INDICATIVE RANGES' : 'RANGOS ORIENTATIVOS'}</span>
+                        <ul class="ec-ranges">
+                            <li><span>E-commerce Engineering</span><span class="editorial">$150k – $280k</span></li>
+                            <li><span>B2B Architecture</span><span class="editorial">$200k – $450k</span></li>
+                            <li><span>Automation + ERP</span><span class="editorial">$180k – $350k</span></li>
+                            <li><span>{isEn ? 'Full CRO' : 'CRO completo'}</span><span class="editorial">$120k – $200k</span></li>
+                        </ul>
+                    </div>
+
                     <div class="ec-block">
                         <span class="ec-label">{isEn ? 'THE FIRM' : 'LA FIRMA'}</span>
                         <p class="ec-firm">{isEn ? 'Fewer than ' : 'Menos de '}<span class="editorial ec-firm-num">8</span>{isEn ? ' clients a year' : ' clientes al año'}</p>
@@ -170,8 +182,10 @@ const contactSchema = {
 
                         <input type="hidden" name="form-name" value="contacto" />
                         <input type="hidden" name="tipo_negocio" id="field-tipo_negocio" />
+                        <input type="hidden" name="facturacion"  id="field-facturacion" />
                         <input type="hidden" name="urgencia"     id="field-urgencia" />
-                        <input type="hidden" name="presupuesto"  id="field-presupuesto" />
+                        <input type="hidden" name="b2b-tiempo"   id="field-b2b-tiempo" value="30" />
+                        <input type="hidden" name="dtc-cr"       id="field-dtc-cr" value="1" />
 
                         <!-- Progreso (Goal Gradient) -->
                         <div class="stepper-head">
@@ -233,11 +247,20 @@ const contactSchema = {
                                     <p class="dq-desc">{isEn ? 'Pick the one that best describes your model.' : 'Selecciona el que mejor describe tu modelo.'}</p>
                                 </div>
                                 <div class="dq-body">
-                                    <div class="q-chips" data-field="tipo_negocio">
+                                    <p class="dq-sublabel">{isEn ? 'OPERATION TYPE' : 'TIPO DE OPERACIÓN'}</p>
+                                    <div class="q-chips" data-field="tipo_negocio" data-noadvance>
                                         <button type="button" class="q-chip" data-value="dtc-ecommerce">{isEn ? 'DTC / Direct e-commerce' : 'DTC / E-commerce directo'}</button>
                                         <button type="button" class="q-chip" data-value="mayorista-b2b">{isEn ? 'Wholesale B2B' : 'Mayorista B2B'}</button>
                                         <button type="button" class="q-chip" data-value="ambos-canales">{isEn ? 'Both channels (DTC + B2B)' : 'Ambos canales (DTC + B2B)'}</button>
                                         <button type="button" class="q-chip" data-value="operacion-compleja">{isEn ? 'Complex enterprise operation' : 'Empresa con operación compleja'}</button>
+                                    </div>
+
+                                    <p class="dq-sublabel dq-sublabel-spaced">{isEn ? 'APPROXIMATE MONTHLY REVENUE' : 'FACTURACIÓN MENSUAL APROXIMADA'}</p>
+                                    <div class="q-chips" data-field="facturacion" data-noadvance>
+                                        <button type="button" class="q-chip" data-value="lt-500k">{isEn ? 'Under $500k MXN' : 'Menos de $500k MXN'}</button>
+                                        <button type="button" class="q-chip" data-value="500k-2m">$500k – $2M MXN</button>
+                                        <button type="button" class="q-chip" data-value="gt-2m">{isEn ? 'Over $2M MXN' : 'Más de $2M MXN'}</button>
+                                        <button type="button" class="q-chip" data-value="no-decir">{isEn ? 'Prefer not to say' : 'Prefiero no decirlo'}</button>
                                     </div>
                                 </div>
                             </div>
@@ -246,16 +269,111 @@ const contactSchema = {
                             <div class="dq-step" data-step="2">
                                 <span class="dq-index" aria-hidden="true">/03</span>
                                 <div class="dq-head">
-                                    <h3 class="dq-title">{isEn ? 'What do you need to solve?' : '¿Qué necesitas resolver?'}</h3>
-                                    <p class="dq-desc">{isEn ? 'Describe your operation today and what you need to work differently. The more concrete, the more useful the diagnosis.' : 'Describe tu operación hoy y qué necesitas que funcione diferente. Entre más concreto, más útil es el diagnóstico.'}</p>
+                                    <h3 class="dq-title">{isEn ? 'How much is the problem costing you?' : '¿Cuánto te está costando el problema?'}</h3>
+                                    <p class="dq-desc">{isEn ? 'An approximate estimate is enough — move the sliders. The formula is visible so the number is yours, not ours.' : 'Una estimación aproximada es suficiente — mueve los sliders. La fórmula es visible para que el número sea tuyo, no nuestro.'}</p>
                                 </div>
-                                <div class="dq-body">
-                                    <div class="sf-group">
-                                        <div class="input-wrapper">
-                                            <textarea id="problema" name="problema" rows="3" placeholder={isEn ? 'E.g. We process 200 B2B orders a month over WhatsApp. We want a portal where clients order on their own without going through the team...' : 'Ej: Tenemos 200 pedidos B2B al mes que se gestionan por WhatsApp. Queremos un portal donde los clientes pidan solos sin pasar por el equipo...'} required></textarea>
-                                            <div class="focus-border"></div>
+                                <div class="dq-body diag-body">
+
+                                    <!-- B2B calculator -->
+                                    <div class="diag-variant" data-variant="b2b" hidden>
+                                        <div class="calc-field">
+                                            <div class="calc-row">
+                                                <label for="b2b-pedidos">{isEn ? 'Orders per month' : 'Pedidos por mes'}</label>
+                                                <output id="b2b-pedidos-out" class="calc-out editorial">200</output>
+                                            </div>
+                                            <input type="range" id="b2b-pedidos" class="calc-range" min="10" max="500" step="10" value="200" />
+                                        </div>
+                                        <div class="calc-field">
+                                            <p class="calc-chiplabel">{isEn ? 'Manual handling time per order' : 'Tiempo de gestión manual por pedido'}</p>
+                                            <div class="q-chips calc-chips" data-field="b2b-tiempo" data-noadvance data-optional data-calc>
+                                                <button type="button" class="q-chip" data-value="15">15 min</button>
+                                                <button type="button" class="q-chip" data-value="30">30 min</button>
+                                                <button type="button" class="q-chip" data-value="60">{isEn ? '1 hour' : '1 hora'}</button>
+                                                <button type="button" class="q-chip" data-value="90">{isEn ? '1 hour +' : 'Más de 1 hora'}</button>
+                                            </div>
+                                        </div>
+                                        <div class="calc-field">
+                                            <div class="calc-row">
+                                                <label for="b2b-costohora">{isEn ? 'Commercial team hourly cost (MXN)' : 'Costo hora de tu equipo comercial (MXN)'}</label>
+                                                <output id="b2b-costohora-out" class="calc-out editorial">$180</output>
+                                            </div>
+                                            <input type="range" id="b2b-costohora" class="calc-range" min="80" max="300" step="10" value="180" />
+                                        </div>
+                                        <div class="diag-reveal" data-rev="b2b">
+                                            <span class="dr-eyebrow">{isEn ? 'OPERATION DIAGNOSIS — ESTIMATED RESULT' : 'DIAGNÓSTICO DE OPERACIÓN — RESULTADO ESTIMADO'}</span>
+                                            <p class="dr-cap">{isEn ? 'Monthly operating cost of manual handling' : 'Costo operativo mensual de la gestión manual'}</p>
+                                            <div class="dr-number" data-num="b2b">$0</div>
+                                            <p class="dr-formula" data-formula="b2b"></p>
+                                            <div class="dr-grid">
+                                                <div class="dr-cell"><span class="dr-cell-label">{isEn ? 'Orders / month' : 'Pedidos / mes'}</span><span class="dr-cell-val" data-cell="b2b-pedidos">200</span></div>
+                                                <div class="dr-cell"><span class="dr-cell-label">{isEn ? 'Time / order' : 'Tiempo / pedido'}</span><span class="dr-cell-val" data-cell="b2b-tiempo">30 min</span></div>
+                                                <div class="dr-cell"><span class="dr-cell-label">{isEn ? 'Team hourly cost' : 'Costo hora equipo'}</span><span class="dr-cell-val" data-cell="b2b-costo">$180</span></div>
+                                                <div class="dr-cell dr-cell-annual"><span class="dr-cell-label">{isEn ? 'Estimated annual cost' : 'Costo anual estimado'}</span><span class="dr-cell-val editorial" data-num-annual="b2b">$0</span></div>
+                                            </div>
+                                            <p class="dr-roi">{isEn ? 'What we build costs a fraction of that — typical year-1 ROI is 3×–5×. We work out the exact number with you on the call.' : 'Lo que construimos cuesta una fracción de eso — el ROI típico en año 1 es de 3× a 5×. El número exacto lo vemos juntos en la llamada.'}</p>
                                         </div>
                                     </div>
+
+                                    <!-- DTC calculator -->
+                                    <div class="diag-variant" data-variant="dtc" hidden>
+                                        <div class="calc-field">
+                                            <div class="calc-row">
+                                                <label for="dtc-visitas">{isEn ? 'Monthly store visits' : 'Visitas mensuales a la tienda'}</label>
+                                                <output id="dtc-visitas-out" class="calc-out editorial">20,000</output>
+                                            </div>
+                                            <input type="range" id="dtc-visitas" class="calc-range" min="2000" max="200000" step="1000" value="20000" />
+                                        </div>
+                                        <div class="calc-field">
+                                            <p class="calc-chiplabel">{isEn ? 'Current conversion rate' : 'Tasa de conversión actual'}</p>
+                                            <div class="q-chips calc-chips" data-field="dtc-cr" data-noadvance data-optional data-calc>
+                                                <button type="button" class="q-chip" data-value="0.5">0.5%</button>
+                                                <button type="button" class="q-chip" data-value="1">1%</button>
+                                                <button type="button" class="q-chip" data-value="1.5">1.5%</button>
+                                                <button type="button" class="q-chip" data-value="2">2%</button>
+                                                <button type="button" class="q-chip" data-value="2.5">{isEn ? '2% +' : 'Más de 2%'}</button>
+                                            </div>
+                                        </div>
+                                        <div class="calc-field">
+                                            <div class="calc-row">
+                                                <label for="dtc-ticket">{isEn ? 'Average order value (MXN)' : 'Ticket promedio (MXN)'}</label>
+                                                <output id="dtc-ticket-out" class="calc-out editorial">$600</output>
+                                            </div>
+                                            <input type="range" id="dtc-ticket" class="calc-range" min="150" max="5000" step="50" value="600" />
+                                        </div>
+                                        <div class="diag-reveal" data-rev="dtc">
+                                            <span class="dr-eyebrow">{isEn ? 'CONVERSION DIAGNOSIS — ESTIMATED RESULT' : 'DIAGNÓSTICO DE CONVERSIÓN — RESULTADO ESTIMADO'}</span>
+                                            <p class="dr-cap">{isEn ? 'Monthly revenue not captured (per +0.5 conversion points)' : 'Revenue mensual no capturado (por +0.5 puntos de conversión)'}</p>
+                                            <div class="dr-number" data-num="dtc">$0</div>
+                                            <p class="dr-formula" data-formula="dtc"></p>
+                                            <div class="dr-grid">
+                                                <div class="dr-cell"><span class="dr-cell-label">{isEn ? 'Monthly visits' : 'Visitas mensuales'}</span><span class="dr-cell-val" data-cell="dtc-visitas">20,000</span></div>
+                                                <div class="dr-cell"><span class="dr-cell-label">{isEn ? 'Current CR' : 'CR actual'}</span><span class="dr-cell-val" data-cell="dtc-cr">1%</span></div>
+                                                <div class="dr-cell"><span class="dr-cell-label">{isEn ? 'Average ticket' : 'Ticket promedio'}</span><span class="dr-cell-val" data-cell="dtc-ticket">$600</span></div>
+                                                <div class="dr-cell dr-cell-annual"><span class="dr-cell-label">{isEn ? 'Additional annual revenue' : 'Revenue adicional anual'}</span><span class="dr-cell-val editorial" data-num-annual="dtc">$0</span></div>
+                                            </div>
+                                            <p class="dr-roi">{isEn ? 'A CRO audit + flow rebuild recovers a meaningful share of that. We size the exact opportunity with you on the call.' : 'Una auditoría CRO + reconstrucción de flujo recupera una parte relevante de eso. El tamaño exacto de la oportunidad lo vemos juntos en la llamada.'}</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Combined total (both channels) -->
+                                    <div class="diag-total" data-variant="both-total" hidden>
+                                        <span class="dt-label">{isEn ? 'COMBINED IMPACT — BOTH CHANNELS' : 'IMPACTO COMBINADO — AMBOS CANALES'}</span>
+                                        <div class="dt-number editorial" data-num="total">$0</div>
+                                        <p class="dt-sub">{isEn ? 'per month · the sum of friction across both channels' : 'al mes · la suma de la fricción en ambos canales'}</p>
+                                    </div>
+
+                                    <!-- Complex operation -->
+                                    <div class="diag-variant" data-variant="compleja" hidden>
+                                        <div class="sf-group">
+                                            <label for="diag-compleja">{isEn ? 'Describe your operation and where the friction is' : 'Describe tu operación y dónde está la fricción'}</label>
+                                            <div class="input-wrapper">
+                                                <textarea id="diag-compleja" name="diag_compleja" rows="3" placeholder={isEn ? 'Systems, volumes, the process that’s breaking down…' : 'Sistemas, volúmenes, el proceso que se está rompiendo…'}></textarea>
+                                                <div class="focus-border"></div>
+                                            </div>
+                                        </div>
+                                        <p class="calc-note">{isEn ? 'We’ll size the value together on the diagnosis call.' : 'Dimensionamos el valor juntos en la llamada de diagnóstico.'}</p>
+                                    </div>
+
                                 </div>
                             </div>
 
@@ -264,7 +382,7 @@ const contactSchema = {
                                 <span class="dq-index" aria-hidden="true">/04</span>
                                 <div class="dq-head">
                                     <h3 class="dq-title">{isEn ? 'When do you need this solved?' : '¿Cuándo necesitas resolverlo?'}</h3>
-                                    <p class="dq-desc">{isEn ? 'We prioritize projects with a defined start. What’s your horizon?' : 'Priorizamos proyectos con arranque definido. ¿Cuál es tu horizonte?'}</p>
+                                    <p class="dq-desc">{isEn ? 'Now that you know the cost of waiting, what’s your horizon?' : 'Ahora que conoces el costo de esperar, ¿cuál es tu horizonte?'}</p>
                                 </div>
                                 <div class="dq-body">
                                     <div class="q-chips" data-field="urgencia">
@@ -279,18 +397,17 @@ const contactSchema = {
                                 <span class="dq-index" aria-hidden="true">/05</span>
                                 <div class="dq-head">
                                     <h3 class="dq-title">
-                                        {isEn ? 'Approximate budget' : 'Presupuesto aproximado'}
-                                        <span class="dq-cur">(MXN)</span>
+                                        {isEn ? 'One more detail.' : 'Un detalle más.'}
                                         <span class="dq-opt">{isEn ? 'OPTIONAL' : 'OPCIONAL'}</span>
                                     </h3>
-                                    <p class="dq-desc">{isEn ? 'No commitment. Helps us validate fit before a call.' : 'Sin compromiso. Nos ayuda a validar fit antes de una llamada.'}</p>
+                                    <p class="dq-desc">{isEn ? 'Anything that helps us prepare the diagnosis.' : 'Lo que nos ayude a preparar el diagnóstico.'}</p>
                                 </div>
                                 <div class="dq-body">
-                                    <div class="q-chips" data-field="presupuesto" data-optional>
-                                        <button type="button" class="q-chip" data-value="30k-80k-mxn">$30k – $80k MXN</button>
-                                        <button type="button" class="q-chip" data-value="80k-200k-mxn">$80k – $200k MXN</button>
-                                        <button type="button" class="q-chip" data-value="mas-200k-mxn">{isEn ? 'Over $200k MXN' : 'Más de $200k MXN'}</button>
-                                        <button type="button" class="q-chip" data-value="no-claro">{isEn ? 'Not sure yet' : 'No lo tengo claro'}</button>
+                                    <div class="sf-group">
+                                        <div class="input-wrapper">
+                                            <textarea id="notas" name="notas" rows="3" placeholder={isEn ? 'Anything else we should know to prepare your diagnosis?' : '¿Hay algo más que necesitamos saber para preparar el diagnóstico?'}></textarea>
+                                            <div class="focus-border"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -321,13 +438,13 @@ const contactSchema = {
                     <!-- SUCCESS STATE (Zeigarnik — cierra el ciclo) -->
                     <div class="diag-success" id="diagSuccess">
                         <div class="ds-inner">
-                            <p class="ds-eyebrow mono-font">{isEn ? 'APPLICATION RECEIVED' : 'SOLICITUD RECIBIDA'}</p>
+                            <p class="ds-eyebrow mono-font">{isEn ? 'DIAGNOSIS RECEIVED' : 'DIAGNÓSTICO RECIBIDO'}</p>
                             <h2 class="ds-headline">
-                                {isEn ? 'We’ll be in' : 'Nos ponemos'}
-                                <br/>{isEn ? 'touch soon.' : 'en contacto.'}
+                                {isEn ? 'We review' : 'Revisamos'}
+                                <br/>{isEn ? 'your operation.' : 'tu operación.'}
                             </h2>
                             <div class="ds-rule"></div>
-                            <p class="ds-sub">{isEn ? 'A real person reads every application. We’ll get back to you within 24 hours.' : 'Una persona real lee cada solicitud. Te respondemos en menos de 24 horas.'}</p>
+                            <p class="ds-sub">{isEn ? 'We analyze the numbers you shared before replying. If there’s a fit with what we build, we reach out in under 24h with an initial assessment — no pitch, no generic proposal.' : 'Analizamos los números que nos compartiste antes de responder. Si hay fit con lo que construimos, te contactamos en menos de 24h con una evaluación inicial — sin pitch, sin propuesta genérica.'}</p>
 
                             <div class="ds-next">
                                 <div class="ds-next-col">
@@ -345,6 +462,7 @@ const contactSchema = {
                                     </ul>
                                 </div>
                             </div>
+                            <p class="ds-close">{isEn ? 'The projects we work with generate 3×–8× ROI in the first year. If yours has that potential, we’ll see it in the numbers.' : 'Los proyectos con los que trabajamos generan entre 3× y 8× de ROI en el primer año. Si el tuyo tiene ese potencial, lo vamos a ver en los números.'}</p>
                         </div>
                     </div>
                 </div>
@@ -776,6 +894,91 @@ const contactSchema = {
     .ds-next-no li::before { content: '✕'; color: #c4495a; }
 
     /* ==========================================================
+       STEP 02 — sublabels de grupo
+       ========================================================== */
+    .dq-sublabel { font-family: var(--font-sans); font-size: 0.58rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: #b0bcc8; margin: 0; }
+    .dq-sublabel-spaced { margin-top: 0.6rem; }
+
+    /* ==========================================================
+       SIDEBAR — METODOLOGÍA + RANGOS (reveal tras paso 03)
+       ========================================================== */
+    .ec-pricing { gap: 0.7rem; }
+    .ec-pricing.is-shown { animation: ec-pricing-in 0.6s var(--ease-smooth) both; }
+    @keyframes ec-pricing-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    .ec-method-text { margin: 0; font-size: 0.85rem; line-height: 1.55; color: #5a677a; }
+    .ec-ranges-label { margin-top: 0.6rem; }
+    .ec-ranges { list-style: none; margin: 0.1rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+    .ec-ranges li { display: flex; align-items: baseline; justify-content: space-between; gap: 0.8rem; font-size: 0.85rem; color: #0a0e1a; }
+    .ec-ranges li span:first-child { color: #5a677a; }
+    .ec-ranges li .editorial { font-size: 1rem; color: var(--color-blue-deep); white-space: nowrap; }
+
+    /* ==========================================================
+       STEP 03 — CALCULADORA + REVEAL
+       ========================================================== */
+    .diag-body { gap: 0; }
+    .diag-variant { display: none; flex-direction: column; gap: 1.9rem; }
+    .diag-variant.is-shown { display: flex; }
+
+    .calc-field { display: flex; flex-direction: column; gap: 1rem; }
+    .calc-row { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+    .calc-row label { font-family: var(--font-sans); font-size: 0.58rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: #8895a7; }
+    .calc-out { font-size: 1.5rem; line-height: 1; color: var(--color-blue-deep); letter-spacing: -0.5px; }
+    .calc-chiplabel { font-family: var(--font-sans); font-size: 0.58rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: #8895a7; margin: 0; }
+    .calc-chips { gap: 0.55rem; }
+    .calc-chips .q-chip { padding: 9px 16px; }
+    .calc-note { font-size: 0.78rem; color: #9aa6b2; margin: 0; line-height: 1.5; }
+
+    /* Range slider (scoped — el input vive en el template, lleva data-astro-cid) */
+    .calc-range {
+        -webkit-appearance: none; appearance: none;
+        width: 100%; height: 3px; border-radius: 100px; outline: none; cursor: pointer;
+        background: linear-gradient(to right, var(--color-blue-deep) 0%, var(--color-blue-deep) var(--fill, 40%), rgba(10,25,47,0.1) var(--fill, 40%), rgba(10,25,47,0.1) 100%);
+    }
+    .calc-range::-webkit-slider-thumb {
+        -webkit-appearance: none; appearance: none;
+        width: 22px; height: 22px; border-radius: 50%; background: #ffffff; cursor: pointer;
+        border: 1.5px solid var(--color-blue-deep);
+        box-shadow: 0 2px 8px rgba(10,25,47,0.25);
+        transition: transform 0.2s var(--ease-spring), box-shadow 0.2s ease;
+    }
+    .calc-range::-webkit-slider-thumb:hover { transform: scale(1.12); box-shadow: 0 4px 14px rgba(10,25,47,0.32); }
+    .calc-range:active::-webkit-slider-thumb { transform: scale(1.05); }
+    .calc-range::-moz-range-thumb {
+        width: 22px; height: 22px; border-radius: 50%; background: #ffffff; cursor: pointer;
+        border: 1.5px solid var(--color-blue-deep); box-shadow: 0 2px 8px rgba(10,25,47,0.25);
+    }
+    .calc-range::-moz-range-track { height: 3px; border-radius: 100px; background: transparent; }
+
+    /* Reveal box — el pico emocional del formulario */
+    .diag-reveal {
+        position: relative; overflow: hidden;
+        border-radius: 20px; padding: 1.9rem 1.8rem;
+        background: radial-gradient(ellipse at 18% 0%, #112240 0%, #0a192f 62%, #050b14 100%);
+        box-shadow: 0 22px 50px -22px rgba(10,25,47,0.5);
+        display: flex; flex-direction: column; gap: 0.55rem;
+    }
+    .dr-eyebrow { font-family: var(--font-sans); font-size: 0.56rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.42); }
+    .dr-cap { margin: 0.2rem 0 0; font-size: 0.92rem; color: rgba(255,255,255,0.78); line-height: 1.4; }
+    .dr-number { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: clamp(2.6rem, 6vw, 3.6rem); line-height: 1; color: #ffffff; letter-spacing: -1px; }
+    .dr-formula { margin: 0.1rem 0 0; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: rgba(255,255,255,0.45); line-height: 1.4; }
+    .dr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem 1.4rem; margin-top: 1.1rem; padding-top: 1.1rem; border-top: 1px solid rgba(255,255,255,0.1); }
+    .dr-cell { display: flex; flex-direction: column; gap: 0.25rem; }
+    .dr-cell-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+    .dr-cell-val { font-size: 1rem; font-weight: 600; color: #ffffff; }
+    .dr-cell-val.editorial { font-size: 1.2rem; color: #ffffff; }
+    .dr-cell-annual .dr-cell-label { color: rgba(255,255,255,0.55); }
+    .dr-roi { margin: 1.1rem 0 0; font-size: 0.85rem; line-height: 1.6; color: rgba(255,255,255,0.7); padding-top: 1.1rem; border-top: 1px solid rgba(255,255,255,0.1); }
+
+    /* Total combinado (ambos canales) */
+    .diag-total { display: none; flex-direction: column; gap: 0.35rem; margin-top: 1.9rem; padding: 1.4rem 1.6rem; border-radius: 16px; background: #f4f6f9; border: 1px solid rgba(10,25,47,0.06); }
+    .diag-total.is-shown { display: flex; }
+    .dt-label { font-family: var(--font-sans); font-size: 0.56rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: #8895a7; }
+    .dt-number { font-size: clamp(2rem, 4.5vw, 2.8rem); line-height: 1; color: var(--color-blue-deep); letter-spacing: -1px; }
+    .dt-sub { margin: 0; font-size: 0.82rem; color: #8895a7; }
+
+    .ds-close { font-size: 0.88rem; color: #5a677a; line-height: 1.65; margin: 1.6rem 0 0; max-width: 480px; padding-top: 1.4rem; border-top: 1px solid var(--color-border); }
+
+    /* ==========================================================
        RESPONSIVO
        ========================================================== */
     @media (max-width: 1024px) {
@@ -817,6 +1020,11 @@ const contactSchema = {
         .step-back span { display: none; }
 
         .ds-next { grid-template-columns: 1fr; gap: 1.75rem; }
+
+        .diag-reveal { padding: 1.5rem 1.3rem; }
+        .dr-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem 1rem; }
+        .calc-out { font-size: 1.3rem; }
+        .ec-ranges li { font-size: 0.82rem; }
     }
 
     @media (max-width: 480px) {
@@ -986,6 +1194,7 @@ const contactSchema = {
             }
             if (backBtn) backBtn.classList.toggle('is-hidden', current === 0);
             if (nextText) nextText.textContent = (current === total - 1) ? T.send : T.continue;
+            if (typeof onStepChange === 'function') onStepChange(current);
         }
 
         function clearError() { if (errorEl) errorEl.classList.remove('show'); }
@@ -1088,43 +1297,214 @@ const contactSchema = {
                     group.classList.remove('chips-invalid');
                     clearError();
 
-                    var hidden = document.getElementById('field-' + group.getAttribute('data-field'));
-                    if (hidden) hidden.value = chip.getAttribute('data-value');
+                    var field = group.getAttribute('data-field');
+                    var value = chip.getAttribute('data-value');
+                    var hidden = document.getElementById('field-' + field);
+                    if (hidden) hidden.value = value;
 
+                    // Ramificación del diagnóstico al elegir tipo de operación
+                    if (field === 'tipo_negocio') configureBranch(value);
+                    // Recalcular el reveal al cambiar un dato del diagnóstico
+                    if (group.hasAttribute('data-calc')) recalc(false);
+
+                    // Auto-avance solo en grupos simples (no en step 02 ni en los del cálculo)
                     var stepEl = chip.closest('.dq-step');
                     var idx = steps.indexOf(stepEl);
-                    if (idx === current && idx < total - 1) {
+                    if (!group.hasAttribute('data-noadvance') && idx === current && idx < total - 1) {
                         window.setTimeout(function () { goTo(current + 1); }, 420);
                     }
                 });
             });
         });
 
-        /* Teclado en pasos de chips: 1–9 seleccionan, Enter avanza */
+        /* Teclado en pasos de chips: 1–9 seleccionan (si hay un solo grupo visible), Enter avanza */
+        function visibleGroups(stepEl) {
+            if (!stepEl) return [];
+            return Array.prototype.slice.call(stepEl.querySelectorAll('.q-chips')).filter(function (g) {
+                return g.offsetParent !== null; // excluye grupos dentro de variantes ocultas
+            });
+        }
         document.addEventListener('keydown', function (ev) {
             if (transitioning) return;
             var stepEl = steps[current];
-            var group = stepEl && stepEl.querySelector('.q-chips');
-            if (!group) return; // pasos de texto: el Enter lo maneja el input
+            var groups = visibleGroups(stepEl);
+            var ae = document.activeElement;
             if (ev.key === 'Enter') {
-                // si hay un botón enfocado (chip o "Continuar"), deja que él maneje Enter
-                if (document.activeElement && document.activeElement.tagName === 'BUTTON') return;
+                // En pasos de texto el Enter lo maneja el listener por-input; aquí solo pasos de chips
+                if (ae && (ae.tagName === 'BUTTON' || ae.tagName === 'TEXTAREA' || ae.tagName === 'INPUT')) return;
+                if (!groups.length) return;
                 ev.preventDefault(); next(); return;
             }
+            if (groups.length !== 1) return; // ambiguo (step 02) o sin grupos
+            if (ae && (ae.tagName === 'TEXTAREA' || ae.tagName === 'INPUT')) return;
             var n = parseInt(ev.key, 10);
             if (!isNaN(n) && n >= 1) {
-                var chips = group.querySelectorAll('.q-chip');
+                var chips = groups[0].querySelectorAll('.q-chip');
                 if (n <= chips.length) { ev.preventDefault(); chips[n - 1].click(); }
             }
         });
 
-        /* 5. TEXTAREA AUTO-RESIZE */
-        var textarea = document.getElementById('problema');
-        if (textarea) {
-            textarea.addEventListener('input', function () {
+        /* 5. TEXTAREA AUTO-RESIZE (todas) */
+        document.querySelectorAll('.diag-form textarea').forEach(function (ta) {
+            ta.addEventListener('input', function () {
                 this.style.height = 'auto';
                 this.style.height = this.scrollHeight + 'px';
             });
+        });
+
+        /* 5b. DIAGNÓSTICO DE VALOR — calculadora ramificada + reveal */
+        var isEnCalc = isEn;
+        function fmtMXN(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+        function fmtNum(n) { return Math.round(n).toLocaleString('en-US'); }
+        function tiempoLabel(min) {
+            if (min >= 90) return isEnCalc ? '1 h +' : '+1 h';
+            if (min >= 60) return '1 h';
+            return min + ' min';
+        }
+        function crLabel(cr) { return (cr >= 2.5 ? '2%+' : (cr + '%')); }
+
+        var DTC_UPLIFT = 0.005; // +0.5 puntos porcentuales (defendible y fijo)
+
+        var elB2bPedidos   = document.getElementById('b2b-pedidos');
+        var elB2bCosto     = document.getElementById('b2b-costohora');
+        var elDtcVisitas   = document.getElementById('dtc-visitas');
+        var elDtcTicket    = document.getElementById('dtc-ticket');
+        var fldTiempo      = document.getElementById('field-b2b-tiempo');
+        var fldCr          = document.getElementById('field-dtc-cr');
+
+        function setFill(slider) {
+            if (!slider) return;
+            var min = +slider.min, max = +slider.max, val = +slider.value;
+            var pct = max > min ? ((val - min) / (max - min)) * 100 : 0;
+            slider.style.setProperty('--fill', pct + '%');
+        }
+
+        function setCell(name, text) {
+            var el = document.querySelector('[data-cell="' + name + '"]');
+            if (el) el.textContent = text;
+        }
+        function setText(sel, text) { var el = document.querySelector(sel); if (el) el.textContent = text; }
+
+        // count-up con easeOutCubic
+        var reducedCalc = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        function animateValue(el, to, formatter) {
+            if (!el) return;
+            if (reducedCalc) { el.textContent = formatter(to); return; }
+            var from = 0;
+            var start = null;
+            var dur = 1100;
+            function step(ts) {
+                if (start === null) start = ts;
+                var p = Math.min((ts - start) / dur, 1);
+                var eased = 1 - Math.pow(1 - p, 3);
+                el.textContent = formatter(from + (to - from) * eased);
+                if (p < 1) requestAnimationFrame(step);
+                else el.textContent = formatter(to);
+            }
+            requestAnimationFrame(step);
+        }
+
+        function computeB2b() {
+            var pedidos = elB2bPedidos ? +elB2bPedidos.value : 0;
+            var costo   = elB2bCosto ? +elB2bCosto.value : 0;
+            var tiempo  = fldTiempo ? +fldTiempo.value : 30;
+            var horas   = tiempo / 60;
+            return { mensual: pedidos * horas * costo, pedidos: pedidos, costo: costo, tiempo: tiempo, horas: horas };
+        }
+        function computeDtc() {
+            var visitas = elDtcVisitas ? +elDtcVisitas.value : 0;
+            var ticket  = elDtcTicket ? +elDtcTicket.value : 0;
+            var cr      = fldCr ? +fldCr.value : 1;
+            return { mensual: visitas * DTC_UPLIFT * ticket, visitas: visitas, ticket: ticket, cr: cr };
+        }
+
+        function recalc(animate) {
+            var branch = (document.getElementById('field-tipo_negocio') || {}).value || '';
+            var showB2b = branch === 'mayorista-b2b' || branch === 'ambos-canales';
+            var showDtc = branch === 'dtc-ecommerce' || branch === 'ambos-canales';
+            var total = 0;
+
+            if (showB2b) {
+                var b = computeB2b();
+                total += b.mensual;
+                setText('[data-formula="b2b"]', b.pedidos + ' ' + (isEnCalc ? 'orders' : 'pedidos') + ' × ' + b.horas.toFixed(2) + ' h × ' + fmtMXN(b.costo) + '/h');
+                setCell('b2b-pedidos', fmtNum(b.pedidos));
+                setCell('b2b-tiempo', tiempoLabel(b.tiempo));
+                setCell('b2b-costo', fmtMXN(b.costo));
+                var nB2b = document.querySelector('[data-num="b2b"]');
+                var aB2b = document.querySelector('[data-num-annual="b2b"]');
+                if (animate) { animateValue(nB2b, b.mensual, fmtMXN); animateValue(aB2b, b.mensual * 12, fmtMXN); }
+                else { if (nB2b) nB2b.textContent = fmtMXN(b.mensual); if (aB2b) aB2b.textContent = fmtMXN(b.mensual * 12); }
+            }
+            if (showDtc) {
+                var d = computeDtc();
+                total += d.mensual;
+                setText('[data-formula="dtc"]', fmtNum(d.visitas) + ' ' + (isEnCalc ? 'visits' : 'visitas') + ' × 0.5% × ' + fmtMXN(d.ticket));
+                setCell('dtc-visitas', fmtNum(d.visitas));
+                setCell('dtc-cr', crLabel(d.cr));
+                setCell('dtc-ticket', fmtMXN(d.ticket));
+                var nDtc = document.querySelector('[data-num="dtc"]');
+                var aDtc = document.querySelector('[data-num-annual="dtc"]');
+                if (animate) { animateValue(nDtc, d.mensual, fmtMXN); animateValue(aDtc, d.mensual * 12, fmtMXN); }
+                else { if (nDtc) nDtc.textContent = fmtMXN(d.mensual); if (aDtc) aDtc.textContent = fmtMXN(d.mensual * 12); }
+            }
+            if (branch === 'ambos-canales') {
+                var nTot = document.querySelector('[data-num="total"]');
+                if (animate) animateValue(nTot, total, fmtMXN);
+                else if (nTot) nTot.textContent = fmtMXN(total);
+            }
+        }
+
+        function configureBranch(value) {
+            document.querySelectorAll('.diag-variant').forEach(function (v) { v.classList.remove('is-shown'); });
+            var totalEl = document.querySelector('.diag-total');
+            if (totalEl) totalEl.classList.remove('is-shown');
+
+            function show(variant) {
+                var el = document.querySelector('.diag-variant[data-variant="' + variant + '"]');
+                if (el) el.classList.add('is-shown');
+            }
+            if (value === 'mayorista-b2b') show('b2b');
+            else if (value === 'dtc-ecommerce') show('dtc');
+            else if (value === 'ambos-canales') { show('b2b'); show('dtc'); if (totalEl) totalEl.classList.add('is-shown'); }
+            else if (value === 'operacion-compleja') show('compleja');
+
+            recalc(false);
+        }
+
+        // Sliders → output + fill + recalc
+        [elB2bPedidos, elB2bCosto, elDtcVisitas, elDtcTicket].forEach(function (sl) {
+            if (!sl) return;
+            setFill(sl);
+            sl.addEventListener('input', function () {
+                var out = document.getElementById(sl.id + '-out');
+                if (out) {
+                    if (sl.id === 'b2b-pedidos') out.textContent = fmtNum(+sl.value);
+                    else if (sl.id === 'dtc-visitas') out.textContent = fmtNum(+sl.value);
+                    else out.textContent = fmtMXN(+sl.value);
+                }
+                setFill(sl);
+                recalc(false);
+            });
+        });
+
+        // Marcar como seleccionados los chips por defecto del cálculo (Riesgo 1: defaults razonables)
+        function markDefaultCalcChip(field, value) {
+            var group = document.querySelector('.q-chips[data-field="' + field + '"]');
+            if (!group) return;
+            var chip = group.querySelector('.q-chip[data-value="' + value + '"]');
+            if (chip) chip.classList.add('selected');
+        }
+        markDefaultCalcChip('b2b-tiempo', '30');
+        markDefaultCalcChip('dtc-cr', '1');
+
+        var pricingShown = false;
+        function onStepChange(idx) {
+            if (idx === 2) recalc(true);          // al entrar al diagnóstico → count-up
+            if (idx >= 3 && !pricingShown) {       // tras el paso 03 → revelar metodología + rangos
+                var pricing = document.getElementById('ec-pricing');
+                if (pricing) { pricing.hidden = false; pricing.classList.add('is-shown'); pricingShown = true; }
+            }
         }
 
         /* 6. SUBMIT → MAKE WEBHOOK */
@@ -1138,14 +1518,27 @@ const contactSchema = {
             var whatsappNumber = '';
             if (itiInstance) { try { whatsappNumber = itiInstance.getNumber(); } catch (e) {} }
 
+            var branch = (document.getElementById('field-tipo_negocio') || {}).value || '';
+            var diagnostico = {};
+            if (branch === 'mayorista-b2b' || branch === 'ambos-canales') {
+                var b = computeB2b();
+                diagnostico.b2b = { pedidos_mes: b.pedidos, minutos_pedido: b.tiempo, costo_hora: b.costo, costo_mensual: Math.round(b.mensual), costo_anual: Math.round(b.mensual * 12) };
+            }
+            if (branch === 'dtc-ecommerce' || branch === 'ambos-canales') {
+                var d = computeDtc();
+                diagnostico.dtc = { visitas_mes: d.visitas, cr_actual: d.cr, ticket_promedio: d.ticket, uplift_pts: 0.5, revenue_mensual: Math.round(d.mensual), revenue_anual: Math.round(d.mensual * 12) };
+            }
+
             var payload = {
                 nombre:       (document.getElementById('name') || {}).value || '',
                 email:        (document.getElementById('email') || {}).value || '',
                 whatsapp:     whatsappNumber,
-                tipo_negocio: (document.getElementById('field-tipo_negocio') || {}).value || '',
-                problema:     (document.getElementById('problema') || {}).value || '',
+                tipo_negocio: branch,
+                facturacion:  (document.getElementById('field-facturacion') || {}).value || '',
                 urgencia:     (document.getElementById('field-urgencia') || {}).value || '',
-                presupuesto:  (document.getElementById('field-presupuesto') || {}).value || '',
+                notas:        (document.getElementById('notas') || {}).value || '',
+                diag_compleja:(document.getElementById('diag-compleja') || {}).value || '',
+                diagnostico:  diagnostico,
                 timestamp:    new Date().toISOString(),
                 fuente:       'flouvia.com/contacto',
             };
@@ -1173,6 +1566,7 @@ const contactSchema = {
                     diagSuccess.querySelector('.ds-rule'),
                     diagSuccess.querySelector('.ds-sub'),
                     diagSuccess.querySelector('.ds-next'),
+                    diagSuccess.querySelector('.ds-close'),
                 ];
 
                 els.forEach(function (el) {
@@ -1183,7 +1577,7 @@ const contactSchema = {
 
                 diagSuccess.classList.add('visible');
 
-                var delays = [0, 80, 200, 300, 380];
+                var delays = [0, 80, 200, 300, 380, 460];
                 els.forEach(function (el, i) {
                     if (!el) return;
                     window.setTimeout(function () {
