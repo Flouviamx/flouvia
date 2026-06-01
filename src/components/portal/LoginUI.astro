@@ -283,17 +283,11 @@ const redirectPath = isEn ? '/en/dashboard' : '/dashboard';
         border-color: rgba(10,25,47,0.35) !important;
         transform: translateY(-2px) !important;
     }
-    /* Evitar que Clerk recorte el texto/ícono del botón (su default trae
-       overflow:hidden + text-overflow:ellipsis → "Continuar con Go…") */
-    .form-mount .cl-socialButtonsBlockButton {
-        overflow: visible !important;
-        white-space: nowrap !important;
-    }
-    .form-mount .cl-socialButtonsBlockButtonText {
-        overflow: visible !important;
-        text-overflow: clip !important;
-        max-width: none !important;
-    }
+    /* Ocultar el badge "Last used" que Clerk pega en la esquina del botón
+       (se salía del borde y se veía cortado) */
+    .form-mount .cl-socialButtonsBlockButton .cl-badge,
+    .form-mount .cl-socialButtonsBlockButtonText__base + .cl-badge,
+    .form-mount .cl-badge { display: none !important; }
 
     /* Divisor "o" — hairline difuminada */
     .form-mount .cl-dividerRow { margin: 0.4rem 0; }
