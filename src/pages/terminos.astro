@@ -4,7 +4,7 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 
-const updated = '1 de mayo de 2026';
+const updated = '8 de junio de 2026';
 ---
 
 <Layout title="Términos de Servicio — Flouvia" description="Términos y condiciones de servicio de Flouvia.">
@@ -14,9 +14,13 @@ const updated = '1 de mayo de 2026';
 
     <section class="legal-hero">
       <div class="container">
-        <p class="legal-eyebrow">DOCUMENTO LEGAL</p>
-        <h1 class="legal-title">Términos de <span class="editorial">Servicio.</span></h1>
-        <div class="legal-meta">
+        <div class="legal-status hero-anim">
+          <span class="legal-status-dot" aria-hidden="true"></span>
+          <span>DOCUMENTO VIGENTE</span>
+        </div>
+        <p class="legal-eyebrow hero-anim">DOCUMENTO LEGAL</p>
+        <h1 class="legal-title hero-anim">Términos de Servicio.</h1>
+        <div class="legal-meta hero-anim">
           <span>Flouvia Boutique, S. de R.L. de C.V.</span>
           <span class="sep">·</span>
           <span>Última actualización: {updated}</span>
@@ -165,14 +169,21 @@ const updated = '1 de mayo de 2026';
   body { background: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); }
   .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
   .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+  /* Gate anti-FOUC: el script inline del Layout añade .js-anim a <html> antes
+     del primer paint (salvo reduced-motion). Sin JS → todo visible. */
+  .js-anim .hero-anim { opacity: 0; }
 </style>
 
 <style>
 .legal-page { width: 100%; overflow-x: clip; }
 .legal-hero { padding: 13rem 0 5rem; background: var(--color-bg); border-bottom: 1px solid var(--color-border); }
-.legal-eyebrow { font-size: 0.6rem; font-weight: 800; letter-spacing: 4px; color: #aaa; text-transform: uppercase; margin: 0 0 1.5rem; opacity: 0; }
-.legal-title { font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 800; letter-spacing: -3px; line-height: 0.95; margin: 0 0 2.5rem; color: var(--color-text); opacity: 0; }
-.legal-meta { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; font-size: 0.8rem; color: var(--color-text-muted); font-weight: 500; opacity: 0; }
+.legal-status { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 100px; border: 1px solid rgba(16,185,129,0.22); background: rgba(16,185,129,0.04); width: max-content; margin-bottom: 1.6rem; }
+.legal-status span { font-size: 0.7rem; color: #059669; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.legal-status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: legal-status-pulse 2s infinite; }
+@keyframes legal-status-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+.legal-eyebrow { font-size: 0.6rem; font-weight: 800; letter-spacing: 4px; color: #aaa; text-transform: uppercase; margin: 0 0 1.5rem; }
+.legal-title { font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 800; letter-spacing: -3px; line-height: 0.95; margin: 0 0 2.5rem; color: var(--color-text); }
+.legal-meta { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; font-size: 0.8rem; color: var(--color-text-muted); font-weight: 500; }
 .legal-meta .sep { opacity: 0.3; }
 .lang-switch-link { color: var(--color-blue-deep); text-decoration: none; font-weight: 700; transition: opacity .2s; }
 .lang-switch-link:hover { opacity: 0.7; }
@@ -190,7 +201,7 @@ const updated = '1 de mayo de 2026';
 .legal-section { padding-bottom: 3rem; margin-bottom: 3rem; border-bottom: 1px solid var(--color-border); }
 .legal-section:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
 .section-title { display: flex; align-items: baseline; gap: 1rem; font-size: 1.3rem; font-weight: 700; letter-spacing: -0.5px; color: var(--color-text); margin: 0 0 1.5rem; }
-.section-num { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; color: #bbb; letter-spacing: 1px; flex-shrink: 0; }
+.section-num { font-family: var(--font-serif); font-style: italic; font-size: 1.1rem; font-weight: 400; color: #bbb; letter-spacing: 0; flex-shrink: 0; line-height: 1; }
 .legal-section p { font-size: 0.97rem; line-height: 1.8; color: #333; margin: 0 0 1rem; }
 .legal-section p:last-child { margin-bottom: 0; }
 .legal-section a { color: var(--color-blue-deep); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(10,25,47,.2); transition: border-color .2s; }
@@ -211,15 +222,23 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 document.addEventListener('DOMContentLoaded', () => {
-  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-  gsap.set('.legal-title', { opacity: 0 });
-  tl.to('.legal-eyebrow', { opacity: 1, duration: 0.8 }, 0.1);
-  tl.from('.legal-title', { y: 30, duration: 1.0 }, 0.2);
-  tl.to('.legal-title',   { opacity: 1, duration: 0.1 }, 0.2);
-  tl.to('.legal-meta',    { opacity: 1, duration: 0.7 }, 0.6);
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  gsap.to('.legal-index',   { opacity: 1, duration: 0.9, ease: 'expo.out', scrollTrigger: { trigger: '.legal-body', start: 'top 85%' } });
-  gsap.to('.legal-content', { opacity: 1, duration: 1.0, ease: 'expo.out', scrollTrigger: { trigger: '.legal-body', start: 'top 85%' } });
+  if (reduced) {
+    gsap.set('.legal-index, .legal-content', { opacity: 1 });
+  } else {
+    const heroAnim = gsap.utils.toArray<HTMLElement>('.hero-anim');
+    if (heroAnim.length) {
+      gsap.set(heroAnim, { opacity: 0, y: 14 });
+      gsap.timeline({ defaults: { ease: 'power2.out' } })
+        .to('.legal-status',  { opacity: 1, y: 0, duration: 0.9 }, 0)
+        .to('.legal-eyebrow', { opacity: 1, y: 0, duration: 0.9 }, 0.08)
+        .to('.legal-title',   { opacity: 1, y: 0, duration: 1.0 }, 0.18)
+        .to('.legal-meta',    { opacity: 1, y: 0, duration: 0.9 }, 0.34);
+    }
+    gsap.to('.legal-index',   { opacity: 1, duration: 0.9, ease: 'power2.out', scrollTrigger: { trigger: '.legal-body', start: 'top 85%', once: true } });
+    gsap.to('.legal-content', { opacity: 1, duration: 1.0, ease: 'power2.out', scrollTrigger: { trigger: '.legal-body', start: 'top 85%', once: true } });
+  }
 
   const sections = document.querySelectorAll<HTMLElement>('.legal-section');
   const links    = document.querySelectorAll<HTMLElement>('.index-link');

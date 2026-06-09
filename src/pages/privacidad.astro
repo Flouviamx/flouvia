@@ -4,7 +4,7 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 
-const updated = '1 de mayo de 2026';
+const updated = '8 de junio de 2026';
 ---
 
 <Layout title="Aviso de Privacidad — Flouvia" description="Aviso de privacidad de Flouvia: cómo recolectamos, tratamos y protegemos tus datos personales.">
@@ -14,9 +14,13 @@ const updated = '1 de mayo de 2026';
 
     <section class="legal-hero">
       <div class="container">
-        <p class="legal-eyebrow">DOCUMENTO LEGAL</p>
-        <h1 class="legal-title">Aviso de <span class="editorial">Privacidad.</span></h1>
-        <div class="legal-meta">
+        <div class="legal-status hero-anim">
+          <span class="legal-status-dot" aria-hidden="true"></span>
+          <span>DOCUMENTO VIGENTE</span>
+        </div>
+        <p class="legal-eyebrow hero-anim">DOCUMENTO LEGAL</p>
+        <h1 class="legal-title hero-anim">Aviso de Privacidad.</h1>
+        <div class="legal-meta hero-anim">
           <span>Flouvia Boutique, S. de R.L. de C.V.</span>
           <span class="sep">·</span>
           <span>Última actualización: {updated}</span>
@@ -37,10 +41,11 @@ const updated = '1 de mayo de 2026';
             <a href="#datos" class="index-link">2. Datos personales</a>
             <a href="#finalidades" class="index-link">3. Finalidades</a>
             <a href="#transferencias" class="index-link">4. Transferencias</a>
-            <a href="#arco" class="index-link">5. Derechos ARCO</a>
-            <a href="#cookies" class="index-link">6. Cookies</a>
-            <a href="#cambios" class="index-link">7. Cambios</a>
-            <a href="#contacto" class="index-link">8. Contacto</a>
+            <a href="#shopify" class="index-link">5. Shopify Partner y apps</a>
+            <a href="#arco" class="index-link">6. Derechos ARCO</a>
+            <a href="#cookies" class="index-link">7. Cookies</a>
+            <a href="#cambios" class="index-link">8. Cambios</a>
+            <a href="#contacto" class="index-link">9. Contacto</a>
           </nav>
         </aside>
 
@@ -92,13 +97,31 @@ const updated = '1 de mayo de 2026';
               <li><strong>Clerk Inc.</strong> — gestión de autenticación del portal de clientes.</li>
               <li><strong>Supabase Inc.</strong> — almacenamiento de datos del proyecto.</li>
               <li><strong>Stripe Inc.</strong> — procesamiento de pagos.</li>
+              <li><strong>Shopify Inc.</strong> — plataforma de comercio sobre la que desarrollamos e instalamos aplicaciones e integraciones (ver sección 5).</li>
               <li><strong>Google LLC</strong> — servicios de analítica (Google Analytics 4) y comunicación.</li>
             </ul>
             <p>Dichas transferencias se realizan bajo contratos que garantizan el mismo nivel de protección exigido por la LFPDPPP. No vendemos ni cedemos sus datos a terceros con fines comerciales propios.</p>
           </div>
 
+          <div class="legal-section" id="shopify">
+            <h2 class="section-title"><span class="section-num">05</span>Shopify Partner, Aplicaciones y Datos de Tiendas</h2>
+            <p>Flouvia es <strong>Shopify Partner</strong> y desarrolla, instala y mantiene aplicaciones e integraciones sobre la plataforma Shopify y Shopify Plus. En el marco de estos servicios, Flouvia puede acceder a datos alojados en la tienda del Cliente a través de las APIs de Shopify, incluyendo catálogo de productos, pedidos, inventario y —cuando el servicio lo requiera— <strong>datos de clientes protegidos (Protected Customer Data)</strong> del comercio.</p>
+            <p><strong>Rol de Flouvia:</strong> respecto de los datos de la tienda y de los clientes finales del comercio, Flouvia actúa como <strong>encargado del tratamiento (data processor)</strong> por cuenta y bajo las instrucciones del Cliente, quien conserva el carácter de responsable (controller) de dichos datos. Flouvia los trata únicamente con la finalidad de prestar el servicio o proveer la funcionalidad de la aplicación contratada.</p>
+            <p>En el tratamiento de estos datos, Flouvia se obliga a:</p>
+            <ul class="legal-list">
+              <li>Cumplir el <strong>Acuerdo del Programa de Partners de Shopify</strong>, los <strong>Términos de la API de Shopify</strong> y la <strong>Política de Datos de Clientes Protegidos (Protected Customer Data)</strong>.</li>
+              <li>Acceder y procesar únicamente los datos estrictamente necesarios para la funcionalidad contratada (principio de minimización de datos).</li>
+              <li>No vender, ceder ni utilizar los datos de la tienda o de los clientes finales para fines propios, publicidad o entrenamiento de modelos de inteligencia artificial.</li>
+              <li>Aplicar medidas de seguridad razonables (cifrado en tránsito y en reposo, controles de acceso) acordes con la sensibilidad de los datos.</li>
+              <li>Conservar los datos solo durante el tiempo necesario y <strong>eliminarlos tras la desinstalación de la aplicación</strong> o a solicitud del Cliente, salvo obligación legal de conservación.</li>
+              <li>Notificar al Cliente sin demora indebida ante cualquier incidente de seguridad que afecte a sus datos.</li>
+            </ul>
+            <p>El tratamiento de datos personales de clientes finales ubicados fuera de México puede estar sujeto a normativas adicionales (p. ej. el GDPR en la Unión Europea o la CCPA en California). Flouvia colaborará con el Cliente para atender, en el marco de dichas normativas, las solicitudes de los titulares de los datos.</p>
+            <p>La responsabilidad de Flouvia respecto de estos datos se limita a la prestación del servicio conforme a las instrucciones del Cliente y a los términos de las plataformas involucradas; el Cliente es responsable de la licitud de los datos que pone a disposición y de informar a sus propios clientes finales conforme a la legislación aplicable.</p>
+          </div>
+
           <div class="legal-section" id="arco">
-            <h2 class="section-title"><span class="section-num">05</span>Derechos ARCO</h2>
+            <h2 class="section-title"><span class="section-num">06</span>Derechos ARCO</h2>
             <p>Usted tiene derecho a <strong>Acceder, Rectificar, Cancelar u Oponerse</strong> al tratamiento de sus datos personales (derechos ARCO), así como a revocar el consentimiento otorgado.</p>
             <p>Para ejercer sus derechos, envíe una solicitud al correo <a href="mailto:hola@flouvia.com">hola@flouvia.com</a> con los siguientes datos:</p>
             <ul class="legal-list">
@@ -110,18 +133,18 @@ const updated = '1 de mayo de 2026';
           </div>
 
           <div class="legal-section" id="cookies">
-            <h2 class="section-title"><span class="section-num">06</span>Uso de Cookies</h2>
+            <h2 class="section-title"><span class="section-num">07</span>Uso de Cookies</h2>
             <p>Nuestro sitio utiliza cookies técnicas (necesarias para el funcionamiento) y analíticas (para medir el rendimiento). Puede configurar su navegador para bloquear o eliminar cookies; sin embargo, algunas funcionalidades del sitio pueden verse afectadas.</p>
             <p>Las cookies utilizadas por herramientas de terceros (Google Analytics) pueden transferir datos a servidores ubicados fuera de México, de conformidad con los términos de privacidad de dichos proveedores.</p>
           </div>
 
           <div class="legal-section" id="cambios">
-            <h2 class="section-title"><span class="section-num">07</span>Cambios al Aviso de Privacidad</h2>
+            <h2 class="section-title"><span class="section-num">08</span>Cambios al Aviso de Privacidad</h2>
             <p>Flouvia se reserva el derecho de modificar el presente Aviso de Privacidad en cualquier momento. Cualquier modificación será publicada en <strong>flouvia.com/privacidad</strong>. Le recomendamos revisarlo periódicamente.</p>
           </div>
 
           <div class="legal-section" id="contacto">
-            <h2 class="section-title"><span class="section-num">08</span>Contacto</h2>
+            <h2 class="section-title"><span class="section-num">09</span>Contacto</h2>
             <p>Para cualquier consulta relacionada con el tratamiento de sus datos personales o el presente Aviso de Privacidad:</p>
             <div class="contact-box">
               <p><strong>Flouvia Boutique</strong></p>
@@ -159,6 +182,9 @@ const updated = '1 de mayo de 2026';
   body { background: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); }
   .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
   .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+  /* Gate anti-FOUC: el script inline del Layout añade .js-anim a <html> antes
+     del primer paint (salvo reduced-motion). Sin JS → todo visible. */
+  .js-anim .hero-anim { opacity: 0; }
 </style>
 
 <style>
@@ -170,21 +196,27 @@ const updated = '1 de mayo de 2026';
   background: var(--color-bg);
   border-bottom: 1px solid var(--color-border);
 }
+.legal-status {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 14px; border-radius: 100px;
+  border: 1px solid rgba(16,185,129,0.22); background: rgba(16,185,129,0.04);
+  width: max-content; margin-bottom: 1.6rem;
+}
+.legal-status span { font-size: 0.7rem; color: #059669; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.legal-status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: legal-status-pulse 2s infinite; }
+@keyframes legal-status-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 .legal-eyebrow {
   font-size: 0.6rem; font-weight: 800; letter-spacing: 4px;
   color: #aaa; text-transform: uppercase; margin: 0 0 1.5rem;
-  opacity: 0;
 }
 .legal-title {
   font-size: clamp(3rem, 6vw, 5.5rem);
   font-weight: 800; letter-spacing: -3px; line-height: 0.95;
   margin: 0 0 2.5rem; color: var(--color-text);
-  opacity: 0;
 }
 .legal-meta {
   display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
   font-size: 0.8rem; color: var(--color-text-muted); font-weight: 500;
-  opacity: 0;
 }
 .legal-meta .sep { opacity: 0.3; }
 .lang-switch-link {
@@ -250,8 +282,8 @@ const updated = '1 de mayo de 2026';
   color: var(--color-text); margin: 0 0 1.5rem;
 }
 .section-num {
-  font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700;
-  color: #bbb; letter-spacing: 1px; flex-shrink: 0;
+  font-family: var(--font-serif); font-style: italic; font-size: 1.1rem; font-weight: 400;
+  color: #bbb; letter-spacing: 0; flex-shrink: 0; line-height: 1;
 }
 
 .legal-section p {
@@ -306,20 +338,30 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 document.addEventListener('DOMContentLoaded', () => {
-  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-  tl.to('.legal-eyebrow', { opacity: 1, y: 0, duration: 0.8 }, 0.1);
-  tl.from('.legal-title', { y: 30, duration: 1.0 }, 0.2);
-  tl.to('.legal-title',   { opacity: 1, duration: 0.1 }, 0.2);
-  tl.to('.legal-meta',    { opacity: 1, y: 0, duration: 0.7 }, 0.6);
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  gsap.set('.legal-title', { opacity: 0 });
+  if (reduced) {
+    // .js-anim nunca se añade con reduced-motion → todo visible vía CSS.
+    gsap.set('.legal-index, .legal-content', { opacity: 1 });
+  } else {
+    // Hero: el gate .js-anim .hero-anim ya los tiene en opacity:0 pre-paint.
+    const heroAnim = gsap.utils.toArray<HTMLElement>('.hero-anim');
+    if (heroAnim.length) {
+      gsap.set(heroAnim, { opacity: 0, y: 14 });
+      gsap.timeline({ defaults: { ease: 'power2.out' } })
+        .to('.legal-status',  { opacity: 1, y: 0, duration: 0.9 }, 0)
+        .to('.legal-eyebrow', { opacity: 1, y: 0, duration: 0.9 }, 0.08)
+        .to('.legal-title',   { opacity: 1, y: 0, duration: 1.0 }, 0.18)
+        .to('.legal-meta',    { opacity: 1, y: 0, duration: 0.9 }, 0.34);
+    }
 
-  gsap.to('.legal-index', { opacity: 1, x: 0, duration: 0.9, ease: 'expo.out',
-    scrollTrigger: { trigger: '.legal-body', start: 'top 85%' }
-  });
-  gsap.to('.legal-content', { opacity: 1, y: 0, duration: 1.0, ease: 'expo.out',
-    scrollTrigger: { trigger: '.legal-body', start: 'top 85%' }
-  });
+    gsap.to('.legal-index', { opacity: 1, duration: 0.9, ease: 'power2.out',
+      scrollTrigger: { trigger: '.legal-body', start: 'top 85%', once: true }
+    });
+    gsap.to('.legal-content', { opacity: 1, duration: 1.0, ease: 'power2.out',
+      scrollTrigger: { trigger: '.legal-body', start: 'top 85%', once: true }
+    });
+  }
 
   // Active link en el índice
   const sections = document.querySelectorAll<HTMLElement>('.legal-section');
