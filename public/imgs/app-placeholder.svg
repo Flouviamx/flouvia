@@ -1,0 +1,19 @@
+<svg width="1200" height="750" viewBox="0 0 1200 750" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="750" fill="#f5f5f7"/>
+  <rect x="80" y="90" width="1040" height="570" rx="24" fill="#ffffff" stroke="#e6e8ec"/>
+  <rect x="80" y="90" width="1040" height="64" rx="24" fill="#0a192f"/>
+  <rect x="80" y="130" width="1040" height="24" fill="#0a192f"/>
+  <circle cx="120" cy="122" r="7" fill="#ffffff" fill-opacity="0.5"/>
+  <circle cx="146" cy="122" r="7" fill="#ffffff" fill-opacity="0.3"/>
+  <circle cx="172" cy="122" r="7" fill="#ffffff" fill-opacity="0.3"/>
+  <rect x="130" y="210" width="360" height="40" rx="8" fill="#0a192f" fill-opacity="0.85"/>
+  <rect x="130" y="276" width="520" height="16" rx="6" fill="#c9ccd2"/>
+  <rect x="130" y="306" width="460" height="16" rx="6" fill="#dadde2"/>
+  <rect x="130" y="380" width="180" height="48" rx="24" fill="#0a192f"/>
+  <rect x="730" y="210" width="320" height="380" rx="16" fill="#f0f2f5" stroke="#e6e8ec"/>
+  <circle cx="890" cy="330" r="48" fill="#0a192f" fill-opacity="0.08"/>
+  <circle cx="890" cy="330" r="20" fill="#10b981"/>
+  <rect x="780" y="420" width="220" height="14" rx="6" fill="#c9ccd2"/>
+  <rect x="800" y="452" width="180" height="14" rx="6" fill="#dadde2"/>
+  <text x="600" y="710" font-family="Inter, system-ui, sans-serif" font-size="22" fill="#9aa0a8" text-anchor="middle" letter-spacing="2">SCREENSHOT — REEMPLAZAR EN /public/imgs/</text>
+</svg>

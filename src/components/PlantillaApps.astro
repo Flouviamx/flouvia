@@ -1,0 +1,457 @@
+---
+// src/components/PlantillaApps.astro
+// Listing de apps de Shopify — /apps y /en/apps (mismo componente, idioma por URL).
+import Layout from '../layouts/Layout.astro';
+import Navbar from './Navbar.astro';
+import Footer from './Footer.astro';
+import { apps } from '../data/apps';
+
+import { getLangFromUrl } from '../i18n/utils';
+const lang = getLangFromUrl(Astro.url);
+const isEn = lang === 'en';
+const root = isEn ? '/en' : '';
+const t = (o: { es: string; en: string }) => isEn ? o.en : o.es;
+
+const liveApps = apps.filter(a => a.status === 'live');
+const soonApps = apps.filter(a => a.status === 'soon');
+
+const SITE = (Astro.site ?? new URL('https://flouvia.com')).origin;
+const collectionSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  '@id': `${SITE}${root}/apps#collection`,
+  name: isEn ? 'Flouvia — Shopify Apps' : 'Flouvia — Apps de Shopify',
+  url: `${SITE}${root}/apps`,
+  isPartOf: { '@id': `${SITE}/#website` },
+  about: liveApps.map(a => ({
+    '@type': 'SoftwareApplication',
+    name: a.name,
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Shopify',
+    url: a.appStoreUrl,
+  })),
+};
+---
+
+<Layout
+  title={isEn ? 'Shopify Apps by Flouvia — engineering, as a product' : 'Apps de Shopify de Flouvia — ingeniería, hecha producto'}
+  description={isEn ? 'Shopify apps built by Flouvia, a boutique e-commerce engineering firm in Mexico City. What we learned building custom systems, now available as products you can install.' : 'Apps de Shopify construidas por Flouvia, firma boutique de ingeniería e-commerce en CDMX. Lo que aprendimos construyendo a medida, ahora como producto que puedes instalar.'}
+>
+  <Navbar />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionSchema)} />
+
+  <main class="flouvia-masterpiece">
+
+    <section class="hero-grand">
+      <div class="container hero-container">
+        <div class="hero-content">
+          <div class="hero-text-zone" id="hero-parallax">
+            <div class="hero-status hero-anim">
+              <span class="hero-status-dot" aria-hidden="true"></span>
+              <span>{isEn ? 'SHOPIFY PARTNER' : 'SHOPIFY PARTNER'}</span>
+            </div>
+            <p class="eyebrow hero-anim">
+              {isEn ? 'PRODUCTS — SHOPIFY APPS' : 'PRODUCTOS — APPS DE SHOPIFY'}
+            </p>
+            <h1 class="hero-title hero-anim">
+              <span class="title-bold">{isEn ? 'What we learned building custom.' : 'Lo que aprendimos a medida.'}</span> <span class="title-bold">{isEn ? 'Now, as a product.' : 'Ahora, como producto.'}</span>
+            </h1>
+          </div>
+
+          <div class="hero-bottom hero-anim">
+            <p class="hero-desc">
+              {isEn ? 'Each app is a piece of engineering from our client work, packaged so any store can install it. One click from the Shopify App Store.' : 'Cada app es una pieza de ingeniería de nuestro trabajo de cliente, empacada para que cualquier tienda la instale. Un clic desde el Shopify App Store.'}
+            </p>
+            <div class="hero-action">
+              <a href="#app-grid" class="btn-luxe">
+                <span>{isEn ? 'See the apps' : 'Ver las apps'}</span>
+                <span class="btn-arrow btn-arrow-down" aria-hidden="true">↓</span>
+                <div class="btn-shimmer"></div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="apps-gallery" id="app-grid">
+      <div class="container">
+        <div class="avail-badge">
+          <span class="avail-dot" aria-hidden="true"></span>
+          {isEn ? 'Available now on the Shopify App Store' : 'Disponibles ahora en el Shopify App Store'}
+        </div>
+        <div class="gallery-grid">
+
+          {liveApps.map(app => (
+            <a href={`${root}/apps/${app.slug}`} class="app-card">
+              <div class="app-visual">
+                <img src={app.icon} alt={`${app.name} — Flouvia`} class="app-icon squircle" />
+                <span class="active-badge"><span class="active-dot" aria-hidden="true"></span>{isEn ? 'On the App Store' : 'En el App Store'}</span>
+              </div>
+              <div class="app-info">
+                <div class="app-head">
+                  <h2 class="app-name">{app.name}</h2>
+                  <span class="app-cat">{t(app.category)}</span>
+                </div>
+                <p class="app-desc">{t(app.tagline)}</p>
+
+                <div class="app-meta">
+                  <span class="app-price-pill">{t(app.pricingTag)}</span>
+                  <span class="app-req">{t(app.requirements)}</span>
+                </div>
+
+                <div class="app-read-more">
+                  <span>{isEn ? 'View app' : 'Ver app'}</span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </div>
+              </div>
+            </a>
+          ))}
+
+          {soonApps.map(app => (
+            <div class="app-card slot-card">
+              <div class="slot-inner">
+                <span class="slot-eyebrow">{t(app.category)}</span>
+                <h2 class="slot-title">{app.name}</h2>
+                <p class="slot-desc">{t(app.tagline)}</p>
+                <div class="slot-action soon">
+                  <span class="soon-dot" aria-hidden="true"></span>
+                  <span>{isEn ? 'In development' : 'En desarrollo'}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+
+        </div>
+      </div>
+    </section>
+
+    <section class="engineering-genesis-section">
+      <div class="container">
+        <div class="genesis-banner-wrapper">
+          <div class="thin-line thin-line-top"></div>
+          <div class="genesis-banner-content">
+            <h3 class="banner-title">{isEn ? 'Need something custom, not off-the-shelf?' : '¿Necesitas algo a medida, no de catálogo?'}</h3>
+            <a href={`${root}/contacto`} class="banner-action-btn">
+              <span>{isEn ? 'Talk to the firm →' : 'Habla con la firma →'}</span>
+            </a>
+          </div>
+          <div class="thin-line thin-line-bottom"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-final-clean">
+      <div class="container">
+        <div class="cta-squircle cta-box-refined" id="cta-card">
+          <div class="texture-noise-micro"></div>
+          <div class="cta-flex relative-z">
+            <div class="cta-text">
+              <p class="eyebrow" style="color: rgba(255,255,255,0.5); letter-spacing: 4px;">
+                {isEn ? 'SHOPIFY APP STORE' : 'SHOPIFY APP STORE'}
+              </p>
+              <h2 class="cta-title">
+                {isEn ? 'Install it. See it work.' : 'Instálala. Míra cómo funciona.'}
+              </h2>
+            </div>
+            <div class="cta-action">
+              <a href={`${root}/apps/${liveApps[0]?.slug ?? ''}`} class="btn-luxe-main">
+                <span>{isEn ? 'Explore the app →' : 'Explorar la app →'}</span>
+              </a>
+              <span class="cta-badge"><span class="cta-badge-dot" aria-hidden="true"></span>{isEn ? 'Free to install' : 'Gratis para instalar'}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { width: 100%; position: relative; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; -webkit-tap-highlight-color: transparent; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  ::selection { background: #0a192f; color: #ffffff; }
+
+  :root {
+    --color-bg: #ffffff;
+    --color-bg-soft: #fcfcfc;
+    --color-blue-icy: #f4f6f9;
+    --color-blue-deep: #0a192f;
+    --color-glass-blue: rgba(10, 25, 47, 0.85);
+    --color-text: #050505;
+    --color-text-muted: #555556;
+    --color-border: rgba(0, 0, 0, 0.08);
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-serif: 'Instrument Serif', serif;
+    --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  body { background-color: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); margin: 0; }
+  .flouvia-masterpiece { width: 100%; position: relative; overflow-x: clip; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; }
+  .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: #222; }
+  .eyebrow { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
+
+  .hero-status { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 100px; border: 1px solid rgba(16,185,129,0.22); background: rgba(16,185,129,0.04); width: max-content; margin-bottom: 1.6rem; }
+  .hero-status span { font-size: 0.7rem; color: #059669; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+  .hero-status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: hero-status-pulse 2s infinite; }
+  @keyframes hero-status-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  .js-anim .hero-anim { opacity: 0; }
+
+  .btn-luxe {
+    position: relative; display: inline-flex; background: var(--color-text); color: #fff;
+    padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem;
+    font-weight: 600; overflow: hidden; justify-content: center;
+    transition: transform 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 10px 20px rgba(0,0,0,0.08);
+    align-items: center; gap: 10px; will-change: transform;
+  }
+  .btn-luxe span { position: relative; z-index: 2; }
+  .btn-arrow { position: relative; z-index: 2; display: inline-block; transition: transform 0.6s var(--ease-smooth); }
+  .btn-luxe:hover .btn-arrow { transform: translateX(4px); }
+  .btn-luxe:hover .btn-arrow-down { transform: translateY(4px); }
+  .btn-shimmer { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent); transform: skewX(-20deg); transition: 0s; z-index: 1;}
+  .btn-luxe:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(0,0,0,0.12), 0 24px 48px rgba(0,0,0,0.16); }
+  .btn-luxe:active { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+  .btn-luxe:hover .btn-shimmer { left: 150%; transition: left 0.9s var(--ease-smooth); }
+
+  .squircle { border-radius: 24px; transform: translateZ(0); overflow: hidden; }
+  .cta-squircle { border-radius: 32px; transform: translateZ(0); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
+</style>
+
+<style>
+  .texture-noise-micro { position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.04; mix-blend-mode: overlay; pointer-events: none; z-index: 1;}
+  .relative-z { position: relative; z-index: 2; }
+
+  .hero-grand { padding: 10rem 0 4rem 0; min-height: 100svh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
+  .hero-text-zone { transition: transform 0.1s ease-out, opacity 0.1s ease-out; }
+  .hero-title { font-size: clamp(1.9rem, 3.6vw, 3.4rem); line-height: 1.14; font-weight: 800; letter-spacing: -1.2px; margin-bottom: 2.75rem; color: #050505; max-width: 880px; }
+  .hero-title .title-bold { color: #050505; }
+  .title-bold { display: inline; }
+  .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem; }
+  .hero-desc { font-size: 1.1rem; color: var(--color-text-muted); max-width: 480px; line-height: 1.55; margin: 0; }
+
+  /* APPS GRID */
+  .apps-gallery { padding: 6rem 0 4rem 0; }
+  .avail-badge {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    color: #059669; background: rgba(16,185,129,0.04);
+    border: 1px solid rgba(16,185,129,0.22); border-radius: 100px;
+    padding: 8px 16px; margin-bottom: 3rem;
+  }
+  .avail-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: hero-status-pulse 2s infinite; }
+
+  .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4rem; align-items: stretch; }
+  .app-card { text-decoration: none; color: inherit; display: flex; flex-direction: column; cursor: pointer; }
+  .app-visual { position: relative; width: 100%; display: block; margin-bottom: 2rem; transition: transform 0.6s var(--ease-smooth); }
+
+  .active-badge {
+    position: absolute; top: 1rem; left: 1rem; z-index: 2;
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 0.6rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase;
+    color: #fff; background: rgba(10,25,47,0.72); backdrop-filter: blur(8px);
+    border-radius: 100px; padding: 6px 12px;
+  }
+  .active-dot { width: 5px; height: 5px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px rgba(16,185,129,0.7); animation: hero-status-pulse 2s infinite; }
+  .app-icon { width: 100%; height: auto; display: block; aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(0,0,0,0.04); background: var(--color-blue-icy); transition: box-shadow 0.6s var(--ease-smooth); }
+
+  .app-card:hover .app-visual { transform: translateY(-8px); }
+  .app-card:hover .app-icon { box-shadow: 0 25px 50px rgba(0,0,0,0.08); }
+  .app-card:hover .app-read-more { color: var(--color-blue-deep); }
+  .app-card:hover .app-read-more span::after { transform: scaleX(1); transform-origin: bottom left; }
+  .app-card:hover .app-read-more svg { transform: translateX(6px); }
+
+  .app-info { display: flex; flex-direction: column; padding: 0 0.5rem; flex: 1; }
+  .app-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 0.8rem; }
+  .app-name { font-family: var(--font-sans); font-size: 2rem; font-weight: 800; color: var(--color-text); margin: 0; letter-spacing: -1.1px; }
+  .app-cat { font-size: 0.62rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #999; flex-shrink: 0; }
+  .app-desc { font-size: 1.05rem; color: var(--color-text-muted); margin: 0 0 1.8rem 0; line-height: 1.5; max-width: 95%; }
+
+  .app-meta { display: flex; align-items: center; gap: 1rem; border-top: 1px solid var(--color-border); padding-top: 1.4rem; flex-wrap: wrap; margin-top: auto; }
+  .app-price-pill { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px; color: var(--color-blue-deep); background: rgba(10,25,47,0.05); border-radius: 100px; padding: 5px 12px; }
+  .app-req { font-size: 0.8rem; color: var(--color-text-muted); }
+
+  .app-read-more {
+    display: inline-flex; align-items: center; gap: 10px; margin-top: 2rem;
+    font-size: 0.8rem; font-weight: 700; color: var(--color-text);
+    text-transform: uppercase; letter-spacing: 1px; position: relative;
+    transition: color 0.4s var(--ease-smooth);
+  }
+  .app-read-more span { position: relative; }
+  .app-read-more span::after {
+    content: ''; position: absolute; width: 100%; transform: scaleX(0);
+    height: 1.5px; bottom: -2px; left: 0; background-color: var(--color-blue-deep);
+    transform-origin: bottom right; transition: transform 0.4s var(--ease-smooth);
+  }
+  .app-read-more svg { transition: transform 0.4s var(--ease-smooth); }
+
+  /* SLOT CARD — "próximamente" */
+  .slot-card { display: flex; }
+  .slot-inner {
+    display: flex; flex-direction: column; align-items: center; text-align: center; justify-content: center;
+    gap: 0.9rem; padding: 3.5rem 2rem; width: 100%;
+    border: 1.5px dashed rgba(10,25,47,0.2); border-radius: 28px;
+    background: var(--color-bg-soft);
+    transition: border-color 0.5s var(--ease-smooth), background 0.5s var(--ease-smooth), transform 0.5s var(--ease-smooth);
+  }
+  .slot-card:hover .slot-inner { border-color: rgba(10,25,47,0.42); background: #fafbfc; transform: translateY(-4px); }
+  .slot-eyebrow { font-size: 0.62rem; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: #999; }
+  .slot-title { font-family: var(--font-sans); font-size: 1.9rem; font-weight: 800; letter-spacing: -1.1px; color: var(--color-text); margin: 0.3rem 0 0; }
+  .slot-desc { font-size: 1.02rem; color: var(--color-text-muted); line-height: 1.5; margin: 0; max-width: 420px; }
+  .slot-action.soon {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 0.8rem;
+    font-size: 0.7rem; font-weight: 700; color: var(--color-text-muted);
+    text-transform: uppercase; letter-spacing: 1.2px;
+  }
+  .soon-dot { width: 6px; height: 6px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 8px rgba(245,158,11,0.5); animation: hero-status-pulse 2s infinite; }
+
+  /* THIN BANNER */
+  .engineering-genesis-section { padding: 4rem 0 4rem 0; }
+  .genesis-banner-wrapper { position: relative; width: 100%; overflow: hidden;}
+  .thin-line { width: 100%; height: 0.5px; background: var(--color-blue-deep); transform: scaleX(0); transform-origin: left center; }
+  .genesis-banner-content { display: flex; justify-content: space-between; align-items: center; padding: 3rem 0; gap: 3rem; }
+  .banner-title { font-size: 1.8rem; font-weight: 500; color: var(--color-blue-deep); margin: 0; letter-spacing: -0.8px; max-width: 70%;}
+  .banner-action-btn { background: var(--color-blue-deep); color: #fff; padding: 16px 38px; border-radius: 100px; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: transform 0.5s var(--ease-smooth), box-shadow 0.5s var(--ease-smooth); flex-shrink: 0; box-shadow: 0 4px 6px rgba(10, 25, 47, 0.05); }
+  .banner-action-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(10, 25, 47, 0.2); }
+
+  /* CTA FINAL */
+  .cta-final-clean { padding: 3rem 0 6rem 0; }
+  .cta-box-refined { background: radial-gradient(100% 100% at 50% 100%, #152744 0%, #0a192f 100%); padding: 4rem 6rem; position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border-radius: 40px; }
+  .cta-flex { display: flex; justify-content: space-between; align-items: center; gap: 4rem; }
+  .cta-title { font-size: clamp(2rem, 3.2vw, 3rem); font-weight: 800; color: #fff; letter-spacing: -1.2px; line-height: 1.05; margin: 0; max-width: 16ch; }
+  .cta-action { display: flex; flex-direction: column; align-items: flex-end; gap: 1.1rem; flex-shrink: 0; }
+  .cta-badge { display: inline-flex; align-items: center; gap: 8px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: rgba(255,255,255,0.6); }
+  .cta-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: hero-status-pulse 2s infinite; }
+
+  .btn-luxe-main { background: #fff; color: var(--color-blue-deep); padding: 16px 36px; border-radius: 100px; text-decoration: none; font-size: 1rem; font-weight: 700; transition: transform 0.5s var(--ease-smooth), box-shadow 0.5s var(--ease-smooth), background 0.5s var(--ease-smooth), color 0.5s var(--ease-smooth), border-color 0.5s var(--ease-smooth); display: inline-flex; align-items: center; gap: 12px; border: 1px solid transparent; }
+  .btn-luxe-main:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(255,255,255,0.15); background: transparent; color: #fff; border-color: #fff; }
+
+  @media (max-width: 1024px) {
+    .hero-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; }
+    .gallery-grid { gap: 3rem 2rem; }
+    .cta-box-refined { padding: 3.5rem 4rem; }
+  }
+
+  @media (max-width: 768px) {
+    .hero-grand { padding-top: 11rem; padding-bottom: 4rem; min-height: auto; text-align: center; }
+    .hero-content { display: flex; flex-direction: column; align-items: center; }
+    .hero-status { margin-left: auto; margin-right: auto; }
+    .hero-title { display: flex; flex-direction: column; gap: 0.2rem; margin-bottom: 2.5rem; max-width: 100%; }
+    .title-bold { display: block; font-size: clamp(2rem, 7.6vw, 2.85rem); font-weight: 800; letter-spacing: -1px; line-height: 1.12; margin-bottom: 0; }
+    .hero-bottom { flex-direction: column; align-items: center; gap: 2.5rem; text-align: center; border-top: none; padding-top: 0;}
+    .hero-desc { font-size: 1.1rem; padding: 0 5%; max-width: 95%; margin: 0 auto; line-height: 1.6;}
+    .hero-action { width: 100%; padding: 0 5%; }
+    .btn-luxe { width: 100%; padding: 18px 0; font-size: 1.05rem;}
+
+    .apps-gallery { padding: 3rem 0; }
+    .gallery-grid { grid-template-columns: 1fr; gap: 3.5rem; }
+    .app-name { font-size: 1.8rem; }
+    .slot-title { font-size: 1.7rem; }
+
+    .engineering-genesis-section { padding-bottom: 4rem; }
+    .genesis-banner-content { flex-direction: column; text-align: center; gap: 2rem; padding: 3rem 5%; }
+    .banner-title { font-size: 1.5rem; max-width: 100%; }
+    .banner-action-btn { width: 100%; text-align: center; }
+
+    .cta-final-clean { padding-bottom: 4rem; }
+    .cta-box-refined { padding: 3rem 1.5rem; border-radius: 24px; text-align: center;}
+    .cta-flex { flex-direction: column; gap: 2rem; }
+    .cta-title { font-size: 2.1rem; max-width: 100%; }
+    .cta-action { align-items: center; width: 100%; }
+    .btn-luxe-main { width: 100%; display: flex; justify-content: center; }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  const robustRefresh = () => {
+    const winLoad = new Promise<void>((resolve) => {
+      if (document.readyState === 'complete') resolve();
+      else window.addEventListener('load', () => resolve(), { once: true });
+    });
+    const fontsReady = (document as any).fonts?.ready ?? Promise.resolve();
+    Promise.all([winLoad, fontsReady]).then(() => setTimeout(() => ScrollTrigger.refresh(), 120));
+  };
+  robustRefresh();
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return;
+
+    const heroAnim = gsap.utils.toArray<HTMLElement>('.hero-anim');
+    if (heroAnim.length) {
+      gsap.set(heroAnim, { opacity: 0, y: 12 });
+      gsap.timeline({ defaults: { ease: 'power2.out' } })
+        .to('.hero-status',             { opacity: 1, y: 0, duration: 0.9 }, 0)
+        .to('.hero-text-zone .eyebrow', { opacity: 1, y: 0, duration: 0.9 }, 0.1)
+        .to('.hero-title',              { opacity: 1, y: 0, duration: 1.1 }, 0.2)
+        .to('.hero-bottom',             { opacity: 1, y: 0, duration: 1.0 }, 0.42);
+    }
+
+    const EASE = 'power2.out', DUR = 0.9, Y = 14;
+    const reveal = (
+      targets: string | HTMLElement | NodeListOf<Element> | HTMLElement[],
+      opts: { trigger?: string | HTMLElement; start?: string; y?: number; dur?: number; stagger?: number; delay?: number } = {}
+    ) => {
+      const els = gsap.utils.toArray<HTMLElement>(targets as any);
+      if (!els.length) return;
+      gsap.set(els, { opacity: 0, y: opts.y ?? Y });
+      ScrollTrigger.create({
+        trigger: opts.trigger ?? els[0], start: opts.start ?? 'top 85%', once: true,
+        onEnter: () => gsap.to(els, {
+          opacity: 1, y: 0, duration: opts.dur ?? DUR, ease: EASE,
+          stagger: opts.stagger ?? 0.08, delay: opts.delay ?? 0, clearProps: 'transform,opacity',
+        }),
+      });
+    };
+
+    const mm = gsap.matchMedia();
+    const buildReveals = () => {
+      reveal('.avail-badge', { trigger: '.apps-gallery', y: 12, dur: 0.85, start: 'top 88%' });
+      reveal('.app-card', { trigger: '.gallery-grid', y: 24, dur: 1.0, stagger: 0.1, start: 'top 82%' });
+      reveal('.genesis-banner-content > *', { trigger: '.genesis-banner-wrapper', y: 14, dur: 0.9, stagger: 0.1, start: 'top 85%' });
+      const lines = gsap.utils.toArray<HTMLElement>('.thin-line');
+      if (lines.length) {
+        gsap.set(lines, { scaleX: 0 });
+        ScrollTrigger.create({
+          trigger: '.genesis-banner-wrapper', start: 'top 85%', once: true,
+          onEnter: () => gsap.to(lines, { scaleX: 1, duration: 1.3, ease: 'power3.inOut', stagger: 0.08 }),
+        });
+      }
+      const ctaCard = document.getElementById('cta-card');
+      if (ctaCard) {
+        reveal(ctaCard, { trigger: ctaCard, y: 24, dur: 1.0, stagger: 0, start: 'top 82%' });
+        reveal(ctaCard.querySelectorAll('.cta-text > *, .cta-action'), { trigger: ctaCard, y: 12, dur: 0.9, stagger: 0.08, delay: 0.15, start: 'top 82%' });
+      }
+    };
+
+    mm.add('(min-width: 769px)', () => {
+      const heroParallax = document.getElementById('hero-parallax');
+      if (heroParallax) {
+        gsap.to(heroParallax, {
+          yPercent: 4, opacity: 0.85, ease: 'none',
+          scrollTrigger: { trigger: '.hero-grand', start: 'top top', end: 'bottom 30%', scrub: 1 },
+        });
+      }
+      buildReveals();
+    });
+    mm.add('(max-width: 768px)', () => { buildReveals(); });
+  });
+</script>

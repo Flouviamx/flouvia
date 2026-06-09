@@ -1,0 +1,488 @@
+---
+// src/components/PlantillaApp.astro
+// Template compartido del detalle de una app. Rendea /apps/{slug} y /en/apps/{slug}
+// desde una sola fuente (evita drift ES/EN). Lee todo de data/apps.ts.
+import Layout from '../layouts/Layout.astro';
+import Navbar from './Navbar.astro';
+import Footer from './Footer.astro';
+import type { ShopifyApp } from '../data/apps';
+
+interface Props {
+  app:  ShopifyApp;
+  next: ShopifyApp;
+  isEn: boolean;
+  root: string;
+}
+const { app, next, isEn, root } = Astro.props;
+const t = (o: { es: string; en: string }) => isEn ? o.en : o.es;
+
+const pageTitle = app.seoTitle ? t(app.seoTitle) : `${app.name} — ${t(app.category)} | Flouvia`;
+const pageDesc  = app.seoDesc  ? t(app.seoDesc)  : t(app.desc);
+
+const SITE     = (Astro.site ?? new URL('https://flouvia.com')).origin;
+const appUrl   = `${SITE}${root}/apps/${app.slug}`;
+const appsUrl  = `${SITE}${root}/apps`;
+
+const softwareSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  '@id': `${appUrl}#software`,
+  name: app.name,
+  description: pageDesc,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Shopify',
+  url: app.appStoreUrl || appUrl,
+  ...(app.appStoreUrl ? { installUrl: app.appStoreUrl, downloadUrl: app.appStoreUrl } : {}),
+  publisher: { '@id': `${SITE}/#organization` },
+  author:    { '@id': `${SITE}/#organization` },
+  datePublished: app.datePublished,
+  dateModified:  app.dateModified ?? app.datePublished,
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  ...(app.rating ? { aggregateRating: { '@type': 'AggregateRating', ratingValue: app.rating.value, ratingCount: app.rating.count } } : {}),
+};
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: isEn ? 'Home' : 'Inicio', item: `${SITE}${root}/` },
+    { '@type': 'ListItem', position: 2, name: 'Apps', item: appsUrl },
+    { '@type': 'ListItem', position: 3, name: app.name, item: appUrl },
+  ],
+};
+const faqSchema = app.faq && app.faq.length ? {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: app.faq.map(f => ({
+    '@type': 'Question',
+    name: t(f.q),
+    acceptedAnswer: { '@type': 'Answer', text: t(f.a) },
+  })),
+} : null;
+---
+
+<Layout title={pageTitle} description={pageDesc} image={app.image} ogType="article">
+  <Navbar />
+
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(softwareSchema)} />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbSchema)} />
+  {faqSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />}
+
+  <main class="ad-page">
+
+    <!-- ════════ HERO ════════ -->
+    <section class="ad-hero">
+      <div class="container">
+
+        <div class="ad-breadcrumb" id="ad-breadcrumb">
+          <a href={`${root}/apps`} class="ad-back">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><polyline points="15 18 9 12 15 6"/></svg>
+            Apps
+          </a>
+          <span class="ad-bread-sep">/</span>
+          <span class="ad-bread-num">{app.num}</span>
+          <span class="ad-bread-name">{app.name}</span>
+          <span class="ad-store-chip">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 3 6v6c0 5 3.8 8.5 9 10 5.2-1.5 9-5 9-10V6l-9-4z"/></svg>
+            Shopify App Store
+          </span>
+        </div>
+
+        <div class="ad-hero-grid" id="ad-hero-text">
+          <div class="ad-hero-main">
+            <p class="ad-eyebrow" id="ad-eyebrow">{t(app.category)}</p>
+            <h1 class="ad-name" id="ad-name">{app.name}</h1>
+            <p class="ad-tagline editorial" id="ad-tagline">{t(app.tagline)}</p>
+            <p class="ad-desc" id="ad-desc">{t(app.desc)}</p>
+
+            <div class="ad-cta-row" id="ad-cta-row">
+              <a href={app.appStoreUrl} target="_blank" rel="noopener" class="ad-install-btn">
+                <span>{isEn ? 'Install from Shopify' : 'Instalar desde Shopify'}</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+              <span class="ad-price-note">{t(app.pricing)}</span>
+            </div>
+          </div>
+
+          <aside class="ad-card" id="ad-card">
+            <img src={app.icon} alt={`${app.name} — Flouvia`} class="ad-card-icon" />
+            <div class="ad-card-rows">
+              <div class="ad-card-row"><span class="ad-card-k">{isEn ? 'Price' : 'Precio'}</span><span class="ad-card-v">{t(app.pricingTag)}</span></div>
+              <div class="ad-card-row"><span class="ad-card-k">{isEn ? 'Category' : 'Categoría'}</span><span class="ad-card-v">{t(app.category)}</span></div>
+              <div class="ad-card-row"><span class="ad-card-k">{isEn ? 'Requires' : 'Requiere'}</span><span class="ad-card-v">{t(app.requirements)}</span></div>
+              {app.rating && <div class="ad-card-row"><span class="ad-card-k">{isEn ? 'Rating' : 'Calificación'}</span><span class="ad-card-v">★ {app.rating.value} · {app.rating.count}</span></div>}
+            </div>
+          </aside>
+        </div>
+
+        {app.metrics && app.metrics.length > 0 && (
+          <div class="ad-metrics" id="ad-metrics">
+            {app.metrics.map(m => (
+              <div class="ad-metric">
+                <span class="ad-metric-val">{m.val}</span>
+                <span class="ad-metric-lbl">{t(m.label)}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+
+    <!-- ════════ SCREENSHOT ════════ -->
+    <section class="ad-visual-section">
+      <div class="container">
+        <div class="ad-visual-wrap" id="ad-visual">
+          <img src={app.image} alt={`${app.name} — screenshot`} class="ad-visual-img" loading="eager" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ PROBLEMA + FEATURES ════════ -->
+    <section class="ad-body-section">
+      <div class="container ad-body-grid">
+        <div class="ad-col" id="ad-problem">
+          <span class="ad-col-eye">{isEn ? 'THE PROBLEM' : 'EL PROBLEMA'}</span>
+          <div class="ad-col-rule"></div>
+          <p class="ad-problem-text editorial">{t(app.problem)}</p>
+          {app.relatedCase && (
+            <a href={`${root}/casos/${app.relatedCase.slug}`} class="ad-related">
+              <span class="ad-related-dot" aria-hidden="true"></span>
+              <span>{t(app.relatedCase.label)}</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          )}
+        </div>
+
+        <div class="ad-col" id="ad-features">
+          <span class="ad-col-eye">{isEn ? 'WHAT IT DOES' : 'QUÉ HACE'}</span>
+          <div class="ad-col-rule"></div>
+          <ul class="ad-features-list">
+            {app.features.map((f, i) => (
+              <li class="ad-feature">
+                <span class="ad-feature-num">{String(i + 1).padStart(2, '0')}</span>
+                <div class="ad-feature-txt">
+                  <span class="ad-feature-title">{t(f.title)}</span>
+                  <span class="ad-feature-desc">{t(f.desc)}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ FAQ ════════ -->
+    {app.faq && app.faq.length > 0 && (
+      <section class="ad-faq-section">
+        <div class="container">
+          <span class="ad-col-eye" id="ad-faq-eye">FAQ</span>
+          <div class="ad-faq-list">
+            {app.faq.map(f => (
+              <div class="ad-faq-item">
+                <h3 class="ad-faq-q">{t(f.q)}</h3>
+                <p class="ad-faq-a">{t(f.a)}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- ════════ NAV APPS ════════ -->
+    <section class="ad-nav">
+      <div class="container">
+        <div class="ad-nav-row">
+          <a href={`${root}/apps`} class="ad-nav-all">
+            <div class="ad-nav-circ">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+            {isEn ? 'All apps' : 'Todas las apps'}
+          </a>
+          {next.slug !== app.slug && (
+            <a href={`${root}/apps/${next.slug}`} class="ad-nav-next">
+              <div class="ad-nav-next-txt">
+                <span class="ad-nav-lbl">{isEn ? 'Next app' : 'Siguiente app'}</span>
+                <span class="ad-nav-brand">{next.name}</span>
+              </div>
+              <div class="ad-nav-circ">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </div>
+            </a>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ CTA ════════ -->
+    <section class="ad-cta-section">
+      <div class="container">
+        <div class="ad-cta-card cta-squircle texture-noise" id="ad-cta">
+          <div class="ad-cta-inner">
+            <div class="ad-cta-text">
+              <p class="ad-cta-eye">{app.cta ? t(app.cta.eyebrow) : (isEn ? 'INSTALL IN ONE CLICK' : 'INSTALA EN UN CLIC')}</p>
+              <h2 class="ad-cta-title">{app.cta ? t(app.cta.title) : (isEn ? 'Try it in your store.' : 'Pruébala en tu tienda.')}</h2>
+              {app.cta && <p class="ad-cta-sub">{t(app.cta.sub)}</p>}
+            </div>
+            <div class="ad-cta-action">
+              <a href={app.appStoreUrl} target="_blank" rel="noopener" class="ad-cta-btn">
+                <span>{isEn ? 'Install from Shopify →' : 'Instalar desde Shopify →'}</span>
+              </a>
+              <span class="ad-cta-badge"><span class="ad-cta-badge-dot" aria-hidden="true"></span>{t(app.pricingTag)}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { width: 100%; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  ::selection { background: #0a192f; color: #fff; }
+  :root {
+    --color-bg: #ffffff; --color-bg-soft: #fcfcfc; --color-blue-icy: #f4f6f9;
+    --color-blue-deep: #0a192f; --color-text: #050505; --color-text-muted: #555556;
+    --color-border: rgba(0,0,0,0.08);
+    --font-sans: 'Inter', system-ui, sans-serif; --font-serif: 'Instrument Serif', serif;
+    --ease-ios: cubic-bezier(0.25,1,0.5,1); --ease-spring: cubic-bezier(0.22,1,0.36,1); --ease-smooth: cubic-bezier(0.16,1,0.3,1);
+  }
+  body { background: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); margin: 0; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; }
+  .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+
+  .js-anim .ad-breadcrumb,
+  .js-anim .ad-eyebrow,
+  .js-anim .ad-name,
+  .js-anim .ad-tagline,
+  .js-anim .ad-desc,
+  .js-anim .ad-cta-row,
+  .js-anim .ad-card,
+  .js-anim .ad-metrics { opacity: 0; }
+
+  .cta-squircle { border-radius: 32px; transform: translateZ(0); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+  .texture-noise::before {
+    content:""; position:absolute; inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity:.04; mix-blend-mode:overlay; pointer-events:none; border-radius:inherit;
+  }
+</style>
+
+<style>
+.ad-page { width: 100%; position: relative; overflow-x: clip; }
+
+/* HERO */
+.ad-hero { padding: 13rem 0 0; background: var(--color-bg); }
+.ad-breadcrumb { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 3.5rem; flex-wrap: wrap; }
+.ad-back { display: inline-flex; align-items: center; gap: 5px; font-size: 0.75rem; font-weight: 700; color: var(--color-text-muted); text-decoration: none; transition: color .2s; }
+.ad-back:hover { color: var(--color-text); }
+.ad-bread-sep { color: rgba(0,0,0,.15); }
+.ad-bread-num { font-family: var(--font-serif); font-style: italic; font-size: 0.95rem; color: #bbb; line-height: 1; }
+.ad-bread-name { font-size: 0.78rem; font-weight: 700; color: var(--color-text); }
+.ad-store-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 0.66rem; font-weight: 600; color: #5a6b3f; background: rgba(85,165,30,0.08); border: 1px solid rgba(85,165,30,0.18); padding: 5px 13px; border-radius: 100px; margin-left: auto; }
+.ad-store-chip svg { color: #5a8a2e; }
+
+.ad-hero-grid { display: grid; grid-template-columns: 1fr 320px; gap: 4rem; align-items: start; }
+.ad-eyebrow { font-size: 0.62rem; font-weight: 800; letter-spacing: 3px; color: #999; text-transform: uppercase; margin: 0 0 1.6rem; }
+.ad-name { font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 800; letter-spacing: -2.5px; line-height: 0.95; margin: 0 0 1.8rem; color: var(--color-text); }
+.ad-tagline { font-size: clamp(1.4rem, 2.4vw, 2.1rem); letter-spacing: -0.5px; line-height: 1.25; color: #2a2a2a; margin: 0 0 1.8rem; max-width: 600px; }
+.ad-desc { font-size: 1.05rem; line-height: 1.65; color: var(--color-text-muted); margin: 0 0 2.5rem; max-width: 560px; }
+
+.ad-cta-row { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+.ad-install-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--color-blue-deep); color: #fff; padding: 17px 34px; border-radius: 100px;
+  text-decoration: none; font-size: 0.95rem; font-weight: 700; white-space: nowrap;
+  box-shadow: 0 10px 24px rgba(10,25,47,0.18); transition: transform .5s var(--ease-spring), box-shadow .5s var(--ease-spring);
+}
+.ad-install-btn svg { transition: transform .5s var(--ease-spring); }
+.ad-install-btn:hover { transform: translateY(-3px); box-shadow: 0 18px 38px rgba(10,25,47,0.26); }
+.ad-install-btn:hover svg { transform: translateX(4px); }
+.ad-price-note { font-size: 0.9rem; color: var(--color-text-muted); }
+
+/* Info card (sidebar) */
+.ad-card { border: 1px solid var(--color-border); border-radius: 24px; padding: 1.6rem; background: var(--color-bg-soft); box-shadow: 0 20px 50px -28px rgba(10,25,47,0.18); }
+.ad-card-icon { width: 72px; height: 72px; border-radius: 18px; display: block; margin-bottom: 1.4rem; border: 1px solid var(--color-border); }
+.ad-card-rows { display: flex; flex-direction: column; }
+.ad-card-row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 0.85rem 0; border-top: 1px solid var(--color-border); }
+.ad-card-row:first-child { border-top: none; }
+.ad-card-k { font-size: 0.6rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #aaa; flex-shrink: 0; }
+.ad-card-v { font-size: 0.85rem; font-weight: 600; color: var(--color-text); text-align: right; }
+
+/* Metrics */
+.ad-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); border-top: 1px solid var(--color-border); margin-top: 4rem; }
+.ad-metric { padding: 2rem 1.5rem; border-right: 1px solid var(--color-border); display: flex; flex-direction: column; gap: 0.35rem; }
+.ad-metric:last-child { border-right: none; }
+.ad-metric-val { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: clamp(2rem,3.2vw,2.8rem); line-height: 1; letter-spacing: -0.5px; color: var(--color-blue-deep); }
+.ad-metric-lbl { font-size: 0.6rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--color-text-muted); }
+
+/* SCREENSHOT */
+.ad-visual-section { padding: 4rem 0; background: #f5f5f7; }
+.ad-visual-wrap { border-radius: 24px; overflow: hidden; border: 1px solid var(--color-border); background: #eceef2; display: flex; align-items: center; justify-content: center; min-height: 380px; box-shadow: 0 40px 80px -40px rgba(10,25,47,0.25); }
+.ad-visual-img { width: 100%; height: auto; display: block; }
+
+/* PROBLEMA + FEATURES */
+.ad-body-section { padding: 5rem 0; background: var(--color-bg); }
+.ad-body-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+.ad-col-eye { display: block; font-size: 0.56rem; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; color: #ccc; margin-bottom: 1rem; }
+.ad-col-rule { height: 2px; width: 32px; background: var(--color-text); margin-bottom: 1.8rem; transform: scaleX(0); transform-origin: left; }
+.ad-problem-text { font-size: 1.1rem; line-height: 1.8; color: #333; margin: 0; }
+.ad-related { display: inline-flex; align-items: center; gap: 10px; margin-top: 2rem; font-size: 0.85rem; font-weight: 600; color: var(--color-blue-deep); text-decoration: none; padding: 10px 16px; border-radius: 100px; background: rgba(10,25,47,0.04); transition: background .4s var(--ease-smooth), transform .4s var(--ease-spring); }
+.ad-related:hover { background: rgba(10,25,47,0.08); transform: translateX(3px); }
+.ad-related svg { transition: transform .4s var(--ease-spring); }
+.ad-related:hover svg { transform: translateX(3px); }
+.ad-related-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; flex-shrink: 0; }
+
+.ad-features-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1.6rem; }
+.ad-feature { display: flex; align-items: flex-start; gap: 1.2rem; }
+.ad-feature-num { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 1.4rem; color: var(--color-blue-deep); line-height: 1; flex-shrink: 0; min-width: 32px; }
+.ad-feature-txt { display: flex; flex-direction: column; gap: 0.3rem; }
+.ad-feature-title { font-size: 1rem; font-weight: 700; color: var(--color-text); letter-spacing: -0.2px; }
+.ad-feature-desc { font-size: 0.92rem; line-height: 1.6; color: var(--color-text-muted); }
+
+/* FAQ */
+.ad-faq-section { padding: 0 0 5rem; background: var(--color-bg); }
+.ad-faq-list { display: flex; flex-direction: column; border-top: 1px solid var(--color-border); margin-top: 1.2rem; }
+.ad-faq-item { padding: 2rem 0; border-bottom: 1px solid var(--color-border); }
+.ad-faq-q { font-size: 1.1rem; font-weight: 700; color: var(--color-text); margin: 0 0 0.7rem; letter-spacing: -0.3px; }
+.ad-faq-a { font-size: 0.98rem; line-height: 1.7; color: var(--color-text-muted); margin: 0; max-width: 720px; }
+
+/* NAV */
+.ad-nav { padding: 3.5rem 0; background: var(--color-bg); border-top: 1px solid var(--color-border); }
+.ad-nav-row { display: flex; justify-content: space-between; align-items: center; gap: 2rem; }
+.ad-nav-all { display: flex; align-items: center; gap: 12px; font-size: 0.82rem; font-weight: 700; color: var(--color-text-muted); text-decoration: none; flex-direction: row-reverse; transition: color .2s, gap .3s var(--ease-smooth); }
+.ad-nav-all:hover { color: var(--color-text); gap: 16px; }
+.ad-nav-all .ad-nav-circ { transform: rotate(180deg); }
+.ad-nav-next { display: flex; align-items: center; gap: 1.5rem; text-decoration: none; color: var(--color-text); transition: gap .3s var(--ease-smooth); }
+.ad-nav-next:hover { gap: 2rem; }
+.ad-nav-next-txt { text-align: right; display: flex; flex-direction: column; gap: 0.15rem; }
+.ad-nav-lbl { font-size: 0.58rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--color-text-muted); }
+.ad-nav-brand { font-size: 1.7rem; font-weight: 800; letter-spacing: -1px; line-height: 1; }
+.ad-nav-circ { width: 46px; height: 46px; border-radius: 50%; border: 1.5px solid rgba(0,0,0,.12); display: flex; align-items: center; justify-content: center; transition: all .4s var(--ease-spring); flex-shrink: 0; color: var(--color-text); }
+.ad-nav-next:hover .ad-nav-circ { background: var(--color-blue-deep); border-color: var(--color-blue-deep); color: #fff; transform: rotate(-45deg) scale(1.08); }
+
+/* CTA */
+.ad-cta-section { padding: 4rem 0 6rem; background: var(--color-bg-soft); }
+.ad-cta-card { background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%); padding: 5rem 6rem; position: relative; box-shadow: 0 20px 40px rgba(5,11,20,.15), 0 50px 100px rgba(5,11,20,.22); transition: transform 0.6s var(--ease-spring); }
+.ad-cta-card:hover { transform: scale(1.012); }
+.ad-cta-inner { display: flex; justify-content: space-between; align-items: center; gap: 3rem; position: relative; z-index: 2; }
+.ad-cta-eye { font-size: 0.6rem; font-weight: 800; letter-spacing: 4px; color: rgba(255,255,255,.3); text-transform: uppercase; margin: 0 0 1rem; }
+.ad-cta-title { font-size: clamp(2.2rem,3.4vw,3.1rem); font-weight: 800; color: #fff; line-height: 1.08; letter-spacing: -1.2px; margin: 0; max-width: 18ch; }
+.ad-cta-sub { margin: 1.3rem 0 0; color: rgba(255,255,255,.66); font-size: 1.02rem; line-height: 1.55; max-width: 440px; }
+.ad-cta-action { display: flex; flex-direction: column; align-items: flex-end; gap: 1.1rem; flex-shrink: 0; }
+.ad-cta-badge { display: inline-flex; align-items: center; gap: 8px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: rgba(255,255,255,.6); }
+.ad-cta-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 10px rgba(16,185,129,.6); animation: ad-badge-pulse 2s infinite; }
+@keyframes ad-badge-pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
+.ad-cta-btn { position: relative; background: #fff; color: var(--color-blue-deep); padding: 20px 44px; border-radius: 100px; text-decoration: none; font-size: 1rem; font-weight: 700; overflow: hidden; transition: .5s var(--ease-spring); display: inline-flex; align-items: center; white-space: nowrap; box-shadow: inset 0 0 0 1px rgba(0,0,0,.1), 0 10px 20px rgba(255,255,255,.1); }
+.ad-cta-btn:hover { transform: translateY(-4px); box-shadow: inset 0 0 0 1px rgba(0,0,0,.1), 0 20px 40px rgba(255,255,255,.2); }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .ad-hero-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .ad-card { max-width: 360px; }
+}
+@media (max-width: 768px) {
+  .ad-hero { padding: 10rem 0 0; }
+  .ad-breadcrumb { margin-bottom: 2.5rem; }
+  .ad-store-chip { margin-left: 0; }
+  .ad-name { letter-spacing: -1.5px; }
+  .ad-cta-row { flex-direction: column; align-items: stretch; }
+  .ad-install-btn { width: 100%; justify-content: center; }
+  .ad-card { max-width: 100%; }
+  .ad-metrics { grid-template-columns: 1fr 1fr; margin-top: 2.5rem; }
+  .ad-metric { padding: 1.4rem 1rem; }
+  .ad-visual-section { padding: 2.5rem 0; }
+  .ad-visual-wrap { min-height: 200px; border-radius: 18px; }
+  .ad-body-section { padding: 4rem 0; }
+  .ad-body-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .ad-nav-row { flex-direction: column; align-items: stretch; gap: 2rem; }
+  .ad-nav-next { justify-content: space-between; }
+  .ad-nav-next-txt { text-align: left; }
+  .ad-cta-section { padding: 3rem 5% 5rem; }
+  .ad-cta-card { padding: 3.5rem 2rem; }
+  .ad-cta-inner { flex-direction: column; align-items: center; gap: 2.5rem; }
+  .ad-cta-text { text-align: center; }
+  .ad-cta-title { max-width: 100%; }
+  .ad-cta-action { align-items: center; width: 100%; }
+  .ad-cta-btn { width: 100%; justify-content: center; padding: 18px 0; }
+}
+</style>
+
+<script>
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);
+
+const robustRefresh = () => {
+  const winLoad = new Promise<void>((resolve) => {
+    if (document.readyState === 'complete') resolve();
+    else window.addEventListener('load', () => resolve(), { once: true });
+  });
+  const fontsReady = (document as any).fonts?.ready ?? Promise.resolve();
+  Promise.all([winLoad, fontsReady]).then(() => setTimeout(() => ScrollTrigger.refresh(), 120));
+};
+robustRefresh();
+
+document.addEventListener('DOMContentLoaded', () => {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced) return;
+
+  const EASE = 'power2.out', DUR = 0.9, Y = 14;
+
+  const heroSel = ['.ad-breadcrumb', '.ad-eyebrow', '.ad-name', '.ad-tagline', '.ad-desc', '.ad-cta-row', '.ad-card', '.ad-metrics'];
+  const heroEls = heroSel.map(s => document.querySelector<HTMLElement>(s)).filter((el): el is HTMLElement => !!el);
+  if (heroEls.length) {
+    gsap.set(heroEls, { opacity: 0, y: 12 });
+    const tl = gsap.timeline({ defaults: { ease: EASE } });
+    heroEls.forEach((el, i) => { tl.to(el, { opacity: 1, y: 0, duration: i === 2 ? 1.1 : 0.95 }, i === 0 ? 0 : 0.08 + i * 0.09); });
+  }
+
+  const reveal = (
+    targets: string | HTMLElement | NodeListOf<Element> | HTMLElement[],
+    opts: { trigger?: string | HTMLElement; start?: string; y?: number; dur?: number; stagger?: number; delay?: number } = {}
+  ) => {
+    const els = gsap.utils.toArray<HTMLElement>(targets as any);
+    if (!els.length) return;
+    gsap.set(els, { opacity: 0, y: opts.y ?? Y });
+    ScrollTrigger.create({
+      trigger: opts.trigger ?? els[0], start: opts.start ?? 'top 85%', once: true,
+      onEnter: () => gsap.to(els, {
+        opacity: 1, y: 0, duration: opts.dur ?? DUR, ease: EASE,
+        stagger: opts.stagger ?? 0.08, delay: opts.delay ?? 0, clearProps: 'transform,opacity',
+      }),
+    });
+  };
+
+  const drawRule = (rule: HTMLElement | null, trigger: HTMLElement) => {
+    if (!rule) return;
+    gsap.set(rule, { scaleX: 0, transformOrigin: 'left center' });
+    ScrollTrigger.create({
+      trigger, start: 'top 82%', once: true,
+      onEnter: () => gsap.to(rule, { scaleX: 1, duration: 0.9, ease: 'power3.inOut' }),
+    });
+  };
+
+  reveal('.ad-visual-wrap', { trigger: '#ad-visual', y: 24, dur: 1.0, start: 'top 86%' });
+
+  const colProblem = document.getElementById('ad-problem');
+  if (colProblem) {
+    reveal(colProblem.querySelectorAll('.ad-col-eye, .ad-problem-text, .ad-related'), { trigger: colProblem, y: 14, stagger: 0.08, start: 'top 84%' });
+    drawRule(colProblem.querySelector('.ad-col-rule'), colProblem);
+  }
+  const colFeatures = document.getElementById('ad-features');
+  if (colFeatures) {
+    reveal(colFeatures.querySelectorAll('.ad-col-eye, .ad-feature'), { trigger: colFeatures, y: 14, stagger: 0.07, start: 'top 82%' });
+    drawRule(colFeatures.querySelector('.ad-col-rule'), colFeatures);
+  }
+
+  reveal('.ad-faq-item', { trigger: '.ad-faq-section', y: 14, dur: 0.9, stagger: 0.08, start: 'top 84%' });
+
+  const ctaCard = document.getElementById('ad-cta');
+  if (ctaCard) {
+    reveal(ctaCard, { trigger: ctaCard, y: 24, dur: 1.0, start: 'top 84%' });
+    reveal(ctaCard.querySelectorAll('.ad-cta-text > *, .ad-cta-action'), { trigger: ctaCard, y: 12, stagger: 0.08, delay: 0.15, start: 'top 84%' });
+  }
+});
+</script>

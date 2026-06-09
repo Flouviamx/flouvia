@@ -35,6 +35,12 @@ src/pages/
   contacto.astro           → /contacto
   nosotros.astro           → /nosotros
 
+  # Páginas legales (prerender:true)
+  privacidad.astro         → /privacidad
+  terminos.astro           → /terminos
+  en/privacy.astro         → /en/privacy
+  en/terms.astro           → /en/terms
+
   # Blog (prerender:true)
   blog/index.astro         → /blog (listing)
   blog/[slug].astro        → /blog/{slug} (artículo)
@@ -522,6 +528,7 @@ nada y todo queda visible (la clase `.js-anim` tampoco se añade).
     contacto." son 100% bold sans (se eliminaron `.title-accent`/`.ds-serif`).
   - Nota: en `Inicio.astro` algunos `section-heading` aún traen acento serif heredado; migrarlos a
     una sola tipografía cuando se toquen.
+  - Las páginas legales (`privacidad.astro`, `terminos.astro`, `en/privacy.astro`, `en/terms.astro`) ya migradas a una sola tipografía (junio 2026). Sus `.section-num` usan serif italic.
 - Eyebrows: `0.65rem`, weight 800, letter-spacing 3px, uppercase, color `#888`
 
 **Watermarks de fondo:**
@@ -1081,11 +1088,58 @@ Actualizar `mentions` si se agregan nuevos casos de estudio.
 
 ---
 
+## Páginas legales (`privacidad.astro`, `terminos.astro`, `en/privacy.astro`, `en/terms.astro`)
+
+> Actualizadas junio 2026: unificadas con el estándar visual/animación del resto del sitio.
+
+### Hero estándar (igual que el home)
+- **Status pill** ("DOCUMENTO VIGENTE" / "ACTIVE DOCUMENT") con dot verde pulsante — mismas clases y CSS que `.hero-status` del home.
+- H1 **100% Inter bold**, sin acento serif italic (eliminar `<span class="editorial">` en ediciones futuras).
+- **Números de sección (`.section-num`):** `Instrument Serif italic` — **no** JetBrains Mono.
+- **Gate anti-FOUC:** `.js-anim .hero-anim { opacity: 0 }` en `<style is:global>` + timeline GSAP `power2.out` en carga. Reduced-motion → todo visible, `gsap.set` fuerza opacity:1 en index/content.
+- **Animación estándar:** `power2.out`, `duration 0.9–1.0`, `y: 14`, stagger por elemento (status → eyebrow → title → meta).
+- **ScrollTrigger reveal:** `once: true`, `power2.out` para `.legal-index` y `.legal-content`. Eliminado `expo.out`.
+
+### Estructura del contenido
+- Índice lateral sticky (`.legal-index`) + artículo principal (`.legal-content`).
+- Active link en el índice: `ScrollTrigger` por sección, `start/end: 'top/bottom 40%'`.
+- Responsive: `grid-template-columns: 220px 1fr` → 1 col en ≤1024px; índice horizontal en ≤768px.
+
+### Aviso de privacidad — sección Shopify Partner (junio 2026)
+`/privacidad` y `/en/privacy` tienen **9 secciones** (una más que términos):
+
+| # | Sección |
+|---|---------|
+| 01 | Identidad del Responsable / Data Controller |
+| 02 | Datos Personales Recabados / Personal Data Collected |
+| 03 | Finalidades del Tratamiento / Purposes of Processing |
+| 04 | Transferencias de Datos / Data Transfers — incluye **Shopify Inc.** |
+| 05 | **Shopify Partner, Aplicaciones y Datos de Tiendas** ← nueva |
+| 06 | Derechos ARCO / Your Rights |
+| 07 | Uso de Cookies / Cookies |
+| 08 | Cambios al Aviso / Changes |
+| 09 | Contacto / Contact |
+
+**Sección 05 — puntos clave de protección legal:**
+- Flouvia actúa como **encargado (data processor)**, no controller, sobre datos de tienda y clientes finales del comercio.
+- Cumplimiento: Shopify Partner Program Agreement + Shopify API Terms + Protected Customer Data Policy.
+- Minimización de datos, no venta/no uso propio/no entrenamiento de IA.
+- Borrado tras desinstalación de la app; notificación de incidentes sin demora.
+- Mención a GDPR/CCPA para clientes finales fuera de México.
+- Cláusula de limitación de responsabilidad: Flouvia responde solo dentro del marco del servicio e instrucciones del Cliente.
+
+**Términos de servicio:** mantienen 9 secciones sin cambios de numeración.
+
+**Fecha de última actualización:** 8 de junio de 2026 / June 8, 2026.
+
+---
+
 ## Deployment
 
 - **Plataforma:** Vercel
 - **Modo:** SSR (server-side rendering) — `output: 'server'`
 - **Páginas estáticas (`prerender:true`):** `index.astro`, `casos.astro`, `casos/[slug].astro`,
   `en/casos/[slug].astro`, `contacto.astro`, `nosotros.astro`, `servicios.astro`,
+  `privacidad.astro`, `terminos.astro`, `en/privacy.astro`, `en/terms.astro`,
   `blog/index.astro`, `blog/[slug].astro` y mirrors `/en/*`.
 - Todas las API routes necesitan `export const prerender = false` al inicio del archivo

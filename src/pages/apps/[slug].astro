@@ -1,0 +1,18 @@
+---
+export const prerender = true;
+
+import PlantillaApp from '../../components/PlantillaApp.astro';
+import { apps, liveApps } from '../../data/apps';
+
+export function getStaticPaths() {
+  // Solo las apps 'live' tienen página de detalle (las 'soon' son solo slots).
+  return liveApps.map(a => ({ params: { slug: a.slug } }));
+}
+
+const { slug } = Astro.params;
+const app  = apps.find(a => a.slug === slug)!;
+const idx  = liveApps.indexOf(app);
+const next = liveApps[(idx + 1) % liveApps.length];
+---
+
+<PlantillaApp app={app} next={next} isEn={false} root="" />
