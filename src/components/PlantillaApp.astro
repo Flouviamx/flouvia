@@ -16,13 +16,15 @@ interface Props {
 const { app, next, isEn, root } = Astro.props;
 const t = (o: { es: string; en: string }) => isEn ? o.en : o.es;
 
+// ── SEO ──────────────────────────────────────────────────────────────────────
+const SITE = 'https://flouvia.com';
 const pageTitle = app.seoTitle ? t(app.seoTitle) : `${app.name} — ${t(app.category)} | Flouvia`;
 const pageDesc  = app.seoDesc  ? t(app.seoDesc)  : t(app.desc);
 
-const SITE     = (Astro.site ?? new URL('https://flouvia.com')).origin;
-const appUrl   = `${SITE}${root}/apps/${app.slug}`;
-const appsUrl  = `${SITE}${root}/apps`;
+const appUrl  = `${SITE}${root}/apps/${app.slug}`;
+const appsUrl = `${SITE}${root}/apps`;
 
+// Schema SoftwareApplication — página de detalle de la app
 const softwareSchema = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
@@ -30,14 +32,26 @@ const softwareSchema = {
   name: app.name,
   description: pageDesc,
   applicationCategory: 'BusinessApplication',
+  applicationSubCategory: t(app.category),
   operatingSystem: 'Shopify',
+  inLanguage: isEn ? 'en-US' : 'es-MX',
   url: app.appStoreUrl || appUrl,
   ...(app.appStoreUrl ? { installUrl: app.appStoreUrl, downloadUrl: app.appStoreUrl } : {}),
-  publisher: { '@id': `${SITE}/#organization` },
-  author:    { '@id': `${SITE}/#organization` },
+  publisher: {
+    '@type': 'Organization',
+    '@id': `${SITE}/#organization`,
+    name: 'Flouvia',
+    url: SITE,
+  },
+  author: { '@id': `${SITE}/#organization` },
   datePublished: app.datePublished,
   dateModified:  app.dateModified ?? app.datePublished,
-  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+    description: t(app.pricing),
+  },
   ...(app.rating ? { aggregateRating: { '@type': 'AggregateRating', ratingValue: app.rating.value, ratingCount: app.rating.count } } : {}),
 };
 const breadcrumbSchema = {
