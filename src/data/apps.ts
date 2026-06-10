@@ -35,6 +35,19 @@ export interface ShopifyApp {
   problem:  { es: string; en: string };    // el problema que resuelve
   features: Array<{ title: { es: string; en: string }; desc: { es: string; en: string } }>;
 
+  // Cómo funciona — flujo paso a paso (clarifica el producto de un vistazo)
+  howItWorks?: Array<{ title: { es: string; en: string }; desc: { es: string; en: string } }>;
+
+  // Planes — comparación clara de precios (qué incluye cada nivel)
+  plans?: Array<{
+    name:     { es: string; en: string };
+    price:    { es: string; en: string };
+    tagline:  { es: string; en: string };
+    features: Array<{ es: string; en: string }>;
+    featured?: boolean;                    // resalta el plan recomendado
+    note?:    { es: string; en: string };  // p.ej. "7 días de prueba gratis"
+  }>;
+
   // Conexión narrativa con un caso (prueba social): "Nació del sistema de El Zarco"
   relatedCase?: { slug: string; label: { es: string; en: string } };
 
@@ -115,6 +128,55 @@ export const apps: ShopifyApp[] = [
       {
         title: { es: 'Facturación CFDI automática (Plan Pro)', en: 'Automatic CFDI invoicing (Pro plan)' },
         desc:  { es: 'Genera el comprobante CFDI 4.0 timbrado ante el SAT directamente desde la cotización. Solo para México.', en: 'Generate a CFDI 4.0 receipt stamped with the SAT directly from the quote. Mexico only.' },
+      },
+    ],
+
+    howItWorks: [
+      {
+        title: { es: 'El comprador solicita', en: 'The buyer requests' },
+        desc:  { es: 'Desde el carrito, la página de producto o un botón flotante, tu cliente pide una cotización sin salir de la tienda ni escribirte por WhatsApp. La solicitud llega a tu panel al instante.', en: 'From the cart, product page, or a floating button, your client requests a quote without leaving the store or messaging you on WhatsApp. The request lands in your dashboard instantly.' },
+      },
+      {
+        title: { es: 'Tú negocias', en: 'You negotiate' },
+        desc:  { es: 'Ajustas el precio de cada producto, aplicas descuentos por volumen y defines los términos de pago: Contado, Net 30 o Net 60. Todo desde un solo panel, sin hojas de cálculo.', en: 'Adjust the price of each product, apply volume discounts, and set payment terms: Cash, Net 30, or Net 60. All from a single panel — no spreadsheets.' },
+      },
+      {
+        title: { es: 'Envías la cotización', en: 'You send the quote' },
+        desc:  { es: 'Mandas al comprador un link de pago seguro o un PDF con tu marca. Él aprueba y paga en línea, o queda registrado a crédito según los términos que acordaron.', en: 'Send the buyer a secure payment link or a branded PDF. They approve and pay online, or it gets logged on credit per the terms you agreed on.' },
+      },
+      {
+        title: { es: 'Se convierte en pedido', en: 'It becomes an order' },
+        desc:  { es: 'La cotización aprobada se vuelve un pedido de Shopify con un clic — sin recaptura. Con el Plan Pro en México, el CFDI 4.0 se timbra automáticamente ante el SAT.', en: 'The approved quote turns into a Shopify order in one click — no re-entry. With the Pro plan in Mexico, the CFDI 4.0 is stamped automatically with the SAT.' },
+      },
+    ],
+
+    plans: [
+      {
+        name:    { es: 'Gratis', en: 'Free' },
+        price:   { es: '$0', en: '$0' },
+        tagline: { es: 'Para empezar a digitalizar tus cotizaciones.', en: 'To start digitizing your quotes.' },
+        features: [
+          { es: 'Hasta 5 cotizaciones activas', en: 'Up to 5 active quotes' },
+          { es: 'Botón de cotización en carrito, producto y flotante', en: 'Quote button on cart, product, and floating' },
+          { es: 'Negociación de precios y descuentos', en: 'Price negotiation and discounts' },
+          { es: 'Convierte la cotización en pedido de Shopify', en: 'Convert quotes into Shopify orders' },
+        ],
+      },
+      {
+        name:    { es: 'Pro', en: 'Pro' },
+        price:   { es: 'Desde $29 USD/mes', en: 'From $29 USD/mo' },
+        tagline: { es: 'Para operar tu canal B2B en serio.', en: 'To run your B2B channel seriously.' },
+        featured: true,
+        note:    { es: '7 días de prueba gratis · sin tarjeta para empezar', en: '7-day free trial · no card to start' },
+        features: [
+          { es: 'Cotizaciones ilimitadas', en: 'Unlimited quotes' },
+          { es: 'Facturación CFDI 4.0 automática ante el SAT (México)', en: 'Automatic CFDI 4.0 invoicing with the SAT (Mexico)' },
+          { es: 'Empresas con límite de crédito', en: 'Companies with credit limits' },
+          { es: 'Términos de pago Net 30 / Net 60', en: 'Net 30 / Net 60 payment terms' },
+          { es: 'Analítica B2B', en: 'B2B analytics' },
+          { es: 'Formulario de cotización personalizable', en: 'Customizable quote form' },
+          { es: 'Modo solo-cotización (oculta precios al público)', en: 'Quote-only mode (hide prices from the public)' },
+        ],
       },
     ],
 

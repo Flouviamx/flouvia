@@ -150,6 +150,27 @@ const faqSchema = app.faq && app.faq.length ? {
       </div>
     </section>
 
+    <!-- ════════ CÓMO FUNCIONA ════════ -->
+    {app.howItWorks && app.howItWorks.length > 0 && (
+      <section class="ad-how-section">
+        <div class="container">
+          <div class="ad-how-head" id="ad-how-head">
+            <span class="ad-col-eye">{isEn ? 'HOW IT WORKS' : 'CÓMO FUNCIONA'}</span>
+            <h2 class="ad-how-title">{isEn ? 'From request to invoiced order, in four steps.' : 'De la solicitud al pedido facturado, en cuatro pasos.'}</h2>
+          </div>
+          <div class="ad-how-grid">
+            {app.howItWorks.map((s, i) => (
+              <div class="ad-how-step">
+                <span class="ad-how-num editorial">{String(i + 1).padStart(2, '0')}</span>
+                <h3 class="ad-how-step-title">{t(s.title)}</h3>
+                <p class="ad-how-step-desc">{t(s.desc)}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
     <!-- ════════ PROBLEMA + FEATURES ════════ -->
     <section class="ad-body-section">
       <div class="container ad-body-grid">
@@ -183,6 +204,41 @@ const faqSchema = app.faq && app.faq.length ? {
         </div>
       </div>
     </section>
+
+    <!-- ════════ PLANES ════════ -->
+    {app.plans && app.plans.length > 0 && (
+      <section class="ad-plans-section">
+        <div class="container">
+          <div class="ad-plans-head" id="ad-plans-head">
+            <span class="ad-col-eye">{isEn ? 'PRICING' : 'PRECIOS'}</span>
+            <h2 class="ad-plans-title">{isEn ? 'Start free. Upgrade when you sell more.' : 'Empieza gratis. Sube de plan cuando vendas más.'}</h2>
+          </div>
+          <div class="ad-plans-grid">
+            {app.plans.map(p => (
+              <div class={`ad-plan${p.featured ? ' ad-plan-featured' : ''}`}>
+                {p.featured && <span class="ad-plan-tag">{isEn ? 'RECOMMENDED' : 'RECOMENDADO'}</span>}
+                <span class="ad-plan-name">{t(p.name)}</span>
+                <span class="ad-plan-price editorial">{t(p.price)}</span>
+                <span class="ad-plan-tagline">{t(p.tagline)}</span>
+                <ul class="ad-plan-feats">
+                  {p.features.map(f => (
+                    <li class="ad-plan-feat">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                      <span>{t(f)}</span>
+                    </li>
+                  ))}
+                </ul>
+                {p.note && <span class="ad-plan-note">{t(p.note)}</span>}
+                <a href={app.appStoreUrl} target="_blank" rel="noopener" class={`ad-plan-btn${p.featured ? ' ad-plan-btn-primary' : ''}`}>
+                  <span>{isEn ? 'Get started' : 'Empezar'}</span>
+                </a>
+              </div>
+            ))}
+          </div>
+          <p class="ad-plans-foot">{t(app.requirements)}</p>
+        </div>
+      </section>
+    )}
 
     <!-- ════════ FAQ ════════ -->
     {app.faq && app.faq.length > 0 && (
@@ -356,6 +412,45 @@ const faqSchema = app.faq && app.faq.length ? {
 .ad-feature-title { font-size: 1rem; font-weight: 700; color: var(--color-text); letter-spacing: -0.2px; }
 .ad-feature-desc { font-size: 0.92rem; line-height: 1.6; color: var(--color-text-muted); }
 
+/* CÓMO FUNCIONA */
+.ad-how-section { padding: 5.5rem 0; background: var(--color-bg-soft); border-top: 1px solid var(--color-border); }
+.ad-how-head { margin-bottom: 3.5rem; max-width: 620px; }
+.ad-how-title { font-size: clamp(1.7rem, 3vw, 2.6rem); font-weight: 800; letter-spacing: -1.2px; line-height: 1.1; color: var(--color-text); margin: 0.6rem 0 0; }
+.ad-how-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--color-border); }
+.ad-how-step { padding: 2.2rem 1.6rem 0 0; border-right: 1px solid var(--color-border); position: relative; }
+.ad-how-step:last-child { border-right: none; padding-right: 0; }
+.ad-how-step::before { content: ""; position: absolute; top: -1px; left: 0; width: 32px; height: 2px; background: var(--color-blue-deep); }
+.ad-how-num { display: block; font-size: 1.9rem; line-height: 1; color: var(--color-blue-deep); margin-bottom: 1.1rem; }
+.ad-how-step-title { font-size: 1.02rem; font-weight: 700; letter-spacing: -0.3px; color: var(--color-text); margin: 0 0 0.7rem; }
+.ad-how-step-desc { font-size: 0.9rem; line-height: 1.6; color: var(--color-text-muted); margin: 0; }
+
+/* PLANES */
+.ad-plans-section { padding: 5.5rem 0; background: var(--color-bg); border-top: 1px solid var(--color-border); }
+.ad-plans-head { margin-bottom: 3rem; max-width: 620px; }
+.ad-plans-title { font-size: clamp(1.7rem, 3vw, 2.6rem); font-weight: 800; letter-spacing: -1.2px; line-height: 1.1; color: var(--color-text); margin: 0.6rem 0 0; }
+.ad-plans-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.6rem; align-items: stretch; }
+.ad-plan { display: flex; flex-direction: column; border: 1px solid var(--color-border); border-radius: 24px; padding: 2.4rem; background: var(--color-bg-soft); position: relative; }
+.ad-plan-featured { background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%); border-color: transparent; box-shadow: 0 30px 70px -30px rgba(10,25,47,0.4); }
+.ad-plan-tag { position: absolute; top: 1.6rem; right: 1.6rem; font-size: 0.56rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #0a192f; background: #fff; padding: 5px 11px; border-radius: 100px; }
+.ad-plan-name { font-size: 0.7rem; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; color: #999; }
+.ad-plan-featured .ad-plan-name { color: rgba(255,255,255,.55); }
+.ad-plan-price { font-size: clamp(2.2rem, 3.5vw, 2.9rem); line-height: 1; letter-spacing: -1px; color: var(--color-blue-deep); margin: 0.8rem 0 0.5rem; }
+.ad-plan-featured .ad-plan-price { color: #fff; }
+.ad-plan-tagline { font-size: 0.92rem; line-height: 1.45; color: var(--color-text-muted); margin-bottom: 1.8rem; }
+.ad-plan-featured .ad-plan-tagline { color: rgba(255,255,255,.6); }
+.ad-plan-feats { list-style: none; margin: 0 0 1.8rem; padding: 1.8rem 0 0; border-top: 1px solid var(--color-border); display: flex; flex-direction: column; gap: 0.85rem; flex-grow: 1; }
+.ad-plan-featured .ad-plan-feats { border-top-color: rgba(255,255,255,.12); }
+.ad-plan-feat { display: flex; align-items: flex-start; gap: 11px; font-size: 0.92rem; line-height: 1.45; color: #333; }
+.ad-plan-featured .ad-plan-feat { color: rgba(255,255,255,.85); }
+.ad-plan-feat svg { color: #10b981; flex-shrink: 0; margin-top: 3px; }
+.ad-plan-note { font-size: 0.78rem; color: var(--color-text-muted); margin-bottom: 1.2rem; }
+.ad-plan-featured .ad-plan-note { color: rgba(255,255,255,.55); }
+.ad-plan-btn { display: inline-flex; align-items: center; justify-content: center; padding: 15px 28px; border-radius: 100px; text-decoration: none; font-size: 0.92rem; font-weight: 700; transition: transform .5s var(--ease-spring), box-shadow .5s var(--ease-spring); border: 1px solid var(--color-border); color: var(--color-text); background: #fff; }
+.ad-plan-btn:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(10,25,47,0.12); }
+.ad-plan-btn-primary { background: #fff; color: var(--color-blue-deep); border-color: transparent; box-shadow: 0 10px 24px rgba(255,255,255,0.14); }
+.ad-plan-btn-primary:hover { box-shadow: 0 18px 38px rgba(255,255,255,0.22); }
+.ad-plans-foot { font-size: 0.82rem; line-height: 1.6; color: var(--color-text-muted); margin: 2rem 0 0; max-width: 720px; }
+
 /* FAQ */
 .ad-faq-section { padding: 0 0 5rem; background: var(--color-bg); }
 .ad-faq-list { display: flex; flex-direction: column; border-top: 1px solid var(--color-border); margin-top: 1.2rem; }
@@ -396,6 +491,11 @@ const faqSchema = app.faq && app.faq.length ? {
 @media (max-width: 1024px) {
   .ad-hero-grid { grid-template-columns: 1fr; gap: 2.5rem; }
   .ad-card { max-width: 360px; }
+  .ad-how-grid { grid-template-columns: 1fr 1fr; }
+  .ad-how-step { border-bottom: 1px solid var(--color-border); padding: 2.2rem 1.6rem 2.2rem 0; }
+  .ad-how-step:nth-child(2n) { border-right: none; padding-right: 0; }
+  .ad-how-step:nth-child(2n) { padding-left: 1.6rem; }
+  .ad-how-step:nth-child(2n)::before { left: 1.6rem; }
 }
 @media (max-width: 768px) {
   .ad-hero { padding: 10rem 0 0; }
@@ -409,6 +509,12 @@ const faqSchema = app.faq && app.faq.length ? {
   .ad-metric { padding: 1.4rem 1rem; }
   .ad-visual-section { padding: 2.5rem 0; }
   .ad-visual-wrap { min-height: 200px; border-radius: 18px; }
+  .ad-how-section, .ad-plans-section { padding: 4rem 0; }
+  .ad-how-grid { grid-template-columns: 1fr; }
+  .ad-how-step, .ad-how-step:nth-child(2n) { border-right: none; padding: 2rem 0; }
+  .ad-how-step:nth-child(2n)::before { left: 0; }
+  .ad-plans-grid { grid-template-columns: 1fr; }
+  .ad-plan { padding: 2rem; }
   .ad-body-section { padding: 4rem 0; }
   .ad-body-grid { grid-template-columns: 1fr; gap: 3rem; }
   .ad-nav-row { flex-direction: column; align-items: stretch; gap: 2rem; }
@@ -490,6 +596,14 @@ document.addEventListener('DOMContentLoaded', () => {
     reveal(colFeatures.querySelectorAll('.ad-col-eye, .ad-feature'), { trigger: colFeatures, y: 14, stagger: 0.07, start: 'top 82%' });
     drawRule(colFeatures.querySelector('.ad-col-rule'), colFeatures);
   }
+
+  const howHead = document.getElementById('ad-how-head');
+  if (howHead) reveal(howHead.querySelectorAll('.ad-col-eye, .ad-how-title'), { trigger: '.ad-how-section', y: 14, stagger: 0.08, start: 'top 84%' });
+  reveal('.ad-how-step', { trigger: '.ad-how-grid', y: 16, dur: 0.9, stagger: 0.1, start: 'top 84%' });
+
+  const plansHead = document.getElementById('ad-plans-head');
+  if (plansHead) reveal(plansHead.querySelectorAll('.ad-col-eye, .ad-plans-title'), { trigger: '.ad-plans-section', y: 14, stagger: 0.08, start: 'top 84%' });
+  reveal('.ad-plan', { trigger: '.ad-plans-grid', y: 20, dur: 1.0, stagger: 0.1, start: 'top 84%' });
 
   reveal('.ad-faq-item', { trigger: '.ad-faq-section', y: 14, dur: 0.9, stagger: 0.08, start: 'top 84%' });
 
