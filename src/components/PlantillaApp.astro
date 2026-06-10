@@ -141,22 +141,44 @@ const faqSchema = app.faq && app.faq.length ? {
       </div>
     </section>
 
-    <!-- ════════ SCREENSHOT ════════ -->
+    <!-- ════════ DEMO (video o screenshot) ════════ -->
     <section class="ad-visual-section">
       <div class="container">
-        <div class="ad-visual-wrap" id="ad-visual">
-          <img src={app.image} alt={`${app.name} — screenshot`} class="ad-visual-img" loading="eager" />
-        </div>
+        {app.youtubeId ? (
+          <div class="ad-video-wrap" id="ad-visual">
+            <iframe
+              class="ad-video"
+              src={`https://www.youtube-nocookie.com/embed/${app.youtubeId}?rel=0&modestbranding=1`}
+              title={`${app.name} — ${isEn ? 'demo' : 'demostración'}`}
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+          </div>
+        ) : (
+          <div class="ad-visual-wrap" id="ad-visual">
+            <img src={app.image} alt={`${app.name} — screenshot`} class="ad-visual-img" loading="eager" />
+          </div>
+        )}
+        {app.demoUrl && (
+          <a href={app.demoUrl} target="_blank" rel="noopener" class="ad-demo-link" id="ad-demo-link">
+            <span>{isEn ? 'Open the live demo store' : 'Abrir la tienda demo en vivo'}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        )}
       </div>
     </section>
 
     <!-- ════════ CÓMO FUNCIONA ════════ -->
     {app.howItWorks && app.howItWorks.length > 0 && (
       <section class="ad-how-section">
+        <span class="ad-sec-wm editorial" aria-hidden="true">{isEn ? 'Flow' : 'Flujo'}</span>
         <div class="container">
           <div class="ad-how-head" id="ad-how-head">
-            <span class="ad-col-eye">{isEn ? 'HOW IT WORKS' : 'CÓMO FUNCIONA'}</span>
-            <h2 class="ad-how-title">{isEn ? 'From request to invoiced order, in four steps.' : 'De la solicitud al pedido facturado, en cuatro pasos.'}</h2>
+            <p class="ad-sec-eye">{isEn ? 'HOW IT WORKS' : 'CÓMO FUNCIONA'}</p>
+            <h2 class="ad-sec-title">{isEn ? 'From request to invoiced order, in four steps.' : 'De la solicitud al pedido facturado, en cuatro pasos.'}</h2>
+            <p class="ad-sec-sub">{isEn ? 'No spreadsheets, no WhatsApp threads. The whole B2B quote lives inside Shopify, from the first request to the stamped invoice.' : 'Sin hojas de cálculo ni hilos de WhatsApp. Toda la cotización B2B vive dentro de Shopify, desde la primera solicitud hasta la factura timbrada.'}</p>
           </div>
           <div class="ad-how-grid">
             {app.howItWorks.map((s, i) => (
@@ -208,17 +230,21 @@ const faqSchema = app.faq && app.faq.length ? {
     <!-- ════════ PLANES ════════ -->
     {app.plans && app.plans.length > 0 && (
       <section class="ad-plans-section">
+        <span class="ad-sec-wm ad-sec-wm-right editorial" aria-hidden="true">{isEn ? 'Plans' : 'Planes'}</span>
         <div class="container">
           <div class="ad-plans-head" id="ad-plans-head">
-            <span class="ad-col-eye">{isEn ? 'PRICING' : 'PRECIOS'}</span>
-            <h2 class="ad-plans-title">{isEn ? 'Start free. Upgrade when you sell more.' : 'Empieza gratis. Sube de plan cuando vendas más.'}</h2>
+            <p class="ad-sec-eye">{isEn ? 'PRICING' : 'PRECIOS'}</p>
+            <h2 class="ad-sec-title">{isEn ? 'Start free. Upgrade when you sell more.' : 'Empieza gratis. Sube de plan cuando vendas más.'}</h2>
           </div>
-          <div class="ad-plans-grid">
+          <div class="ad-plans-grid" style={`--plan-cols:${app.plans.length}`}>
             {app.plans.map(p => (
               <div class={`ad-plan${p.featured ? ' ad-plan-featured' : ''}`}>
                 {p.featured && <span class="ad-plan-tag">{isEn ? 'RECOMMENDED' : 'RECOMENDADO'}</span>}
                 <span class="ad-plan-name">{t(p.name)}</span>
-                <span class="ad-plan-price editorial">{t(p.price)}</span>
+                <div class="ad-plan-price-row">
+                  <span class="ad-plan-price editorial">{t(p.price)}</span>
+                  {p.cycle && <span class="ad-plan-cycle">{t(p.cycle)}</span>}
+                </div>
                 <span class="ad-plan-tagline">{t(p.tagline)}</span>
                 <ul class="ad-plan-feats">
                   {p.features.map(f => (
@@ -243,8 +269,12 @@ const faqSchema = app.faq && app.faq.length ? {
     <!-- ════════ FAQ ════════ -->
     {app.faq && app.faq.length > 0 && (
       <section class="ad-faq-section">
+        <span class="ad-sec-wm editorial" aria-hidden="true">{isEn ? 'Answers' : 'Dudas'}</span>
         <div class="container">
-          <span class="ad-col-eye" id="ad-faq-eye">FAQ</span>
+          <div class="ad-faq-head" id="ad-faq-head">
+            <p class="ad-sec-eye">{isEn ? 'FREQUENT QUESTIONS' : 'PREGUNTAS FRECUENTES'}</p>
+            <h2 class="ad-sec-title">{isEn ? 'Everything you need to decide.' : 'Todo lo que necesitas para decidir.'}</h2>
+          </div>
           <div class="ad-faq-list">
             {app.faq.map(f => (
               <div class="ad-faq-item">
@@ -388,14 +418,20 @@ const faqSchema = app.faq && app.faq.length ? {
 .ad-metric-val { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: clamp(2rem,3.2vw,2.8rem); line-height: 1; letter-spacing: -0.5px; color: var(--color-blue-deep); }
 .ad-metric-lbl { font-size: 0.6rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--color-text-muted); }
 
-/* SCREENSHOT */
-.ad-visual-section { padding: 4rem 0; background: #f5f5f7; }
+/* DEMO (video / screenshot) */
+.ad-visual-section { padding: 6rem 0; background: #f5f5f7; }
 .ad-visual-wrap { border-radius: 24px; overflow: hidden; border: 1px solid var(--color-border); background: #eceef2; display: flex; align-items: center; justify-content: center; min-height: 380px; box-shadow: 0 40px 80px -40px rgba(10,25,47,0.25); }
 .ad-visual-img { width: 100%; height: auto; display: block; }
+.ad-video-wrap { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 24px; overflow: hidden; background: #050b14; box-shadow: 0 40px 90px -40px rgba(10,25,47,0.45); border: 1px solid rgba(10,25,47,0.1); }
+.ad-video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+.ad-demo-link { display: inline-flex; align-items: center; gap: 9px; margin-top: 1.6rem; font-size: 0.85rem; font-weight: 700; color: var(--color-blue-deep); text-decoration: none; transition: gap .3s var(--ease-smooth); }
+.ad-demo-link:hover { gap: 13px; }
+.ad-demo-link svg { transition: transform .4s var(--ease-spring); }
+.ad-demo-link:hover svg { transform: translateX(3px); }
 
 /* PROBLEMA + FEATURES */
-.ad-body-section { padding: 5rem 0; background: var(--color-bg); }
-.ad-body-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+.ad-body-section { padding: 9rem 0; background: var(--color-bg); }
+.ad-body-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
 .ad-col-eye { display: block; font-size: 0.56rem; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; color: #ccc; margin-bottom: 1rem; }
 .ad-col-rule { height: 2px; width: 32px; background: var(--color-text); margin-bottom: 1.8rem; transform: scaleX(0); transform-origin: left; }
 .ad-problem-text { font-size: 1.1rem; line-height: 1.8; color: #333; margin: 0; }
@@ -412,38 +448,51 @@ const faqSchema = app.faq && app.faq.length ? {
 .ad-feature-title { font-size: 1rem; font-weight: 700; color: var(--color-text); letter-spacing: -0.2px; }
 .ad-feature-desc { font-size: 0.92rem; line-height: 1.6; color: var(--color-text-muted); }
 
+/* SECTION HEADS — estándar home (eyebrow + heading + sub + watermark) */
+.ad-sec-eye { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin: 0 0 1.2rem; }
+.ad-sec-title { font-size: clamp(2.1rem, 4vw, 3.1rem); font-weight: 800; letter-spacing: -1.5px; line-height: 1.05; color: var(--color-text); margin: 0; }
+.ad-sec-sub { font-size: 1.08rem; line-height: 1.6; color: var(--color-text-muted); margin: 1.6rem 0 0; max-width: 540px; }
+.ad-sec-wm {
+  position: absolute; bottom: -2.5vw; left: 5%; font-size: 22vw; line-height: 1;
+  color: rgba(0,0,0,0.025); pointer-events: none; user-select: none; z-index: 0; white-space: nowrap;
+}
+.ad-sec-wm-right { left: auto; right: 5%; }
+
 /* CÓMO FUNCIONA */
-.ad-how-section { padding: 5.5rem 0; background: var(--color-bg-soft); border-top: 1px solid var(--color-border); }
-.ad-how-head { margin-bottom: 3.5rem; max-width: 620px; }
-.ad-how-title { font-size: clamp(1.7rem, 3vw, 2.6rem); font-weight: 800; letter-spacing: -1.2px; line-height: 1.1; color: var(--color-text); margin: 0.6rem 0 0; }
-.ad-how-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--color-border); }
-.ad-how-step { padding: 2.2rem 1.6rem 0 0; border-right: 1px solid var(--color-border); position: relative; }
+.ad-how-section { padding: 9rem 0; background: var(--color-bg-soft); border-top: 1px solid var(--color-border); position: relative; overflow: clip; }
+.ad-how-section .container { z-index: 1; }
+.ad-how-head { margin-bottom: 4.5rem; max-width: 640px; }
+.ad-how-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--color-border); position: relative; z-index: 1; }
+.ad-how-step { padding: 2.4rem 1.8rem 0 0; border-right: 1px solid var(--color-border); position: relative; }
 .ad-how-step:last-child { border-right: none; padding-right: 0; }
-.ad-how-step::before { content: ""; position: absolute; top: -1px; left: 0; width: 32px; height: 2px; background: var(--color-blue-deep); }
-.ad-how-num { display: block; font-size: 1.9rem; line-height: 1; color: var(--color-blue-deep); margin-bottom: 1.1rem; }
-.ad-how-step-title { font-size: 1.02rem; font-weight: 700; letter-spacing: -0.3px; color: var(--color-text); margin: 0 0 0.7rem; }
-.ad-how-step-desc { font-size: 0.9rem; line-height: 1.6; color: var(--color-text-muted); margin: 0; }
+.ad-how-step::before { content: ""; position: absolute; top: -1px; left: 0; width: 36px; height: 2px; background: var(--color-blue-deep); }
+.ad-how-num { display: block; font-size: 2.2rem; line-height: 1; color: var(--color-blue-deep); margin-bottom: 1.3rem; }
+.ad-how-step-title { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.3px; color: var(--color-text); margin: 0 0 0.7rem; }
+.ad-how-step-desc { font-size: 0.92rem; line-height: 1.62; color: var(--color-text-muted); margin: 0; }
 
 /* PLANES */
-.ad-plans-section { padding: 5.5rem 0; background: var(--color-bg); border-top: 1px solid var(--color-border); }
-.ad-plans-head { margin-bottom: 3rem; max-width: 620px; }
-.ad-plans-title { font-size: clamp(1.7rem, 3vw, 2.6rem); font-weight: 800; letter-spacing: -1.2px; line-height: 1.1; color: var(--color-text); margin: 0.6rem 0 0; }
-.ad-plans-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.6rem; align-items: stretch; }
-.ad-plan { display: flex; flex-direction: column; border: 1px solid var(--color-border); border-radius: 24px; padding: 2.4rem; background: var(--color-bg-soft); position: relative; }
+.ad-plans-section { padding: 9rem 0; background: var(--color-bg); border-top: 1px solid var(--color-border); position: relative; overflow: clip; }
+.ad-plans-section .container { z-index: 1; }
+.ad-plans-head { margin-bottom: 3.5rem; max-width: 640px; }
+.ad-plans-grid { display: grid; grid-template-columns: repeat(var(--plan-cols, 2), 1fr); gap: 1.2rem; align-items: stretch; position: relative; z-index: 1; }
+.ad-plan { display: flex; flex-direction: column; border: 1px solid var(--color-border); border-radius: 22px; padding: 2rem 1.8rem; background: var(--color-bg-soft); position: relative; }
 .ad-plan-featured { background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%); border-color: transparent; box-shadow: 0 30px 70px -30px rgba(10,25,47,0.4); }
-.ad-plan-tag { position: absolute; top: 1.6rem; right: 1.6rem; font-size: 0.56rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #0a192f; background: #fff; padding: 5px 11px; border-radius: 100px; }
-.ad-plan-name { font-size: 0.7rem; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; color: #999; }
+.ad-plan-tag { position: absolute; top: -11px; left: 1.8rem; font-size: 0.55rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #fff; background: #10b981; padding: 5px 11px; border-radius: 100px; box-shadow: 0 6px 16px rgba(16,185,129,0.35); }
+.ad-plan-name { font-size: 0.68rem; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; color: #999; }
 .ad-plan-featured .ad-plan-name { color: rgba(255,255,255,.55); }
-.ad-plan-price { font-size: clamp(2.2rem, 3.5vw, 2.9rem); line-height: 1; letter-spacing: -1px; color: var(--color-blue-deep); margin: 0.8rem 0 0.5rem; }
+.ad-plan-price-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin: 0.7rem 0 0.6rem; }
+.ad-plan-price { font-size: clamp(2.1rem, 3vw, 2.7rem); line-height: 1; letter-spacing: -1px; color: var(--color-blue-deep); }
 .ad-plan-featured .ad-plan-price { color: #fff; }
-.ad-plan-tagline { font-size: 0.92rem; line-height: 1.45; color: var(--color-text-muted); margin-bottom: 1.8rem; }
-.ad-plan-featured .ad-plan-tagline { color: rgba(255,255,255,.6); }
-.ad-plan-feats { list-style: none; margin: 0 0 1.8rem; padding: 1.8rem 0 0; border-top: 1px solid var(--color-border); display: flex; flex-direction: column; gap: 0.85rem; flex-grow: 1; }
+.ad-plan-cycle { font-size: 0.72rem; font-weight: 600; color: var(--color-text-muted); line-height: 1.3; }
+.ad-plan-featured .ad-plan-cycle { color: rgba(255,255,255,.5); }
+.ad-plan-tagline { font-size: 0.88rem; line-height: 1.45; color: var(--color-text-muted); margin-bottom: 1.6rem; min-height: 2.5em; }
+.ad-plan-featured .ad-plan-tagline { color: rgba(255,255,255,.62); }
+.ad-plan-feats { list-style: none; margin: 0 0 1.6rem; padding: 1.6rem 0 0; border-top: 1px solid var(--color-border); display: flex; flex-direction: column; gap: 0.8rem; flex-grow: 1; }
 .ad-plan-featured .ad-plan-feats { border-top-color: rgba(255,255,255,.12); }
-.ad-plan-feat { display: flex; align-items: flex-start; gap: 11px; font-size: 0.92rem; line-height: 1.45; color: #333; }
+.ad-plan-feat { display: flex; align-items: flex-start; gap: 10px; font-size: 0.87rem; line-height: 1.4; color: #333; }
 .ad-plan-featured .ad-plan-feat { color: rgba(255,255,255,.85); }
 .ad-plan-feat svg { color: #10b981; flex-shrink: 0; margin-top: 3px; }
-.ad-plan-note { font-size: 0.78rem; color: var(--color-text-muted); margin-bottom: 1.2rem; }
+.ad-plan-note { font-size: 0.74rem; line-height: 1.4; color: var(--color-text-muted); margin-bottom: 1.1rem; }
 .ad-plan-featured .ad-plan-note { color: rgba(255,255,255,.55); }
 .ad-plan-btn { display: inline-flex; align-items: center; justify-content: center; padding: 15px 28px; border-radius: 100px; text-decoration: none; font-size: 0.92rem; font-weight: 700; transition: transform .5s var(--ease-spring), box-shadow .5s var(--ease-spring); border: 1px solid var(--color-border); color: var(--color-text); background: #fff; }
 .ad-plan-btn:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(10,25,47,0.12); }
@@ -452,8 +501,10 @@ const faqSchema = app.faq && app.faq.length ? {
 .ad-plans-foot { font-size: 0.82rem; line-height: 1.6; color: var(--color-text-muted); margin: 2rem 0 0; max-width: 720px; }
 
 /* FAQ */
-.ad-faq-section { padding: 0 0 5rem; background: var(--color-bg); }
-.ad-faq-list { display: flex; flex-direction: column; border-top: 1px solid var(--color-border); margin-top: 1.2rem; }
+.ad-faq-section { padding: 9rem 0; background: var(--color-bg-soft); border-top: 1px solid var(--color-border); position: relative; overflow: clip; }
+.ad-faq-section .container { z-index: 1; }
+.ad-faq-head { margin-bottom: 3rem; max-width: 640px; }
+.ad-faq-list { display: flex; flex-direction: column; border-top: 1px solid var(--color-border); position: relative; z-index: 1; }
 .ad-faq-item { padding: 2rem 0; border-bottom: 1px solid var(--color-border); }
 .ad-faq-q { font-size: 1.1rem; font-weight: 700; color: var(--color-text); margin: 0 0 0.7rem; letter-spacing: -0.3px; }
 .ad-faq-a { font-size: 0.98rem; line-height: 1.7; color: var(--color-text-muted); margin: 0; max-width: 720px; }
@@ -496,6 +547,7 @@ const faqSchema = app.faq && app.faq.length ? {
   .ad-how-step:nth-child(2n) { border-right: none; padding-right: 0; }
   .ad-how-step:nth-child(2n) { padding-left: 1.6rem; }
   .ad-how-step:nth-child(2n)::before { left: 1.6rem; }
+  .ad-plans-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 768px) {
   .ad-hero { padding: 10rem 0 0; }
@@ -509,13 +561,15 @@ const faqSchema = app.faq && app.faq.length ? {
   .ad-metric { padding: 1.4rem 1rem; }
   .ad-visual-section { padding: 2.5rem 0; }
   .ad-visual-wrap { min-height: 200px; border-radius: 18px; }
-  .ad-how-section, .ad-plans-section { padding: 4rem 0; }
+  .ad-how-section, .ad-plans-section, .ad-faq-section { padding: 5rem 0; }
+  .ad-how-head, .ad-plans-head { margin-bottom: 2.8rem; }
   .ad-how-grid { grid-template-columns: 1fr; }
   .ad-how-step, .ad-how-step:nth-child(2n) { border-right: none; padding: 2rem 0; }
   .ad-how-step:nth-child(2n)::before { left: 0; }
-  .ad-plans-grid { grid-template-columns: 1fr; }
+  .ad-plans-grid { grid-template-columns: 1fr; max-width: 100%; }
   .ad-plan { padding: 2rem; }
-  .ad-body-section { padding: 4rem 0; }
+  .ad-sec-wm { font-size: 34vw; bottom: -1.5vw; }
+  .ad-body-section { padding: 5rem 0; }
   .ad-body-grid { grid-template-columns: 1fr; gap: 3rem; }
   .ad-nav-row { flex-direction: column; align-items: stretch; gap: 2rem; }
   .ad-nav-next { justify-content: space-between; }
@@ -584,7 +638,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  reveal('.ad-visual-wrap', { trigger: '#ad-visual', y: 24, dur: 1.0, start: 'top 86%' });
+  reveal('#ad-visual', { trigger: '#ad-visual', y: 24, dur: 1.0, start: 'top 86%' });
+  reveal('#ad-demo-link', { trigger: '#ad-demo-link', y: 12, dur: 0.8, start: 'top 92%' });
 
   const colProblem = document.getElementById('ad-problem');
   if (colProblem) {
@@ -598,14 +653,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const howHead = document.getElementById('ad-how-head');
-  if (howHead) reveal(howHead.querySelectorAll('.ad-col-eye, .ad-how-title'), { trigger: '.ad-how-section', y: 14, stagger: 0.08, start: 'top 84%' });
-  reveal('.ad-how-step', { trigger: '.ad-how-grid', y: 16, dur: 0.9, stagger: 0.1, start: 'top 84%' });
+  if (howHead) reveal(howHead.querySelectorAll('.ad-sec-eye, .ad-sec-title, .ad-sec-sub'), { trigger: '.ad-how-section', y: 14, stagger: 0.08, start: 'top 82%' });
+  reveal('.ad-how-step', { trigger: '.ad-how-grid', y: 18, dur: 0.95, stagger: 0.1, start: 'top 84%' });
 
   const plansHead = document.getElementById('ad-plans-head');
-  if (plansHead) reveal(plansHead.querySelectorAll('.ad-col-eye, .ad-plans-title'), { trigger: '.ad-plans-section', y: 14, stagger: 0.08, start: 'top 84%' });
-  reveal('.ad-plan', { trigger: '.ad-plans-grid', y: 20, dur: 1.0, stagger: 0.1, start: 'top 84%' });
+  if (plansHead) reveal(plansHead.querySelectorAll('.ad-sec-eye, .ad-sec-title'), { trigger: '.ad-plans-section', y: 14, stagger: 0.08, start: 'top 82%' });
+  reveal('.ad-plan', { trigger: '.ad-plans-grid', y: 22, dur: 1.0, stagger: 0.1, start: 'top 84%' });
 
-  reveal('.ad-faq-item', { trigger: '.ad-faq-section', y: 14, dur: 0.9, stagger: 0.08, start: 'top 84%' });
+  const faqHead = document.getElementById('ad-faq-head');
+  if (faqHead) reveal(faqHead.querySelectorAll('.ad-sec-eye, .ad-sec-title'), { trigger: '.ad-faq-section', y: 14, stagger: 0.08, start: 'top 82%' });
+  reveal('.ad-faq-item', { trigger: '.ad-faq-list', y: 14, dur: 0.9, stagger: 0.08, start: 'top 86%' });
 
   const ctaCard = document.getElementById('ad-cta');
   if (ctaCard) {

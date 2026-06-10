@@ -22,6 +22,8 @@ export interface ShopifyApp {
   appStoreUrl: string;                    // listing público del Shopify App Store ('' si soon)
   icon:     string;                        // /imgs/...  — ícono cuadrado de la app
   image:    string;                        // /imgs/...  — screenshot/hero del detalle
+  youtubeId?: string;                      // ID del video demo (reemplaza el screenshot si existe)
+  demoUrl?:  string;                       // tienda demo pública
 
   // Comercial
   pricingTag: { es: string; en: string };  // badge corto: "Gratis", "Free to install", "Desde $9.99"
@@ -42,6 +44,7 @@ export interface ShopifyApp {
   plans?: Array<{
     name:     { es: string; en: string };
     price:    { es: string; en: string };
+    cycle?:   { es: string; en: string };  // "USD/mes · o $290/año"
     tagline:  { es: string; en: string };
     features: Array<{ es: string; en: string }>;
     featured?: boolean;                    // resalta el plan recomendado
@@ -91,8 +94,9 @@ export const apps: ShopifyApp[] = [
     // Formato: https://apps.shopify.com/{handle}?utm_source=flouvia&utm_campaign=apps
     appStoreUrl: 'https://apps.shopify.com/cotizaciones-b2b?utm_source=flouvia&utm_campaign=apps',
     icon:  '/imgs/logo-app.png',             // ícono real de la app
-
-    image: '/imgs/app-placeholder.svg',      // TODO: reemplaza con un screenshot real (1600×900px)
+    image: '/imgs/app-placeholder.svg',      // fallback si no hay video (TODO: screenshot real 1600×900)
+    youtubeId: 'kqcQ5B1bX-U',                // video demo — se muestra en lugar del screenshot
+    demoUrl:   'https://flouvia.myshopify.com/',
 
     pricingTag: { es: 'Plan gratis disponible', en: 'Free plan available' },
     pricing: {
@@ -100,8 +104,8 @@ export const apps: ShopifyApp[] = [
       en: 'Free plan up to 5 active quotes. Paid plans from $29 USD/month with a 7-day free trial.',
     },
     requirements: {
-      es: 'Compatible con todos los planes de Shopify. Facturación CFDI requiere Plan Pro y tienda con dirección fiscal en México.',
-      en: 'Compatible with all Shopify plans. CFDI invoicing requires the Pro plan and a store with a fiscal address in Mexico.',
+      es: 'Requiere la Tienda Online de Shopify y domicilio fiscal del comercio en México. La facturación CFDI 4.0 está disponible en los planes Pro y Plus.',
+      en: 'Requires the Shopify Online Store and a merchant business address in Mexico. CFDI 4.0 invoicing is available on the Pro and Plus plans.',
     },
 
     problem: {
@@ -152,30 +156,57 @@ export const apps: ShopifyApp[] = [
 
     plans: [
       {
-        name:    { es: 'Gratis', en: 'Free' },
+        name:    { es: 'Plan Gratis', en: 'Free Plan' },
         price:   { es: '$0', en: '$0' },
-        tagline: { es: 'Para empezar a digitalizar tus cotizaciones.', en: 'To start digitizing your quotes.' },
+        cycle:   { es: 'Para empezar sin costo', en: 'Free to start' },
+        tagline: { es: 'Digitaliza tus primeras cotizaciones B2B.', en: 'Digitize your first B2B quotes.' },
         features: [
           { es: 'Hasta 5 cotizaciones activas', en: 'Up to 5 active quotes' },
-          { es: 'Botón de cotización en carrito, producto y flotante', en: 'Quote button on cart, product, and floating' },
-          { es: 'Negociación de precios y descuentos', en: 'Price negotiation and discounts' },
-          { es: 'Convierte la cotización en pedido de Shopify', en: 'Convert quotes into Shopify orders' },
+          { es: 'Botón "Solicitar cotización"', en: '"Request a quote" button' },
+          { es: 'Precios negociados por producto', en: 'Negotiated pricing per product' },
+          { es: 'Marca "Cotizaciones por Flouvia"', en: '"Quotes by Flouvia" branding' },
         ],
       },
       {
-        name:    { es: 'Pro', en: 'Pro' },
-        price:   { es: 'Desde $29 USD/mes', en: 'From $29 USD/mo' },
-        tagline: { es: 'Para operar tu canal B2B en serio.', en: 'To run your B2B channel seriously.' },
-        featured: true,
-        note:    { es: '7 días de prueba gratis · sin tarjeta para empezar', en: '7-day free trial · no card to start' },
+        name:    { es: 'Plan Básico', en: 'Basic Plan' },
+        price:   { es: '$29', en: '$29' },
+        cycle:   { es: 'USD / mes · o $290/año', en: 'USD / mo · or $290/yr' },
+        tagline: { es: 'Cotizaciones sin límite y términos de crédito.', en: 'Unlimited quotes and credit terms.' },
+        note:    { es: 'Incluye 7 días de prueba gratis', en: 'Includes a 7-day free trial' },
         features: [
           { es: 'Cotizaciones ilimitadas', en: 'Unlimited quotes' },
-          { es: 'Facturación CFDI 4.0 automática ante el SAT (México)', en: 'Automatic CFDI 4.0 invoicing with the SAT (Mexico)' },
-          { es: 'Empresas con límite de crédito', en: 'Companies with credit limits' },
-          { es: 'Términos de pago Net 30 / Net 60', en: 'Net 30 / Net 60 payment terms' },
-          { es: 'Analítica B2B', en: 'B2B analytics' },
-          { es: 'Formulario de cotización personalizable', en: 'Customizable quote form' },
-          { es: 'Modo solo-cotización (oculta precios al público)', en: 'Quote-only mode (hide prices from the public)' },
+          { es: 'Modo solo-cotización (oculta precio y botón)', en: 'Quote-only mode (hide price and buy button)' },
+          { es: 'Precios negociados y descuentos', en: 'Negotiated pricing and discounts' },
+          { es: 'Clientes automáticos', en: 'Automatic customers' },
+          { es: 'Términos de crédito: Contado / Net 30 / Net 60', en: 'Credit terms: Cash / Net 30 / Net 60' },
+          { es: 'Avisos por email al recibir solicitudes', en: 'Email alerts on new requests' },
+        ],
+      },
+      {
+        name:    { es: 'Plan Pro', en: 'Pro Plan' },
+        price:   { es: '$59', en: '$59' },
+        cycle:   { es: 'USD / mes · o $590/año', en: 'USD / mo · or $590/yr' },
+        tagline: { es: 'CFDI automático y B2B con crédito.', en: 'Automatic CFDI and B2B credit.' },
+        featured: true,
+        note:    { es: '7 días gratis · factura CFDI extra $0.20 USD c/u', en: '7-day trial · extra CFDI invoice $0.20 USD each' },
+        features: [
+          { es: 'Todo lo del Plan Básico', en: 'Everything in Basic' },
+          { es: 'CFDI 4.0 automático — 250 facturas/mes', en: 'Automatic CFDI 4.0 — 250 invoices/mo' },
+          { es: 'Empresas B2B con límite de crédito', en: 'B2B companies with credit limits' },
+          { es: 'Analítica avanzada y soporte prioritario', en: 'Advanced analytics and priority support' },
+        ],
+      },
+      {
+        name:    { es: 'Plan Plus', en: 'Plus Plan' },
+        price:   { es: '$149', en: '$149' },
+        cycle:   { es: 'USD / mes · o $1,490/año', en: 'USD / mo · or $1,490/yr' },
+        tagline: { es: 'Alto volumen para tiendas Shopify Plus.', en: 'High volume for Shopify Plus stores.' },
+        note:    { es: 'Solo Shopify Plus · factura extra $0.10 USD c/u', en: 'Shopify Plus only · extra invoice $0.10 USD each' },
+        features: [
+          { es: 'Todo lo del Plan Pro', en: 'Everything in Pro' },
+          { es: 'CFDI automático — 1,000 facturas/mes', en: 'Automatic CFDI — 1,000 invoices/mo' },
+          { es: 'Soporte prioritario para alto volumen', en: 'Priority support for high volume' },
+          { es: 'Exclusivo para tiendas Shopify Plus', en: 'Exclusive to Shopify Plus stores' },
         ],
       },
     ],
