@@ -58,87 +58,109 @@ export interface ShopifyApp {
 
 export const apps: ShopifyApp[] = [
   {
-    slug:   'tu-primera-app',                                   // TODO: slug real (ej. 'wholesale-pricing')
+    slug:   'cotizaciones-b2b',
     num:    '01',
-    name:   'Nombre de la App',                                 // TODO
+    name:   'Flouvia Cotizaciones B2B',
     status: 'live',
     category: {
-      es: 'Conversión',                                         // TODO: Conversión / B2B / Inventario / Automatización…
-      en: 'Conversion',
+      es: 'B2B',
+      en: 'B2B',
     },
     tagline: {
-      es: 'Una frase que resume el problema que resuelve.',     // TODO
-      en: 'One line that sums up the problem it solves.',
+      es: 'Portal B2B para cotizaciones con precios negociados y CFDI en México.',
+      en: 'B2B quoting portal with negotiated pricing and CFDI invoicing for Mexico.',
     },
     desc: {
-      es: 'Descripción de la app: qué hace, para qué tipo de tienda y por qué la construimos. Misma voz editorial que el resto del sitio — concreta, sin promesas genéricas.', // TODO
-      en: 'App description: what it does, which kind of store it is for, and why we built it. Same editorial voice as the rest of the site — concrete, no generic promises.',
+      es: '¿Tus pedidos B2B llegan por WhatsApp y los capturas en Excel? Flouvia Cotizaciones B2B digitaliza ese proceso dentro de Shopify. Tus compradores solicitan cotizaciones desde el carrito, la página de producto o un botón flotante; tú negocias precios producto por producto, envías el link de pago o un PDF con tu marca, y conviertes la cotización en pedido con un clic. Incluye términos de crédito (Contado, Net 30, Net 60), descuentos, empresas con límite de crédito, analítica y facturación CFDI automática para México en el Plan Pro.',
+      en: 'Are your B2B orders coming in over WhatsApp and being captured in spreadsheets? Flouvia Cotizaciones B2B digitizes that process inside Shopify. Your buyers request quotes from the cart, product page, or a floating button; you negotiate prices product by product, send a payment link or branded PDF, and convert the quote into an order in one click. Includes credit terms (Cash, Net 30, Net 60), discounts, companies with credit limits, analytics, and automatic CFDI invoicing for Mexico on the Pro plan.',
     },
-    appStoreUrl: 'https://apps.shopify.com/tu-app?utm_source=flouvia&utm_campaign=apps', // TODO: handle real del App Store
-    icon:  '/imgs/app-placeholder-icon.svg',                    // TODO: ícono real (cuadrado, ~512px)
-    image: '/imgs/app-placeholder.svg',                         // TODO: screenshot/hero real
+    // TODO: reemplaza con el handle real del App Store una vez publicada
+    // Formato: https://apps.shopify.com/{handle}?utm_source=flouvia&utm_campaign=apps
+    appStoreUrl: 'https://apps.shopify.com/cotizaciones-b2b?utm_source=flouvia&utm_campaign=apps',
+    icon:  '/imgs/logo-app.png',             // ícono real de la app
 
-    pricingTag: { es: 'Gratis', en: 'Free' },                   // TODO
-    pricing:    { es: 'Gratis. Sin tarjeta para instalar.', en: 'Free. No card required to install.' }, // TODO
-    requirements:{ es: 'Compatible con todos los planes de Shopify.', en: 'Compatible with all Shopify plans.' }, // TODO
+    image: '/imgs/app-placeholder.svg',      // TODO: reemplaza con un screenshot real (1600×900px)
 
-    metrics: [                                                  // TODO: opcional — borra el bloque si no aplica
-      { val: '5★',  label: { es: 'Reseñas', en: 'Reviews' } },
-      { val: '1 min', label: { es: 'Instalación', en: 'Setup' } },
-    ],
+    pricingTag: { es: 'Plan gratis disponible', en: 'Free plan available' },
+    pricing: {
+      es: 'Plan gratis hasta 5 cotizaciones activas. Planes de pago desde $29 USD/mes con 7 días de prueba gratis.',
+      en: 'Free plan up to 5 active quotes. Paid plans from $29 USD/month with a 7-day free trial.',
+    },
+    requirements: {
+      es: 'Compatible con todos los planes de Shopify. Facturación CFDI requiere Plan Pro y tienda con dirección fiscal en México.',
+      en: 'Compatible with all Shopify plans. CFDI invoicing requires the Pro plan and a store with a fiscal address in Mexico.',
+    },
 
     problem: {
-      es: 'Describe el dolor concreto del merchant antes de tu app — qué hacían manualmente, qué perdían, dónde se rompía la operación.', // TODO
-      en: 'Describe the merchant\'s concrete pain before your app — what they did manually, what they lost, where the operation broke.',
+      es: 'Los comercios B2B en México gestionan cotizaciones por WhatsApp, teléfono y hojas de cálculo. Sin un sistema, los precios negociados viven en conversaciones privadas, los seguimientos se pierden y cada pedido requiere capturas manuales — ventas perdidas, errores de precio y un equipo de ventas saturado de tareas que debería ejecutar el sistema.',
+      en: 'B2B merchants in Mexico manage quotes over WhatsApp, phone calls, and spreadsheets. Without a system, negotiated prices live in private conversations, follow-ups get lost, and every order requires manual data entry — lost sales, pricing errors, and a sales team overwhelmed with tasks the system should handle.',
     },
     features: [
       {
-        title: { es: 'Feature uno', en: 'Feature one' },        // TODO
-        desc:  { es: 'Qué hace y por qué importa, en una línea.', en: 'What it does and why it matters, in one line.' },
+        title: { es: 'Solicitud desde la tienda', en: 'Quote request from the storefront' },
+        desc:  { es: 'Botón "Solicitar cotización" en el carrito, página de producto y flotante — sin salir de tu tienda.', en: '"Request a quote" button on the cart, product page, and floating — without leaving your store.' },
       },
       {
-        title: { es: 'Feature dos', en: 'Feature two' },        // TODO
-        desc:  { es: 'Qué hace y por qué importa, en una línea.', en: 'What it does and why it matters, in one line.' },
+        title: { es: 'Negociación de precios y descuentos', en: 'Price negotiation and discounts' },
+        desc:  { es: 'Edita el precio de cada producto en la cotización, aplica descuentos y manda el link de pago o un PDF con tu marca.', en: 'Edit the price of each item in the quote, apply discounts, and send the payment link or a branded PDF.' },
       },
       {
-        title: { es: 'Feature tres', en: 'Feature three' },     // TODO
-        desc:  { es: 'Qué hace y por qué importa, en una línea.', en: 'What it does and why it matters, in one line.' },
+        title: { es: 'Convierte en pedido con un clic', en: 'Convert to order in one click' },
+        desc:  { es: 'La cotización aprobada se convierte en pedido de Shopify directamente — sin recaptura manual ni errores.', en: 'An approved quote converts into a Shopify order directly — no manual re-entry, no errors.' },
+      },
+      {
+        title: { es: 'Empresas, crédito y términos Net 30/60', en: 'Companies, credit limits, and Net 30/60 terms' },
+        desc:  { es: 'Asigna límites de crédito por empresa, activa términos Contado / Net 30 / Net 60 y consulta la analítica B2B.', en: 'Assign credit limits per company, enable Cash / Net 30 / Net 60 terms, and review B2B analytics.' },
+      },
+      {
+        title: { es: 'Facturación CFDI automática (Plan Pro)', en: 'Automatic CFDI invoicing (Pro plan)' },
+        desc:  { es: 'Genera el comprobante CFDI 4.0 timbrado ante el SAT directamente desde la cotización. Solo para México.', en: 'Generate a CFDI 4.0 receipt stamped with the SAT directly from the quote. Mexico only.' },
       },
     ],
 
-    // TODO: conecta con un caso si la app nació de un proyecto real (prueba social fuerte)
     relatedCase: {
-      slug: 'el-zarco',
-      label: { es: 'Nació del sistema que construimos para El Zarco.', en: 'Born from the system we built for El Zarco.' },
+      slug:  'el-zarco',
+      label: {
+        es: 'Nació del sistema B2B que construimos para El Zarco.',
+        en: 'Born from the B2B system we built for El Zarco.',
+      },
     },
 
     faq: [
       {
-        q: { es: '¿Cómo se instala?', en: 'How do I install it?' },
-        a: { es: 'Desde el Shopify App Store en un clic. Shopify gestiona los permisos y la instalación.', en: 'From the Shopify App Store in one click. Shopify handles permissions and installation.' },
+        q: { es: '¿Funciona con cualquier plan de Shopify?', en: 'Does it work with any Shopify plan?' },
+        a: { es: 'Sí. El botón de cotización y la gestión básica funcionan con todos los planes. El CFDI y las funciones avanzadas (empresas, analítica, formulario personalizable) requieren el Plan Pro.', en: 'Yes. The quote button and basic management work with all Shopify plans. CFDI and advanced features (companies, analytics, custom form) require the Pro plan.' },
       },
       {
-        q: { es: '¿Tiene costo?', en: 'Is there a cost?' },     // TODO: ajusta a tu pricing real
-        a: { es: 'Gratis para instalar y usar. Sin tarjeta requerida.', en: 'Free to install and use. No card required.' },
+        q: { es: '¿Qué pasa si supero las 5 cotizaciones del plan gratis?', en: 'What happens if I exceed 5 quotes on the free plan?' },
+        a: { es: 'Puedes seguir viendo cotizaciones existentes pero no crear nuevas hasta que cierres alguna o pases a un plan de pago. Los planes pagos tienen cotizaciones ilimitadas.', en: 'You can still view existing quotes but cannot create new ones until you close one or upgrade to a paid plan. Paid plans include unlimited quotes.' },
+      },
+      {
+        q: { es: '¿La facturación CFDI funciona para cualquier empresa?', en: 'Does CFDI invoicing work for any company?' },
+        a: { es: 'Solo para comercios con dirección fiscal en México. Necesitas tu CSD (Certificado de Sello Digital) del SAT para activarlo. El proceso de conexión tarda menos de 5 minutos.', en: 'Only for merchants with a fiscal address in Mexico. You need your CSD (Digital Seal Certificate) from the SAT to activate it. The connection process takes under 5 minutes.' },
+      },
+      {
+        q: { es: '¿El comprador ve los precios de lista o los negociados?', en: 'Does the buyer see list prices or negotiated prices?' },
+        a: { es: 'Solo ve los precios que tú apruebas en la cotización. En modo "Solo cotización" puedes ocultar todos los precios de tu tienda y forzar al comprador a solicitar cotización antes de comprar.', en: 'They only see the prices you approve in the quote. In "Quote-only mode" you can hide all store prices and require the buyer to request a quote before purchasing.' },
       },
     ],
 
     seoTitle: {
-      es: 'Nombre de la App — App de Shopify | Flouvia',        // TODO
-      en: 'App Name — Shopify App | Flouvia',
+      es: 'Flouvia Cotizaciones B2B — App de Shopify para Cotizaciones y CFDI en México | Flouvia',
+      en: 'Flouvia Cotizaciones B2B — Shopify App for B2B Quoting & CFDI in Mexico | Flouvia',
     },
     seoDesc: {
-      es: 'Descripción SEO de la app con el problema que resuelve y para qué tiendas. Por Flouvia, firma boutique de ingeniería e-commerce — CDMX.', // TODO
-      en: 'SEO description of the app with the problem it solves and which stores it is for. By Flouvia, boutique e-commerce engineering firm — Mexico City.',
+      es: 'App de Shopify para gestionar cotizaciones B2B con precios negociados, términos de crédito Net 30/60, facturación CFDI automática ante el SAT y analítica. Plan gratis disponible. Hecha por Flouvia para comercios B2B en México.',
+      en: 'Shopify app to manage B2B quotes with negotiated pricing, Net 30/60 credit terms, automatic CFDI invoicing with the SAT, and analytics. Free plan available. Built by Flouvia for B2B merchants in Mexico.',
     },
-    // rating: { value: '5.0', count: '12' },                   // TODO: descomenta cuando tengas reseñas reales
-    datePublished: '2026-06-08',
-    dateModified:  '2026-06-08',
+    // rating: { value: '5.0', count: '12' }, // TODO: descomenta cuando tengas reseñas en el App Store
+    datePublished: '2026-06-10',
+    dateModified:  '2026-06-10',
 
     cta: {
-      eyebrow: { es: 'INSTALA EN UN CLIC', en: 'INSTALL IN ONE CLICK' },
-      title:   { es: 'Pruébala en tu tienda.', en: 'Try it in your store.' },
-      sub:     { es: 'Instalación gratis desde el Shopify App Store. Sin compromiso, sin tarjeta.', en: 'Free install from the Shopify App Store. No commitment, no card.' },
+      eyebrow: { es: 'INSTALA GRATIS', en: 'FREE INSTALL' },
+      title:   { es: 'Digitaliza tus cotizaciones B2B hoy.', en: 'Digitize your B2B quotes today.' },
+      sub:     { es: 'Plan gratis hasta 5 cotizaciones activas. Sin tarjeta para empezar. Planes de pago desde $29 USD/mes con 7 días de prueba gratis.', en: 'Free plan up to 5 active quotes. No card required to get started. Paid plans from $29 USD/month with a 7-day free trial.' },
     },
   },
 
@@ -146,7 +168,7 @@ export const apps: ShopifyApp[] = [
   {
     slug:   'proximamente-2',
     num:    '02',
-    name:   'En desarrollo',                                    // TODO: nombre tentativo
+    name:   'En desarrollo',
     status: 'soon',
     category: { es: 'Próximamente', en: 'Coming soon' },
     tagline: { es: 'La siguiente pieza de ingeniería, como producto.', en: 'The next piece of engineering, as a product.' },
