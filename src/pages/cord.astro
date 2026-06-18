@@ -1,0 +1,343 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { getLangFromUrl } from '../i18n/utils';
+
+export const prerender = true;
+
+const lang = getLangFromUrl(Astro.url);
+const isEn = lang === 'en';
+
+const title = isEn 
+    ? 'Cord — B2B Quoting SaaS developed by Flouvia' 
+    : 'Cord — El SaaS de Cotizaciones B2B desarrollado por Flouvia';
+const description = isEn 
+    ? 'Automate your B2B sales with Cord. Interactive quote editor, B2B client portal, CFO analytics, and native digital signatures. Revenue infrastructure built by Flouvia.' 
+    : 'Automatiza tus ventas B2B con Cord. Editor interactivo, portal de clientes B2B, analítica CFO y firmas digitales nativas. Infraestructura de revenue creada por Flouvia.';
+---
+
+<Layout
+    title={title}
+    description={description}
+>
+    <Navbar />
+
+    <main class="flouvia-masterpiece page-cord">
+        
+        <!-- HERO SECTION -->
+        <section class="hero-grand cord-hero">
+            <div class="container hero-container">
+                <div class="hero-content">
+                    <div class="hero-text-zone" id="hero-parallax">
+                        <div class="hero-status hero-anim">
+                            <span class="hero-status-dot" aria-hidden="true"></span>
+                            <span>{isEn ? 'INFRASTRUCTURE BY FLOUVIA' : 'INFRAESTRUCTURA POR FLOUVIA'}</span>
+                        </div>
+                        <p class="eyebrow hero-anim">
+                            {isEn ? 'STANDALONE SAAS' : 'SAAS INDEPENDIENTE'}
+                        </p>
+                        <h1 class="hero-title hero-anim">
+                            <span class="title-bold">Cord.</span> 
+                            <span class="title-regular editorial">
+                                {isEn ? 'The quoting engine for B2B scale.' : 'El motor de cotizaciones para escalar en B2B.'}
+                            </span>
+                        </h1>
+                    </div>
+
+                    <div class="hero-bottom hero-anim">
+                        <p class="hero-desc">
+                            {isEn 
+                                ? 'Cord is our standalone SaaS engineered specifically for B2B operations. We transformed the quoting workflow into a self-serve portal that accelerates approvals, locks in margins, and integrates with your ERP. Designed with our signature Quiet Luxury aesthetic.'
+                                : 'Cord es nuestro SaaS independiente diseñado específicamente para operaciones B2B. Transformamos el flujo de cotizaciones en un portal de autoservicio que acelera aprobaciones, protege tus márgenes y se integra a tu ERP. Diseñado con nuestra estética Quiet Luxury.'}
+                        </p>
+                        <div class="hero-action">
+                            <a href="https://cord.flouvia.com" target="_blank" rel="noopener noreferrer" class="btn-luxe">
+                                <span>{isEn ? 'Visit Cord Platform' : 'Visitar Plataforma Cord'}</span>
+                                <span class="btn-arrow" aria-hidden="true">→</span>
+                                <div class="btn-shimmer"></div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cord-bg-graphic" aria-hidden="true">
+                <div class="orb orb-1"></div>
+                <div class="orb orb-2"></div>
+            </div>
+        </section>
+
+        <!-- FEATURES SECTION -->
+        <section class="services-rows cord-features">
+            <div class="container">
+                <div class="section-header">
+                    <p class="eyebrow">{isEn ? 'CORE CAPABILITIES' : 'CAPACIDADES CORE'}</p>
+                    <h2 class="section-heading">{isEn ? 'Engineered for conversion.' : 'Ingeniería para la conversión.'}</h2>
+                </div>
+
+                <div class="rows-wrapper">
+                    <!-- Feature 1 -->
+                    <div class="service-row" style="--delay: 0.1s;">
+                        <div class="row-num">/01</div>
+                        <div class="row-content">
+                            <h3>{isEn ? 'Quiet Luxury Editor & Interactive Links' : 'Editor Quiet Luxury y Links Interactivos'}</h3>
+                            <p>{isEn 
+                                ? 'Leave static PDFs behind. Build quotes instantly with an interactive editor that calculates gross margins in real-time. Share a beautiful, unique link where your clients can approve and sign digitally.'
+                                : 'Deja atrás los PDFs estáticos. Arma cotizaciones al instante con un editor interactivo que calcula el margen bruto en tiempo real. Comparte un link único y elegante donde tus clientes pueden aprobar y firmar digitalmente.'}</p>
+                        </div>
+                        <div class="animated-border"></div>
+                    </div>
+                    
+                    <!-- Feature 2 -->
+                    <div class="service-row" style="--delay: 0.2s;">
+                        <div class="row-num">/02</div>
+                        <div class="row-content">
+                            <h3>{isEn ? 'Client Portal & Live Negotiation' : 'Portal de Clientes y Negociación en Vivo'}</h3>
+                            <p>{isEn 
+                                ? 'Embed real-time collaboration. Your clients can negotiate line items via comments directly on the quote. Cord acts as a B2B portal, integrating Stripe checkout for seamless payments once approved.'
+                                : 'Colaboración en tiempo real. Tus clientes pueden negociar partidas específicas a través de comentarios directamente en la cotización. Cord actúa como un portal B2B, integrando pagos vía Stripe una vez aprobada.'}</p>
+                        </div>
+                        <div class="animated-border"></div>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="service-row" style="--delay: 0.3s;">
+                        <div class="row-num">/03</div>
+                        <div class="row-content">
+                            <h3>{isEn ? 'CFO Dashboard & Predictive Analytics' : 'CFO Dashboard y Analítica Predictiva'}</h3>
+                            <p>{isEn 
+                                ? 'Advanced financial intelligence. Project your expected cash flow based on historical closing rates and payment delays. Monitor your DSO (Days Sales Outstanding) and manage automated overdue reminders.'
+                                : 'Inteligencia financiera avanzada. Proyecta tu flujo de efectivo esperado basado en tasas históricas de cierre y retrasos de pago. Monitorea tu DSO (Días de Ventas Pendientes) y automatiza recordatorios de cobranza.'}</p>
+                        </div>
+                        <div class="animated-border"></div>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div class="service-row" style="--delay: 0.4s;">
+                        <div class="row-num">/04</div>
+                        <div class="row-content">
+                            <h3>{isEn ? 'Enterprise Governance & MCP AI' : 'Gobernanza Enterprise e IA vía MCP'}</h3>
+                            <p>{isEn 
+                                ? 'Built with multi-tenant Row Level Security (RLS) in PostgreSQL. Set precise approval thresholds (max discount, min margin) to protect your bottom line. Ready for Agentic AI via the MCP protocol.'
+                                : 'Construido con seguridad a nivel de fila (RLS) multi-tenant en PostgreSQL. Establece umbrales de aprobación (descuento máximo, margen mínimo) para proteger tus ganancias. Listo para IA Agentic vía el protocolo MCP.'}</p>
+                        </div>
+                        <div class="animated-border"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FLOUVIA CONNECTION SECTION -->
+        <section class="protocol-section cord-origin">
+            <div class="container protocol-grid">
+                
+                <div class="protocol-sticky-col">
+                    <p class="eyebrow">{isEn ? 'THE ORIGIN' : 'EL ORIGEN'}</p>
+                    <h2 class="section-heading">{isEn ? 'Developed by Flouvia.' : 'Desarrollado por Flouvia.'}</h2>
+                    <p class="protocol-intro">{isEn 
+                        ? 'Cord was born from our experience building private B2B infrastructure for high-volume brands. We extracted our best quoting and negotiation systems into a standalone platform accessible to any B2B operation in Mexico.' 
+                        : 'Cord nació de nuestra experiencia construyendo infraestructura B2B privada para marcas de alto volumen. Extrajimos nuestros mejores sistemas de cotización y negociación en una plataforma independiente accesible para cualquier operación B2B en México.'}</p>
+                </div>
+
+                <div class="protocol-timeline">
+                    <div class="timeline-track"></div>
+
+                    <div class="protocol-step" style="--delay: 0.1s;">
+                        <div class="step-node"><div class="node-core"></div></div>
+                        <div class="step-content">
+                            <div class="watermark-num">FL</div>
+                            <h4>{isEn ? 'Same Engineering Standard' : 'Mismo Estándar de Ingeniería'}</h4>
+                            <p>{isEn ? 'Cord runs on the same robust, low-latency architecture we use for our private clients. It shares our uncompromising approach to clean code, secure databases, and zero-downtime deployments.' : 'Cord corre sobre la misma arquitectura robusta y de baja latencia que usamos para nuestros clientes privados. Comparte nuestro enfoque intransigente en código limpio, bases de datos seguras y despliegues sin interrupciones.'}</p>
+                        </div>
+                    </div>
+
+                    <div class="protocol-step" style="--delay: 0.2s;">
+                        <div class="step-node"><div class="node-core"></div></div>
+                        <div class="step-content">
+                            <div class="watermark-num">UX</div>
+                            <h4>{isEn ? 'The Flouvia Aesthetic' : 'La Estética Flouvia'}</h4>
+                            <p>{isEn ? 'We believe enterprise software shouldn\'t be ugly. Cord brings our "Quiet Luxury" design philosophy to B2B software, offering an interface that feels premium, fast, and effortlessly responsive.' : 'Creemos que el software empresarial no debe ser feo. Cord lleva nuestra filosofía de diseño "Quiet Luxury" al software B2B, ofreciendo una interfaz premium, rápida y responsiva sin esfuerzo.'}</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CTA SECTION -->
+        <section class="cta-integrated">
+            <div class="container">
+                <div class="cta-card-blue cta-squircle texture-noise" id="cta-card">
+                    <div class="cta-inner-flex">
+                        <div class="cta-text-side">
+                            <p class="eyebrow" style="color: #64748b; letter-spacing: 4px;">CORD BY FLOUVIA</p>
+                            <h2 class="cta-title-luxe">{isEn ? 'Ready to upgrade your B2B sales flow?' : '¿Listo para mejorar tu flujo de ventas B2B?'}</h2>
+                            <p class="cta-scarcity-sub">{isEn ? 'Try Cord for free and experience the difference of Flouvia engineering.' : 'Prueba Cord gratis y experimenta la diferencia de la ingeniería Flouvia.'}</p>
+                        </div>
+                        <div class="cta-action-side">
+                            <a href="https://cord.flouvia.com/registro" target="_blank" rel="noopener noreferrer" class="btn-glow-blue">
+                                <span>{isEn ? 'Start using Cord →' : 'Comenzar a usar Cord →'}</span>
+                                <div class="glow-effect"></div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <Footer />
+</Layout>
+
+<style>
+    /* Specific styles for the Cord page */
+    .page-cord {
+        background-color: var(--color-bg);
+    }
+    
+    .cord-hero {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .title-regular {
+        display: block;
+        font-weight: 400;
+        margin-top: 0.5rem;
+        color: var(--color-text-muted);
+    }
+
+    /* Ambient background graphics for the hero */
+    .cord-bg-graphic {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+    }
+
+    .cord-bg-graphic .orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.15;
+    }
+
+    .cord-bg-graphic .orb-1 {
+        top: -10%; left: -5%;
+        width: 600px; height: 600px;
+        background: #0f172a;
+    }
+
+    .cord-bg-graphic .orb-2 {
+        bottom: -20%; right: -10%;
+        width: 800px; height: 800px;
+        background: #1e293b;
+    }
+
+    /* Adjust features hover */
+    .cord-features .service-row {
+        cursor: default; /* Remove pointer since there's no link */
+    }
+    
+    .cord-features .service-row:hover .animated-border { width: 100%; }
+    .cord-features .service-row:hover .row-num { color: var(--color-blue-deep); transform: translateX(8px); }
+    .cord-features .service-row:hover .row-content h3 { letter-spacing: -0.8px; transform: translateX(6px); }
+
+    /* Adjust origin section layout */
+    .cord-origin {
+        background-color: #f8fafc; /* slightly different tint for contrast */
+    }
+
+    @media (max-width: 768px) {
+        .title-regular {
+            margin-top: 1rem;
+            font-size: clamp(1.8rem, 6vw, 2.2rem);
+        }
+        .cord-bg-graphic .orb { opacity: 0.1; }
+    }
+</style>
+
+<script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const initAnimations = () => {
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reducedMotion) return;
+
+        // Hero entrance
+        const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+        
+        // Use clearProps to ensure GSAP doesn't leave lingering styles
+        heroTl.fromTo('.hero-status', 
+            { y: 20, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1, clearProps: 'all' }, 0.1
+        )
+        .fromTo('.hero-title', 
+            { y: 30, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1.2, clearProps: 'all' }, 0.2
+        )
+        .fromTo('.eyebrow.hero-anim', 
+            { y: 15, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1, clearProps: 'all' }, 0.3
+        )
+        .fromTo('.hero-bottom', 
+            { y: 30, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1.2, clearProps: 'all' }, 0.4
+        );
+
+        // Features rows reveal
+        const rows = document.querySelectorAll('.service-row');
+        if (rows.length > 0) {
+            ScrollTrigger.create({
+                trigger: '.cord-features',
+                start: 'top 80%',
+                once: true,
+                onEnter: () => {
+                    gsap.fromTo(rows, 
+                        { y: 40, opacity: 0 },
+                        { 
+                            y: 0, 
+                            opacity: 1, 
+                            duration: 1, 
+                            stagger: 0.15, 
+                            ease: 'power3.out',
+                            clearProps: 'all'
+                        }
+                    );
+                }
+            });
+        }
+
+        // Origin steps reveal
+        const steps = document.querySelectorAll('.protocol-step');
+        if (steps.length > 0) {
+            ScrollTrigger.create({
+                trigger: '.cord-origin',
+                start: 'top 80%',
+                once: true,
+                onEnter: () => {
+                    gsap.fromTo(steps, 
+                        { x: -30, opacity: 0 },
+                        { 
+                            x: 0, 
+                            opacity: 1, 
+                            duration: 1, 
+                            stagger: 0.2, 
+                            ease: 'power3.out',
+                            clearProps: 'all'
+                        }
+                    );
+                }
+            });
+        }
+    };
+
+    // Run animations once the DOM is ready
+    document.addEventListener('DOMContentLoaded', initAnimations);
+</script>
