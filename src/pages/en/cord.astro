@@ -1,12 +1,12 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Footer from '../components/Footer.astro';
-import CordNavbar from '../components/CordNavbar.astro';
+import Layout from '../../layouts/Layout.astro';
+import Footer from '../../components/Footer.astro';
+import CordNavbar from '../../components/CordNavbar.astro';
 
 export const prerender = true;
 
-const title = 'Cord — Cotizaciones B2B con CFDI Automático | Gratis para Empezar';
-const description = 'Cord es la plataforma B2B para cotizaciones, pedidos y CFDI 4.0, creada por Flouvia. Gratis para siempre, sin tarjeta. Disponible para cualquier negocio en México.';
+const title = 'Cord — B2B Quotes with Automatic Invoicing | Free to Start';
+const description = 'Cord is the B2B platform for quotes, orders, and automatic invoicing by Flouvia. Free forever, no credit card required. Available for any business.';
 
 const schemaOrg = {
   "@context": "https://schema.org",
@@ -19,7 +19,7 @@ const schemaOrg = {
       "name": "Cord",
       "url": "https://cord.flouvia.com",
       "applicationCategory": "BusinessApplication",
-      "description": "Plataforma B2B de cotizaciones, pedidos y CFDI 4.0, de uso público y gratuito."
+      "description": "B2B platform for quotes, orders, and automatic invoicing, available to the public for free."
     }
   }
 };
@@ -47,38 +47,38 @@ const schemaOrg = {
                         
                         <div class="hero-status hero-anim" id="hero-status">
                             <span class="hero-status-dot" aria-hidden="true"></span>
-                            <span>DISPONIBLE PARA CUALQUIER NEGOCIO</span>
+                            <span>AVAILABLE FOR ANY BUSINESS</span>
                         </div>
 
                         <p class="eyebrow hero-anim">
-                            UN PRODUCTO DE FLOUVIA
+                            A PRODUCT BY FLOUVIA
                         </p>
 
                         <h1 class="hero-title hero-anim" style="text-align: center;">
-                            <span class="title-bold">Cord. Cotizaciones B2B</span> <br/><span class="title-bold">que se aprueban solas.</span>
+                            <span class="title-bold">Cord. B2B Quotes</span> <br/><span class="title-bold">that approve themselves.</span>
                         </h1>
                     </div>
 
                     <div class="hero-bottom hero-anim" style="flex-direction: column; align-items: center; border-top: none; gap: 2.5rem;">
                         <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
                             <p class="hero-desc text-center" style="max-width: 600px;">
-                                Manda cotizaciones con tu marca, tu cliente aprueba en un clic y el CFDI se timbra solo. Gratis para empezar — sin tarjeta, sin aplicar a nada.
+                                Send quotes with your brand, your client approves in one click, and the invoice is automatically issued. Free to start — no credit card, no application required.
                             </p>
                             <div class="hero-badges" style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; color: var(--color-text-muted); font-size: 0.85rem; font-weight: 500;">
-                                <span>&middot; Notificación de lectura</span>
-                                <span>&middot; Aprobación en un clic</span>
-                                <span>&middot; CFDI 4.0 automático</span>
+                                <span>&middot; Read receipts</span>
+                                <span>&middot; One-click approval</span>
+                                <span>&middot; Automatic invoicing</span>
                             </div>
                         </div>
 
                         <div class="hero-action" style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; width: 100%; margin-top: 1.5rem;">
                             <a href="https://cord.flouvia.com/registro" class="btn-luxe">
-                                <span>Probar Cord gratis</span>
+                                <span>Try Cord for free</span>
                                 <span class="btn-arrow" aria-hidden="true">&rarr;</span>
                                 <div class="btn-shimmer"></div>
                             </a>
                             <a href="https://cord.flouvia.com" class="btn-secondary-luxe">
-                                <span>Ver una cotización de ejemplo</span>
+                                <span>View a sample quote</span>
                             </a>
                         </div>
                     </div>
@@ -90,34 +90,34 @@ const schemaOrg = {
         <section class="services-rows">
             <div class="container">
                 <div class="section-header hero-anim">
-                    <p class="eyebrow" style="margin-bottom: 1.5rem;">CÓMO FUNCIONA</p>
-                    <h2 class="section-heading">Cero fricción para vender.</h2>
+                    <p class="eyebrow" style="margin-bottom: 1.5rem;">HOW IT WORKS</p>
+                    <h2 class="section-heading">Zero friction to sell.</h2>
                 </div>
 
                 <div class="rows-wrapper">
-                    <a href="https://cord.flouvia.com/caracteristicas/aprobaciones" class="service-row js-anim-row" style="--delay: 0.1s;">
+                    <a href="https://cord.flouvia.com/en/features/approvals" class="service-row js-anim-row" style="--delay: 0.1s;">
                         <div class="row-num">/01</div>
                         <div class="row-content">
-                            <h3>Tu cliente aprueba sin crear cuenta</h3>
-                            <p>Un link con tu marca. Lo abre, ve el total, aprueba o paga. Cero fricción para que cierren más rápido.</p>
+                            <h3>Your client approves without an account</h3>
+                            <p>A link with your brand. They open it, see the total, approve, or pay. Zero friction so you close faster.</p>
                         </div>
                         <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
                         <div class="animated-border"></div>
                     </a>
-                    <a href="https://cord.flouvia.com/caracteristicas/notificaciones" class="service-row js-anim-row" style="--delay: 0.2s;">
+                    <a href="https://cord.flouvia.com/en/features/notifications" class="service-row js-anim-row" style="--delay: 0.2s;">
                         <div class="row-num">/02</div>
                         <div class="row-content">
-                            <h3>Sabes el momento exacto en que la ven</h3>
-                            <p>Notificación instantánea cuando tu cliente abre la cotización. Se acabó el "¿ya la revisaste?"</p>
+                            <h3>Know the exact moment they see it</h3>
+                            <p>Instant notification when your client opens the quote. No more asking "did you review it yet?"</p>
                         </div>
                         <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
                         <div class="animated-border"></div>
                     </a>
-                    <a href="https://cord.flouvia.com/caracteristicas/cfdi" class="service-row js-anim-row" style="--delay: 0.3s;">
+                    <a href="https://cord.flouvia.com/en/features/invoicing" class="service-row js-anim-row" style="--delay: 0.3s;">
                         <div class="row-num">/03</div>
                         <div class="row-content">
-                            <h3>CFDI 4.0, sin recapturar nada</h3>
-                            <p>De cotización aprobada a factura timbrada ante el SAT, automático, desde la misma pantalla.</p>
+                            <h3>Automatic invoicing, no data entry</h3>
+                            <p>From approved quote to issued invoice automatically, directly from the same screen.</p>
                         </div>
                         <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
                         <div class="animated-border"></div>
@@ -129,7 +129,7 @@ const schemaOrg = {
         <!-- 04 — Trust strip -->
         <section class="trust-strip hero-anim">
             <div class="container">
-                <p>Construido por Flouvia, la misma firma detrás de portales B2B para distribuidores en México &middot; Usado en La Central de Abastos CDMX: &minus;67% tiempo de procesamiento, +25% ticket promedio</p>
+                <p>Built by Flouvia, the firm behind B2B portals for distributors in Mexico &middot; Used at La Central de Abastos CDMX: &minus;67% processing time, +25% average ticket</p>
             </div>
         </section>
 
@@ -139,12 +139,12 @@ const schemaOrg = {
                 <div class="cta-card-blue cta-squircle texture-noise" id="cta-card">
                     <div class="cta-inner-flex">
                         <div class="cta-text-side text-center" style="flex: 1;">
-                            <p class="eyebrow" style="color: #64748b; letter-spacing: 4px;">EMPIEZA HOY</p>
-                            <h2 class="cta-title-luxe" style="max-width: 100%; margin: 0 auto;">Tu primera cotización, en menos de 10 minutos.</h2>
-                            <p class="cta-scarcity-sub" style="max-width: 100%; margin: 1.1rem auto 2.5rem;">Sin tarjeta. Plan gratis para siempre. Cualquier negocio B2B en México puede empezar ahora.</p>
+                            <p class="eyebrow" style="color: #64748b; letter-spacing: 4px;">START TODAY</p>
+                            <h2 class="cta-title-luxe" style="max-width: 100%; margin: 0 auto;">Your first quote, in under 10 minutes.</h2>
+                            <p class="cta-scarcity-sub" style="max-width: 100%; margin: 1.1rem auto 2.5rem;">No credit card. Free forever. Any B2B business can start right now.</p>
                             
                             <a href="https://cord.flouvia.com/registro" class="btn-glow-blue">
-                                <span>Crear cuenta gratis en Cord &rarr;</span>
+                                <span>Create free account in Cord &rarr;</span>
                                 <div class="glow-effect"></div>
                             </a>
                         </div>
