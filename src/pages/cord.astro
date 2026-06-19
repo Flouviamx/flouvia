@@ -192,71 +192,503 @@ const description = isEn
 </Layout>
 
 <style>
-    /* Specific styles for the Cord page */
-    .page-cord {
-        background-color: var(--color-bg);
-    }
-    
-    .cord-hero {
+    /* ==========================================================
+       ESCRITORIO
+       ========================================================== */
+    .hero-grand { padding: 10rem 0 4rem 0; min-height: 100svh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
+    .hero-text-zone { transition: transform 0.1s ease-out, opacity 0.1s ease-out; }
+    .hero-title { font-size: clamp(1.9rem, 3.6vw, 3.4rem); line-height: 1.14; font-weight: 800; letter-spacing: -1.2px; margin-bottom: 2.75rem; color: #050505; max-width: 880px; }
+    .hero-title .title-bold { color: #050505; }
+    .lx-line-mask { overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; }
+    .title-bold { display: inline; }
+
+    .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem; }
+    .hero-desc { font-size: 1.1rem; color: var(--color-text-muted); max-width: 480px; line-height: 1.55; margin: 0; }
+
+    /* ==========================================================
+       2. TECNOLOGÍA — Tira de logos minimalista
+       ========================================================== */
+    .tech-spotlight {
+        padding: 9rem 0;
+        background: var(--color-bg);
         position: relative;
-        overflow: hidden;
+    }
+    .tech-header { max-width: 760px; margin: 0 auto 4.5rem; text-align: center; }
+    .tech-header .eyebrow { margin-bottom: 1.2rem; }
+    .section-heading { font-size: clamp(2.3rem, 4.4vw, 3.4rem); font-weight: 800; letter-spacing: -1.5px; margin: 0 0 1rem 0; line-height: 1.05; }
+    .section-sub { font-size: 1.05rem; color: var(--color-text-muted); margin: 0; line-height: 1.55;}
+    .tech-header .section-sub { max-width: 540px; margin: 0 auto; }
+
+    /* Stack — marco editorial con hairlines que se desvanecen en las orillas */
+    .tech-stack {
+        max-width: 920px;
+        margin: 0 auto;
+        position: relative;
+        padding-top: 3.5rem;
+    }
+    /* Hairline superior del marco (se desvanece en los extremos, estilo footer) */
+    .tech-stack::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+        background: linear-gradient(90deg, transparent, var(--color-border) 18%, var(--color-border) 82%, transparent);
     }
 
-    .title-regular {
-        display: block;
-        font-weight: 400;
-        margin-top: 0.5rem;
-        color: var(--color-text-muted);
+    /* Logo strip — sobrio, gris, sin cajas */
+    .logo-strip {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 3.5rem 2rem;
+        align-items: center;
+    }
+    .strip-logo {
+        height: 30px; width: auto; max-width: 130px;
+        object-fit: contain; object-position: center;
+        margin: 0 auto;
+        opacity: 0.4;
+        filter: grayscale(1);
+        transition: opacity 0.6s var(--ease-smooth), filter 0.6s var(--ease-smooth);
+    }
+    @media (hover: hover) {
+        /* Spotlight: al pasar sobre la tira, los demás se atenúan; el activo resalta */
+        .logo-strip:hover .strip-logo { opacity: 0.16; }
+        .logo-strip .strip-logo:hover { opacity: 0.9; filter: grayscale(0); }
     }
 
-    /* Ambient background graphics for the hero */
-    .cord-bg-graphic {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        pointer-events: none;
-        z-index: 0;
-        overflow: hidden;
+    /* Detalle editorial — conteo en serif italic, bajo su propia hairline */
+    .stack-meta {
+        position: relative;
+        margin-top: 3.5rem; padding-top: 1.75rem;
+        display: flex; align-items: baseline; justify-content: center; gap: 0.6rem;
+    }
+    .stack-meta::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+        background: linear-gradient(90deg, transparent, var(--color-border) 18%, var(--color-border) 82%, transparent);
+    }
+    .stack-count {
+        font-family: var(--font-serif); font-style: italic; font-weight: 400;
+        font-size: 1.5rem; color: var(--color-blue-deep); line-height: 1; letter-spacing: -0.5px;
+    }
+    .stack-label {
+        font-size: 0.7rem; font-weight: 800; letter-spacing: 2.5px;
+        text-transform: uppercase; color: #999;
     }
 
-    .cord-bg-graphic .orb {
-        position: absolute;
-        border-radius: 50%;
-        filter: blur(120px);
-        opacity: 0.15;
+    /* ==========================================================
+       3. CARRUSEL CASOS
+       ========================================================== */
+    .clients-vertical-carousel {
+        padding: calc(9rem - 25px) 0 calc(8rem - 25px) 0;
+        background: radial-gradient(ellipse at 20% 50%, #112240 0%, #0a192f 65%, #050b14 100%);
+        position: relative; overflow: hidden;
+    }
+    .casos-bg-text {
+        position: absolute; top: 50%; left: -4%;
+        transform: translateY(-50%);
+        font-family: var(--font-serif); font-style: italic; font-size: 33vw;
+        font-weight: 400; color: rgba(255,255,255,0.035); pointer-events: none;
+        white-space: nowrap; line-height: 1; user-select: none; z-index: 0;
+    }
+    .casos-eyebrow { color: rgba(255,255,255,0.32) !important; }
+    .clients-vertical-carousel .section-heading { color: #ffffff; }
+    .header-flex { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; }
+    .nav-hint {
+        font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.4);
+        border: 1px solid rgba(255,255,255,0.1); padding: 8px 16px;
+        border-radius: 50px; background: rgba(255,255,255,0.05); white-space: nowrap;
+    }
+    .clients-vertical-carousel .scroll-pill {
+        color: rgba(255,255,255,0.38); background: rgba(255,255,255,0.05);
+        border-color: rgba(255,255,255,0.1);
+    }
+    .clients-vertical-carousel .scroll-pill svg { opacity: 0.5; }
+
+    .carousel-track-wrapper { 
+        width: 100%; overflow-x: auto; padding: 4rem max(5%, calc((100vw - 1200px) / 2)); margin-top: -2rem; 
+        scroll-snap-type: x mandatory; scrollbar-width: none;
+    }
+    .carousel-track-wrapper::-webkit-scrollbar { display: none; }
+    .carousel-track { display: flex; gap: 2.5rem; width: max-content; align-items: center; }
+    
+    .vertical-card {
+        width: 400px; height: 540px; scroll-snap-align: center; position: relative;
+        text-decoration: none;
+        transition: transform 0.6s var(--ease-smooth), opacity 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth);
+        z-index: 1;
+        box-shadow: 0 24px 60px rgba(0,0,0,0.35);
     }
 
-    .cord-bg-graphic .orb-1 {
-        top: -10%; left: -5%;
-        width: 600px; height: 600px;
-        background: #0f172a;
-    }
-
-    .cord-bg-graphic .orb-2 {
-        bottom: -20%; right: -10%;
-        width: 800px; height: 800px;
-        background: #1e293b;
-    }
-
-    /* Adjust features hover */
-    .cord-features .service-row {
-        cursor: default; /* Remove pointer since there's no link */
+    @media (hover: hover) {
+        /* Elevación limpia y sencilla — sólo la tarjeta activa reacciona,
+           sin atenuar al resto (eso se sentía brusco / "buggy"). */
+        .carousel-track .vertical-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.48);
+            z-index: 10;
+        }
     }
     
-    .cord-features .service-row:hover .animated-border { width: 100%; }
-    .cord-features .service-row:hover .row-num { color: var(--color-blue-deep); transform: translateX(8px); }
-    .cord-features .service-row:hover .row-content h3 { letter-spacing: -0.8px; transform: translateX(6px); }
+    .card-num-luxury { position: absolute; top: 1.5rem; left: 2rem; font-family: var(--font-serif); font-style: italic; font-size: 1.8rem; color: #fff; opacity: 0.6; z-index: 3; letter-spacing: -1px; transition: 0.5s var(--ease-spring);}
+    .vertical-card:hover .card-num-luxury { opacity: 1; transform: translateX(5px); }
 
-    /* Adjust origin section layout */
-    .cord-origin {
-        background-color: #f8fafc; /* slightly different tint for contrast */
+    .card-bg { position: absolute; width: 100%; height: 100%; background: #050b14; display: flex; align-items: center; justify-content: center; z-index: 1; border-radius: inherit;}
+    .placeholder-text { font-size: 0.7rem; font-weight: 700; color: #aaa; letter-spacing: 1px; }
+    
+    .carousel-image { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease-spring); z-index: 1;}
+    .vertical-card:hover .carousel-image { transform: scale(1.08); }
+
+    .card-overlay { position: absolute; bottom: 0; width: 100%; padding: 4rem 2.5rem 2.5rem 2.5rem; background: linear-gradient(transparent, rgba(0,0,0,0.85)); color: #fff; transition: transform 0.5s var(--ease-smooth); z-index: 2;}
+    .card-overlay h3 { font-size: 2rem; font-weight: 800; margin: 0; letter-spacing: -0.5px;}
+    .v-tag { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: #ccc; letter-spacing: 2px;}
+    
+    .cta-vertical {
+        background: radial-gradient(120% 90% at 50% 0%, #1a2f52 0%, #0a192f 65%, #050b14 100%);
+        display: flex; align-items: center; justify-content: center;
+        text-align: center; color: #fff;
+    }
+    .cta-inner h3 { font-size: 2.2rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -1px;}
+    .btn-text-only { font-size: 0.9rem; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 4px; transition: 0.3s;}
+    .cta-vertical:hover .btn-text-only { border-color: #fff; }
+
+    /* ==========================================================
+       4. SERVICIOS — Editorial Rows
+       ========================================================== */
+    .services-rows { padding: 9rem 0 7rem 0; background: var(--color-bg); position: relative; }
+    .rows-wrapper { margin-top: 5rem; border-top: 1px solid var(--color-border); }
+
+    .service-row {
+        display: grid; grid-template-columns: 110px 1fr auto; gap: 4rem;
+        padding: 4.5rem 0; position: relative; cursor: pointer; align-items: center;
+        transition: background 0.5s var(--ease-smooth);
+        text-decoration: none; color: inherit;
     }
 
+    .service-row::before { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: var(--color-border); }
+
+    .animated-border {
+        position: absolute; bottom: 0; left: 0; width: 0%; height: 1px;
+        background: linear-gradient(90deg, #0a192f 0%, #0a192f 60%, transparent 100%);
+        transition: width 0.85s var(--ease-spring); z-index: 2;
+    }
+
+    /* Number — editorial serif italic */
+    .row-num {
+        font-family: var(--font-serif); font-style: italic;
+        font-size: 2.6rem; font-weight: 400;
+        color: rgba(10,25,47,0.18);
+        line-height: 0.9; letter-spacing: -1.5px;
+        transition: color 0.5s var(--ease-smooth), transform 0.6s var(--ease-spring);
+    }
+
+    .row-content h3 {
+        font-size: 2.6rem; font-weight: 800; letter-spacing: -1.2px;
+        margin: 0 0 1rem 0;
+        transition: color 0.5s var(--ease-smooth), letter-spacing 0.5s var(--ease-smooth), transform 0.55s var(--ease-spring);
+    }
+    .row-content p {
+        font-size: 1.1rem; color: var(--color-text-muted); line-height: 1.65;
+        margin: 0; max-width: 620px;
+        transition: color 0.4s var(--ease-smooth);
+    }
+
+    .arrow-circle {
+        width: 56px; height: 56px; border: 1px solid var(--color-border); border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        transition: background 0.5s var(--ease-spring), color 0.5s var(--ease-spring),
+                    border-color 0.5s var(--ease-spring), transform 0.6s var(--ease-spring);
+    }
+
+    .service-row:hover .animated-border { width: 100%; }
+    .service-row:hover .row-num { color: var(--color-blue-deep); transform: translateX(8px); }
+    .service-row:hover .row-content h3 { letter-spacing: -0.8px; transform: translateX(6px); }
+    .service-row:hover .arrow-circle { background: var(--color-blue-deep); color: #fff; border-color: var(--color-blue-deep); transform: translate(6px, -6px) rotate(-45deg); }
+
+    /* ==========================================================
+       5. PROTOCOLO — Editorial Timeline
+       ========================================================== */
+    .protocol-section {
+        padding: 9rem 0 12rem 0;
+        background: var(--color-bg-soft);
+        position: relative;
+        overflow: clip; /* clip no crea scroll context — sticky funciona; hidden lo rompía */
+    }
+
+    /* Hairline superior — separa el protocolo del bloque anterior con sobriedad,
+       sin el watermark difuminado gigante que recargaba la sección */
+    .protocol-section::before {
+        content: ''; position: absolute; top: 0; left: 5%; right: 5%;
+        height: 1px; background: var(--color-border);
+        pointer-events: none; z-index: 0;
+    }
+
+    .protocol-grid {
+        display: grid; grid-template-columns: 1fr 1.3fr; gap: 5rem;
+        align-items: flex-start;
+        position: relative; z-index: 1;
+    }
+
+    .protocol-sticky-col {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 140px;
+        height: max-content;
+    }
+
+    .protocol-intro { font-size: 1.15rem; color: var(--color-text-muted); line-height: 1.7; margin-top: 1.75rem; max-width: 400px; }
+
+    /* Editorial progress indicator inside the sticky col */
+    .proto-progress {
+        margin-top: 3rem;
+        max-width: 280px;
+    }
+    .proto-progress-meta {
+        display: flex; align-items: baseline; justify-content: space-between;
+        margin-bottom: 0.85rem;
+    }
+    .proto-progress-label {
+        font-size: 0.62rem; font-weight: 800; letter-spacing: 3px;
+        text-transform: uppercase; color: rgba(10,25,47,0.4);
+    }
+    .proto-progress-count {
+        display: inline-flex; align-items: baseline; gap: 0.35rem;
+        font-family: var(--font-serif); font-style: italic; font-weight: 400;
+        color: var(--color-blue-deep); line-height: 1;
+    }
+    .proto-current { font-size: 2rem; display: inline-block; min-width: 1.6ch; transition: transform 0.6s var(--ease-spring); }
+    .proto-divider { font-size: 1.2rem; color: rgba(10,25,47,0.25); }
+    .proto-total { font-size: 1.2rem; color: rgba(10,25,47,0.45); }
+
+    .proto-progress-bar {
+        position: relative; width: 100%; height: 1px;
+        background: rgba(10,25,47,0.08); overflow: hidden;
+    }
+    .proto-progress-fill {
+        position: absolute; inset: 0; transform: scaleX(0); transform-origin: left center;
+        background: linear-gradient(to right, var(--color-blue-deep), #1a3a6e);
+    }
+
+    /* Active step state — driven by JS */
+    .protocol-step.is-active .step-node {
+        border-color: var(--color-blue-deep);
+        box-shadow: 0 0 0 6px rgba(10,25,47,0.06), 0 0 0 14px rgba(10,25,47,0.025);
+    }
+    .protocol-step.is-active .node-core { background: var(--color-blue-deep); transform: scale(1.4); }
+    .protocol-step.is-active .watermark-num { color: rgba(10,25,47,0.5); }
+    .protocol-step.is-active h4 { color: var(--color-blue-deep); }
+
+    .protocol-timeline {
+        position: relative; display: flex; flex-direction: column;
+        gap: 7rem;
+        padding-left: 2.5rem;
+    }
+
+    .timeline-track {
+        position: absolute; top: 12px; bottom: 12px;
+        left: calc(2.5rem + 13px);
+        width: 1px;
+        background: linear-gradient(to bottom,
+            var(--color-blue-deep) 0%,
+            var(--color-blue-deep) 30%,
+            rgba(10,25,47,0.2) 70%,
+            rgba(10,25,47,0.05) 100%);
+        z-index: 1;
+    }
+
+    .protocol-step {
+        position: relative; z-index: 2; display: flex; align-items: flex-start; gap: 3.5rem;
+        cursor: default; transition: transform 0.5s var(--ease-smooth);
+    }
+
+    .step-node {
+        width: 28px; height: 28px; border-radius: 50%; background: var(--color-bg-soft);
+        border: 1.5px solid rgba(10,25,47,0.18); display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0; transition: all 0.55s var(--ease-spring), box-shadow 0.55s ease;
+        position: relative;
+    }
+    .node-core {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: transparent; transition: all 0.55s var(--ease-spring);
+    }
+
+    .step-content { position: relative; padding-top: 2px; min-height: 80px; }
+
+    .watermark-num {
+        position: absolute; top: -2.6rem; left: 0;
+        font-family: var(--font-serif); font-style: italic;
+        font-size: 2.4rem; line-height: 1;
+        color: rgba(10,25,47,0.22); font-weight: 400; letter-spacing: -1px;
+        pointer-events: none; transition: color 0.5s var(--ease-smooth), transform 0.55s var(--ease-spring); z-index: 0;
+    }
+
+    .step-content h4 {
+        font-size: 1.75rem; font-weight: 800; margin: 0 0 1rem 0;
+        letter-spacing: -0.7px; line-height: 1.15;
+        transition: color 0.5s ease, transform 0.55s var(--ease-spring);
+    }
+    .step-content p {
+        font-size: 1.08rem; color: var(--color-text-muted); margin: 0;
+        max-width: 480px; line-height: 1.65;
+    }
+
+    .protocol-step:hover { transform: translateX(8px); }
+    .protocol-step:hover .step-node {
+        border-color: var(--color-blue-deep); transform: scale(1.2);
+        box-shadow: 0 0 0 6px rgba(10,25,47,0.06), 0 0 0 12px rgba(10,25,47,0.025);
+    }
+    .protocol-step:hover .node-core { background: var(--color-blue-deep); transform: scale(1.4); }
+    .protocol-step:hover .watermark-num { color: rgba(10,25,47,0.45); transform: translateX(6px); }
+    .protocol-step:hover h4 { color: var(--color-blue-deep); }
+
+    /* ==========================================================
+       6. CTA
+       ========================================================== */
+    .cta-integrated { padding: 0 0 8rem 0; background: var(--color-bg-soft); border: none; } 
+    
+    .cta-card-blue {
+        background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%);
+        padding: 5.5rem 6rem; box-shadow: 0 20px 40px rgba(5,11,20,0.15), 0 50px 100px rgba(5,11,20,0.25);
+        transition: transform 0.6s var(--ease-spring); position: relative;
+        --cta-mx: 50%; --cta-my: 50%;
+    }
+    .cta-card-blue::after {
+        content: ''; position: absolute; inset: 0; border-radius: inherit;
+        background: radial-gradient(600px circle at var(--cta-mx) var(--cta-my), rgba(255,255,255,0.05) 0%, transparent 60%);
+        pointer-events: none; z-index: 1; opacity: 0; transition: opacity 0.4s ease;
+    }
+    .cta-card-blue:hover::after { opacity: 1; }
+    
+    .texture-noise::before {
+        content: ""; position: absolute; inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        opacity: 0.04; mix-blend-mode: overlay; pointer-events: none; border-radius: inherit;
+    }
+
+    .cta-card-blue:hover { transform: scale(1.02); }
+    .cta-inner-flex { display: flex; justify-content: space-between; align-items: center; gap: 3rem; position: relative; z-index: 2;}
+    .cta-text-side { flex: 1; }
+    .cta-title-luxe { font-size: clamp(1.9rem, 3vw, 2.8rem); font-weight: 800; color: #fff; line-height: 1.12; letter-spacing: -1.2px; margin: 0; max-width: 17ch; }
+    .cta-scarcity-sub { margin: 1.1rem 0 0; color: rgba(255,255,255,0.68); font-size: 1.05rem; line-height: 1.5; max-width: 460px; }
+    
+    .btn-glow-blue {
+        position: relative; background: #fff; color: var(--color-blue-deep);
+        padding: 20px 44px; border-radius: 100px; text-decoration: none; font-size: 1.05rem; font-weight: 700; overflow: hidden;
+        transition: transform 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth);
+        display: inline-flex; align-items: center; justify-content: center; white-space: nowrap;
+        box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 4px 6px rgba(255,255,255,0.05), 0 10px 20px rgba(255,255,255,0.1);
+        will-change: transform;
+    }
+    .btn-glow-blue span { position: relative; z-index: 2; }
+    .btn-glow-blue:hover { transform: translateY(-3px); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 14px 28px rgba(255,255,255,0.12), 0 26px 52px rgba(255,255,255,0.22); }
+    .btn-glow-blue:active { transform: translateY(-1px); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 4px 8px rgba(255,255,255,0.08); }
+
+    @media (max-width: 1024px) {
+        .hero-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; }
+        .desktop-only { display: none; }
+        .protocol-grid { grid-template-columns: 1fr; gap: 3rem; }
+        .protocol-sticky-col { position: relative; top: 0; padding-right: 0; height: auto; }
+        .protocol-timeline { padding-left: 0; gap: 3rem; }
+        .timeline-track { left: 11px; } 
+    }
+
+
+    /* ==========================================================
+       MÓVIL
+       ========================================================== */
     @media (max-width: 768px) {
-        .title-regular {
-            margin-top: 1rem;
-            font-size: clamp(1.8rem, 6vw, 2.2rem);
+        .hero-grand { padding-top: 11rem; padding-bottom: 4rem; min-height: auto; text-align: center; }
+        .hero-content { display: flex; flex-direction: column; align-items: center; }
+        .hero-title { display: flex; flex-direction: column; gap: 0.2rem; margin-bottom: 2.5rem; max-width: 100%; }
+        .title-bold { display: block; font-size: clamp(2rem, 7.6vw, 2.85rem); font-weight: 800; letter-spacing: -1px; line-height: 1.12; margin-bottom: 0; }
+        .hero-bottom { flex-direction: column; align-items: center; gap: 2.5rem; text-align: center; border-top: none; padding-top: 0;}
+        .hero-desc { font-size: 1.1rem; padding: 0 5%; max-width: 95%; margin: 0 auto; line-height: 1.6;}
+        .hero-action { width: 100%; padding: 0 5%; }
+        .btn-luxe { width: 100%; padding: 18px 0; font-size: 1.05rem;}
+        /* TECNOLOGÍA */
+        .tech-spotlight { padding: 4.5rem 0; }
+        .tech-header { margin-bottom: 2.75rem; }
+        .tech-stack { padding-top: 2.5rem; }
+        .logo-strip {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem 1.5rem; padding: 0 8%;
         }
-        .cord-bg-graphic .orb { opacity: 0.1; }
+        .strip-logo { height: 26px; opacity: 0.5; }
+        .stack-meta { margin-top: 2.5rem; padding-top: 1.5rem; }
+        .stack-count { font-size: 1.3rem; }
+        .stack-label { font-size: 0.65rem; letter-spacing: 2px; }
+
+        /* CARRUSEL CASOS */
+        .clients-vertical-carousel {
+            padding: 4rem 0 4rem;
+            overflow: hidden; width: 100%;
+        }
+        .casos-bg-text { font-size: 60vw; left: -8%; }
+        .header-flex { margin-bottom: 0.5rem; }
+        .header-title-mobile h2 { font-size: 2.2rem; margin-bottom: 0.5rem; letter-spacing: -1px; }
+        .carousel-mobile-hint {
+            display: flex; margin-top: 1rem;
+        }
+
+        .carousel-track-wrapper {
+            padding: 2.5rem 11% 3.5rem;
+            scroll-padding-left: 11%;
+            scroll-behavior: smooth; width: 100%; margin-top: 0;
+            scroll-snap-type: x mandatory;
+        }
+        .carousel-track { gap: 14px; }
+
+        .vertical-card {
+            width: 78vw;
+            height: 58vh; max-height: 460px;
+            scroll-snap-align: center;
+            transform: scale(0.9);
+            opacity: 0.6;
+            transition: transform 0.55s var(--ease-ios), opacity 0.55s var(--ease-ios), box-shadow 0.55s ease;
+            transform-origin: center center;
+            flex-shrink: 0;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+        }
+
+        .vertical-card.is-centered {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            box-shadow: 0 28px 60px rgba(0,0,0,0.5); z-index: 2;
+        }
+
+        .card-num-luxury { font-size: 1.4rem; top: 1rem; left: 1.5rem; }
+        .card-overlay { padding: 3rem 2rem 2rem 2rem; background: linear-gradient(transparent, rgba(0,0,0,0.9)); }
+
+        /* SERVICIOS */
+        .services-rows { padding: 4rem 0 3rem; }
+        .services-rows .section-header { margin-bottom: 0; }
+        .rows-wrapper { margin-top: 2rem; }
+        .service-row { grid-template-columns: 28px 1fr 36px; gap: 1.2rem; padding: 2rem 0; margin: 0; }
+        .row-num { display: block; font-size: 0.75rem; padding-top: 4px; color: #bbb; }
+        .row-content h3 { font-size: 1.4rem; margin-bottom: 0.6rem; letter-spacing: -0.5px; }
+        .row-content p { font-size: 0.97rem; line-height: 1.55; }
+        .row-action { display: flex; align-items: flex-start; padding-top: 2px; }
+        .arrow-circle { width: 38px; height: 38px; border-color: rgba(0,0,0,0.1); }
+        .arrow-circle svg { width: 15px; height: 15px; }
+        .service-row:active { transform: scale(0.98); transition: 0.1s; }
+        .service-row:active .animated-border { width: 100%; transition: 0.2s; }
+        .service-row:active .arrow-circle { background: #000; color: #fff; border-color: #000; transform: rotate(-45deg); }
+
+        /* PROTOCOLO */
+        .protocol-section { padding: 4rem 0 5rem; }
+        .protocol-timeline { gap: 2.5rem; }
+        .protocol-step { gap: 1.5rem; }
+        .protocol-step:hover { transform: translateX(0); }
+        .step-node { width: 20px; height: 20px; }
+        .watermark-num { font-size: 1.9rem; top: -2rem; left: 0; }
+        .step-content h4 { font-size: 1.3rem; }
+        .step-content p { font-size: 1rem; }
+
+        /* CTA */
+        .cta-integrated { padding: 0 5% 5rem 5%; }
+        .cta-card-blue { padding: 4rem 2rem; box-shadow: 0 20px 40px rgba(5,11,20,0.25), inset 0 1px 0 rgba(255,255,255,0.08); }
+        .cta-inner-flex { flex-direction: column; align-items: center; gap: 2.5rem; width: 100%; }
+        .cta-text-side { display: flex; flex-direction: column; align-items: center; }
+        .cta-title-luxe { font-size: 2rem; text-align: center; line-height: 1.1; letter-spacing: -1px; margin-top: 0.5rem; max-width: 100%; }
+        .cta-scarcity-sub { text-align: center; font-size: 1rem; margin-top: 0.9rem; }
+        .cta-action-side { width: 100%; }
+        .btn-glow-blue { width: 100%; padding: 20px 0; justify-content: center; font-size: 1.05rem; box-shadow: 0 10px 20px rgba(255,255,255,0.05); }
     }
 </style>
 
@@ -266,78 +698,297 @@ const description = isEn
 
     gsap.registerPlugin(ScrollTrigger);
 
-    const initAnimations = () => {
-        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (reducedMotion) return;
-
-        // Hero entrance
-        const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-        
-        // Use clearProps to ensure GSAP doesn't leave lingering styles
-        heroTl.fromTo('.hero-status', 
-            { y: 20, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1, clearProps: 'all' }, 0.1
-        )
-        .fromTo('.hero-title', 
-            { y: 30, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1.2, clearProps: 'all' }, 0.2
-        )
-        .fromTo('.eyebrow.hero-anim', 
-            { y: 15, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1, clearProps: 'all' }, 0.3
-        )
-        .fromTo('.hero-bottom', 
-            { y: 30, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1.2, clearProps: 'all' }, 0.4
-        );
-
-        // Features rows reveal
-        const rows = document.querySelectorAll('.service-row');
-        if (rows.length > 0) {
-            ScrollTrigger.create({
-                trigger: '.cord-features',
-                start: 'top 80%',
-                once: true,
-                onEnter: () => {
-                    gsap.fromTo(rows, 
-                        { y: 40, opacity: 0 },
-                        { 
-                            y: 0, 
-                            opacity: 1, 
-                            duration: 1, 
-                            stagger: 0.15, 
-                            ease: 'power3.out',
-                            clearProps: 'all'
-                        }
-                    );
-                }
-            });
-        }
-
-        // Origin steps reveal
-        const steps = document.querySelectorAll('.protocol-step');
-        if (steps.length > 0) {
-            ScrollTrigger.create({
-                trigger: '.cord-origin',
-                start: 'top 80%',
-                once: true,
-                onEnter: () => {
-                    gsap.fromTo(steps, 
-                        { x: -30, opacity: 0 },
-                        { 
-                            x: 0, 
-                            opacity: 1, 
-                            duration: 1, 
-                            stagger: 0.2, 
-                            ease: 'power3.out',
-                            clearProps: 'all'
-                        }
-                    );
-                }
-            });
-        }
+    // Recalcular posiciones después de que carguen fuentes + imágenes, para que
+    // los ScrollTrigger disparen en el punto correcto desde el inicio.
+    const robustRefresh = () => {
+        const winLoad = new Promise<void>((resolve) => {
+            if (document.readyState === 'complete') resolve();
+            else window.addEventListener('load', () => resolve(), { once: true });
+        });
+        const fontsReady = (document as any).fonts?.ready ?? Promise.resolve();
+        Promise.all([winLoad, fontsReady]).then(() => {
+            setTimeout(() => ScrollTrigger.refresh(), 120);
+        });
     };
+    robustRefresh();
 
-    // Run animations once the DOM is ready
-    document.addEventListener('DOMContentLoaded', initAnimations);
+    document.addEventListener('DOMContentLoaded', () => {
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // Con reduced-motion la clase .js-anim nunca se añade (script inline del
+        // Layout), así que todo queda visible vía CSS. No animamos nada.
+        if (reduced) return;
+
+        /* ═══════ HERO — entrada en carga (compartida desktop/móvil) ═══════
+           El CSS (.js-anim .hero-anim) ya los tiene en opacity:0 desde antes del
+           primer paint, así que animamos con .to() — sin doble salto, sin flash. */
+        const heroAnim = gsap.utils.toArray<HTMLElement>('.hero-anim');
+        if (heroAnim.length) {
+            gsap.set(heroAnim, { opacity: 0, y: 12 });
+            gsap.timeline({ defaults: { ease: 'power2.out' } })
+                .to('.hero-status',             { opacity: 1, y: 0, duration: 0.9 }, 0)
+                .to('.hero-text-zone .eyebrow', { opacity: 1, y: 0, duration: 0.9 }, 0.1)
+                .to('.hero-title',              { opacity: 1, y: 0, duration: 1.1 }, 0.2)
+                .to('.hero-bottom',             { opacity: 1, y: 0, duration: 1.0 }, 0.42);
+        }
+
+        // ── Estándar único de animación de entrada ──────────────────
+        // Mismo lenguaje en todo el sitio: fade + leve subida, suave, sutil.
+        const EASE = 'power2.out';
+        const DUR  = 0.9;
+        const Y    = 14;
+
+        /* Reveal robusto (sin parpadeo): el elemento se OCULTA de entrada con
+           gsap.set y solo se revela UNA vez cuando su trigger entra al viewport.
+           Antes usábamos gsap.from + immediateRender:false, que dejaba el elemento
+           visible hasta el primer scroll y entonces lo "saltaba" a opacity:0 para
+           re-animarlo → se veía recargar. Con set+onEnter eso ya no pasa.
+           Failsafe anti "invisible para siempre": robustRefresh() recalcula
+           posiciones tras fuentes+carga, así que todo trigger ya pasado dispara su
+           onEnter; y si no hay JS/hay reduced-motion, el CSS deja todo visible. */
+        const reveal = (
+            targets: string | HTMLElement | NodeListOf<Element> | HTMLElement[],
+            opts: { trigger?: string | HTMLElement; start?: string; y?: number; dur?: number; stagger?: number; delay?: number } = {}
+        ) => {
+            const els = gsap.utils.toArray<HTMLElement>(targets as any);
+            if (!els.length) return;
+            const y = opts.y ?? Y;
+            gsap.set(els, { opacity: 0, y });
+            ScrollTrigger.create({
+                trigger: opts.trigger ?? els[0],
+                start: opts.start ?? 'top 85%',
+                once: true,
+                onEnter: () => gsap.to(els, {
+                    opacity: 1, y: 0, duration: opts.dur ?? DUR, ease: EASE,
+                    stagger: opts.stagger ?? 0.08, delay: opts.delay ?? 0,
+                    clearProps: 'transform,opacity',
+                }),
+            });
+        };
+
+        // Reveal por-elemento (cada uno con su propio trigger/posición)
+        const revealEach = (
+            selector: string,
+            opts: { start?: string; y?: number; dur?: number } = {}
+        ) => {
+            gsap.utils.toArray<HTMLElement>(selector).forEach(el => {
+                reveal(el, { trigger: el, start: opts.start, y: opts.y, dur: opts.dur, stagger: 0 });
+            });
+        };
+
+        const mm = gsap.matchMedia();
+
+        /* ─── DESKTOP ──────────────────────────────────────────────── */
+        mm.add('(min-width: 769px)', () => {
+
+            /* Parallax muy leve del hero al hacer scroll */
+            const heroParallax = document.getElementById('hero-parallax');
+            if (heroParallax) {
+                gsap.to(heroParallax, {
+                    yPercent: 4, opacity: 0.85, ease: 'none',
+                    scrollTrigger: { trigger: '.hero-grand', start: 'top top', end: 'bottom 30%', scrub: 1 },
+                });
+            }
+
+            /* Encabezados + eyebrows */
+            revealEach('section:not(.hero-grand) .section-heading', { y: 16, dur: 1.0, start: 'top 86%' });
+            revealEach('section:not(.hero-grand) .eyebrow',         { y: 10, dur: 0.9, start: 'top 90%' });
+
+            /* TECH — subtítulo + tira de logos */
+            reveal('.tech-spotlight .section-sub', { trigger: '.tech-spotlight', y: 12, dur: 0.9, start: 'top 82%' });
+            reveal('.strip-logo', { trigger: '#logo-strip', y: 12, dur: 0.9, stagger: 0.06, start: 'top 85%' });
+            reveal('.stack-meta', { trigger: '#logo-strip', y: 10, dur: 0.9, delay: 0.2, start: 'top 85%' });
+
+            /* CASOS — tarjetas (el Ken Burns/elevación es hover en CSS) */
+            reveal('.clients-vertical-carousel .vertical-card', {
+                trigger: '.clients-vertical-carousel', y: 24, dur: 1.0, stagger: 0.1, start: 'top 78%',
+            });
+
+            /* SERVICIOS — filas (reveal sobrio por fila) */
+            gsap.utils.toArray<HTMLElement>('.service-row').forEach((row) => {
+                reveal(row.querySelectorAll('.row-num, .row-content h3, .row-content p, .arrow-circle'), {
+                    trigger: row, y: 14, dur: 0.9, stagger: 0.06, start: 'top 86%',
+                });
+            });
+
+            /* PROTOCOLO — columna sticky + indicador de progreso */
+            reveal('.protocol-sticky-col > *:not(.proto-progress)', {
+                trigger: '.protocol-section', y: 16, dur: 1.0, stagger: 0.09, start: 'top 80%',
+            });
+            reveal('.proto-progress', { trigger: '.protocol-section', y: 14, dur: 1.0, delay: 0.3, start: 'top 78%' });
+
+            /* PROTOCOLO — el track se dibuja con el scroll */
+            const timelineTrack = document.querySelector('.timeline-track');
+            if (timelineTrack) {
+                gsap.set(timelineTrack, { transformOrigin: 'top center', scaleY: 0 });
+                gsap.to(timelineTrack, {
+                    scaleY: 1, ease: 'none',
+                    scrollTrigger: { trigger: '.protocol-section', start: 'top 60%', end: 'bottom 75%', scrub: 0.6 },
+                });
+            }
+
+            /* PROTOCOLO — barra de progreso se llena con el scroll */
+            const progressFill = document.querySelector<HTMLElement>('.proto-progress-fill');
+            if (progressFill) {
+                gsap.to(progressFill, {
+                    scaleX: 1, ease: 'none',
+                    scrollTrigger: { trigger: '.protocol-section', start: 'top 50%', end: 'bottom 70%', scrub: 0.4 },
+                });
+            }
+
+            /* PROTOCOLO — paso activo + contador */
+            const protoSteps = gsap.utils.toArray<HTMLElement>('.protocol-step');
+            const protoCurrent = document.querySelector<HTMLElement>('.proto-current');
+            protoSteps.forEach((step, idx) => {
+                ScrollTrigger.create({
+                    trigger: step, start: 'top 55%', end: 'bottom 45%',
+                    onEnter:     () => { step.classList.add('is-active');    setProtoCount(idx); },
+                    onEnterBack: () => { step.classList.add('is-active');    setProtoCount(idx); },
+                    onLeave:     () => { step.classList.remove('is-active'); },
+                    onLeaveBack: () => { step.classList.remove('is-active'); },
+                });
+            });
+            function setProtoCount(idx: number) {
+                if (!protoCurrent) return;
+                const next = String(idx + 1).padStart(2, '0');
+                if (protoCurrent.textContent === next) return;
+                gsap.fromTo(protoCurrent,
+                    { y: -8, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.45, ease: EASE,
+                      onStart: () => { protoCurrent.textContent = next; } });
+            }
+
+            /* PROTOCOLO — pasos (reveal por paso) */
+            protoSteps.forEach((step) => {
+                reveal(step.querySelectorAll('.watermark-num, h4, p'), {
+                    trigger: step, y: 14, dur: 0.9, stagger: 0.07, start: 'top 86%',
+                });
+            });
+
+            /* CTA — entrada sutil + glow que sigue el cursor */
+            const ctaCard = document.getElementById('cta-card') as HTMLElement | null;
+            if (ctaCard) {
+                reveal(ctaCard, { trigger: ctaCard, y: 24, dur: 1.0, stagger: 0, start: 'top 82%' });
+                reveal(ctaCard.querySelectorAll('.cta-text-side > *, .cta-action-side'), {
+                    trigger: ctaCard, y: 12, dur: 0.9, stagger: 0.08, delay: 0.15, start: 'top 82%',
+                });
+
+                ctaCard.addEventListener('mousemove', e => {
+                    const r = ctaCard.getBoundingClientRect();
+                    ctaCard.style.setProperty('--cta-mx', `${((e.clientX - r.left) / r.width) * 100}%`);
+                    ctaCard.style.setProperty('--cta-my', `${((e.clientY - r.top) / r.height) * 100}%`);
+                });
+            }
+        });
+
+        /* ─── MOBILE ───────────────────────────────────────────────── */
+        mm.add('(max-width: 768px)', () => {
+
+            /* (El hero se anima en el bloque compartido de arriba) */
+
+            /* Encabezados + eyebrows */
+            revealEach('section:not(.hero-grand) .section-heading', { y: 16, dur: 1.0, start: 'top 88%' });
+            revealEach('section:not(.hero-grand) .eyebrow',         { y: 10, dur: 0.9, start: 'top 92%' });
+
+            /* TECH */
+            reveal('.tech-spotlight .section-sub', { trigger: '.tech-spotlight', y: 12, dur: 0.9, start: 'top 86%' });
+            reveal('.strip-logo', { trigger: '#logo-strip', y: 10, dur: 0.8, stagger: 0.05, start: 'top 88%' });
+            reveal('.stack-meta', { trigger: '#logo-strip', y: 10, dur: 0.85, delay: 0.18, start: 'top 88%' });
+
+            /* CASOS — tarjetas */
+            reveal('.clients-vertical-carousel .vertical-card', {
+                trigger: '.clients-vertical-carousel', y: 22, dur: 0.95, stagger: 0.08, start: 'top 82%',
+            });
+
+            /* SERVICIOS — filas */
+            gsap.utils.toArray<HTMLElement>('.service-row').forEach((row) => {
+                reveal(row.querySelectorAll('.row-num, .row-content h3, .row-content p, .arrow-circle'), {
+                    trigger: row, y: 14, dur: 0.85, stagger: 0.05, start: 'top 90%',
+                });
+            });
+
+            /* PROTOCOLO — columna sticky + progreso */
+            reveal('.protocol-sticky-col > *:not(.proto-progress)', {
+                trigger: '.protocol-section', y: 16, dur: 0.95, stagger: 0.1, start: 'top 84%',
+            });
+            reveal('.proto-progress', { trigger: '.protocol-section', y: 14, dur: 0.9, delay: 0.3, start: 'top 84%' });
+
+            const mTrack = document.querySelector('.timeline-track');
+            if (mTrack) {
+                gsap.set(mTrack, { transformOrigin: 'top center', scaleY: 0 });
+                gsap.to(mTrack, {
+                    scaleY: 1, ease: 'none',
+                    scrollTrigger: { trigger: '.protocol-section', start: 'top 70%', end: 'bottom 85%', scrub: 0.8 },
+                });
+            }
+            const mProgressFill = document.querySelector<HTMLElement>('.proto-progress-fill');
+            if (mProgressFill) {
+                gsap.to(mProgressFill, {
+                    scaleX: 1, ease: 'none',
+                    scrollTrigger: { trigger: '.protocol-section', start: 'top 60%', end: 'bottom 75%', scrub: 0.4 },
+                });
+            }
+
+            const mProtoSteps = gsap.utils.toArray<HTMLElement>('.protocol-step');
+            const mProtoCurrent = document.querySelector<HTMLElement>('.proto-current');
+            mProtoSteps.forEach((step, idx) => {
+                ScrollTrigger.create({
+                    trigger: step, start: 'top 60%', end: 'bottom 50%',
+                    onEnter:     () => { step.classList.add('is-active');    setMProtoCount(idx); },
+                    onEnterBack: () => { step.classList.add('is-active');    setMProtoCount(idx); },
+                    onLeave:     () => { step.classList.remove('is-active'); },
+                    onLeaveBack: () => { step.classList.remove('is-active'); },
+                });
+            });
+            function setMProtoCount(idx: number) {
+                if (!mProtoCurrent) return;
+                const next = String(idx + 1).padStart(2, '0');
+                if (mProtoCurrent.textContent === next) return;
+                gsap.fromTo(mProtoCurrent,
+                    { y: -6, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.4, ease: EASE,
+                      onStart: () => { mProtoCurrent.textContent = next; } });
+            }
+
+            mProtoSteps.forEach((step) => {
+                reveal(step.querySelectorAll('.watermark-num, h4, p'), {
+                    trigger: step, y: 14, dur: 0.85, stagger: 0.06, start: 'top 90%',
+                });
+            });
+
+            /* CTA */
+            const mCtaCard = document.getElementById('cta-card') as HTMLElement | null;
+            if (mCtaCard) {
+                reveal(mCtaCard, { trigger: mCtaCard, y: 22, dur: 0.95, stagger: 0, start: 'top 86%' });
+                reveal(mCtaCard.querySelectorAll('.cta-text-side > *, .cta-action-side'), {
+                    trigger: mCtaCard, y: 12, dur: 0.85, stagger: 0.08, delay: 0.12, start: 'top 86%',
+                });
+            }
+
+            /* CARRUSEL — la tarjeta cuyo centro está más cerca del centro del
+               carril se marca como .is-centered. Cálculo por scroll (rAF), robusto
+               y sin el parpadeo del IntersectionObserver anterior. */
+            const track = document.querySelector('.carousel-track-wrapper') as HTMLElement | null;
+            const cards = Array.from(document.querySelectorAll<HTMLElement>('.vertical-card'));
+            if (track && cards.length) {
+                let rafId = 0;
+                const updateCentered = () => {
+                    const mid = track.scrollLeft + track.clientWidth / 2;
+                    let best = cards[0]; let bestDist = Infinity;
+                    for (const card of cards) {
+                        const center = card.offsetLeft + card.offsetWidth / 2;
+                        const dist = Math.abs(center - mid);
+                        if (dist < bestDist) { bestDist = dist; best = card; }
+                    }
+                    cards.forEach(c => c.classList.toggle('is-centered', c === best));
+                };
+                track.addEventListener('scroll', () => {
+                    if (rafId) return;
+                    rafId = requestAnimationFrame(() => { rafId = 0; updateCentered(); });
+                }, { passive: true });
+                window.addEventListener('resize', updateCentered, { passive: true });
+                updateCentered();
+            }
+        });
+    });
 </script>
