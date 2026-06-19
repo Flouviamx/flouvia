@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
+import CordNavbar from '../components/CordNavbar.astro';
 
 export const prerender = true;
 
@@ -35,20 +36,7 @@ const schemaOrg = {
     
     <script type="application/ld+json" set:html={JSON.stringify(schemaOrg)} />
 
-    <!-- Simplified Nav -->
-    <header class="cord-nav">
-        <div class="nav-container">
-            <div class="nav-left">
-                <a href="/" class="flouvia-mini-logo" aria-label="Flouvia">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 22h20L12 2z" fill="currentColor"/></svg>
-                </a>
-                <span class="nav-brand">Cord</span>
-            </div>
-            <div class="nav-right">
-                <a href="https://cord.flouvia.com" class="nav-cta-link">Ir a Cord &rarr;</a>
-            </div>
-        </div>
-    </header>
+    <CordNavbar />
 
     <main class="page-cord">
         <!-- 02 — Hero -->
