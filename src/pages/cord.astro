@@ -59,18 +59,12 @@ const schemaOrg = {
                         </h1>
                     </div>
 
-                    <div class="hero-bottom hero-anim" style="flex-direction: column; align-items: center; border-top: none; gap: 2rem;">
+                    <div class="hero-bottom hero-anim" style="flex-direction: column; align-items: center; border-top: none; gap: 2.5rem;">
                         <p class="hero-desc text-center" style="max-width: 600px;">
                             Manda cotizaciones con tu marca, tu cliente aprueba en un clic y el CFDI se timbra solo. Gratis para empezar — sin tarjeta, sin aplicar a nada.
                         </p>
 
-                        <div class="hero-badges" style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
-                            <div class="hero-status" style="margin-bottom: 0;"><span style="color: var(--color-blue-deep); font-weight: 800;">📩 NOTIFICACIÓN CUANDO LA VEN</span></div>
-                            <div class="hero-status" style="margin-bottom: 0;"><span style="color: var(--color-blue-deep); font-weight: 800;">✓ APROBACIÓN EN UN CLIC</span></div>
-                            <div class="hero-status" style="margin-bottom: 0;"><span style="color: var(--color-blue-deep); font-weight: 800;">🧾 CFDI 4.0 AUTOMÁTICO</span></div>
-                        </div>
-
-                        <div class="hero-action" style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; width: 100%; margin-top: 1rem;">
+                        <div class="hero-action" style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; width: 100%;">
                             <a href="https://cord.flouvia.com/registro" class="btn-luxe">
                                 <span>Probar Cord gratis</span>
                                 <span class="btn-arrow" aria-hidden="true">&rarr;</span>
@@ -80,7 +74,12 @@ const schemaOrg = {
                                 <span>Ver una cotización de ejemplo</span>
                             </a>
                         </div>
-                        <p style="font-size: 0.85rem; color: #888; margin-top: 0;">Gratis hasta 5 cotizaciones &middot; Sin tarjeta &middot; Cualquier negocio puede entrar</p>
+                        
+                        <div class="hero-badges" style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; color: var(--color-text-muted); font-size: 0.85rem; font-weight: 500; margin-top: -0.5rem;">
+                            <span>&middot; Notificación de lectura</span>
+                            <span>&middot; Aprobación en un clic</span>
+                            <span>&middot; CFDI 4.0 automático</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -224,9 +223,9 @@ const schemaOrg = {
     .cta-squircle { border-radius: 32px; transform: translateZ(0); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
 
     /* HERO */
-    .hero-grand { padding: 8rem 0 4rem 0; min-height: 90svh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
+    .hero-grand { padding: 10rem 0 6rem 0; min-height: 100svh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
     .hero-text-zone { transition: transform 0.1s ease-out, opacity 0.1s ease-out; }
-    .hero-title { font-size: clamp(1.9rem, 3.6vw, 3.4rem); line-height: 1.14; font-weight: 800; letter-spacing: -1.2px; margin-bottom: 2.75rem; color: #050505; max-width: 880px; }
+    .hero-title { font-size: clamp(1.9rem, 3.6vw, 3.4rem); line-height: 1.14; font-weight: 800; letter-spacing: -1.2px; margin-bottom: 3.5rem; color: #050505; max-width: 880px; }
     .hero-title .title-bold { color: #050505; }
     .title-bold { display: inline; }
     .hero-desc { font-size: 1.1rem; color: var(--color-text-muted); max-width: 480px; line-height: 1.55; margin: 0; }
