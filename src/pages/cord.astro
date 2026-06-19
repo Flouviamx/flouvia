@@ -32,67 +32,123 @@ const schemaOrg = {
 >
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <script type="application/ld+json" set:html={JSON.stringify(schemaOrg)} />
 
     <CordNavbar />
 
-    <main class="page-cord">
+    <main class="flouvia-masterpiece page-cord">
         <!-- 02 — Hero -->
-        <section class="hero-teaser">
+        <section class="hero-grand">
             <div class="container hero-container text-center">
-                <p class="eyebrow anim-up">UN PRODUCTO DE FLOUVIA &middot; DISPONIBLE PARA CUALQUIER NEGOCIO</p>
-                <h1 class="hero-title anim-up">Cord. Cotizaciones B2B<br/>que se aprueban solas.</h1>
-                <p class="hero-subhead anim-up">Manda cotizaciones con tu marca, tu cliente aprueba en un clic y el CFDI se timbra solo. Gratis para empezar — sin tarjeta, sin aplicar a nada.</p>
-                
-                <div class="hero-badges anim-up">
-                    <span class="badge">📩 Notificación cuando la ven</span>
-                    <span class="badge">&#10003; Aprobación en un clic</span>
-                    <span class="badge">🧾 CFDI 4.0 automático</span>
-                </div>
+                <div class="hero-content" style="align-items: center;">
+                    <div class="hero-text-zone" id="hero-parallax" style="display: flex; flex-direction: column; align-items: center;">
+                        
+                        <div class="hero-status hero-anim" id="hero-status">
+                            <span class="hero-status-dot" aria-hidden="true"></span>
+                            <span>DISPONIBLE PARA CUALQUIER NEGOCIO</span>
+                        </div>
 
-                <div class="hero-actions anim-up">
-                    <a href="https://cord.flouvia.com/registro" class="btn-primary">Probar Cord gratis &rarr;</a>
-                    <a href="https://cord.flouvia.com" class="btn-secondary">Ver una cotización de ejemplo</a>
+                        <p class="eyebrow hero-anim">
+                            UN PRODUCTO DE FLOUVIA
+                        </p>
+
+                        <h1 class="hero-title hero-anim" style="text-align: center;">
+                            <span class="title-bold">Cord. Cotizaciones B2B</span> <br/><span class="title-bold">que se aprueban solas.</span>
+                        </h1>
+                    </div>
+
+                    <div class="hero-bottom hero-anim" style="flex-direction: column; align-items: center; border-top: none; gap: 2rem;">
+                        <p class="hero-desc text-center" style="max-width: 600px;">
+                            Manda cotizaciones con tu marca, tu cliente aprueba en un clic y el CFDI se timbra solo. Gratis para empezar — sin tarjeta, sin aplicar a nada.
+                        </p>
+
+                        <div class="hero-badges" style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                            <div class="hero-status" style="margin-bottom: 0;"><span style="color: var(--color-blue-deep); font-weight: 800;">📩 NOTIFICACIÓN CUANDO LA VEN</span></div>
+                            <div class="hero-status" style="margin-bottom: 0;"><span style="color: var(--color-blue-deep); font-weight: 800;">✓ APROBACIÓN EN UN CLIC</span></div>
+                            <div class="hero-status" style="margin-bottom: 0;"><span style="color: var(--color-blue-deep); font-weight: 800;">🧾 CFDI 4.0 AUTOMÁTICO</span></div>
+                        </div>
+
+                        <div class="hero-action" style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; width: 100%; margin-top: 1rem;">
+                            <a href="https://cord.flouvia.com/registro" class="btn-luxe">
+                                <span>Probar Cord gratis</span>
+                                <span class="btn-arrow" aria-hidden="true">&rarr;</span>
+                                <div class="btn-shimmer"></div>
+                            </a>
+                            <a href="https://cord.flouvia.com" class="btn-secondary-luxe">
+                                <span>Ver una cotización de ejemplo</span>
+                            </a>
+                        </div>
+                        <p style="font-size: 0.85rem; color: #888; margin-top: 0;">Gratis hasta 5 cotizaciones &middot; Sin tarjeta &middot; Cualquier negocio puede entrar</p>
+                    </div>
                 </div>
-                <p class="hero-microcopy anim-up">Gratis hasta 5 cotizaciones &middot; Sin tarjeta &middot; Cualquier negocio puede entrar</p>
             </div>
         </section>
 
-        <!-- 03 — Features -->
-        <section class="teaser-features">
-            <div class="container features-grid">
-                <div class="feature-card anim-up">
-                    <h3>Tu cliente aprueba sin crear cuenta.</h3>
-                    <p>Un link con tu marca. Lo abre, ve el total, aprueba o paga. Cero fricción para que cierren más rápido.</p>
+        <!-- 03 — Features (Editorial Rows) -->
+        <section class="services-rows">
+            <div class="container">
+                <div class="section-header hero-anim">
+                    <p class="eyebrow" style="margin-bottom: 1.5rem;">CÓMO FUNCIONA</p>
+                    <h2 class="section-heading">Cero fricción <span class="editorial">para vender.</span></h2>
                 </div>
-                <div class="feature-card anim-up">
-                    <h3>Sabes el momento exacto en que la ven.</h3>
-                    <p>Notificación instantánea cuando tu cliente abre la cotización. Se acabó el "¿ya la revisaste?"</p>
-                </div>
-                <div class="feature-card anim-up">
-                    <h3>CFDI 4.0, sin recapturar nada.</h3>
-                    <p>De cotización aprobada a factura timbrada ante el SAT, automático, desde la misma pantalla.</p>
+
+                <div class="rows-wrapper">
+                    <div class="service-row js-anim-row" style="--delay: 0.1s;">
+                        <div class="row-num">/01</div>
+                        <div class="row-content">
+                            <h3>Tu cliente aprueba sin crear cuenta</h3>
+                            <p>Un link con tu marca. Lo abre, ve el total, aprueba o paga. Cero fricción para que cierren más rápido.</p>
+                        </div>
+                        <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+                        <div class="animated-border"></div>
+                    </div>
+                    <div class="service-row js-anim-row" style="--delay: 0.2s;">
+                        <div class="row-num">/02</div>
+                        <div class="row-content">
+                            <h3>Sabes el momento exacto en que la ven</h3>
+                            <p>Notificación instantánea cuando tu cliente abre la cotización. Se acabó el "¿ya la revisaste?"</p>
+                        </div>
+                        <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+                        <div class="animated-border"></div>
+                    </div>
+                    <div class="service-row js-anim-row" style="--delay: 0.3s;">
+                        <div class="row-num">/03</div>
+                        <div class="row-content">
+                            <h3>CFDI 4.0, sin recapturar nada</h3>
+                            <p>De cotización aprobada a factura timbrada ante el SAT, automático, desde la misma pantalla.</p>
+                        </div>
+                        <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+                        <div class="animated-border"></div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- 04 — Trust strip -->
-        <section class="trust-strip">
+        <section class="trust-strip hero-anim">
             <div class="container">
                 <p>Construido por Flouvia, la misma firma detrás de portales B2B para distribuidores en México &middot; Usado en La Central de Abastos CDMX: &minus;67% tiempo de procesamiento, +25% ticket promedio</p>
             </div>
         </section>
 
         <!-- 05 — CTA final -->
-        <section class="final-cta text-center">
+        <section class="cta-integrated js-anim-cta">
             <div class="container">
-                <p class="eyebrow anim-up">EMPIEZA HOY</p>
-                <h2 class="anim-up">Tu primera cotización, en menos de 10 minutos.</h2>
-                <p class="subtext anim-up">Sin tarjeta. Plan gratis para siempre. Cualquier negocio B2B en México puede empezar ahora.</p>
-                <div class="anim-up">
-                    <a href="https://cord.flouvia.com/registro" class="btn-primary btn-large">Crear cuenta gratis en Cord &rarr;</a>
+                <div class="cta-card-blue cta-squircle texture-noise" id="cta-card">
+                    <div class="cta-inner-flex">
+                        <div class="cta-text-side text-center" style="flex: 1;">
+                            <p class="eyebrow" style="color: #64748b; letter-spacing: 4px;">EMPIEZA HOY</p>
+                            <h2 class="cta-title-luxe" style="max-width: 100%; margin: 0 auto;">Tu primera cotización, en menos de 10 minutos.</h2>
+                            <p class="cta-scarcity-sub" style="max-width: 100%; margin: 1.1rem auto 2.5rem;">Sin tarjeta. Plan gratis para siempre. Cualquier negocio B2B en México puede empezar ahora.</p>
+                            
+                            <a href="https://cord.flouvia.com/registro" class="btn-glow-blue">
+                                <span>Crear cuenta gratis en Cord &rarr;</span>
+                                <div class="glow-effect"></div>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -101,285 +157,133 @@ const schemaOrg = {
     <Footer />
 </Layout>
 
-<style>
-/* CSS para el teaser, enfocado en Inter (sin serif) y diseño limpio, Quiet Luxury */
-:root {
-    --bg-color: #ffffff;
-    --text-primary: #0a192f;
-    --text-secondary: rgba(10,25,47,0.65);
-    --border-color: rgba(10,25,47,0.1);
-}
-
-body {
-    background-color: var(--bg-color);
-    color: var(--text-primary);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    margin: 0;
-    padding: 0;
-    -webkit-font-smoothing: antialiased;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 5%;
-}
-
-.text-center { text-align: center; }
-
-.eyebrow {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--text-secondary);
-    margin-bottom: 1.5rem;
-}
-
-/* NAV */
-.cord-nav {
-    border-bottom: 1px solid var(--border-color);
-    padding: 1.2rem 0;
-    position: sticky;
-    top: 0;
-    background: rgba(255,255,255,0.85);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    z-index: 100;
-}
-.nav-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 5%;
-}
-.nav-left {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-}
-.flouvia-mini-logo svg {
-    width: 20px;
-    height: 20px;
-    color: var(--text-primary);
-}
-.nav-brand {
-    font-weight: 600;
-    font-size: 1.05rem;
-    letter-spacing: -0.01em;
-}
-.nav-cta-link {
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--text-primary);
-    text-decoration: none;
-    transition: opacity 0.2s ease;
-}
-.nav-cta-link:hover { opacity: 0.6; }
-
-/* HERO */
-.hero-teaser {
-    padding: 7rem 0 5rem;
-}
-.hero-title {
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
-    font-weight: 800;
-    line-height: 1.05;
-    letter-spacing: -0.035em;
-    margin: 0 auto 1.5rem;
-    max-width: 900px;
-}
-.hero-subhead {
-    font-size: clamp(1.1rem, 2vw, 1.35rem);
-    line-height: 1.5;
-    color: var(--text-secondary);
-    max-width: 700px;
-    margin: 0 auto 2.5rem;
-}
-.hero-badges {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 0.8rem;
-    margin-bottom: 3.5rem;
-}
-.badge {
-    background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(10,25,47,0.06);
-    padding: 0.6rem 1.2rem;
-    border-radius: 100px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    box-shadow: 0 4px 12px rgba(10,25,47,0.03), inset 0 1px 1px rgba(255,255,255,0.9);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s;
-}
-.badge:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 8px 20px rgba(10,25,47,0.06), inset 0 1px 1px rgba(255,255,255,0.9);
-    border-color: rgba(10,25,47,0.12);
-}
-.hero-actions {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1.2rem;
-    margin-bottom: 1.5rem;
-}
-@media (max-width: 600px) {
-    .hero-actions {
-        flex-direction: column;
-        width: 100%;
-        max-width: 400px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    .hero-actions a {
-        width: 100%;
-        justify-content: center;
-        display: flex;
-    }
-}
-.btn-primary {
-    background: var(--text-primary);
-    color: #fff;
-    padding: 1.1rem 2rem;
-    border-radius: 100px;
-    font-size: 1.05rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, background 0.3s;
-    position: relative;
-    overflow: hidden;
-}
-.btn-primary::before {
-    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.15) 50%, transparent 80%);
-    transform: translateX(-100%); transition: transform 0s;
-}
-.btn-primary:hover::before { transform: translateX(100%); transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-.btn-primary:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 14px 28px rgba(10,25,47,0.22);
-    background: #061121;
-}
-.btn-secondary {
-    background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    color: var(--text-primary);
-    padding: 1.1rem 2rem;
-    border-radius: 100px;
-    font-size: 1.05rem;
-    font-weight: 600;
-    text-decoration: none;
-    border: 1px solid rgba(10,25,47,0.08);
-    box-shadow: 0 4px 12px rgba(10,25,47,0.03), inset 0 1px 1px rgba(255,255,255,0.9);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.3s;
-}
-.btn-secondary:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 8px 24px rgba(10,25,47,0.08), inset 0 1px 1px rgba(255,255,255,0.9);
-    border-color: rgba(10,25,47,0.15);
-}
-.btn-large {
-    font-size: 1.15rem;
-    padding: 1.25rem 2.5rem;
-}
-.hero-microcopy {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    opacity: 0.9;
-}
-
-/* FEATURES */
-.teaser-features {
-    padding: 5rem 0;
-    border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-    background: rgba(10,25,47,0.015);
-}
-.features-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 4rem;
-}
-@media (max-width: 900px) {
-    .features-grid { grid-template-columns: 1fr; gap: 3rem; }
-}
-.feature-card {
-    background: #fff;
-    padding: 2.5rem;
-    border-radius: 24px;
-    border: 1px solid rgba(10,25,47,0.06);
-    box-shadow: 0 4px 20px rgba(10,25,47,0.02);
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease, border-color 0.5s ease;
-}
-.feature-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 20px 40px rgba(10,25,47,0.06);
-    border-color: rgba(10,25,47,0.12);
-}
-.feature-card h3 {
-    font-size: 1.3rem;
-    font-weight: 700;
-    letter-spacing: -0.015em;
-    margin-bottom: 0.8rem;
-    margin-top: 0;
-    color: var(--text-primary);
-}
-.feature-card p {
-    font-size: 1.05rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin: 0;
-}
-
-/* TRUST STRIP */
-.trust-strip {
-    padding: 3rem 0;
-    text-align: center;
-    border-bottom: 1px solid var(--border-color);
-}
-.trust-strip p {
-    font-size: 0.95rem;
-    color: var(--text-secondary);
-    margin: 0;
-    line-height: 1.6;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-/* FINAL CTA */
-.final-cta {
-    padding: 8rem 0 9rem;
-}
-.final-cta h2 {
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 800;
-    letter-spacing: -0.035em;
-    margin: 0 auto 1.5rem;
-    max-width: 700px;
-}
-.final-cta .subtext {
-    font-size: 1.15rem;
-    color: var(--text-secondary);
-    margin: 0 auto 3rem;
-    max-width: 600px;
-    line-height: 1.5;
-}
-}
-</style>
-
 <style is:global>
-    /* Prevent flash of unstyled content before GSAP kicks in */
-    .js-anim .anim-up {
-        opacity: 0;
-        visibility: hidden;
+    *, *::before, *::after { box-sizing: border-box; } 
+    
+    :root {
+        --color-bg: #ffffff;
+        --color-bg-soft: #fcfcfc; 
+        --color-blue-deep: #0a192f;
+        --color-text: #050505;
+        --color-text-muted: #555556;
+        --color-border: rgba(0, 0, 0, 0.08); 
+        
+        --font-sans: 'Inter', system-ui, sans-serif;
+        --font-serif: 'Instrument Serif', serif;
+        
+        --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
+        --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+        --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    body { background-color: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); margin: 0; }
+
+    .flouvia-masterpiece { width: 100%; position: relative; overflow-x: clip; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; }
+    .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: #222; }
+    .eyebrow { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
+    .text-center { text-align: center; }
+
+    /* HERO STATUS */
+    .hero-status { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 100px; border: 1px solid rgba(16,185,129,0.22); background: rgba(16,185,129,0.04); width: max-content; margin-bottom: 1.6rem; }
+    .hero-status span { font-size: 0.7rem; color: #059669; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .hero-status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: hero-status-pulse 2s infinite; }
+    @keyframes hero-status-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+    
+    .js-anim .hero-anim, .js-anim .js-anim-row, .js-anim .js-anim-cta { opacity: 0; visibility: hidden; }
+
+    .btn-luxe {
+        position: relative; display: inline-flex; background: var(--color-text); color: #fff;
+        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem;
+        font-weight: 600; overflow: hidden; justify-content: center;
+        transition: transform 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 10px 20px rgba(0,0,0,0.08);
+        align-items: center; gap: 10px; will-change: transform;
+    }
+    .btn-luxe span { position: relative; z-index: 2; }
+    .btn-arrow { position: relative; z-index: 2; display: inline-block; transition: transform 0.6s var(--ease-smooth); }
+    .btn-luxe:hover .btn-arrow { transform: translateX(4px); }
+    .btn-shimmer { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent); transform: skewX(-20deg); transition: 0s; z-index: 1;}
+    .btn-luxe:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(0,0,0,0.12), 0 24px 48px rgba(0,0,0,0.16); }
+    .btn-luxe:active { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+    .btn-luxe:hover .btn-shimmer { left: 150%; transition: left 0.9s var(--ease-smooth); }
+
+    .btn-secondary-luxe {
+        background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%);
+        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: var(--color-text);
+        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem; font-weight: 600;
+        border: 1px solid rgba(10,25,47,0.08); display: inline-flex; justify-content: center; align-items: center;
+        box-shadow: 0 4px 12px rgba(10,25,47,0.03), inset 0 1px 1px rgba(255,255,255,0.9);
+        transition: transform 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth), border-color 0.3s;
+    }
+    .btn-secondary-luxe:hover {
+        transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,25,47,0.08), inset 0 1px 1px rgba(255,255,255,0.9); border-color: rgba(10,25,47,0.15);
+    }
+
+    .squircle { border-radius: 24px; transform: translateZ(0); overflow: hidden; }
+    .cta-squircle { border-radius: 32px; transform: translateZ(0); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
+
+    /* HERO */
+    .hero-grand { padding: 8rem 0 4rem 0; min-height: 90svh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
+    .hero-text-zone { transition: transform 0.1s ease-out, opacity 0.1s ease-out; }
+    .hero-title { font-size: clamp(1.9rem, 3.6vw, 3.4rem); line-height: 1.14; font-weight: 800; letter-spacing: -1.2px; margin-bottom: 2.75rem; color: #050505; max-width: 880px; }
+    .hero-title .title-bold { color: #050505; }
+    .title-bold { display: inline; }
+    .hero-desc { font-size: 1.1rem; color: var(--color-text-muted); max-width: 480px; line-height: 1.55; margin: 0; }
+
+    /* SERVICIOS — Editorial Rows */
+    .services-rows { padding: 4rem 0 7rem 0; background: var(--color-bg); position: relative; }
+    .section-heading { font-size: clamp(2.3rem, 4.4vw, 3.4rem); font-weight: 800; letter-spacing: -1.5px; margin: 0 0 1rem 0; line-height: 1.05; text-align: center; }
+    .section-header .eyebrow { text-align: center; }
+    .rows-wrapper { margin-top: 5rem; border-top: 1px solid var(--color-border); }
+    .service-row { display: grid; grid-template-columns: 110px 1fr auto; gap: 4rem; padding: 4.5rem 0; position: relative; cursor: default; align-items: center; transition: background 0.5s var(--ease-smooth); text-decoration: none; color: inherit; }
+    .service-row::before { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: var(--color-border); }
+    .animated-border { position: absolute; bottom: 0; left: 0; width: 0%; height: 1px; background: linear-gradient(90deg, #0a192f 0%, #0a192f 60%, transparent 100%); transition: width 0.85s var(--ease-spring); z-index: 2; }
+    .row-num { font-family: var(--font-serif); font-style: italic; font-size: 2.6rem; font-weight: 400; color: rgba(10,25,47,0.18); line-height: 0.9; letter-spacing: -1.5px; transition: color 0.5s var(--ease-smooth), transform 0.6s var(--ease-spring); }
+    .row-content h3 { font-size: 2.4rem; font-weight: 800; letter-spacing: -1.2px; margin: 0 0 1rem 0; transition: color 0.5s var(--ease-smooth), letter-spacing 0.5s var(--ease-smooth), transform 0.55s var(--ease-spring); }
+    .row-content p { font-size: 1.1rem; color: var(--color-text-muted); line-height: 1.65; margin: 0; max-width: 620px; transition: color 0.4s var(--ease-smooth); }
+    .arrow-circle { width: 56px; height: 56px; border: 1px solid var(--color-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.5s var(--ease-spring), color 0.5s var(--ease-spring), border-color 0.5s var(--ease-spring), transform 0.6s var(--ease-spring); }
+    
+    .service-row:hover .animated-border { width: 100%; }
+    .service-row:hover .row-num { color: var(--color-blue-deep); transform: translateX(8px); }
+    .service-row:hover .row-content h3 { letter-spacing: -0.8px; transform: translateX(6px); }
+    .service-row:hover .arrow-circle { background: var(--color-blue-deep); color: #fff; border-color: var(--color-blue-deep); transform: translate(6px, -6px) rotate(-45deg); }
+
+    /* TRUST STRIP */
+    .trust-strip { padding: 3rem 0; text-align: center; border-top: 1px solid var(--color-border); }
+    .trust-strip p { font-size: 0.95rem; color: var(--color-text-muted); line-height: 1.6; max-width: 800px; margin: 0 auto; }
+
+    /* CTA */
+    .cta-integrated { padding: 0 0 8rem 0; background: var(--color-bg); border: none; } 
+    .cta-card-blue { background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%); padding: 5.5rem 6rem; box-shadow: 0 20px 40px rgba(5,11,20,0.15), 0 50px 100px rgba(5,11,20,0.25); transition: transform 0.6s var(--ease-spring); position: relative; --cta-mx: 50%; --cta-my: 50%; }
+    .cta-card-blue::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(600px circle at var(--cta-mx) var(--cta-my), rgba(255,255,255,0.05) 0%, transparent 60%); pointer-events: none; z-index: 1; opacity: 0; transition: opacity 0.4s ease; }
+    .cta-card-blue:hover::after { opacity: 1; }
+    .texture-noise::before { content: ""; position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.04; mix-blend-mode: overlay; pointer-events: none; border-radius: inherit; }
+    .cta-card-blue:hover { transform: scale(1.02); }
+    .cta-inner-flex { display: flex; justify-content: space-between; align-items: center; gap: 3rem; position: relative; z-index: 2;}
+    .cta-title-luxe { font-size: clamp(1.9rem, 3vw, 2.8rem); font-weight: 800; color: #fff; line-height: 1.12; letter-spacing: -1.2px; margin: 0; }
+    .cta-scarcity-sub { color: rgba(255,255,255,0.68); font-size: 1.05rem; line-height: 1.5; }
+    
+    .btn-glow-blue { position: relative; background: #fff; color: var(--color-blue-deep); padding: 20px 44px; border-radius: 100px; text-decoration: none; font-size: 1.05rem; font-weight: 700; overflow: hidden; transition: transform 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth); display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 4px 6px rgba(255,255,255,0.05), 0 10px 20px rgba(255,255,255,0.1); will-change: transform; }
+    .btn-glow-blue span { position: relative; z-index: 2; }
+    .btn-glow-blue:hover { transform: translateY(-3px); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 14px 28px rgba(255,255,255,0.12), 0 26px 52px rgba(255,255,255,0.22); }
+    .btn-glow-blue:active { transform: translateY(-1px); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 4px 8px rgba(255,255,255,0.08); }
+
+    @media (max-width: 1024px) {
+        .service-row { grid-template-columns: 110px 1fr; }
+        .row-action { display: none; }
+    }
+
+    @media (max-width: 768px) {
+        .hero-grand { padding-top: 10rem; padding-bottom: 4rem; min-height: auto; }
+        .hero-title { max-width: 100%; font-size: clamp(2rem, 7.6vw, 2.85rem); line-height: 1.12; }
+        .service-row { grid-template-columns: 1fr; gap: 1.5rem; padding: 3rem 0; }
+        .row-num { font-size: 2rem; }
+        .row-action { display: none; }
+        .cta-card-blue { padding: 4rem 2rem; text-align: center; }
+        .btn-glow-blue { width: 100%; padding: 18px 0; }
+        .hero-action { flex-direction: column; width: 100% !important; align-items: stretch; }
+        .btn-luxe, .btn-secondary-luxe { width: 100%; }
     }
 </style>
 
@@ -393,52 +297,65 @@ body {
         const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
         if (!reducedMotion) {
-            // Hero entrance animation
-            gsap.fromTo(".hero-teaser .anim-up", 
-                { opacity: 0, y: 30, autoAlpha: 0 }, 
-                { opacity: 1, y: 0, autoAlpha: 1, duration: 1.2, stagger: 0.15, ease: "power4.out", delay: 0.1 }
-            );
+            document.documentElement.classList.add("js-anim");
 
-            // Features scroll animation
-            gsap.utils.toArray(".teaser-features .anim-up").forEach((el: any, i) => {
-                gsap.fromTo(el,
-                    { opacity: 0, y: 40, autoAlpha: 0 },
+            // Hero Entrance
+            const tl = gsap.timeline({ defaults: { ease: "power4.out", duration: 1.2 }, delay: 0.1 });
+            const heroEls = document.querySelectorAll(".hero-anim");
+            if(heroEls.length) {
+                gsap.set(heroEls, { y: 30, opacity: 0, visibility: "visible" });
+                tl.to(heroEls, { y: 0, opacity: 1, stagger: 0.1 });
+            }
+
+            // Services Rows Entrance
+            gsap.utils.toArray(".js-anim-row").forEach((row: any) => {
+                gsap.fromTo(row, 
+                    { y: 40, opacity: 0, visibility: "visible" },
                     {
                         scrollTrigger: {
-                            trigger: el,
+                            trigger: row,
                             start: "top 85%",
                             toggleActions: "play none none none"
                         },
-                        opacity: 1,
                         y: 0,
-                        autoAlpha: 1,
+                        opacity: 1,
                         duration: 1.2,
-                        ease: "power4.out",
-                        delay: i * 0.1
+                        ease: "power4.out"
                     }
                 );
             });
 
-            // Final CTA scroll animation
-            gsap.fromTo(".final-cta .anim-up", 
-                { opacity: 0, y: 30, autoAlpha: 0 }, 
-                {
-                    scrollTrigger: {
-                        trigger: ".final-cta",
-                        start: "top 80%",
-                        toggleActions: "play none none none"
-                    },
-                    opacity: 1,
-                    y: 0,
-                    autoAlpha: 1,
-                    duration: 1.2,
-                    stagger: 0.15,
-                    ease: "power4.out"
-                }
-            );
-        } else {
-            // Fallback for reduced motion
-            gsap.set(".anim-up", { opacity: 1, visibility: "visible" });
+            // CTA Entrance
+            const cta = document.querySelector(".js-anim-cta");
+            if(cta) {
+                gsap.fromTo(cta,
+                    { y: 40, opacity: 0, visibility: "visible", scale: 0.98 },
+                    {
+                        scrollTrigger: {
+                            trigger: cta,
+                            start: "top 80%",
+                            toggleActions: "play none none none"
+                        },
+                        y: 0,
+                        scale: 1,
+                        opacity: 1,
+                        duration: 1.4,
+                        ease: "power4.out"
+                    }
+                );
+            }
+
+            // Spotlight effect on CTA card
+            const card = document.getElementById("cta-card");
+            if (card) {
+                card.addEventListener("mousemove", (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty("--cta-mx", `${x}px`);
+                    card.style.setProperty("--cta-my", `${y}px`);
+                });
+            }
         }
     });
 </script>
