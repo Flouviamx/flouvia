@@ -42,36 +42,36 @@ const schemaOrg = {
         <!-- 02 — Hero -->
         <section class="hero-teaser">
             <div class="container hero-container text-center">
-                <p class="eyebrow">UN PRODUCTO DE FLOUVIA &middot; DISPONIBLE PARA CUALQUIER NEGOCIO</p>
-                <h1 class="hero-title">Cord. Cotizaciones B2B<br/>que se aprueban solas.</h1>
-                <p class="hero-subhead">Manda cotizaciones con tu marca, tu cliente aprueba en un clic y el CFDI se timbra solo. Gratis para empezar — sin tarjeta, sin aplicar a nada.</p>
+                <p class="eyebrow anim-up">UN PRODUCTO DE FLOUVIA &middot; DISPONIBLE PARA CUALQUIER NEGOCIO</p>
+                <h1 class="hero-title anim-up">Cord. Cotizaciones B2B<br/>que se aprueban solas.</h1>
+                <p class="hero-subhead anim-up">Manda cotizaciones con tu marca, tu cliente aprueba en un clic y el CFDI se timbra solo. Gratis para empezar — sin tarjeta, sin aplicar a nada.</p>
                 
-                <div class="hero-badges">
+                <div class="hero-badges anim-up">
                     <span class="badge">📩 Notificación cuando la ven</span>
                     <span class="badge">&#10003; Aprobación en un clic</span>
                     <span class="badge">🧾 CFDI 4.0 automático</span>
                 </div>
 
-                <div class="hero-actions">
+                <div class="hero-actions anim-up">
                     <a href="https://cord.flouvia.com/registro" class="btn-primary">Probar Cord gratis &rarr;</a>
                     <a href="https://cord.flouvia.com" class="btn-secondary">Ver una cotización de ejemplo</a>
                 </div>
-                <p class="hero-microcopy">Gratis hasta 5 cotizaciones &middot; Sin tarjeta &middot; Cualquier negocio puede entrar</p>
+                <p class="hero-microcopy anim-up">Gratis hasta 5 cotizaciones &middot; Sin tarjeta &middot; Cualquier negocio puede entrar</p>
             </div>
         </section>
 
         <!-- 03 — Features -->
         <section class="teaser-features">
             <div class="container features-grid">
-                <div class="feature-card">
+                <div class="feature-card anim-up">
                     <h3>Tu cliente aprueba sin crear cuenta.</h3>
                     <p>Un link con tu marca. Lo abre, ve el total, aprueba o paga. Cero fricción para que cierren más rápido.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card anim-up">
                     <h3>Sabes el momento exacto en que la ven.</h3>
                     <p>Notificación instantánea cuando tu cliente abre la cotización. Se acabó el "¿ya la revisaste?"</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card anim-up">
                     <h3>CFDI 4.0, sin recapturar nada.</h3>
                     <p>De cotización aprobada a factura timbrada ante el SAT, automático, desde la misma pantalla.</p>
                 </div>
@@ -88,10 +88,12 @@ const schemaOrg = {
         <!-- 05 — CTA final -->
         <section class="final-cta text-center">
             <div class="container">
-                <p class="eyebrow">EMPIEZA HOY</p>
-                <h2>Tu primera cotización, en menos de 10 minutos.</h2>
-                <p class="subtext">Sin tarjeta. Plan gratis para siempre. Cualquier negocio B2B en México puede empezar ahora.</p>
-                <a href="https://cord.flouvia.com/registro" class="btn-primary btn-large">Crear cuenta gratis en Cord &rarr;</a>
+                <p class="eyebrow anim-up">EMPIEZA HOY</p>
+                <h2 class="anim-up">Tu primera cotización, en menos de 10 minutos.</h2>
+                <p class="subtext anim-up">Sin tarjeta. Plan gratis para siempre. Cualquier negocio B2B en México puede empezar ahora.</p>
+                <div class="anim-up">
+                    <a href="https://cord.flouvia.com/registro" class="btn-primary btn-large">Crear cuenta gratis en Cord &rarr;</a>
+                </div>
             </div>
         </section>
     </main>
@@ -204,14 +206,22 @@ body {
     margin-bottom: 3.5rem;
 }
 .badge {
-    background: rgba(10,25,47,0.03);
-    border: 1px solid var(--border-color);
+    background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(10,25,47,0.06);
     padding: 0.6rem 1.2rem;
     border-radius: 100px;
     font-size: 0.85rem;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--text-primary);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    box-shadow: 0 4px 12px rgba(10,25,47,0.03), inset 0 1px 1px rgba(255,255,255,0.9);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s;
+}
+.badge:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(10,25,47,0.06), inset 0 1px 1px rgba(255,255,255,0.9);
+    border-color: rgba(10,25,47,0.12);
 }
 .hero-actions {
     display: flex;
@@ -242,25 +252,39 @@ body {
     font-size: 1.05rem;
     font-weight: 600;
     text-decoration: none;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, background 0.3s;
+    position: relative;
+    overflow: hidden;
 }
+.btn-primary::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.15) 50%, transparent 80%);
+    transform: translateX(-100%); transition: transform 0s;
+}
+.btn-primary:hover::before { transform: translateX(100%); transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(10,25,47,0.18);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 14px 28px rgba(10,25,47,0.22);
+    background: #061121;
 }
 .btn-secondary {
-    background: transparent;
+    background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     color: var(--text-primary);
     padding: 1.1rem 2rem;
     border-radius: 100px;
     font-size: 1.05rem;
     font-weight: 600;
     text-decoration: none;
-    border: 1px solid var(--border-color);
-    transition: background 0.2s ease;
+    border: 1px solid rgba(10,25,47,0.08);
+    box-shadow: 0 4px 12px rgba(10,25,47,0.03), inset 0 1px 1px rgba(255,255,255,0.9);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.3s;
 }
 .btn-secondary:hover {
-    background: rgba(10,25,47,0.03);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 24px rgba(10,25,47,0.08), inset 0 1px 1px rgba(255,255,255,0.9);
+    border-color: rgba(10,25,47,0.15);
 }
 .btn-large {
     font-size: 1.15rem;
@@ -286,6 +310,19 @@ body {
 }
 @media (max-width: 900px) {
     .features-grid { grid-template-columns: 1fr; gap: 3rem; }
+}
+.feature-card {
+    background: #fff;
+    padding: 2.5rem;
+    border-radius: 24px;
+    border: 1px solid rgba(10,25,47,0.06);
+    box-shadow: 0 4px 20px rgba(10,25,47,0.02);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease, border-color 0.5s ease;
+}
+.feature-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(10,25,47,0.06);
+    border-color: rgba(10,25,47,0.12);
 }
 .feature-card h3 {
     font-size: 1.3rem;
@@ -335,4 +372,73 @@ body {
     max-width: 600px;
     line-height: 1.5;
 }
+}
 </style>
+
+<style is:global>
+    /* Prevent flash of unstyled content before GSAP kicks in */
+    .js-anim .anim-up {
+        opacity: 0;
+        visibility: hidden;
+    }
+</style>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    
+    gsap.registerPlugin(ScrollTrigger);
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (!reducedMotion) {
+            // Hero entrance animation
+            gsap.fromTo(".hero-teaser .anim-up", 
+                { opacity: 0, y: 30, autoAlpha: 0 }, 
+                { opacity: 1, y: 0, autoAlpha: 1, duration: 1.2, stagger: 0.15, ease: "power4.out", delay: 0.1 }
+            );
+
+            // Features scroll animation
+            gsap.utils.toArray(".teaser-features .anim-up").forEach((el: any, i) => {
+                gsap.fromTo(el,
+                    { opacity: 0, y: 40, autoAlpha: 0 },
+                    {
+                        scrollTrigger: {
+                            trigger: el,
+                            start: "top 85%",
+                            toggleActions: "play none none none"
+                        },
+                        opacity: 1,
+                        y: 0,
+                        autoAlpha: 1,
+                        duration: 1.2,
+                        ease: "power4.out",
+                        delay: i * 0.1
+                    }
+                );
+            });
+
+            // Final CTA scroll animation
+            gsap.fromTo(".final-cta .anim-up", 
+                { opacity: 0, y: 30, autoAlpha: 0 }, 
+                {
+                    scrollTrigger: {
+                        trigger: ".final-cta",
+                        start: "top 80%",
+                        toggleActions: "play none none none"
+                    },
+                    opacity: 1,
+                    y: 0,
+                    autoAlpha: 1,
+                    duration: 1.2,
+                    stagger: 0.15,
+                    ease: "power4.out"
+                }
+            );
+        } else {
+            // Fallback for reduced motion
+            gsap.set(".anim-up", { opacity: 1, visibility: "visible" });
+        }
+    });
+</script>
