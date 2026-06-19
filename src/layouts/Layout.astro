@@ -7,6 +7,7 @@ interface Props {
     image?: string;
     noindex?: boolean;
     ogType?: string;
+    canonicalOverride?: string;
 }
 
 const {
@@ -15,6 +16,7 @@ const {
     image = '/android-touch-icon-512.png',
     noindex = false,
     ogType = 'website',
+    canonicalOverride,
 } = Astro.props;
 
 // Detecta el idioma basado en la URL (/en/ o /)
@@ -25,7 +27,7 @@ const SITE      = Astro.site ?? new URL('https://flouvia.com');
 const pathname  = Astro.url.pathname;
 const esPath    = lang === 'en' ? (pathname.replace(/^\/en/, '') || '/') : pathname;
 const enPath    = lang === 'es' ? '/en' + (pathname === '/' ? '' : pathname) : pathname;
-const canonical = new URL(pathname, SITE).href;
+const canonical = canonicalOverride || new URL(pathname, SITE).href;
 const ogImage   = new URL(image, SITE).href;
 const esURL     = new URL(esPath, SITE).href;
 const enURL     = new URL(enPath, SITE).href;
