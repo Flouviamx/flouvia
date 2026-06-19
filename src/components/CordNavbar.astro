@@ -10,7 +10,15 @@ const enUrl = lang === 'es' ? '/en' + pathname : pathname;
 ---
 
 <header class="navbar-wrapper" id="navbar">
-    
+    <div class="top-bar" id="top-bar">
+        <div class="top-bar-inner">
+            <span class="top-text">{lang === 'en' ? 'E-COMMERCE & B2B ENGINEERING' : 'INGENIERÍA E-COMMERCE & B2B'}</span>
+            <span class="top-dot desktop-only">·</span>
+            <span class="top-text desktop-only">{lang === 'en' ? 'BY APPLICATION ONLY' : 'PROYECTOS POR APLICACIÓN'}</span>
+            <span class="top-dot desktop-only">·</span>
+            <span class="top-text desktop-only">{lang === 'en' ? 'FEWER THAN 8 ACTIVE CLIENTS / YEAR' : 'MENOS DE 8 CLIENTES ACTIVOS AL AÑO'}</span>
+        </div>
+    </div>
 
     <nav class="main-nav">
         <div class="nav-container">
@@ -27,31 +35,74 @@ const enUrl = lang === 'es' ? '/en' + pathname : pathname;
                 </div>
             </div>
 
-            
+            <div class="nav-center desktop-nav">
+                <a href={lang === 'en' ? '/en/' : '/'} class="main-logo" id="main-logo">
+                    <img src="/imgs/logo-flouvia-3.svg" alt="Flouvia" class="logo-center-img" />
+                </a>
+            </div>
 
             <div class="nav-right desktop-nav" id="nav-right">
-                
+                <div class="lang-switch">
+                    <a href={esUrl} class="lang-option" class:list={[{ active: lang === 'es' }]}>ES</a>
+                    <a href={enUrl} class="lang-option" class:list={[{ active: lang === 'en' }]}>EN</a>
+                </div>
 
-                <a href="https://cord.flouvia.com" class="btn-contact" target="_blank" rel="noopener noreferrer"><span class="btn-contact-label">Ir a Cord</span><svg class="contact-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="19" x2="19" y2="5"/><polyline points="9 5 19 5 19 15"/></svg></a>
+
+
+                <a href="https://cord.flouvia.com" target="_blank" rel="noopener noreferrer" class="btn-contact">
+                    <span class="btn-contact-label">Ir a Cord</span>
+                    <svg class="contact-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="19" x2="19" y2="5"/><polyline points="9 5 19 5 19 15"/></svg>
+                </a>
             </div>
 
             <!-- MOBILE -->
             <div class="mobile-pill-nav">
                 <div class="mobile-pill-inner squircle" id="mobile-pill">
                     <div class="pill-left-group">
-                        
+                        <button class="hamburger-btn" id="menu-toggle" aria-label="Menú">
+                            <div class="burger-lines">
+                                <span class="l1"></span><span class="l2"></span><span class="l3"></span>
+                            </div>
+                        </button>
                         <a href={lang === 'en' ? '/en/' : '/'} class="mobile-logo">
                             <img src="/imgs/logo-flouvia-3.png" alt="Flouvia" class="logo-mobile-img default-logo" />
                             <img src="/imgs/logo-flouvia-1.png" alt="Flouvia" class="logo-mobile-img scrolled-logo" />
                         </a>
                     </div>
-                    <a href="https://cord.flouvia.com" class="btn-contact-mobile squircle" target="_blank" rel="noopener noreferrer"><span>Ir a Cord</span><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="19" x2="19" y2="5"/><polyline points="9 5 19 5 19 15"/></svg></a>
+                    <a href="https://cord.flouvia.com" target="_blank" rel="noopener noreferrer" class="btn-contact-mobile squircle">
+                        <span>Ir a Cord</span>
+                        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="19" x2="19" y2="5"/><polyline points="9 5 19 5 19 15"/></svg>
+                    </a>
                 </div>
             </div>
 
         </div>
     </nav>
 
+    <div class="mobile-menu-overlay" id="mobile-menu">
+        <div class="mobile-menu-content">
+            <div class="menu-top-row">
+
+                <div class="lang-switch-mobile">
+                    <a href={esUrl} class="lang-option-m" class:list={[{ active: lang === 'es' }]}>ES</a>
+                    <a href={enUrl} class="lang-option-m" class:list={[{ active: lang === 'en' }]}>EN</a>
+                </div>
+            </div>
+
+            <nav class="mobile-links" id="mobile-links">
+                <a href={lang === 'en' ? '/en/' : '/'} class="m-link">{lang === 'en' ? 'HOME' : 'INICIO'}</a>
+                <a href="/" class="m-link">CORD</a>
+            </nav>
+
+            <div class="mobile-menu-footer">
+                <p class="m-eyebrow">ESTUDIO DE INGENIERÍA DIGITAL</p>
+                <div class="m-legal">
+                    <span>CDMX — OP. GLOBAL</span>
+                    <a href="mailto:hola@flouvia.com">hola@flouvia.com</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </header>
 
 <style>
@@ -548,11 +599,13 @@ document.addEventListener("DOMContentLoaded", () => {
     let indicatorFollow: ((ms?: number) => void) | null = null;
 
     if (navbar && !reducedMotion) {
+        const topBar    = document.getElementById("top-bar");
         const pill      = document.getElementById("glass-pill");
+        const mainLogo  = document.getElementById("main-logo");
         const navRight  = document.getElementById("nav-right");
         const rightKids = navRight ? Array.from(navRight.children) : [];
         const mobile    = document.getElementById("mobile-pill");
-        const pieces    = [pill, ...rightKids, mobile].filter(Boolean);
+        const pieces    = [topBar, pill, mainLogo, ...rightKids, mobile].filter(Boolean);
 
         gsap.set(pieces, { opacity: 0, y: -10 });   // ocultas (navbar aún tapado por el gate)
         gsap.set(navbar, { opacity: 1 });           // revela contenedor; piezas siguen ocultas
@@ -565,8 +618,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (indicatorRelayout) indicatorRelayout(false); // recolocar tras settle
             },
         });
-        tl.to([pill, mobile],         { opacity: 1, y: 0, duration: 1.0 }, 0)
-          .to(rightKids,              { opacity: 1, y: 0, stagger: 0.08, duration: 0.75 }, "<0.1");
+        tl.to(topBar,                 { opacity: 1, y: 0, duration: 0.6 }, 0)
+          .to([pill, mobile],         { opacity: 1, y: 0, duration: 1.0 }, 0.1)
+          .to(mainLogo,               { opacity: 1, y: 0, duration: 0.9 }, "<0.07")
+          .to(rightKids,              { opacity: 1, y: 0, stagger: 0.08, duration: 0.75 }, "<0.05");
     }
 
     /* ═══════════════════════════════════════════════════
