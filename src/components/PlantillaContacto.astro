@@ -47,9 +47,7 @@ const contactSchema = {
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.4/build/css/intlTelInput.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <main class="flouvia-masterpiece">
 
@@ -89,39 +87,11 @@ const contactSchema = {
             </div>
         </section>
 
-        <!-- ============================================================
-             2. EVIDENCIA — métricas reales justo antes del formulario
-             ============================================================ -->
-        <section class="trust-strip">
-            <div class="trust-watermark" aria-hidden="true">{isEn ? 'Evidence' : 'Evidencia'}</div>
-            <div class="container">
-                <p class="eyebrow trust-eyebrow">{isEn ? 'EVIDENCE' : 'EVIDENCIA'}</p>
-                <div class="trust-metrics">
-                    <div class="trust-metric">
-                        <span class="tm-val">−67%</span>
-                        <span class="tm-label">{isEn ? 'Order processing time' : 'Tiempo de proceso de pedidos'}</span>
-                        <span class="tm-case">El Zarco · B2B</span>
-                    </div>
-                    <div class="trust-metric">
-                        <span class="tm-val">+42%</span>
-                        <span class="tm-label">{isEn ? 'Conversion rate' : 'Tasa de conversión'}</span>
-                        <span class="tm-case">Setnpet · E-commerce</span>
-                    </div>
-                    <div class="trust-metric">
-                        <span class="tm-val">3×</span>
-                        <span class="tm-label">{isEn ? 'LTV retention in 90 days' : 'Retención LTV en 90 días'}</span>
-                        <span class="tm-case">Setnpet · E-commerce</span>
-                    </div>
-                </div>
-                <p class="trust-note">{isEn ? 'Real numbers from projects we built. We take fewer than 8 brands a year to keep this level of work.' : 'Números de proyectos reales que construimos. Tomamos menos de 8 marcas al año para sostener este nivel.'}</p>
-            </div>
-        </section>
 
         <!-- ============================================================
              3. INTERFAZ DE CONTACTO — sidebar + formulario por pasos
              ============================================================ -->
         <section class="executive-contact" id="form-zone">
-            <div class="contact-watermark" aria-hidden="true">{isEn ? 'Apply' : 'Aplica'}</div>
             <div class="container ec-grid">
 
                 <div class="ec-sidebar">
@@ -149,21 +119,13 @@ const contactSchema = {
                         </ul>
                     </div>
 
-                    <div class="ec-block ec-pricing" id="ec-pricing" hidden>
-                        <span class="ec-label">{isEn ? 'METHODOLOGY' : 'METODOLOGÍA'}</span>
-                        <p class="ec-method-text">{isEn ? 'We charge 5%–10% of the value we generate in year one. Before proposing a price, we calculate that value with you.' : 'Cobramos 5%–10% del valor que generamos en el primer año. Antes de proponer un precio, lo calculamos contigo.'}</p>
-                        <span class="ec-label ec-ranges-label">{isEn ? 'INDICATIVE RANGES' : 'RANGOS ORIENTATIVOS'}</span>
-                        <ul class="ec-ranges">
-                            <li><span>E-commerce Engineering</span><span class="editorial">$150k – $280k</span></li>
-                            <li><span>B2B Architecture</span><span class="editorial">$200k – $450k</span></li>
-                            <li><span>Automation + ERP</span><span class="editorial">$180k – $350k</span></li>
-                            <li><span>{isEn ? 'Full CRO' : 'CRO completo'}</span><span class="editorial">$120k – $200k</span></li>
-                        </ul>
-                    </div>
+
+
+
 
                     <div class="ec-block">
                         <span class="ec-label">{isEn ? 'THE FIRM' : 'LA FIRMA'}</span>
-                        <p class="ec-firm">{isEn ? 'Fewer than ' : 'Menos de '}<span class="editorial ec-firm-num">8</span>{isEn ? ' clients a year' : ' clientes al año'}</p>
+                        <p class="ec-firm">{isEn ? 'Fewer than ' : 'Menos de '}<span>8</span>{isEn ? ' clients a year' : ' clientes al año'}</p>
                         <p class="ec-place">{isEn ? 'Mexico City · Global operation' : 'Ciudad de México · Operación global'}</p>
                     </div>
 
@@ -207,10 +169,9 @@ const contactSchema = {
 
                             <!-- 01 — DATOS DE CONTACTO -->
                             <div class="dq-step is-active is-visible" data-step="0">
-                                <span class="dq-index" aria-hidden="true">/01</span>
                                 <div class="dq-head">
                                     <h3 class="dq-title">{isEn ? 'Who are we talking to?' : '¿Con quién hablamos?'}</h3>
-                                    <p class="dq-desc">{isEn ? 'Name, email, and WhatsApp if you prefer that channel.' : 'Nombre, correo y WhatsApp si prefieres ese canal.'}</p>
+                                    <p class="dq-desc">{isEn ? 'Name and email.' : 'Nombre y correo.'}</p>
                                 </div>
                                 <div class="dq-body">
                                     <div class="sf-row">
@@ -229,19 +190,11 @@ const contactSchema = {
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="sf-group">
-                                        <label for="whatsapp" class="mono-font">{isEn ? 'WHATSAPP · OPTIONAL' : 'WHATSAPP · OPCIONAL'}</label>
-                                        <div class="input-wrapper">
-                                            <input type="tel" id="whatsapp" name="whatsapp" />
-                                            <div class="focus-border"></div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
 
                             <!-- 02 — TU OPERACIÓN HOY -->
                             <div class="dq-step" data-step="1">
-                                <span class="dq-index" aria-hidden="true">/02</span>
                                 <div class="dq-head">
                                     <h3 class="dq-title">{isEn ? 'How does your business operate today?' : '¿Cómo opera tu negocio hoy?'}</h3>
                                     <p class="dq-desc">{isEn ? 'Pick the one that best describes your model.' : 'Selecciona el que mejor describe tu modelo.'}</p>
@@ -267,7 +220,6 @@ const contactSchema = {
 
                             <!-- 03 — QUÉ NECESITAS RESOLVER -->
                             <div class="dq-step" data-step="2">
-                                <span class="dq-index" aria-hidden="true">/03</span>
                                 <div class="dq-head">
                                     <h3 class="dq-title">{isEn ? 'How much is the problem costing you?' : '¿Cuánto te está costando el problema?'}</h3>
                                     <p class="dq-desc">{isEn ? 'An approximate estimate is enough — move the sliders. The formula is visible so the number is yours, not ours.' : 'Una estimación aproximada es suficiente — mueve los sliders. La fórmula es visible para que el número sea tuyo, no nuestro.'}</p>
@@ -310,7 +262,7 @@ const contactSchema = {
                                                 <div class="dr-cell"><span class="dr-cell-label">{isEn ? 'Team hourly cost' : 'Costo hora equipo'}</span><span class="dr-cell-val" data-cell="b2b-costo">$180</span></div>
                                                 <div class="dr-cell dr-cell-annual"><span class="dr-cell-label">{isEn ? 'Estimated annual cost' : 'Costo anual estimado'}</span><span class="dr-cell-val editorial" data-num-annual="b2b">$0</span></div>
                                             </div>
-                                            <p class="dr-roi">{isEn ? 'What we build costs a fraction of that — typical year-1 ROI is 3×–5×. We work out the exact number with you on the call.' : 'Lo que construimos cuesta una fracción de eso — el ROI típico en año 1 es de 3× a 5×. El número exacto lo vemos juntos en la llamada.'}</p>
+                                            <p class="dr-roi">{isEn ? 'Our typical engagement fee is a small fraction of this annual cost, targeting a 3×–5× ROI within year 1.' : 'Nuestro fee típico de implementación es una fracción pequeña de este costo anual, apuntando a un ROI de 3× a 5× en el año 1.'}</p>
                                         </div>
                                     </div>
 
@@ -351,7 +303,7 @@ const contactSchema = {
                                                 <div class="dr-cell"><span class="dr-cell-label">{isEn ? 'Average ticket' : 'Ticket promedio'}</span><span class="dr-cell-val" data-cell="dtc-ticket">$600</span></div>
                                                 <div class="dr-cell dr-cell-annual"><span class="dr-cell-label">{isEn ? 'Additional annual revenue' : 'Revenue adicional anual'}</span><span class="dr-cell-val editorial" data-num-annual="dtc">$0</span></div>
                                             </div>
-                                            <p class="dr-roi">{isEn ? 'A CRO audit + flow rebuild recovers a meaningful share of that. We size the exact opportunity with you on the call.' : 'Una auditoría CRO + reconstrucción de flujo recupera una parte relevante de eso. El tamaño exacto de la oportunidad lo vemos juntos en la llamada.'}</p>
+                                            <p class="dr-roi">{isEn ? 'A flow rebuild recovers a large share of this lost revenue. Our engagement fee is typically a fraction of this annualized amount.' : 'Una reconstrucción del flujo recupera gran parte de este revenue perdido. Nuestro fee típico es una fracción de este monto anualizado.'}</p>
                                         </div>
                                     </div>
 
@@ -379,22 +331,20 @@ const contactSchema = {
 
                             <!-- 04 — HORIZONTE -->
                             <div class="dq-step" data-step="3">
-                                <span class="dq-index" aria-hidden="true">/04</span>
                                 <div class="dq-head">
                                     <h3 class="dq-title">{isEn ? 'When do you need this solved?' : '¿Cuándo necesitas resolverlo?'}</h3>
                                     <p class="dq-desc">{isEn ? 'Now that you know the cost of waiting, what’s your horizon?' : 'Ahora que conoces el costo de esperar, ¿cuál es tu horizonte?'}</p>
                                 </div>
                                 <div class="dq-body">
                                     <div class="q-chips" data-field="urgencia">
-                                        <button type="button" class="q-chip" data-value="lo-antes-posible">{isEn ? 'As soon as possible' : 'Lo antes posible'}</button>
-                                        <button type="button" class="q-chip" data-value="1-3-meses">{isEn ? '1–3 months' : '1–3 meses'}</button>
+                                        <button type="button" class="q-chip" data-value="costando-crecimiento-hoy">{isEn ? 'It is costing me growth today' : 'Me está costando crecimiento hoy'}</button>
+                                        <button type="button" class="q-chip" data-value="planeacion-trimestre">{isEn ? 'Planning for next quarter' : 'Planeación para el próximo trimestre'}</button>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- 05 — PRESUPUESTO (OPCIONAL, MXN) -->
                             <div class="dq-step" data-step="4">
-                                <span class="dq-index" aria-hidden="true">/05</span>
                                 <div class="dq-head">
                                     <h3 class="dq-title">
                                         {isEn ? 'One more detail.' : 'Un detalle más.'}
@@ -472,7 +422,7 @@ const contactSchema = {
 
     </main>
 
-    <Footer />
+    <Footer hideCta={true} />
 </Layout>
 
 <style is:global>
@@ -503,7 +453,6 @@ const contactSchema = {
         --color-border: rgba(0, 0, 0, 0.08);
 
         --font-sans: 'Inter', system-ui, sans-serif;
-        --font-serif: 'Instrument Serif', serif;
 
         --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
         --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
@@ -514,7 +463,7 @@ const contactSchema = {
 
     .flouvia-masterpiece { width: 100%; position: relative; overflow-x: clip; }
     .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; }
-    .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: #222; }
+    .editorial { font-weight: 400; color: #222; }
     .eyebrow { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
     .mono-font { font-family: 'JetBrains Mono', monospace; }
 
@@ -544,48 +493,7 @@ const contactSchema = {
 
     .squircle { border-radius: 24px; transform: translateZ(0); overflow: hidden; }
 
-    /* ==========================================================
-       INTL-TEL-INPUT — DEBE ir en is:global: el DOM lo inyecta la
-       librería en runtime y NO trae el atributo de scope de Astro,
-       así que los selectores scoped (.iti…[data-astro-cid]) no aplican.
-       ========================================================== */
-    .iti, .iti * { font-family: 'Inter', system-ui, sans-serif !important; }
-    .iti { width: 100%; display: block; }
-    .iti__country-list {
-        border-radius: 12px;
-        border: 1px solid var(--color-border);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        font-size: 0.95rem;
-        color: var(--color-text);
-        z-index: 9999;
-    }
-    .iti__selected-flag { background-color: transparent !important; padding-left: 0; outline: none; display: flex; align-items: center; }
 
-    /* El prefijo (+52) y los dígitos que teclea el prospecto DEBEN verse idénticos:
-       mismo font, tamaño, peso, color, letter-spacing y line-height (baseline). */
-    .iti input,
-    .iti input[type="tel"],
-    #whatsapp {
-        font-family: 'Inter', system-ui, sans-serif !important;
-        font-size: 1.1rem !important;
-        font-weight: 500 !important;
-        letter-spacing: -0.01em !important;
-        color: #0a0e1a !important;
-        line-height: 1.5 !important;
-        font-feature-settings: normal !important;
-    }
-    .iti__selected-dial-code {
-        font-family: 'Inter', system-ui, sans-serif !important;
-        color: #0a0e1a !important;
-        font-weight: 500 !important;
-        font-size: 1.1rem !important;
-        letter-spacing: -0.01em !important;
-        line-height: 1.5 !important;
-        font-feature-settings: normal !important;
-        padding-left: 6px;
-    }
-    .iti__arrow { border-top-color: #94a3b8; margin-left: 6px; }
-    .iti--show-selected-dial-code.iti--show-flags .iti__selected-flag { padding-right: 12px; }
 </style>
 
 <style>
@@ -604,25 +512,9 @@ const contactSchema = {
     .hero-action .btn-luxe:hover .btn-arrow { transform: translateY(3px); }
 
     /* ==========================================================
-       2. TRUST STRIP — evidencia (autoridad)
-       ========================================================== */
-    /* Franja oscura estilo "Casos" — contraste claro/oscuro del inicio */
-    .trust-strip { position: relative; overflow: hidden; padding: 3.5rem 0; background: radial-gradient(ellipse at 20% 50%, #112240 0%, #0a192f 65%, #050b14 100%); }
-    .trust-strip .container { position: relative; z-index: 1; }
-    .trust-watermark { position: absolute; top: 50%; left: -2%; transform: translateY(-50%); font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 20vw; line-height: 1; color: rgba(255,255,255,0.035); white-space: nowrap; pointer-events: none; user-select: none; z-index: 0; }
-    .trust-eyebrow { color: rgba(255,255,255,0.34) !important; margin-bottom: 1.9rem; }
-    .trust-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-    .trust-metric { display: flex; align-items: baseline; gap: 0.7rem; flex-wrap: wrap; }
-    .tm-val { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: clamp(1.9rem, 2.8vw, 2.4rem); line-height: 1; color: #ffffff; letter-spacing: -0.5px; }
-    .tm-label { font-size: 0.9rem; color: rgba(255,255,255,0.82); font-weight: 500; }
-    .tm-case { flex-basis: 100%; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.4); font-family: var(--font-sans); }
-    .trust-note { margin: 2rem 0 0; font-size: 0.85rem; color: rgba(255,255,255,0.55); line-height: 1.55; max-width: 640px; }
-
-    /* ==========================================================
        3. EXECUTIVE CONTACT INTERFACE
        ========================================================== */
     .executive-contact { padding: 6rem 0 10rem 0; position: relative; overflow: clip; }
-    .contact-watermark { position: absolute; right: -4%; top: 4rem; font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 26vw; line-height: 1; color: rgba(10,25,47,0.022); white-space: nowrap; pointer-events: none; user-select: none; z-index: 0; }
     .ec-grid { display: grid; grid-template-columns: 320px 1fr; gap: 7rem; align-items: start; position: relative; z-index: 1; }
 
     /* SIDEBAR — tarjeta Liquid Glass (iOS), secciones con hairlines */
@@ -683,7 +575,7 @@ const contactSchema = {
     .sp-progress { max-width: 340px; }
     .sp-meta { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 0.85rem; }
     .sp-label { font-family: var(--font-sans); font-size: 0.62rem; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: rgba(10,25,47,0.4); }
-    .sp-count { display: inline-flex; align-items: baseline; gap: 0.35rem; font-family: var(--font-serif); font-style: italic; font-weight: 400; color: var(--color-blue-deep); line-height: 1; }
+    .sp-count { display: inline-flex; align-items: baseline; gap: 0.35rem; font-weight: 400; color: var(--color-blue-deep); line-height: 1; }
     .sp-current { font-size: 2rem; display: inline-block; min-width: 1.6ch; }
     .sp-divider { font-size: 1.2rem; color: rgba(10,25,47,0.25); }
     .sp-total { font-size: 1.2rem; color: rgba(10,25,47,0.45); }
@@ -720,12 +612,7 @@ const contactSchema = {
         .sp-current.bump { animation: none; }
     }
 
-    /* índice editorial grande por pregunta (eco de los /01 del inicio) */
-    .dq-index {
-        font-family: var(--font-serif); font-style: italic; font-weight: 400;
-        font-size: clamp(2rem, 3vw, 2.7rem); line-height: 1; letter-spacing: -1px;
-        color: rgba(10,25,47,0.16); display: block; margin-bottom: 0.1rem;
-    }
+
     .dq-head { display: flex; flex-direction: column; gap: 0.7rem; }
     .dq-title {
         font-size: clamp(1.55rem, 2.7vw, 2.15rem); font-weight: 700;
@@ -959,7 +846,7 @@ const contactSchema = {
     }
     .dr-eyebrow { font-family: var(--font-sans); font-size: 0.56rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.42); }
     .dr-cap { margin: 0.2rem 0 0; font-size: 0.92rem; color: rgba(255,255,255,0.78); line-height: 1.4; }
-    .dr-number { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: clamp(2.6rem, 6vw, 3.6rem); line-height: 1; color: #ffffff; letter-spacing: -1px; }
+    .dr-number { font-weight: 400; font-size: clamp(2.6rem, 6vw, 3.6rem); line-height: 1; color: #ffffff; letter-spacing: -1px; }
     .dr-formula { margin: 0.1rem 0 0; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: rgba(255,255,255,0.45); line-height: 1.4; }
     .dr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem 1.4rem; margin-top: 1.1rem; padding-top: 1.1rem; border-top: 1px solid rgba(255,255,255,0.1); }
     .dr-cell { display: flex; flex-direction: column; gap: 0.25rem; }
@@ -1140,25 +1027,7 @@ const contactSchema = {
             });
         }
 
-        /* 2. INTL-TEL-INPUT (WHATSAPP) */
-        var itiInstance = null;
-        var phoneInput = document.querySelector('#whatsapp');
-        if (phoneInput) {
-            itiInstance = window.intlTelInput(phoneInput, {
-                initialCountry: 'auto',
-                strictMode: true,
-                formatOnDisplay: true,
-                geoIpLookup: function (callback) {
-                    fetch('https://ipapi.co/json')
-                        .then(function (res) { return res.json(); })
-                        .then(function (data) { callback(data.country_code); })
-                        .catch(function () { callback('mx'); });
-                },
-                separateDialCode: true,
-                dropdownContainer: document.body,
-                utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.4/build/js/utils.js',
-            });
-        }
+
 
         /* 3. STEPPER — una pregunta a la vez */
         var form        = document.getElementById('diagForm');
@@ -1515,8 +1384,7 @@ const contactSchema = {
             nextBtn.disabled = true;
             nextText.textContent = '…';
 
-            var whatsappNumber = '';
-            if (itiInstance) { try { whatsappNumber = itiInstance.getNumber(); } catch (e) {} }
+
 
             var branch = (document.getElementById('field-tipo_negocio') || {}).value || '';
             var diagnostico = {};
@@ -1532,7 +1400,6 @@ const contactSchema = {
             var payload = {
                 nombre:       (document.getElementById('name') || {}).value || '',
                 email:        (document.getElementById('email') || {}).value || '',
-                whatsapp:     whatsappNumber,
                 tipo_negocio: branch,
                 facturacion:  (document.getElementById('field-facturacion') || {}).value || '',
                 urgencia:     (document.getElementById('field-urgencia') || {}).value || '',

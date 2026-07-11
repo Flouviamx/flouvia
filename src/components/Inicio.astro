@@ -16,7 +16,7 @@ const t = useTranslations(lang);
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <main class="flouvia-masterpiece">
 
@@ -55,8 +55,10 @@ const t = useTranslations(lang);
         <section class="tech-spotlight">
             <div class="container">
                 <div class="tech-header">
-                    <p class="eyebrow">{lang === 'en' ? 'OUR TECHNOLOGY' : 'NUESTRA TECNOLOGÍA'}</p>
-                    <h2 class="section-heading">{t('tech.title')} {t('tech.title_editorial')}</h2>
+                    <div class="tech-header-left">
+                        <p class="eyebrow">{lang === 'en' ? 'OUR TECHNOLOGY' : 'NUESTRA TECNOLOGÍA'}</p>
+                        <h2 class="section-heading">{t('tech.title')} {t('tech.title_editorial')}</h2>
+                    </div>
                     <p class="section-sub">{t('tech.sub')}</p>
                 </div>
 
@@ -80,7 +82,6 @@ const t = useTranslations(lang);
         </section>
 
         <section class="clients-vertical-carousel">
-            <div class="casos-bg-text" aria-hidden="true">Casos</div>
             <div class="container">
                 <div class="section-header">
                     <div class="header-flex">
@@ -104,25 +105,25 @@ const t = useTranslations(lang);
             <div class="carousel-track-wrapper">
                 <div class="carousel-track">
                     
+                    <a href={lang === 'en' ? '/en/cord' : '/cord'} class="vertical-card squircle">
+                        <div class="card-num-luxury">01</div>
+                        <div class="card-bg fluid-target" style="background: var(--color-blue-deep);" data-shader-color="#bae6fd">
+                            <img src="https://cord.flouvia.com/imgs/logo-cord-white.png" alt="Cord SaaS" class="carousel-image" style="padding: 3rem; object-fit: contain; position: relative; z-index: 1;" />
+                        </div>
+                        <div class="card-overlay">
+                            <span class="v-tag">SaaS B2B</span>
+                            <h3>Cord</h3>
+                        </div>
+                    </a>
+
                     <a href="/casos/el-zarco" class="vertical-card squircle">
-                        <div class="card-num-luxury">/01</div>
+                        <div class="card-num-luxury">02</div>
                         <div class="card-bg">
                             <img src="/imgs/el-zarco.svg" alt="El Zarco B2B" class="carousel-image" />
                         </div>
                         <div class="card-overlay">
                             <span class="v-tag">{lang === 'en' ? 'B2B Architecture' : 'Arquitectura B2B'}</span>
                             <h3>El Zarco</h3>
-                        </div>
-                    </a>
-
-                    <a href="/casos/setnpet" class="vertical-card squircle">
-                        <div class="card-num-luxury">/02</div>
-                        <div class="card-bg">
-                            <img src="/imgs/set-n-pet.svg" alt="Setnpet D2C" class="carousel-image" />
-                        </div>
-                        <div class="card-overlay">
-                            <span class="v-tag">CRO & E-commerce</span>
-                            <h3>Setnpet</h3>
                         </div>
                     </a>
 
@@ -146,7 +147,7 @@ const t = useTranslations(lang);
 
                 <div class="rows-wrapper">
                     <a href={lang === 'en' ? '/en/servicios/ecommerce' : '/servicios/ecommerce'} class="service-row" style="--delay: 0.1s;">
-                        <div class="row-num">/01</div>
+                        <div class="row-num">01</div>
                         <div class="row-content">
                             <h3>E-commerce Engineering</h3>
                             <p>{lang === 'en' ? 'Every visit that doesn\'t convert is revenue you never recover. We rebuild the purchase flow so your store sells more to the same visitors — without depending on more traffic or third-party apps.' : 'Cada visita que no convierte es revenue que no recuperas. Reconstruimos el flujo de compra para que tu tienda venda más a los mismos visitantes, sin depender de más tráfico o apps de terceros.'}</p>
@@ -155,7 +156,7 @@ const t = useTranslations(lang);
                         <div class="animated-border"></div>
                     </a>
                     <a href={lang === 'en' ? '/en/servicios/b2b' : '/servicios/b2b'} class="service-row" style="--delay: 0.2s;">
-                        <div class="row-num">/02</div>
+                        <div class="row-num">02</div>
                         <div class="row-content">
                             <h3>B2B Digital Architecture</h3>
                             <p>{lang === 'en' ? 'Every order taken by WhatsApp or phone is time your team never recovers and an error waiting to happen. We build the B2B portal that lets your wholesalers order on their own — with their pricing and catalog — while your operation scales without hiring more people.' : 'Cada pedido que tomas por WhatsApp o teléfono es tiempo que tu equipo no recupera y un error esperando a pasar. Construimos el portal B2B que deja que tus mayoristas compren solos —con sus precios y su catálogo— mientras tu operación escala sin contratar más gente.'}</p>
@@ -164,7 +165,7 @@ const t = useTranslations(lang);
                         <div class="animated-border"></div>
                     </a>
                     <a href={lang === 'en' ? '/en/servicios/automatizacion' : '/servicios/automatizacion'} class="service-row" style="--delay: 0.3s;">
-                        <div class="row-num">/03</div>
+                        <div class="row-num">03</div>
                         <div class="row-content">
                             <h3>Business Automation</h3>
                             <p>{lang === 'en' ? 'If your team still copies data between systems by hand, you\'re paying for errors and hours no one should spend. We connect your store, your ERP, and your databases so information flows on its own — no repetitive tasks, no out-of-sync inventory.' : 'Si tu equipo todavía copia datos entre sistemas a mano, estás pagando por errores y horas que nadie debería gastar. Conectamos tu tienda, tu ERP y tus bases de datos para que la información fluya sola: sin tareas repetitivas ni inventarios desincronizados.'}</p>
@@ -173,7 +174,7 @@ const t = useTranslations(lang);
                         <div class="animated-border"></div>
                     </a>
                     <a href={lang === 'en' ? '/en/servicios/growth' : '/servicios/growth'} class="service-row" style="--delay: 0.4s;">
-                        <div class="row-num">/04</div>
+                        <div class="row-num">04</div>
                         <div class="row-content">
                             <h3>Conversion Rate Optimization</h3>
                             <p>{lang === 'en' ? 'Optimizing on opinions is burning budget blind. We audit your funnel with real data, find exactly where you\'re losing sales, and fix it — so you grow without spending more on traffic.' : 'Optimizar a base de opiniones es quemar presupuesto a ciegas. Auditamos tu embudo con datos reales, encontramos exactamente dónde pierdes ventas y lo arreglamos: para que crezcas sin gastar más en tráfico.'}</p>
@@ -212,7 +213,6 @@ const t = useTranslations(lang);
                     <div class="protocol-step" style="--delay: 0.1s;">
                         <div class="step-node"><div class="node-core"></div></div>
                         <div class="step-content">
-                            <div class="watermark-num">01</div>
                             <h4>{lang === 'en' ? 'Audit & Diagnostics' : 'Auditoría y Diagnóstico'}</h4>
                             <p>{lang === 'en' ? 'We analyze the current infrastructure to identify operational and conversion bottlenecks, plotting a precise friction map.' : 'Analizamos la infraestructura actual para identificar cuellos de botella en la operación y conversión, trazando un mapa de fricción preciso.'}</p>
                         </div>
@@ -221,7 +221,6 @@ const t = useTranslations(lang);
                     <div class="protocol-step" style="--delay: 0.2s;">
                         <div class="step-node"><div class="node-core"></div></div>
                         <div class="step-content">
-                            <div class="watermark-num">02</div>
                             <h4>{lang === 'en' ? 'System Architecture' : 'Arquitectura del Sistema'}</h4>
                             <p>{lang === 'en' ? 'We design the database logic, API connections, and UX/UI experience aimed at maximizing the average order value.' : 'Diseñamos la lógica de base de datos, conexiones API y experiencia de usuario (UX/UI) orientada a maximizar el valor promedio del pedido.'}</p>
                         </div>
@@ -230,7 +229,6 @@ const t = useTranslations(lang);
                     <div class="protocol-step" style="--delay: 0.3s;">
                         <div class="step-node"><div class="node-core"></div></div>
                         <div class="step-content">
-                            <div class="watermark-num">03</div>
                             <h4>{lang === 'en' ? 'Full-Stack Development' : 'Desarrollo Full-Stack'}</h4>
                             <p>{lang === 'en' ? 'We write clean, optimized code, assemble the ecosystem, and connect data automation tools so they operate independently.' : 'Escribimos código limpio y optimizado, montamos el ecosistema y conectamos las herramientas de automatización de datos para que operen solas.'}</p>
                         </div>
@@ -239,7 +237,6 @@ const t = useTranslations(lang);
                     <div class="protocol-step" style="--delay: 0.4s;">
                         <div class="step-node"><div class="node-core"></div></div>
                         <div class="step-content">
-                            <div class="watermark-num">04</div>
                             <h4>{lang === 'en' ? 'Deployment & Scaling' : 'Despliegue y Escalado'}</h4>
                             <p>{lang === 'en' ? 'Production launch with active server and latency monitoring. We leave the systems ready to scale without breaking.' : 'Lanzamiento a producción con monitoreo activo de servidores y latencia. Dejamos los sistemas listos para que escale sin romper la infraestructura.'}</p>
                         </div>
@@ -249,29 +246,9 @@ const t = useTranslations(lang);
             </div>
         </section>
 
-        <section class="cta-integrated">
-            <div class="container">
-                <div class="cta-card-blue cta-squircle texture-noise" id="cta-card">
-                    <div class="cta-inner-flex">
-                        <div class="cta-text-side">
-                            <p class="eyebrow" style="color: #64748b; letter-spacing: 4px;">{lang === 'en' ? 'LIMITED AVAILABILITY' : 'DISPONIBILIDAD LIMITADA'}</p>
-                            <h2 class="cta-title-luxe">{lang === 'en' ? 'Currently evaluating 2 projects for Q3.' : 'Actualmente evaluando 2 proyectos para Q3.'}</h2>
-                            <p class="cta-scarcity-sub">{lang === 'en' ? 'If your operation qualifies, we begin the diagnosis this week.' : 'Si tu operación califica, iniciamos diagnóstico esta semana.'}</p>
-                        </div>
-                        <div class="cta-action-side">
-                            <a href="/contacto" class="btn-glow-blue">
-                                <span>{lang === 'en' ? 'See if I qualify →' : 'Ver si califico →'}</span>
-                                <div class="glow-effect"></div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
     </main>
 
-    <Footer />
+    <Footer ctaTitleEs="Escalemos tu operación hoy." ctaTitleEn="Let’s scale your operation today." ctaBtnEs="Iniciar un proyecto" ctaBtnEn="Start a project" />
 </Layout>
 
 <style is:global>
@@ -302,7 +279,6 @@ const t = useTranslations(lang);
         --color-border: rgba(0, 0, 0, 0.08); 
         
         --font-sans: 'Inter', system-ui, sans-serif;
-        --font-serif: 'Instrument Serif', serif;
         
         --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
         --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
@@ -313,7 +289,7 @@ const t = useTranslations(lang);
 
     .flouvia-masterpiece { width: 100%; position: relative; overflow-x: clip; }
     .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; }
-    .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: #222; }
+    .editorial { font-family: var(--font-sans); font-weight: 400; color: #222; }
     .eyebrow { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
 
     /* HERO STATUS — señal de exclusividad (cupo por trimestre) */
@@ -381,11 +357,13 @@ const t = useTranslations(lang);
         background: var(--color-bg);
         position: relative;
     }
-    .tech-header { max-width: 760px; margin: 0 auto 4.5rem; text-align: center; }
+    .tech-header { max-width: 100%; margin: 0 0 4.5rem 0; display: flex; justify-content: space-between; align-items: flex-end; gap: 3rem; text-align: left; }
+    .tech-header-left { flex: 1; }
     .tech-header .eyebrow { margin-bottom: 1.2rem; }
     .section-heading { font-size: clamp(2.3rem, 4.4vw, 3.4rem); font-weight: 800; letter-spacing: -1.5px; margin: 0 0 1rem 0; line-height: 1.05; }
     .section-sub { font-size: 1.05rem; color: var(--color-text-muted); margin: 0; line-height: 1.55;}
-    .tech-header .section-sub { max-width: 540px; margin: 0 auto; }
+    .tech-header .section-heading { margin: 0; }
+    .tech-header .section-sub { max-width: 480px; margin: 0; text-align: left; }
 
     /* Stack — marco editorial con hairlines que se desvanecen en las orillas */
     .tech-stack {
@@ -421,7 +399,7 @@ const t = useTranslations(lang);
         .logo-strip .strip-logo:hover { opacity: 0.9; filter: grayscale(0); }
     }
 
-    /* Detalle editorial — conteo en serif italic, bajo su propia hairline */
+    /* Detalle editorial — bajo su propia hairline */
     .stack-meta {
         position: relative;
         margin-top: 3.5rem; padding-top: 1.75rem;
@@ -432,7 +410,7 @@ const t = useTranslations(lang);
         background: linear-gradient(90deg, transparent, var(--color-border) 18%, var(--color-border) 82%, transparent);
     }
     .stack-count {
-        font-family: var(--font-serif); font-style: italic; font-weight: 400;
+        font-family: var(--font-sans); font-weight: 700;
         font-size: 1.5rem; color: var(--color-blue-deep); line-height: 1; letter-spacing: -0.5px;
     }
     .stack-label {
@@ -447,13 +425,6 @@ const t = useTranslations(lang);
         padding: calc(9rem - 25px) 0 calc(8rem - 25px) 0;
         background: radial-gradient(ellipse at 20% 50%, #112240 0%, #0a192f 65%, #050b14 100%);
         position: relative; overflow: hidden;
-    }
-    .casos-bg-text {
-        position: absolute; top: 50%; left: -4%;
-        transform: translateY(-50%);
-        font-family: var(--font-serif); font-style: italic; font-size: 33vw;
-        font-weight: 400; color: rgba(255,255,255,0.035); pointer-events: none;
-        white-space: nowrap; line-height: 1; user-select: none; z-index: 0;
     }
     .casos-eyebrow { color: rgba(255,255,255,0.32) !important; }
     .clients-vertical-carousel .section-heading { color: #ffffff; }
@@ -494,7 +465,7 @@ const t = useTranslations(lang);
         }
     }
     
-    .card-num-luxury { position: absolute; top: 1.5rem; left: 2rem; font-family: var(--font-serif); font-style: italic; font-size: 1.8rem; color: #fff; opacity: 0.6; z-index: 3; letter-spacing: -1px; transition: 0.5s var(--ease-spring);}
+    .card-num-luxury { position: absolute; top: 1.5rem; left: 2rem; font-family: var(--font-sans); font-weight: 700; font-size: 1.4rem; color: #fff; opacity: 0.6; z-index: 3; letter-spacing: -1px; transition: 0.5s var(--ease-spring);}
     .vertical-card:hover .card-num-luxury { opacity: 1; transform: translateX(5px); }
 
     .card-bg { position: absolute; width: 100%; height: 100%; background: #050b14; display: flex; align-items: center; justify-content: center; z-index: 1; border-radius: inherit;}
@@ -537,10 +508,10 @@ const t = useTranslations(lang);
         transition: width 0.85s var(--ease-spring); z-index: 2;
     }
 
-    /* Number — editorial serif italic */
+    /* Number */
     .row-num {
-        font-family: var(--font-serif); font-style: italic;
-        font-size: 2.6rem; font-weight: 400;
+        font-family: var(--font-sans); font-weight: 700;
+        font-size: 2rem;
         color: rgba(10,25,47,0.18);
         line-height: 0.9; letter-spacing: -1.5px;
         transition: color 0.5s var(--ease-smooth), transform 0.6s var(--ease-spring);
@@ -602,7 +573,7 @@ const t = useTranslations(lang);
 
     .protocol-intro { font-size: 1.15rem; color: var(--color-text-muted); line-height: 1.7; margin-top: 1.75rem; max-width: 400px; }
 
-    /* Editorial progress indicator inside the sticky col */
+    /* Progress indicator inside the sticky col */
     .proto-progress {
         margin-top: 3rem;
         max-width: 280px;
@@ -617,7 +588,7 @@ const t = useTranslations(lang);
     }
     .proto-progress-count {
         display: inline-flex; align-items: baseline; gap: 0.35rem;
-        font-family: var(--font-serif); font-style: italic; font-weight: 400;
+        font-family: var(--font-sans); font-weight: 700;
         color: var(--color-blue-deep); line-height: 1;
     }
     .proto-current { font-size: 2rem; display: inline-block; min-width: 1.6ch; transition: transform 0.6s var(--ease-spring); }
@@ -680,9 +651,9 @@ const t = useTranslations(lang);
 
     .watermark-num {
         position: absolute; top: -2.6rem; left: 0;
-        font-family: var(--font-serif); font-style: italic;
-        font-size: 2.4rem; line-height: 1;
-        color: rgba(10,25,47,0.22); font-weight: 400; letter-spacing: -1px;
+        font-family: var(--font-sans); font-weight: 800;
+        font-size: 2rem; line-height: 1;
+        color: rgba(10,25,47,0.22); letter-spacing: -1px;
         pointer-events: none; transition: color 0.5s var(--ease-smooth), transform 0.55s var(--ease-spring); z-index: 0;
     }
 
@@ -771,7 +742,8 @@ const t = useTranslations(lang);
         .btn-luxe { width: 100%; padding: 18px 0; font-size: 1.05rem;}
         /* TECNOLOGÍA */
         .tech-spotlight { padding: 4.5rem 0; }
-        .tech-header { margin-bottom: 2.75rem; }
+        .tech-header { flex-direction: column; align-items: flex-start; gap: 1.5rem; margin-bottom: 2.75rem; }
+        .tech-header .section-sub { max-width: 100%; }
         .tech-stack { padding-top: 2.5rem; }
         .logo-strip {
             grid-template-columns: repeat(2, 1fr);
@@ -787,7 +759,6 @@ const t = useTranslations(lang);
             padding: 4rem 0 4rem;
             overflow: hidden; width: 100%;
         }
-        .casos-bg-text { font-size: 60vw; left: -8%; }
         .header-flex { margin-bottom: 0.5rem; }
         .header-title-mobile h2 { font-size: 2.2rem; margin-bottom: 0.5rem; letter-spacing: -1px; }
         .carousel-mobile-hint {
@@ -863,6 +834,7 @@ const t = useTranslations(lang);
 <script>
     import { gsap } from 'gsap';
     import { ScrollTrigger } from 'gsap/ScrollTrigger';
+    import { initFluidShaders } from './blog/FluidShader';
 
     gsap.registerPlugin(ScrollTrigger);
 
@@ -1158,5 +1130,7 @@ const t = useTranslations(lang);
                 updateCentered();
             }
         });
+
+        initFluidShaders();
     });
 </script>

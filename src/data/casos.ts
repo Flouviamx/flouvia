@@ -41,7 +41,7 @@ export interface CaseStudy {
 export const casos: CaseStudy[] = [
   {
     slug:  'el-zarco',
-    num:   '01',
+    num:   '02',
     brand: 'El Zarco',
     category: {
       es: 'Arquitectura B2B',
@@ -120,84 +120,4 @@ export const casos: CaseStudy[] = [
     },
   },
 
-  {
-    slug:  'setnpet',
-    num:   '02',
-    brand: 'Setnpet',
-    category: {
-      es: 'CRO & E-commerce',
-      en: 'CRO & E-commerce',
-    },
-    tagline: {
-      es: 'De 0.9% a 1.3% de conversión en 90 días — sin cambiar el tráfico.',
-      en: 'From 0.9% to 1.3% conversion in 90 days — without changing traffic.',
-    },
-    desc: {
-      es: 'Convertimos una tienda con tráfico orgánico sólido y conversión baja en un sistema de crecimiento sostenible con retención activa, flujos de Klaviyo y arquitectura de conversión custom.',
-      en: 'We turned a store with solid organic traffic and low conversion into a sustainable growth system with active retention, Klaviyo flows, and custom conversion architecture.',
-    },
-    liveUrl:    'https://setnpet.com',
-    liveDomain: 'setnpet.com',
-    image: '/imgs/set-n-pet.svg',
-    metrics: [
-      { val: '+42%', label: { es: 'Tasa de conversión', en: 'Conversion Rate' } },
-      { val: '3×',   label: { es: 'Retención LTV',       en: 'LTV Retention' } },
-      { val: '−18%', label: { es: 'Abandono de carrito', en: 'Cart Abandonment' } },
-      { val: '5',    label: { es: 'Flujos Klaviyo',       en: 'Klaviyo Flows' } },
-    ],
-    challenge: {
-      es: 'Marca D2C de productos para mascotas con tráfico orgánico sólido pero tasa de conversión de 0.9%. Sin sistema de retención activo, 68% de abandono en carrito y un tema Shopify genérico que no comunicaba el posicionamiento de marca. El 90% de las ventas venían de clientes nuevos — sin recurrencia, sin LTV, sin sistema. Cada peso de adquisición compraba una sola compra: el CAC crecía sin una retención que lo compensara.',
-      en: 'D2C pet products brand with solid organic traffic but a 0.9% conversion rate. No active retention system, 68% cart abandonment, and a generic Shopify theme that failed to communicate brand positioning. 90% of sales came from new customers — no recurrence, no LTV, no system. Every acquisition peso bought a single purchase: CAC kept rising with no retention to offset it.',
-    },
-    solutionPoints: [
-      { es: 'Auditoría CRO completa: mapas de calor, análisis de sesión y funnel granular por dispositivo', en: 'Full CRO audit: heatmaps, session analysis, and device-level granular funnel breakdown' },
-      { es: 'Tema Shopify custom — cada módulo diseñado para maximizar conversión',                         en: 'Custom Shopify theme — every module engineered to maximize conversion' },
-      { es: '5 flujos Klaviyo: bienvenida, carrito abandonado, winback, post-compra y browse abandonment', en: '5 Klaviyo flows: welcome, abandoned cart, winback, post-purchase, and browse abandonment' },
-      { es: 'A/B testing framework con 8 variantes activas y análisis estadístico de resultados',          en: 'A/B testing framework with 8 active variants and statistical result analysis' },
-      { es: 'Programa de puntos integrado para incentivar compra recurrente y reducir CAC',                en: 'Integrated loyalty program to incentivize repeat purchases and reduce CAC' },
-      { es: 'GA4 + Meta Pixel con data layer custom para atribución precisa multi-canal',                  en: 'GA4 + Meta Pixel with custom data layer for precise multi-channel attribution' },
-    ],
-    stack: ['Shopify', 'Klaviyo', 'Hotjar', 'Custom Liquid', 'Google Analytics 4', 'Meta Pixel'],
-    resultsNote: {
-      es: 'Resultados medidos a 90 días del lanzamiento. Punto de partida: 0.9% de conversión, 68% de abandono de carrito.',
-      en: 'Results measured 90 days after launch. Starting point: 0.9% conversion, 68% cart abandonment.',
-    },
-    results: [
-      {
-        val: '+42%',
-        label: { es: 'Tasa de conversión', en: 'Conversion Rate' },
-        desc:  { es: 'La tasa de conversión pasó de 0.9% a 1.3% global — sin aumentar el presupuesto de tráfico. El cambio fue en la arquitectura del flujo de compra, no en la inversión en adquisición.', en: 'Conversion rate went from 0.9% to 1.3% overall — without raising the traffic budget. The change was in the purchase-flow architecture, not in acquisition spend.' },
-      },
-      {
-        val: '3×',
-        label: { es: 'Retención LTV',      en: 'LTV Retention' },
-        desc:  { es: 'El 90% de las ventas venían de clientes nuevos antes de los flujos Klaviyo. A 90 días del lanzamiento, los clientes recurrentes representan 3× más revenue que al inicio — reduciendo el CAC efectivo sin tocar la inversión en ads.', en: '90% of sales came from new customers before the Klaviyo flows. 90 days after launch, recurring customers represent 3× more revenue than at the start — lowering effective CAC without touching ad spend.' },
-      },
-      {
-        val: '−18%',
-        label: { es: 'Abandono de carrito', en: 'Cart Abandonment' },
-        desc:  { es: 'Reducción en tasa de abandono tras optimizar el checkout y activar los flujos de recuperación.', en: 'Reduction in cart abandonment after optimizing checkout and activating recovery flows.' },
-      },
-    ],
-    seoTitle: {
-      es: 'Setnpet: CRO en Shopify — +42% conversión, 3× retención LTV | Flouvia',
-      en: 'Setnpet: CRO on Shopify — +42% conversion, 3× LTV retention | Flouvia',
-    },
-    seoDesc: {
-      es: 'Caso de estudio CRO: pasamos a Setnpet de 0.9% a 1.3% de conversión global en 90 días sin aumentar el tráfico — tema Shopify custom, 5 flujos Klaviyo y arquitectura de conversión. 3× retención LTV, −18% abandono de carrito.',
-      en: 'CRO case study: we took Setnpet from 0.9% to 1.3% overall conversion in 90 days without adding traffic — custom Shopify theme, 5 Klaviyo flows and conversion architecture. 3× LTV retention, −18% cart abandonment.',
-    },
-    about: {
-      name: 'Setnpet',
-      description: 'Marca D2C de productos para mascotas con tráfico orgánico sólido',
-      url: 'https://setnpet.com',
-    },
-    datePublished: '2025-01-15',
-    dateModified:  '2026-05-29',
-    cta: {
-      eyebrow: { es: '¿TIENES TRÁFICO PERO LA CONVERSIÓN NO SUBE?', en: 'TRAFFIC, BUT CONVERSION WON\'T MOVE?' },
-      title:   { es: 'Así se ve el mismo reto resuelto.', en: 'This is that same challenge, solved.' },
-      sub:     { es: 'Si tienes visitas pero las ventas no crecen al mismo ritmo, auditamos tu embudo y te mostramos exactamente dónde se pierden.', en: 'If you have visits but sales aren\'t growing at the same pace, we audit your funnel and show you exactly where they\'re lost.' },
-    },
-  },
 ];

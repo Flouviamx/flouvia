@@ -66,54 +66,27 @@ const blogSchema = {
     <!-- HERO -->
     <section class="blog-hero">
       <div class="container">
-        <div class="blog-status blog-anim">
-          <span class="blog-status-dot" aria-hidden="true"></span>
-          <span>{isEn ? 'ACCEPTING Q3 PROJECTS' : 'ACEPTANDO PROYECTOS Q3'}</span>
+        <div class="blog-header-top blog-anim">
+          <div class="left-col">
+            <h1 class="blog-small-title">{isEn ? 'The Flouvia Blog' : 'Blog de Flouvia'}</h1>
+          </div>
+          <div class="right-col">
+            <p class="eyebrow blog-eyebrow">{isEn ? 'APPLIED ENGINEERING — NOTES FROM THE FIRM' : 'INGENIERÍA APLICADA — PERSPECTIVAS DE LA FIRMA'}</p>
+            <p class="blog-desc">
+              {isEn
+                ? 'What we learn building real systems for established brands. No generics, no filler posts.'
+                : 'Lo que aprendemos construyendo sistemas reales para marcas establecidas. Sin genéricos, sin posts de relleno.'}
+            </p>
+          </div>
         </div>
-        <p class="eyebrow blog-eyebrow blog-anim">{isEn ? 'APPLIED ENGINEERING — NOTES FROM THE FIRM' : 'INGENIERÍA APLICADA — PERSPECTIVAS DE LA FIRMA'}</p>
-        <h1 class="blog-title blog-anim">{isEn ? 'The Flouvia Blog.' : 'El Blog de Flouvia.'}</h1>
-        <p class="blog-desc blog-anim">
-          {isEn
-            ? 'What we learn building real systems for established brands. No generics, no filler posts.'
-            : 'Lo que aprendemos construyendo sistemas reales para marcas establecidas. Sin genéricos, sin posts de relleno.'}
-        </p>
-        <div class="blog-hero-meta blog-anim">
-          <span class="post-count">{posts.length} {isEn ? 'articles' : 'artículos'}</span>
-        </div>
-      </div>
-    </section>
 
-    <!-- FILTER -->
-    <div class="filter-bar">
-      <div class="container">
-        <div class="filter-glass" id="filter-glass" role="group" aria-label={isEn ? 'Filter by category' : 'Filtrar por categoría'}>
-          <div class="pill-shimmer" aria-hidden="true"></div>
-          <span class="filter-indicator" id="filter-indicator" aria-hidden="true"></span>
-          {categories.map((cat, i) => (
-            <button
-              class={`filter-pill ${i === 0 ? 'active' : ''}`}
-              data-filter={i === 0 ? 'all' : cat.es}
-            >
-              {t(cat)}
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-
-    <!-- FEATURED POST -->
-    <section class="blog-body">
-      <div class="container">
-
-        <div class="featured-wrapper" data-category={featured.category.es}>
+        <div class="featured-wrapper blog-anim" data-category={featured.category.es}>
           <a href={`${root}/blog/${featured.slug}`} class="featured-card squircle">
-            <div class="featured-visual" style={`background: ${featured.categoryBg}`}>
-              <span class="featured-num">/01</span>
-              <div class="visual-grid-lines" aria-hidden="true"></div>
+            <div class="featured-visual fluid-target" style={`background: ${featured.categoryBg}`} data-shader-color={featured.categoryColor}>
             </div>
             <div class="featured-body">
               <div class="card-top">
-                <span class="cat-pill" style={`color: ${featured.categoryColor}; background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12);`}>
+                <span class="cat-label">
                   {t(featured.category)}
                 </span>
                 <span class="read-time">{featured.readTime} min {isEn ? 'read' : 'de lectura'}</span>
@@ -133,19 +106,39 @@ const blogSchema = {
             </div>
           </a>
         </div>
+      </div>
+    </section>
+
+    <!-- FILTER -->
+    <div class="filter-bar">
+      <div class="container">
+        <div class="filter-list" role="group" aria-label={isEn ? 'Filter by category' : 'Filtrar por categoría'}>
+          {categories.map((cat, i) => (
+            <button
+              class={`filter-link ${i === 0 ? 'active' : ''}`}
+              data-filter={i === 0 ? 'all' : cat.es}
+            >
+              {t(cat)}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN BODY -->
+    <section class="blog-body">
+      <div class="container">
 
         <!-- GRID -->
         <div class="posts-grid">
           {rest.map((post, idx) => (
             <div class="post-card-wrapper" data-category={post.category.es}>
               <a href={`${root}/blog/${post.slug}`} class="post-card squircle">
-                <div class="card-visual" style={`background: ${post.categoryBg}`}>
-                  <span class="card-num">/{String(idx + 2).padStart(2, '0')}</span>
-                  <div class="visual-grid-lines" aria-hidden="true"></div>
+                <div class="card-visual fluid-target" style={`background: ${post.categoryBg}`} data-shader-color={post.categoryColor}>
                 </div>
                 <div class="card-body">
                   <div class="card-top">
-                    <span class="cat-pill cat-pill-dark" style={`color: ${post.categoryColor}; background: rgba(10,25,47,0.06); border-color: rgba(10,25,47,0.1);`}>
+                    <span class="cat-label cat-label-dark">
                       {t(post.category)}
                     </span>
                     <span class="read-time read-time-dark">{post.readTime} min</span>
@@ -168,29 +161,9 @@ const blogSchema = {
       </div>
     </section>
 
-    <!-- CTA -->
-    <section class="blog-cta">
-      <div class="container">
-        <div class="cta-inner squircle-cta">
-          <div class="cta-text">
-            <p class="eyebrow" style="color: rgba(255,255,255,0.4);">{isEn ? 'DOES THIS SOUND LIKE YOUR OPERATION?' : '¿LEES ESTO Y RECONOCES TU OPERACIÓN?'}</p>
-            <h2>{isEn ? 'We diagnose whether we can help.' : 'Diagnosticamos si podemos ayudarte.'}</h2>
-            <div class="cta-badge">
-              <span class="cta-badge-dot" aria-hidden="true"></span>
-              {isEn ? '2 project slots open Q3' : '2 proyectos disponibles Q3'}
-            </div>
-          </div>
-          <a href={`${root}/contacto`} class="cta-btn">
-            <span>{isEn ? 'Request a diagnosis' : 'Solicitar diagnóstico'}</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="19" x2="19" y2="5"/><polyline points="9 5 19 5 19 15"/></svg>
-          </a>
-        </div>
-      </div>
-    </section>
+    </main>
 
-  </main>
-
-  <Footer />
+    <Footer ctaTitleEs="Aplica estas estrategias en tu negocio." ctaBtnEs="Hablar con un experto" />
 </Layout>
 
 <style is:global>
@@ -225,202 +198,215 @@ const blogSchema = {
 
 /* HERO */
 .blog-hero {
-  padding: 13rem 0 5rem;
+  padding: 10rem 0 3rem;
   background: var(--color-bg);
-  border-bottom: 1px solid var(--color-border);
 }
-/* Status pill — mismo lenguaje que el home (señal de exclusividad) */
-.blog-status { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 100px; border: 1px solid rgba(16,185,129,0.22); background: rgba(16,185,129,0.04); width: max-content; margin-bottom: 1.6rem; }
-.blog-status span { font-size: 0.7rem; color: #059669; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-.blog-status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: blog-status-pulse 2s infinite; }
-@keyframes blog-status-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-.blog-title {
-  font-size: clamp(3rem, 6.4vw, 5.6rem);
-  font-weight: 800; letter-spacing: -2.5px; line-height: 0.95;
-  margin: 0 0 1.5rem; color: var(--color-text);
+.blog-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 3.5rem;
 }
-.blog-desc {
-  font-size: 1.15rem; color: var(--color-text-muted);
-  max-width: 560px; line-height: 1.55; margin: 0 0 2rem;
+.blog-small-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin: 0;
+  color: var(--color-text);
 }
-.post-count {
-  font-size: 0.72rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-  color: #bbb; border: 1px solid var(--color-border); padding: 6px 14px; border-radius: 50px;
+.blog-header-top .right-col {
+  max-width: 480px;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.blog-header-top .eyebrow {
+  margin-bottom: 1rem;
+}
+.blog-header-top .blog-desc {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  text-align: right;
 }
 
 /* FILTER */
 .filter-bar {
-  padding: 2rem 0;
+  padding: 1rem 0 2.5rem;
   background: var(--color-bg);
-  border-bottom: 1px solid var(--color-border);
+  text-align: center;
 }
-
-/* Liquid Glass container — mismo lenguaje que .glass-pill del navbar */
-.filter-glass {
-  display: inline-flex; align-items: center;
-  background: linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.5) 48%, rgba(255,255,255,0.56) 100%);
-  backdrop-filter: blur(30px) saturate(1.9) brightness(1.04);
-  -webkit-backdrop-filter: blur(30px) saturate(1.9) brightness(1.04);
-  padding: 4px 6px; border-radius: 100px;
-  border: 1px solid rgba(255,255,255,0.55);
-  box-shadow:
-    inset 0 1px 1px rgba(255,255,255,0.95),
-    inset 0 0 0 0.5px rgba(255,255,255,0.4),
-    inset 0 -6px 14px rgba(255,255,255,0.18),
-    0 10px 34px rgba(10,25,47,0.08),
-    0 2px 6px rgba(10,25,47,0.05);
-  position: relative; overflow: hidden;
-  transition: box-shadow 0.7s var(--ease-spring), border-color 0.7s var(--ease-spring);
+.filter-list {
+  display: inline-flex; align-items: center; gap: 2rem;
+  flex-wrap: wrap; justify-content: center;
 }
-
-/* shimmer sweep al hover del contenedor */
-.pill-shimmer {
-  position: absolute; inset: 0; border-radius: inherit;
-  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%);
-  transform: translateX(-100%); pointer-events: none; z-index: 0; transition: transform 0s;
-}
-.filter-glass:hover .pill-shimmer {
-  transform: translateX(100%); transition: transform 0.55s var(--ease-smooth);
-}
-
-/* Indicador deslizante — cápsula de vidrio, posición/tamaño manejados por GSAP */
-.filter-indicator {
-  position: absolute; top: 0; left: 0;
-  width: 0; height: 0; border-radius: 100px;
-  background: rgba(10,25,47,0.07);
-  box-shadow:
-    inset 0 1px 1px rgba(255,255,255,0.7),
-    inset 0 0 0 0.5px rgba(255,255,255,0.35),
-    inset 0 -3px 8px rgba(255,255,255,0.12);
-  opacity: 0; z-index: 0; pointer-events: none;
-  will-change: transform, width, height;
-}
-
-.filter-pill {
+.filter-link {
   position: relative; z-index: 1;
   font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
-  color: rgba(0,0,0,0.45); background: transparent; border: none; border-radius: 100px;
-  padding: 8px 18px; cursor: pointer;
+  color: var(--color-text-muted); background: transparent; border: none; padding: 4px 0; cursor: pointer;
   transition: color 0.4s var(--ease-spring);
 }
-.filter-pill:hover { color: rgba(0,0,0,0.85); }
-.filter-pill.active { color: rgba(0,0,0,0.92); font-weight: 800; }
+.filter-link:hover { color: var(--color-text); }
+.filter-link.active { color: var(--color-blue-deep); font-weight: 800; }
+.filter-link::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 2px;
+  background: var(--color-blue-deep); transform: scaleX(0); transition: transform 0.4s var(--ease-spring);
+  transform-origin: left;
+}
+.filter-link.active::after { transform: scaleX(1); }
 
 /* BLOG BODY */
-.blog-body { padding: 5rem 0 6rem; background: var(--color-bg-soft); }
+.blog-body { padding: 2rem 0 6rem; background: var(--color-bg-soft); }
 
 /* FEATURED */
-.featured-wrapper { margin-bottom: 3rem; }
+.featured-wrapper { margin-bottom: 3.5rem; }
 .featured-card {
   display: grid; grid-template-columns: 1fr 1fr;
-  min-height: 460px; text-decoration: none; color: inherit;
-  background: var(--color-blue-deep);
-  border: 1px solid rgba(255,255,255,0.04);
-  transition: transform 0.5s var(--ease-smooth), box-shadow 0.5s var(--ease-smooth);
+  min-height: 480px; text-decoration: none; color: inherit;
+  
+  /* Apple Dark Mode Material Aesthetic */
+  background: linear-gradient(180deg, var(--color-blue-deep) 0%, #050c17 100%);
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 
+    inset 0 1px 1px rgba(255,255,255,0.08),
+    0 16px 40px rgba(10,25,47,0.25),
+    0 4px 12px rgba(0,0,0,0.2);
+    
+  position: relative; top: 0;
+  transition: top 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth), border-color 0.6s;
 }
 .featured-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+  top: -6px;
+  border-color: rgba(255,255,255,0.12);
+  box-shadow: 
+    inset 0 1px 1px rgba(255,255,255,0.1),
+    0 30px 60px rgba(10,25,47,0.4),
+    0 8px 24px rgba(0,0,0,0.3);
 }
+
 .featured-visual {
   position: relative; overflow: hidden;
   display: flex; align-items: flex-end; padding: 2.5rem;
+  border-right: 1px solid rgba(255,255,255,0.04);
 }
 .featured-num {
-  font-family: var(--font-serif); font-style: italic;
-  font-size: 5rem; color: rgba(255,255,255,0.08);
+  font-weight: 700;
+  font-size: 5.5rem; color: rgba(255,255,255,0.06);
   line-height: 1; letter-spacing: -3px;
   position: absolute; bottom: 1.5rem; left: 2.5rem;
-  transition: color 0.5s, transform 0.5s var(--ease-smooth);
+  transition: color 0.6s, transform 0.6s var(--ease-smooth);
 }
 .featured-card:hover .featured-num { color: rgba(255,255,255,0.15); transform: scale(1.05); }
+
 .card-num {
-  font-family: var(--font-serif); font-style: italic;
+  font-weight: 700;
   font-size: 3.5rem; color: rgba(255,255,255,0.1);
   line-height: 1; letter-spacing: -2px;
   position: absolute; bottom: 1.5rem; left: 2rem;
-  transition: color 0.5s, transform 0.5s var(--ease-smooth);
+  transition: color 0.6s, transform 0.6s var(--ease-smooth);
 }
 .post-card:hover .card-num { color: rgba(255,255,255,0.18); transform: scale(1.06); }
 
-.visual-grid-lines {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
+/* Para asegurar que los números queden sobre el shader canvas (z-index: 0) */
+.relative-z { position: relative; z-index: 1; }
 
 .featured-body {
-  padding: 3.5rem; display: flex; flex-direction: column; justify-content: space-between;
+  padding: 3.5rem 4rem; display: flex; flex-direction: column; justify-content: space-between;
 }
 .card-top {
   display: flex; align-items: center; justify-content: space-between;
   margin-bottom: 2rem;
 }
-.cat-pill {
-  font-size: 0.62rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
-  border: 1px solid; border-radius: 50px; padding: 5px 12px;
+
+/* Category Text */
+.cat-label {
+  font-size: 0.65rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
 }
-.read-time { font-size: 0.72rem; font-weight: 600; color: rgba(255,255,255,0.4); }
-.read-time-dark { color: #aaa; }
+.cat-label-dark {
+  color: var(--color-text-muted);
+}
+.read-time { font-size: 0.75rem; font-weight: 600; color: rgba(255,255,255,0.4); }
+.read-time-dark { color: var(--color-text-muted); }
+
 .featured-title {
-  font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 800;
-  letter-spacing: -0.8px; line-height: 1.15; margin: 0 0 1.5rem;
+  font-size: clamp(1.8rem, 2.8vw, 2.4rem); font-weight: 800;
+  letter-spacing: -1.2px; line-height: 1.1; margin: 0 0 1.2rem;
   color: #fff;
 }
-.featured-excerpt { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.6); margin: 0; }
+.featured-excerpt { 
+  font-size: 1.05rem; line-height: 1.6; color: rgba(255,255,255,0.65); 
+  margin: 0; font-weight: 400; 
+}
+
 .card-footer {
   display: flex; align-items: center; justify-content: space-between;
-  border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.5rem; margin-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.06); 
+  padding-top: 1.5rem; margin-top: 2rem;
 }
-.card-footer-dark { border-top-color: var(--color-border); }
-.author-meta { display: flex; align-items: center; gap: 10px; }
+.card-footer-dark { border-top-color: rgba(0,0,0,0.06); }
+.author-meta { display: flex; align-items: center; gap: 12px; }
 .author-dot {
-  width: 34px; height: 34px; border-radius: 50%;
-  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);
   display: flex; align-items: center; justify-content: center;
-  font-size: 0.75rem; font-weight: 800; color: rgba(255,255,255,0.7); flex-shrink: 0;
+  font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.8); flex-shrink: 0;
 }
-.author-dot-dark { background: rgba(10,25,47,0.06); border-color: rgba(10,25,47,0.1); color: var(--color-blue-deep); }
-.author-name { display: block; font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.85); }
-.post-date { display: block; font-size: 0.72rem; color: rgba(255,255,255,0.4); }
-.post-date-dark { color: #aaa; font-size: 0.75rem; font-weight: 500; }
+.author-dot-dark { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.06); color: var(--color-text); }
+.author-name { display: block; font-size: 0.85rem; font-weight: 700; color: rgba(255,255,255,0.9); }
+.post-date { display: block; font-size: 0.75rem; color: rgba(255,255,255,0.45); }
+.post-date-dark { color: rgba(0,0,0,0.5); font-weight: 500; }
 .read-link {
-  font-size: 0.78rem; font-weight: 700; color: rgba(255,255,255,0.5);
-  transition: color 0.3s, transform 0.3s;
+  font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.5);
+  transition: color 0.4s, transform 0.4s; display: inline-flex; align-items: center; gap: 4px;
 }
-.read-link-dark { color: #aaa; }
-.featured-card:hover .read-link { color: #fff; transform: translateX(4px); }
-.post-card:hover .read-link-dark { color: var(--color-blue-deep); transform: translateX(4px); }
+.read-link-dark { color: rgba(0,0,0,0.4); }
+.featured-card:hover .read-link { color: #fff; transform: translateX(6px); }
+.post-card:hover .read-link-dark { color: var(--color-text); transform: translateX(6px); }
 
 /* GRID */
 .posts-grid {
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem;
 }
 .post-card {
   display: flex; flex-direction: column; text-decoration: none; color: inherit;
-  background: var(--color-bg); border: 1px solid var(--color-border);
-  transition: transform 0.4s var(--ease-smooth), box-shadow 0.4s var(--ease-smooth), border-color 0.3s;
+  
+  /* Apple Light Mode Elevated Aesthetic */
+  background: #ffffff; 
+  border: 1px solid rgba(0,0,0,0.04);
+  box-shadow: 
+    0 2px 8px rgba(0,0,0,0.02),
+    0 16px 32px rgba(0,0,0,0.03);
+    
+  position: relative; top: 0;
+  transition: top 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth), border-color 0.6s;
 }
 .post-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.06);
-  border-color: rgba(0,0,0,0.14);
+  top: -6px;
+  border-color: rgba(0,0,0,0.08);
+  box-shadow: 
+    0 4px 12px rgba(0,0,0,0.04),
+    0 24px 48px rgba(0,0,0,0.08);
 }
 .card-visual {
-  height: 200px; position: relative; overflow: hidden;
+  height: 220px; position: relative; overflow: hidden;
   display: flex; align-items: flex-end; padding: 1.5rem;
+  border-bottom: 1px solid rgba(0,0,0,0.03);
 }
-.card-body { padding: 2rem 2rem 2rem; flex: 1; display: flex; flex-direction: column; }
+.card-body { padding: 2.5rem 2.5rem; flex: 1; display: flex; flex-direction: column; }
 .card-title {
-  font-size: 1.35rem; font-weight: 800; letter-spacing: -0.4px; line-height: 1.2;
-  margin: 0 0 0.8rem; color: var(--color-text);
-  transition: color 0.3s;
+  font-size: 1.45rem; font-weight: 800; letter-spacing: -0.8px; line-height: 1.15;
+  margin: 0 0 1rem; color: var(--color-text);
+  transition: color 0.4s;
 }
 .post-card:hover .card-title { color: var(--color-blue-deep); }
-.card-excerpt { font-size: 0.93rem; line-height: 1.7; color: var(--color-text-muted); margin: 0; flex: 1; }
+.card-excerpt { 
+  font-size: 0.95rem; line-height: 1.6; color: var(--color-text-muted); 
+  margin: 0; flex: 1; font-weight: 400;
+}
 
 /* CTA */
 .blog-cta { padding: 0 0 6rem; background: var(--color-bg-soft); }
@@ -443,22 +429,9 @@ const blogSchema = {
   color: rgba(255,255,255,0.8); border: 1px solid rgba(16,185,129,0.3);
   background: rgba(16,185,129,0.08); padding: 6px 14px; border-radius: 50px;
 }
-.cta-badge-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px rgba(16,185,129,0.6); }
-.cta-btn {
-  display: inline-flex; align-items: center; gap: 10px;
-  background: #fff; color: var(--color-blue-deep);
-  padding: 16px 32px; border-radius: 100px;
-  text-decoration: none; font-size: 0.95rem; font-weight: 700;
-  transition: all 0.4s var(--ease-smooth); white-space: nowrap; flex-shrink: 0;
-  position: relative; z-index: 1;
-}
-.cta-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(255,255,255,0.15); }
-.cta-btn svg { transition: transform 0.35s var(--ease-spring); }
-.cta-btn:hover svg { transform: translate(2px, -2px); }
-
 /* HIDDEN CARDS */
 .post-card-wrapper.hidden,
-.featured-wrapper.hidden { display: none; }
+.featured-wrapper.hidden { display: none !important; }
 
 /* RESPONSIVE */
 @media (max-width: 1024px) {
@@ -467,11 +440,20 @@ const blogSchema = {
   .posts-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
-  .blog-hero { padding: 8.5rem 0 3rem; text-align: center; }
-  .blog-status { margin-left: auto; margin-right: auto; }
-  .blog-desc { margin-left: auto; margin-right: auto; }
-  .blog-hero-meta { display: flex; justify-content: center; }
-  .blog-title { letter-spacing: -1.5px; font-size: clamp(2.2rem, 9vw, 3.2rem); }
+  .blog-hero { padding: 8.5rem 0 3rem; }
+  .blog-header-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .blog-header-top .right-col {
+    text-align: left;
+    align-items: flex-start;
+  }
+  .blog-header-top .blog-desc {
+    text-align: left;
+  }
   .blog-body { padding: 3rem 0 4rem; }
   .featured-body { padding: 2rem; }
   .featured-title { font-size: 1.5rem; }
@@ -486,6 +468,8 @@ const blogSchema = {
 <script>
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { initFluidShaders } from '../../components/blog/FluidShader';
+
 gsap.registerPlugin(ScrollTrigger);
 
 // Recalcula posiciones tras fuentes+carga para que los triggers ya pasados disparen.
@@ -503,52 +487,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // reduced-motion — al inicio para que todo el bloque lo use
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ── INDICADOR DESLIZANTE — definir primero para usarlo en click handlers ──
-  const glass     = document.getElementById('filter-glass');
-  const indicator = document.getElementById('filter-indicator');
-  let slideIndicator: ((el: HTMLElement, animate?: boolean) => void) | null = null;
-
-  if (glass && indicator && !reduced) {
-    const rectOf = (el: HTMLElement) => {
-      const gr = glass.getBoundingClientRect();
-      const r  = el.getBoundingClientRect();
-      return { x: r.left - gr.left, y: r.top - gr.top, width: r.width, height: r.height };
-    };
-
-    let indicatorVisible = false;
-    slideIndicator = (el: HTMLElement, animate = true) => {
-      if (!indicatorVisible) {
-        gsap.set(indicator, { ...rectOf(el), opacity: 1 });
-        indicatorVisible = true;
-      } else {
-        gsap.to(indicator, { ...rectOf(el), opacity: 1, duration: animate ? 0.48 : 0, ease: 'power3.out', overwrite: true });
-      }
-    };
-
-    // posición inicial (sin animar)
-    const initialActive = glass.querySelector<HTMLElement>('.filter-pill.active');
-    if (initialActive) slideIndicator(initialActive, false);
-
-    // hover: desliza al pill; mouseleave: vuelve al activo
-    const pills2 = glass.querySelectorAll<HTMLButtonElement>('.filter-pill');
-    pills2.forEach(p => p.addEventListener('mouseenter', () => slideIndicator!(p)));
-    glass.addEventListener('mouseleave', () => {
-      const active = glass.querySelector<HTMLElement>('.filter-pill.active');
-      if (active) slideIndicator!(active);
-    });
-
-    // recolocar al cambiar layout
-    const relayout = () => {
-      const active = glass.querySelector<HTMLElement>('.filter-pill.active');
-      if (active) slideIndicator!(active, false);
-    };
-    if (document.fonts?.ready) document.fonts.ready.then(() => relayout());
-    window.addEventListener('load', relayout, { once: true });
-    window.addEventListener('resize', relayout, { passive: true });
-  }
-
-  // ── FILTRO — lógica de visibilidad + mueve el indicador al hacer click ──
-  const pills = document.querySelectorAll<HTMLButtonElement>('.filter-pill');
+  // ── FILTRO — lógica de visibilidad ──
+  const pills = document.querySelectorAll<HTMLButtonElement>('.filter-link');
   const featured = document.querySelector<HTMLElement>('.featured-wrapper');
   const cards = document.querySelectorAll<HTMLElement>('.post-card-wrapper');
   pills.forEach(pill => {
@@ -558,7 +498,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const filter = pill.dataset.filter;
       if (featured) featured.classList.toggle('hidden', filter !== 'all' && featured.dataset.category !== filter);
       cards.forEach(card => card.classList.toggle('hidden', filter !== 'all' && card.dataset.category !== filter));
-      if (slideIndicator) slideIndicator(pill);
+      setTimeout(() => ScrollTrigger.refresh(), 100);
     });
   });
 
@@ -572,11 +512,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (heroAnim.length) {
     gsap.set(heroAnim, { opacity: 0, y: 12 });
     gsap.timeline({ defaults: { ease: EASE } })
-      .to('.blog-status',    { opacity: 1, y: 0, duration: 0.9 }, 0)
-      .to('.blog-eyebrow',   { opacity: 1, y: 0, duration: 0.9 }, 0.1)
-      .to('.blog-title',     { opacity: 1, y: 0, duration: 1.0 }, 0.2)
-      .to('.blog-desc',      { opacity: 1, y: 0, duration: 0.9 }, 0.4)
-      .to('.blog-hero-meta', { opacity: 1, y: 0, duration: 0.8 }, 0.55);
+      .to('.blog-header-top', { opacity: 1, y: 0, duration: 1.0 }, 0)
+      .to('.featured-wrapper', { opacity: 1, y: 0, duration: 1.0 }, 0.15);
   }
 
   // ── Reveal robusto (sin parpadeo): oculta de entrada + revela 1 vez ──
@@ -598,10 +535,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  reveal('.featured-card', { trigger: '.featured-wrapper', y: 24, dur: 1.0, start: 'top 85%' });
   gsap.utils.toArray<HTMLElement>('.post-card').forEach((card) => {
     reveal(card, { trigger: card, y: 16, dur: 0.9, start: 'top 90%' });
   });
   reveal('.cta-inner', { trigger: '.blog-cta', y: 24, dur: 1.0, start: 'top 88%' });
+
+  // Inicializar WebGL Fluids
+  initFluidShaders();
 });
 </script>

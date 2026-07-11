@@ -2,16 +2,44 @@
 // Footer Flouvia — Editorial Luxury (Apple / Bottega aesthetic)
 import { getLangFromUrl } from '../i18n/utils';
 
+export interface Props {
+    ctaTitleEn?: string;
+    ctaTitleEs?: string;
+    ctaBtnEn?: string;
+    ctaBtnEs?: string;
+    ctaLinkEn?: string;
+    ctaLinkEs?: string;
+    hideCta?: boolean;
+}
+
+const { 
+    ctaTitleEn = 'Let’s build something extraordinary.',
+    ctaTitleEs = 'Construyamos algo extraordinario.',
+    ctaBtnEn = 'Start a project',
+    ctaBtnEs = 'Iniciar un proyecto',
+    ctaLinkEn = '/en/contacto',
+    ctaLinkEs = '/contacto',
+    hideCta = false
+} = Astro.props;
+
 const lang = getLangFromUrl(Astro.url);
 const isEn = lang === 'en';
 ---
 
 <footer class="footer-premium">
-    <div class="top-hairline"></div>
-
-    <div class="footer-watermark" aria-hidden="true">Flouvia</div>
 
     <div class="container footer-inner">
+        {!hideCta && (
+            <div class="footer-unified-cta">
+                <h2 class="unified-cta-title">{isEn ? ctaTitleEn : ctaTitleEs}</h2>
+                <a href={isEn ? ctaLinkEn : ctaLinkEs} class="unified-cta-btn">
+                    <span>{isEn ? ctaBtnEn : ctaBtnEs}</span>
+                    <svg class="cta-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </a>
+            </div>
+        )}
+
+        <div class="top-hairline"></div>
 
         <div class="footer-meta-row">
             <p class="footer-eyebrow">{isEn ? 'STUDIO · MEXICO CITY' : 'ESTUDIO · CIUDAD DE MÉXICO'}</p>
@@ -174,13 +202,14 @@ const isEn = lang === 'en';
     .footer-premium ::selection { background: #ffffff; color: #0a192f; }
 
     .footer-premium {
-        background: radial-gradient(ellipse at 30% 20%, #112240 0%, #0a192f 60%, #050b14 100%);
+        background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%);
         color: var(--text-main);
-        padding: 0 0 2.5rem 0;
+        padding: 5rem 0 2.5rem 0;
         position: relative;
         font-family: var(--font-sans);
         overflow: hidden;
         isolation: isolate;
+        box-shadow: 0 -20px 80px rgba(10,25,47,0.3);
     }
 
     .container { width: 100%; max-width: 1240px; padding: 0 5%; margin: 0 auto; position: relative; }
@@ -194,6 +223,34 @@ const isEn = lang === 'en';
         color: rgba(255,255,255,0.025);
         pointer-events: none; user-select: none; white-space: nowrap;
         z-index: 1;
+    }
+
+    /* ── Unified CTA ── */
+    .footer-unified-cta {
+        display: flex; justify-content: space-between; align-items: center; gap: 4rem;
+        padding-bottom: 4rem;
+    }
+    .unified-cta-title {
+        font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+        font-weight: 800;
+        color: #fff; letter-spacing: -1.5px; margin: 0; line-height: 1.1;
+    }
+    .unified-cta-btn {
+        background: #fff; color: var(--bg-footer);
+        padding: 18px 36px; border-radius: 100px;
+        text-decoration: none; font-weight: 700; font-size: 1.05rem;
+        display: inline-flex; align-items: center; gap: 8px;
+        transition: transform 0.4s var(--ease-spring);
+        white-space: nowrap;
+    }
+    .cta-arrow {
+        transition: transform 0.4s var(--ease-spring);
+    }
+    .unified-cta-btn:hover {
+        transform: translateY(-2px);
+    }
+    .unified-cta-btn:hover .cta-arrow {
+        transform: translateX(4px);
     }
 
     /* ── Top hairline ── */
@@ -431,6 +488,10 @@ const isEn = lang === 'en';
         .footer-statement { font-size: 1.55rem; line-height: 1.2; margin-bottom: 1.25rem; }
         .description { font-size: 1rem; line-height: 1.6; margin-bottom: 2rem; }
 
+        .footer-unified-cta { flex-direction: column; align-items: flex-start; gap: 2rem; padding-bottom: 3rem; }
+        .unified-cta-title { font-size: 2.2rem; }
+        .unified-cta-btn { width: 100%; justify-content: center; }
+
         .navigation-columns {
             grid-template-columns: 1fr 1fr;
             row-gap: 3rem; column-gap: 1.5rem;
@@ -468,7 +529,7 @@ const isEn = lang === 'en';
         if (!footer || reducedMotion) return;
 
         const fadeSel = [
-            '.footer-eyebrow', '.footer-edition', '.footer-logo-svg', '.footer-statement',
+            '.footer-unified-cta', '.footer-eyebrow', '.footer-edition', '.footer-logo-svg', '.footer-statement',
             '.description', '.footer-status-badge', '.nav-col', '.footer-bottom > *',
         ].map(s => '.footer-premium ' + s).join(', ');
 
@@ -484,6 +545,7 @@ const isEn = lang === 'en';
             onEnter: () => {
                 const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
                 tl
+                    .to('.footer-premium .footer-unified-cta', { opacity: 1, y: 0, duration: 1.0, clearProps: 'transform,opacity' }, 0)
                     .to('.footer-premium .top-hairline',   { scaleX: 1, duration: 1.0 }, 0)
                     .to('.footer-premium .footer-eyebrow', { opacity: 1, y: 0, duration: 0.9, clearProps: 'transform,opacity' }, 0.1)
                     .to('.footer-premium .footer-edition', { opacity: 1, y: 0, duration: 0.9, clearProps: 'transform,opacity' }, 0.16)

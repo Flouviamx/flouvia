@@ -268,18 +268,28 @@ const faqSchema = app.faq && app.faq.length ? {
 
     <!-- ════════ FAQ ════════ -->
     {app.faq && app.faq.length > 0 && (
-      <section class="ad-faq-section">
+      <section class="ad-faq-section" id="faq-section">
         <span class="ad-sec-wm editorial" aria-hidden="true">{isEn ? 'Answers' : 'Dudas'}</span>
-        <div class="container">
+        <div class="container ad-faq-container">
           <div class="ad-faq-head" id="ad-faq-head">
-            <p class="ad-sec-eye">{isEn ? 'FREQUENT QUESTIONS' : 'PREGUNTAS FRECUENTES'}</p>
-            <h2 class="ad-sec-title">{isEn ? 'Everything you need to decide.' : 'Todo lo que necesitas para decidir.'}</h2>
+            <h2 class="ad-faq-heading">{isEn ? 'FAQ' : 'Preguntas frecuentes'}</h2>
+            <p class="ad-faq-sub">{isEn ? 'Everything you need to know to decide.' : 'Todo lo que necesitas para decidir.'}</p>
           </div>
-          <div class="ad-faq-list">
+          <div class="ad-faq-list" id="faq-list">
             {app.faq.map(f => (
-              <div class="ad-faq-item">
-                <h3 class="ad-faq-q">{t(f.q)}</h3>
-                <p class="ad-faq-a">{t(f.a)}</p>
+              <div class="faq-item">
+                <button class="faq-q" aria-expanded="false">
+                  <span>{t(f.q)}</span>
+                  <div class="faq-icon-wrap" aria-hidden="true">
+                    <span class="faq-icon-line faq-icon-h"></span>
+                    <span class="faq-icon-line faq-icon-v"></span>
+                  </div>
+                </button>
+                <div class="faq-a">
+                  <div class="faq-a-inner">
+                    <p>{t(f.a)}</p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -501,13 +511,33 @@ const faqSchema = app.faq && app.faq.length ? {
 .ad-plans-foot { font-size: 0.82rem; line-height: 1.6; color: var(--color-text-muted); margin: 2rem 0 0; max-width: 720px; }
 
 /* FAQ */
-.ad-faq-section { padding: 9rem 0; background: var(--color-bg-soft); border-top: 1px solid var(--color-border); position: relative; overflow: clip; }
+.ad-faq-section { padding: 9rem 0; background: var(--color-bg); border-top: 1px solid var(--color-border); position: relative; overflow: clip; }
 .ad-faq-section .container { z-index: 1; }
-.ad-faq-head { margin-bottom: 3rem; max-width: 640px; }
+.ad-faq-container { display: grid; grid-template-columns: 360px 1fr; gap: 6rem; align-items: start; }
+.ad-faq-head { position: sticky; top: 120px; }
+.ad-faq-heading { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; letter-spacing: -1.2px; margin: 0 0 1rem 0; color: var(--color-text); line-height: 1.1; }
+.ad-faq-sub { font-size: 1.05rem; color: var(--color-text-muted); line-height: 1.5; margin: 0; max-width: 280px; }
+
 .ad-faq-list { display: flex; flex-direction: column; border-top: 1px solid var(--color-border); position: relative; z-index: 1; }
-.ad-faq-item { padding: 2rem 0; border-bottom: 1px solid var(--color-border); }
-.ad-faq-q { font-size: 1.1rem; font-weight: 700; color: var(--color-text); margin: 0 0 0.7rem; letter-spacing: -0.3px; }
-.ad-faq-a { font-size: 0.98rem; line-height: 1.7; color: var(--color-text-muted); margin: 0; max-width: 720px; }
+.faq-item { border-bottom: 1px solid var(--color-border); }
+
+.faq-q { width: 100%; background: none; border: none; text-align: left; padding: 2rem 0; display: flex; align-items: center; justify-content: space-between; gap: 2rem; cursor: pointer; font-family: var(--font-sans); font-size: 1.3rem; font-weight: 500; color: var(--color-text); letter-spacing: -0.4px; transition: color 0.3s ease; }
+.faq-q:hover { color: #86868b; }
+
+.faq-icon-wrap { position: relative; width: 14px; height: 14px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--color-text); transition: color 0.3s ease; }
+.faq-q:hover .faq-icon-wrap { color: #86868b; }
+.faq-icon-line { position: absolute; background: currentColor; border-radius: 1px; transition: transform 0.5s var(--ease-spring), opacity 0.5s ease; }
+.faq-icon-h { width: 14px; height: 1.5px; }
+.faq-icon-v { width: 1.5px; height: 14px; }
+
+.faq-item.is-open .faq-icon-v { transform: rotate(90deg); opacity: 0; }
+.faq-item.is-open .faq-icon-h { transform: rotate(180deg); }
+.faq-item.is-open .faq-q { color: var(--color-text); }
+.faq-item.is-open .faq-icon-wrap { color: var(--color-text); }
+
+.faq-a { height: 0; overflow: hidden; opacity: 0; }
+.faq-a-inner { padding: 0 3rem 2.5rem 0; }
+.faq-a-inner p { margin: 0; font-size: 1.05rem; line-height: 1.6; color: #6e6e73; max-width: 680px; font-weight: 400; }
 
 /* NAV */
 .ad-nav { padding: 3.5rem 0; background: var(--color-bg); border-top: 1px solid var(--color-border); }
@@ -548,6 +578,10 @@ const faqSchema = app.faq && app.faq.length ? {
   .ad-how-step:nth-child(2n) { padding-left: 1.6rem; }
   .ad-how-step:nth-child(2n)::before { left: 1.6rem; }
   .ad-plans-grid { grid-template-columns: repeat(2, 1fr); }
+  
+  .ad-faq-container { grid-template-columns: 1fr; gap: 3rem; }
+  .ad-faq-head { position: static; max-width: 100%; }
+  .ad-faq-sub { max-width: 100%; }
 }
 @media (max-width: 768px) {
   .ad-hero { padding: 10rem 0 0; }
@@ -581,6 +615,11 @@ const faqSchema = app.faq && app.faq.length ? {
   .ad-cta-title { max-width: 100%; }
   .ad-cta-action { align-items: center; width: 100%; }
   .ad-cta-btn { width: 100%; justify-content: center; padding: 18px 0; }
+
+  .ad-faq-heading { font-size: 2.2rem; }
+  .faq-q { font-size: 1.1rem; padding: 1.5rem 0; gap: 1rem; }
+  .faq-a-inner { padding: 0 1rem 1.5rem 0; }
+  .faq-a-inner p { font-size: 0.95rem; }
 }
 </style>
 
@@ -661,8 +700,36 @@ document.addEventListener('DOMContentLoaded', () => {
   reveal('.ad-plan', { trigger: '.ad-plans-grid', y: 22, dur: 1.0, stagger: 0.1, start: 'top 84%' });
 
   const faqHead = document.getElementById('ad-faq-head');
-  if (faqHead) reveal(faqHead.querySelectorAll('.ad-sec-eye, .ad-sec-title'), { trigger: '.ad-faq-section', y: 14, stagger: 0.08, start: 'top 82%' });
-  reveal('.ad-faq-item', { trigger: '.ad-faq-list', y: 14, dur: 0.9, stagger: 0.08, start: 'top 86%' });
+  if (faqHead) reveal(faqHead.querySelectorAll('.ad-faq-heading, .ad-faq-sub'), { trigger: '.ad-faq-section', y: 14, stagger: 0.08, start: 'top 82%' });
+  reveal('.faq-item', { trigger: '#faq-list', y: 14, dur: 0.9, stagger: 0.08, start: 'top 86%' });
+
+  const faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach(item => {
+    const q = item.querySelector('.faq-q');
+    const a = item.querySelector('.faq-a');
+    
+    q?.addEventListener('click', () => {
+      const isOpen = item.classList.contains('is-open');
+      
+      faqItems.forEach(other => {
+        if (other !== item && other.classList.contains('is-open')) {
+          other.classList.remove('is-open');
+          other.querySelector('.faq-q')?.setAttribute('aria-expanded', 'false');
+          gsap.to(other.querySelector('.faq-a'), { height: 0, opacity: 0, duration: 0.5, ease: 'power3.inOut' });
+        }
+      });
+
+      if (isOpen) {
+        item.classList.remove('is-open');
+        q.setAttribute('aria-expanded', 'false');
+        gsap.to(a, { height: 0, opacity: 0, duration: 0.5, ease: 'power3.inOut' });
+      } else {
+        item.classList.add('is-open');
+        q.setAttribute('aria-expanded', 'true');
+        gsap.to(a, { height: 'auto', opacity: 1, duration: 0.5, ease: 'power3.inOut' });
+      }
+    });
+  });
 
   const ctaCard = document.getElementById('ad-cta');
   if (ctaCard) {

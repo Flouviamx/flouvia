@@ -93,7 +93,6 @@ const contactSchema = {
              2. EVIDENCIA — métricas reales justo antes del formulario
              ============================================================ -->
         <section class="trust-strip">
-            <div class="trust-watermark" aria-hidden="true">{isEn ? 'Evidence' : 'Evidencia'}</div>
             <div class="container">
                 <p class="eyebrow trust-eyebrow">{isEn ? 'EVIDENCE' : 'EVIDENCIA'}</p>
                 <div class="trust-metrics">
@@ -121,7 +120,6 @@ const contactSchema = {
              3. INTERFAZ DE CONTACTO — sidebar + formulario por pasos
              ============================================================ -->
         <section class="executive-contact" id="form-zone">
-            <div class="contact-watermark" aria-hidden="true">{isEn ? 'Apply' : 'Aplica'}</div>
             <div class="container ec-grid">
 
                 <div class="ec-sidebar">
@@ -354,7 +352,7 @@ const contactSchema = {
 
     </main>
 
-    <Footer />
+    <Footer hideCta={true} />
 </Layout>
 
 <style is:global>

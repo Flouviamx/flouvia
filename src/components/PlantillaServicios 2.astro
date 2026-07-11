@@ -161,7 +161,6 @@ const serviceRows = [
 
         <!-- ════════ HERO (estándar inicio) ════════ -->
         <section class="hero-grand">
-            <div class="serv-watermark" aria-hidden="true">Servicios</div>
             <div class="container hero-container">
                 <div class="hero-content">
                     <div class="hero-text-zone" id="hero-parallax">
@@ -196,7 +195,6 @@ const serviceRows = [
 
         <!-- ════════ PHILOSOPHY (dark band) ════════ -->
         <section class="philosophy-blueprint dark-section">
-            <div class="bp-watermark" aria-hidden="true">{isEn ? 'Why' : 'Por qué'}</div>
             <div class="texture-noise-micro"></div>
 
             <div class="bp-line-x bp-line-top"></div>
@@ -267,7 +265,6 @@ const serviceRows = [
 
                         <h2 class="svc-title">{s.title}</h2>
                         <p class="svc-desc">{s.desc}</p>
-                        <p class="svc-proof"><span class="svc-proof-metric editorial">{s.proof.metric}</span> {s.proof.text}</p>
 
                         <div class="svc-caps">
                             {s.caps.map((c, ci) => (
@@ -328,11 +325,12 @@ const serviceRows = [
 
         <!-- ════════ COMPARISON TABLE ════════ -->
         <section class="comparison-section">
-            <div class="cmp-watermark" aria-hidden="true">{isEn ? 'Firm' : 'Firma'}</div>
             <div class="container relative-z">
                 <div class="cmp-header">
-                    <p class="eyebrow">{isEn ? 'EVALUATION' : 'EVALUACIÓN'}</p>
-                    <h2 class="section-heading">{isEn ? 'Why a specialized firm?' : '¿Por qué una firma especializada?'}</h2>
+                    <div class="cmp-header-left">
+                        <p class="eyebrow">{isEn ? 'EVALUATION' : 'EVALUACIÓN'}</p>
+                        <h2 class="section-heading">{isEn ? 'Why a specialized firm?' : '¿Por qué una firma especializada?'}</h2>
+                    </div>
                     <p class="section-sub">{isEn ? 'The difference between building a store and building a system that scales.' : 'La diferencia entre construir una tienda y construir un sistema que escala.'}</p>
                 </div>
 
@@ -392,32 +390,9 @@ const serviceRows = [
             </div>
         </section>
 
-        <!-- ════════ CTA FINAL (escasez) ════════ -->
-        <section class="cta-final-clean">
-            <div class="container">
-                <div class="cta-box-refined squircle-pro">
-                    <div class="texture-noise-micro"></div>
-                    <div class="cta-flex relative-z">
-                        <div class="cta-text">
-                            <p class="eyebrow cta-eyebrow">{isEn ? 'LIMITED AVAILABILITY — Q3' : 'DISPONIBILIDAD LIMITADA — Q3'}</p>
-                            <h2 class="cta-title">
-                                {isEn ? '2 projects available this quarter.' : '2 proyectos disponibles este trimestre.'}
-                                <span class="cta-title-soft">{isEn ? 'Does your operation qualify?' : '¿Tu operación califica?'}</span>
-                            </h2>
-                            <p class="cta-body">{isEn ? 'We don’t take on projects without a prior diagnosis. If your operation already has traction and you need the technical infrastructure for the next level, let’s start with a free 30-minute session.' : 'No aceptamos proyectos sin diagnóstico previo. Si tu operación ya tiene tracción y necesitas la infraestructura técnica para el siguiente nivel, comencemos con una sesión de 30 minutos sin costo.'}</p>
-                        </div>
-                        <a href="/contacto" class="btn-luxe-main">
-                            <span>{isEn ? 'See if I qualify' : 'Ver si califico'}</span>
-                            <span class="btn-arrow" aria-hidden="true">→</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
     </main>
 
-    <Footer />
+    <Footer ctaTitleEs="La infraestructura para el siguiente nivel." ctaTitleEn="The infrastructure for the next level." ctaBtnEs="Hablemos de tu plataforma" ctaBtnEn="Let’s discuss your platform" />
 </Layout>
 
 <style is:global>
@@ -605,7 +580,10 @@ const serviceRows = [
 
     /* 5. COMPARISON TABLE — matriz editorial (blanco · hairlines que se desvanecen) */
     .comparison-section { padding: 7rem 0; background: var(--color-bg); position: relative; overflow: clip; }
-    .cmp-header { text-align: center; max-width: 640px; margin: 0 auto 3.5rem; }
+    .cmp-header { max-width: 100%; margin: 0 0 3.5rem 0; display: flex; justify-content: space-between; align-items: flex-end; gap: 3rem; text-align: left; }
+    .cmp-header-left { flex: 1; }
+    .cmp-header .section-heading { margin: 0; }
+    .cmp-header .section-sub { max-width: 480px; margin: 0; text-align: left; }
     .cmp-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 2px; }
     .cmp-frame { position: relative; max-width: 960px; margin: 0 auto; min-width: 700px; }
     /* marco editorial: hairlines superior/inferior que se desvanecen en las orillas */
@@ -649,8 +627,7 @@ const serviceRows = [
     .faq-a p { margin: 0; padding: 0 3rem 1.8rem 0; font-size: 1rem; line-height: 1.65; color: var(--color-text-muted); max-width: 680px; }
 
     /* 7. CTA FINAL */
-    .cta-final-clean { padding: 3rem 0 10rem 0; }
-    .cta-box-refined { background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%); padding: 5.5rem; position: relative; overflow: hidden; box-shadow: 0 40px 80px rgba(10,25,47,0.25); }
+
     .cta-flex { display: flex; justify-content: space-between; align-items: center; gap: 4rem; }
     .cta-text { max-width: 640px; }
     .cta-eyebrow { color: rgba(255,255,255,0.55) !important; letter-spacing: 4px; margin-bottom: 1.4rem; }
@@ -707,7 +684,8 @@ const serviceRows = [
         .hw-text-zone p { font-size: 1rem; }
 
         .comparison-section { padding: 4rem 0; }
-        .cmp-header { margin-bottom: 2.5rem; }
+        .cmp-header { flex-direction: column; align-items: flex-start; gap: 1.5rem; margin-bottom: 2.5rem; }
+        .cmp-header .section-sub { max-width: 100%; }
         .faq-section { padding: 4rem 0; }
         .faq-q { font-size: 1rem; padding: 1.3rem 0; gap: 1rem; }
         .faq-a p { padding-right: 0; }
@@ -827,7 +805,7 @@ const serviceRows = [
 
         /* SERVICIOS — índice editorial (capítulo por servicio) */
         document.querySelectorAll<HTMLElement>('.svc-chapter').forEach((row) => {
-            const head = row.querySelectorAll<HTMLElement>('.svc-head, .svc-title, .svc-desc, .svc-proof');
+            const head = row.querySelectorAll<HTMLElement>('.svc-head, .svc-title, .svc-desc');
             const caps = row.querySelectorAll<HTMLElement>('.svc-cap');
             const stack = row.querySelector<HTMLElement>('.svc-stack');
 

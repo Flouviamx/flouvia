@@ -4,11 +4,11 @@ import Layout from '../../../layouts/Layout.astro';
 import Navbar from '../../../components/Navbar.astro';
 import Footer from '../../../components/Footer.astro';
 import { posts, formatDate } from '../../../data/blog';
+import { getLangFromUrl } from '../../../i18n/utils';
 
-const isEn = true;
-const t = (o: { es: string; en: string }) => o.en;
-const lang: 'es' | 'en' = 'en';
-const root = '/en';
+const lang = getLangFromUrl(Astro.url);
+const isEn = lang === 'en';
+const t = (o: { es: string; en: string }) => isEn ? o.en : o.es;
 
 const featured = posts.find(p => p.featured)!;
 const rest = posts.filter(p => !p.featured);
@@ -20,18 +20,26 @@ const categories = [
   { es: 'Automatización', en: 'Automation' },
 ];
 
-const SITE = 'https://flouvia.com';
-const pageTitle = 'E-commerce & B2B Engineering Blog | Flouvia — Mexico City';
-const pageDesc = 'Applied-engineering perspectives on e-commerce, B2B architecture, automation and CRO. Based on real projects.';
+const root = isEn ? '/en' : '';
 
+// ── SEO ──────────────────────────────────────────────────────────────────────
+const SITE = 'https://flouvia.com';
+const pageTitle = isEn
+  ? 'E-commerce & B2B Engineering Blog | Flouvia — Mexico City'
+  : 'Blog de Ingeniería E-commerce y B2B | Flouvia — CDMX';
+const pageDesc = isEn
+  ? 'Applied-engineering perspectives on e-commerce, B2B architecture, automation and CRO. Based on real projects.'
+  : 'Perspectivas de ingeniería aplicada sobre e-commerce, arquitectura B2B, automatización y CRO. Contenido basado en proyectos reales.';
+
+// Schema Blog (JSON-LD) — listado del blog
 const blogSchema = {
   '@context': 'https://schema.org',
   '@type': 'Blog',
   '@id': `${SITE}${root}/blog#blog`,
-  name: 'E-commerce & B2B Engineering Blog | Flouvia',
+  name: isEn ? 'E-commerce & B2B Engineering Blog | Flouvia' : 'Blog de Ingeniería E-commerce y B2B | Flouvia',
   description: pageDesc,
   url: `${SITE}${root}/blog`,
-  inLanguage: 'en-US',
+  inLanguage: isEn ? 'en-US' : 'es-MX',
   publisher: {
     '@type': 'Organization',
     '@id': `${SITE}/#organization`,
@@ -55,53 +63,33 @@ const blogSchema = {
 
   <main class="blog-page">
 
+    <!-- HERO -->
     <section class="blog-hero">
       <div class="container">
-        <div class="blog-status blog-anim">
-          <span class="blog-status-dot" aria-hidden="true"></span>
-          <span>ACCEPTING Q3 PROJECTS</span>
+        <div class="blog-header-top blog-anim">
+          <div class="left-col">
+            <h1 class="blog-small-title">{isEn ? 'The Flouvia Blog' : 'Blog de Flouvia'}</h1>
+          </div>
+          <div class="right-col">
+            <p class="eyebrow blog-eyebrow">{isEn ? 'APPLIED ENGINEERING — NOTES FROM THE FIRM' : 'INGENIERÍA APLICADA — PERSPECTIVAS DE LA FIRMA'}</p>
+            <p class="blog-desc">
+              {isEn
+                ? 'What we learn building real systems for established brands. No generics, no filler posts.'
+                : 'Lo que aprendemos construyendo sistemas reales para marcas establecidas. Sin genéricos, sin posts de relleno.'}
+            </p>
+          </div>
         </div>
-        <p class="eyebrow blog-eyebrow blog-anim">APPLIED ENGINEERING — NOTES FROM THE FIRM</p>
-        <h1 class="blog-title blog-anim">The Flouvia Blog.</h1>
-        <p class="blog-desc blog-anim">What we learn building real systems for established brands. No generics, no filler posts.</p>
-        <div class="blog-hero-meta blog-anim">
-          <span class="post-count">{posts.length} articles</span>
-        </div>
-      </div>
-    </section>
 
-    <div class="filter-bar">
-      <div class="container">
-        <div class="filter-glass" id="filter-glass" role="group" aria-label="Filter by category">
-          <div class="pill-shimmer" aria-hidden="true"></div>
-          <span class="filter-indicator" id="filter-indicator" aria-hidden="true"></span>
-          {categories.map((cat, i) => (
-            <button
-              class={`filter-pill ${i === 0 ? 'active' : ''}`}
-              data-filter={i === 0 ? 'all' : cat.es}
-            >
-              {t(cat)}
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-
-    <section class="blog-body">
-      <div class="container">
-
-        <div class="featured-wrapper" data-category={featured.category.es}>
+        <div class="featured-wrapper blog-anim" data-category={featured.category.es}>
           <a href={`${root}/blog/${featured.slug}`} class="featured-card squircle">
-            <div class="featured-visual" style={`background: ${featured.categoryBg}`}>
-              <span class="featured-num">/01</span>
-              <div class="visual-grid-lines" aria-hidden="true"></div>
+            <div class="featured-visual fluid-target" style={`background: ${featured.categoryBg}`} data-shader-color={featured.categoryColor}>
             </div>
             <div class="featured-body">
               <div class="card-top">
-                <span class="cat-pill" style={`color: ${featured.categoryColor}; background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12);`}>
+                <span class="cat-label">
                   {t(featured.category)}
                 </span>
-                <span class="read-time">{featured.readTime} min read</span>
+                <span class="read-time">{featured.readTime} min {isEn ? 'read' : 'de lectura'}</span>
               </div>
               <h2 class="featured-title">{t(featured.title)}</h2>
               <p class="featured-excerpt">{t(featured.excerpt)}</p>
@@ -113,23 +101,44 @@ const blogSchema = {
                     <span class="post-date">{formatDate(featured.date, lang)}</span>
                   </div>
                 </div>
-                <span class="read-link">Read article →</span>
+                <span class="read-link">{isEn ? 'Read article' : 'Leer artículo'} →</span>
               </div>
             </div>
           </a>
         </div>
+      </div>
+    </section>
 
+    <!-- FILTER -->
+    <div class="filter-bar">
+      <div class="container">
+        <div class="filter-list" role="group" aria-label={isEn ? 'Filter by category' : 'Filtrar por categoría'}>
+          {categories.map((cat, i) => (
+            <button
+              class={`filter-link ${i === 0 ? 'active' : ''}`}
+              data-filter={i === 0 ? 'all' : cat.es}
+            >
+              {t(cat)}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN BODY -->
+    <section class="blog-body">
+      <div class="container">
+
+        <!-- GRID -->
         <div class="posts-grid">
           {rest.map((post, idx) => (
             <div class="post-card-wrapper" data-category={post.category.es}>
               <a href={`${root}/blog/${post.slug}`} class="post-card squircle">
-                <div class="card-visual" style={`background: ${post.categoryBg}`}>
-                  <span class="card-num">/{String(idx + 2).padStart(2, '0')}</span>
-                  <div class="visual-grid-lines" aria-hidden="true"></div>
+                <div class="card-visual fluid-target" style={`background: ${post.categoryBg}`} data-shader-color={post.categoryColor}>
                 </div>
                 <div class="card-body">
                   <div class="card-top">
-                    <span class="cat-pill cat-pill-dark" style={`color: ${post.categoryColor}; background: rgba(10,25,47,0.06); border-color: rgba(10,25,47,0.1);`}>
+                    <span class="cat-label cat-label-dark">
                       {t(post.category)}
                     </span>
                     <span class="read-time read-time-dark">{post.readTime} min</span>
@@ -141,7 +150,7 @@ const blogSchema = {
                       <div class="author-dot author-dot-dark">{post.authorInitial}</div>
                       <span class="post-date post-date-dark">{formatDate(post.date, lang)}</span>
                     </div>
-                    <span class="read-link read-link-dark">Read →</span>
+                    <span class="read-link read-link-dark">{isEn ? 'Read →' : 'Leer →'}</span>
                   </div>
                 </div>
               </a>
@@ -152,35 +161,19 @@ const blogSchema = {
       </div>
     </section>
 
-    <section class="blog-cta">
-      <div class="container">
-        <div class="cta-inner squircle-cta">
-          <div class="cta-text">
-            <p class="eyebrow" style="color: rgba(255,255,255,0.4);">DOES THIS SOUND LIKE YOUR OPERATION?</p>
-            <h2>We diagnose whether we can help.</h2>
-            <div class="cta-badge">
-              <span class="cta-badge-dot" aria-hidden="true"></span>
-              2 project slots open Q3
-            </div>
-          </div>
-          <a href="/en/contacto" class="cta-btn">
-            <span>Request a diagnosis</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="19" x2="19" y2="5"/><polyline points="9 5 19 5 19 15"/></svg>
-          </a>
-        </div>
-      </div>
-    </section>
+    </main>
 
-  </main>
-
-  <Footer />
+    <Footer ctaTitleEn="Apply these strategies to your business." ctaBtnEn="Talk to an expert" />
 </Layout>
 
 <style is:global>
   :root {
-    --color-bg: #ffffff; --color-bg-soft: #fcfcfc;
-    --color-blue-deep: #0a192f; --color-text: #050505;
-    --color-text-muted: #555556; --color-border: rgba(0,0,0,0.08);
+    --color-bg: #ffffff;
+    --color-bg-soft: #fcfcfc;
+    --color-blue-deep: #0a192f;
+    --color-text: #050505;
+    --color-text-muted: #555556;
+    --color-border: rgba(0,0,0,0.08);
     --font-sans: 'Inter', system-ui, sans-serif;
     --font-serif: 'Instrument Serif', serif;
     --font-mono: 'JetBrains Mono', monospace;
@@ -195,112 +188,291 @@ const blogSchema = {
   .eyebrow { font-size: 0.62rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
   .squircle { border-radius: 24px; overflow: hidden; transform: translateZ(0); }
   .squircle-cta { border-radius: 28px; overflow: hidden; }
+
+  /* Gate anti-flash — el hero parte oculto solo con JS sin reduced-motion. */
   .js-anim .blog-anim { opacity: 0; }
 </style>
 
 <style>
 .blog-page { width: 100%; overflow-x: clip; }
-.blog-hero { padding: 13rem 0 5rem; background: var(--color-bg); border-bottom: 1px solid var(--color-border); }
-.blog-status { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 100px; border: 1px solid rgba(16,185,129,0.22); background: rgba(16,185,129,0.04); width: max-content; margin-bottom: 1.6rem; }
-.blog-status span { font-size: 0.7rem; color: #059669; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-.blog-status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: blog-status-pulse 2s infinite; }
-@keyframes blog-status-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
-.blog-title { font-size: clamp(3rem, 6.4vw, 5.6rem); font-weight: 800; letter-spacing: -2.5px; line-height: 0.95; margin: 0 0 1.5rem; color: var(--color-text); }
-.blog-desc { font-size: 1.15rem; color: var(--color-text-muted); max-width: 560px; line-height: 1.55; margin: 0 0 2rem; }
-.post-count { font-size: 0.72rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #bbb; border: 1px solid var(--color-border); padding: 6px 14px; border-radius: 50px; }
-.filter-bar { padding: 2rem 0; background: var(--color-bg); border-bottom: 1px solid var(--color-border); }
-.filter-glass {
-  display: inline-flex; align-items: center;
-  background: linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.5) 48%, rgba(255,255,255,0.56) 100%);
-  backdrop-filter: blur(30px) saturate(1.9) brightness(1.04);
-  -webkit-backdrop-filter: blur(30px) saturate(1.9) brightness(1.04);
-  padding: 4px 6px; border-radius: 100px;
-  border: 1px solid rgba(255,255,255,0.55);
-  box-shadow:
-    inset 0 1px 1px rgba(255,255,255,0.95),
-    inset 0 0 0 0.5px rgba(255,255,255,0.4),
-    inset 0 -6px 14px rgba(255,255,255,0.18),
-    0 10px 34px rgba(10,25,47,0.08),
-    0 2px 6px rgba(10,25,47,0.05);
-  position: relative; overflow: hidden;
-  transition: box-shadow 0.7s var(--ease-spring), border-color 0.7s var(--ease-spring);
+
+/* HERO */
+.blog-hero {
+  padding: 10rem 0 3rem;
+  background: var(--color-bg);
 }
-.pill-shimmer {
-  position: absolute; inset: 0; border-radius: inherit;
-  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%);
-  transform: translateX(-100%); pointer-events: none; z-index: 0; transition: transform 0s;
+
+.blog-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 3.5rem;
 }
-.filter-glass:hover .pill-shimmer { transform: translateX(100%); transition: transform 0.55s var(--ease-smooth); }
-.filter-indicator {
-  position: absolute; top: 0; left: 0;
-  width: 0; height: 0; border-radius: 100px;
-  background: rgba(10,25,47,0.07);
-  box-shadow: inset 0 1px 1px rgba(255,255,255,0.7), inset 0 0 0 0.5px rgba(255,255,255,0.35), inset 0 -3px 8px rgba(255,255,255,0.12);
-  opacity: 0; z-index: 0; pointer-events: none; will-change: transform, width, height;
+.blog-small-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin: 0;
+  color: var(--color-text);
 }
-.filter-pill {
+.blog-header-top .right-col {
+  max-width: 480px;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.blog-header-top .eyebrow {
+  margin-bottom: 1rem;
+}
+.blog-header-top .blog-desc {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  text-align: right;
+}
+
+/* FILTER */
+.filter-bar {
+  padding: 1rem 0 2.5rem;
+  background: var(--color-bg);
+  text-align: center;
+}
+.filter-list {
+  display: inline-flex; align-items: center; gap: 2rem;
+  flex-wrap: wrap; justify-content: center;
+}
+.filter-link {
   position: relative; z-index: 1;
   font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
-  color: rgba(0,0,0,0.45); background: transparent; border: none; border-radius: 100px;
-  padding: 8px 18px; cursor: pointer; transition: color 0.4s var(--ease-spring);
+  color: var(--color-text-muted); background: transparent; border: none; padding: 4px 0; cursor: pointer;
+  transition: color 0.4s var(--ease-spring);
 }
-.filter-pill:hover { color: rgba(0,0,0,0.85); }
-.filter-pill.active { color: rgba(0,0,0,0.92); font-weight: 800; }
-.blog-body { padding: 5rem 0 6rem; background: var(--color-bg-soft); }
-.featured-wrapper { margin-bottom: 3rem; }
-.featured-card { display: grid; grid-template-columns: 1fr 1fr; min-height: 460px; text-decoration: none; color: inherit; background: var(--color-blue-deep); border: 1px solid rgba(255,255,255,0.04); transition: transform 0.5s var(--ease-smooth), box-shadow 0.5s var(--ease-smooth); }
-.featured-card:hover { transform: translateY(-6px); box-shadow: 0 30px 60px rgba(0,0,0,0.15); }
-.featured-visual { position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 2.5rem; }
-.featured-num { font-family: var(--font-serif); font-style: italic; font-size: 5rem; color: rgba(255,255,255,0.08); line-height: 1; letter-spacing: -3px; position: absolute; bottom: 1.5rem; left: 2.5rem; transition: color 0.5s, transform 0.5s var(--ease-smooth); }
+.filter-link:hover { color: var(--color-text); }
+.filter-link.active { color: var(--color-blue-deep); font-weight: 800; }
+.filter-link::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 2px;
+  background: var(--color-blue-deep); transform: scaleX(0); transition: transform 0.4s var(--ease-spring);
+  transform-origin: left;
+}
+.filter-link.active::after { transform: scaleX(1); }
+
+/* BLOG BODY */
+.blog-body { padding: 2rem 0 6rem; background: var(--color-bg-soft); }
+
+/* FEATURED */
+.featured-wrapper { margin-bottom: 3.5rem; }
+.featured-card {
+  display: grid; grid-template-columns: 1fr 1fr;
+  min-height: 480px; text-decoration: none; color: inherit;
+  
+  /* Apple Dark Mode Material Aesthetic */
+  background: linear-gradient(180deg, var(--color-blue-deep) 0%, #050c17 100%);
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 
+    inset 0 1px 1px rgba(255,255,255,0.08),
+    0 16px 40px rgba(10,25,47,0.25),
+    0 4px 12px rgba(0,0,0,0.2);
+    
+  position: relative; top: 0;
+  transition: top 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth), border-color 0.6s;
+}
+.featured-card:hover {
+  top: -6px;
+  border-color: rgba(255,255,255,0.12);
+  box-shadow: 
+    inset 0 1px 1px rgba(255,255,255,0.1),
+    0 30px 60px rgba(10,25,47,0.4),
+    0 8px 24px rgba(0,0,0,0.3);
+}
+
+.featured-visual {
+  position: relative; overflow: hidden;
+  display: flex; align-items: flex-end; padding: 2.5rem;
+  border-right: 1px solid rgba(255,255,255,0.04);
+}
+.featured-num {
+  font-weight: 700;
+  font-size: 5.5rem; color: rgba(255,255,255,0.06);
+  line-height: 1; letter-spacing: -3px;
+  position: absolute; bottom: 1.5rem; left: 2.5rem;
+  transition: color 0.6s, transform 0.6s var(--ease-smooth);
+}
 .featured-card:hover .featured-num { color: rgba(255,255,255,0.15); transform: scale(1.05); }
-.card-num { font-family: var(--font-serif); font-style: italic; font-size: 3.5rem; color: rgba(255,255,255,0.1); line-height: 1; letter-spacing: -2px; position: absolute; bottom: 1.5rem; left: 2rem; transition: color 0.5s, transform 0.5s var(--ease-smooth); }
+
+.card-num {
+  font-weight: 700;
+  font-size: 3.5rem; color: rgba(255,255,255,0.1);
+  line-height: 1; letter-spacing: -2px;
+  position: absolute; bottom: 1.5rem; left: 2rem;
+  transition: color 0.6s, transform 0.6s var(--ease-smooth);
+}
 .post-card:hover .card-num { color: rgba(255,255,255,0.18); transform: scale(1.06); }
-.visual-grid-lines { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 40px 40px; }
-.featured-body { padding: 3.5rem; display: flex; flex-direction: column; justify-content: space-between; }
-.card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
-.cat-pill { font-size: 0.62rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; border-radius: 50px; padding: 5px 12px; }
-.read-time { font-size: 0.72rem; font-weight: 600; color: rgba(255,255,255,0.4); }
-.read-time-dark { color: #aaa; }
-.featured-title { font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 800; letter-spacing: -0.8px; line-height: 1.15; margin: 0 0 1.5rem; color: #fff; }
-.featured-excerpt { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.6); margin: 0; }
-.card-footer { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.5rem; margin-top: 2rem; }
-.card-footer-dark { border-top-color: var(--color-border); }
-.author-meta { display: flex; align-items: center; gap: 10px; }
-.author-dot { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; color: rgba(255,255,255,0.7); flex-shrink: 0; }
-.author-dot-dark { background: rgba(10,25,47,0.06); border-color: rgba(10,25,47,0.1); color: var(--color-blue-deep); }
-.author-name { display: block; font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.85); }
-.post-date { display: block; font-size: 0.72rem; color: rgba(255,255,255,0.4); }
-.post-date-dark { color: #aaa; font-size: 0.75rem; font-weight: 500; }
-.read-link { font-size: 0.78rem; font-weight: 700; color: rgba(255,255,255,0.5); transition: color 0.3s, transform 0.3s; }
-.read-link-dark { color: #aaa; }
-.featured-card:hover .read-link { color: #fff; transform: translateX(4px); }
-.post-card:hover .read-link-dark { color: var(--color-blue-deep); transform: translateX(4px); }
-.posts-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
-.post-card { display: flex; flex-direction: column; text-decoration: none; color: inherit; background: var(--color-bg); border: 1px solid var(--color-border); transition: transform 0.4s var(--ease-smooth), box-shadow 0.4s, border-color 0.3s; }
-.post-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.14); }
-.card-visual { height: 200px; position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 1.5rem; }
-.card-body { padding: 2rem; flex: 1; display: flex; flex-direction: column; }
-.card-title { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.4px; line-height: 1.2; margin: 0 0 0.8rem; color: var(--color-text); transition: color 0.3s; }
+
+/* Para asegurar que los números queden sobre el shader canvas (z-index: 0) */
+.relative-z { position: relative; z-index: 1; }
+
+.featured-body {
+  padding: 3.5rem 4rem; display: flex; flex-direction: column; justify-content: space-between;
+}
+.card-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+/* Category Text */
+.cat-label {
+  font-size: 0.65rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+}
+.cat-label-dark {
+  color: var(--color-text-muted);
+}
+.read-time { font-size: 0.75rem; font-weight: 600; color: rgba(255,255,255,0.4); }
+.read-time-dark { color: var(--color-text-muted); }
+
+.featured-title {
+  font-size: clamp(1.8rem, 2.8vw, 2.4rem); font-weight: 800;
+  letter-spacing: -1.2px; line-height: 1.1; margin: 0 0 1.2rem;
+  color: #fff;
+}
+.featured-excerpt { 
+  font-size: 1.05rem; line-height: 1.6; color: rgba(255,255,255,0.65); 
+  margin: 0; font-weight: 400; 
+}
+
+.card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  border-top: 1px solid rgba(255,255,255,0.06); 
+  padding-top: 1.5rem; margin-top: 2rem;
+}
+.card-footer-dark { border-top-color: rgba(0,0,0,0.06); }
+.author-meta { display: flex; align-items: center; gap: 12px; }
+.author-dot {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.8); flex-shrink: 0;
+}
+.author-dot-dark { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.06); color: var(--color-text); }
+.author-name { display: block; font-size: 0.85rem; font-weight: 700; color: rgba(255,255,255,0.9); }
+.post-date { display: block; font-size: 0.75rem; color: rgba(255,255,255,0.45); }
+.post-date-dark { color: rgba(0,0,0,0.5); font-weight: 500; }
+.read-link {
+  font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.5);
+  transition: color 0.4s, transform 0.4s; display: inline-flex; align-items: center; gap: 4px;
+}
+.read-link-dark { color: rgba(0,0,0,0.4); }
+.featured-card:hover .read-link { color: #fff; transform: translateX(6px); }
+.post-card:hover .read-link-dark { color: var(--color-text); transform: translateX(6px); }
+
+/* GRID */
+.posts-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem;
+}
+.post-card {
+  display: flex; flex-direction: column; text-decoration: none; color: inherit;
+  
+  /* Apple Light Mode Elevated Aesthetic */
+  background: #ffffff; 
+  border: 1px solid rgba(0,0,0,0.04);
+  box-shadow: 
+    0 2px 8px rgba(0,0,0,0.02),
+    0 16px 32px rgba(0,0,0,0.03);
+    
+  position: relative; top: 0;
+  transition: top 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth), border-color 0.6s;
+}
+.post-card:hover {
+  top: -6px;
+  border-color: rgba(0,0,0,0.08);
+  box-shadow: 
+    0 4px 12px rgba(0,0,0,0.04),
+    0 24px 48px rgba(0,0,0,0.08);
+}
+.card-visual {
+  height: 220px; position: relative; overflow: hidden;
+  display: flex; align-items: flex-end; padding: 1.5rem;
+  border-bottom: 1px solid rgba(0,0,0,0.03);
+}
+.card-body { padding: 2.5rem 2.5rem; flex: 1; display: flex; flex-direction: column; }
+.card-title {
+  font-size: 1.45rem; font-weight: 800; letter-spacing: -0.8px; line-height: 1.15;
+  margin: 0 0 1rem; color: var(--color-text);
+  transition: color 0.4s;
+}
 .post-card:hover .card-title { color: var(--color-blue-deep); }
-.card-excerpt { font-size: 0.93rem; line-height: 1.7; color: var(--color-text-muted); margin: 0; flex: 1; }
+.card-excerpt { 
+  font-size: 0.95rem; line-height: 1.6; color: var(--color-text-muted); 
+  margin: 0; flex: 1; font-weight: 400;
+}
+
+/* CTA */
 .blog-cta { padding: 0 0 6rem; background: var(--color-bg-soft); }
-.cta-inner { background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%); padding: 4.5rem 5rem; display: flex; justify-content: space-between; align-items: center; gap: 3rem; position: relative; overflow: hidden; }
+.cta-inner {
+  background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%);
+  padding: 4.5rem 5rem;
+  display: flex; justify-content: space-between; align-items: center; gap: 3rem;
+  position: relative; overflow: hidden;
+}
+.cta-inner::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.04; mix-blend-mode: overlay; pointer-events: none;
+}
 .cta-text { position: relative; z-index: 1; }
 .cta-text h2 { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 800; color: rgba(255,255,255,0.92); letter-spacing: -1px; margin: 0; line-height: 1.1; }
-.cta-badge { display: inline-flex; align-items: center; gap: 8px; margin-top: 1.4rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: rgba(255,255,255,0.8); border: 1px solid rgba(16,185,129,0.3); background: rgba(16,185,129,0.08); padding: 6px 14px; border-radius: 50px; }
-.cta-badge-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px rgba(16,185,129,0.6); }
-.cta-btn { display: inline-flex; align-items: center; gap: 10px; background: #fff; color: var(--color-blue-deep); padding: 16px 32px; border-radius: 100px; text-decoration: none; font-size: 0.95rem; font-weight: 700; transition: all 0.4s var(--ease-smooth); white-space: nowrap; flex-shrink: 0; position: relative; z-index: 1; }
-.cta-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(255,255,255,0.15); }
-.post-card-wrapper.hidden, .featured-wrapper.hidden { display: none; }
-@media (max-width: 1024px) { .featured-card { grid-template-columns: 1fr; } .featured-visual { min-height: 240px; } .posts-grid { grid-template-columns: 1fr; } }
-@media (max-width: 768px) { .blog-hero { padding: 11rem 0 4rem; } .blog-title { letter-spacing: -1.5px; } .blog-body { padding: 3rem 0 4rem; } .featured-body { padding: 2rem; } .featured-title { font-size: 1.5rem; } .card-body { padding: 1.5rem; } .cta-inner { flex-direction: column; padding: 3rem 2rem; text-align: center; } .cta-badge { margin-left: auto; margin-right: auto; } .cta-btn { width: 100%; justify-content: center; } .blog-cta { padding: 0 5% 4rem; } }
+.cta-badge {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 1.4rem;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+  color: rgba(255,255,255,0.8); border: 1px solid rgba(16,185,129,0.3);
+  background: rgba(16,185,129,0.08); padding: 6px 14px; border-radius: 50px;
+}
+/* HIDDEN CARDS */
+.post-card-wrapper.hidden,
+.featured-wrapper.hidden { display: none !important; }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .featured-card { grid-template-columns: 1fr; }
+  .featured-visual { min-height: 240px; }
+  .posts-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .blog-hero { padding: 8.5rem 0 3rem; }
+  .blog-header-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .blog-header-top .right-col {
+    text-align: left;
+    align-items: flex-start;
+  }
+  .blog-header-top .blog-desc {
+    text-align: left;
+  }
+  .blog-body { padding: 3rem 0 4rem; }
+  .featured-body { padding: 2rem; }
+  .featured-title { font-size: 1.5rem; }
+  .card-body { padding: 1.5rem; }
+  .cta-inner { flex-direction: column; padding: 3rem 2rem; text-align: center; }
+  .cta-badge { margin-left: auto; margin-right: auto; }
+  .cta-btn { width: 100%; justify-content: center; }
+  .blog-cta { padding: 0 5% 4rem; }
+}
 </style>
 
 <script>
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { initFluidShaders } from '../../../components/blog/FluidShader';
+
 gsap.registerPlugin(ScrollTrigger);
 
+// Recalcula posiciones tras fuentes+carga para que los triggers ya pasados disparen.
 const robustRefresh = () => {
   const winLoad = new Promise<void>((resolve) => {
     if (document.readyState === 'complete') resolve();
@@ -312,47 +484,11 @@ const robustRefresh = () => {
 robustRefresh();
 
 document.addEventListener('DOMContentLoaded', () => {
+  // reduced-motion — al inicio para que todo el bloque lo use
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ── INDICADOR DESLIZANTE ──
-  const glass     = document.getElementById('filter-glass');
-  const indicator = document.getElementById('filter-indicator');
-  let slideIndicator: ((el: HTMLElement, animate?: boolean) => void) | null = null;
-
-  if (glass && indicator && !reduced) {
-    const rectOf = (el: HTMLElement) => {
-      const gr = glass.getBoundingClientRect();
-      const r  = el.getBoundingClientRect();
-      return { x: r.left - gr.left, y: r.top - gr.top, width: r.width, height: r.height };
-    };
-    let indicatorVisible = false;
-    slideIndicator = (el: HTMLElement, animate = true) => {
-      if (!indicatorVisible) {
-        gsap.set(indicator, { ...rectOf(el), opacity: 1 });
-        indicatorVisible = true;
-      } else {
-        gsap.to(indicator, { ...rectOf(el), opacity: 1, duration: animate ? 0.48 : 0, ease: 'power3.out', overwrite: true });
-      }
-    };
-    const initialActive = glass.querySelector<HTMLElement>('.filter-pill.active');
-    if (initialActive) slideIndicator(initialActive, false);
-    const pills2 = glass.querySelectorAll<HTMLButtonElement>('.filter-pill');
-    pills2.forEach(p => p.addEventListener('mouseenter', () => slideIndicator!(p)));
-    glass.addEventListener('mouseleave', () => {
-      const active = glass.querySelector<HTMLElement>('.filter-pill.active');
-      if (active) slideIndicator!(active);
-    });
-    const relayout = () => {
-      const active = glass.querySelector<HTMLElement>('.filter-pill.active');
-      if (active) slideIndicator!(active, false);
-    };
-    if (document.fonts?.ready) document.fonts.ready.then(() => relayout());
-    window.addEventListener('load', relayout, { once: true });
-    window.addEventListener('resize', relayout, { passive: true });
-  }
-
-  // ── FILTRO ──
-  const pills = document.querySelectorAll<HTMLButtonElement>('.filter-pill');
+  // ── FILTRO — lógica de visibilidad ──
+  const pills = document.querySelectorAll<HTMLButtonElement>('.filter-link');
   const featured = document.querySelector<HTMLElement>('.featured-wrapper');
   const cards = document.querySelectorAll<HTMLElement>('.post-card-wrapper');
   pills.forEach(pill => {
@@ -362,25 +498,25 @@ document.addEventListener('DOMContentLoaded', () => {
       const filter = pill.dataset.filter;
       if (featured) featured.classList.toggle('hidden', filter !== 'all' && featured.dataset.category !== filter);
       cards.forEach(card => card.classList.toggle('hidden', filter !== 'all' && card.dataset.category !== filter));
-      if (slideIndicator) slideIndicator(pill);
+      setTimeout(() => ScrollTrigger.refresh(), 100);
     });
   });
 
+  // Con reduced-motion → no animamos nada (la clase .js-anim tampoco se añade).
   if (reduced) return;
 
   const EASE = 'power2.out';
 
+  // ── HERO — entrada en carga (estándar único del sitio: fade + leve subida) ──
   const heroAnim = gsap.utils.toArray<HTMLElement>('.blog-anim');
   if (heroAnim.length) {
     gsap.set(heroAnim, { opacity: 0, y: 12 });
     gsap.timeline({ defaults: { ease: EASE } })
-      .to('.blog-status',    { opacity: 1, y: 0, duration: 0.9 }, 0)
-      .to('.blog-eyebrow',   { opacity: 1, y: 0, duration: 0.9 }, 0.1)
-      .to('.blog-title',     { opacity: 1, y: 0, duration: 1.0 }, 0.2)
-      .to('.blog-desc',      { opacity: 1, y: 0, duration: 0.9 }, 0.4)
-      .to('.blog-hero-meta', { opacity: 1, y: 0, duration: 0.8 }, 0.55);
+      .to('.blog-header-top', { opacity: 1, y: 0, duration: 1.0 }, 0)
+      .to('.featured-wrapper', { opacity: 1, y: 0, duration: 1.0 }, 0.15);
   }
 
+  // ── Reveal robusto (sin parpadeo): oculta de entrada + revela 1 vez ──
   const reveal = (
     targets: string | HTMLElement,
     opts: { trigger?: string | HTMLElement; start?: string; y?: number; dur?: number; stagger?: number } = {}
@@ -399,10 +535,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  reveal('.featured-card', { trigger: '.featured-wrapper', y: 24, dur: 1.0, start: 'top 85%' });
   gsap.utils.toArray<HTMLElement>('.post-card').forEach((card) => {
     reveal(card, { trigger: card, y: 16, dur: 0.9, start: 'top 90%' });
   });
   reveal('.cta-inner', { trigger: '.blog-cta', y: 24, dur: 1.0, start: 'top 88%' });
+
+  // Inicializar WebGL Fluids
+  initFluidShaders();
 });
 </script>

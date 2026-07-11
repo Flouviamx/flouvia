@@ -46,7 +46,7 @@ export const ui = {
     'serv.why.3.desc': 'UX fundamentada en datos y patrones de compra.',
     'serv.why.btn': 'Agendar Diagnóstico',
     'serv.sticky.btn': 'Iniciar Arquitectura',
-    
+
     'serv.1.cat': '01 — E-COMMERCE',
     'serv.1.title': 'E-Commerce Engineering.',
     'serv.1.desc': 'Tu tienda tarda en cargar, pierdes ventas en el checkout y dependes de apps que rompen todo cuando hay tráfico. Reconstruimos tu e-commerce en Shopify Plus con código nativo: cargas instantáneas, checkout optimizado y arquitectura que escala sin fricción.',
@@ -93,6 +93,9 @@ export const ui = {
     'serv.choose.1.title': 'Cero Deuda Técnica', 'serv.choose.1.desc': 'Cada app que añades a tu tienda es una dependencia que puede romperse sola. Escribimos código nativo, modular y limpio — sin plantillas, sin apps de terceros, sin sorpresas cuando escala el tráfico.',
     'serv.choose.2.title': 'Expertise Singular', 'serv.choose.2.desc': 'Hacemos una sola cosa: construir sistemas que generan revenue. No redes, no branding, no diseño decorativo. Esa especialización es la razón por la que nuestros sistemas convierten más.',
     'serv.choose.3.title': 'Metodología Predictiva', 'serv.choose.3.desc': 'No tomamos decisiones de diseño basadas en preferencias. Cada elemento que construimos tiene una hipótesis, un dato que la respalda y una métrica que la valida. Así se construye algo que escala sin adivinanzas.',
+    'serv.choose.4.title': 'Infraestructura Escalable', 'serv.choose.4.desc': 'Diseñamos arquitecturas robustas preparadas para absorber picos de tráfico masivo durante temporadas altas sin latencia, caídas ni pérdida de transacciones.',
+    'serv.choose.5.title': 'Integraciones a Medida', 'serv.choose.5.desc': 'Conectamos tu ecosistema tecnológico de forma nativa. Sincronizamos e-commerce con ERPs, CRMs y sistemas de logística en tiempo real, automatizando flujos críticos de tu operación.',
+    'serv.choose.6.title': 'Transparencia Absoluta', 'serv.choose.6.desc': 'Operamos bajo un esquema de código abierto interno. El repositorio, la documentación técnica y el código te pertenecen desde el día uno, sin contratos que te aten a nosotros.',
 
     // NOSOTROS
     'about.hero.status': 'ACEPTANDO PROYECTOS Q3',
@@ -134,11 +137,11 @@ export const ui = {
     'about.rev1.role': 'Director Comercial, El Zarco',
     'about.rev1.context': 'Distribuidora mayorista · +150 clientes activos · CDMX',
     'about.rev1.metric': '−67% tiempo de proceso · +25% AOV',
-    'about.rev2.text': 'Migrar a arquitectura headless con Flouvia subió nuestra conversión un 42% en el primer trimestre. La tienda carga en menos de un segundo y la diferencia es visible en cada métrica.',
-    'about.rev2.author': 'Diego Godoy',
-    'about.rev2.role': 'CEO, Setnpet',
-    'about.rev2.context': 'E-commerce D2C · Migración a Shopify Plus Headless · CDMX',
-    'about.rev2.metric': '+42% Conversion Rate · 3× retención LTV',
+    'about.rev2.text': 'El equipo de Flouvia desarrolló la infraestructura base de nuestro SaaS desde cero. Hoy Cord procesa miles de cotizaciones B2B y timbra CFDI 4.0 automáticamente sin caídas, con una arquitectura impecable.',
+    'about.rev2.author': 'Andre Valle',
+    'about.rev2.role': 'CEO, Cord',
+    'about.rev2.context': 'SaaS B2B · Software B2B',
+    'about.rev2.metric': 'Miles de cotizaciones · 99.9% Uptime',
     'about.cta.badge': 'EL SIGUIENTE NIVEL — Q3',
     'about.cta.avail': 'ACEPTANDO PROYECTOS Q3 · 2 cupos disponibles',
     'about.cta.title': '2 proyectos disponibles este trimestre.',
@@ -346,7 +349,7 @@ export const ui = {
     'nav.cases': 'CASES',
     'nav.contact': 'CONTACT',
     'nav.login': 'LOGIN',
-    
+
     // INICIO
     'hero.badge': 'PRIVATE GROWTH BOUTIQUE',
     'hero.title1': 'We build the system that grows',
@@ -372,7 +375,7 @@ export const ui = {
     'serv.why.3.title': 'Conversion', 'serv.why.3.desc': 'UX based on data and buying patterns.',
     'serv.why.btn': 'Schedule Diagnostics',
     'serv.sticky.btn': 'Start Architecture',
-    
+
     'serv.1.cat': '01 — E-COMMERCE',
     'serv.1.title': 'E-Commerce Engineering.',
     'serv.1.desc': 'Your store loads slowly, you bleed sales at checkout, and you depend on apps that break under traffic. We rebuild your e-commerce on Shopify Plus with native code: instant loads, optimized checkout, and architecture that scales without friction.',
@@ -419,6 +422,9 @@ export const ui = {
     'serv.choose.1.title': 'Zero Technical Debt', 'serv.choose.1.desc': 'Every app you add to your store is a dependency that can break on its own. We write native, modular, clean code — no templates, no third-party apps, no surprises when traffic scales.',
     'serv.choose.2.title': 'Singular Expertise', 'serv.choose.2.desc': 'We do one thing: build systems that generate revenue. No social, no branding, no decorative design. That specialization is exactly why our systems convert more.',
     'serv.choose.3.title': 'Predictive Methodology', 'serv.choose.3.desc': 'We don\'t make design decisions based on preferences. Every element we build has a hypothesis, data that backs it, and a metric that validates it. That\'s how you build something that scales without guesswork.',
+    'serv.choose.4.title': 'Scalable Infrastructure', 'serv.choose.4.desc': 'We design robust architectures prepared to absorb massive traffic spikes during peak seasons without latency, crashes, or dropped transactions.',
+    'serv.choose.5.title': 'Custom Integrations', 'serv.choose.5.desc': 'We connect your tech ecosystem natively. We synchronize e-commerce with ERPs, CRMs, and logistics systems in real-time, automating your critical operational workflows.',
+    'serv.choose.6.title': 'Absolute Transparency', 'serv.choose.6.desc': 'We operate under an internal open-source model. The repository, technical documentation, and code belong to you from day one, with no lock-in contracts.',
 
     // NOSOTROS
     'about.hero.status': 'ACCEPTING Q3 PROJECTS',
@@ -460,11 +466,11 @@ export const ui = {
     'about.rev1.role': 'Commercial Director, El Zarco',
     'about.rev1.context': 'Wholesale distributor · 150+ active clients · Mexico City',
     'about.rev1.metric': '−67% processing time · +25% AOV',
-    'about.rev2.text': 'Migrating to a headless architecture with Flouvia raised our conversion 42% in the first quarter. The store loads in under a second, and the difference shows in every metric.',
-    'about.rev2.author': 'Diego Godoy',
-    'about.rev2.role': 'CEO, Setnpet',
-    'about.rev2.context': 'D2C e-commerce · Shopify Plus Headless migration · Mexico City',
-    'about.rev2.metric': '+42% Conversion Rate · 3× LTV retention',
+    'about.rev2.text': 'The Flouvia team built the core infrastructure of our SaaS from the ground up. Today Cord processes thousands of B2B quotes and issues invoices automatically with zero downtime, using a flawless modern architecture.',
+    'about.rev2.author': 'Andre Valle',
+    'about.rev2.role': 'CEO, Cord',
+    'about.rev2.context': 'B2B SaaS',
+    'about.rev2.metric': 'Thousands of quotes · 99.9% Uptime',
     'about.cta.badge': 'THE NEXT LEVEL — Q3',
     'about.cta.avail': 'ACCEPTING Q3 PROJECTS · 2 slots open',
     'about.cta.title': '2 projects open this quarter.',

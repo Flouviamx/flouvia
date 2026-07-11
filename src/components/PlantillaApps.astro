@@ -163,33 +163,9 @@ const collectionSchema = {
       </div>
     </section>
 
-    <section class="cta-final-clean">
-      <div class="container">
-        <div class="cta-squircle cta-box-refined" id="cta-card">
-          <div class="texture-noise-micro"></div>
-          <div class="cta-flex relative-z">
-            <div class="cta-text">
-              <p class="eyebrow" style="color: rgba(255,255,255,0.5); letter-spacing: 4px;">
-                {isEn ? 'SHOPIFY APP STORE' : 'SHOPIFY APP STORE'}
-              </p>
-              <h2 class="cta-title">
-                {isEn ? 'Install it. See it work.' : 'Instálala. Míra cómo funciona.'}
-              </h2>
-            </div>
-            <div class="cta-action">
-              <a href={`${root}/apps/${liveApps[0]?.slug ?? ''}`} class="btn-luxe-main">
-                <span>{isEn ? 'Explore the app →' : 'Explorar la app →'}</span>
-              </a>
-              <span class="cta-badge"><span class="cta-badge-dot" aria-hidden="true"></span>{isEn ? 'Free to install' : 'Gratis para instalar'}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
   </main>
 
-  <Footer />
+  <Footer ctaTitleEs="Automatiza y optimiza tu flujo de trabajo." ctaTitleEn="Automate and optimize your workflow." ctaBtnEs="Crear app a la medida" ctaBtnEn="Build a custom app" />
 </Layout>
 
 <style is:global>

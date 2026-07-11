@@ -21,7 +21,7 @@ Node requerido: **>=22.12.0** (ver `.nvmrc`)
 | Auth | Clerk (`@clerk/astro`) |
 | DB / Storage | Supabase (PostgreSQL + Storage bucket `boveda`) |
 | Animaciones | GSAP 3 + ScrollTrigger (SplitText eliminado) |
-| Tipografía | Instrument Serif (serif/editorial) + Inter (sans) |
+| Tipografía | Inter (sans) — Instrument Serif ha sido eliminado (Julio 2026) |
 
 ---
 
@@ -417,13 +417,18 @@ porque depende de datos dinámicos del caso.
 
 ---
 
-## Animaciones — GSAP (estándar de todo el sitio)
+## Animaciones — GSAP & WebGL (estándar del sitio)
 
-> **Filosofía actual (mayo 2026):** minimalista, sutil, smooth. El usuario rechazó
+> **Filosofía actual (mayo/julio 2026):** minimalista, sutil, smooth. El usuario rechazó
 > explícitamente: SplitText "frase construyéndose", botones magnetic, entradas
 > cinemáticas multicapa y cualquier blur/scale dramático. **Un solo estándar para
 > todo el sitio.** Esta sección reemplaza las reglas viejas (SplitText, magnetic,
 > `immediateRender:false`, coreografías) — no reintroducir esos patrones.
+>
+> **WebGL Shaders (Julio 2026):** Se incorporaron fluid shaders interactivos para los
+> fondos de tarjetas (ej. Blog y Cord). Estos se renderizan en `<canvas>` absolutos 
+> (`z-index: 0`) detrás del contenido (`.relative-z`), manteniendo la elegancia técnica 
+> y el performance.
 >
 > Aplica a: `Inicio.astro`, `PlantillaCasos.astro`, `PlantillaCaso.astro`,
 > `PlantillaContacto.astro`, `PlantillaServicios.astro`, `PlantillaNosotros.astro`, `Footer.astro`,
@@ -507,7 +512,6 @@ nada y todo queda visible (la clase `.js-anim` tampoco se añade).
 --color-text-muted: #555556
 --color-border: rgba(0,0,0,0.08)
 --font-sans: 'Inter'
---font-serif: 'Instrument Serif'
 --ease-ios: cubic-bezier(0.25, 1, 0.5, 1)
 --ease-spring: cubic-bezier(0.22, 1, 0.36, 1)   /* sin overshoot — suavizado (antes 1.05) */
 --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1)
@@ -521,28 +525,25 @@ nada y todo queda visible (la clase `.js-anim` tampoco se añade).
 
 **Filosofía:** minimalista, caro, lujoso. Referencias visuales: Apple, Stripe, Bottega Veneta, Aesop.
 
-**Tipografía editorial:**
-- Cualquier número o "tier" debe ir en **`Instrument Serif italic`** — nunca números en sans bold.
-  - Ej: `<span class="editorial">.js</span>`, `<span class="tool-tier"> Plus</span>`, `/01` en serif italic
-- **Títulos = una sola tipografía (Inter bold). REGLA ACTUAL (mayo 2026):** los H1/H2/headings van
-  **completos en `Inter` bold**, sin palabra-acento en serif italic. Esto **anula** la regla vieja
-  de "palabra-acento en serif que rompe el bold sans". El serif italic se reserva para **números,
-  tiers y watermarks**, no para texto de títulos.
-  - Ej aplicado en Contacto: H1 "Aplica. / Evaluamos el fit." y el H2 de éxito "Nos ponemos / en
-    contacto." son 100% bold sans (se eliminaron `.title-accent`/`.ds-serif`).
-  - Nota: en `Inicio.astro` algunos `section-heading` aún traen acento serif heredado; migrarlos a
-    una sola tipografía cuando se toquen.
-  - Las páginas legales (`privacidad.astro`, `terminos.astro`, `en/privacy.astro`, `en/terms.astro`) ya migradas a una sola tipografía (junio 2026). Sus `.section-num` usan serif italic.
-- Eyebrows: `0.65rem`, weight 800, letter-spacing 3px, uppercase, color `#888`
+**Tipografía editorial (Actualizado Julio 2026):**
+- **Eliminación del estilo Serif/Elegante:** Se elimina `Instrument Serif` en favor de `Inter` (sans) para un estilo más moderno y directo.
+- **Números:** Los números grandes decorativos han sido removidos (especialmente en tarjetas de blog) para lograr máxima limpieza. Donde sean estrictamente necesarios, van en `01`, `02` sans-serif (no serif italic ni con barra `/`).
+- **Títulos = una sola tipografía (Inter bold).** Los H1/H2/headings van completos en `Inter` bold. En interiores (ej. Blog) usan la escala estandarizada `clamp(1.9rem, 3.6vw, 3.4rem)`.
+- Eyebrows: Globalmente ocultos vía `Layout.astro` (`[class*="eyebrow"] { display: none !important; }`), EXCEPTO en componentes del Footer (donde sí se utilizan).
 
-**Watermarks de fondo:**
-- Cada sección importante tiene un watermark de su nombre en serif italic, tamaño `20-22vw`, color `rgba(0,0,0,0.025)` (light) o `rgba(255,255,255,0.035)` (dark)
-- Posicionado bottom-right o left con parallax suave en scroll
+**Watermarks de fondo (Eliminados Julio 2026):**
+- Todos los watermarks gigantes en el fondo de las secciones han sido removidos por completo en todo el sitio para mantener una interfaz aún más limpia, profesional y libre de ruido visual.
 
 **Cards / containers:**
 - NO usar `border` blanco en fondo oscuro (causa "líneas grises" perceptibles). Usar `box-shadow` profundo en su lugar.
 - Border-radius: 24px (squircle) para cards normales, 28-32px para containers grandes
 - Shadows luxe: `0 24px 60px rgba(0,0,0,0.35)` para cards en dark, `0 30px 80px -30px rgba(10,25,47,0.08)` para containers en light
+
+**Blog & Shaders (Actualizado Julio 2026):**
+- **WebGL Fluid Shader:** Se eliminaron las cuadrículas estáticas (`.visual-grid-lines`) de las tarjetas del blog en favor de un shader de fluido WebGL ultraligero y de alto rendimiento, implementado con `OffscreenCanvas` y Vanilla WebGL.
+- **Minimalismo absoluto:** El shader es completamente pasivo (no reacciona al mouse ni emite luz). Es un gradiente fluido lento y elegante (mayormente oscuro), que mezcla de forma sutil un 12% del color de la categoría (`data-shader-color`) usando simplex noise y ruido esmerilado, manteniendo una estética *Apple/Stripe* extremadamente sobria.
+- **Categorías y Filtros:** Se eliminaron las pastillas coloridas (`.cat-pill`). Ahora las categorías usan enlaces de texto simple que se subrayan al hover, fusionándose con el diseño sin crear ruido visual. El filtro JS oculta tarjetas manipulando `.hidden` con `display: none !important` y forzando `ScrollTrigger.refresh()`.
+- **Datos y Ordenamiento:** El arreglo principal de posts exportado en `src/data/blog.ts` aplica automáticamente un `.sort()` descendente por fecha (`post.date`), garantizando un listado cronológico sin intervención manual.
 
 **Easings — qué usar/no usar:**
 - ✅ `power2.out` — estándar de TODAS las entradas del home (sutil, sin overshoot)
@@ -565,7 +566,7 @@ Hero (white)        — clamp(1.9rem, 3.6vw, 3.4rem) title (reducido), fade en c
 Tech (white)        — Tira de logos minimalista: 8 logos grises (.strip-logo) en
                       grid 4-col centrado, sin tarjetas ni hover navy. Header centrado.
 Casos (dark navy)   — Carrusel horizontal scroll-snap, Ken Burns (scale) en hover
-Servicios (white)   — Lista vertical de 4 rows, números editorial serif italic 2.6rem
+Servicios (white)   — Lista vertical de 4 rows, números 2rem sans-serif (01, 02...)
 Protocolo (gray)    — Sticky 2-col + timeline track con gradient + step counter
 CTA (gray + dark)   — Card oscura con mouse-tracking glow
 Footer (dark navy)  — Watermark "Flouvia" 26vw. Grid 5fr/7fr: columna de marca
@@ -578,17 +579,38 @@ Footer (dark navy)  — Watermark "Flouvia" 26vw. Grid 5fr/7fr: columna de marca
 > que iban debajo del hero) y el grid editorial de tarjetas del bloque Tech (con
 > hover navy, números y labels). El bloque Tech ahora es solo la tira de logos.
 
+**Pattern de Layout (Split Header):**
+- Por defecto, TODAS las secciones (excepto el Hero) usan un layout "Split Header".
+- **Izquierda:** El título de la sección (`<h2>`).
+- **Derecha:** El subtítulo/texto explicativo (`<p class="section-intro">`).
+- Esto reemplaza el antiguo patrón centrado, otorgando un look más limpio y estructurado a los inicios de sección en pantallas de escritorio. En móvil, se apilan verticalmente.
+
 **Pattern de "active step" (Protocolo y similar):**
 - ScrollTrigger sin scrub con `start: 'top 55%'` y `end: 'bottom 45%'` para detectar qué paso es el más visible
 - Toggle clase `.is-active` con `onEnter`/`onEnterBack`/`onLeave`/`onLeaveBack`
 - Contador "01 / 04" en sticky col se actualiza con animación `fromTo` (y: -10 → 0, opacity: 0 → 1)
 - Barra de progreso (1px de alto) con scrub para llenarse conforme avanza el scroll
 
-**Footer pattern** (`src/components/Footer.astro` — rediseñado mayo 2026):
+**FAQ Pattern (Actualizado Julio 2026):**
+- **Estética Apple/Minimalista:** Diseño en 2 columnas (desktop) donde el encabezado (`.faq-header`) permanece fijo (sticky) a la izquierda y las preguntas (`.faq-list`) hacen scroll a la derecha.
+- **Acordeón Custom:** Se eliminó el uso de `<details>` nativo por problemas de animación. Ahora se usan botones (`.faq-q`) y divs (`.faq-a`), controlando la altura con GSAP.
+- **Interacción Exclusiva:** Al abrir una pregunta, se despliega suavemente y cierra automáticamente las demás.
+- **Iconografía Clean:** Ícono de + / - construido con `span`s de 1.5px de grosor que rotan con un easing `spring` suave.
+- **Tipografía:** Las preguntas usan Inter Medium (500) con `letter-spacing` negativo. Al hacer hover, el color se atenúa ligeramente.
+
+**Footer pattern** (`src/components/Footer.astro` — rediseñado mayo/julio 2026):
 
 > **Objetivo del rediseño:** dar protagonismo al correo (antes era un link pequeño
 > perdido al pie de la columna de marca) y reordenar el contenido con eje de
 > exclusividad. El correo es ahora el **CTA principal** del footer.
+> **Actualización Julio 2026 (Unified CTA):** Todos los CTA finales de página se fusionaron
+> visualmente y estructuralmente en el componente `Footer.astro`. Ya NO se usa `<slot name="cta" />`.
+> El Footer ahora recibe `props` (`ctaTitleEs`, `ctaBtnEs`, etc.) para inyectar copy dinámico
+> y de alta conversión dependiendo de la página (usando principios de marketing/copywriting).
+> **Reglas estrictas de diseño del CTA del Footer:** 
+> - **Cero serif:** El título principal del CTA (`.unified-cta-title`) debe ser 100% sans-serif (Inter) y audaz (`font-weight: 800`).
+> - **Botón limpio (sin brillo):** El `.unified-cta-btn` no debe usar `box-shadow` ni glow effect. Emplea la flecha `.cta-arrow` con `transform: translateX(4px)` en hover para igualar la animación del resto del sitio.
+> - **Ocultar CTA:** Si la página ya cumple el propósito del CTA (ej. `/contacto`), pasar la prop `hideCta={true}` al Footer para evitar redundancia.
 
 **Estructura (de arriba a abajo):**
 1. `.top-hairline` — línea con gradient que desvanece a los lados.
@@ -783,7 +805,7 @@ navbars (público y portal); el switch del portal también recibió el crossfade
 | `src/components/Navbar.astro` | Navbar con glassmorphism y dark-mode adaptativo |
 | `src/components/PlantillaContacto.astro` | Página `/contacto` (y `/en/contacto`) — hero estándar home + formulario por pasos. Ver sección "Página de Contacto". |
 | `src/components/PlantillaServicios.astro` | Página `/servicios` (y `/en/servicios`) — rediseñada mayo 2026. Ver sección "Página de Servicios". |
-| `src/components/PlantillaCasos.astro` | Página `/casos` (listing). Hero estándar home + grid 2-col + slot card + CTAs de escasez. Ver "Página de Casos". |
+| `src/components/PlantillaCasos.astro` | Página `/casos` (listing). Hero estándar home + grid 2-col. Simplificada (Julio 2026): sin CTAs de escasez adicionales. Ver "Página de Casos". |
 | `src/components/PlantillaCaso.astro` | Template **compartido** del caso individual (`/casos/{slug}` y `/en/casos/{slug}`). Ambas `[slug].astro` son wrappers que le pasan `caso/next/isEn/root`. Lee todo de `data/casos.ts`. Ver "Página de Casos". |
 | `src/components/PlantillaApps.astro` | Listing de apps de Shopify (`/apps` y `/en/apps`). Grid de apps `live` + slots `soon`. Hero estándar home. Ver "Página de Apps". |
 | `src/components/PlantillaApp.astro` | Template **compartido** del detalle de app (`/apps/{slug}` y `/en/apps/{slug}`). Hero con botón Instalar + info-card lateral, problema, features, FAQ, CTA. Lee de `data/apps.ts`. Ver "Página de Apps". |
@@ -879,8 +901,8 @@ Las pills de categoría (Todos / B2B / E-commerce / Automatización) usan el mis
 Hero (white, 100svh)   — mismo estándar que la home: status pill de escasez + eyebrow +
                          H1 bold (una sola tipografía, sin serif) + hero-bottom (desc + CTA scroll).
                          CTA "Iniciar solicitud ↓" hace scroll a #form-zone.
-Trust strip (NAVY)     — banda oscura estilo Casos: radial-gradient navy + watermark serif
-                         "Evidencia". 3 métricas reales (−67% El Zarco · +42% / 3× Setnpet) en
+Trust strip (NAVY)     — `Resultados` (gris, full-width) — grid de 2-4 métricas destacadas bajo la sección
+                         "Evidencia". 3 métricas reales (−67% El Zarco · +42% / 3× Cord) en
                          serif italic BLANCO + nota de escasez. Sin testimonio (no inventar).
 Executive contact      — grid 320px/1fr: sidebar sticky + formulario por pasos (#form-zone).
                          Watermark serif "Aplica" muy faint detrás; overflow:clip.
@@ -990,11 +1012,9 @@ fade-in vía CSS (no GSAP), `var(--ease-smooth)`. Toda la lógica vive en el `<s
   + H1 bold "Lo que construimos. / Lo que midió." + CTA `#case-grid` "Explorar casos ↓".
 - **Badge de disponibilidad** (`.avail-badge`) arriba del grid (Loss Aversion en el momento de
   lectura) + **badge "● Sistema activo"** (`.active-badge`) sobre cada imagen.
-- **Slot card** (`.slot-card`, `grid-column: 1/-1`, borde punteado) = tercer card "Tu proyecto
-  aquí" → `/contacto` (Mimetic Desire).
-- CTA intermedio "¿Tu operación tiene un reto similar?" + CTA final "El siguiente caso podría
-  ser el tuyo." con badge "● 2 proyectos disponibles".
-- Title/description con métricas (El Zarco +25% AOV · Setnpet +42%); el resto de OG/canonical
+- **Simplificación (Julio 2026)**: Se eliminó la `slot-card` final ("Tu proyecto aquí"), el banner intermedio de "¿Tu operación tiene un reto similar?" y el CTA del footer personalizado. Todo esto se fusionó con la barra inferior estándar de `<Footer>`.
+- **Fondos WebGL**: Tarjetas estelares (como Cord) utilizan `FluidShader` en el fondo.
+- Title/description con métricas (El Zarco +25% AOV · Cord +42%); el resto de OG/canonical
   lo genera `Layout.astro`.
 
 ### Detalle — `/casos/{slug}` (`PlantillaCaso.astro` — componente compartido)
@@ -1046,7 +1066,7 @@ Manifiesto (white)        — Grid 2 col: imagen (parallax leve) + texto sticky.
 ADN / Principios (white)  — 3 tarjetas monolith: 01 Transparencia · 02 Código de Autor ·
                             03 ROI. Watermark editorial /01/02/03 dentro de la tarjeta.
 Resultados (white)        — 4 métricas ESTÁTICAS con fuente visible. NO hay contadores JS.
-                            Valores: +42% CR (Setnpet), −67% tiempo (El Zarco), +25% AOV
+                            Valores: +42% CR (Cord), −67% tiempo (El Zarco), +25% AOV
                             (El Zarco), <8 proyectos/año. Fuente citable por AI.
 ¿Por qué Flouvia? (navy)  — Bandita slim (padding ~1.5rem). Título compacto izquierda +
                             divisor + texto filtro-cliente + botón derecha. Una sola fila.
@@ -1061,7 +1081,7 @@ CTA final (navy)          — Escasez: "2 proyectos disponibles este trimestre" 
 `AboutPage` + `Organization` inline en el `<head>` vía `set:html`:
 - `foundingDate: '2024'`, `foundingLocation: 'Ciudad de México'`
 - `areaServed: ['México', 'Estados Unidos']`
-- `mentions`: El Zarco (distribuidora mayorista B2B) + Setnpet (D2C Shopify Plus)
+- `mentions`: El Zarco (distribuidora mayorista B2B) + Cord (SaaS B2B)
 - `breadcrumb` localizado por idioma
 Actualizar `mentions` si se agregan nuevos casos de estudio.
 
@@ -1195,6 +1215,27 @@ Helpers exportados: `liveApps` / `soonApps`.
 3. Apuntar `icon:` e `image:` a esos archivos.
 4. Cuando haya reseñas, descomentar `rating: { value, count }`.
 5. Build automáticamente genera `/apps/{slug}` y `/en/apps/{slug}`.
+
+---
+
+## Página de Servicios (`PlantillaServicios.astro`)
+
+> Rediseñada julio 2026: eliminación total de tipografías Serif y Watermarks para alinearla al minimalismo "pro" del resto de la plataforma. La sección "¿Por qué Flouvia?" fue convertida en un Acordeón Horizontal Dinámico (inspiración Stripe/Apple).
+
+### Estructura
+```
+Hero (white, 100svh)      — Sin watermark de fondo. Títulos 100% sans. Status pill.
+Servicios (white)         — Grid de servicios principales.
+                            Las métricas pequeñas (.svc-proof) debajo de cada servicio han sido ELIMINADAS (Julio 2026).
+¿Por qué Flouvia? (white) — Acordeón Horizontal Interactivo (Desktop) / Vertical (Móvil).
+                            6 puntos de valor integrados (Cero Deuda Técnica, Metodología Predictiva, Integraciones a Medida, etc.).
+CTA final (navy)          — Integrado de manera limpia con el footer.
+```
+
+### Acordeón Horizontal "Super Pro" (`.wf-accordion`)
+- **Funcionamiento**: Reemplazó a las tarjetas estáticas anteriores. Al hacer clic en un panel cerrado (que solo muestra su número 01..06), este se expande revelando el título y la descripción, mientras que el anterior se contrae fluidamente usando un `cubic-bezier` muy suavizado.
+- **Microinteracciones**: Efectos de `filter: brightness(1.25)` sutiles en hover sobre los paneles inactivos.
+- **Paleta de Color**: Utiliza variaciones (shades) del azul principal (`--color-blue-deep`) para crear un efecto de degradado elegante a lo largo de los paneles cerrados del acordeón (`--bg-shade`).
 
 ---
 

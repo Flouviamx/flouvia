@@ -157,7 +157,7 @@ const pageTitle = `${title.replace('.', '')} | Flouvia`;
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <main class="flouvia-masterpiece sd-detail page-bg-unified">
 
@@ -232,10 +232,12 @@ const pageTitle = `${title.replace('.', '')} | Flouvia`;
       <div class="container">
 
         <div class="section-header reveal-blur" style="--delay: 0s;">
-          <p class="eyebrow">{t('serv.page.capabilities')}</p>
-          <h2 class="section-heading">
-            {isEn ? 'What we' : 'Lo que'} <span class="editorial">{isEn ? 'engineer.' : 'construimos.'}</span>
-          </h2>
+          <div class="section-header-left">
+            <p class="eyebrow">{t('serv.page.capabilities')}</p>
+            <h2 class="section-heading">
+              {isEn ? 'What we' : 'Lo que'} <span class="editorial">{isEn ? 'engineer.' : 'construimos.'}</span>
+            </h2>
+          </div>
           <p class="section-sub">
             {isEn
               ? 'Four engineering modules. Each one removes a specific friction in your operation.'
@@ -298,7 +300,6 @@ const pageTitle = `${title.replace('.', '')} | Flouvia`;
             <div class="protocol-step reveal-blur" data-step={i} style={`--delay: ${0.1 + i * 0.1}s`}>
               <div class="step-node"><div class="node-core"></div></div>
               <div class="step-content">
-                <div class="watermark-num">0{i + 1}</div>
                 <h4>{stepTitles[i]}</h4>
                 <p>{step}</p>
               </div>
@@ -338,31 +339,9 @@ const pageTitle = `${title.replace('.', '')} | Flouvia`;
       </div>
     </section>
 
-    <!-- ══════════════ CTA ══════════════ -->
-    <section class="cta-final-clean sd-cta">
-      <div class="container">
-        <div class="cta-box-refined squircle-pro reveal-blur">
-          <div class="texture-noise-micro"></div>
-          <div class="cta-flex relative-z">
-            <div class="cta-text">
-              <p class="eyebrow" style="color: rgba(255,255,255,0.6); letter-spacing: 4px;">
-                {isEn ? 'THE NEXT STEP' : 'EL SIGUIENTE PASO'}
-              </p>
-              <h2 class="cta-title">
-                {isEn ? 'Scale your' : 'Escala tu'} <span class="editorial" style="color: #fff;">{isEn ? 'operation.' : 'operación.'}</span>
-              </h2>
-            </div>
-            <a href={contactLink} class="btn-luxe-main">
-              <span>{t('serv.page.cta.btn')}</span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
   </main>
 
-  <Footer />
+  <Footer ctaTitleEs="¿Listo para transformar tu operación?" ctaTitleEn="Ready to transform your operation?" ctaBtnEs="Agendar sesión técnica" ctaBtnEn="Book a technical session" />
 </Layout>
 
 <style is:global>
@@ -387,7 +366,6 @@ const pageTitle = `${title.replace('.', '')} | Flouvia`;
     --color-text-muted: #555555;
     --color-border: rgba(0, 0, 0, 0.08);
     --font-sans: 'Inter', system-ui, sans-serif;
-    --font-serif: 'Instrument Serif', serif;
     --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
     --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05);
     --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
@@ -397,7 +375,7 @@ const pageTitle = `${title.replace('.', '')} | Flouvia`;
 
   .flouvia-masterpiece { width: 100%; position: relative; overflow-x: clip; }
   .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; }
-  .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: #222; }
+  .editorial { font-weight: 400; color: #222; }
   .eyebrow { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
 
   .reveal-blur {
@@ -461,9 +439,10 @@ const pageTitle = `${title.replace('.', '')} | Flouvia`;
   .sd-detail { position: relative; }
 
   .section-header {
-    display: flex; flex-direction: column; gap: 0.6rem;
-    margin-bottom: 4rem; max-width: 720px;
+    display: flex; justify-content: space-between; align-items: flex-end; gap: 3rem;
+    margin-bottom: 4rem; max-width: 100%; text-align: left;
   }
+  .section-header-left { flex: 1; }
   .section-heading {
     font-size: clamp(2.5rem, 5vw, 3.8rem);
     font-weight: 800; letter-spacing: -2px; line-height: 1.02;
@@ -471,7 +450,7 @@ const pageTitle = `${title.replace('.', '')} | Flouvia`;
   }
   .section-sub {
     font-size: 1.05rem; color: var(--color-text-muted);
-    line-height: 1.5; margin: 0.4rem 0 0;
+    line-height: 1.5; margin: 0; max-width: 480px; text-align: left;
   }
 
   /* ══════════════════════════════════════════════════════
@@ -716,7 +695,7 @@ const pageTitle = `${title.replace('.', '')} | Flouvia`;
     padding-bottom: 1rem;
   }
   .watermark-num {
-    position: absolute; font-family: var(--font-serif); font-style: italic;
+    position: absolute; 
     font-size: 5rem; color: rgba(10,25,47,0.04);
     top: -28px; left: -10px;
     pointer-events: none; line-height: 1;
@@ -777,8 +756,7 @@ const pageTitle = `${title.replace('.', '')} | Flouvia`;
 
   .hw-inner { position: relative; z-index: 2; transform: translateZ(30px); }
   .hw-num {
-    font-family: var(--font-serif); font-style: italic;
-    font-size: 2rem; color: #cbd5e1;
+    font-size: 2rem; color: #cbd5e1; font-weight: 600;
     display: block; margin-bottom: 2.5rem; line-height: 1;
   }
   .hw-text-zone h3 {
@@ -861,7 +839,8 @@ const pageTitle = `${title.replace('.', '')} | Flouvia`;
     .sd-metric-num { font-size: 2.2rem; letter-spacing: -1px; }
 
     .services-showcase { padding: 4rem 0; }
-    .section-header { margin-bottom: 2.5rem; }
+    .section-header { flex-direction: column; align-items: flex-start; gap: 1.5rem; margin-bottom: 2.5rem; }
+    .section-sub { max-width: 100%; }
     .section-heading { font-size: clamp(1.9rem, 8vw, 2.5rem); letter-spacing: -1px; }
     .bento-modules-grid { grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2rem; }
     .b-module { padding: 1.8rem; }

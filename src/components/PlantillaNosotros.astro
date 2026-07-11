@@ -154,7 +154,6 @@ const aboutSchema = {
                 <div class="monolith-grid">
 
                     <div class="monolith-card squircle-math reveal-up">
-                        <div class="m-watermark">01</div>
                         <div class="m-card-inner">
                             <div class="m-top-zone">
                                 <div class="m-progress-line"></div>
@@ -167,7 +166,6 @@ const aboutSchema = {
                     </div>
 
                     <div class="monolith-card squircle-math reveal-up">
-                        <div class="m-watermark">02</div>
                         <div class="m-card-inner">
                             <div class="m-top-zone">
                                 <div class="m-progress-line"></div>
@@ -180,7 +178,6 @@ const aboutSchema = {
                     </div>
 
                     <div class="monolith-card squircle-math reveal-up">
-                        <div class="m-watermark">03</div>
                         <div class="m-card-inner">
                             <div class="m-top-zone">
                                 <div class="m-progress-line"></div>
@@ -196,59 +193,6 @@ const aboutSchema = {
             </div>
         </section>
 
-        <!-- ══════════ RESULTADOS (estáticos, con fuente) ══════════ -->
-        <section class="thin-metrics-section global-gap-reduced">
-            <div class="container">
-                <div class="metrics-top">
-                    <p class="eyebrow reveal-fade">{t('about.metrics.badge')}</p>
-                    <h2 class="section-heading reveal-fade">{t('about.metrics.title')} {t('about.metrics.title_ed')}</h2>
-                </div>
-
-                <div class="thin-grid">
-
-                    <div class="thin-card thin-highlight reveal-up">
-                        <div class="thin-data">
-                            <span class="thin-sym thin-pre">{t('about.m1.pre')}</span>
-                            <span class="thin-num editorial">{t('about.m1.num')}</span>
-                            <span class="thin-sym">{t('about.m1.sym')}</span>
-                        </div>
-                        <p class="thin-desc">{t('about.m1.desc')}</p>
-                        <span class="thin-src">{t('about.m1.src')}</span>
-                    </div>
-
-                    <div class="thin-card thin-highlight reveal-up">
-                        <div class="thin-data">
-                            <span class="thin-sym thin-pre">{t('about.m2.pre')}</span>
-                            <span class="thin-num editorial">{t('about.m2.num')}</span>
-                            <span class="thin-sym">{t('about.m2.sym')}</span>
-                        </div>
-                        <p class="thin-desc">{t('about.m2.desc')}</p>
-                        <span class="thin-src">{t('about.m2.src')}</span>
-                    </div>
-
-                    <div class="thin-card thin-highlight reveal-up">
-                        <div class="thin-data">
-                            <span class="thin-sym thin-pre">{t('about.m3.pre')}</span>
-                            <span class="thin-num editorial">{t('about.m3.num')}</span>
-                            <span class="thin-sym">{t('about.m3.sym')}</span>
-                        </div>
-                        <p class="thin-desc">{t('about.m3.desc')}</p>
-                        <span class="thin-src">{t('about.m3.src')}</span>
-                    </div>
-
-                    <div class="thin-card reveal-up">
-                        <div class="thin-data">
-                            <span class="thin-sym thin-pre">{t('about.m4.pre')}</span>
-                            <span class="thin-num editorial">{t('about.m4.num')}</span>
-                            <span class="thin-sym">{t('about.m4.sym')}</span>
-                        </div>
-                        <p class="thin-desc">{t('about.m4.desc')}</p>
-                        <span class="thin-src">{t('about.m4.src')}</span>
-                    </div>
-
-                </div>
-            </div>
-        </section>
 
         <!-- ══════════ ¿POR QUÉ FLOUVIA? ══════════ -->
         <section class="advantage-sober-banner global-gap-reduced">
@@ -278,96 +222,77 @@ const aboutSchema = {
             </div>
         </section>
 
-        <!-- ══════════ TESTIMONIOS ══════════ -->
-        <section class="testimonials-slider-pro global-gap-reduced">
+        <!-- ══════════ TESTIMONIOS (INTERACTIVE) ══════════ -->
+        <section class="testimonials-apple-luxe global-gap-reduced">
             <div class="container">
-                <div class="section-header">
-                    <div class="header-flex">
-                        <div class="header-title-mobile">
-                            <p class="eyebrow reveal-fade">{t('about.reviews.badge')}</p>
-                            <h2 class="section-heading reveal-fade">{t('about.reviews.title')} {t('about.reviews.title_ed')}</h2>
-                        </div>
-                    </div>
-                    <div class="t-scroll-hint">
-                        <span class="scroll-pill">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                            {isEn ? 'Swipe to explore' : 'Desliza para explorar'}
-                        </span>
-                    </div>
+                <div class="section-header ta-header">
+                    <p class="eyebrow reveal-fade">{t('about.reviews.badge')}</p>
+                    <h2 class="section-heading reveal-fade">{t('about.reviews.title')} {t('about.reviews.title_ed')}</h2>
                 </div>
-            </div>
 
-            <div class="t-track-wrapper reveal-fade">
-                <div class="t-track">
-
-                    <div class="t-card-pro squircle-math">
-                        <div class="t-quote-watermark">“</div>
-                        <div class="t-content-wrapper">
-                            <span class="t-metric">{t('about.rev1.metric')}</span>
-                            <p class="t-text">{t('about.rev1.text')}</p>
-                            <div class="t-author-strip">
-                                <div class="t-avatar bg-dark">G</div>
-                                <div class="t-meta">
-                                    <h4>{t('about.rev1.author')}</h4>
-                                    <span class="t-role">{t('about.rev1.role')}</span>
-                                    <span class="t-context">{t('about.rev1.context')}</span>
+                <div class="ta-interactive-wrapper reveal-up">
+                    <div class="ta-card-main">
+                        
+                        <!-- SLIDES -->
+                        <div class="ta-slides-container">
+                            
+                            <!-- SLIDE 1 -->
+                            <div class="ta-slide active" id="ta-slide-1">
+                                <div class="ta-slide-logo" style="margin-bottom: 2.5rem;">
+                                    <img src="https://elzarcodistribuidora.com.mx/assets/69ac8c1474da9485bf036f71_DISTRIBUIDORA.webp" alt="El Zarco Logo" style="height: 32px; width: auto; object-fit: contain;">
+                                </div>
+                                <p class="ta-text">"{t('about.rev1.text')}"</p>
+                                <div class="ta-author">
+                                    <div class="ta-avatar">G</div>
+                                    <div class="ta-meta">
+                                        <h4>{t('about.rev1.author')}</h4>
+                                        <span>{t('about.rev1.role')}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="t-card-pro squircle-math">
-                        <div class="t-quote-watermark">“</div>
-                        <div class="t-content-wrapper">
-                            <span class="t-metric">{t('about.rev2.metric')}</span>
-                            <p class="t-text">{t('about.rev2.text')}</p>
-                            <div class="t-author-strip">
-                                <div class="t-avatar bg-dark">D</div>
-                                <div class="t-meta">
-                                    <h4>{t('about.rev2.author')}</h4>
-                                    <span class="t-role">{t('about.rev2.role')}</span>
-                                    <span class="t-context">{t('about.rev2.context')}</span>
+                            <!-- SLIDE 2 -->
+                            <div class="ta-slide" id="ta-slide-2">
+                                <div class="ta-slide-logo" style="margin-bottom: 2.5rem;">
+                                    <img src="https://cord.flouvia.com/imgs/logo-cord-navy.png" alt="Cord Logo" style="height: 28px; width: auto; object-fit: contain;">
+                                </div>
+                                <p class="ta-text">"{t('about.rev2.text')}"</p>
+                                <div class="ta-author">
+                                    <div class="ta-avatar" style="background: var(--color-blue-deep); color: white;">A</div>
+                                    <div class="ta-meta">
+                                        <h4>{t('about.rev2.author')}</h4>
+                                        <span>{t('about.rev2.role')}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
+                        </div>
+
+                        <!-- TABS NAV -->
+                        <div class="ta-tabs-nav">
+                            <button class="ta-tab-btn active" data-target="1">
+                                <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                                    <img src="https://elzarcodistribuidora.com.mx/assets/69ac8c1474da9485bf036f71_DISTRIBUIDORA.webp" alt="El Zarco" style="height: 18px; filter: grayscale(100%); opacity: 0.6; transition: 0.3s;" class="tab-img">
+                                    <span class="ta-tab-logo">EL ZARCO</span>
+                                </div>
+                            </button>
+                            <button class="ta-tab-btn" data-target="2">
+                                <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                                    <img src="https://cord.flouvia.com/imgs/logo-cord-navy.png" alt="Cord" style="height: 16px; filter: grayscale(100%); opacity: 0.6; transition: 0.3s;" class="tab-img">
+                                    <span class="ta-tab-logo">CORD</span>
+                                </div>
+                            </button>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- ══════════ CTA FINAL (escasez) ══════════ -->
-        <section class="cta-final-clean global-gap-reduced">
-            <div class="container">
-                <div class="cta-box-refined cta-squircle reveal-fade">
-                    <div class="texture-noise-micro"></div>
-                    <div class="cta-flex relative-z">
-                        <div class="cta-text">
-                            <p class="eyebrow cta-eyebrow">{t('about.cta.badge')}</p>
-                            <h2 class="cta-title">
-                                {t('about.cta.title')}<br>
-                                {t('about.cta.title_ed')}
-                            </h2>
-                            <p class="cta-body">{t('about.cta.body')}</p>
-                            <div class="cta-avail">
-                                <span class="cta-avail-dot" aria-hidden="true"></span>
-                                <span>{t('about.cta.avail')}</span>
-                            </div>
-                        </div>
-                        <div class="cta-action-side">
-                            <a href={isEn ? '/en/contacto' : '/contacto'} class="btn-luxe-main">
-                                <span>{t('about.cta.btn')}</span>
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
     </main>
 
-    <Footer />
+    <Footer ctaTitleEs="El aliado técnico de tu negocio." ctaTitleEn="The technical partner for your business." ctaBtnEs="Conocer al equipo" ctaBtnEn="Meet the team" ctaLinkEs="/contacto" ctaLinkEn="/en/contacto" />
 </Layout>
 
 <style is:global>
@@ -409,7 +334,7 @@ const aboutSchema = {
 
     .flouvia-masterpiece { width: 100%; position: relative; overflow-x: clip; }
     .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; }
-    .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: #222; }
+    .editorial { font-weight: 400; color: #222; }
     .eyebrow { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
 
     /* HERO STATUS — señal de exclusividad (cupo por trimestre) */
@@ -501,7 +426,7 @@ const aboutSchema = {
     .monolith-card { background: #ffffff; padding: 3.5rem 3rem; display: flex; flex-direction: column; position: relative; transition: transform 0.5s var(--ease-spring), box-shadow 0.5s var(--ease-spring); box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 4px 20px rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.05); }
     .monolith-card:hover { transform: translateY(-8px); box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 30px 60px rgba(0,0,0,0.06); }
 
-    .m-watermark { position: absolute; right: 1.5rem; top: 1.5rem; font-family: var(--font-serif); font-style: italic; font-size: 2rem; color: rgba(10,25,47,0.18); line-height: 1; pointer-events: none; transition: transform 0.5s var(--ease-spring), color 0.5s ease; z-index: 0; letter-spacing: -1px; }
+    .m-watermark { position: absolute; right: 1.5rem; top: 1.5rem; font-size: 2rem; color: rgba(10,25,47,0.18); line-height: 1; pointer-events: none; transition: transform 0.5s var(--ease-spring), color 0.5s ease; z-index: 0; letter-spacing: -1px; font-weight: 700; }
     .monolith-card:hover .m-watermark { color: rgba(10,25,47,0.35); transform: translateX(4px); }
 
     .m-card-inner { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%; justify-content: space-between;}
@@ -512,20 +437,6 @@ const aboutSchema = {
     .m-bottom-zone h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 1rem 0; color: #000;}
     .m-bottom-zone p { font-size: 1.08rem; color: var(--color-text-muted); line-height: 1.6; margin: 0; font-weight: 400;}
 
-    /* 4. RESULTADOS */
-    .thin-metrics-section { background: var(--color-bg); }
-    .metrics-top { text-align: left; margin-bottom: 4rem; }
-    .thin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.5rem 2rem; border-top: 1px solid var(--color-border); padding-top: 4rem;}
-    .thin-card { display: flex; flex-direction: column; gap: 0.65rem; transition: transform 0.4s ease; }
-    .thin-card:hover { transform: translateY(-5px); }
-
-    .thin-data { display: flex; align-items: baseline; gap: 4px; }
-    .thin-num { font-size: clamp(3rem, 4vw, 4.2rem); font-weight: 400; color: #000; line-height: 0.9; letter-spacing: -1px;}
-    .thin-sym { font-size: 1.7rem; font-weight: 400; color: var(--color-text-muted); font-family: var(--font-serif); font-style: italic;}
-    .thin-pre { color: var(--color-blue-deep); }
-    .thin-desc { font-size: 1.02rem; color: var(--color-text-muted); line-height: 1.45; margin: 0; font-weight: 400; }
-    .thin-src { font-size: 0.68rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #aaa; margin-top: 0.35rem; }
-    .thin-highlight .thin-num, .thin-highlight .thin-sym.thin-pre { color: var(--color-blue-deep); }
 
     /* 5. POR QUÉ FLOUVIA — banda delgada */
     .advantage-sober-banner.global-gap-reduced { padding: 1.5rem 0; }
@@ -552,36 +463,43 @@ const aboutSchema = {
     }
     .scroll-pill svg { opacity: 0.6; flex-shrink: 0; }
 
-    /* 6. TESTIMONIOS */
-    .testimonials-slider-pro { padding-bottom: 2rem; }
-    .header-flex { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; }
-    .t-track-wrapper { width: 100%; overflow-x: auto; padding: 2rem max(5%, calc((100vw - 1200px) / 2)); margin-top: -2rem; scroll-snap-type: x mandatory; scrollbar-width: none; }
-    .t-track-wrapper::-webkit-scrollbar { display: none; }
-    .t-track { display: flex; gap: 2.5rem; width: max-content; align-items: stretch; }
-    .t-card-pro { width: 560px; height: auto; min-height: 380px; scroll-snap-align: center; position: relative; background: #ffffff; border: 1px solid rgba(0,0,0,0.04); padding: 4rem; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.5s var(--ease-smooth), box-shadow 0.5s var(--ease-smooth), border-color 0.5s var(--ease-smooth); z-index: 1; box-shadow: 0 10px 30px rgba(0,0,0,0.02), inset 0 1px 0 rgba(255,255,255,1); overflow: hidden; }
-    @media (hover: hover) {
-        .t-track .t-card-pro:hover { transform: translateY(-8px); z-index: 10; box-shadow: 0 30px 60px rgba(0,0,0,0.08); border-color: rgba(0,0,0,0.08);}
+    /* 6. TESTIMONIOS (Flouvia Interactive) */
+    .testimonials-apple-luxe { background: var(--color-bg); }
+    .ta-header { text-align: center; margin-bottom: 4rem; }
+    
+    .ta-interactive-wrapper { max-width: 900px; margin: 0 auto; }
+    .ta-card-main { background: #ffffff; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02), inset 0 1px 0 rgba(255,255,255,1); border: 1px solid rgba(0,0,0,0.05); overflow: hidden; display: flex; flex-direction: column; }
+    
+    .ta-slides-container { position: relative; width: 100%; display: grid; }
+    
+    .ta-slide { 
+        grid-area: 1 / 1; 
+        padding: 4rem 3.5rem 3.5rem 3.5rem; 
+        display: flex; flex-direction: column; align-items: center; text-align: center;
+        opacity: 0; pointer-events: none; transform: translateY(10px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
     }
-    .t-quote-watermark { position: absolute; top: -10px; left: 30px; font-family: var(--font-serif); font-size: 12rem; color: rgba(10,25,47,0.02); line-height: 1; pointer-events: none;}
-    .t-content-wrapper { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%; justify-content: space-between;}
-    .t-metric { font-family: var(--font-serif); font-style: italic; font-size: 1.35rem; color: var(--color-blue-deep); letter-spacing: -0.3px; display: block; margin-bottom: 1.5rem; }
-    .t-text { font-size: 1.3rem; font-weight: 500; color: #050505; line-height: 1.5; margin: 0 0 2.5rem 0; letter-spacing: -0.4px;}
-    .t-author-strip { display: flex; align-items: center; gap: 1.2rem; border-top: 1px solid rgba(0,0,0,0.06); padding-top: 2rem;}
-    .t-avatar { width: 52px; height: 52px; border-radius: 50%; background: #f8fafc; border: 1px solid rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--color-blue-deep); font-size: 1.1rem; flex-shrink: 0;}
-    .bg-dark { background: var(--color-blue-deep); color: #fff; border-color: transparent; }
-    .t-meta h4 { margin: 0 0 4px 0; font-size: 1.05rem; font-weight: 800; color: #000; letter-spacing: -0.5px;}
-    .t-meta .t-role { display: block; font-size: 0.82rem; color: #64748b; font-weight: 600; }
-    .t-meta .t-context { display: block; font-size: 0.72rem; color: #94a3b8; font-weight: 600; letter-spacing: 0.3px; margin-top: 2px; }
+    .ta-slide.active { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    
+    .ta-slide-logo h3 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 2rem 0; color: var(--color-text); text-transform: uppercase; }
+    
+    .ta-text { font-size: 1.25rem; font-weight: 500; color: #050505; line-height: 1.6; letter-spacing: -0.3px; margin: 0 0 2.5rem 0; max-width: 700px; }
+    
+    .ta-author { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; }
+    .ta-avatar { width: 42px; height: 42px; border-radius: 50%; background: #f8fafc; color: var(--color-blue-deep); border: 1px solid rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; flex-shrink: 0; }
+    .ta-meta h4 { margin: 0 0 2px 0; font-size: 1rem; font-weight: 800; color: #000; letter-spacing: -0.5px;}
+    .ta-meta span { font-size: 0.82rem; font-weight: 600; color: #64748b; }
+    
+    .ta-tabs-nav { display: flex; background: #fdfdfd; border-top: 1px solid rgba(0,0,0,0.05); }
+    .ta-tab-btn { flex: 1; padding: 1.2rem; background: transparent; border: none; border-right: 1px solid rgba(0,0,0,0.04); cursor: pointer; transition: background 0.3s ease; display: flex; align-items: center; justify-content: center; }
+    .ta-tab-btn:last-child { border-right: none; }
+    .ta-tab-btn:hover { background: #f8f8f8; }
+    .ta-tab-btn.active { background: #ffffff; box-shadow: 0 -2px 0 var(--color-blue-deep) inset; }
+    .ta-tab-logo { font-size: 1.05rem; font-weight: 800; color: var(--color-text); letter-spacing: -0.5px; opacity: 0.3; transition: opacity 0.3s ease; }
+    .ta-tab-btn.active .ta-tab-logo { opacity: 1; color: var(--color-blue-deep); }
+    .ta-tab-btn.active .tab-img { opacity: 1 !important; filter: grayscale(0) !important; }
 
     /* 7. CTA FINAL */
-    .cta-final-clean { padding-bottom: 6rem; }
-    .cta-box-refined {
-        background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%);
-        padding: 5rem 6rem;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 20px 40px rgba(5,11,20,0.15), 0 50px 100px rgba(5,11,20,0.25);
-    }
     .cta-flex { display: flex; justify-content: space-between; align-items: center; gap: 4rem; }
     .cta-text { flex: 1; }
     .cta-eyebrow { color: rgba(255,255,255,0.55); letter-spacing: 4px; }
@@ -613,7 +531,8 @@ const aboutSchema = {
         .image-frame-luxe { aspect-ratio: 16/9; }
         .sticky-text-wrapper { position: relative; top: 0; }
         .monolith-grid { grid-template-columns: 1fr; gap: 2rem; }
-        .thin-grid { grid-template-columns: repeat(2, 1fr); gap: 3rem; }
+
+
         .adv-banner-flex { flex-direction: column; align-items: flex-start; gap: 2rem; }
         .adv-b-right { border-left: none; padding-left: 0; flex-direction: column; align-items: flex-start; gap: 2rem;}
         .cta-flex { flex-direction: column; align-items: flex-start; gap: 2.5rem;}
@@ -652,13 +571,6 @@ const aboutSchema = {
         .monolith-card { flex: 0 0 80%; scroll-snap-align: center; padding: 2.5rem; }
         .m-top-zone { margin-bottom: 2rem;}
 
-        .thin-metrics-section { padding: 4rem 0; }
-        .metrics-top { margin-bottom: 2.5rem; }
-        .thin-grid { grid-template-columns: repeat(2, 1fr); gap: 2.2rem 1.5rem; padding-top: 2.5rem; }
-        .thin-num { font-size: clamp(2.4rem, 9vw, 3.4rem); }
-        .thin-sym { font-size: 1.4rem; }
-        .thin-desc { font-size: 0.95rem; line-height: 1.4; }
-        .thin-src { font-size: 0.62rem; }
 
         .advantage-sober-banner.global-gap-reduced { padding: 2.5rem 0; }
         /* ¿POR QUÉ FLOUVIA? → centrado */
@@ -667,27 +579,14 @@ const aboutSchema = {
         .adv-b-title { font-size: 2.3rem; white-space: normal; }
         .adv-b-desc { font-size: 1.05rem; }
 
-        .testimonials-slider-pro { padding: 4rem 0; width: 100%; overflow: hidden; }
-        .header-flex { margin-bottom: 0.5rem; }
-        .header-title-mobile h2 { font-size: 2.2rem; margin-bottom: 0.5rem; letter-spacing: -1px; }
-        .t-scroll-hint { display: flex; justify-content: center; margin-top: 1rem; margin-bottom: 2rem; }
-        .t-track-wrapper { padding: 2rem 0 3rem 5%; scroll-padding-left: 5%; scroll-behavior: smooth; }
-        .t-track { gap: 14px; }
-        .t-card-pro {
-            width: 80vw; flex-shrink: 0;
-            padding: 2.5rem 2rem;
-            transform: scale(0.92); opacity: 0.55;
-            transform-origin: left center;
-            transition: transform 0.5s var(--ease-spring), opacity 0.5s var(--ease-spring);
-            min-height: auto;
-            scroll-snap-align: start;
-        }
-        .t-card-pro.is-centered { transform: scale(1); opacity: 1; box-shadow: 0 20px 40px rgba(0,0,0,0.1); z-index: 2; }
-        .t-quote-watermark { font-size: 8rem; top: -15px; left: 15px; }
-        .t-metric { font-size: 1.15rem; margin-bottom: 1rem; }
-        .t-text { font-size: 1.15rem; margin-bottom: 1.5rem; }
-        .t-author-strip { padding-top: 1.5rem; }
-        .t-avatar { width: 42px; height: 42px; font-size: 0.95rem; }
+        .testimonials-apple-luxe { background: var(--color-bg); }
+        .ta-interactive-wrapper { padding: 0 5%; }
+        .ta-header { margin-bottom: 3rem; }
+        .ta-slide { padding: 3rem 1.5rem 2.5rem 1.5rem; }
+        .ta-text { font-size: 1.1rem; margin-bottom: 2rem; }
+        .ta-tabs-nav { flex-direction: column; }
+        .ta-tab-btn { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.04); padding: 1rem; }
+        .ta-tab-btn.active { box-shadow: -3px 0 0 var(--color-blue-deep) inset; }
 
         .cta-final-clean { padding-bottom: 4rem; }
         .cta-box-refined { padding: 3rem 2rem; border-radius: 24px; text-align: center; }
@@ -810,32 +709,33 @@ const aboutSchema = {
             revealEach('.monolith-card', { y: 14 });
             revealEach('.thin-card', { y: 12 });
             reveal('.adv-banner-flex', { y: 14 });
-            reveal('.t-track-wrapper', { trigger: '.testimonials-slider-pro', y: 14, start: 'top 85%' });
+            reveal('.ta-interactive-wrapper', { trigger: '.testimonials-apple-luxe', y: 14, start: 'top 85%' });
             reveal('.cta-box-refined', { y: 16 });
-            initCarousel();
         });
     });
 
-    // ── Carrusel móvil: marca la tarjeta centrada (escala/opacidad) ──
-    function initCarousel() {
-        if (typeof IntersectionObserver === 'undefined') return;
-        if (window.innerWidth > 1024) return;
-        const track = document.querySelector('.t-track-wrapper');
-        const cards = document.querySelectorAll('.t-card-pro');
-        if (!track || cards.length === 0) return;
-
-        const obs = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    cards.forEach(c => c.classList.remove('is-centered'));
-                    entry.target.classList.add('is-centered');
-                }
+    // ── Testimonials Tabs Logic ──
+    document.addEventListener('DOMContentLoaded', () => {
+        const tabs = document.querySelectorAll('.ta-tab-btn');
+        const slides = document.querySelectorAll('.ta-slide');
+        if (!tabs.length || !slides.length) return;
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = tab.getAttribute('data-target');
+                
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                slides.forEach(s => {
+                    s.classList.remove('active');
+                    if (s.getAttribute('id') === `ta-slide-${target}`) {
+                        s.classList.add('active');
+                    }
+                });
             });
-        }, { root: track, threshold: 0.6 });
-
-        cards.forEach(card => obs.observe(card));
-        setTimeout(() => { if (cards[0]) cards[0].classList.add('is-centered'); }, 100);
-    }
+        });
+    });
 
     // Parallax suave de la imagen del manifiesto (solo desktop)
     document.addEventListener('DOMContentLoaded', () => {

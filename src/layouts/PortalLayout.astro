@@ -66,6 +66,10 @@ const { title } = Astro.props;
        ============================================================ */
     *, *::before, *::after { box-sizing: border-box; }
 
+    [class*="eyebrow"] {
+        display: none !important;
+    }
+
     /* Cambio de idioma: oculta el body antes del paint para restaurar el scroll sin
        mostrar el salto desde arriba. El navbar lo revela tras posicionar (o el failsafe). */
     html.lang-restoring body { opacity: 0; }
