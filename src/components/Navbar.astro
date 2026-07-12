@@ -35,6 +35,7 @@ const enUrl = lang === 'es' ? '/en' + pathname : pathname;
                     <a href={lang === 'en' ? '/en/nosotros' : '/nosotros'}   class="nav-link" data-path={lang === 'en' ? '/en/nosotros'  : '/nosotros'}>{t('nav.about')}</a>
                     <a href={lang === 'en' ? '/en/casos'    : '/casos'}      class="nav-link" data-path={lang === 'en' ? '/en/casos'     : '/casos'}>{t('nav.cases')}</a>
                     <a href={lang === 'en' ? '/en/blog'    : '/blog'}       class="nav-link" data-path={lang === 'en' ? '/en/blog'      : '/blog'}>BLOG</a>
+                    <a href={lang === 'en' ? '/en/cord'    : '/cord'}       class="nav-link" data-path={lang === 'en' ? '/en/cord'      : '/cord'}>CORD</a>
                 </div>
             </div>
 
@@ -106,6 +107,7 @@ const enUrl = lang === 'es' ? '/en' + pathname : pathname;
                 <a href={lang === 'en' ? '/en/nosotros'  : '/nosotros'}  class="m-link">{t('nav.about')}</a>
                 <a href={lang === 'en' ? '/en/casos'     : '/casos'}     class="m-link">{t('nav.cases')}</a>
                 <a href={lang === 'en' ? '/en/blog'      : '/blog'}      class="m-link">BLOG</a>
+                <a href={lang === 'en' ? '/en/cord'      : '/cord'}      class="m-link">CORD</a>
             </nav>
 
             <div class="mobile-menu-footer">
@@ -533,6 +535,7 @@ const enUrl = lang === 'es' ? '/en' + pathname : pathname;
         .m-link:nth-child(3) { transition-delay: 0.40s; }
         .m-link:nth-child(4) { transition-delay: 0.49s; }
         .m-link:nth-child(5) { transition-delay: 0.58s; }
+        .m-link:nth-child(6) { transition-delay: 0.67s; }
 
         .mobile-menu-footer {
             border-top: 1px solid rgba(255,255,255,0.07); padding-top: 2rem;

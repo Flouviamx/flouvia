@@ -164,10 +164,7 @@ const serviceRows = [
             <div class="container hero-container">
                 <div class="hero-content">
                     <div class="hero-text-zone" id="hero-parallax">
-                        <div class="hero-status hero-anim">
-                            <span class="hero-status-dot" aria-hidden="true"></span>
-                            <span>{isEn ? 'ACCEPTING Q3 PROJECTS' : 'ACEPTANDO PROYECTOS Q3'}</span>
-                        </div>
+
                         <p class="eyebrow hero-anim">{t('serv.hero.badge')}</p>
                         <h1 class="hero-title hero-anim">
                             <span class="title-bold">{t('serv.hero.title1')}</span>
@@ -257,13 +254,15 @@ const serviceRows = [
                                 <span class="svc-num editorial">/0{s.n}</span>
                                 <span class="svc-cat">{s.cat.replace(/^\d+\s*—\s*/, '')}</span>
                             </span>
+                        </div>
+
+                        <div class="svc-title-row">
+                            <h2 class="svc-title">{s.title}</h2>
                             <a href={s.href} class="svc-cta">
                                 <span>{s.btn}</span>
                                 <span class="svc-cta-arrow" aria-hidden="true">→</span>
                             </a>
                         </div>
-
-                        <h2 class="svc-title">{s.title}</h2>
                         <p class="svc-desc">{s.desc}</p>
 
                         <div class="svc-caps">
@@ -538,7 +537,8 @@ const serviceRows = [
     .svc-cta:hover { background: var(--color-text); color: #fff; border-color: var(--color-text); transform: translateY(-2px); }
     .svc-cta:hover .svc-cta-arrow { transform: translateX(4px); }
 
-    .svc-title { font-size: clamp(2.2rem, 4.4vw, 3.6rem); font-weight: 800; letter-spacing: -1.8px; line-height: 1.0; margin: 0 0 1.5rem 0; color: var(--color-text); }
+    .svc-title-row { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-bottom: 1.5rem; }
+    .svc-title { font-size: clamp(2.2rem, 4.4vw, 3.6rem); font-weight: 800; letter-spacing: -1.8px; line-height: 1.0; margin: 0; color: var(--color-text); }
     .svc-desc { font-size: 1.15rem; color: var(--color-text-muted); line-height: 1.6; max-width: 760px; margin: 0 0 1.1rem 0; }
 
     /* Caso / métrica discreta (sin caja) */
@@ -669,7 +669,7 @@ const serviceRows = [
     
     .faq-icon-wrap { position: relative; width: 14px; height: 14px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--color-text); transition: color 0.3s ease; }
     .faq-q:hover .faq-icon-wrap { color: #86868b; }
-    .faq-icon-line { position: absolute; background: currentColor; border-radius: 1px; transition: transform 0.5s var(--ease-spring), opacity 0.5s ease; }
+    .faq-icon-line { position: absolute; background: currentColor; border-radius: 1px; transition: transform 0.7s var(--ease-spring), opacity 0.6s ease; }
     .faq-icon-h { width: 14px; height: 1.5px; }
     .faq-icon-v { width: 1.5px; height: 14px; }
     
@@ -730,7 +730,8 @@ const serviceRows = [
         .services-index { padding: 1rem 0; }
         .svc-chapter { padding: 3rem 0; }
         .svc-head { flex-direction: column; align-items: flex-start; gap: 1rem; margin-bottom: 1.25rem; }
-        .svc-title { font-size: 2rem; margin-bottom: 1rem; }
+        .svc-title-row { flex-direction: column; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
+        .svc-title { font-size: 2rem; margin-bottom: 0; }
         .svc-desc { font-size: 1.05rem; }
         .svc-proof { margin-bottom: 2rem; font-size: 0.92rem; }
         .svc-caps { margin-bottom: 2rem; }
@@ -964,7 +965,7 @@ const serviceRows = [
             } else {
                 item.classList.add('is-open');
                 q.setAttribute('aria-expanded', 'true');
-                gsap.to(a, { height: 'auto', opacity: 1, duration: 0.5, ease: 'power3.inOut' });
+                gsap.to(a, { height: 'auto', opacity: 1, duration: 0.7, ease: 'power3.out' });
             }
             });
         });

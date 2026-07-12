@@ -25,10 +25,7 @@ const isEn = lang === 'en';
             <div class="container hero-container">
                 <div class="hero-content">
                     <div class="hero-text-zone" id="hero-parallax">
-                        <div class="hero-status hero-anim">
-                            <span class="hero-status-dot" aria-hidden="true"></span>
-                            <span>{isEn ? 'ACCEPTING Q3 PROJECTS' : 'ACEPTANDO PROYECTOS Q3'}</span>
-                        </div>
+
                         <p class="eyebrow hero-anim">
                             {isEn ? 'DOCUMENTED RESULTS — 2 ACTIVE SYSTEMS' : 'RESULTADOS DOCUMENTADOS — 2 SISTEMAS ACTIVOS'}
                         </p>
@@ -55,10 +52,7 @@ const isEn = lang === 'en';
 
         <section class="cases-gallery" id="case-grid">
             <div class="container">
-                <div class="avail-badge">
-                    <span class="avail-dot" aria-hidden="true"></span>
-                    {isEn ? 'Accepting Q3 projects — 2 slots available' : 'Aceptando proyectos Q3 — 2 slots disponibles'}
-                </div>
+
                 <div class="gallery-grid">
 
                     <a href={isEn ? '/en/cord' : '/cord'} class="case-card">
@@ -72,16 +66,6 @@ const isEn = lang === 'en';
                             <h2 class="case-brand">Cord</h2>
                             <p class="case-desc">{isEn ? 'B2B platform for quotes, orders, and automated CFDI 4.0. Designed to scale wholesale operations with zero friction.' : 'Plataforma B2B para cotizaciones, pedidos y CFDI 4.0 automatizado. Diseñada para escalar operaciones mayoristas sin fricción.'}</p>
 
-                            <div class="case-metrics">
-                                <div class="metric">
-                                    <span class="metric-val">100%</span>
-                                    <span class="metric-lbl">{isEn ? 'Automated' : 'Automatizado'}</span>
-                                </div>
-                                <div class="metric">
-                                    <span class="metric-val">CFDI</span>
-                                    <span class="metric-lbl">{isEn ? 'Integration' : 'Integración'}</span>
-                                </div>
-                            </div>
 
                             <div class="case-read-more">
                                 <span>{isEn ? 'Explore Cord' : 'Explorar Cord'}</span>
@@ -92,23 +76,15 @@ const isEn = lang === 'en';
 
                     <a href="/casos/el-zarco" class="case-card">
                         <div class="case-visual">
-                            <img src="/imgs/el-zarco.svg" alt="El Zarco B2B" class="case-img squircle" />
+                            <div class="case-img squircle fluid-target" style="background: var(--color-blue-deep); display: flex; align-items: center; justify-content: center;" data-shader-color="#fef08a">
+                                <img src="https://elzarcodistribuidora.com.mx/assets/69ac8c1474da9485bf036f71_DISTRIBUIDORA.webp" alt="El Zarco B2B" style="width: 180px; height: auto; opacity: 1; position: relative; z-index: 1;" />
+                            </div>
                             <span class="active-badge"><span class="active-dot" aria-hidden="true"></span>{isEn ? 'Active system' : 'Sistema activo'}</span>
                         </div>
                         <div class="case-info">
                             <h2 class="case-brand">El Zarco</h2>
                             <p class="case-desc">{isEn ? 'Full-scale wholesale digitization. We engineered a custom logistics engine powered by APIs and Airtable.' : 'Digitalización mayorista a escala total. Desarrollamos un motor de logística mediante código custom y APIs conectadas a Airtable.'}</p>
 
-                            <div class="case-metrics">
-                                <div class="metric">
-                                    <span class="metric-val">+25%</span>
-                                    <span class="metric-lbl">{isEn ? 'AOV Uplift' : 'Aumento AOV'}</span>
-                                </div>
-                                <div class="metric">
-                                    <span class="metric-val">100%</span>
-                                    <span class="metric-lbl">{isEn ? 'Sync Autom.' : 'Sync Automatizada'}</span>
-                                </div>
-                            </div>
 
                             <div class="case-read-more">
                                 <span>{isEn ? 'Read Case Study' : 'Conocer más'}</span>
@@ -270,10 +246,7 @@ const isEn = lang === 'en';
     .case-brand { font-family: var(--font-sans); font-size: 2.2rem; font-weight: 800; color: var(--color-text); margin: 0 0 0.8rem 0; letter-spacing: -1.2px; }
     .case-desc { font-size: 1.1rem; color: var(--color-text-muted); margin: 0 0 2.2rem 0; line-height: 1.5; max-width: 95%;}
 
-    .case-metrics { display: flex; gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 1.8rem; }
-    .metric { display: flex; flex-direction: column; gap: 0.3rem; }
-    .metric-val { font-family: var(--font-sans); font-style: normal; font-weight: 700; font-size: 2.2rem; color: var(--color-blue-deep); line-height: 1; letter-spacing: -1px; }
-    .metric-lbl { font-size: 0.7rem; color: var(--color-text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; }
+
 
     .case-read-more {
         display: inline-flex; align-items: center; gap: 10px; margin-top: 2.5rem;
@@ -317,7 +290,7 @@ const isEn = lang === 'en';
     @media (max-width: 1024px) {
         .hero-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; }
         .gallery-grid { gap: 4rem 2rem; }
-        .case-metrics { gap: 2.5rem; }
+
         .cta-box-refined { padding: 3.5rem 4rem; }
     }
 
@@ -335,8 +308,7 @@ const isEn = lang === 'en';
         .cases-gallery { padding: 3rem 0; }
         .gallery-grid { grid-template-columns: 1fr; gap: 4rem; }
 
-        .case-metrics { gap: 2rem; }
-        .metric-val { font-size: 1.9rem; }
+
 
         .slot-inner { padding: 3.5rem 1.5rem; }
         .slot-title { font-size: 1.8rem; }

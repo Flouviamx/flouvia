@@ -61,17 +61,14 @@ const isEn = lang === 'en';
                         : 'Firma boutique con sede en CDMX. Construimos tiendas Shopify Plus, portales B2B privados y automatizaciones para marcas con operación establecida. Proyectos por aplicación — menos de 8 clientes activos al año.'}
                 </p>
 
-                <div class="footer-status-badge">
-                    <span class="dot-online"></span>
-                    <span class="status-text">{isEn ? 'ACCEPTING PROJECTS Q3' : 'ACEPTANDO PROYECTOS Q3'}</span>
-                </div>
+
             </div>
 
             <div class="navigation-columns">
 
                 <div class="nav-col">
                     <div class="col-head">
-                        <span class="col-num">/01</span>
+                        <span class="col-num">01</span>
                         <h4 class="col-title">{isEn ? 'Work' : 'Trabajo'}</h4>
                     </div>
                     <nav class="nav-links">
@@ -88,7 +85,7 @@ const isEn = lang === 'en';
                             <span class="link-arrow">→</span>
                         </a>
                         <a href={isEn ? '/en/cord' : '/cord'} class="link-item">
-                            <span>Cord SaaS</span>
+                            <span>Cord</span>
                             <span class="link-arrow">→</span>
                         </a>
                         <a href={isEn ? '/en/blog' : '/blog'} class="link-item">
@@ -100,7 +97,7 @@ const isEn = lang === 'en';
 
                 <div class="nav-col">
                     <div class="col-head">
-                        <span class="col-num">/02</span>
+                        <span class="col-num">02</span>
                         <h4 class="col-title">{isEn ? 'The Firm' : 'La Firma'}</h4>
                     </div>
                     <nav class="nav-links">
@@ -117,7 +114,7 @@ const isEn = lang === 'en';
 
                 <div class="nav-col contact-col">
                     <div class="col-head">
-                        <span class="col-num">/03</span>
+                        <span class="col-num">03</span>
                         <h4 class="col-title">{isEn ? 'Contact' : 'Contacto'}</h4>
                     </div>
 
@@ -272,10 +269,10 @@ const isEn = lang === 'en';
     }
     .footer-edition {
         display: inline-flex; align-items: baseline; gap: 0.55rem;
-        font-family: var(--font-serif); font-style: italic; font-weight: 400;
+        font-weight: 400;
         color: rgba(255,255,255,0.65); margin: 0; line-height: 1;
     }
-    .edition-num { font-size: 1.5rem; }
+    .edition-num { font-size: 1.05rem; }
     .edition-divider { color: rgba(255,255,255,0.3); font-size: 1rem; }
     .edition-label { font-size: 1.05rem; color: rgba(255,255,255,0.45); }
 
@@ -338,7 +335,7 @@ const isEn = lang === 'en';
         margin-bottom: 2.25rem;
     }
     .col-num {
-        font-family: var(--font-serif); font-style: italic; font-weight: 400;
+        font-weight: 400;
         font-size: 1.05rem; color: rgba(255,255,255,0.3); line-height: 1;
     }
     .col-title {
@@ -481,7 +478,7 @@ const isEn = lang === 'en';
         .top-hairline { margin-bottom: 2.5rem; }
         .footer-meta-row { margin-bottom: 3.5rem; padding-top: 0.5rem; }
         .footer-edition { gap: 0.4rem; }
-        .edition-num { font-size: 1.2rem; }
+        .edition-num { font-size: 0.9rem; }
         .edition-label { font-size: 0.9rem; }
 
         .footer-logo-svg { width: 110px; margin-bottom: 2rem; }

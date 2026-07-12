@@ -62,8 +62,8 @@ const fs = `
     // El fondo es casi enteramente oscuro, con un toque del color de la categoría
     vec3 fluidColor = mix(u_bg, u_color, flow * 0.12);
     
-    // Grano fino estilo cristal esmerilado para darle textura premium
-    float grain = fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453) * 0.025;
+    // Grano fino estilo cristal esmerilado para darle textura premium (centrado en 0 para verse en fondos blancos)
+    float grain = (fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453) - 0.5) * 0.04;
     
     gl_FragColor = vec4(fluidColor + grain, 1.0);
   }
@@ -124,9 +124,6 @@ export function initFluidShaders() {
   const uColor = gl.getUniformLocation(program, 'u_color');
   const uBg = gl.getUniformLocation(program, 'u_bg');
 
-  const bgRgb = hexToRgb('#0a192f');
-  gl.uniform3f(uBg, bgRgb[0], bgRgb[1], bgRgb[2]);
-
   let globalMouseX = -1000;
   let globalMouseY = -1000;
   window.addEventListener('mousemove', (e) => {
@@ -134,10 +131,11 @@ export function initFluidShaders() {
     globalMouseY = e.clientY;
   }, { passive: true });
 
-  const cards: { ctx: ImageBitmapRenderingContext, color: number[], el: HTMLElement, width: number, height: number }[] = [];
+  const cards: { ctx: ImageBitmapRenderingContext, color: number[], bg: number[], el: HTMLElement, width: number, height: number }[] = [];
   
   targets.forEach((target) => {
     const colorHex = target.dataset.shaderColor || '#ffffff';
+    const bgHex = target.dataset.bgColor || '#0a192f';
     const canvas = document.createElement('canvas');
     canvas.style.position = 'absolute';
     canvas.style.top = '0';
@@ -158,6 +156,7 @@ export function initFluidShaders() {
       cards.push({
         ctx,
         color: hexToRgb(colorHex),
+        bg: hexToRgb(bgHex),
         el: target,
         width: 0,
         height: 0
@@ -205,6 +204,7 @@ export function initFluidShaders() {
       gl.uniform2f(uRes, w, h);
       gl.uniform2f(uMouse, localMouseX, localMouseY);
       gl.uniform3f(uColor, card.color[0], card.color[1], card.color[2]);
+      gl.uniform3f(uBg, card.bg[0], card.bg[1], card.bg[2]);
       
       gl.drawArrays(gl.TRIANGLES, 0, 6);
       

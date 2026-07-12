@@ -20,14 +20,11 @@ const t = useTranslations(lang);
 
     <main class="flouvia-masterpiece">
 
-        <section class="hero-grand">
-            <div class="container hero-container">
+        <section class="hero-grand fluid-target" data-bg-color="#ffffff" data-shader-color="#cbd5e1">
+            <div class="container hero-container" style="z-index: 1;">
                 <div class="hero-content">
                     <div class="hero-text-zone" id="hero-parallax">
-                        <div class="hero-status hero-anim" id="hero-status">
-                            <span class="hero-status-dot" aria-hidden="true"></span>
-                            <span>{lang === 'en' ? 'ACCEPTING Q3 PROJECTS' : 'ACEPTANDO PROYECTOS Q3'}</span>
-                        </div>
+
                         <p class="eyebrow hero-anim">
                             {t('hero.badge')}
                         </p>
@@ -118,8 +115,8 @@ const t = useTranslations(lang);
 
                     <a href="/casos/el-zarco" class="vertical-card squircle">
                         <div class="card-num-luxury">02</div>
-                        <div class="card-bg">
-                            <img src="/imgs/el-zarco.svg" alt="El Zarco B2B" class="carousel-image" />
+                        <div class="card-bg fluid-target" style="background: var(--color-blue-deep);" data-shader-color="#fef08a">
+                            <img src="https://elzarcodistribuidora.com.mx/assets/69ac8c1474da9485bf036f71_DISTRIBUIDORA.webp" alt="El Zarco B2B" class="carousel-image" style="padding: 3rem; object-fit: contain; position: relative; z-index: 1;" />
                         </div>
                         <div class="card-overlay">
                             <span class="v-tag">{lang === 'en' ? 'B2B Architecture' : 'Arquitectura B2B'}</span>

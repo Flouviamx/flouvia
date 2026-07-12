@@ -526,7 +526,7 @@ const faqSchema = app.faq && app.faq.length ? {
 
 .faq-icon-wrap { position: relative; width: 14px; height: 14px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--color-text); transition: color 0.3s ease; }
 .faq-q:hover .faq-icon-wrap { color: #86868b; }
-.faq-icon-line { position: absolute; background: currentColor; border-radius: 1px; transition: transform 0.5s var(--ease-spring), opacity 0.5s ease; }
+.faq-icon-line { position: absolute; background: currentColor; border-radius: 1px; transition: transform 0.7s var(--ease-spring), opacity 0.6s ease; }
 .faq-icon-h { width: 14px; height: 1.5px; }
 .faq-icon-v { width: 1.5px; height: 14px; }
 
@@ -726,7 +726,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         item.classList.add('is-open');
         q.setAttribute('aria-expanded', 'true');
-        gsap.to(a, { height: 'auto', opacity: 1, duration: 0.5, ease: 'power3.inOut' });
+        gsap.to(a, { height: 'auto', opacity: 1, duration: 0.7, ease: 'power3.out' });
       }
     });
   });

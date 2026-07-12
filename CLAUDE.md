@@ -539,6 +539,11 @@ nada y todo queda visible (la clase `.js-anim` tampoco se añade).
 - Border-radius: 24px (squircle) para cards normales, 28-32px para containers grandes
 - Shadows luxe: `0 24px 60px rgba(0,0,0,0.35)` para cards en dark, `0 30px 80px -30px rgba(10,25,47,0.08)` para containers en light
 
+**Plantillas Interiores & Hero (Actualizado Julio 2026):**
+- **Heroes Unificados:** Todas las plantillas interiores (Casos, Servicios, Cord, Blog) usan un Hero centrado, limpio, con el título directamente alineado sin elementos asimétricos (eliminados los layouts "flex-between"). Se eliminó toda lógica de separación de texto (como `titleHasDot`) para remover el punto serif final.
+- **Métricas Minimalistas (Apple-style):** Las bandas oscuras y pesadas de métricas ("DARK BLUEPRINT") fueron eliminadas de Servicios. En los Casos de estudio, la sección de resultados ahora tiene fondo claro (`--color-bg`), números gigantes gruesos, más padding y ausencia de cajas oscuras.
+- **Sin CTAs Intermedios:** Se eliminaron todos los bloques CTA personalizados al final de las páginas de plantillas (`.cta-card-blue`, `.cta-integrated`). Ahora el sitio depende exclusivamente del CTA unificado del `Footer.astro` para cerrar cada página.
+
 **Blog & Shaders (Actualizado Julio 2026):**
 - **WebGL Fluid Shader:** Se eliminaron las cuadrículas estáticas (`.visual-grid-lines`) de las tarjetas del blog en favor de un shader de fluido WebGL ultraligero y de alto rendimiento, implementado con `OffscreenCanvas` y Vanilla WebGL.
 - **Minimalismo absoluto:** El shader es completamente pasivo (no reacciona al mouse ni emite luz). Es un gradiente fluido lento y elegante (mayormente oscuro), que mezcla de forma sutil un 12% del color de la categoría (`data-shader-color`) usando simplex noise y ruido esmerilado, manteniendo una estética *Apple/Stripe* extremadamente sobria.
@@ -571,8 +576,8 @@ Protocolo (gray)    — Sticky 2-col + timeline track con gradient + step counte
 CTA (gray + dark)   — Card oscura con mouse-tracking glow
 Footer (dark navy)  — Watermark "Flouvia" 26vw. Grid 5fr/7fr: columna de marca
                       (logo, tagline sans, descripción-entity, status badge) +
-                      3 nav cols (/01 TRABAJO · /02 LA FIRMA · /03 CONTACTO).
-                      El correo es el CTA protagonista (en /03). Ver Footer pattern.
+                      3 nav cols (01 TRABAJO · 02 LA FIRMA · 03 CONTACTO).
+                      El correo es el CTA protagonista (en 03). Ver Footer pattern.
 ```
 
 > **Eliminado (mayo 2026):** la "proof-strip" (filas El Zarco −67% / Setnpet +42%
@@ -624,9 +629,9 @@ Footer (dark navy)  — Watermark "Flouvia" 26vw. Grid 5fr/7fr: columna de marca
      año") → **`.footer-status-badge`** (punto verde `pulse-server` + "ACEPTANDO
      PROYECTOS Q3").
    - **`.navigation-columns`** (derecha, `grid-template-columns: 1fr 1fr 1.7fr; gap: 2.5rem`):
-     - `/01 TRABAJO` → Servicios · Casos · Blog
-     - `/02 LA FIRMA` → Nosotros · Portal de Clientes (`/login`)
-     - `/03 CONTACTO` (`.contact-col`, más ancha) → `.contact-location`
+     - `01 TRABAJO` → Servicios · Casos · Blog
+     - `02 LA FIRMA` → Nosotros · Portal de Clientes (`/login`)
+     - `03 CONTACTO` (`.contact-col`, más ancha) → `.contact-location`
        ("CDMX — Operación global") + **`.minimal-email-link` = correo protagonista**
        (`hola@flouvia.com`, `clamp(1.4rem, 1.9vw, 1.8rem)`, weight 600, subrayado +
        flecha SVG animada) + `.contact-note` ("Respuesta en menos de 24 h.").
@@ -636,11 +641,11 @@ Footer (dark navy)  — Watermark "Flouvia" 26vw. Grid 5fr/7fr: columna de marca
    circulares compactos) · `.legal-right` (Privacidad · Términos).
 
 **Tipografía — casing unificado (regla del proyecto):**
-- **Etiquetas-sistema en MAYÚSCULAS:** eyebrow, `/01 /02 /03` col-titles, status badge.
+- **Etiquetas-sistema en MAYÚSCULAS:** eyebrow, `01 02 03` col-titles, status badge.
 - **Links en Title Case:** Servicios, Casos, Blog, Nosotros, Portal de Clientes
   (hardcodeados con ternario `isEn ?`, **NO** `t()` — las claves `nav.*` devuelven
   mayúsculas y romperían el casing). Por eso `useTranslations`/`t` ya no se importa aquí.
-- Numeración `/01 /02 /03` y el "2026" de edición y el "Flouvia" del copyright: serif italic.
+- Numeración `01 02 03` y el "2026" de edición: sans-serif. El "Flouvia" del copyright: serif italic.
 
 **Hairlines:** `linear-gradient(to right, transparent, rgba(255,255,255,0.18) 20%, ... 80%, transparent)` — bordes desvanecen.
 
@@ -677,14 +682,14 @@ hardcodeados — revisar cada trimestre.
 4. `.pf-grid` (`5fr 7fr`):
    - **`.pf-brand-col`**: logo SVG + **statement 100% sans/Inter** "Tu operación, en un solo lugar." (SIN serif italic — misma regla que el footer público) + correo `hola@flouvia.com →`.
    - **`.pf-nav-cols`** (`repeat(3, 1fr)`):
-     - `/01 PORTAL` → Dashboard · Bóveda · Facturación · Calendario
-     - `/02 HERRAMIENTAS` → Roadmap · Entorno · Changelog · Soporte
-     - `/03 CUENTA` → Sitio Público · Cerrar sesión (logout)
+     - `01 PORTAL` → Dashboard · Bóveda · Facturación · Calendario
+     - `02 HERRAMIENTAS` → Roadmap · Entorno · Changelog · Soporte
+     - `03 CUENTA` → Sitio Público · Cerrar sesión (logout)
 5. `.pf-divider` — hairline con gradient.
 6. `.pf-bottom` — copyright + Privacidad · Términos.
 
 **Tipografía — mismas reglas que el footer público:**
-- Etiquetas-sistema en MAYÚSCULAS (eyebrow, `/0X` col-titles, badge).
+- Etiquetas-sistema en MAYÚSCULAS (eyebrow, `0X` col-titles, badge).
 - Links en Title Case (hardcodeados con ternario `isEn ?`).
 - Statement 100% sans — sin acento serif italic.
 - Números de edición y "Flouvia" del copyright: serif italic (`.pf-ed`).

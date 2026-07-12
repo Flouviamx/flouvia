@@ -1,7 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
-import CordNavbar from '../components/CordNavbar.astro';
+import Navbar from '../components/Navbar.astro';
+import CordPricing from '../components/cord/CordPricing.astro';
 
 export const prerender = true;
 
@@ -10,18 +11,66 @@ const description = 'Cord es la plataforma B2B para cotizaciones, pedidos y CFDI
 
 const schemaOrg = {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  "@id": "https://flouvia.com/#organization",
-  "makesOffer": {
-    "@type": "Offer",
-    "itemOffered": {
-      "@type": "SoftwareApplication",
-      "name": "Cord",
-      "url": "https://cord.flouvia.com",
-      "applicationCategory": "BusinessApplication",
-      "description": "Plataforma B2B de cotizaciones, pedidos y CFDI 4.0, de uso público y gratuito."
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://flouvia.com/#organization",
+      "makesOffer": {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "SoftwareApplication",
+          "name": "Cord",
+          "url": "https://cord.flouvia.com",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "MXN",
+            "availability": "https://schema.org/InStock"
+          },
+          "description": "Plataforma B2B de cotizaciones, pedidos y CFDI 4.0, de uso público y gratuito."
+        }
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Cord es realmente gratis?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí. Cord es 100% gratis para empezar. No necesitas tarjeta de crédito y puedes crear cotizaciones ilimitadas con tu propia marca. Nuestro objetivo es eliminar la fricción en ventas B2B."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Necesito ser cliente de Flouvia para usarlo?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolutamente no. Cord es un producto SaaS desarrollado por Flouvia, pero está abierto y disponible para cualquier empresa, negocio o profesional independiente en México, sean clientes nuestros o no."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Mi cliente tiene que descargar algo o crear una cuenta?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Tu cliente recibe un enlace seguro que abre directamente en su navegador web (celular o computadora). Puede ver la cotización, aprobarla y descargarla en PDF sin crear cuenta ni instalar ninguna app."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo funciona la facturación automática (CFDI 4.0)?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Una vez que tu cliente aprueba la cotización, puedes generar la factura CFDI 4.0 con un solo clic. El sistema toma los datos de la cotización y los envía al SAT, ahorrándote la captura doble de datos."
+          }
+        }
+      ]
     }
-  }
+  ]
 };
 ---
 
@@ -36,49 +85,38 @@ const schemaOrg = {
     
     <script type="application/ld+json" set:html={JSON.stringify(schemaOrg)} />
 
-    <CordNavbar />
+    <Navbar />
 
     <main class="flouvia-masterpiece page-cord">
-        <!-- 02 — Hero -->
-        <section class="hero-grand">
-            <div class="container hero-container text-center">
-                <div class="hero-content" style="align-items: center;">
-                    <div class="hero-text-zone" id="hero-parallax" style="display: flex; flex-direction: column; align-items: center;">
-                        
+        <!-- 01 — Hero -->
+        <section class="hero-grand fluid-target" data-bg-color="#ffffff" data-shader-color="#bae6fd">
+            <div class="container hero-container" style="z-index: 1;">
+                <div class="hero-content">
+                    <div class="hero-text-zone" id="hero-parallax">
                         <div class="hero-status hero-anim" id="hero-status">
                             <span class="hero-status-dot" aria-hidden="true"></span>
                             <span>DISPONIBLE PARA CUALQUIER NEGOCIO</span>
                         </div>
-
                         <p class="eyebrow hero-anim">
-                            UN PRODUCTO DE FLOUVIA
+                            UN PRODUCTO PÚBLICO DE FLOUVIA
                         </p>
-
-                        <h1 class="hero-title hero-anim" style="text-align: center;">
-                            <span class="title-bold">Cord. Cotizaciones B2B</span> <br/><span class="title-bold">que se aprueban solas.</span>
+                        <h1 class="hero-title hero-anim">
+                            <span class="title-bold">Cotizaciones B2B</span> <span class="title-bold">que se aprueban solas.</span>
                         </h1>
                     </div>
 
-                    <div class="hero-bottom hero-anim" style="flex-direction: column; align-items: center; border-top: none; gap: 2.5rem;">
-                        <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
-                            <p class="hero-desc text-center" style="max-width: 600px;">
-                                Manda cotizaciones con tu marca, tu cliente aprueba en un clic y el CFDI se timbra solo. Gratis para empezar — sin tarjeta, sin aplicar a nada.
-                            </p>
-                            <div class="hero-badges" style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; color: var(--color-text-muted); font-size: 0.85rem; font-weight: 500;">
-                                <span>&middot; Notificación de lectura</span>
-                                <span>&middot; Aprobación en un clic</span>
-                                <span>&middot; CFDI 4.0 automático</span>
-                            </div>
-                        </div>
-
-                        <div class="hero-action" style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; width: 100%; margin-top: 1.5rem;">
+                    <div class="hero-bottom hero-anim">
+                        <p class="hero-desc">
+                            Cord es la plataforma gratuita para enviar cotizaciones con tu marca, obtener aprobación en un clic y timbrar el CFDI 4.0 automáticamente. Sin fricción, sin tarjeta, sin ser cliente de Flouvia.
+                        </p>
+                        <div class="hero-action" style="display: flex; gap: 1rem; align-items: center;">
                             <a href="https://cord.flouvia.com/registro" class="btn-luxe">
-                                <span>Probar Cord gratis</span>
+                                <span>Crear cotización gratis</span>
                                 <span class="btn-arrow" aria-hidden="true">&rarr;</span>
                                 <div class="btn-shimmer"></div>
                             </a>
                             <a href="https://cord.flouvia.com" class="btn-secondary-luxe">
-                                <span>Ver una cotización de ejemplo</span>
+                                <span>Ver ejemplo</span>
                             </a>
                         </div>
                     </div>
@@ -86,38 +124,80 @@ const schemaOrg = {
             </div>
         </section>
 
-        <!-- 03 — Features (Editorial Rows) -->
+        <!-- 02 — AI Definition Block -->
+        <section class="ai-definition-block hero-anim">
+            <div class="container">
+                <div class="definition-card">
+                    <p class="eyebrow" style="margin-bottom: 1rem;">¿QUÉ ES CORD?</p>
+                    <h2 class="definition-heading">Cord es el software público y gratuito de Flouvia diseñado para modernizar las ventas B2B. Permite a cualquier empresa enviar cotizaciones interactivas, saber cuándo el cliente las abre, recibir aprobación digital instantánea y generar facturas CFDI 4.0 directamente desde la misma interfaz.</h2>
+                </div>
+            </div>
+        </section>
+
+        <!-- 03 — Public & Free Emphasis -->
+        <section class="public-free-section js-anim-section">
+            <div class="container">
+                <div class="pf-grid">
+                    <div class="pf-text">
+                        <p class="eyebrow">HECHO PARA TODOS</p>
+                        <h2 class="pf-title">No necesitas ser nuestro cliente.</h2>
+                        <p class="pf-desc">
+                            En Flouvia desarrollamos sistemas complejos para grandes corporativos, pero queríamos democratizar esta tecnología. Cord nace como un producto independiente, <strong>100% público y gratuito</strong> para empezar.
+                        </p>
+                        <ul class="pf-list">
+                            <li><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></span> Cualquier persona puede registrarse hoy mismo.</li>
+                            <li><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></span> No te pedimos tarjeta de crédito.</li>
+                            <li><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></span> Tus cotizaciones llevarán siempre tu logotipo.</li>
+                        </ul>
+                    </div>
+                    <div class="pf-visual">
+                        <div class="pf-card texture-noise fluid-target" data-shader-color="#bae6fd">
+                            <div class="pf-card-inner">
+                                <div class="pf-price">Gratis</div>
+                                <div class="pf-price-sub">Para siempre.</div>
+                                <div class="pf-divider"></div>
+                                <div class="pf-feature">Cotizaciones ilimitadas</div>
+                                <div class="pf-feature">Aprobaciones en un clic</div>
+                                <div class="pf-feature">Catálogo de productos</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 04 — Features (Editorial Rows) -->
         <section class="services-rows">
             <div class="container">
-                <div class="section-header hero-anim">
+                <div class="section-header js-anim-section">
                     <p class="eyebrow" style="margin-bottom: 1.5rem;">CÓMO FUNCIONA</p>
-                    <h2 class="section-heading">Cero fricción para vender.</h2>
+                    <h2 class="section-heading">Cero fricción en todo tu proceso.</h2>
                 </div>
 
                 <div class="rows-wrapper">
                     <a href="https://cord.flouvia.com/caracteristicas/aprobaciones" class="service-row js-anim-row" style="--delay: 0.1s;">
-                        <div class="row-num">/01</div>
+                        <div class="row-num">01</div>
                         <div class="row-content">
-                            <h3>Tu cliente aprueba sin crear cuenta</h3>
-                            <p>Un link con tu marca. Lo abre, ve el total, aprueba o paga. Cero fricción para que cierren más rápido.</p>
+                            <h3>Aprobación mágica sin fricción</h3>
+                            <p>Envías un link seguro con tu propia marca. Tu cliente lo abre en el celular o computadora, revisa los detalles, y aprueba con un solo clic. Sin crear cuentas, ni descargar PDFs gigantes, ni responder correos con "ok, procedan".</p>
                         </div>
                         <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
                         <div class="animated-border"></div>
                     </a>
                     <a href="https://cord.flouvia.com/caracteristicas/notificaciones" class="service-row js-anim-row" style="--delay: 0.2s;">
-                        <div class="row-num">/02</div>
+                        <div class="row-num">02</div>
                         <div class="row-content">
-                            <h3>Sabes el momento exacto en que la ven</h3>
-                            <p>Notificación instantánea cuando tu cliente abre la cotización. Se acabó el "¿ya la revisaste?"</p>
+                            <h3>Notificación instantánea de lectura</h3>
+                            <p>Recibe una alerta silenciosa en el segundo exacto en que tu cliente abre la cotización. Tendrás todo el contexto para saber si es momento de hacer una llamada de seguimiento o esperar a que la revisen.</p>
                         </div>
                         <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
                         <div class="animated-border"></div>
                     </a>
                     <a href="https://cord.flouvia.com/caracteristicas/cfdi" class="service-row js-anim-row" style="--delay: 0.3s;">
-                        <div class="row-num">/03</div>
+                        <div class="row-num">03</div>
                         <div class="row-content">
-                            <h3>CFDI 4.0, sin recapturar nada</h3>
-                            <p>De cotización aprobada a factura timbrada ante el SAT, automático, desde la misma pantalla.</p>
+                            <h3>Facturación CFDI 4.0 automática</h3>
+                            <p>Cuando el cliente aprueba, pasas de cotización a factura timbrada ante el SAT con un botón. Toda la información (conceptos, impuestos, retenciones) se transfiere automáticamente. Adiós a la captura doble.</p>
                         </div>
                         <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
                         <div class="animated-border"></div>
@@ -126,35 +206,48 @@ const schemaOrg = {
             </div>
         </section>
 
-        <!-- 04 — Trust strip -->
-        <section class="trust-strip hero-anim">
+        <!-- 05 — Trust strip -->
+        <section class="trust-strip js-anim-section">
             <div class="container">
-                <p>Construido por Flouvia, la misma firma detrás de portales B2B para distribuidores en México &middot; Usado en La Central de Abastos CDMX: &minus;67% tiempo de procesamiento, +25% ticket promedio</p>
+                <p>Construido por Flouvia, la misma firma detrás de portales B2B para distribuidores en México &middot; Usado por docenas de empresas para cerrar tratos más rápido</p>
             </div>
         </section>
 
-        <!-- 05 — CTA final -->
-        <section class="cta-integrated js-anim-cta">
+        <!-- 05.5 — Pricing -->
+        <CordPricing />
+
+        <!-- 06 — FAQs -->
+        <section class="faq-section js-anim-section">
             <div class="container">
-                <div class="cta-card-blue cta-squircle texture-noise" id="cta-card">
-                    <div class="cta-inner-flex">
-                        <div class="cta-text-side text-center" style="flex: 1;">
-                            <p class="eyebrow" style="color: #64748b; letter-spacing: 4px;">EMPIEZA HOY</p>
-                            <h2 class="cta-title-luxe" style="max-width: 100%; margin: 0 auto;">Tu primera cotización, en menos de 10 minutos.</h2>
-                            <p class="cta-scarcity-sub" style="max-width: 100%; margin: 1.1rem auto 2.5rem;">Sin tarjeta. Plan gratis para siempre. Cualquier negocio B2B en México puede empezar ahora.</p>
-                            
-                            <a href="https://cord.flouvia.com/registro" class="btn-glow-blue">
-                                <span>Crear cuenta gratis en Cord &rarr;</span>
-                                <div class="glow-effect"></div>
-                            </a>
-                        </div>
+                <div class="faq-header text-center">
+                    <p class="eyebrow">PREGUNTAS FRECUENTES</p>
+                    <h2 class="section-heading" style="margin-bottom: 4rem;">Despejando dudas.</h2>
+                </div>
+                
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h4>¿Cord es realmente gratis?</h4>
+                        <p>Sí. Cord es 100% gratis para empezar. No necesitas tarjeta de crédito y puedes crear cotizaciones ilimitadas con tu propia marca. Nuestro objetivo es eliminar la fricción en ventas B2B.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>¿Necesito ser cliente de Flouvia para usarlo?</h4>
+                        <p>Absolutamente no. Cord es un producto SaaS desarrollado por Flouvia, pero está abierto y disponible para cualquier empresa, negocio o profesional independiente en México, sean clientes nuestros o no.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>¿Mi cliente tiene que descargar algo?</h4>
+                        <p>No. Tu cliente recibe un enlace seguro que abre directamente en su navegador web. Puede ver la cotización, aprobarla y descargarla en PDF sin crear cuenta ni instalar ninguna app.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>¿Puedo timbrar facturas válidas en México?</h4>
+                        <p>Sí, Cord está diseñado para el mercado mexicano. Puedes generar facturas CFDI 4.0 válidas ante el SAT directamente desde una cotización aprobada.</p>
                     </div>
                 </div>
             </div>
         </section>
+
     </main>
 
-    <Footer ctaTitleEs="Simplifica tus finanzas B2B hoy mismo." ctaBtnEs="Agendar demostración de Cord" ctaLinkEs="/contacto" />
+    <Footer ctaTitleEs="Simplifica tus finanzas B2B hoy mismo." ctaBtnEs="Agendar demostración de Flouvia" ctaLinkEs="/contacto" />
 </Layout>
 
 <style is:global>
@@ -190,11 +283,11 @@ const schemaOrg = {
     .hero-status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: hero-status-pulse 2s infinite; }
     @keyframes hero-status-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
     
-    .js-anim .hero-anim, .js-anim .js-anim-row, .js-anim .js-anim-cta { opacity: 0; visibility: hidden; }
+    .js-anim .hero-anim, .js-anim .js-anim-row, .js-anim .js-anim-section, .js-anim .js-anim-cta { opacity: 0; visibility: hidden; }
 
     .btn-luxe {
         position: relative; display: inline-flex; background: var(--color-text); color: #fff;
-        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem;
+        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.95rem;
         font-weight: 600; overflow: hidden; justify-content: center;
         transition: transform 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth);
         box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 10px 20px rgba(0,0,0,0.08);
@@ -211,7 +304,7 @@ const schemaOrg = {
     .btn-secondary-luxe {
         background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%);
         backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: var(--color-text);
-        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem; font-weight: 600;
+        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.95rem; font-weight: 600;
         border: 1px solid rgba(10,25,47,0.08); display: inline-flex; justify-content: center; align-items: center;
         box-shadow: 0 4px 12px rgba(10,25,47,0.03), inset 0 1px 1px rgba(255,255,255,0.9);
         transition: transform 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth), border-color 0.3s;
@@ -221,26 +314,49 @@ const schemaOrg = {
     }
 
     .squircle { border-radius: 24px; transform: translateZ(0); overflow: hidden; }
-    .cta-squircle { border-radius: 32px; transform: translateZ(0); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
 
     /* HERO */
-    .hero-grand { padding: 10rem 0 6rem 0; min-height: 100svh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
+    .hero-grand { padding: 10rem 0 4rem 0; min-height: 100svh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
     .hero-text-zone { transition: transform 0.1s ease-out, opacity 0.1s ease-out; }
-    .hero-title { font-size: clamp(1.9rem, 3.6vw, 3.4rem); line-height: 1.14; font-weight: 800; letter-spacing: -1.2px; margin-bottom: 3.5rem; color: #050505; max-width: 880px; }
+    .hero-title { font-size: clamp(1.9rem, 3.6vw, 3.4rem); line-height: 1.14; font-weight: 800; letter-spacing: -1.2px; margin-bottom: 2.75rem; color: #050505; max-width: 880px; }
     .hero-title .title-bold { color: #050505; }
     .title-bold { display: inline; }
+    .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem; }
     .hero-desc { font-size: 1.1rem; color: var(--color-text-muted); max-width: 480px; line-height: 1.55; margin: 0; }
 
+    /* AI DEFINITION BLOCK */
+    .ai-definition-block { padding: 2rem 0 5rem; }
+    .definition-card { max-width: 800px; margin: 0 auto; text-align: center; }
+    .definition-heading { font-size: 1.5rem; line-height: 1.5; font-weight: 500; color: var(--color-text); letter-spacing: -0.5px; }
+
+    /* PUBLIC & FREE SECTION */
+    .public-free-section { padding: 6rem 0; background: var(--color-bg); }
+    .pf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .pf-title { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 800; letter-spacing: -1.2px; margin-bottom: 1.5rem; line-height: 1.1; }
+    .pf-desc { font-size: 1.1rem; color: var(--color-text-muted); line-height: 1.6; margin-bottom: 2rem; }
+    .pf-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1rem; }
+    .pf-list li { display: flex; align-items: center; gap: 0.8rem; font-size: 1.05rem; font-weight: 500; color: var(--color-text); }
+    .pf-list li span { color: #059669; display: flex; align-items: center; }
+    
+    .pf-card { background: #0a192f; border-radius: 24px; padding: 3rem; color: #fff; position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(10,25,47,0.15); transition: transform 0.5s var(--ease-spring), box-shadow 0.5s var(--ease-spring); }
+    .pf-card:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 30px 60px rgba(10,25,47,0.2); }
+    .texture-noise::before { content: ""; position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.05; mix-blend-mode: overlay; pointer-events: none; border-radius: inherit; }
+    .pf-card-inner { position: relative; z-index: 2; }
+    .pf-price { font-size: 3.5rem; font-weight: 800; letter-spacing: -1.5px; line-height: 1; margin-bottom: 0.5rem; }
+    .pf-price-sub { font-size: 1.2rem; font-weight: 500; color: rgba(255,255,255,0.7); }
+    .pf-divider { width: 100%; height: 1px; background: rgba(255,255,255,0.15); margin: 2rem 0; }
+    .pf-feature { display: flex; align-items: center; gap: 0.8rem; font-size: 1.05rem; font-weight: 500; margin-bottom: 1rem; }
+    .pf-feature::before { content: ''; display: inline-block; width: 18px; height: 18px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E"); background-size: contain; background-repeat: no-repeat; }
+
     /* SERVICIOS — Editorial Rows */
-    .services-rows { padding: 4rem 0 7rem 0; background: var(--color-bg); position: relative; }
+    .services-rows { padding: 6rem 0; background: var(--color-bg); position: relative; }
     .section-heading { font-size: clamp(2.3rem, 4.4vw, 3.4rem); font-weight: 800; letter-spacing: -1.5px; margin: 0 0 1rem 0; line-height: 1.05; text-align: center; }
     .section-header .eyebrow { text-align: center; }
-    .rows-wrapper { margin-top: 5rem; border-top: 1px solid var(--color-border); }
+    .rows-wrapper { margin-top: 5rem; }
     .service-row { display: grid; grid-template-columns: 110px 1fr auto; gap: 4rem; padding: 4.5rem 0; position: relative; cursor: pointer; align-items: center; transition: background 0.5s var(--ease-smooth); text-decoration: none; color: inherit; }
-    .service-row::before { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: var(--color-border); }
     .animated-border { position: absolute; bottom: 0; left: 0; width: 0%; height: 1px; background: linear-gradient(90deg, #0a192f 0%, #0a192f 60%, transparent 100%); transition: width 0.85s var(--ease-spring); z-index: 2; }
-    .row-num { font-family: var(--font-serif); font-style: italic; font-size: 2.6rem; font-weight: 400; color: rgba(10,25,47,0.18); line-height: 0.9; letter-spacing: -1.5px; transition: color 0.5s var(--ease-smooth), transform 0.6s var(--ease-spring); }
-    .row-content h3 { font-size: 2.4rem; font-weight: 800; letter-spacing: -1.2px; margin: 0 0 1rem 0; transition: color 0.5s var(--ease-smooth), letter-spacing 0.5s var(--ease-smooth), transform 0.55s var(--ease-spring); }
+    .row-num { font-family: var(--font-sans); font-style: normal; font-size: 2.6rem; font-weight: 800; color: rgba(10,25,47,0.18); line-height: 0.9; letter-spacing: -1.5px; transition: color 0.5s var(--ease-smooth), transform 0.6s var(--ease-spring); }
+    .row-content h3 { font-size: 2.2rem; font-weight: 800; letter-spacing: -1.2px; margin: 0 0 1rem 0; transition: color 0.5s var(--ease-smooth), letter-spacing 0.5s var(--ease-smooth), transform 0.55s var(--ease-spring); }
     .row-content p { font-size: 1.1rem; color: var(--color-text-muted); line-height: 1.65; margin: 0; max-width: 620px; transition: color 0.4s var(--ease-smooth); }
     .arrow-circle { width: 56px; height: 56px; border: 1px solid var(--color-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.5s var(--ease-spring), color 0.5s var(--ease-spring), border-color 0.5s var(--ease-spring), transform 0.6s var(--ease-spring); }
     
@@ -250,15 +366,21 @@ const schemaOrg = {
     .service-row:hover .arrow-circle { background: var(--color-blue-deep); color: #fff; border-color: var(--color-blue-deep); transform: translate(6px, -6px) rotate(-45deg); }
 
     /* TRUST STRIP */
-    .trust-strip { padding: 3rem 0; text-align: center; border-top: 1px solid var(--color-border); }
+    .trust-strip { padding: 3rem 0; text-align: center; }
     .trust-strip p { font-size: 0.95rem; color: var(--color-text-muted); line-height: 1.6; max-width: 800px; margin: 0 auto; }
 
+    /* FAQs */
+    .faq-section { padding: 6rem 0; background: var(--color-bg); }
+    .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; max-width: 1000px; margin: 0 auto; }
+    .faq-item h4 { font-size: 1.3rem; font-weight: 700; margin: 0 0 1rem 0; letter-spacing: -0.5px; }
+    .faq-item p { font-size: 1.05rem; color: var(--color-text-muted); line-height: 1.6; margin: 0; }
+
     /* CTA */
-    .cta-integrated { padding: 0 0 8rem 0; background: var(--color-bg); border: none; } 
+    .cta-integrated { padding: 6rem 0 8rem 0; background: var(--color-bg); border: none; } 
     .cta-card-blue { background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%); padding: 5.5rem 6rem; box-shadow: 0 20px 40px rgba(5,11,20,0.15), 0 50px 100px rgba(5,11,20,0.25); transition: transform 0.6s var(--ease-spring); position: relative; --cta-mx: 50%; --cta-my: 50%; }
+    .cta-squircle { border-radius: 32px; transform: translateZ(0); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
     .cta-card-blue::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(600px circle at var(--cta-mx) var(--cta-my), rgba(255,255,255,0.05) 0%, transparent 60%); pointer-events: none; z-index: 1; opacity: 0; transition: opacity 0.4s ease; }
     .cta-card-blue:hover::after { opacity: 1; }
-    .texture-noise::before { content: ""; position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.04; mix-blend-mode: overlay; pointer-events: none; border-radius: inherit; }
     .cta-card-blue:hover { transform: scale(1.02); }
     .cta-inner-flex { display: flex; justify-content: space-between; align-items: center; gap: 3rem; position: relative; z-index: 2;}
     .cta-title-luxe { font-size: clamp(1.9rem, 3vw, 2.8rem); font-weight: 800; color: #fff; line-height: 1.12; letter-spacing: -1.2px; margin: 0; }
@@ -269,31 +391,46 @@ const schemaOrg = {
     .btn-glow-blue:hover { transform: translateY(-3px); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 14px 28px rgba(255,255,255,0.12), 0 26px 52px rgba(255,255,255,0.22); }
     .btn-glow-blue:active { transform: translateY(-1px); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 4px 8px rgba(255,255,255,0.08); }
 
+
     @media (max-width: 1024px) {
+        .hero-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; }
         .service-row { grid-template-columns: 110px 1fr; }
         .row-action { display: none; }
+        .pf-grid { gap: 2rem; }
     }
 
     @media (max-width: 768px) {
-        .hero-grand { padding-top: 10rem; padding-bottom: 4rem; min-height: auto; }
-        .hero-title { max-width: 100%; font-size: clamp(2rem, 7.6vw, 2.85rem); line-height: 1.12; }
+        .hero-grand { padding-top: 11rem; padding-bottom: 4rem; min-height: auto; text-align: center; }
+        .hero-content { display: flex; flex-direction: column; align-items: center; }
+        .hero-title { display: flex; flex-direction: column; gap: 0.2rem; margin-bottom: 2.5rem; max-width: 100%; }
+        .title-bold { display: block; font-size: clamp(2rem, 7.6vw, 2.85rem); font-weight: 800; letter-spacing: -1px; line-height: 1.12; margin-bottom: 0; }
+        .hero-bottom { flex-direction: column; align-items: center; gap: 2.5rem; text-align: center; border-top: none; padding-top: 0;}
+        .hero-desc { font-size: 1.1rem; padding: 0 5%; max-width: 95%; margin: 0 auto; line-height: 1.6;}
+        .hero-action { width: 100%; padding: 0 5%; flex-direction: column !important; }
+        .btn-luxe { width: 100%; padding: 18px 0; font-size: 1.05rem;}
         .service-row { grid-template-columns: 1fr; gap: 1.5rem; padding: 3rem 0; }
         .row-num { font-size: 2rem; }
         .row-action { display: none; }
+
+        .pf-grid { grid-template-columns: 1fr; gap: 3rem; }
+        .faq-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+
+        .btn-luxe, .btn-secondary-luxe { width: 100%; }
+
         .cta-card-blue { padding: 4rem 2rem; text-align: center; }
         .btn-glow-blue { width: 100%; padding: 18px 0; }
-        .hero-action { flex-direction: column; width: 100% !important; align-items: stretch; }
-        .btn-luxe, .btn-secondary-luxe { width: 100%; }
     }
 </style>
 
 <script>
     import { gsap } from "gsap";
     import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { initFluidShaders } from "../components/blog/FluidShader";
     
     gsap.registerPlugin(ScrollTrigger);
 
     document.addEventListener("DOMContentLoaded", () => {
+        initFluidShaders();
         const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
         if (!reducedMotion) {
@@ -306,6 +443,24 @@ const schemaOrg = {
                 gsap.set(heroEls, { y: 30, opacity: 0, visibility: "visible" });
                 tl.to(heroEls, { y: 0, opacity: 1, stagger: 0.1 });
             }
+
+            // General Sections Entrance
+            gsap.utils.toArray(".js-anim-section").forEach((section: any) => {
+                gsap.fromTo(section,
+                    { y: 40, opacity: 0, visibility: "visible" },
+                    {
+                        scrollTrigger: {
+                            trigger: section,
+                            start: "top 85%",
+                            toggleActions: "play none none none"
+                        },
+                        y: 0,
+                        opacity: 1,
+                        duration: 1.2,
+                        ease: "power4.out"
+                    }
+                );
+            });
 
             // Services Rows Entrance
             gsap.utils.toArray(".js-anim-row").forEach((row: any) => {
@@ -325,37 +480,7 @@ const schemaOrg = {
                 );
             });
 
-            // CTA Entrance
-            const cta = document.querySelector(".js-anim-cta");
-            if(cta) {
-                gsap.fromTo(cta,
-                    { y: 40, opacity: 0, visibility: "visible", scale: 0.98 },
-                    {
-                        scrollTrigger: {
-                            trigger: cta,
-                            start: "top 80%",
-                            toggleActions: "play none none none"
-                        },
-                        y: 0,
-                        scale: 1,
-                        opacity: 1,
-                        duration: 1.4,
-                        ease: "power4.out"
-                    }
-                );
-            }
-
-            // Spotlight effect on CTA card
-            const card = document.getElementById("cta-card");
-            if (card) {
-                card.addEventListener("mousemove", (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    card.style.setProperty("--cta-mx", `${x}px`);
-                    card.style.setProperty("--cta-my", `${y}px`);
-                });
-            }
+            // Removed CTA animation block
         }
     });
 </script>

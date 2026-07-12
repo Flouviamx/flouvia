@@ -80,9 +80,6 @@ const aboutSchema = {
                             <span class="hero-status-dot" aria-hidden="true"></span>
                             <span>{t('about.hero.status')}</span>
                         </div>
-                        <p class="eyebrow hero-anim">
-                            {t('about.hero.badge')}
-                        </p>
                         <h1 class="hero-title hero-anim">
                             <span class="title-bold">{t('about.hero.title1')}</span> <span class="title-bold">{t('about.hero.title2')}</span>
                         </h1>
@@ -108,7 +105,6 @@ const aboutSchema = {
         <section class="entity-section">
             <div class="container">
                 <div class="entity-flex">
-                    <p class="eyebrow reveal-fade">{isEn ? 'THE FIRM, IN ONE PARAGRAPH' : 'LA FIRMA, EN UN PÁRRAFO'}</p>
                     <p class="entity-text reveal-fade">{t('about.entity')}</p>
                 </div>
             </div>
@@ -121,14 +117,11 @@ const aboutSchema = {
                 <div class="m-visual-side reveal-fade">
                     <div class="image-frame-luxe squircle">
                         <img src="/imgs/nosotros1.jpg" alt={isEn ? 'Flouvia — engineering team in Mexico City' : 'Flouvia — equipo de ingeniería en Ciudad de México'} class="parallax-inner-img" id="manifesto-img" />
-                        <div class="frame-glass-edge"></div>
                     </div>
                 </div>
 
                 <div class="m-text-side">
                     <div class="sticky-text-wrapper">
-                        <p class="eyebrow reveal-fade">{t('about.manifesto.badge')}</p>
-
                         <h2 class="section-heading reveal-fade">
                             {t('about.manifesto.title')} {t('about.manifesto.title_ed')}
                         </h2>
@@ -147,7 +140,6 @@ const aboutSchema = {
         <section class="values-monolith-section global-gap-reduced">
             <div class="container">
                 <div class="section-header">
-                    <p class="eyebrow reveal-fade">{t('about.values.badge')}</p>
                     <h2 class="section-heading reveal-fade">{t('about.values.title')} {t('about.values.title_ed')}</h2>
                 </div>
 
@@ -226,7 +218,6 @@ const aboutSchema = {
         <section class="testimonials-apple-luxe global-gap-reduced">
             <div class="container">
                 <div class="section-header ta-header">
-                    <p class="eyebrow reveal-fade">{t('about.reviews.badge')}</p>
                     <h2 class="section-heading reveal-fade">{t('about.reviews.title')} {t('about.reviews.title_ed')}</h2>
                 </div>
 
@@ -372,7 +363,7 @@ const aboutSchema = {
     /* ==========================================================
        ESTILOS LOCALES
        ========================================================== */
-    .section-heading { font-size: clamp(2.3rem, 4.4vw, 3.4rem); font-weight: 800; letter-spacing: -1.5px; margin: 0 0 1rem 0; line-height: 1.05; color: #000; }
+    .section-heading { font-size: clamp(2.2rem, 4vw, 3.2rem); font-weight: 700; letter-spacing: -1.2px; margin: 0 0 1rem 0; line-height: 1.1; color: #1d1d1f; }
     .mt-medium { margin-top: 2rem; }
 
     /* Reveal: el JS los oculta con gsap.set y los revela en onEnter. NO se
@@ -380,7 +371,7 @@ const aboutSchema = {
        visibles (nunca contenido invisible para siempre). */
     .reveal-fade, .reveal-up { will-change: opacity, transform; }
 
-    .squircle-math { border-radius: 20px; overflow: hidden; transform: translateZ(0); }
+    .squircle-math { border-radius: 32px; overflow: hidden; transform: translateZ(0); }
     .texture-noise-micro { position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.04; mix-blend-mode: overlay; pointer-events: none; }
     .relative-z { position: relative; z-index: 2; }
 
@@ -389,53 +380,44 @@ const aboutSchema = {
     /* 1. HERO — mismo estándar que el index */
     .hero-grand { padding: 10rem 0 4rem 0; min-height: 100svh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
     .hero-text-zone { transition: transform 0.1s ease-out, opacity 0.1s ease-out; }
-    .hero-title { font-size: clamp(1.9rem, 3.6vw, 3.4rem); line-height: 1.14; font-weight: 800; letter-spacing: -1.2px; margin-bottom: 2.75rem; color: #050505; max-width: 880px; }
-    .hero-title .title-bold { color: #050505; display: inline; }
+    .hero-title { font-size: clamp(1.9rem, 3.6vw, 3.4rem); line-height: 1.14; font-weight: 800; letter-spacing: -1.2px; margin-bottom: 2.75rem; color: #1d1d1f; max-width: 880px; }
+    .hero-title .title-bold { color: #1d1d1f; display: inline; }
 
     .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem; }
     .hero-desc { font-size: 1.1rem; color: var(--color-text-muted); max-width: 520px; line-height: 1.55; margin: 0; }
 
     /* 1b. DEFINICIÓN DE ENTIDAD */
-    .entity-section { background: var(--color-bg); padding: 0 0 7rem 0; }
-    .entity-flex { max-width: 880px; padding-top: 3.5rem; position: relative; }
-    .entity-flex::before {
-        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-        background: linear-gradient(90deg, var(--color-border), transparent);
-    }
-    .entity-text { font-size: clamp(1.3rem, 2.1vw, 1.7rem); line-height: 1.5; color: var(--color-text); font-weight: 500; letter-spacing: -0.4px; margin: 0; }
+    .entity-section { background: var(--color-bg); padding: 2rem 0 7rem 0; }
+    .entity-flex { max-width: 900px; margin: 0 auto; padding-top: 0; position: relative; text-align: center; }
+    .entity-text { font-size: clamp(1.4rem, 2.3vw, 1.85rem); line-height: 1.45; color: #1d1d1f; font-weight: 500; letter-spacing: -0.5px; margin: 0; }
 
     /* 2. MANIFIESTO */
     .manifesto-section { background: var(--color-bg); }
     .manifesto-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 6rem; align-items: center; }
 
     .m-visual-side { position: relative; width: 100%; }
-    .image-frame-luxe { width: 100%; aspect-ratio: 4/5; background: #f8fafc; border-radius: 24px; position: relative; overflow: hidden; transform: translateZ(0); border: 1px solid rgba(0,0,0,0.03); box-shadow: 0 20px 40px rgba(0,0,0,0.04); }
+    .image-frame-luxe { width: 100%; aspect-ratio: 4/5; background: #f5f5f7; border-radius: 32px; position: relative; overflow: hidden; transform: translateZ(0); border: none; box-shadow: none; }
     .parallax-inner-img { width: 100%; height: 120%; position: absolute; top: -10%; left: 0; object-fit: cover; z-index: 2; transition: transform 0.1s linear;}
-    .frame-glass-edge { position: absolute; inset: 0; z-index: 3; pointer-events: none; border-radius: inherit; box-shadow: inset 0 2px 1px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05); }
+    .frame-glass-edge { display: none; }
 
     .m-text-side { display: flex; flex-direction: column; }
     .sticky-text-wrapper { position: sticky; top: 140px; }
     .m-paragraphs { display: flex; flex-direction: column; gap: 1.5rem; max-width: 550px;}
-    .m-lead-text { font-size: 1.4rem; color: var(--color-text); font-weight: 600; line-height: 1.45; margin: 0; letter-spacing: -0.5px;}
-    .m-body-text { font-size: 1.12rem; color: var(--color-text-muted); line-height: 1.65; margin: 0;}
+    .m-lead-text { font-size: 1.4rem; color: #1d1d1f; font-weight: 500; line-height: 1.45; margin: 0; letter-spacing: -0.4px;}
+    .m-body-text { font-size: 1.12rem; color: #86868b; line-height: 1.65; margin: 0;}
 
     /* 3. ADN / PRINCIPIOS */
     .values-monolith-section { background: #ffffff; }
-    .values-monolith-section .section-header { margin-bottom: 5rem; }
-    .monolith-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem;}
-    .monolith-card { background: #ffffff; padding: 3.5rem 3rem; display: flex; flex-direction: column; position: relative; transition: transform 0.5s var(--ease-spring), box-shadow 0.5s var(--ease-spring); box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 4px 20px rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.05); }
-    .monolith-card:hover { transform: translateY(-8px); box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 30px 60px rgba(0,0,0,0.06); }
+    .values-monolith-section .section-header { margin-bottom: 4.5rem; text-align: center; }
+    .monolith-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;}
+    .monolith-card { background: #f5f5f7; padding: 3rem; display: flex; flex-direction: column; justify-content: flex-start; border-radius: 32px; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), background 0.5s ease; border: none; cursor: default; }
+    .monolith-card:hover { transform: scale(1.03); background: #ebebeb; }
 
-    .m-watermark { position: absolute; right: 1.5rem; top: 1.5rem; font-size: 2rem; color: rgba(10,25,47,0.18); line-height: 1; pointer-events: none; transition: transform 0.5s var(--ease-spring), color 0.5s ease; z-index: 0; letter-spacing: -1px; font-weight: 700; }
-    .monolith-card:hover .m-watermark { color: rgba(10,25,47,0.35); transform: translateX(4px); }
+    .m-card-inner { display: flex; flex-direction: column; height: 100%; justify-content: flex-start;}
+    .m-top-zone { display: none; /* Removed for better balance */ }
 
-    .m-card-inner { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%; justify-content: space-between;}
-    .m-top-zone { margin-bottom: 4rem;}
-    .m-progress-line { width: 0%; height: 2px; background: var(--color-blue-deep); transition: width 0.6s var(--ease-spring);}
-    .monolith-card:hover .m-progress-line { width: 100%; }
-
-    .m-bottom-zone h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 1rem 0; color: #000;}
-    .m-bottom-zone p { font-size: 1.08rem; color: var(--color-text-muted); line-height: 1.6; margin: 0; font-weight: 400;}
+    .m-bottom-zone h3 { font-size: 1.7rem; font-weight: 700; letter-spacing: -0.6px; margin: 0 0 1.2rem 0; color: #1d1d1f;}
+    .m-bottom-zone p { font-size: 1.1rem; color: #86868b; line-height: 1.55; margin: 0; font-weight: 500;}
 
 
     /* 5. POR QUÉ FLOUVIA — banda delgada */
@@ -468,7 +450,7 @@ const aboutSchema = {
     .ta-header { text-align: center; margin-bottom: 4rem; }
     
     .ta-interactive-wrapper { max-width: 900px; margin: 0 auto; }
-    .ta-card-main { background: #ffffff; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02), inset 0 1px 0 rgba(255,255,255,1); border: 1px solid rgba(0,0,0,0.05); overflow: hidden; display: flex; flex-direction: column; }
+    .ta-card-main { background: #f5f5f7; border-radius: 32px; box-shadow: none; border: none; overflow: hidden; display: flex; flex-direction: column; }
     
     .ta-slides-container { position: relative; width: 100%; display: grid; }
     
@@ -481,22 +463,22 @@ const aboutSchema = {
     }
     .ta-slide.active { opacity: 1; pointer-events: auto; transform: translateY(0); }
     
-    .ta-slide-logo h3 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 2rem 0; color: var(--color-text); text-transform: uppercase; }
+    .ta-slide-logo h3 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 2rem 0; color: #1d1d1f; text-transform: uppercase; }
     
-    .ta-text { font-size: 1.25rem; font-weight: 500; color: #050505; line-height: 1.6; letter-spacing: -0.3px; margin: 0 0 2.5rem 0; max-width: 700px; }
+    .ta-text { font-size: 1.25rem; font-weight: 500; color: #1d1d1f; line-height: 1.6; letter-spacing: -0.3px; margin: 0 0 2.5rem 0; max-width: 700px; }
     
     .ta-author { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; }
-    .ta-avatar { width: 42px; height: 42px; border-radius: 50%; background: #f8fafc; color: var(--color-blue-deep); border: 1px solid rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; flex-shrink: 0; }
-    .ta-meta h4 { margin: 0 0 2px 0; font-size: 1rem; font-weight: 800; color: #000; letter-spacing: -0.5px;}
-    .ta-meta span { font-size: 0.82rem; font-weight: 600; color: #64748b; }
+    .ta-avatar { width: 42px; height: 42px; border-radius: 50%; background: #ffffff; color: #1d1d1f; border: none; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
+    .ta-meta h4 { margin: 0 0 2px 0; font-size: 1rem; font-weight: 700; color: #1d1d1f; letter-spacing: -0.5px;}
+    .ta-meta span { font-size: 0.82rem; font-weight: 500; color: #86868b; }
     
-    .ta-tabs-nav { display: flex; background: #fdfdfd; border-top: 1px solid rgba(0,0,0,0.05); }
+    .ta-tabs-nav { display: flex; background: #ebebeb; border-top: none; }
     .ta-tab-btn { flex: 1; padding: 1.2rem; background: transparent; border: none; border-right: 1px solid rgba(0,0,0,0.04); cursor: pointer; transition: background 0.3s ease; display: flex; align-items: center; justify-content: center; }
     .ta-tab-btn:last-child { border-right: none; }
-    .ta-tab-btn:hover { background: #f8f8f8; }
-    .ta-tab-btn.active { background: #ffffff; box-shadow: 0 -2px 0 var(--color-blue-deep) inset; }
-    .ta-tab-logo { font-size: 1.05rem; font-weight: 800; color: var(--color-text); letter-spacing: -0.5px; opacity: 0.3; transition: opacity 0.3s ease; }
-    .ta-tab-btn.active .ta-tab-logo { opacity: 1; color: var(--color-blue-deep); }
+    .ta-tab-btn:hover { background: #e0e0e0; }
+    .ta-tab-btn.active { background: #f5f5f7; box-shadow: none; }
+    .ta-tab-logo { font-size: 1.05rem; font-weight: 700; color: #1d1d1f; letter-spacing: -0.5px; opacity: 0.4; transition: opacity 0.3s ease; }
+    .ta-tab-btn.active .ta-tab-logo { opacity: 1; color: #1d1d1f; }
     .ta-tab-btn.active .tab-img { opacity: 1 !important; filter: grayscale(0) !important; }
 
     /* 7. CTA FINAL */

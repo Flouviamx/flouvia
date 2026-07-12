@@ -19,6 +19,7 @@ const t = (o: { es: string; en: string }) => isEn ? o.en : o.es;
 // SEO — title/description con métricas si el caso los define (fallback al genérico)
 const pageTitle = caso.seoTitle ? t(caso.seoTitle) : `${caso.brand} — ${t(caso.category)} | Flouvia`;
 const pageDesc  = caso.seoDesc  ? t(caso.seoDesc)  : t(caso.desc);
+const shaderColor = caso.slug === 'el-zarco' ? '#fef08a' : '#bae6fd';
 
 // URLs absolutas para schema
 const SITE       = (Astro.site ?? new URL('https://flouvia.com')).origin;
@@ -58,37 +59,43 @@ const breadcrumbSchema = {
   <main class="cs-page">
 
     <!-- ════════════════════ HERO ════════════════════ -->
-    <section class="cs-hero">
-      <div class="container">
+    <section class="hero-grand">
+      <div class="container hero-container">
+        <div class="hero-content">
 
-        <!-- Breadcrumb -->
-        <div class="cs-breadcrumb" id="cs-breadcrumb">
-          <a href={`${root}/casos`} class="cs-back">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><polyline points="15 18 9 12 15 6"/></svg>
-            {isEn ? 'Cases' : 'Casos'}
-          </a>
-          <span class="cs-bread-sep">/</span>
-          <span class="cs-bread-num">{caso.num}</span>
-          <span class="cs-bread-brand">{caso.brand}</span>
-          <a href={caso.liveUrl} target="_blank" rel="noopener" class="cs-site-chip">
-            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            {caso.liveDomain}
-          </a>
-        </div>
-
-        <!-- Hero text -->
-        <div class="cs-hero-text" id="cs-hero-text">
-          <p class="cs-eyebrow" id="cs-eyebrow">{t(caso.category)}</p>
-          <h1 class="cs-brand" id="cs-brand">{caso.brand}.</h1>
-          <p class="cs-tagline editorial" id="cs-tagline">{t(caso.tagline)}</p>
-
-          <div class="cs-hero-bottom" id="cs-hero-bottom">
-            <p class="cs-desc">{t(caso.desc)}</p>
-            <a href={caso.liveUrl} target="_blank" rel="noopener" class="cs-visit-btn">
-              <span>{isEn ? 'Visit live site' : 'Visitar sitio'}</span>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          <!-- Breadcrumb -->
+          <div class="cs-breadcrumb hero-anim" id="cs-breadcrumb">
+            <a href={`${root}/casos`} class="cs-back">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><polyline points="15 18 9 12 15 6"/></svg>
+              {isEn ? 'Cases' : 'Casos'}
+            </a>
+            <span class="cs-bread-sep">/</span>
+            <span class="cs-bread-num">{caso.num}</span>
+            <a href={caso.liveUrl} target="_blank" rel="noopener" class="cs-site-chip">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              {caso.liveDomain}
             </a>
           </div>
+
+          <!-- Hero text -->
+          <div class="hero-text-zone" id="hero-parallax">
+            <p class="eyebrow hero-anim">{t(caso.category)}</p>
+            <h1 class="hero-title hero-anim">
+              <span class="title-bold">{caso.brand}.</span> {t(caso.tagline)}
+            </h1>
+          </div>
+
+          <div class="hero-bottom hero-anim" id="cs-hero-bottom">
+            <p class="hero-desc">{t(caso.desc)}</p>
+            <div class="hero-action">
+              <a href={caso.liveUrl} target="_blank" rel="noopener" class="btn-luxe">
+                <span>{isEn ? 'Visit live site' : 'Visitar sitio'}</span>
+                <span class="btn-arrow" aria-hidden="true">→</span>
+                <div class="btn-shimmer"></div>
+              </a>
+            </div>
+          </div>
+
         </div>
 
         <!-- Metrics strip -->
@@ -104,29 +111,32 @@ const breadcrumbSchema = {
       </div>
     </section>
 
-    <!-- ════════════════════ IMAGEN ════════════════════ -->
-    <section class="cs-visual-section">
-      <div class="container">
-        <div class="cs-visual-wrap" id="cs-visual">
-          <img src={caso.image} alt={`${caso.brand} — Flouvia`} class="cs-visual-img" loading="eager" />
-        </div>
-      </div>
-    </section>
+    <!-- ════════════════════ RETO / VISUAL ════════════════════ -->
+    <section class="cs-intro-section">
+      <div class="container cs-intro-grid">
 
-    <!-- ════════════════════ CUERPO ════════════════════ -->
-    <section class="cs-body-section">
-      <div class="container cs-body-grid">
+        <div class="cs-visual-wrap" id="cs-visual">
+          <div class="case-img squircle fluid-target" style="background: var(--color-blue-deep); display: flex; align-items: center; justify-content: center; min-height: 400px; height: 100%;" data-shader-color={shaderColor}>
+              <img src={caso.image} alt={`${caso.brand} — Flouvia`} style="width: 220px; height: auto; opacity: 1; position: relative; z-index: 1;" />
+          </div>
+        </div>
 
         <div class="cs-col" id="cs-challenge">
           <span class="cs-col-eye">{isEn ? 'THE CHALLENGE' : 'EL RETO'}</span>
           <div class="cs-col-rule"></div>
-          <p class="cs-challenge-text editorial">{t(caso.challenge)}</p>
+          <p class="cs-challenge-text">{t(caso.challenge)}</p>
         </div>
 
+      </div>
+    </section>
+
+    <!-- ════════════════════ SOLUCIÓN ════════════════════ -->
+    <section class="cs-solution-section">
+      <div class="container">
         <div class="cs-col" id="cs-solution">
           <span class="cs-col-eye">{isEn ? 'THE SOLUTION' : 'LA SOLUCIÓN'}</span>
           <div class="cs-col-rule"></div>
-          <ul class="cs-points">
+          <ul class="cs-points cs-points-grid">
             {caso.solutionPoints.map(pt => (
               <li class="cs-point">
                 <span class="cs-dot"></span>
@@ -135,7 +145,6 @@ const breadcrumbSchema = {
             ))}
           </ul>
         </div>
-
       </div>
     </section>
 
@@ -156,7 +165,10 @@ const breadcrumbSchema = {
     <!-- ════════════════════ RESULTADOS ════════════════════ -->
     <section class="cs-results-section">
       <div class="container">
-        <p class="cs-results-eye">{isEn ? 'RESULTS' : 'RESULTADOS'}</p>
+        <div class="cs-results-header">
+          <span class="cs-col-eye">{isEn ? 'THE IMPACT' : 'EL IMPACTO'}</span>
+          <div class="cs-col-rule"></div>
+        </div>
         {caso.resultsNote && <p class="cs-results-note" id="cs-results-note">{t(caso.resultsNote)}</p>}
         <div class="cs-results-grid">
           {caso.results.map(r => (
@@ -193,27 +205,7 @@ const breadcrumbSchema = {
       </div>
     </section>
 
-    <!-- ════════════════════ CTA ════════════════════ -->
-    <section class="cs-cta-section">
-      <div class="container">
-        <div class="cs-cta-card cta-squircle texture-noise" id="cs-cta">
-          <div class="cs-cta-inner">
-            <div class="cs-cta-text">
-              <p class="cs-cta-eye">{caso.cta ? t(caso.cta.eyebrow) : (isEn ? 'THE NEXT STEP' : 'EL SIGUIENTE PASO')}</p>
-              <h2 class="cs-cta-title">{caso.cta ? t(caso.cta.title) : (isEn ? 'Scale your operation.' : 'Escale su operación.')}</h2>
-              {caso.cta && <p class="cs-cta-sub">{t(caso.cta.sub)}</p>}
-            </div>
-            <div class="cs-cta-action">
-              <a href={`${root}/contacto`} class="cs-cta-btn">
-                <span>{isEn ? 'Request diagnosis →' : 'Solicitar diagnóstico →'}</span>
-                <div class="cs-cta-glow"></div>
-              </a>
-              <span class="cs-cta-badge"><span class="cs-cta-badge-dot" aria-hidden="true"></span>{isEn ? '2 projects available · Q3' : '2 proyectos disponibles · Q3'}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+
 
   </main>
 
@@ -237,7 +229,6 @@ const breadcrumbSchema = {
     --color-text-muted:#555556;
     --color-border:    rgba(0,0,0,0.08);
     --font-sans:       'Inter', system-ui, sans-serif;
-    --font-serif:      'Instrument Serif', serif;
     --ease-ios:        cubic-bezier(0.25, 1, 0.5, 1);
     --ease-spring:     cubic-bezier(0.22, 1, 0.36, 1);
     --ease-smooth:     cubic-bezier(0.16, 1, 0.3, 1);
@@ -245,7 +236,7 @@ const breadcrumbSchema = {
 
   body { background: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); margin: 0; }
   .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; }
-  .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+
 
   /* Gate anti-flash — los elementos del hero parten ocultos SOLO con JS activo
      (clase .js-anim puesta antes del paint). Sin JS / reduced-motion → visibles. */
@@ -256,13 +247,7 @@ const breadcrumbSchema = {
   .js-anim .cs-hero-bottom,
   .js-anim .cs-metrics { opacity: 0; }
 
-  /* CTA shared styles */
-  .cta-squircle { border-radius: 32px; transform: translateZ(0); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
-  .texture-noise::before {
-    content:""; position:absolute; inset:0;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    opacity:.04; mix-blend-mode:overlay; pointer-events:none; border-radius:inherit;
-  }
+
 </style>
 
 <!-- ════════════════════════════════════════
@@ -273,10 +258,8 @@ const breadcrumbSchema = {
 .cs-page { width: 100%; position: relative; overflow-x: clip; }
 
 /* ── HERO ── */
-.cs-hero {
-  padding: 13rem 0 0;
-  background: var(--color-bg);
-}
+.hero-grand { padding: 10rem 0 4rem 0; min-height: 100svh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
+
 
 /* Breadcrumb */
 .cs-breadcrumb {
@@ -290,7 +273,7 @@ const breadcrumbSchema = {
 }
 .cs-back:hover { color: var(--color-text); }
 .cs-bread-sep  { color: rgba(0,0,0,.15); }
-.cs-bread-num  { font-family: var(--font-serif); font-style: italic; font-size: 0.95rem; color: #bbb; line-height: 1; }
+.cs-bread-num  { font-size: 0.85rem; font-weight: 700; color: #bbb; line-height: 1; }
 .cs-bread-brand{ font-size: 0.78rem; font-weight: 700; color: var(--color-text); }
 .cs-site-chip {
   display: inline-flex; align-items: center; gap: 6px;
@@ -304,46 +287,28 @@ const breadcrumbSchema = {
 .cs-site-chip:hover { background: var(--color-blue-deep); color: #fff; border-color: var(--color-blue-deep); }
 
 /* Hero text */
-.cs-eyebrow {
-  font-size: 0.62rem; font-weight: 800; letter-spacing: 3px;
-  color: #999; text-transform: uppercase; margin: 0 0 2rem;
+.eyebrow { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
+.hero-text-zone { transition: transform 0.1s ease-out, opacity 0.1s ease-out; }
+.hero-title { font-size: clamp(1.9rem, 3.6vw, 3.4rem); line-height: 1.14; font-weight: 800; letter-spacing: -1.2px; margin-bottom: 2.75rem; color: #050505; max-width: 880px; }
+.hero-title .title-bold { color: #050505; display: inline; }
+.hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem; }
+.hero-desc { font-size: 1.1rem; color: var(--color-text-muted); max-width: 480px; line-height: 1.55; margin: 0; }
+
+.btn-luxe {
+    position: relative; display: inline-flex; background: var(--color-text); color: #fff;
+    padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem;
+    font-weight: 600; overflow: hidden; justify-content: center;
+    transition: transform 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 10px 20px rgba(0,0,0,0.08);
+    align-items: center; gap: 10px; will-change: transform;
 }
-.cs-brand {
-  font-size: clamp(4.5rem, 12vw, 10rem);
-  font-weight: 800; letter-spacing: -4px;
-  line-height: 0.9; margin: 0 0 2.5rem;
-  color: var(--color-text);
-}
-.cs-tagline {
-  font-size: clamp(1.6rem, 3vw, 2.8rem);
-  letter-spacing: -0.5px; line-height: 1.2;
-  color: #2a2a2a; margin: 0 0 3rem;
-  max-width: 760px;
-}
-.cs-hero-bottom {
-  display: flex; justify-content: space-between; align-items: flex-end;
-  gap: 3rem; border-top: 1px solid var(--color-border); padding-top: 2.5rem;
-}
-.cs-desc {
-  font-size: 1.05rem; line-height: 1.65;
-  color: var(--color-text-muted); margin: 0; max-width: 520px;
-}
-.cs-visit-btn {
-  display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0;
-  font-size: 0.85rem; font-weight: 700; color: var(--color-text);
-  text-decoration: none; white-space: nowrap;
-  padding: 14px 26px; border-radius: 100px;
-  border: 1.5px solid rgba(0,0,0,0.12);
-  transition: all .4s var(--ease-spring);
-}
-.cs-visit-btn svg { transition: transform .4s var(--ease-spring); }
-.cs-visit-btn:hover {
-  background: var(--color-blue-deep); color: #fff;
-  border-color: var(--color-blue-deep);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 28px rgba(10,25,47,0.2);
-}
-.cs-visit-btn:hover svg { transform: translate(2px,-2px); }
+.btn-luxe span { position: relative; z-index: 2; }
+.btn-arrow { position: relative; z-index: 2; display: inline-block; transition: transform 0.6s var(--ease-smooth); }
+.btn-luxe:hover .btn-arrow { transform: translateX(4px); }
+.btn-shimmer { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent); transform: skewX(-20deg); transition: 0s; z-index: 1;}
+.btn-luxe:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(0,0,0,0.12), 0 24px 48px rgba(0,0,0,0.16); }
+.btn-luxe:active { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+.btn-luxe:hover .btn-shimmer { left: 150%; transition: left 0.9s var(--ease-smooth); }
 
 /* Metrics */
 .cs-metrics {
@@ -359,9 +324,9 @@ const breadcrumbSchema = {
 .cs-metric:last-child { border-right: none; }
 .cs-metric:hover { background: rgba(0,0,0,.018); }
 .cs-metric-val {
-  font-family: var(--font-serif); font-style: italic; font-weight: 400;
   font-size: clamp(2rem, 3.2vw, 2.8rem);
-  line-height: 1; letter-spacing: -0.5px;
+  font-weight: 600;
+  line-height: 1; letter-spacing: -1px;
   color: var(--color-blue-deep);
 }
 .cs-metric-lbl {
@@ -370,22 +335,20 @@ const breadcrumbSchema = {
   color: var(--color-text-muted);
 }
 
-/* ── IMAGEN ── */
-.cs-visual-section { padding: 3rem 0; background: #f5f5f7; }
-.cs-visual-wrap {
-  border-radius: 24px; overflow: hidden;
-  border: 1px solid var(--color-border);
-  background: #eceef2;
-  display: flex; align-items: center; justify-content: center;
-  min-height: 380px;
-}
-.cs-visual-img { width: 100%; height: auto; display: block; max-height: 580px; object-fit: cover; }
-
-/* ── CUERPO ── */
-.cs-body-section { padding: 5rem 0; background: var(--color-bg); }
-.cs-body-grid {
+/* ── INTRO / RETO ── */
+.cs-intro-section { padding: 4rem 0 2rem; background: var(--color-bg); }
+.cs-intro-grid {
   display: grid; grid-template-columns: 1fr 1fr;
-  gap: 5rem; align-items: start;
+  gap: 5rem; align-items: stretch;
+}
+.cs-visual-wrap { width: 100%; height: 100%; display: block; }
+.case-img { width: 100%; border: 1px solid rgba(0,0,0,0.04); position: relative; overflow: hidden; }
+.squircle { border-radius: 24px; transform: translateZ(0); }
+
+/* ── SOLUCIÓN ── */
+.cs-solution-section { padding: 2rem 0 5rem; background: var(--color-bg); }
+.cs-points-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2rem 4rem;
 }
 .cs-col-eye {
   display: block; font-size: 0.56rem; font-weight: 800;
@@ -425,44 +388,36 @@ const breadcrumbSchema = {
 
 /* ── RESULTADOS ── */
 .cs-results-section {
-  background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #060c18 100%);
-  padding: 5rem 0; position: relative; overflow: hidden;
+  padding: 6rem 0 8rem; background: var(--color-bg);
+  border-top: 1px solid var(--color-border);
 }
-.cs-results-section::before {
-  content:""; position:absolute; inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  opacity:.035; mix-blend-mode:overlay; pointer-events:none;
-}
-.cs-results-eye {
-  font-size: 0.58rem; font-weight: 800; letter-spacing: 4px;
-  color: rgba(255,255,255,.25); text-transform: uppercase;
-  margin: 0 0 1rem; position: relative;
+.cs-results-header {
+  margin-bottom: 2rem;
 }
 .cs-results-note {
-  font-size: 0.95rem; line-height: 1.6; color: rgba(255,255,255,.55);
-  margin: 0 0 2.6rem; max-width: 640px; position: relative;
+  font-size: 1.1rem; line-height: 1.6; color: var(--color-text-muted);
+  margin: 0 0 4rem; max-width: 640px; position: relative;
 }
 .cs-results-grid {
-  display: grid; grid-template-columns: repeat(3,1fr);
-  gap: 1px; background: rgba(255,255,255,.07);
-  border: 1px solid rgba(255,255,255,.07);
-  border-radius: 20px; overflow: hidden; position: relative;
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 4rem;
 }
 .cs-result-card {
-  padding: 3rem 2.5rem; display: flex; flex-direction: column; gap: 0.5rem;
-  transition: background .3s var(--ease-smooth);
+  display: flex; flex-direction: column;
 }
-.cs-result-card:hover { background: rgba(255,255,255,.04); }
 .cs-result-val {
-  font-family: var(--font-serif); font-style: italic; font-weight: 400;
-  font-size: clamp(3rem,5.2vw,4.6rem);
-  color: #fff; line-height: 1; letter-spacing: -1px;
+  font-size: clamp(3.5rem, 6vw, 5rem);
+  font-weight: 800;
+  color: var(--color-text); line-height: 1; letter-spacing: -3px;
+  margin-bottom: 1.5rem;
 }
 .cs-result-lbl {
-  font-size: 0.6rem; font-weight: 800; letter-spacing: 2px;
-  text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 0.4rem;
+  font-size: 0.65rem; font-weight: 800; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--color-text); margin-bottom: 0.8rem;
 }
-.cs-result-desc { font-size: 0.85rem; color: rgba(255,255,255,.5); line-height: 1.6; margin: 0; }
+.cs-result-desc {
+  font-size: 1rem; color: var(--color-text-muted); line-height: 1.6; margin: 0;
+}
 
 /* ── NAV CASOS ── */
 .cs-case-nav {
@@ -502,51 +457,7 @@ const breadcrumbSchema = {
   color: #fff; transform: rotate(-45deg) scale(1.08);
 }
 
-/* ── CTA ── */
-.cs-cta-section { padding: 0 0 6rem; background: var(--color-bg-soft); }
-.cs-cta-card {
-  background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%);
-  padding: 5rem 6rem; position: relative;
-  box-shadow: 0 20px 40px rgba(5,11,20,.15), 0 50px 100px rgba(5,11,20,.22);
-  transition: transform 0.6s var(--ease-spring);
-}
-.cs-cta-card:hover { transform: scale(1.012); }
-.cs-cta-inner {
-  display: flex; justify-content: space-between; align-items: center;
-  gap: 3rem; position: relative; z-index: 2;
-}
-.cs-cta-eye {
-  font-size: 0.6rem; font-weight: 800; letter-spacing: 4px;
-  color: rgba(255,255,255,.3); text-transform: uppercase; margin: 0 0 1rem;
-}
-.cs-cta-title {
-  font-size: clamp(2.2rem,3.4vw,3.1rem); font-weight: 800;
-  color: #fff; line-height: 1.08; letter-spacing: -1.2px; margin: 0; max-width: 18ch;
-}
-.cs-cta-sub {
-  margin: 1.3rem 0 0; color: rgba(255,255,255,.66);
-  font-size: 1.02rem; line-height: 1.55; max-width: 440px;
-}
-.cs-cta-action { display: flex; flex-direction: column; align-items: flex-end; gap: 1.1rem; flex-shrink: 0; }
-.cs-cta-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
-  color: rgba(255,255,255,.6);
-}
-.cs-cta-badge-dot {
-  width: 6px; height: 6px; border-radius: 50%; background: #10b981;
-  box-shadow: 0 0 10px rgba(16,185,129,.6); animation: cs-badge-pulse 2s infinite;
-}
-@keyframes cs-badge-pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
-.cs-cta-btn {
-  position: relative; background: #fff; color: var(--color-blue-deep);
-  padding: 20px 44px; border-radius: 100px; text-decoration: none;
-  font-size: 1rem; font-weight: 700; overflow: hidden;
-  transition: .5s var(--ease-spring); display: inline-flex; align-items: center;
-  white-space: nowrap; flex-shrink: 0;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.1), 0 10px 20px rgba(255,255,255,.1);
-}
-.cs-cta-btn:hover { transform: translateY(-4px); box-shadow: inset 0 0 0 1px rgba(0,0,0,.1), 0 20px 40px rgba(255,255,255,.2); }
+
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1024px) {
@@ -557,12 +468,12 @@ const breadcrumbSchema = {
 }
 
 @media (max-width: 768px) {
-  .cs-hero       { padding: 10rem 0 0; }
+  .hero-grand    { padding-top: 10rem; padding-bottom: 4rem; min-height: auto; }
   .cs-breadcrumb { margin-bottom: 2.5rem; }
   .cs-site-chip  { margin-left: 0; }
-  .cs-brand      { letter-spacing: -2px; }
-  .cs-hero-bottom{ flex-direction: column; align-items: flex-start; gap: 2rem; border-top: none; padding-top: 0; }
-  .cs-visit-btn  { width: 100%; justify-content: center; }
+  .hero-title    { letter-spacing: -2px; }
+  .hero-bottom   { flex-direction: column; align-items: flex-start; gap: 2rem; border-top: none; padding-top: 0; }
+  .btn-luxe      { width: 100%; justify-content: center; }
 
   .cs-metrics { grid-template-columns: 1fr 1fr; margin-top: 2.5rem; }
   .cs-metric  { padding: 1.4rem 1rem; }
@@ -570,17 +481,18 @@ const breadcrumbSchema = {
   .cs-metric:nth-child(3),
   .cs-metric:nth-child(4) { border-top: 1px solid var(--color-border); }
 
-  .cs-visual-section { padding: 2.5rem 0; }
-  .cs-visual-wrap    { min-height: 240px; border-radius: 18px; }
+  .cs-intro-section  { padding: 2.5rem 0; }
+  .cs-intro-grid     { grid-template-columns: 1fr; gap: 3rem; }
+  .case-img          { min-height: 280px !important; }
 
-  .cs-body-section { padding: 4rem 0; }
-  .cs-body-grid    { grid-template-columns: 1fr; gap: 3rem; }
+  .cs-solution-section { padding: 2rem 0; }
+  .cs-points-grid    { grid-template-columns: 1fr; gap: 1.5rem; }
 
   .cs-stack-section { padding: 0 0 4rem; }
 
   .cs-results-section { padding: 4rem 0; }
-  .cs-results-grid    { grid-template-columns: 1fr; }
-  .cs-result-card     { padding: 2rem 1.5rem; }
+  .cs-results-grid    { grid-template-columns: 1fr; gap: 3.5rem; }
+  .cs-result-card     { padding: 0; }
 
   .cs-case-nav { padding: 3rem 0; }
   .cs-nav-row  { flex-direction: column; align-items: stretch; gap: 2rem; }
@@ -588,29 +500,23 @@ const breadcrumbSchema = {
   .cs-nav-next-txt { text-align: left; }
   .cs-nav-brand { font-size: 1.5rem; }
 
-  .cs-cta-section { padding: 0 5% 5rem; }
-  .cs-cta-card { padding: 3.5rem 2rem; }
-  .cs-cta-inner { flex-direction: column; align-items: center; gap: 2.5rem; width: 100%; }
-  .cs-cta-text  { text-align: center; }
-  .cs-cta-title { max-width: 100%; }
-  .cs-cta-sub   { max-width: 100%; }
-  .cs-cta-action { align-items: center; width: 100%; }
-  .cs-cta-btn   { width: 100%; justify-content: center; font-size: 0.95rem; padding: 18px 0; }
+
 }
 
 @media (max-width: 480px) {
   .cs-metric-val { font-size: 1.7rem; }
   .cs-breadcrumb { gap: 0.5rem; }
   .cs-bread-brand { display: none; }
-  .cs-hero { padding: 8.5rem 0 3rem; }
-  .cs-hero-title { font-size: clamp(1.9rem, 9vw, 2.6rem); }
-  .cs-cta-card { padding: 3rem 1.5rem; }
+  .hero-grand { padding-top: 8.5rem; padding-bottom: 3rem; }
+  .hero-title { font-size: clamp(1.9rem, 9vw, 2.6rem); }
+
 }
 </style>
 
 <script>
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { initFluidShaders } from './blog/FluidShader';
 gsap.registerPlugin(ScrollTrigger);
 
 // Recalcular posiciones tras fuentes + imágenes — mismo patrón que el home.
@@ -636,7 +542,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const Y    = 14;
 
   /* ═══════ HERO — entrada en carga (gate .js-anim) ═══════ */
-  const heroSel = ['.cs-breadcrumb', '.cs-eyebrow', '.cs-brand', '.cs-tagline', '.cs-hero-bottom', '.cs-metrics'];
+  const heroSel = ['.cs-breadcrumb', '.eyebrow', '.hero-title', '.hero-bottom', '.cs-metrics'];
   const heroEls = heroSel
     .map(s => document.querySelector<HTMLElement>(s))
     .filter((el): el is HTMLElement => !!el);
@@ -672,11 +578,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   mm.add('(min-width: 769px)', () => {
     /* Parallax muy leve del hero */
-    const heroText = document.getElementById('cs-hero-text');
+    const heroText = document.getElementById('hero-parallax');
     if (heroText) {
       gsap.to(heroText, {
         yPercent: 4, opacity: 0.85, ease: 'none',
-        scrollTrigger: { trigger: '.cs-hero', start: 'top top', end: 'bottom 30%', scrub: 1 },
+        scrollTrigger: { trigger: '.hero-grand', start: 'top top', end: 'bottom 30%', scrub: 1 },
       });
     }
   });
@@ -715,14 +621,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* Resultados — nota + cards */
-  reveal('.cs-results-note', { trigger: '.cs-results-section', y: 12, start: 'top 80%' });
+  reveal('.cs-results-header > *, .cs-results-note', { trigger: '.cs-results-section', y: 12, stagger: 0.1, start: 'top 80%' });
+  drawRule(document.querySelector('.cs-results-header .cs-col-rule'), document.querySelector('.cs-results-section') as HTMLElement);
   reveal('.cs-result-card', { trigger: '.cs-results-grid', y: 22, dur: 1.0, stagger: 0.1, start: 'top 85%' });
 
-  /* CTA */
-  const ctaCard = document.getElementById('cs-cta');
-  if (ctaCard) {
-    reveal(ctaCard, { trigger: ctaCard, y: 24, dur: 1.0, start: 'top 84%' });
-    reveal(ctaCard.querySelectorAll('.cs-cta-text > *, .cs-cta-action'), { trigger: ctaCard, y: 12, stagger: 0.08, delay: 0.15, start: 'top 84%' });
-  }
+
+
+  initFluidShaders();
 });
 </script>

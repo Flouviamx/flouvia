@@ -98,7 +98,7 @@ export const ui = {
     'serv.choose.6.title': 'Transparencia Absoluta', 'serv.choose.6.desc': 'Operamos bajo un esquema de código abierto interno. El repositorio, la documentación técnica y el código te pertenecen desde el día uno, sin contratos que te aten a nosotros.',
 
     // NOSOTROS
-    'about.hero.status': 'ACEPTANDO PROYECTOS Q3',
+
     'about.hero.badge': 'LA FIRMA',
     'about.hero.title1': 'Diseño de sistemas.',
     'about.hero.title2': 'Ingeniería de revenue.',
@@ -143,7 +143,7 @@ export const ui = {
     'about.rev2.context': 'SaaS B2B · Software B2B',
     'about.rev2.metric': 'Miles de cotizaciones · 99.9% Uptime',
     'about.cta.badge': 'EL SIGUIENTE NIVEL — Q3',
-    'about.cta.avail': 'ACEPTANDO PROYECTOS Q3 · 2 cupos disponibles',
+
     'about.cta.title': '2 proyectos disponibles este trimestre.',
     'about.cta.title_ed': '¿Tu operación califica?',
     'about.cta.body': 'No aceptamos proyectos sin diagnóstico previo. Si tienes operación establecida y quieres construir la infraestructura del siguiente nivel, empieza con una sesión de 30 minutos sin costo.',

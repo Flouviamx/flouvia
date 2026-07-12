@@ -164,10 +164,7 @@ const serviceRows = [
             <div class="container hero-container">
                 <div class="hero-content">
                     <div class="hero-text-zone" id="hero-parallax">
-                        <div class="hero-status hero-anim">
-                            <span class="hero-status-dot" aria-hidden="true"></span>
-                            <span>{isEn ? 'ACCEPTING Q3 PROJECTS' : 'ACEPTANDO PROYECTOS Q3'}</span>
-                        </div>
+
                         <p class="eyebrow hero-anim">{t('serv.hero.badge')}</p>
                         <h1 class="hero-title hero-anim">
                             <span class="title-bold">{t('serv.hero.title1')}</span>
@@ -257,13 +254,15 @@ const serviceRows = [
                                 <span class="svc-num editorial">/0{s.n}</span>
                                 <span class="svc-cat">{s.cat.replace(/^\d+\s*—\s*/, '')}</span>
                             </span>
+                        </div>
+
+                        <div class="svc-title-row">
+                            <h2 class="svc-title">{s.title}</h2>
                             <a href={s.href} class="svc-cta">
                                 <span>{s.btn}</span>
                                 <span class="svc-cta-arrow" aria-hidden="true">→</span>
                             </a>
                         </div>
-
-                        <h2 class="svc-title">{s.title}</h2>
                         <p class="svc-desc">{s.desc}</p>
 
                         <div class="svc-caps">
@@ -543,7 +542,8 @@ const serviceRows = [
     .svc-cta:hover { background: var(--color-text); color: #fff; border-color: var(--color-text); transform: translateY(-2px); }
     .svc-cta:hover .svc-cta-arrow { transform: translateX(4px); }
 
-    .svc-title { font-size: clamp(2.2rem, 4.4vw, 3.6rem); font-weight: 800; letter-spacing: -1.8px; line-height: 1.0; margin: 0 0 1.5rem 0; color: var(--color-text); }
+    .svc-title-row { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-bottom: 1.5rem; }
+    .svc-title { font-size: clamp(2.2rem, 4.4vw, 3.6rem); font-weight: 800; letter-spacing: -1.8px; line-height: 1.0; margin: 0; color: var(--color-text); }
     .svc-desc { font-size: 1.15rem; color: var(--color-text-muted); line-height: 1.6; max-width: 760px; margin: 0 0 1.1rem 0; }
 
     /* Caso / métrica discreta (sin caja) */
@@ -619,7 +619,7 @@ const serviceRows = [
     .faq-q { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding: 1.6rem 0; font-size: 1.1rem; font-weight: 700; color: var(--color-text); letter-spacing: -0.3px; }
     .faq-q::-webkit-details-marker { display: none; }
     .faq-icon { position: relative; width: 16px; height: 16px; flex-shrink: 0; }
-    .faq-icon::before, .faq-icon::after { content: ''; position: absolute; background: var(--color-text); transition: transform 0.4s var(--ease-smooth), opacity 0.4s var(--ease-smooth); }
+    .faq-icon::before, .faq-icon::after { content: ''; position: absolute; background: var(--color-text); transition: transform 0.7s var(--ease-smooth), opacity 0.6s ease; }
     .faq-icon::before { top: 7px; left: 0; width: 16px; height: 2px; }
     .faq-icon::after { left: 7px; top: 0; width: 2px; height: 16px; }
     .faq-item[open] .faq-icon::after { transform: rotate(90deg); opacity: 0; }
@@ -668,7 +668,8 @@ const serviceRows = [
         .services-index { padding: 1rem 0; }
         .svc-chapter { padding: 3rem 0; }
         .svc-head { flex-direction: column; align-items: flex-start; gap: 1rem; margin-bottom: 1.25rem; }
-        .svc-title { font-size: 2rem; margin-bottom: 1rem; }
+        .svc-title-row { flex-direction: column; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
+        .svc-title { font-size: 2rem; margin-bottom: 0; }
         .svc-desc { font-size: 1.05rem; }
         .svc-proof { margin-bottom: 2rem; font-size: 0.92rem; }
         .svc-caps { margin-bottom: 2rem; }
@@ -835,7 +836,7 @@ const serviceRows = [
             if (!panel) return;
             gsap.set(panel, { height: panel.offsetHeight });
             gsap.to(panel, {
-                height: 0, opacity: 0, duration: 0.4, ease: 'power2.inOut',
+                height: 0, opacity: 0, duration: 0.5, ease: 'power3.inOut',
                 onComplete: () => { item.removeAttribute('open'); gsap.set(panel, { clearProps: 'height,opacity' }); },
             });
         };
@@ -847,7 +848,7 @@ const serviceRows = [
             const h = panel.offsetHeight;
             gsap.fromTo(panel,
                 { height: 0, opacity: 0 },
-                { height: h, opacity: 1, duration: 0.55, ease: 'power2.out',
+                { height: h, opacity: 1, duration: 0.7, ease: 'power3.out',
                   onComplete: () => gsap.set(panel, { height: 'auto' }) });
         };
         faqItems.forEach((item) => {
