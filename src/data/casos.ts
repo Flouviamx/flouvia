@@ -136,10 +136,15 @@ export const casos: CaseStudy[] = [
       es: 'Construimos el storefront de Ago Fitness en modo headless: Shopify como backend de comercio (catálogo, checkout, inventario) vía Storefront API, con todo el frontend hecho a la medida en Next.js — sin las limitaciones de un theme.',
       en: 'We built the Ago Fitness storefront headless: Shopify as the commerce backend (catalog, checkout, inventory) via the Storefront API, with the entire frontend custom-built in Next.js — without the limitations of a theme.',
     },
-    liveUrl:    '#',
-    liveDomain: 'Próximamente',
+    liveUrl:    'https://ago-fitness.vercel.app/',
+    liveDomain: 'ago-fitness.vercel.app',
     image: '/imgs/logo-ago-fitness.png',
-    metrics: [],
+    metrics: [
+      { val: '92/100', label: { es: 'Performance',      en: 'Performance' } },
+      { val: '100/100', label: { es: 'SEO',             en: 'SEO' } },
+      { val: '0',       label: { es: 'Layout Shift',    en: 'Layout Shift' } },
+      { val: '100%',    label: { es: 'Headless',        en: 'Headless' } },
+    ],
     challenge: {
       es: 'Ago Fitness quería un e-commerce con el nivel de acabado de marcas premium de activewear (Lululemon, Alo Yoga, On Running) — un resultado que un theme estándar de Shopify no iba a lograr sin control total sobre el frontend.',
       en: 'Ago Fitness wanted an e-commerce with the polish of premium activewear brands (Lululemon, Alo Yoga, On Running) — a result a standard Shopify theme wasn\'t going to deliver without full control over the frontend.',
@@ -152,10 +157,26 @@ export const casos: CaseStudy[] = [
     ],
     stack: ['Next.js', 'Shopify Storefront API', 'Tailwind CSS', 'GSAP'],
     resultsNote: {
-      es: 'Proyecto en desarrollo activo — el lanzamiento y las métricas medidas se documentarán aquí una vez en producción.',
-      en: 'Project in active development — launch and measured metrics will be documented here once live.',
+      es: 'Tienda en fase de lanzamiento — métricas técnicas medidas con Lighthouse contra el build de producción real. Datos de conversión y tráfico se agregarán una vez la tienda esté operando con clientes reales.',
+      en: 'Store in launch phase — technical metrics measured with Lighthouse against the real production build. Conversion and traffic data will be added once the store is operating with real customers.',
     },
-    results: [],
+    results: [
+      {
+        val: '92/100',
+        label: { es: 'Performance Score',        en: 'Performance Score' },
+        desc:  { es: 'Medido con Lighthouse contra el build de producción real — sin el peso de un theme genérico, el sitio carga rápido desde el primer render.', en: 'Measured with Lighthouse against the real production build — without the weight of a generic theme, the site loads fast from the first render.' },
+      },
+      {
+        val: '0',
+        label: { es: 'Cumulative Layout Shift',  en: 'Cumulative Layout Shift' },
+        desc:  { es: 'Cero saltos de layout: cada componente reserva su espacio desde el inicio, sin parpadeos ni reflow al cargar.', en: 'Zero layout shift: every component reserves its space from the start, no flicker or reflow on load.' },
+      },
+      {
+        val: '100%',
+        label: { es: 'Headless',                 en: 'Headless' },
+        desc:  { es: 'Frontend 100% custom en Next.js — sin depender de un theme de Shopify ni sus límites de personalización, con Shopify como backend puro de comercio.', en: '100% custom Next.js frontend — no dependency on a Shopify theme or its customization limits, with Shopify as a pure commerce backend.' },
+      },
+    ],
     seoTitle: {
       es: 'Ago Fitness: E-commerce Headless con Next.js y Shopify | Flouvia CDMX',
       en: 'Ago Fitness: Headless E-commerce with Next.js and Shopify | Flouvia',
