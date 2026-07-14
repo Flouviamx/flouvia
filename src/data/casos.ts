@@ -120,4 +120,57 @@ export const casos: CaseStudy[] = [
     },
   },
 
+  {
+    slug:  'ago-fitness',
+    num:   '03',
+    brand: 'Ago Fitness',
+    category: {
+      es: 'E-commerce Headless',
+      en: 'Headless E-commerce',
+    },
+    tagline: {
+      es: 'De una tienda Shopify estándar a un frontend 100% custom construido con Next.js.',
+      en: 'From a standard Shopify store to a 100% custom frontend built with Next.js.',
+    },
+    desc: {
+      es: 'Construimos el storefront de Ago Fitness en modo headless: Shopify como backend de comercio (catálogo, checkout, inventario) vía Storefront API, con todo el frontend hecho a la medida en Next.js — sin las limitaciones de un theme.',
+      en: 'We built the Ago Fitness storefront headless: Shopify as the commerce backend (catalog, checkout, inventory) via the Storefront API, with the entire frontend custom-built in Next.js — without the limitations of a theme.',
+    },
+    liveUrl:    '#',
+    liveDomain: 'Próximamente',
+    image: '/imgs/logo-ago-fitness.png',
+    metrics: [],
+    challenge: {
+      es: 'Ago Fitness quería un e-commerce con el nivel de acabado de marcas premium de activewear (Lululemon, Alo Yoga, On Running) — un resultado que un theme estándar de Shopify no iba a lograr sin control total sobre el frontend.',
+      en: 'Ago Fitness wanted an e-commerce with the polish of premium activewear brands (Lululemon, Alo Yoga, On Running) — a result a standard Shopify theme wasn\'t going to deliver without full control over the frontend.',
+    },
+    solutionPoints: [
+      { es: 'Storefront headless con Next.js 15 (App Router) + Shopify Storefront API para catálogo y carrito.', en: 'Headless storefront with Next.js 15 (App Router) + Shopify Storefront API for catalog and cart.' },
+      { es: 'Navbar con mega menu animado y buscador que hace morph in-place (GSAP Flip).', en: 'Navbar with animated mega menu and an in-place morphing search bar (GSAP Flip).' },
+      { es: 'Footer con newsletter y componente de botón reutilizable con microinteracciones.', en: 'Footer with newsletter and a reusable button component with micro-interactions.' },
+      { es: 'Checkout 100% Shopify — sin reconstruir pagos, impuestos ni envíos desde cero.', en: '100% Shopify checkout — no rebuilding payments, taxes, or shipping from scratch.' },
+    ],
+    stack: ['Next.js', 'Shopify Storefront API', 'Tailwind CSS', 'GSAP'],
+    resultsNote: {
+      es: 'Proyecto en desarrollo activo — el lanzamiento y las métricas medidas se documentarán aquí una vez en producción.',
+      en: 'Project in active development — launch and measured metrics will be documented here once live.',
+    },
+    results: [],
+    seoTitle: {
+      es: 'Ago Fitness: E-commerce Headless con Next.js y Shopify | Flouvia CDMX',
+      en: 'Ago Fitness: Headless E-commerce with Next.js and Shopify | Flouvia',
+    },
+    seoDesc: {
+      es: 'Caso de estudio en desarrollo: storefront headless de Ago Fitness construido con Next.js y Shopify Storefront API, con diseño 100% custom.',
+      en: 'Case study in progress: Ago Fitness headless storefront built with Next.js and Shopify Storefront API, with 100% custom design.',
+    },
+    datePublished: '2026-07-13',
+    dateModified:  '2026-07-13',
+    cta: {
+      eyebrow: { es: '¿QUIERES UN E-COMMERCE ASÍ DE CUIDADO?', en: 'WANT AN E-COMMERCE THIS CAREFULLY BUILT?' },
+      title:   { es: 'Construimos tu tienda sin las limitaciones de un theme.', en: 'We build your store without theme limitations.' },
+      sub:     { es: 'Si tu marca necesita un e-commerce a la altura de tu producto, hablemos. Comienza con un diagnóstico sin costo.', en: 'If your brand needs an e-commerce that matches your product, let\'s talk. Start with a free diagnosis.' },
+    },
+  },
+
 ];

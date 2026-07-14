@@ -93,6 +93,25 @@ const isEn = lang === 'en';
                         </div>
                     </a>
 
+                    <a href="/casos/ago-fitness" class="case-card">
+                        <div class="case-visual">
+                            <div class="case-img squircle fluid-target" style="background: var(--color-blue-deep); display: flex; align-items: center; justify-content: center;" data-shader-color="#f5d0d8">
+                                <img src="/imgs/logo-ago-fitness.png" alt="Ago Fitness" style="width: 180px; height: auto; opacity: 1; position: relative; z-index: 1;" />
+                            </div>
+                            <span class="active-badge"><span class="dev-dot" aria-hidden="true"></span>{isEn ? 'In development' : 'En desarrollo'}</span>
+                        </div>
+                        <div class="case-info">
+                            <h2 class="case-brand">Ago Fitness</h2>
+                            <p class="case-desc">{isEn ? 'Headless storefront built with Next.js and the Shopify Storefront API — full frontend control, no theme limitations.' : 'Storefront headless construido con Next.js y la Storefront API de Shopify — control total del frontend, sin limitaciones de theme.'}</p>
+
+
+                            <div class="case-read-more">
+                                <span>{isEn ? 'Read Case Study' : 'Conocer más'}</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
+                        </div>
+                    </a>
+
                     <a href="/contacto" class="case-card slot-card">
                         <div class="slot-inner">
                             <span class="slot-eyebrow">{isEn ? 'Q3 — 1 SLOT' : 'Q3 — 1 SLOT'}</span>
@@ -233,6 +252,7 @@ const isEn = lang === 'en';
         border-radius: 100px; padding: 6px 12px;
     }
     .active-dot { width: 5px; height: 5px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px rgba(16,185,129,0.7); animation: hero-status-pulse 2s infinite; }
+    .dev-dot { width: 5px; height: 5px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 8px rgba(245,158,11,0.6); }
     .case-img { width: 100%; height: auto; aspect-ratio: 4/5; object-fit: cover; display: block; border: 1px solid rgba(0,0,0,0.04); transition: box-shadow 0.6s var(--ease-smooth); }
 
     .case-card:hover .case-visual { transform: translateY(-8px); }
