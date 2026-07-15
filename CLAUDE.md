@@ -35,6 +35,28 @@ src/pages/
   contacto.astro           → /contacto
   nosotros.astro           → /nosotros
 
+  # Producto público — Cord (prerender:true; repo hermano ~/Desktop/flouvia-cord)
+  cord.astro               → /cord — landing de venta del SaaS público de Flouvia.
+                              Reescrita jul 2026 para reflejar el alcance REAL de
+                              Cord (no solo cotizar+CFDI): cobranza autónoma con IA,
+                              pagos directos a la cuenta del negocio (Stripe Connect,
+                              sin comisión de Cord), multi-divisa con cobertura FX,
+                              API/webhooks/MCP, Cord Elements (cotizador embebible),
+                              roles de equipo y firma legal SHA-256. Reusa
+                              <CordPricing /> (src/components/cord/CordPricing.astro,
+                              ya alineado a los 5 planes reales — no tocar sin
+                              verificar contra flouvia-cord/docs/negocio-billing.md).
+                              Estética 100% Flouvia (hero-grand + fluid-target shader,
+                              service-row editorial), NUNCA la estética "Apple gray"
+                              propia de cord.flouvia.com. ⚠️ Los enlaces de esta
+                              página apuntan a rutas reales de cord.flouvia.com
+                              (/producto/*, /desarrolladores/*) — antes de agregar un
+                              enlace nuevo, confirmar el slug contra
+                              flouvia-cord/src/lib/producto.ts o desarrolladores.ts,
+                              no inventarlo.
+  en/cord.astro             → /en/cord — espejo en inglés (fuente de verdad separada,
+                              se mantiene sincronizado a mano con cord.astro).
+
   # Páginas legales (prerender:true)
   privacidad.astro         → /privacidad
   terminos.astro           → /terminos

@@ -3,11 +3,131 @@ import Layout from '../../layouts/Layout.astro';
 import Footer from '../../components/Footer.astro';
 import Navbar from '../../components/Navbar.astro';
 import CordPricing from '../../components/cord/CordPricing.astro';
+import CapCard from '../../components/cord/CapCard.jsx';
+import CordFaqAccordion from '../../components/cord/CordFaqAccordion.astro';
 
 export const prerender = true;
 
-const title = 'Cord — B2B Quotes with Automatic Invoicing | Free to Start';
-const description = 'Cord is the B2B platform for quotes, orders, and automatic invoicing by Flouvia. Free forever, no credit card required. Available for any business.';
+const title = 'Cord — B2B Quotes, AI Collections & Automatic Invoicing | Free to Start';
+const description = 'Cord is Flouvia\'s B2B platform to quote, collect, and invoice: one-click approval, autonomous AI collections, payments straight to your own account, multi-currency, and automatic Mexican e-invoicing (CFDI 4.0). Free to start, no credit card, for any business.';
+
+// Editorial rows — "how it works" (single source, also feeds the FAQ/feature schema)
+const ROWS = [
+  {
+    num: '01',
+    href: 'https://cord.flouvia.com/producto/link-publico',
+    h3: 'Magical approval with zero friction',
+    p: 'Send a secure link with your own branding. Your client opens it on their phone or computer, reviews every line, negotiates if needed, and approves with a single click. No accounts, no giant PDFs, no email chains ending in "ok, go ahead".',
+  },
+  {
+    num: '02',
+    href: 'https://cord.flouvia.com/producto/seguimiento',
+    h3: 'Instant read notifications',
+    p: 'Get a silent alert the exact second your client opens the quote, plus a live chat if they write back. You\'ll know whether it\'s time to call or time to wait — instead of guessing.',
+  },
+  {
+    num: '03',
+    href: 'https://cord.flouvia.com/producto/cobranza-ia',
+    h3: 'Autonomous collections with Artificial Intelligence',
+    p: 'When a credit term is due, an AI agent follows up with your client for you — answers questions and can even negotiate a payment plan of up to 3 installments, all within the rules you set, with a full log of every conversation.',
+  },
+  {
+    num: '04',
+    href: 'https://cord.flouvia.com/producto/link-publico',
+    h3: 'Get paid straight to your own account, no Cord fee',
+    p: 'Your client pays by card or bank transfer from the same link — the money lands directly in your own connected Stripe account, never in ours. Collect the full amount upfront, a deposit first, or split it into installments.',
+  },
+  {
+    num: '05',
+    href: 'https://cord.flouvia.com/producto/divisas',
+    h3: 'Multi-currency with FX coverage',
+    p: 'Quote in USD or EUR and invoice in your local currency without losing margin: Cord locks the exchange rate with a buffer you choose, so your client sees a fixed price and you don\'t absorb the volatility.',
+  },
+  {
+    num: '06',
+    href: 'https://cord.flouvia.com/producto/cfdi',
+    h3: 'Automatic Mexican e-invoicing (CFDI 4.0)',
+    p: 'Once the client approves, you go from quote to a SAT-stamped invoice with a single button. Line items, taxes, and withholdings transfer automatically — no more double data entry.',
+  },
+];
+
+// Additional capabilities grid — for businesses that already outgrew "just quoting"
+const CAPABILITIES = [
+  {
+    href: 'https://cord.flouvia.com/producto/finanzas',
+    h3: 'Analytics and an AI-powered CFO view',
+    p: 'Weighted pipeline, days-sales-outstanding, per-client risk concentration, and a 5-week cash flow projection — decisions backed by data, not gut feeling.',
+    icon: 'M4 19V9m6 10V4m6 15v-7',
+  },
+  {
+    href: 'https://cord.flouvia.com/producto/equipo',
+    h3: 'Team roles and permissions',
+    p: 'Invite your sales team, define who can approve discounts and who can only quote. Every action is kept in an immutable audit log.',
+    icon: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75',
+  },
+  {
+    href: 'https://cord.flouvia.com/producto/aprobaciones',
+    h3: 'Approval flows and margin control',
+    p: 'Set discount thresholds and minimum margin per quote. If a rep goes past them, the quote waits for management sign-off before it ever goes out.',
+    icon: 'M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11',
+  },
+  {
+    href: 'https://cord.flouvia.com/desarrolladores/api',
+    h3: 'Open API, webhooks and MCP',
+    p: 'Connect Cord to your ERP or CRM with a documented REST API, signed webhooks into Zapier or Make, and an MCP server so your own AI agents can query your pipeline.',
+    icon: 'M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3',
+  },
+  {
+    href: 'https://cord.flouvia.com/elements',
+    h3: 'A quote builder embedded in your own site',
+    p: 'With Cord Elements you embed the quote builder inside your own client portal in one line of code (Web Component, React, Vue) — with your brand, not ours.',
+    icon: 'M16 18l6-6-6-6M8 6l-6 6 6 6',
+  },
+  {
+    href: 'https://cord.flouvia.com/producto/negociacion',
+    h3: 'Legally binding signature with a cryptographic seal',
+    p: 'Every approval is signed with the client\'s name, IP address, and a SHA-256 hash of the exact content they accepted — an immutable version history with real backing.',
+    icon: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z',
+  },
+];
+
+// Single source for the FAQ — feeds the visible accordion AND the JSON-LD
+// schema, so they can never drift apart (same pattern Cord enforces on its
+// own landing pages).
+const FAQS = [
+  {
+    q: 'Is Cord really free?',
+    a: "Yes. Cord's Free plan doesn't ask for a credit card and lets you create quotes with your own branding. As your operation grows, you can upgrade to a paid plan for unlimited quotes, AI collections, multi-currency, and more users.",
+  },
+  {
+    q: 'Do I need to be a Flouvia client to use it?',
+    a: "No. Cord is a SaaS product built by Flouvia, but it's open to any company, business, or independent professional, whether or not they're a Flouvia client.",
+  },
+  {
+    q: 'How does the AI collections agent work?',
+    a: "It's opt-in and you turn it on yourself. When a credit-term quote becomes due, an AI agent follows up with the client and, if applicable, negotiates a payment plan of up to 3 installments within the rules you defined — every conversation is logged for your review.",
+  },
+  {
+    q: 'Where does the money go when my client pays online?',
+    a: 'Straight to your own Stripe account connected to Cord — never to a Flouvia account. You can accept card or bank transfer, and collect the full amount, a deposit, or split it into installments.',
+  },
+  {
+    q: 'Can I quote in dollars and invoice in another currency?',
+    a: "Yes. Cord supports quoting in USD or EUR with the exchange rate protected by a buffer you choose, so your margin isn't eroded between the day you quote and the day you get paid.",
+  },
+  {
+    q: 'How does automatic invoicing (CFDI 4.0) work?',
+    a: "Once your client approves the quote, you generate a SAT-stamped CFDI 4.0 invoice with a single click. The system pulls the quote's data and stamps it automatically, saving you double data entry.",
+  },
+  {
+    q: 'Does Cord have an API to connect it to my own system?',
+    a: 'Yes. Cord exposes a documented REST API, signed webhooks to integrate with Zapier, Make, or your own backend, and an MCP server so AI agents can securely query your pipeline and catalog.',
+  },
+  {
+    q: 'Does my client have to download anything or create an account?',
+    a: 'No. Your client receives a secure link that opens directly in their browser, on mobile or desktop. They can view the quote, negotiate, approve, pay, and download it as a PDF without creating an account or installing anything.',
+  },
+];
 
 const schemaOrg = {
   "@context": "https://schema.org",
@@ -29,46 +149,27 @@ const schemaOrg = {
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock"
           },
-          "description": "B2B platform for quotes, orders, and automatic invoicing, available to the public for free."
+          "description": "B2B platform for quotes, AI-powered collections, payments, multi-currency, and automatic Mexican e-invoicing (CFDI 4.0), publicly available for free.",
+          "featureList": [
+            "Quotes with digital approval and legal signature",
+            "Autonomous collections with Artificial Intelligence",
+            "Online payments straight to your own account (Stripe Connect)",
+            "Multi-currency with FX coverage",
+            "Automatic CFDI 4.0 invoicing with the Mexican tax authority",
+            "AI-powered financial analytics and CFO dashboard",
+            "REST API, webhooks and an MCP server",
+            "Embeddable quote builder (Cord Elements)"
+          ]
         }
       }
     },
     {
       "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Is Cord really free?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Cord is 100% free to start. No credit card is required and you can create unlimited quotes with your own branding. Our goal is to eliminate friction in B2B sales."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Do I need to be a Flouvia client to use it?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Absolutely not. Cord is a SaaS product developed by Flouvia, but it is open and available to any company, business, or independent professional, whether they are our clients or not."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Does my client have to download anything or create an account?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. Your client receives a secure link that opens directly in their web browser (mobile or desktop). They can view the quote, approve it, and download it as a PDF without creating an account or installing any app."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How does automatic invoicing work?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Once your client approves the quote, you can generate the official invoice with a single click. The system takes the quote data and issues it automatically, saving you double data entry."
-          }
-        }
-      ]
+      "mainEntity": FAQS.map((f) => ({
+        "@type": "Question",
+        "name": f.q,
+        "acceptedAnswer": { "@type": "Answer", "text": f.a },
+      })),
     }
   ]
 };
@@ -82,7 +183,7 @@ const schemaOrg = {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <script type="application/ld+json" set:html={JSON.stringify(schemaOrg)} />
 
     <Navbar />
@@ -101,22 +202,22 @@ const schemaOrg = {
                             A PUBLIC PRODUCT BY FLOUVIA
                         </p>
                         <h1 class="hero-title hero-anim">
-                            <span class="title-bold">B2B Quotes</span> <span class="title-bold">that approve themselves.</span>
+                            <span class="title-bold">Quote, collect, and invoice</span> <span class="title-bold">without leaving one link.</span>
                         </h1>
                     </div>
 
                     <div class="hero-bottom hero-anim">
                         <p class="hero-desc">
-                            Cord is the free platform to send quotes with your branding, get one-click approvals, and issue automatic invoices. Zero friction, no credit card, no need to be a Flouvia client.
+                            Cord is the free platform to send quotes with your branding, get one-click approvals, get paid straight to your own account, and stamp automatic invoices — with an AI collections agent that follows up for you when credit terms are due.
                         </p>
                         <div class="hero-action" style="display: flex; gap: 1rem; align-items: center;">
                             <a href="https://cord.flouvia.com/registro" class="btn-luxe">
-                                <span>Create my first quote for free</span>
+                                <span>Start for free</span>
                                 <span class="btn-arrow" aria-hidden="true">&rarr;</span>
                                 <div class="btn-shimmer"></div>
                             </a>
-                            <a href="https://cord.flouvia.com" class="btn-secondary-luxe">
-                                <span>View live example</span>
+                            <a href="https://cord.flouvia.com/q/demo" class="btn-secondary-luxe">
+                                <span>See a live example</span>
                             </a>
                         </div>
                     </div>
@@ -129,7 +230,7 @@ const schemaOrg = {
             <div class="container">
                 <div class="definition-card">
                     <p class="eyebrow" style="margin-bottom: 1rem;">WHAT IS CORD?</p>
-                    <h2 class="definition-heading">Cord is the free, public software by Flouvia designed to modernize B2B sales. It allows any business to send interactive quotes, know when clients open them, receive instant digital approval, and generate invoices directly from the same interface.</h2>
+                    <h2 class="definition-heading">Cord is Flouvia's free, public software to run B2B sales end to end: interactive quotes with digital approval, autonomous AI-powered collections, payments that land straight in your own account, multi-currency quotes with FX coverage, and automatic Mexican e-invoicing (CFDI 4.0) without double data entry — all from the same place.</h2>
                 </div>
             </div>
         </section>
@@ -142,21 +243,21 @@ const schemaOrg = {
                         <p class="eyebrow">BUILT FOR EVERYONE</p>
                         <h2 class="pf-title">You don't need to be our client.</h2>
                         <p class="pf-desc">
-                            At Flouvia, we develop complex systems for large corporations, but we wanted to democratize this technology. Cord was born as an independent product, <strong>100% public and free</strong> to start.
+                            At Flouvia, we build complex systems for large corporations, but we wanted to democratize this technology. Cord was born as an independent product, <strong>100% public and free</strong> to start — and it grows with you as your operation needs more.
                         </p>
                         <ul class="pf-list">
                             <li><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></span> Anyone can sign up today.</li>
                             <li><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></span> We don't ask for a credit card.</li>
-                            <li><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></span> Your quotes will always carry your logo.</li>
+                            <li><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></span> Your quotes will always carry your own logo.</li>
                         </ul>
                     </div>
                     <div class="pf-visual">
                         <div class="pf-card texture-noise fluid-target" data-shader-color="#bae6fd">
                             <div class="pf-card-inner">
                                 <div class="pf-price">Free</div>
-                                <div class="pf-price-sub">Forever.</div>
+                                <div class="pf-price-sub">To start.</div>
                                 <div class="pf-divider"></div>
-                                <div class="pf-feature">Unlimited quotes</div>
+                                <div class="pf-feature">Quotes with your own branding</div>
                                 <div class="pf-feature">One-click approvals</div>
                                 <div class="pf-feature">Product catalog</div>
                             </div>
@@ -171,37 +272,38 @@ const schemaOrg = {
             <div class="container">
                 <div class="section-header js-anim-section">
                     <p class="eyebrow" style="margin-bottom: 1.5rem;">HOW IT WORKS</p>
-                    <h2 class="section-heading">Zero friction throughout your process.</h2>
+                    <h2 class="section-heading">Zero friction, from quote to cash.</h2>
                 </div>
 
                 <div class="rows-wrapper">
-                    <a href="https://cord.flouvia.com/en/features/approvals" class="service-row js-anim-row" style="--delay: 0.1s;">
-                        <div class="row-num">01</div>
-                        <div class="row-content">
-                            <h3>Magical approval with zero friction</h3>
-                            <p>Send a secure link with your own branding. Your client opens it on their phone or computer, reviews the details, and approves with a single click. No accounts to create, no giant PDFs to download, no replying to emails with "ok, proceed".</p>
-                        </div>
-                        <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
-                        <div class="animated-border"></div>
-                    </a>
-                    <a href="https://cord.flouvia.com/en/features/notifications" class="service-row js-anim-row" style="--delay: 0.2s;">
-                        <div class="row-num">02</div>
-                        <div class="row-content">
-                            <h3>Instant read notifications</h3>
-                            <p>Receive a silent alert the exact second your client opens the quote. You will have all the context to know if it's time for a follow-up call or if you should wait for them to review it.</p>
-                        </div>
-                        <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
-                        <div class="animated-border"></div>
-                    </a>
-                    <a href="https://cord.flouvia.com/en/features/invoicing" class="service-row js-anim-row" style="--delay: 0.3s;">
-                        <div class="row-num">03</div>
-                        <div class="row-content">
-                            <h3>Automatic invoicing</h3>
-                            <p>When the client approves, you go from quote to issued invoice with a single button. All information (items, taxes, retentions) transfers automatically. Goodbye double entry.</p>
-                        </div>
-                        <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
-                        <div class="animated-border"></div>
-                    </a>
+                    {ROWS.map((f, i) => (
+                        <a href={f.href} target="_blank" rel="noopener noreferrer" class="service-row js-anim-row" style={`--delay: ${0.1 * (i + 1)}s;`}>
+                            <div class="row-num">{f.num}</div>
+                            <div class="row-content">
+                                <h3>{f.h3}</h3>
+                                <p>{f.p}</p>
+                            </div>
+                            <div class="row-action"><div class="arrow-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+                            <div class="animated-border"></div>
+                        </a>
+                    ))}
+                </div>
+            </div>
+        </section>
+
+        <!-- 04.5 — Additional capabilities -->
+        <section class="capabilities-section js-anim-section">
+            <div class="container">
+                <div class="section-header">
+                    <p class="eyebrow" style="margin-bottom: 1.5rem;">FOR WHEN YOU'VE OUTGROWN QUOTING</p>
+                    <h2 class="section-heading">More than quotes: run your whole B2B operation.</h2>
+                    <p class="cap-sub">Team roles, margin control, financial analytics, an open API, and even your own embedded quote builder — Cord scales with your operation.</p>
+                </div>
+
+                <div class="cap-grid">
+                    {CAPABILITIES.map((c) => (
+                        <CapCard client:visible href={c.href} icon={c.icon} title={c.h3} desc={c.p} linkLabel="Learn more" />
+                    ))}
                 </div>
             </div>
         </section>
@@ -209,41 +311,21 @@ const schemaOrg = {
         <!-- 05 — Trust strip -->
         <section class="trust-strip js-anim-section">
             <div class="container">
-                <p>Built by Flouvia, the firm behind B2B portals for distributors in Mexico &middot; Used by dozens of companies to close deals faster</p>
+                <p>Built by Flouvia, the same firm behind custom B2B portals for distributors in Mexico &middot; Encrypted in transit and at rest, with an immutable audit log on every quote</p>
             </div>
         </section>
 
         <!-- 05.5 — Pricing -->
         <CordPricing isEn={true} />
 
-        <!-- 06 — FAQs -->
-        <section class="faq-section js-anim-section">
-            <div class="container">
-                <div class="faq-header text-center">
-                    <p class="eyebrow">FREQUENTLY ASKED QUESTIONS</p>
-                    <h2 class="section-heading" style="margin-bottom: 4rem;">Clearing doubts.</h2>
-                </div>
-                
-                <div class="faq-grid">
-                    <div class="faq-item">
-                        <h4>Is Cord really free?</h4>
-                        <p>Yes. Cord is 100% free to start. No credit card is required and you can create unlimited quotes with your own branding. Our goal is to eliminate friction in B2B sales.</p>
-                    </div>
-                    <div class="faq-item">
-                        <h4>Do I need to be a Flouvia client to use it?</h4>
-                        <p>Absolutely not. Cord is a SaaS product developed by Flouvia, but it is open and available to any company, business, or independent professional, whether they are our clients or not.</p>
-                    </div>
-                    <div class="faq-item">
-                        <h4>Does my client have to download anything?</h4>
-                        <p>No. Your client receives a secure link that opens directly in their web browser. They can view the quote, approve it, and download it as a PDF without creating an account or installing any app.</p>
-                    </div>
-                    <div class="faq-item">
-                        <h4>Can I issue valid invoices?</h4>
-                        <p>Yes, Cord is designed with built-in invoicing capabilities. You can generate valid tax invoices directly from an approved quote.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <!-- 06 — FAQs (accordion, same style as cord.flouvia.com) -->
+        <CordFaqAccordion
+            class="js-anim-section"
+            id="cord-faq"
+            eyebrow="FREQUENTLY ASKED QUESTIONS"
+            title="Clearing doubts."
+            faqs={FAQS}
+        />
 
     </main>
 
@@ -251,19 +333,19 @@ const schemaOrg = {
 </Layout>
 
 <style is:global>
-    *, *::before, *::after { box-sizing: border-box; } 
-    
+    *, *::before, *::after { box-sizing: border-box; }
+
     :root {
         --color-bg: #ffffff;
-        --color-bg-soft: #fcfcfc; 
+        --color-bg-soft: #fcfcfc;
         --color-blue-deep: #0a192f;
         --color-text: #050505;
         --color-text-muted: #555556;
-        --color-border: rgba(0, 0, 0, 0.08); 
-        
+        --color-border: rgba(0, 0, 0, 0.08);
+
         --font-sans: 'Inter', system-ui, sans-serif;
         --font-serif: 'Instrument Serif', serif;
-        
+
         --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
         --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
         --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
@@ -282,7 +364,7 @@ const schemaOrg = {
     .hero-status span { font-size: 0.7rem; color: #059669; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
     .hero-status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: hero-status-pulse 2s infinite; }
     @keyframes hero-status-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
-    
+
     .js-anim .hero-anim, .js-anim .js-anim-row, .js-anim .js-anim-section, .js-anim .js-anim-cta { opacity: 0; visibility: hidden; }
 
     .btn-luxe {
@@ -337,7 +419,7 @@ const schemaOrg = {
     .pf-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1rem; }
     .pf-list li { display: flex; align-items: center; gap: 0.8rem; font-size: 1.05rem; font-weight: 500; color: var(--color-text); }
     .pf-list li span { color: #059669; display: flex; align-items: center; }
-    
+
     .pf-card { background: #0a192f; border-radius: 24px; padding: 3rem; color: #fff; position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(10,25,47,0.15); transition: transform 0.5s var(--ease-spring), box-shadow 0.5s var(--ease-spring); }
     .pf-card:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 30px 60px rgba(10,25,47,0.2); }
     .texture-noise::before { content: ""; position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.05; mix-blend-mode: overlay; pointer-events: none; border-radius: inherit; }
@@ -359,24 +441,41 @@ const schemaOrg = {
     .row-content h3 { font-size: 2.2rem; font-weight: 800; letter-spacing: -1.2px; margin: 0 0 1rem 0; transition: color 0.5s var(--ease-smooth), letter-spacing 0.5s var(--ease-smooth), transform 0.55s var(--ease-spring); }
     .row-content p { font-size: 1.1rem; color: var(--color-text-muted); line-height: 1.65; margin: 0; max-width: 620px; transition: color 0.4s var(--ease-smooth); }
     .arrow-circle { width: 56px; height: 56px; border: 1px solid var(--color-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.5s var(--ease-spring), color 0.5s var(--ease-spring), border-color 0.5s var(--ease-spring), transform 0.6s var(--ease-spring); }
-    
+
     .service-row:hover .animated-border { width: 100%; }
     .service-row:hover .row-num { color: var(--color-blue-deep); transform: translateX(8px); }
     .service-row:hover .row-content h3 { letter-spacing: -0.8px; transform: translateX(6px); }
     .service-row:hover .arrow-circle { background: var(--color-blue-deep); color: #fff; border-color: var(--color-blue-deep); transform: translate(6px, -6px) rotate(-45deg); }
 
+    /* CAPABILITIES — editorial grid */
+    .capabilities-section { padding: 3rem 0 7rem; background: var(--color-bg); }
+    .cap-sub { max-width: 620px; margin: 0 auto; text-align: center; font-size: 1.05rem; color: var(--color-text-muted); line-height: 1.6; }
+    .cap-grid { margin-top: 4.5rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--color-border); border-left: 1px solid var(--color-border); }
+    .cap-item {
+        display: block; padding: 2.75rem 2.5rem; border-right: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);
+        text-decoration: none; color: inherit; position: relative; overflow: hidden;
+        transition: border-color 0.5s var(--ease-smooth);
+    }
+    .cap-item-inner { position: relative; z-index: 2; }
+    .cap-icon { width: 42px; height: 42px; border-radius: 12px; background: rgba(10,25,47,0.04); display: flex; align-items: center; justify-content: center; color: var(--color-blue-deep); margin-bottom: 1.4rem; transition: background 0.45s var(--ease-smooth), color 0.45s var(--ease-smooth), transform 0.4s var(--ease-spring); }
+    .cap-item h4 { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.4px; margin: 0 0 0.7rem 0; transition: color 0.45s var(--ease-smooth); }
+    .cap-item p { font-size: 0.95rem; color: var(--color-text-muted); line-height: 1.55; margin: 0 0 1.2rem 0; transition: color 0.45s var(--ease-smooth); }
+    .cap-link { font-size: 0.82rem; font-weight: 700; color: var(--color-blue-deep); letter-spacing: 0.2px; display: inline-flex; align-items: center; gap: 4px; opacity: 0; transform: translateX(-4px); transition: opacity 0.4s var(--ease-smooth), transform 0.4s var(--ease-smooth), color 0.45s var(--ease-smooth); }
+    .cap-item:hover .cap-link, .cap-item.is-active .cap-link { opacity: 1; transform: translateX(0); }
+
+    /* Active state — Cord Help Center aurora shader as background */
+    .cap-item.is-active { border-color: rgba(255,255,255,0.08); }
+    .cap-item.is-active .cap-icon { background: rgba(255,255,255,0.14); color: #fff; transform: translateY(-2px); }
+    .cap-item.is-active h4 { color: #fff; }
+    .cap-item.is-active p { color: rgba(226,232,240,0.74); }
+    .cap-item.is-active .cap-link { color: #fff; }
+
     /* TRUST STRIP */
     .trust-strip { padding: 3rem 0; text-align: center; }
     .trust-strip p { font-size: 0.95rem; color: var(--color-text-muted); line-height: 1.6; max-width: 800px; margin: 0 auto; }
 
-    /* FAQs */
-    .faq-section { padding: 6rem 0; background: var(--color-bg); }
-    .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; max-width: 1000px; margin: 0 auto; }
-    .faq-item h4 { font-size: 1.3rem; font-weight: 700; margin: 0 0 1rem 0; letter-spacing: -0.5px; }
-    .faq-item p { font-size: 1.05rem; color: var(--color-text-muted); line-height: 1.6; margin: 0; }
-
     /* CTA */
-    .cta-integrated { padding: 6rem 0 8rem 0; background: var(--color-bg); border: none; } 
+    .cta-integrated { padding: 6rem 0 8rem 0; background: var(--color-bg); border: none; }
     .cta-card-blue { background: radial-gradient(120% 100% at 50% 0%, #152744 0%, #050b14 100%); padding: 5.5rem 6rem; box-shadow: 0 20px 40px rgba(5,11,20,0.15), 0 50px 100px rgba(5,11,20,0.25); transition: transform 0.6s var(--ease-spring); position: relative; --cta-mx: 50%; --cta-my: 50%; }
     .cta-squircle { border-radius: 32px; transform: translateZ(0); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
     .cta-card-blue::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(600px circle at var(--cta-mx) var(--cta-my), rgba(255,255,255,0.05) 0%, transparent 60%); pointer-events: none; z-index: 1; opacity: 0; transition: opacity 0.4s ease; }
@@ -385,7 +484,7 @@ const schemaOrg = {
     .cta-inner-flex { display: flex; justify-content: space-between; align-items: center; gap: 3rem; position: relative; z-index: 2;}
     .cta-title-luxe { font-size: clamp(1.9rem, 3vw, 2.8rem); font-weight: 800; color: #fff; line-height: 1.12; letter-spacing: -1.2px; margin: 0; }
     .cta-scarcity-sub { color: rgba(255,255,255,0.68); font-size: 1.05rem; line-height: 1.5; }
-    
+
     .btn-glow-blue { position: relative; background: #fff; color: var(--color-blue-deep); padding: 20px 44px; border-radius: 100px; text-decoration: none; font-size: 1.05rem; font-weight: 700; overflow: hidden; transition: transform 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth); display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 4px 6px rgba(255,255,255,0.05), 0 10px 20px rgba(255,255,255,0.1); will-change: transform; }
     .btn-glow-blue span { position: relative; z-index: 2; }
     .btn-glow-blue:hover { transform: translateY(-3px); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), 0 14px 28px rgba(255,255,255,0.12), 0 26px 52px rgba(255,255,255,0.22); }
@@ -397,6 +496,7 @@ const schemaOrg = {
         .service-row { grid-template-columns: 110px 1fr; }
         .row-action { display: none; }
         .pf-grid { gap: 2rem; }
+        .cap-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (max-width: 768px) {
@@ -413,7 +513,7 @@ const schemaOrg = {
         .row-action { display: none; }
 
         .pf-grid { grid-template-columns: 1fr; gap: 3rem; }
-        .faq-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+        .cap-grid { grid-template-columns: 1fr; }
 
         .btn-luxe, .btn-secondary-luxe { width: 100%; }
 
@@ -426,7 +526,7 @@ const schemaOrg = {
     import { gsap } from "gsap";
     import { ScrollTrigger } from "gsap/ScrollTrigger";
     import { initFluidShaders } from "../../components/blog/FluidShader";
-    
+
     gsap.registerPlugin(ScrollTrigger);
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -464,7 +564,7 @@ const schemaOrg = {
 
             // Services Rows Entrance
             gsap.utils.toArray(".js-anim-row").forEach((row: any) => {
-                gsap.fromTo(row, 
+                gsap.fromTo(row,
                     { y: 40, opacity: 0, visibility: "visible" },
                     {
                         scrollTrigger: {

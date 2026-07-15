@@ -1,0 +1,203 @@
+---
+// CordFaqAccordion.astro — mismo acordeón premium que usa cord.flouvia.com
+// (componente hermano: flouvia-cord/src/components/landing/FaqAccordion.astro),
+// portado a flouvia con sus propios tokens de :root (--color-border, --font-sans,
+// --color-blue-deep, --color-text-muted, ya definidos en cord.astro/en/cord.astro).
+// Usage: <CordFaqAccordion faqs={[{q,a}]} eyebrow="..." title="..." id="unique" />
+
+interface Props {
+    faqs: { q: string; a: string }[];
+    eyebrow?: string;
+    title?: string;
+    id?: string;
+    class?: string;
+    maxWidth?: string;
+}
+
+const {
+    faqs,
+    eyebrow,
+    title,
+    id = 'faq',
+    class: className = '',
+    maxWidth = '820px',
+} = Astro.props;
+
+const uid = `cfacc-${id}`;
+---
+
+<section class:list={['cf-acc-section', className]} id={id}>
+    <div class="cf-acc-wrap" style={`--cf-max-w: ${maxWidth}`}>
+        {eyebrow && (
+            <p class="cf-acc-eyebrow eyebrow">{eyebrow}</p>
+        )}
+        {title && (
+            <h2 class="cf-acc-title section-heading">{title}</h2>
+        )}
+        <div class="cf-acc-list" role="list">
+            {faqs.map((f, i) => (
+                <div class="cf-acc-item" role="listitem">
+                    <button
+                        class="cf-acc-q"
+                        aria-expanded="false"
+                        aria-controls={`${uid}-body-${i}`}
+                        id={`${uid}-btn-${i}`}
+                        type="button"
+                    >
+                        <span class="cf-acc-q-text">{f.q}</span>
+                        <span class="cf-acc-icon" aria-hidden="true">
+                            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <line x1="4" y1="10" x2="16" y2="10" stroke="currentColor" stroke-width="1.65" stroke-linecap="round"/>
+                                <line class="cf-ico-v" x1="10" y1="4" x2="10" y2="16" stroke="currentColor" stroke-width="1.65" stroke-linecap="round"/>
+                            </svg>
+                        </span>
+                    </button>
+                    <div
+                        class="cf-acc-body"
+                        id={`${uid}-body-${i}`}
+                        role="region"
+                        aria-labelledby={`${uid}-btn-${i}`}
+                    >
+                        <div class="cf-acc-body-inner">
+                            <p class="cf-acc-a">{f.a}</p>
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<style>
+.cf-acc-section { padding: 6rem 5%; }
+.cf-acc-wrap { max-width: var(--cf-max-w, 820px); margin: 0 auto; }
+
+.cf-acc-eyebrow { text-align: center; }
+.cf-acc-title { margin-bottom: 3rem; }
+
+.cf-acc-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--color-border);
+}
+.cf-acc-item { border-bottom: 1px solid var(--color-border); }
+
+.cf-acc-q {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    padding: 1.6rem 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    transition: color 0.25s ease;
+    outline: none;
+}
+.cf-acc-q:focus-visible {
+    outline: 2px solid rgba(10, 25, 47, 0.4);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+.cf-acc-q:hover { color: #050505; }
+.cf-acc-item.is-open .cf-acc-q { color: #050505; }
+
+.cf-acc-icon {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    background: transparent;
+    transition: background 0.28s ease, border-color 0.28s ease, color 0.28s ease;
+}
+.cf-acc-icon svg { width: 16px; height: 16px; display: block; }
+.cf-acc-q:hover .cf-acc-icon {
+    background: rgba(10, 25, 47, 0.04);
+    border-color: rgba(10, 25, 47, 0.18);
+    color: var(--color-blue-deep);
+}
+.cf-acc-item.is-open .cf-acc-icon {
+    background: var(--color-blue-deep);
+    border-color: var(--color-blue-deep);
+    color: #fff;
+}
+
+.cf-ico-v {
+    transform-origin: 10px 10px;
+    transition: transform 0.36s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.26s ease;
+}
+.cf-acc-item.is-open .cf-ico-v { transform: scaleY(0); opacity: 0; }
+
+.cf-acc-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.cf-acc-item.is-open .cf-acc-body { grid-template-rows: 1fr; }
+.cf-acc-body-inner { overflow: hidden; min-height: 0; }
+
+.cf-acc-a {
+    margin: 0;
+    font-size: 1.03rem;
+    line-height: 1.72;
+    color: var(--color-text-muted);
+    max-width: 680px;
+    padding-bottom: 0;
+    opacity: 0;
+    transform: translateY(-5px);
+    transition:
+        opacity   0.4s  ease 0.08s,
+        transform 0.44s cubic-bezier(0.34, 1.56, 0.64, 1) 0.08s,
+        padding-bottom 0.42s ease;
+}
+.cf-acc-item.is-open .cf-acc-a {
+    opacity: 1;
+    transform: translateY(0);
+    padding-bottom: 1.9rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cf-ico-v, .cf-acc-icon, .cf-acc-body, .cf-acc-a, .cf-acc-q { transition: none; }
+}
+
+@media (max-width: 680px) {
+    .cf-acc-section { padding: 4.5rem 5%; }
+    .cf-acc-q { font-size: 1rem; padding: 1.3rem 0; gap: 1rem; }
+    .cf-acc-a { font-size: 0.95rem; }
+    .cf-acc-icon { width: 32px; height: 32px; }
+    .cf-acc-icon svg { width: 14px; height: 14px; }
+}
+</style>
+
+<script>
+// Acordeón uno-a-la-vez, agrupado por lista (permite varias instancias por página)
+document.querySelectorAll<HTMLElement>('.cf-acc-list').forEach((list) => {
+    const items = Array.from(list.querySelectorAll<HTMLElement>('.cf-acc-item'));
+    items.forEach((item) => {
+        const btn = item.querySelector<HTMLButtonElement>('.cf-acc-q');
+        if (!btn) return;
+        btn.addEventListener('click', () => {
+            const willOpen = !item.classList.contains('is-open');
+            items.forEach((other) => {
+                other.classList.remove('is-open');
+                other.querySelector<HTMLButtonElement>('.cf-acc-q')?.setAttribute('aria-expanded', 'false');
+            });
+            if (willOpen) {
+                item.classList.add('is-open');
+                btn.setAttribute('aria-expanded', 'true');
+            }
+        });
+    });
+});
+</script>
