@@ -57,6 +57,37 @@ src/pages/
   en/cord.astro             → /en/cord — espejo en inglés (fuente de verdad separada,
                               se mantiene sincronizado a mano con cord.astro).
 
+  # Componentes de /cord — src/components/cord/ (jul 2026)
+  CordPricing.astro         → tarjetas de los 5 planes reales, con aurora CSS viajera.
+  CordFaqAccordion.astro    → acordeón de FAQ PORTADO 1:1 desde
+                              flouvia-cord/src/components/landing/FaqAccordion.astro
+                              (mismo patrón: ícono +/− que rota, grid-template-rows
+                              para la altura, uno-a-la-vez). En cord.astro/en/cord.astro
+                              el array `FAQS` es la ÚNICA fuente — alimenta tanto el
+                              acordeón visible como el `FAQPage` del JSON-LD; nunca
+                              hardcodear las preguntas por separado en el schema.
+  CapCard.jsx (React)       → tarjeta del grid "capacidades adicionales"; maneja su
+                              propio estado de hover/foco y monta <CapAuroraBg active=.../>
+                              como fondo — el texto pasa a blanco vía la clase `.is-active`
+                              (definida en el <style is:global> de cord.astro/en/cord.astro,
+                              NO en el componente).
+  CapAuroraBg.jsx (React)   → mismo motor de shader del aurora del Centro de Ayuda de
+                              Cord (BlueAuroraBg — teal/cobalt/cyan, grano de película),
+                              adaptado para vivir dentro de una tarjeta clara y solo
+                              pintar mientras `active` es true (frameloop 'never'→'always',
+                              fade 0.55s). El cursor se anima con un resorte
+                              masa-amortiguador (Hooke + fricción, no un lerp plano) y su
+                              velocidad alimenta el uniform `u_force`, que infla el empuje
+                              del aurora y dispara un chispazo cyan — es lo que le da la
+                              sensación de "físicas" al pasar el mouse rápido. Montado
+                              siempre con `client:visible` (no `client:only`) porque va
+                              DENTRO de CapCard, que ya es un island de React.
+                              ⚠️ Regla: cualquier shader R3F nuevo dentro de una tarjeta
+                              con hover reactivo debe seguir este patrón (frameloop
+                              condicionado + spring físico), no CardAuroraBg.jsx de
+                              flouvia-cord tal cual (ese es para tarjetas SIEMPRE
+                              oscuras, no para un toggle hover en una tarjeta clara).
+
   # Páginas legales (prerender:true)
   privacidad.astro         → /privacidad
   terminos.astro           → /terminos
