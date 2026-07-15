@@ -12,12 +12,16 @@ const vs = `
 `;
 
 const fs = `
-  precision mediump float;
+  precision highp float;
   uniform float u_time;
   uniform vec2 u_resolution;
   uniform vec2 u_mouse;
+  uniform vec2 u_mouse_vel;
   uniform vec3 u_color;
   uniform vec3 u_bg;
+  uniform float u_grain;
+  uniform float u_intensity;
+  uniform float u_interactive;
 
   // Simplex noise function
   vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
@@ -48,22 +52,71 @@ const fs = `
     return 130.0 * dot(m, g);
   }
 
+  // Matriz de rotación basada en la Proporción Áurea para reducir artefactos axiales en el ruido
+  const mat2 m = mat2( 0.80,  0.60, -0.60,  0.80 );
+
+  // Fractional Brownian Motion (FBM) de alta calidad
+  float fbm( vec2 p ) {
+      float f = 0.0;
+      float a = 0.5;
+      for(int i = 0; i < 5; i++) {
+          f += a * snoise(p);
+          p = m * p * 2.0;
+          a *= 0.5;
+      }
+      return f;
+  }
+
+  // Iterative Domain Warping: El ruido deforma el espacio para evaluar más ruido
+  float pattern(in vec2 p, out vec2 q, out vec2 r, float t) {
+      q.x = fbm( p + vec2(0.0,0.0) + 0.1 * t );
+      q.y = fbm( p + vec2(5.2,1.3) - 0.1 * t );
+
+      r.x = fbm( p + 2.0*q + vec2(1.7,9.2) + 0.15*t );
+      r.y = fbm( p + 2.0*q + vec2(8.3,2.8) - 0.12*t );
+
+      return fbm( p + 2.5*r + 0.05 * t );
+  }
+
   void main() {
     vec2 st = gl_FragCoord.xy / u_resolution.xy;
+    vec2 aspect = vec2(u_resolution.x / u_resolution.y, 1.0);
+    vec2 st_a = st * aspect;
     
-    // Ruido muy lento y a gran escala (minimalista y sobrio)
-    vec2 pos = vec2(st * 1.2);
-    float n1 = snoise(pos + u_time * 0.04);
-    float n2 = snoise(pos + vec2(n1) - u_time * 0.06);
+    // ── Mouse Physics Minimalista ──
+    vec2 mouse_a = (u_mouse / u_resolution.xy) * aspect;
+    vec2 vel_a = (u_mouse_vel / u_resolution.xy) * aspect;
     
-    // Mezcla de colores ultra sutil
-    float flow = smoothstep(-0.5, 1.0, n2);
+    vec2 dir = st_a - mouse_a;
+    float len = length(dir);
+    vec2 nd = len > 0.0 ? dir / len : vec2(0.0);
     
-    // El fondo es casi enteramente oscuro, con un toque del color de la categoría
-    vec3 fluidColor = mix(u_bg, u_color, flow * 0.12);
+    // Interacción microscópica, apenas perceptible
+    float dragRadius = smoothstep(1.0, 0.0, len);
+    vec2 drag = vel_a * dragRadius * 0.05;
+    float push = smoothstep(0.9, 0.0, len) * 0.005;
     
-    // Grano fino estilo cristal esmerilado para darle textura premium (centrado en 0 para verse en fondos blancos)
-    float grain = (fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453) - 0.5) * 0.04;
+    vec2 interaction = (nd * push - drag) * u_interactive;
+    
+    // Escala grande para colores suaves y difusos
+    vec2 uv = st_a * 0.5 - interaction;
+    float t = u_time * 0.08; // Movimiento muy lento y elegante
+    
+    // ── Gradiente Líquido Suave ──
+    vec2 q, r;
+    float h = pattern(uv, q, r, t);
+    
+    // Mezcla aterciopelada entre el color de fondo y el u_color
+    float flow = smoothstep(0.2, 0.8, h);
+    
+    // Añadimos sutileza usando los sub-patrones para variar el tono suavemente
+    float nuance = smoothstep(0.1, 0.9, r.y);
+    float finalMix = mix(flow, nuance, 0.4);
+    
+    vec3 fluidColor = mix(u_bg, u_color, finalMix * u_intensity);
+    
+    // Grano sutil para textura premium
+    float grain = (fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453) - 0.5) * u_grain;
     
     gl_FragColor = vec4(fluidColor + grain, 1.0);
   }
@@ -121,21 +174,37 @@ export function initFluidShaders() {
   const uTime = gl.getUniformLocation(program, 'u_time');
   const uRes = gl.getUniformLocation(program, 'u_resolution');
   const uMouse = gl.getUniformLocation(program, 'u_mouse');
+  const uMouseVel = gl.getUniformLocation(program, 'u_mouse_vel');
   const uColor = gl.getUniformLocation(program, 'u_color');
   const uBg = gl.getUniformLocation(program, 'u_bg');
+  const uGrain = gl.getUniformLocation(program, 'u_grain');
+  const uIntensity = gl.getUniformLocation(program, 'u_intensity');
+  const uInteractive = gl.getUniformLocation(program, 'u_interactive');
 
   let globalMouseX = -1000;
   let globalMouseY = -1000;
+  let smoothMouseX = -1000;
+  let smoothMouseY = -1000;
+  let lastSmoothMouseX = -1000;
+  let lastSmoothMouseY = -1000;
+  
   window.addEventListener('mousemove', (e) => {
     globalMouseX = e.clientX;
     globalMouseY = e.clientY;
   }, { passive: true });
 
-  const cards: { ctx: ImageBitmapRenderingContext, color: number[], bg: number[], el: HTMLElement, width: number, height: number }[] = [];
+  const cards: { ctx: ImageBitmapRenderingContext, color: number[], bg: number[], el: HTMLElement, width: number, height: number, grain: number, intensity: number, interactive: number }[] = [];
   
   targets.forEach((target) => {
     const colorHex = target.dataset.shaderColor || '#ffffff';
     const bgHex = target.dataset.bgColor || '#0a192f';
+    const hasNoGrain = target.hasAttribute('data-no-grain');
+    const intensityRaw = target.dataset.shaderIntensity;
+    const intensity = intensityRaw ? parseFloat(intensityRaw) : 0.18;
+    const grain = hasNoGrain ? 0.0 : 0.04;
+    const isInteractive = target.hasAttribute('data-interactive');
+    const interactive = isInteractive ? 1.0 : 0.0;
+
     const canvas = document.createElement('canvas');
     canvas.style.position = 'absolute';
     canvas.style.top = '0';
@@ -159,7 +228,10 @@ export function initFluidShaders() {
         bg: hexToRgb(bgHex),
         el: target,
         width: 0,
-        height: 0
+        height: 0,
+        grain,
+        intensity,
+        interactive
       });
     }
   });
@@ -171,6 +243,16 @@ export function initFluidShaders() {
     animationFrame = requestAnimationFrame(render);
     const time = (Date.now() - startTime) * 0.001;
     gl.uniform1f(uTime, time);
+
+    // Lerp suave para que el mouse se deslice como agua y cálculo de inercia
+    const lerpFactor = 0.06;
+    lastSmoothMouseX = smoothMouseX;
+    lastSmoothMouseY = smoothMouseY;
+    smoothMouseX += (globalMouseX - smoothMouseX) * lerpFactor;
+    smoothMouseY += (globalMouseY - smoothMouseY) * lerpFactor;
+    
+    const mouseVelX = smoothMouseX - lastSmoothMouseX;
+    const mouseVelY = smoothMouseY - lastSmoothMouseY;
 
     cards.forEach(card => {
       const rect = card.el.getBoundingClientRect();
@@ -197,14 +279,20 @@ export function initFluidShaders() {
         gl.viewport(0, 0, w, h);
       }
 
-      // Calculate local mouse position (y is inverted in WebGL)
-      const localMouseX = (globalMouseX - rect.left) * dpr;
-      const localMouseY = (rect.height - (globalMouseY - rect.top)) * dpr;
+      // Calculate local mouse position (y is inverted in WebGL) — uses lerped coords
+      const localMouseX = (smoothMouseX - rect.left) * dpr;
+      const localMouseY = (rect.height - (smoothMouseY - rect.top)) * dpr;
+      const localVelX = mouseVelX * dpr;
+      const localVelY = -mouseVelY * dpr; // Invert Y for velocity too
 
       gl.uniform2f(uRes, w, h);
       gl.uniform2f(uMouse, localMouseX, localMouseY);
+      gl.uniform2f(uMouseVel, localVelX, localVelY);
       gl.uniform3f(uColor, card.color[0], card.color[1], card.color[2]);
       gl.uniform3f(uBg, card.bg[0], card.bg[1], card.bg[2]);
+      gl.uniform1f(uGrain, card.grain);
+      gl.uniform1f(uIntensity, card.intensity);
+      gl.uniform1f(uInteractive, card.interactive);
       
       gl.drawArrays(gl.TRIANGLES, 0, 6);
       

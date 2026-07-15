@@ -76,10 +76,6 @@ const aboutSchema = {
             <div class="container hero-container">
                 <div class="hero-content">
                     <div class="hero-text-zone" id="hero-parallax">
-                        <div class="hero-status hero-anim" id="hero-status">
-                            <span class="hero-status-dot" aria-hidden="true"></span>
-                            <span>{t('about.hero.status')}</span>
-                        </div>
                         <h1 class="hero-title hero-anim">
                             <span class="title-bold">{t('about.hero.title1')}</span> <span class="title-bold">{t('about.hero.title2')}</span>
                         </h1>
@@ -328,12 +324,6 @@ const aboutSchema = {
     .editorial { font-weight: 400; color: #222; }
     .eyebrow { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
 
-    /* HERO STATUS — señal de exclusividad (cupo por trimestre) */
-    .hero-status { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 100px; border: 1px solid rgba(16,185,129,0.22); background: rgba(16,185,129,0.04); width: max-content; margin-bottom: 1.6rem; }
-    .hero-status span { font-size: 0.7rem; color: #059669; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-    .hero-status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: hero-status-pulse 2s infinite; }
-    @keyframes hero-status-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
-
     /* El hero parte oculto SOLO cuando hay JS sin reduced-motion (gate .js-anim
        puesto por el script inline del Layout antes del paint). GSAP lo revela.
        Sin JS o reduced-motion queda visible por defecto → nunca pantalla en blanco. */
@@ -526,7 +516,6 @@ const aboutSchema = {
         .global-gap-reduced { padding: 4rem 0; }
         .hero-grand { padding-top: 11rem; padding-bottom: 4rem; min-height: auto; text-align: center; }
         .hero-content { display: flex; flex-direction: column; align-items: center; }
-        .hero-status { margin-left: auto; margin-right: auto; }
         .hero-title { display: flex; flex-direction: column; gap: 0.2rem; margin-bottom: 2.5rem; max-width: 100%; }
         .title-bold { display: block; font-size: clamp(2rem, 7.6vw, 2.85rem); font-weight: 800; letter-spacing: -1px; line-height: 1.12; }
         .hero-bottom { flex-direction: column; align-items: center; gap: 2.5rem; text-align: center; border-top: none; padding-top: 0;}
@@ -615,7 +604,6 @@ const aboutSchema = {
         if (heroAnim.length) {
             gsap.set(heroAnim, { opacity: 0, y: 12 });
             gsap.timeline({ defaults: { ease: 'power2.out' } })
-                .to('.hero-status',             { opacity: 1, y: 0, duration: 0.9 }, 0)
                 .to('.hero-text-zone .eyebrow', { opacity: 1, y: 0, duration: 0.9 }, 0.1)
                 .to('.hero-title',              { opacity: 1, y: 0, duration: 1.1 }, 0.2)
                 .to('.hero-bottom',             { opacity: 1, y: 0, duration: 1.0 }, 0.42);
