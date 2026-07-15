@@ -3,6 +3,7 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from './Navbar.astro';
 import Footer from './Footer.astro';
+import CordFaqAccordion from './cord/CordFaqAccordion.astro';
 
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 const lang = getLangFromUrl(Astro.url);
@@ -11,6 +12,9 @@ const isEn = lang === 'en';
 
 const SITE = 'https://flouvia.com';
 const servPath = isEn ? '/en/servicios' : '/servicios';
+
+// Debe coincidir con --acc-bg-1..6 del <style> — color base del fluid shader por panel.
+const ACC_BG_HEX = ['#061122', '#0a192f', '#112646', '#17335d', '#1c3d6e', '#224880'];
 
 // ── Schema Service (uno por servicio) — citable por AI Overviews ──
 const services = isEn ? [
@@ -298,7 +302,15 @@ const serviceRows = [
 
                 <div class="wf-accordion" id="wf-accordion">
                     {[1, 2, 3, 4, 5, 6].map((n, i) => (
-                        <div class={`wf-acc-panel ${i === 0 ? 'active' : ''}`} data-index={i} style={`--bg-shade: var(--acc-bg-${n});`}>
+                        <div
+                            class={`wf-acc-panel fluid-target ${i === 0 ? 'active' : ''}`}
+                            data-index={i}
+                            style={`--bg-shade: var(--acc-bg-${n});`}
+                            data-bg-color={ACC_BG_HEX[n - 1]}
+                            data-shader-color="#7dd3fc"
+                            data-shader-intensity="0.3"
+                            data-interactive
+                        >
                             <div class="wf-acc-collapsed">
                                 <span class="wf-acc-num">0{n}</span>
                             </div>
@@ -358,34 +370,20 @@ const serviceRows = [
             </div>
         </section>
 
-        <!-- ════════ FAQ ════════ -->
-        <section class="faq-section" id="faq-section">
-            <div class="container faq-container">
-                <div class="faq-header" id="faq-header">
-                    <h2 class="faq-heading">{isEn ? 'FAQ' : 'Preguntas frecuentes'}</h2>
-                    <p class="faq-sub">{isEn ? 'Everything you need to know before we start.' : 'Todo lo que necesitas saber antes de empezar.'}</p>
-                </div>
-
-                <div class="faq-list" id="faq-list">
-                    {faqs.map((f, i) => (
-                        <div class="faq-item">
-                            <button class="faq-q" aria-expanded="false">
-                                <span>{f.q}</span>
-                                <div class="faq-icon-wrap" aria-hidden="true">
-                                    <span class="faq-icon-line faq-icon-h"></span>
-                                    <span class="faq-icon-line faq-icon-v"></span>
-                                </div>
-                            </button>
-                            <div class="faq-a">
-                                <div class="faq-a-inner">
-                                    <p>{f.a}</p>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+        <!-- ════════ FAQ (acordeón estilo cord.flouvia.com) ════════ -->
+        <div class="faq-section-wrap" id="faq-section">
+            <div class="container">
+                <div class="cmp-header">
+                    <div class="cmp-header-left">
+                        <p class="eyebrow">{isEn ? 'FAQ' : 'PREGUNTAS FRECUENTES'}</p>
+                        <h2 class="section-heading">{isEn ? 'Frequently asked questions.' : 'Preguntas frecuentes.'}</h2>
+                    </div>
+                    <p class="section-sub">{isEn ? 'Everything you need to know before we start.' : 'Todo lo que necesitas saber antes de empezar.'}</p>
                 </div>
             </div>
-        </section>
+
+            <CordFaqAccordion faqs={faqs.map(f => ({ q: f.q, a: f.a }))} />
+        </div>
 
     </main>
 
@@ -570,7 +568,7 @@ const serviceRows = [
     }
     
     .why-flouvia-hardware { padding: 7rem 0 8rem 0; background: var(--color-bg); position: relative; overflow: clip; }
-    .wf-header { text-align: center; margin-bottom: 4rem; }
+    .wf-header { text-align: left; margin-bottom: 4rem; }
     .wf-title { margin: 0; }
     
     .wf-accordion {
@@ -594,7 +592,7 @@ const serviceRows = [
     .wf-acc-panel:not(.active):hover { filter: brightness(1.25); }
     
     .wf-acc-collapsed {
-        position: absolute; top: 0; left: 0; bottom: 0; width: 90px;
+        position: absolute; top: 0; left: 0; bottom: 0; width: 90px; z-index: 1;
         display: flex; align-items: center; justify-content: center;
         transition: opacity 0.4s ease; pointer-events: none;
     }
@@ -606,7 +604,7 @@ const serviceRows = [
     }
     
     .wf-acc-content {
-        position: absolute; left: 90px; top: 0; bottom: 0;
+        position: absolute; left: 90px; top: 0; bottom: 0; z-index: 1;
         width: calc(100% - 90px); min-width: 500px;
         padding: 4rem 3rem; display: flex; flex-direction: column; justify-content: center;
         opacity: 0; transform: translateX(20px);
@@ -624,6 +622,10 @@ const serviceRows = [
 
     /* 5. COMPARISON TABLE — matriz editorial (blanco · hairlines que se desvanecen) */
     .comparison-section { padding: 7rem 0; background: var(--color-bg); position: relative; overflow: clip; }
+
+    /* 6. FAQ — header split (título izq · subtítulo der), igual que Comparativa */
+    .faq-section-wrap { padding: 7rem 0 0 0; background: var(--color-bg); }
+    .faq-section-wrap :global(.cf-acc-section) { padding-top: 0; }
     .cmp-header { max-width: 100%; margin: 0 0 3.5rem 0; display: flex; justify-content: space-between; align-items: flex-end; gap: 3rem; text-align: left; }
     .cmp-header-left { flex: 1; }
     .cmp-header .section-heading { margin: 0; }
@@ -654,35 +656,6 @@ const serviceRows = [
     .cmp-cell { display: inline-flex; align-items: center; gap: 9px; }
     .cmp-check { width: 15px; height: 15px; color: var(--color-blue-deep); flex-shrink: 0; }
 
-    /* 6. FAQ (Apple-like Minimalist) */
-    .faq-section { padding: 9rem 0; background: var(--color-bg); border-top: 1px solid var(--color-border); }
-    .faq-container { display: grid; grid-template-columns: 360px 1fr; gap: 6rem; align-items: start; }
-    .faq-header { position: sticky; top: 120px; }
-    .faq-heading { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; letter-spacing: -1.2px; margin: 0 0 1rem 0; color: var(--color-text); line-height: 1.1; }
-    .faq-sub { font-size: 1.05rem; color: var(--color-text-muted); line-height: 1.5; margin: 0; max-width: 280px; }
-    
-    .faq-list { display: flex; flex-direction: column; border-top: 1px solid var(--color-border); }
-    .faq-item { border-bottom: 1px solid var(--color-border); }
-    
-    .faq-q { width: 100%; background: none; border: none; text-align: left; padding: 2rem 0; display: flex; align-items: center; justify-content: space-between; gap: 2rem; cursor: pointer; font-family: var(--font-sans); font-size: 1.3rem; font-weight: 500; color: var(--color-text); letter-spacing: -0.4px; transition: color 0.3s ease; }
-    .faq-q:hover { color: #86868b; }
-    
-    .faq-icon-wrap { position: relative; width: 14px; height: 14px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--color-text); transition: color 0.3s ease; }
-    .faq-q:hover .faq-icon-wrap { color: #86868b; }
-    .faq-icon-line { position: absolute; background: currentColor; border-radius: 1px; transition: transform 0.7s var(--ease-spring), opacity 0.6s ease; }
-    .faq-icon-h { width: 14px; height: 1.5px; }
-    .faq-icon-v { width: 1.5px; height: 14px; }
-    
-    .faq-item.is-open .faq-icon-v { transform: rotate(90deg); opacity: 0; }
-    .faq-item.is-open .faq-icon-h { transform: rotate(180deg); }
-    .faq-item.is-open .faq-q { color: var(--color-text); }
-    .faq-item.is-open .faq-icon-wrap { color: var(--color-text); }
-    
-    .faq-a { height: 0; overflow: hidden; opacity: 0; }
-    .faq-a-inner { padding: 0 3rem 2.5rem 0; }
-    .faq-a-inner p { margin: 0; font-size: 1.05rem; line-height: 1.6; color: #6e6e73; max-width: 680px; font-weight: 400; }
-
-
     .cta-flex { display: flex; justify-content: space-between; align-items: center; gap: 4rem; }
     .cta-text { max-width: 640px; }
     .cta-eyebrow { color: rgba(255,255,255,0.55) !important; letter-spacing: 4px; margin-bottom: 1.4rem; }
@@ -704,9 +677,6 @@ const serviceRows = [
         .wf-accordion { display: flex; }
         .hero-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; }
         .hero-title { margin-bottom: 1.5rem; }
-        .faq-container { grid-template-columns: 1fr; gap: 3rem; }
-        .faq-header { position: static; max-width: 100%; }
-        .faq-sub { max-width: 100%; }
         .cta-flex { flex-direction: column; align-items: flex-start; gap: 2.5rem; }
     }
 
@@ -778,12 +748,6 @@ const serviceRows = [
         .cmp-table th, .cmp-table td { padding: 1rem; font-size: 0.82rem; }
         .cmp-table thead th { font-size: 0.56rem; letter-spacing: 1px; }
         .cmp-table tbody th[scope="row"] { width: 28%; }
-        
-        .faq-section { padding: 5rem 0; }
-        .faq-heading { font-size: 2.2rem; }
-        .faq-q { font-size: 1.1rem; padding: 1.5rem 0; gap: 1rem; }
-        .faq-a-inner { padding: 0 1rem 1.5rem 0; }
-        .faq-a-inner p { font-size: 0.95rem; }
 
         .cta-final-clean { padding: 2rem 0 6rem 0; }
         .cta-box-refined { padding: 3rem 1.6rem; border-radius: 28px; text-align: center; }
@@ -798,6 +762,7 @@ const serviceRows = [
 <script>
     import { gsap } from 'gsap';
     import { ScrollTrigger } from 'gsap/ScrollTrigger';
+    import { initFluidShaders } from './blog/FluidShader';
     gsap.registerPlugin(ScrollTrigger);
 
     // Recalcular posiciones tras fuentes + carga para que los triggers ya pasados disparen.
@@ -926,49 +891,19 @@ const serviceRows = [
                 panel.classList.add('active');
             });
         });
-        
+
+        initFluidShaders();
+
         reveal('.wf-accordion', { trigger: '.why-flouvia-hardware', y: 28, dur: 1.0, start: 'top 82%' });
 
         /* COMPARISON table */
         reveal('.cmp-scroll', { trigger: '.comparison-section', y: 24, dur: 1.0, start: 'top 80%' });
 
-        // ── Animación y lógica del FAQ (Apple-style) ──
+        /* FAQ */
+        reveal('#faq-section .cf-acc-item', { trigger: '#faq-section .cf-acc-list', y: 18, dur: 0.8, stagger: 0.06, start: 'top 86%' });
+
         const ctaCard = document.getElementById('svc-cta-card');
         if (ctaCard) reveal(ctaCard.querySelectorAll('.cta-text > *, .btn-luxe-main'), { trigger: ctaCard, y: 14, stagger: 0.08, start: 'top 86%' });
-
-        const faqHead = document.getElementById('faq-header');
-        if (faqHead) reveal(faqHead.querySelectorAll('.faq-heading, .faq-sub'), { trigger: '.faq-section', y: 14, stagger: 0.08, start: 'top 82%' });
-        reveal('.faq-item', { trigger: '#faq-list', y: 18, dur: 0.8, stagger: 0.06, start: 'top 86%' });
-
-        const faqItems = document.querySelectorAll('.faq-item');
-        faqItems.forEach(item => {
-            const q = item.querySelector('.faq-q');
-            const a = item.querySelector('.faq-a');
-            
-            q?.addEventListener('click', () => {
-            const isOpen = item.classList.contains('is-open');
-            
-            // Cerrar otros
-            faqItems.forEach(other => {
-                if (other !== item && other.classList.contains('is-open')) {
-                other.classList.remove('is-open');
-                other.querySelector('.faq-q')?.setAttribute('aria-expanded', 'false');
-                gsap.to(other.querySelector('.faq-a'), { height: 0, opacity: 0, duration: 0.5, ease: 'power3.inOut' });
-                }
-            });
-
-            // Toggle actual
-            if (isOpen) {
-                item.classList.remove('is-open');
-                q.setAttribute('aria-expanded', 'false');
-                gsap.to(a, { height: 0, opacity: 0, duration: 0.5, ease: 'power3.inOut' });
-            } else {
-                item.classList.add('is-open');
-                q.setAttribute('aria-expanded', 'true');
-                gsap.to(a, { height: 'auto', opacity: 1, duration: 0.7, ease: 'power3.out' });
-            }
-            });
-        });
     });
 
 </script>

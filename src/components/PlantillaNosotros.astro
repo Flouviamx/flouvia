@@ -119,7 +119,7 @@ const aboutSchema = {
                 <div class="m-text-side">
                     <div class="sticky-text-wrapper">
                         <h2 class="section-heading reveal-fade">
-                            {t('about.manifesto.title')} {t('about.manifesto.title_ed')}
+                            {t('about.manifesto.title')}
                         </h2>
 
                         <div class="m-paragraphs mt-medium">
@@ -132,48 +132,36 @@ const aboutSchema = {
             </div>
         </section>
 
-        <!-- ══════════ ADN / PRINCIPIOS ══════════ -->
+        <!-- ══════════ ADN / PRINCIPIOS (lista editorial numerada) ══════════ -->
         <section class="values-monolith-section global-gap-reduced">
             <div class="container">
                 <div class="section-header">
-                    <h2 class="section-heading reveal-fade">{t('about.values.title')} {t('about.values.title_ed')}</h2>
+                    <h2 class="section-heading reveal-fade">{t('about.values.title')}</h2>
                 </div>
 
-                <div class="monolith-grid">
+                <div class="principles-list">
 
-                    <div class="monolith-card squircle-math reveal-up">
-                        <div class="m-card-inner">
-                            <div class="m-top-zone">
-                                <div class="m-progress-line"></div>
-                            </div>
-                            <div class="m-bottom-zone">
-                                <h3>{t('about.v1.title')}</h3>
-                                <p>{t('about.v1.desc')}</p>
-                            </div>
+                    <div class="principle-row reveal-up">
+                        <span class="principle-num">01</span>
+                        <div class="principle-body">
+                            <h3>{t('about.v1.title')}</h3>
+                            <p>{t('about.v1.desc')}</p>
                         </div>
                     </div>
 
-                    <div class="monolith-card squircle-math reveal-up">
-                        <div class="m-card-inner">
-                            <div class="m-top-zone">
-                                <div class="m-progress-line"></div>
-                            </div>
-                            <div class="m-bottom-zone">
-                                <h3>{t('about.v2.title')}</h3>
-                                <p>{t('about.v2.desc')}</p>
-                            </div>
+                    <div class="principle-row reveal-up">
+                        <span class="principle-num">02</span>
+                        <div class="principle-body">
+                            <h3>{t('about.v2.title')}</h3>
+                            <p>{t('about.v2.desc')}</p>
                         </div>
                     </div>
 
-                    <div class="monolith-card squircle-math reveal-up">
-                        <div class="m-card-inner">
-                            <div class="m-top-zone">
-                                <div class="m-progress-line"></div>
-                            </div>
-                            <div class="m-bottom-zone">
-                                <h3>{t('about.v3.title')}</h3>
-                                <p>{t('about.v3.desc')}</p>
-                            </div>
+                    <div class="principle-row reveal-up">
+                        <span class="principle-num">03</span>
+                        <div class="principle-body">
+                            <h3>{t('about.v3.title')}</h3>
+                            <p>{t('about.v3.desc')}</p>
                         </div>
                     </div>
 
@@ -210,7 +198,7 @@ const aboutSchema = {
             </div>
         </section>
 
-        <!-- ══════════ TESTIMONIOS (INTERACTIVE) ══════════ -->
+        <!-- ══════════ TESTIMONIOS (cita centrada estilo Fiasco) ══════════ -->
         <section class="testimonials-apple-luxe global-gap-reduced">
             <div class="container">
                 <div class="section-header ta-header">
@@ -218,60 +206,65 @@ const aboutSchema = {
                 </div>
 
                 <div class="ta-interactive-wrapper reveal-up">
-                    <div class="ta-card-main">
-                        
-                        <!-- SLIDES -->
-                        <div class="ta-slides-container">
-                            
-                            <!-- SLIDE 1 -->
-                            <div class="ta-slide active" id="ta-slide-1">
-                                <div class="ta-slide-logo" style="margin-bottom: 2.5rem;">
-                                    <img src="https://elzarcodistribuidora.com.mx/assets/69ac8c1474da9485bf036f71_DISTRIBUIDORA.webp" alt="El Zarco Logo" style="height: 32px; width: auto; object-fit: contain;">
-                                </div>
-                                <p class="ta-text">"{t('about.rev1.text')}"</p>
-                                <div class="ta-author">
-                                    <div class="ta-avatar">G</div>
-                                    <div class="ta-meta">
-                                        <h4>{t('about.rev1.author')}</h4>
-                                        <span>{t('about.rev1.role')}</span>
-                                    </div>
-                                </div>
-                            </div>
+                    <span class="ta-quote-mark" aria-hidden="true">&ldquo;</span>
 
-                            <!-- SLIDE 2 -->
-                            <div class="ta-slide" id="ta-slide-2">
-                                <div class="ta-slide-logo" style="margin-bottom: 2.5rem;">
-                                    <img src="https://cord.flouvia.com/imgs/logo-cord-navy.png" alt="Cord Logo" style="height: 28px; width: auto; object-fit: contain;">
-                                </div>
-                                <p class="ta-text">"{t('about.rev2.text')}"</p>
-                                <div class="ta-author">
-                                    <div class="ta-avatar" style="background: var(--color-blue-deep); color: white;">A</div>
-                                    <div class="ta-meta">
-                                        <h4>{t('about.rev2.author')}</h4>
-                                        <span>{t('about.rev2.role')}</span>
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- SLIDES -->
+                    <div class="ta-slides-container">
 
+                        <!-- SLIDE 1 — El Zarco -->
+                        <div class="ta-slide active" id="ta-slide-1">
+                            <p class="ta-text">{t('about.rev1.text')}</p>
+                            <div class="ta-author">
+                                <h4>{t('about.rev1.author')}</h4>
+                                <span>{t('about.rev1.role')}</span>
+                            </div>
+                            <a href={isEn ? '/en/casos/el-zarco' : '/casos/el-zarco'} class="ta-view-btn">
+                                {isEn ? 'View project' : 'Ver caso'}
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+                            </a>
                         </div>
 
-                        <!-- TABS NAV -->
-                        <div class="ta-tabs-nav">
-                            <button class="ta-tab-btn active" data-target="1">
-                                <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                                    <img src="https://elzarcodistribuidora.com.mx/assets/69ac8c1474da9485bf036f71_DISTRIBUIDORA.webp" alt="El Zarco" style="height: 18px; filter: grayscale(100%); opacity: 0.6; transition: 0.3s;" class="tab-img">
-                                    <span class="ta-tab-logo">EL ZARCO</span>
-                                </div>
-                            </button>
-                            <button class="ta-tab-btn" data-target="2">
-                                <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                                    <img src="https://cord.flouvia.com/imgs/logo-cord-navy.png" alt="Cord" style="height: 16px; filter: grayscale(100%); opacity: 0.6; transition: 0.3s;" class="tab-img">
-                                    <span class="ta-tab-logo">CORD</span>
-                                </div>
-                            </button>
+                        <!-- SLIDE 2 — Cord -->
+                        <div class="ta-slide" id="ta-slide-2">
+                            <p class="ta-text">{t('about.rev2.text')}</p>
+                            <div class="ta-author">
+                                <h4>{t('about.rev2.author')}</h4>
+                                <span>{t('about.rev2.role')}</span>
+                            </div>
+                            <a href={isEn ? '/en/cord' : '/cord'} class="ta-view-btn">
+                                {isEn ? 'View project' : 'Ver caso'}
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+                            </a>
+                        </div>
+
+                        <!-- SLIDE 3 — Ago Fitness -->
+                        <div class="ta-slide" id="ta-slide-3">
+                            <p class="ta-text">{t('about.rev3.text')}</p>
+                            <div class="ta-author">
+                                <h4>{t('about.rev3.author')}</h4>
+                                <span>{t('about.rev3.role')}</span>
+                            </div>
+                            <a href={isEn ? '/en/casos/ago-fitness' : '/casos/ago-fitness'} class="ta-view-btn">
+                                {isEn ? 'View project' : 'Ver caso'}
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+                            </a>
                         </div>
 
                     </div>
+
+                    <!-- LOGOS — selector -->
+                    <div class="ta-logos-row">
+                        <button class="ta-tab-btn active" data-target="1" aria-label="El Zarco">
+                            <img src="https://elzarcodistribuidora.com.mx/assets/69ac8c1474da9485bf036f71_DISTRIBUIDORA.webp" alt="El Zarco" class="tab-img" style="height: 34px;">
+                        </button>
+                        <button class="ta-tab-btn" data-target="2" aria-label="Cord">
+                            <img src="https://cord.flouvia.com/imgs/logo-cord-navy.png" alt="Cord" class="tab-img" style="height: 29px;">
+                        </button>
+                        <button class="ta-tab-btn" data-target="3" aria-label="Ago Fitness">
+                            <img src="/imgs/logo-ago-fitness.png" alt="Ago Fitness" class="tab-img" style="height: 38px;">
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -361,7 +354,6 @@ const aboutSchema = {
        visibles (nunca contenido invisible para siempre). */
     .reveal-fade, .reveal-up { will-change: opacity, transform; }
 
-    .squircle-math { border-radius: 32px; overflow: hidden; transform: translateZ(0); }
     .texture-noise-micro { position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.04; mix-blend-mode: overlay; pointer-events: none; }
     .relative-z { position: relative; z-index: 2; }
 
@@ -398,16 +390,13 @@ const aboutSchema = {
 
     /* 3. ADN / PRINCIPIOS */
     .values-monolith-section { background: #ffffff; }
-    .values-monolith-section .section-header { margin-bottom: 4.5rem; text-align: center; }
-    .monolith-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;}
-    .monolith-card { background: #f5f5f7; padding: 3rem; display: flex; flex-direction: column; justify-content: flex-start; border-radius: 32px; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), background 0.5s ease; border: none; cursor: default; }
-    .monolith-card:hover { transform: scale(1.03); background: #ebebeb; }
+    .values-monolith-section .section-header { margin-bottom: 3rem; text-align: left; }
 
-    .m-card-inner { display: flex; flex-direction: column; height: 100%; justify-content: flex-start;}
-    .m-top-zone { display: none; /* Removed for better balance */ }
-
-    .m-bottom-zone h3 { font-size: 1.7rem; font-weight: 700; letter-spacing: -0.6px; margin: 0 0 1.2rem 0; color: #1d1d1f;}
-    .m-bottom-zone p { font-size: 1.1rem; color: #86868b; line-height: 1.55; margin: 0; font-weight: 500;}
+    .principles-list { border-top: 1px solid var(--color-border); }
+    .principle-row { display: flex; align-items: flex-start; gap: 2.5rem; padding: 2.75rem 0; border-bottom: 1px solid var(--color-border); transition: opacity 0.4s ease; }
+    .principle-num { flex: 0 0 64px; font-size: 1.7rem; font-weight: 700; letter-spacing: -0.5px; color: #cbd5e1; line-height: 1.1; }
+    .principle-body h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.6px; margin: 0 0 0.9rem 0; color: var(--color-text); }
+    .principle-body p { font-size: 1.08rem; color: var(--color-text-muted); line-height: 1.6; margin: 0; max-width: 680px; font-weight: 500; }
 
 
     /* 5. POR QUÉ FLOUVIA — banda delgada */
@@ -437,39 +426,38 @@ const aboutSchema = {
 
     /* 6. TESTIMONIOS (Flouvia Interactive) */
     .testimonials-apple-luxe { background: var(--color-bg); }
-    .ta-header { text-align: center; margin-bottom: 4rem; }
-    
-    .ta-interactive-wrapper { max-width: 900px; margin: 0 auto; }
-    .ta-card-main { background: #f5f5f7; border-radius: 32px; box-shadow: none; border: none; overflow: hidden; display: flex; flex-direction: column; }
-    
+    .ta-header { text-align: center; margin-bottom: 3rem; }
+
+    .ta-interactive-wrapper { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+
+    .ta-quote-mark { font-family: var(--font-serif); font-style: italic; font-size: clamp(3.5rem, 6vw, 5rem); line-height: 1; color: rgba(10, 25, 47, 0.12); margin-bottom: 0.5rem; user-select: none; }
+
     .ta-slides-container { position: relative; width: 100%; display: grid; }
-    
-    .ta-slide { 
-        grid-area: 1 / 1; 
-        padding: 4rem 3.5rem 3.5rem 3.5rem; 
+
+    .ta-slide {
+        grid-area: 1 / 1;
         display: flex; flex-direction: column; align-items: center; text-align: center;
         opacity: 0; pointer-events: none; transform: translateY(10px);
         transition: opacity 0.5s ease, transform 0.5s ease;
     }
     .ta-slide.active { opacity: 1; pointer-events: auto; transform: translateY(0); }
-    
-    .ta-slide-logo h3 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 2rem 0; color: #1d1d1f; text-transform: uppercase; }
-    
-    .ta-text { font-size: 1.25rem; font-weight: 500; color: #1d1d1f; line-height: 1.6; letter-spacing: -0.3px; margin: 0 0 2.5rem 0; max-width: 700px; }
-    
-    .ta-author { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; }
-    .ta-avatar { width: 42px; height: 42px; border-radius: 50%; background: #ffffff; color: #1d1d1f; border: none; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
-    .ta-meta h4 { margin: 0 0 2px 0; font-size: 1rem; font-weight: 700; color: #1d1d1f; letter-spacing: -0.5px;}
-    .ta-meta span { font-size: 0.82rem; font-weight: 500; color: #86868b; }
-    
-    .ta-tabs-nav { display: flex; background: #ebebeb; border-top: none; }
-    .ta-tab-btn { flex: 1; padding: 1.2rem; background: transparent; border: none; border-right: 1px solid rgba(0,0,0,0.04); cursor: pointer; transition: background 0.3s ease; display: flex; align-items: center; justify-content: center; }
-    .ta-tab-btn:last-child { border-right: none; }
-    .ta-tab-btn:hover { background: #e0e0e0; }
-    .ta-tab-btn.active { background: #f5f5f7; box-shadow: none; }
-    .ta-tab-logo { font-size: 1.05rem; font-weight: 700; color: #1d1d1f; letter-spacing: -0.5px; opacity: 0.4; transition: opacity 0.3s ease; }
-    .ta-tab-btn.active .ta-tab-logo { opacity: 1; color: #1d1d1f; }
-    .ta-tab-btn.active .tab-img { opacity: 1 !important; filter: grayscale(0) !important; }
+
+    .ta-text { font-size: clamp(1.3rem, 2.3vw, 1.7rem); font-weight: 500; color: var(--color-text); line-height: 1.5; letter-spacing: -0.4px; margin: 0 0 2rem 0; }
+
+    .ta-author { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; margin-bottom: 2.5rem; }
+    .ta-author h4 { margin: 0; font-size: 1rem; font-weight: 700; color: var(--color-text); letter-spacing: -0.3px; }
+    .ta-author span { font-size: 0.85rem; font-weight: 500; color: var(--color-text-muted); }
+
+    .ta-view-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--color-blue-deep); color: #fff; padding: 12px 22px; border-radius: 100px; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: transform 0.4s var(--ease-smooth), box-shadow 0.4s var(--ease-smooth); }
+    .ta-view-btn svg { transition: transform 0.4s var(--ease-smooth); }
+    .ta-view-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(10,25,47,0.22); }
+    .ta-view-btn:hover svg { transform: translate(2px, -2px); }
+
+    .ta-logos-row { display: flex; align-items: center; justify-content: center; gap: 3.5rem; margin-top: 3.5rem; padding-top: 2.5rem; border-top: 1px solid var(--color-border); width: 100%; }
+    .ta-tab-btn { background: transparent; border: none; padding: 0.4rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .tab-img { width: auto; object-fit: contain; filter: grayscale(100%); opacity: 0.4; transition: opacity 0.3s ease, filter 0.3s ease; }
+    .ta-tab-btn:hover .tab-img { opacity: 0.7; }
+    .ta-tab-btn.active .tab-img { opacity: 1; filter: grayscale(0); }
 
     /* 7. CTA FINAL */
     .cta-flex { display: flex; justify-content: space-between; align-items: center; gap: 4rem; }
@@ -502,8 +490,6 @@ const aboutSchema = {
         .m-visual-side { order: -1; }
         .image-frame-luxe { aspect-ratio: 16/9; }
         .sticky-text-wrapper { position: relative; top: 0; }
-        .monolith-grid { grid-template-columns: 1fr; gap: 2rem; }
-
 
         .adv-banner-flex { flex-direction: column; align-items: flex-start; gap: 2rem; }
         .adv-b-right { border-left: none; padding-left: 0; flex-direction: column; align-items: flex-start; gap: 2rem;}
@@ -532,15 +518,10 @@ const aboutSchema = {
 
         .values-monolith-section { padding: 4rem 0; }
         .values-monolith-section .section-header { margin-bottom: 2.5rem; }
-        /* PRINCIPIOS → scroll horizontal con snap */
-        .monolith-grid {
-            display: flex; gap: 1rem; overflow-x: auto;
-            scroll-snap-type: x mandatory; scrollbar-width: none;
-            margin: 0 -1.5rem; padding: 0 1.5rem 1rem;
-        }
-        .monolith-grid::-webkit-scrollbar { display: none; }
-        .monolith-card { flex: 0 0 80%; scroll-snap-align: center; padding: 2.5rem; }
-        .m-top-zone { margin-bottom: 2rem;}
+        .principle-row { gap: 1.25rem; padding: 2rem 0; }
+        .principle-num { flex: 0 0 40px; font-size: 1.3rem; }
+        .principle-body h3 { font-size: 1.3rem; }
+        .principle-body p { font-size: 1rem; }
 
 
         .advantage-sober-banner.global-gap-reduced { padding: 2.5rem 0; }
@@ -553,11 +534,9 @@ const aboutSchema = {
         .testimonials-apple-luxe { background: var(--color-bg); }
         .ta-interactive-wrapper { padding: 0 5%; }
         .ta-header { margin-bottom: 3rem; }
-        .ta-slide { padding: 3rem 1.5rem 2.5rem 1.5rem; }
-        .ta-text { font-size: 1.1rem; margin-bottom: 2rem; }
-        .ta-tabs-nav { flex-direction: column; }
-        .ta-tab-btn { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.04); padding: 1rem; }
-        .ta-tab-btn.active { box-shadow: -3px 0 0 var(--color-blue-deep) inset; }
+        .ta-quote-mark { font-size: 2.8rem; }
+        .ta-text { font-size: 1.15rem; margin-bottom: 1.6rem; }
+        .ta-logos-row { gap: 1.75rem; margin-top: 2.5rem; padding-top: 2rem; flex-wrap: wrap; }
 
         .cta-final-clean { padding-bottom: 4rem; }
         .cta-box-refined { padding: 3rem 2rem; border-radius: 24px; text-align: center; }
@@ -659,8 +638,8 @@ const aboutSchema = {
             revealEach('.m-body-text',  { y: 14 });
             revealEach('.m-visual-side',{ y: 18, dur: 1.0 });
 
-            // Tarjetas con stagger por grupo
-            reveal('.monolith-card', { trigger: '.monolith-grid', y: 18, stagger: 0.1 });
+            // Filas con stagger por grupo
+            reveal('.principle-row', { trigger: '.principles-list', y: 18, stagger: 0.1 });
             reveal('.thin-card',     { trigger: '.thin-grid',     y: 16, stagger: 0.08 });
 
             reveal('.adv-banner-flex', { y: 18, dur: 1.0 });
@@ -676,7 +655,7 @@ const aboutSchema = {
             revealEach('.m-lead-text', { y: 12 });
             revealEach('.m-body-text', { y: 12 });
             revealEach('.m-visual-side', { y: 16 });
-            revealEach('.monolith-card', { y: 14 });
+            revealEach('.principle-row', { y: 14 });
             revealEach('.thin-card', { y: 12 });
             reveal('.adv-banner-flex', { y: 14 });
             reveal('.ta-interactive-wrapper', { trigger: '.testimonials-apple-luxe', y: 14, start: 'top 85%' });
