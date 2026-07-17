@@ -15,37 +15,37 @@ const description = 'Cord es la plataforma B2B de Flouvia para cotizar, cobrar y
 const FILAS = [
   {
     num: '01',
-    href: 'https://cord.flouvia.com/producto/link-publico',
+    href: 'https://cordhq.app/producto/link-publico',
     h3: 'Aprobación mágica sin fricción',
     p: 'Envías un link seguro con tu propia marca. Tu cliente lo abre en el celular o la computadora, revisa cada línea, negocia si hace falta y aprueba con un clic. Sin crear cuentas, sin PDFs gigantes, sin cadenas de correo con "ok, procedan".',
   },
   {
     num: '02',
-    href: 'https://cord.flouvia.com/producto/seguimiento',
+    href: 'https://cordhq.app/producto/seguimiento',
     h3: 'Notificación instantánea de lectura',
     p: 'Recibe una alerta silenciosa en el segundo exacto en que tu cliente abre la cotización, y un chat en vivo si te escribe. Sabrás si es momento de llamar o de esperar, en vez de adivinar.',
   },
   {
     num: '03',
-    href: 'https://cord.flouvia.com/producto/cobranza-ia',
+    href: 'https://cordhq.app/producto/cobranza-ia',
     h3: 'Cobranza autónoma con Inteligencia Artificial',
     p: 'Cuando el crédito vence, un agente de IA le escribe al cliente por ti: da seguimiento, resuelve dudas y hasta negocia un plan de pago en hasta 3 cuotas — todo bajo las reglas que tú defines, con reporte de cada conversación.',
   },
   {
     num: '04',
-    href: 'https://cord.flouvia.com/producto/link-publico',
+    href: 'https://cordhq.app/producto/link-publico',
     h3: 'Cobra directo a tu cuenta, sin comisión de Cord',
     p: 'Tu cliente paga con tarjeta o SPEI desde el mismo link — el dinero cae directo a tu cuenta de Stripe, no a la nuestra. Puedes cobrar el anticipo primero y el saldo después, o dividir en cuotas.',
   },
   {
     num: '05',
-    href: 'https://cord.flouvia.com/producto/divisas',
+    href: 'https://cordhq.app/producto/divisas',
     h3: 'Multi-divisa con cobertura cambiaria',
     p: 'Cotiza en USD o EUR y factura en MXN sin perder margen: Cord congela el tipo de cambio con un colchón de protección que tú eliges, así el cliente ve un precio fijo y tú no absorbes la volatilidad.',
   },
   {
     num: '06',
-    href: 'https://cord.flouvia.com/producto/cfdi',
+    href: 'https://cordhq.app/producto/cfdi',
     h3: 'Facturación CFDI 4.0 automática',
     p: 'Cuando el cliente aprueba, pasas de cotización a factura timbrada ante el SAT con un botón. Conceptos, impuestos y retenciones se transfieren solos — se acabó la captura doble.',
   },
@@ -54,37 +54,37 @@ const FILAS = [
 // Grid de capacidades adicionales — para negocios que ya crecieron del "solo cotizar"
 const CAPACIDADES = [
   {
-    href: 'https://cord.flouvia.com/producto/finanzas',
+    href: 'https://cordhq.app/producto/finanzas',
     h3: 'Analítica y CFO con IA',
     p: 'Pipeline ponderado, DSO, concentración de riesgo por cliente y proyección de flujo de caja a 5 semanas — para tomar decisiones con datos, no con corazonadas.',
     icon: 'M4 19V9m6 10V4m6 15v-7',
   },
   {
-    href: 'https://cord.flouvia.com/producto/equipo',
+    href: 'https://cordhq.app/producto/equipo',
     h3: 'Equipo con roles y permisos',
     p: 'Invita a tu equipo de ventas, define quién puede aprobar descuentos y quién solo cotiza. Cada acción queda en un registro de auditoría inmutable.',
     icon: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75',
   },
   {
-    href: 'https://cord.flouvia.com/producto/aprobaciones',
+    href: 'https://cordhq.app/producto/aprobaciones',
     h3: 'Flujos de aprobación y control de margen',
     p: 'Define umbrales de descuento y margen mínimo por cotización. Si un vendedor los rebasa, la cotización espera el visto bueno de gerencia antes de salir.',
     icon: 'M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11',
   },
   {
-    href: 'https://cord.flouvia.com/desarrolladores/api',
+    href: 'https://cordhq.app/desarrolladores/api',
     h3: 'API abierta, webhooks y MCP',
     p: 'Conecta Cord a tu ERP o CRM con una API REST documentada, webhooks firmados hacia Zapier o Make, y un servidor MCP para que tus propios agentes de IA consulten tu cartera.',
     icon: 'M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3',
   },
   {
-    href: 'https://cord.flouvia.com/elements',
+    href: 'https://cordhq.app/elements',
     h3: 'Cotizador embebible en tu propio sitio',
     p: 'Con Cord Elements incrustas el cotizador dentro de tu portal de clientes en una línea de código (Web Component, React, Vue) — con tu marca, no la nuestra.',
     icon: 'M16 18l6-6-6-6M8 6l-6 6 6 6',
   },
   {
-    href: 'https://cord.flouvia.com/producto/negociacion',
+    href: 'https://cordhq.app/producto/negociacion',
     h3: 'Firma legal con sello criptográfico',
     p: 'Cada aprobación queda firmada con nombre, IP y un hash SHA-256 del contenido exacto que se aceptó — un historial de versiones inmutable con validez de respaldo.',
     icon: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z',
@@ -139,7 +139,7 @@ const schemaOrg = {
         "itemOffered": {
           "@type": "SoftwareApplication",
           "name": "Cord",
-          "url": "https://cord.flouvia.com",
+          "url": "https://cordhq.app",
           "applicationCategory": "BusinessApplication",
           "operatingSystem": "Web",
           "offers": {
@@ -177,7 +177,7 @@ const schemaOrg = {
 <Layout
     title={title}
     description={description}
-    canonicalOverride="https://cord.flouvia.com/"
+    canonicalOverride="https://cordhq.app/"
 >
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -210,12 +210,12 @@ const schemaOrg = {
                             Cord es la plataforma gratuita para enviar cotizaciones con tu marca, conseguir aprobación en un clic, cobrar directo a tu cuenta y timbrar el CFDI 4.0 automáticamente — con un agente de cobranza con IA que da seguimiento por ti cuando el crédito vence.
                         </p>
                         <div class="hero-action" style="display: flex; gap: 1rem; align-items: center;">
-                            <a href="https://cord.flouvia.com/registro" class="btn-luxe">
+                            <a href="https://cordhq.app/registro" class="btn-luxe">
                                 <span>Empieza gratis</span>
                                 <span class="btn-arrow" aria-hidden="true">&rarr;</span>
                                 <div class="btn-shimmer"></div>
                             </a>
-                            <a href="https://cord.flouvia.com/q/demo" class="btn-secondary-luxe">
+                            <a href="https://cordhq.app/q/demo" class="btn-secondary-luxe">
                                 <span>Ver ejemplo en vivo</span>
                             </a>
                         </div>
@@ -317,7 +317,7 @@ const schemaOrg = {
         <!-- 05.5 — Pricing -->
         <CordPricing />
 
-        <!-- 06 — FAQs (acordeón estilo cord.flouvia.com) -->
+        <!-- 06 — FAQs (acordeón estilo cordhq.app) -->
         <CordFaqAccordion
             class="js-anim-section"
             id="cord-faq"
