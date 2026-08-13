@@ -1,0 +1,40 @@
+---
+export const prerender = false;
+
+import PortalLayout from '../../../layouts/PortalLayout.astro';
+import OpsClientDetail from '../../../features/ops/clients/OpsClientDetail';
+import { getOpsClientSnapshot } from '../../../features/ops/clients/opsClients.service';
+import { isOperatorHost, requireOperatorCapability, requireOperatorIdentity } from '../../../features/ops/operatorAccess';
+import { isPortalAccessError } from '../../../lib/portalAccess';
+
+if (!isOperatorHost(Astro.url.hostname)) {
+  return Astro.redirect('https://ops.flouvia.com/', 302);
+}
+
+let identity;
+try {
+  identity = await requireOperatorIdentity(Astro.locals);
+  requireOperatorCapability(identity, 'ops:read');
+} catch (error) {
+  if (isPortalAccessError(error) && error.status === 401) return Astro.redirect('/login', 302);
+  return Astro.redirect('/acceso-restringido?signout=1&ops=1', 302);
+}
+
+const workspaceId = Astro.params.workspaceId;
+if (!workspaceId) return Astro.redirect('/ops/clientes', 302);
+
+let snapshot;
+try {
+  snapshot = await getOpsClientSnapshot(workspaceId);
+} catch {
+  return Astro.redirect('/ops/clientes?notFound=1', 302);
+}
+---
+
+<PortalLayout title={`${snapshot.workspace.name} | Flouvia Ops`} mode="ops">
+  <OpsClientDetail
+    initialSnapshot={snapshot}
+    canEdit={identity.capabilities.includes('clients:write')}
+    client:load
+  />
+</PortalLayout>

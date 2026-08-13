@@ -1,95 +1,162 @@
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
-import { supabase }    from '../../../lib/supabase';
-import { rateLimit }   from '../../../lib/rateLimit';
+import { head } from '@vercel/blob';
+import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
+import { createVaultFile, requirePortalIdentity, type PortalIdentity } from '../../../lib/portalDb';
+import { portalAccessErrorResponse } from '../../../lib/portalAccess';
+import { rateLimit } from '../../../lib/rateLimit';
 
-const ALLOWED_TYPES = new Set([
+const ALLOWED_EXTENSIONS = new Set([
   'pdf', 'doc', 'docx', 'xls', 'xlsx',
   'png', 'jpg', 'jpeg', 'fig', 'zip',
 ]);
 
-const MAX_BYTES = 50 * 1024 * 1024; // 50 MB
+const ALLOWED_CONTENT_TYPES = [
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'image/png',
+  'image/jpeg',
+  'application/zip',
+  'application/x-zip-compressed',
+  'application/octet-stream',
+];
+
+const VALID_CATEGORIES = new Set(['contratos', 'diseno', 'entregables', 'general']);
+const MAX_BYTES = 50 * 1024 * 1024;
+
+interface ClientMetadata {
+  name?: string;
+  category?: string;
+  originalFileName?: string;
+}
+
+interface UploadTokenPayload {
+  userId: string;
+  name: string;
+  category: string;
+  originalFileName: string;
+  extension: string;
+}
+
+function parseClientMetadata(payload: string | null): ClientMetadata {
+  if (!payload) return {};
+  const parsed = JSON.parse(payload) as ClientMetadata;
+  if (!parsed || typeof parsed !== 'object') throw new Error('Invalid upload metadata');
+  return parsed;
+}
+
+function safeText(value: unknown, fallback: string, maxLength = 180) {
+  if (typeof value !== 'string') return fallback;
+  return value.trim().slice(0, maxLength) || fallback;
+}
+
+function sizeLabel(bytes: number) {
+  return bytes < 1024 * 1024
+    ? `${Math.max(1, Math.round(bytes / 1024))} KB`
+    : `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
 
 export const POST: APIRoute = async ({ request, locals }) => {
-  // ── Auth ──────────────────────────────────────────────────────────
-  const { userId } = await locals.auth();
-  if (!userId) {
-    return json({ error: 'Unauthorized' }, 401);
+  let body: HandleUploadBody;
+  try {
+    body = await request.json() as HandleUploadBody;
+  } catch {
+    return json({ error: 'Bad JSON' }, 400);
   }
 
-  // ── Rate limit — 10 uploads / minute per user ──────────────────────
-  if (!rateLimit(userId, 10, 60_000)) {
-    return json({ error: 'Too many requests — max 10 uploads per minute' }, 429);
+  // Upload-completed callbacks come from Vercel Blob and therefore do not carry
+  // the user's Clerk cookie. Authentication is required only for token issuance;
+  // the callback itself is authenticated by the signed client token payload.
+  let identity: PortalIdentity | null = null;
+  if (body.type === 'blob.generate-client-token') {
+    const { userId } = await locals.auth();
+    if (!userId) return json({ error: 'Unauthorized' }, 401);
+    if (!rateLimit(userId, 10, 60_000)) {
+      return json({ error: 'Too many requests — max 10 uploads per minute' }, 429);
+    }
+    try { identity = await requirePortalIdentity(locals); }
+    catch (error) { return portalAccessErrorResponse(error); }
   }
 
-  const user = await locals.currentUser();
-  const email = user?.emailAddresses[0]?.emailAddress;
-  if (!email) {
-    return json({ error: 'No email found' }, 400);
+  try {
+    const response = await handleUpload({
+      body,
+      request,
+      onBeforeGenerateToken: async (pathname, clientPayload) => {
+        if (!identity) throw new Error('Unauthorized upload token request');
+
+        const expectedPrefix = `boveda/${identity.id}/`;
+        if (!pathname.startsWith(expectedPrefix) || pathname.includes('..')) {
+          throw new Error('Invalid upload path');
+        }
+
+        const fileName = pathname.slice(expectedPrefix.length);
+        if (!fileName || fileName.includes('/')) throw new Error('Invalid file name');
+
+        const metadata = parseClientMetadata(clientPayload);
+        const originalFileName = safeText(metadata.originalFileName, fileName);
+        const extension = originalFileName.split('.').pop()?.toLowerCase() || '';
+        if (!ALLOWED_EXTENSIONS.has(extension)) {
+          throw new Error(`File type .${extension || 'unknown'} not allowed`);
+        }
+
+        const category = VALID_CATEGORIES.has(metadata.category || '')
+          ? String(metadata.category)
+          : 'general';
+
+        const tokenPayload: UploadTokenPayload = {
+          userId: identity.id,
+          name: safeText(metadata.name, originalFileName),
+          category,
+          originalFileName,
+          extension,
+        };
+
+        return {
+          allowedContentTypes: ALLOWED_CONTENT_TYPES,
+          maximumSizeInBytes: MAX_BYTES,
+          validUntil: Date.now() + 10 * 60_000,
+          addRandomSuffix: true,
+          allowOverwrite: false,
+          tokenPayload: JSON.stringify(tokenPayload),
+        };
+      },
+      onUploadCompleted: async ({ blob, tokenPayload }) => {
+        if (!tokenPayload) throw new Error('Missing upload metadata');
+        const metadata = JSON.parse(tokenPayload) as UploadTokenPayload;
+        if (!metadata.userId || !ALLOWED_EXTENSIONS.has(metadata.extension)) {
+          throw new Error('Invalid signed upload metadata');
+        }
+
+        // The completion result does not include byte size. Read it from Blob so
+        // database metadata is based on storage, not on a browser-provided value.
+        const stored = await head(blob.url);
+        if (stored.size > MAX_BYTES) throw new Error('Uploaded file exceeds 50 MB');
+
+        await createVaultFile({
+          userId: metadata.userId,
+          name: metadata.name,
+          category: metadata.category,
+          fileType: metadata.extension.toUpperCase(),
+          sizeLabel: sizeLabel(stored.size),
+          sizeBytes: stored.size,
+          blobUrl: blob.url,
+          blobPathname: blob.pathname,
+          contentType: stored.contentType || blob.contentType || 'application/octet-stream',
+        });
+      },
+    });
+
+    return json(response, 200);
+  } catch (cause) {
+    const message = cause instanceof Error ? cause.message : 'Upload failed';
+    // Vercel Blob retries completion callbacks that do not return a 2xx response.
+    return json({ error: message }, 400);
   }
-
-  // ── Parse form ────────────────────────────────────────────────────
-  const formData = await request.formData();
-  const file     = formData.get('file') as File | null;
-  const name     = ((formData.get('name') as string) || file?.name || 'unnamed').trim();
-  const category = (formData.get('category') as string) || 'general';
-
-  if (!file) {
-    return json({ error: 'No file provided' }, 400);
-  }
-
-  // ── Validate ──────────────────────────────────────────────────────
-  if (file.size > MAX_BYTES) {
-    return json({ error: 'File exceeds 50 MB' }, 400);
-  }
-
-  const ext = (file.name.split('.').pop() ?? '').toLowerCase();
-  if (!ALLOWED_TYPES.has(ext)) {
-    return json({ error: `File type .${ext} not allowed` }, 400);
-  }
-
-  const validCategories = ['contratos', 'diseno', 'entregables', 'general'];
-  const safeCategory = validCategories.includes(category) ? category : 'general';
-
-  // ── Upload to Supabase Storage ────────────────────────────────────
-  // Path: {email}/{timestamp}_{filename}
-  // Stored in DB as the path (NOT a public URL) — signed URLs are generated at read time
-  const storagePath = `${email}/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
-
-  const { error: storageError } = await supabase.storage
-    .from('boveda')
-    .upload(storagePath, file, { upsert: false, contentType: file.type });
-
-  if (storageError) {
-    return json({ error: storageError.message }, 500);
-  }
-
-  // ── Insert metadata into DB ───────────────────────────────────────
-  const sizeLabel = file.size < 1024 * 1024
-    ? `${(file.size / 1024).toFixed(0)} KB`
-    : `${(file.size / (1024 * 1024)).toFixed(1)} MB`;
-
-  const { data: inserted, error: dbError } = await supabase
-    .from('boveda_archivos')
-    .insert({
-      email_cliente: email,
-      nombre:        name,
-      categoria:     safeCategory,
-      tipo:          ext.toUpperCase(),
-      size:          sizeLabel,
-      url_descarga:  storagePath, // path, not URL — signed URL generated at read time
-    })
-    .select('id, nombre, tipo, size, created_at')
-    .single();
-
-  if (dbError) {
-    // Clean up orphaned storage object
-    await supabase.storage.from('boveda').remove([storagePath]);
-    return json({ error: dbError.message }, 500);
-  }
-
-  return json({ ok: true, file: inserted }, 200);
 };
 
 function json(body: object, status: number) {

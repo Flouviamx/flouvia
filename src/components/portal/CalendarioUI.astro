@@ -272,27 +272,27 @@ const calendlyUrl = `${calendlyBase}?${params.toString()}`;
     import { gsap } from "gsap";
 
     document.addEventListener("DOMContentLoaded", () => {
-        gsap.set(".cal-split-grid", { y: 24, opacity: 0, scale: 0.99 });
+        gsap.set(".cal-split-grid", { y: 24, opacity: 0 });
 
         const tl = gsap.timeline();
-        tl.to(".cal-split-grid", { y: 0, opacity: 1, scale: 1, duration: 1.4, ease: "expo.out" }, 0.3);
+        tl.to(".cal-split-grid", { y: 0, opacity: 1, duration: 1.4, ease: "power2.out" }, 0.3);
 
         const pills = document.querySelectorAll('.info-pill');
         if (pills.length > 0) {
             gsap.set(pills, { x: -14, opacity: 0 });
-            tl.to(pills, { x: 0, opacity: 1, duration: 0.6, stagger: 0.12, ease: "expo.out" }, "-=1.0");
+            tl.to(pills, { x: 0, opacity: 1, duration: 0.6, stagger: 0.12, ease: "power2.out" }, "-=1.0");
         }
 
         const feats = document.querySelectorAll('.feature-row');
         if (feats.length > 0) {
             gsap.set(feats, { y: 12, opacity: 0 });
-            tl.to(feats, { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "expo.out" }, "-=0.8");
+            tl.to(feats, { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "power2.out" }, "-=0.8");
         }
 
         const shell = document.querySelector('.calendly-shell');
         if (shell) {
-            gsap.set(shell, { y: 40, opacity: 0, scale: 0.98 });
-            tl.to(shell, { y: 0, opacity: 1, scale: 1, duration: 1.8, ease: "expo.out" }, "-=1.4");
+            gsap.set(shell, { y: 40, opacity: 0 });
+            tl.to(shell, { y: 0, opacity: 1, duration: 1.8, ease: "power2.out" }, "-=1.4");
         }
     });
 </script>

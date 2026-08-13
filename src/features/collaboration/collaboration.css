@@ -1,0 +1,346 @@
+.collab-app {
+  --ca-bg: #f5f5f7;
+  --ca-surface: rgba(255, 255, 255, 0.94);
+  --ca-surface-solid: #fff;
+  --ca-text: #1d1d1f;
+  --ca-secondary: #6e6e73;
+  --ca-tertiary: #86868b;
+  --ca-border: rgba(0, 0, 0, 0.08);
+  --ca-border-strong: rgba(0, 0, 0, 0.13);
+  --ca-blue: #0a192f;
+  --ca-green: #30a46c;
+  --ca-orange: #d97706;
+  --ca-red: #d70015;
+  --ca-yellow-bg: #fff9e8;
+  --ca-radius: 22px;
+  --ca-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  color: var(--ca-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", system-ui, sans-serif;
+}
+
+.collab-app *, .collab-app *::before, .collab-app *::after { box-sizing: border-box; }
+.collab-app button, .collab-app input, .collab-app textarea, .collab-app select { font: inherit; }
+.collab-app button { -webkit-tap-highlight-color: transparent; }
+.collab-app svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.collab-app .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+.collab-toolbar {
+  min-height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  margin-bottom: 1.4rem;
+  padding: 0.8rem 0;
+}
+.collab-workspace-meta, .collab-toolbar-actions { display: flex; align-items: center; }
+.collab-workspace-meta { gap: 0.8rem; min-width: 0; }
+.collab-toolbar-actions { gap: 0.65rem; }
+.collab-role-mark {
+  width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center;
+  flex: 0 0 auto; color: #fff; background: #8e8e93; font-weight: 700; font-size: 0.82rem;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.22), 0 4px 12px rgba(0,0,0,.12);
+}
+.collab-role-mark.is-admin { background: #1d1d1f; }
+.collab-overline { display: block; margin-bottom: 0.18rem; color: var(--ca-tertiary); font-size: 0.7rem; font-weight: 600; }
+.collab-workspace-meta strong { display: block; font-size: 1rem; letter-spacing: -0.015em; }
+
+.collab-workspace-select { position: relative; display: inline-flex; align-items: center; max-width: min(280px, 45vw); }
+.collab-workspace-select select {
+  width: 100%; appearance: none; border: 0; border-radius: 8px; padding: 0.15rem 1.5rem 0.15rem 0;
+  background: transparent; color: var(--ca-text); font-weight: 650; font-size: 1rem; letter-spacing: -0.015em;
+  cursor: pointer; outline: none;
+}
+.collab-workspace-select svg { position: absolute; right: 0; width: 14px; height: 14px; pointer-events: none; transform: rotate(90deg); color: var(--ca-tertiary); }
+
+.collab-access-chip {
+  display: inline-flex; align-items: center; gap: 0.45rem; min-height: 30px; padding: 0 0.75rem;
+  border: 1px solid var(--ca-border); border-radius: 999px; background: rgba(255,255,255,.65);
+  color: var(--ca-secondary); font-size: 0.7rem; font-weight: 600;
+}
+.collab-access-chip > span { width: 6px; height: 6px; border-radius: 50%; background: #8e8e93; }
+.collab-access-chip.is-admin > span { background: var(--ca-blue); }
+
+.collab-primary-button, .collab-secondary-button, .collab-send-button, .collab-cancel-button, .collab-sync-button, .collab-pin-button, .collab-modal-close {
+  border: 0; cursor: pointer; transition: transform 160ms var(--ca-ease), background 180ms var(--ca-ease), color 180ms var(--ca-ease), opacity 180ms;
+}
+.collab-primary-button {
+  min-height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  padding: 0 1rem; border-radius: 15px; background: var(--ca-blue); color: #fff; font-size: 0.82rem; font-weight: 650;
+  box-shadow: 0 12px 26px -15px rgba(10,25,47,.7);
+  transition: transform .35s cubic-bezier(.16,1,.3,1), background .25s, box-shadow .35s cubic-bezier(.16,1,.3,1);
+}
+.collab-primary-button:hover { background: #102745; transform: translateY(-3px); box-shadow: 0 18px 32px -15px rgba(10,25,47,.75); }
+.collab-primary-button:active, .collab-secondary-button:active, .collab-send-button:active, .collab-cancel-button:active { transform: translateY(-1px); }
+.collab-primary-button:disabled, .collab-send-button:disabled { opacity: .48; cursor: default; transform: none; }
+.collab-primary-button svg { width: 17px; height: 17px; }
+.collab-sync-button, .collab-pin-button, .collab-modal-close {
+  width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%;
+  background: rgba(118,118,128,.1); color: var(--ca-secondary);
+}
+.collab-sync-button:hover, .collab-pin-button:hover, .collab-modal-close:hover { background: rgba(118,118,128,.17); color: var(--ca-text); }
+.collab-pin-button.is-pinned { background: rgba(0,113,227,.1); color: var(--ca-blue); }
+.collab-sync-button span { display: grid; place-items: center; }
+.collab-sync-button .is-spinning { animation: collab-spin .8s linear infinite; }
+@keyframes collab-spin { to { transform: rotate(360deg); } }
+
+.collab-error {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  margin-bottom: 1rem; padding: 0.8rem 0.9rem 0.8rem 1rem; border-radius: 14px;
+  background: #fff1f2; color: #9f1239; font-size: 0.8rem; border: 1px solid rgba(190,18,60,.12);
+}
+.collab-error button { border: 0; background: transparent; color: inherit; font-weight: 650; cursor: pointer; }
+
+.collab-filter {
+  width: max-content; display: flex; padding: 3px; margin: 0 0 1rem;
+  background: rgba(118,118,128,.12); border-radius: 10px;
+}
+.collab-filter button {
+  min-width: 78px; padding: 0.42rem 0.8rem; border: 0; border-radius: 8px; background: transparent;
+  color: var(--ca-secondary); cursor: pointer; font-size: 0.74rem; font-weight: 550;
+  transition: background 160ms, color 160ms, box-shadow 160ms;
+}
+.collab-filter button.is-active { background: #fff; color: var(--ca-text); box-shadow: 0 1px 4px rgba(0,0,0,.12); }
+
+.collab-layout {
+  min-height: 660px; display: grid; grid-template-columns: minmax(290px, 350px) minmax(0, 1fr);
+  overflow: hidden; border: 1px solid var(--ca-border); border-radius: 24px;
+  background: rgba(255,255,255,.76); box-shadow: 0 18px 50px -32px rgba(0,0,0,.28);
+}
+.collab-thread-list { background: rgba(248,248,250,.88); border-right: 1px solid var(--ca-border); overflow-y: auto; }
+.collab-thread-row {
+  width: 100%; display: block; padding: 1.05rem 1rem; border: 0; border-bottom: 1px solid var(--ca-border);
+  background: transparent; color: inherit; text-align: left; cursor: pointer; transition: background 160ms var(--ca-ease);
+}
+.collab-thread-row:hover { background: rgba(255,255,255,.72); }
+.collab-thread-row.is-selected { background: #fff; box-shadow: inset 3px 0 0 var(--ca-blue); }
+.collab-thread-row:active { background: rgba(255,255,255,.92); }
+.collab-thread-row-top { display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: .55rem; }
+.collab-status-dot { width: 7px; height: 7px; border-radius: 50%; background: #8e8e93; }
+.collab-status-dot.is-in_progress { background: var(--ca-blue); }
+.collab-status-dot.is-waiting_client { background: var(--ca-orange); }
+.collab-status-dot.is-resolved { background: var(--ca-green); }
+.collab-thread-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .88rem; font-weight: 650; letter-spacing: -.01em; }
+.collab-row-chevron { color: #c7c7cc; display: grid; }
+.collab-row-chevron svg { width: 13px; height: 13px; }
+.collab-thread-preview { display: -webkit-box; margin: .55rem 0 .7rem 1.05rem; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; color: var(--ca-secondary); font-size: .75rem; line-height: 1.45; }
+.collab-thread-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem; margin-left: 1.05rem; color: var(--ca-tertiary); font-size: .65rem; }
+.collab-thread-meta time { margin-left: auto; }
+.collab-icon-label { display: inline-flex; align-items: center; gap: .25rem; color: var(--ca-secondary); }
+.collab-icon-label svg { width: 11px; height: 11px; }
+.collab-icon-label.is-important { color: #a15c00; }
+.collab-comment-count { white-space: nowrap; }
+.collab-filter-empty { padding: 2rem 1rem; text-align: center; color: var(--ca-tertiary); font-size: .8rem; }
+
+.collab-detail { min-width: 0; background: #fff; }
+.collab-detail-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 2rem 2rem 1.5rem; }
+.collab-detail-title-wrap { min-width: 0; }
+.collab-detail-flags { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-bottom: .8rem; }
+.collab-status-label, .collab-important-label {
+  display: inline-flex; align-items: center; gap: .3rem; padding: .28rem .55rem; border-radius: 999px;
+  background: #f2f2f7; color: var(--ca-secondary); font-size: .64rem; font-weight: 650;
+}
+.collab-status-label.is-in_progress { background: #eaf3ff; color: #0066cc; }
+.collab-status-label.is-waiting_client { background: #fff4df; color: #995400; }
+.collab-status-label.is-resolved { background: #eaf8ef; color: #1d7a46; }
+.collab-important-label { background: #fff4df; color: #995400; }
+.collab-important-label svg { width: 12px; height: 12px; }
+.collab-detail h2 { margin: 0; font-size: clamp(1.45rem, 2.2vw, 2rem); line-height: 1.14; letter-spacing: -.035em; }
+.collab-detail-title-wrap > p { max-width: 68ch; margin: .8rem 0 1rem; color: var(--ca-secondary); font-size: .9rem; line-height: 1.6; white-space: pre-wrap; }
+.collab-author-line { color: var(--ca-tertiary); font-size: .68rem; }
+.collab-author-line strong { color: var(--ca-secondary); font-weight: 600; }
+
+.collab-state-panel { margin: 0 2rem 1.5rem; padding: .9rem; border-radius: 15px; background: #f5f5f7; }
+.collab-state-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .65rem; }
+.collab-state-heading > span { font-size: .7rem; font-weight: 650; color: var(--ca-secondary); }
+.collab-state-heading small { color: var(--ca-tertiary); font-size: .64rem; }
+.collab-status-control { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 3px; padding: 3px; border-radius: 10px; background: rgba(118,118,128,.12); }
+.collab-status-control button {
+  min-height: 34px; padding: .4rem .55rem; border: 0; border-radius: 8px; background: transparent;
+  color: var(--ca-secondary); cursor: pointer; font-size: .68rem; font-weight: 550; transition: background 160ms, color 160ms, box-shadow 160ms;
+}
+.collab-status-control button.is-active { background: #fff; color: var(--ca-text); box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+.collab-client-status { display: inline-flex; align-items: center; gap: .45rem; color: var(--ca-text); font-size: .75rem; font-weight: 600; }
+.collab-client-status > span { width: 7px; height: 7px; border-radius: 50%; background: #8e8e93; }
+.collab-client-status.is-in_progress > span { background: var(--ca-blue); }
+.collab-client-status.is-waiting_client > span { background: var(--ca-orange); }
+.collab-client-status.is-resolved > span { background: var(--ca-green); }
+
+.collab-conversation { border-top: 1px solid var(--ca-border); padding: 1.5rem 2rem 2rem; }
+.collab-section-title { display: flex; align-items: center; gap: .55rem; margin-bottom: 1.2rem; }
+.collab-section-title h3 { margin: 0; font-size: .95rem; letter-spacing: -.015em; }
+.collab-section-title > span { min-width: 20px; height: 20px; display: grid; place-items: center; border-radius: 999px; background: #f2f2f7; color: var(--ca-secondary); font-size: .62rem; }
+.collab-comments { display: grid; gap: 1.15rem; }
+.collab-no-comments { margin: 0; padding: 1.2rem; border: 1px dashed var(--ca-border-strong); border-radius: 14px; color: var(--ca-tertiary); text-align: center; font-size: .78rem; }
+.collab-comment { display: grid; grid-template-columns: 34px minmax(0,1fr); gap: .75rem; }
+.collab-comment-avatar { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: #8e8e93; color: #fff; font-size: .65rem; font-weight: 700; }
+.collab-comment.is-flouvia .collab-comment-avatar { background: #1d1d1f; }
+.collab-comment-content { min-width: 0; }
+.collab-comment-content header { display: flex; flex-wrap: wrap; align-items: baseline; gap: .45rem; margin-bottom: .35rem; }
+.collab-comment-content header strong { font-size: .76rem; }
+.collab-comment-content header span { color: var(--ca-tertiary); font-size: .62rem; }
+.collab-comment-content header time { margin-left: auto; color: var(--ca-tertiary); font-size: .62rem; }
+.collab-comment-content p { margin: 0; color: #3a3a3c; font-size: .82rem; line-height: 1.55; white-space: pre-wrap; }
+.collab-comment.is-internal { padding: .85rem; border: 1px solid #f2df9b; border-radius: 14px; background: var(--ca-yellow-bg); }
+.collab-comment.is-pending { opacity: .55; }
+.collab-internal-label { display: inline-flex; align-items: center; gap: .3rem; margin-bottom: .4rem; color: #815b00; font-size: .61rem; font-weight: 650; }
+.collab-internal-label svg { width: 12px; height: 12px; }
+
+.collab-comment-form { margin-top: 1.5rem; padding: .8rem; border: 1px solid var(--ca-border-strong); border-radius: 16px; background: #fff; transition: border-color 160ms, box-shadow 160ms; }
+.collab-comment-form:focus-within { border-color: rgba(10,25,47,.38); box-shadow: 0 0 0 3px rgba(10,25,47,.07); }
+.collab-comment-form textarea { width: 100%; resize: vertical; min-height: 76px; padding: .35rem; border: 0; outline: 0; background: transparent; color: var(--ca-text); font-size: .82rem; line-height: 1.5; }
+.collab-comment-form textarea::placeholder { color: #a1a1a6; }
+.collab-comment-actions { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding-top: .55rem; }
+.collab-visibility-control { display: flex; align-items: center; gap: .25rem; }
+.collab-visibility-control button { min-height: 30px; display: inline-flex; align-items: center; gap: .35rem; padding: 0 .6rem; border: 0; border-radius: 8px; background: transparent; color: var(--ca-tertiary); cursor: pointer; font-size: .64rem; }
+.collab-visibility-control button.is-active { background: #f2f2f7; color: var(--ca-text); }
+.collab-visibility-control button.is-internal.is-active { background: var(--ca-yellow-bg); color: #815b00; }
+.collab-visibility-control svg { width: 12px; height: 12px; }
+.collab-send-button { min-height: 38px; display: inline-flex; align-items: center; gap: .45rem; padding: 0 .9rem; border-radius: 13px; background: var(--ca-blue); color: #fff; font-size: .72rem; font-weight: 650; box-shadow: 0 10px 22px -14px rgba(10,25,47,.75); transition: transform .3s cubic-bezier(.16,1,.3,1), background .25s; }
+.collab-send-button:hover:not(:disabled) { background: #102745; transform: translateY(-2px); }
+.collab-send-button svg { width: 14px; height: 14px; }
+.collab-internal-hint { display: block; margin: .5rem .35rem 0; color: #8a6b14; font-size: .61rem; }
+
+.collab-empty { min-height: 470px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 1.5rem; border: 1px solid var(--ca-border); border-radius: 24px; background: #fff; text-align: center; }
+.collab-empty-icon { width: 58px; height: 58px; display: grid; place-items: center; margin-bottom: 1rem; border-radius: 18px; background: #f2f2f7; color: var(--ca-secondary); }
+.collab-empty-icon svg { width: 25px; height: 25px; }
+.collab-empty h2 { margin: 0 0 .55rem; font-size: 1.3rem; letter-spacing: -.025em; }
+.collab-empty p { max-width: 430px; margin: 0 0 1.3rem; color: var(--ca-secondary); font-size: .85rem; line-height: 1.55; }
+.collab-secondary-button { min-height: 40px; display: inline-flex; align-items: center; gap: .45rem; padding: 0 .9rem; border-radius: 11px; background: #f2f2f7; color: var(--ca-text); font-size: .76rem; font-weight: 650; }
+.collab-secondary-button:hover { background: #e8e8ed; }
+
+.collab-modal-backdrop { position: fixed; inset: 0; z-index: 50000; display: grid; place-items: center; padding: 1rem; background: rgba(0,0,0,.28); backdrop-filter: blur(14px); animation: collab-fade-in 180ms ease both; }
+.collab-modal { width: min(580px, 100%); max-height: calc(100dvh - 2rem); overflow-y: auto; padding: 1.35rem; border: 1px solid rgba(255,255,255,.7); border-radius: 24px; background: rgba(255,255,255,.98); box-shadow: 0 28px 90px -34px rgba(0,0,0,.48); animation: collab-sheet-in 220ms var(--ca-ease) both; }
+@keyframes collab-fade-in { from { opacity: 0; } }
+@keyframes collab-sheet-in { from { opacity: 0; transform: translateY(10px) scale(.985); } }
+.collab-modal > header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.35rem; }
+.collab-modal h2 { margin: 0; font-size: 1.4rem; letter-spacing: -.03em; }
+.collab-modal header p { max-width: 48ch; margin: .45rem 0 0; color: var(--ca-secondary); font-size: .78rem; line-height: 1.5; }
+.collab-modal form { display: grid; gap: 1rem; }
+.collab-field { display: grid; gap: .42rem; }
+.collab-field > span { color: var(--ca-secondary); font-size: .7rem; font-weight: 600; }
+.collab-field input, .collab-field textarea { width: 100%; border: 1px solid var(--ca-border-strong); border-radius: 12px; background: #fff; color: var(--ca-text); outline: none; padding: .8rem .85rem; font-size: .8rem; line-height: 1.5; transition: border-color 160ms, box-shadow 160ms; }
+.collab-field textarea { resize: vertical; min-height: 128px; }
+.collab-field input:focus, .collab-field textarea:focus { border-color: rgba(0,113,227,.48); box-shadow: 0 0 0 3px rgba(0,113,227,.09); }
+.collab-important-toggle { display: flex; align-items: center; gap: .7rem; padding: .8rem; border-radius: 14px; background: #f5f5f7; cursor: pointer; }
+.collab-important-toggle > input { position: absolute; opacity: 0; pointer-events: none; }
+.collab-toggle-track { width: 38px; height: 23px; flex: 0 0 auto; padding: 2px; border-radius: 999px; background: #d1d1d6; transition: background 180ms; }
+.collab-toggle-track > span { display: block; width: 19px; height: 19px; border-radius: 50%; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.25); transition: transform 180ms var(--ca-ease); }
+.collab-important-toggle input:checked + .collab-toggle-track { background: var(--ca-blue); }
+.collab-important-toggle input:checked + .collab-toggle-track > span { transform: translateX(15px); }
+.collab-important-toggle strong, .collab-important-toggle small { display: block; }
+.collab-important-toggle strong { font-size: .75rem; }
+.collab-important-toggle small { margin-top: .16rem; color: var(--ca-tertiary); font-size: .64rem; }
+.collab-modal footer { display: flex; justify-content: flex-end; gap: .55rem; margin-top: .35rem; padding-top: 1rem; border-top: 1px solid var(--ca-border); }
+.collab-cancel-button { min-height: 42px; padding: 0 1rem; border-radius: 12px; background: #f2f2f7; color: var(--ca-text); font-size: .8rem; font-weight: 600; }
+.collab-cancel-button:hover { background: #e8e8ed; }
+
+.collab-app button:focus-visible, .collab-app input:focus-visible, .collab-app textarea:focus-visible, .collab-app select:focus-visible { outline: 2px solid var(--ca-blue); outline-offset: 2px; }
+
+@media (max-width: 900px) {
+  .collab-toolbar { align-items: flex-start; }
+  .collab-toolbar-actions { flex-wrap: wrap; justify-content: flex-end; }
+  .collab-access-chip { display: none; }
+  .collab-layout { grid-template-columns: 300px minmax(0,1fr); }
+  .collab-detail-header, .collab-conversation { padding-left: 1.3rem; padding-right: 1.3rem; }
+  .collab-state-panel { margin-left: 1.3rem; margin-right: 1.3rem; }
+}
+
+@media (max-width: 720px) {
+  .collab-toolbar { min-height: 0; flex-direction: column; }
+  .collab-toolbar-actions { width: 100%; justify-content: space-between; }
+  .collab-primary-button { flex: 1; }
+  .collab-filter { width: 100%; }
+  .collab-filter button { flex: 1; min-width: 0; }
+  .collab-layout { display: block; min-height: 0; overflow: visible; border: 0; background: transparent; box-shadow: none; }
+  .collab-thread-list { display: grid; gap: .65rem; margin-bottom: 1rem; border: 0; background: transparent; overflow: visible; }
+  .collab-thread-row { border: 1px solid var(--ca-border); border-radius: 16px; background: rgba(255,255,255,.85); }
+  .collab-thread-row.is-selected { box-shadow: inset 0 0 0 1.5px var(--ca-blue); }
+  .collab-detail { border: 1px solid var(--ca-border); border-radius: 20px; overflow: hidden; }
+  .collab-status-control { grid-template-columns: 1fr 1fr; }
+  .collab-comment-actions { align-items: flex-end; }
+  .collab-visibility-control { flex-direction: column; align-items: flex-start; }
+  .collab-comment-content header time { width: 100%; margin-left: 0; }
+  .collab-modal-backdrop { place-items: end center; padding: 0; }
+  .collab-modal { width: 100%; max-height: 92dvh; border-radius: 24px 24px 0 0; padding-bottom: calc(1.35rem + env(safe-area-inset-bottom)); }
+}
+
+@media (max-width: 430px) {
+  .collab-workspace-select { max-width: 66vw; }
+  .collab-sync-button { display: none; }
+  .collab-detail-header { padding-top: 1.4rem; }
+  .collab-detail h2 { font-size: 1.35rem; }
+  .collab-comment-form { padding: .65rem; }
+  .collab-send-button { align-self: flex-end; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collab-app *, .collab-app *::before, .collab-app *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+/* Apple-style shared workspace: calm split view, message bubbles and native-feeling controls. */
+.collab-toolbar { min-height: 58px; margin-bottom: .8rem; padding: .35rem .15rem; }
+.collab-role-mark { width: 38px; height: 38px; border-radius: 11px; box-shadow: none; }
+.collab-access-chip { min-height: 28px; border: 0; background: #f5f5f7; font-size: .65rem; }
+.collab-primary-button { min-height: 40px; border-radius: 13px; font-size: .76rem; }
+.collab-filter { margin-bottom: .8rem; border-radius: 11px; }
+
+.collab-layout {
+  min-height: 680px;
+  grid-template-columns: minmax(280px, 330px) minmax(0,1fr);
+  border-color: rgba(0,0,0,.075);
+  border-radius: 26px;
+  background: #fff;
+  box-shadow: 0 24px 70px -55px rgba(0,0,0,.42);
+}
+.collab-thread-list { background: rgba(245,245,247,.78); }
+.collab-thread-row { min-height: 112px; padding: 1rem; }
+.collab-thread-row:hover { background: rgba(255,255,255,.65); }
+.collab-thread-row.is-selected { background: #fff; box-shadow: none; }
+.collab-thread-row.is-selected::before { content: ''; float: left; width: 3px; height: 34px; margin: 1px .65rem 0 -.65rem; border-radius: 99px; background: #0a192f; }
+.collab-thread-title { font-size: .82rem; }
+.collab-thread-preview { margin-top: .5rem; font-size: .7rem; }
+.collab-thread-meta { font-size: .61rem; }
+
+.collab-detail { display: flex; min-height: 680px; flex-direction: column; }
+.collab-detail-header { padding: 1.65rem 1.8rem 1.25rem; }
+.collab-detail h2 { font-size: clamp(1.4rem,2.1vw,1.9rem); }
+.collab-detail-title-wrap > p { margin-top: .65rem; font-size: .82rem; }
+.collab-state-panel { margin: 0; padding: .75rem 1.8rem; border-top: 1px solid var(--ca-border); border-bottom: 1px solid var(--ca-border); border-radius: 0; background: rgba(245,245,247,.7); }
+.collab-state-heading { margin-bottom: .45rem; }
+.collab-state-heading small { font-size: .6rem; }
+
+.collab-conversation { flex: 1; padding: 1.5rem 1.8rem 1.8rem; }
+.collab-comments { display: flex; flex-direction: column; gap: .9rem; }
+.collab-comment { width: min(82%,680px); display: grid; grid-template-columns: 30px minmax(0,1fr); align-items: end; gap: .6rem; }
+.collab-comment-avatar { width: 30px; height: 30px; border-radius: 50%; color: #596273; background: #e8ebf0; font-size: .58rem; }
+.collab-comment.is-flouvia .collab-comment-avatar { background: #e8ebf0; color: #596273; }
+.collab-comment-content { padding: .7rem .8rem; border-radius: 17px 17px 17px 5px; background: #e9e9eb; }
+.collab-comment-content header { margin-bottom: .28rem; }
+.collab-comment-content header strong { font-size: .65rem; }
+.collab-comment-content header span, .collab-comment-content header time { font-size: .54rem; }
+.collab-comment-content p { color: #1d1d1f; font-size: .73rem; line-height: 1.5; }
+.collab-comment.is-client { align-self: flex-end; grid-template-columns: minmax(0,1fr) 30px; }
+.collab-comment.is-client .collab-comment-avatar { order: 2; color: #fff; background: #0a192f; }
+.collab-comment.is-client .collab-comment-content { order: 1; border-radius: 17px 17px 5px 17px; color: #fff; background: #0a192f; }
+.collab-comment.is-client .collab-comment-content p { color: #fff; }
+.collab-comment.is-client .collab-comment-content header span,
+.collab-comment.is-client .collab-comment-content header time { color: rgba(255,255,255,.58); }
+.collab-comment.is-client .collab-comment-content header strong { color: #fff; }
+.collab-no-comments { border: 0; background: #f5f5f7; }
+
+.collab-comment-form { margin-top: 1.35rem; padding: .7rem; border-radius: 18px; box-shadow: 0 12px 35px -30px rgba(0,0,0,.42); }
+.collab-comment-form textarea { min-height: 70px; font-size: .76rem; }
+.collab-send-button { min-height: 36px; border-radius: 12px; font-size: .68rem; }
+
+.collab-empty { border-radius: 26px; box-shadow: 0 24px 70px -55px rgba(0,0,0,.42); }
+.collab-modal { border-radius: 26px; box-shadow: 0 30px 90px -32px rgba(0,0,0,.45); }
+
+@media (max-width: 720px) {
+  .collab-layout { min-height: 0; }
+  .collab-thread-row.is-selected::before { display: none; }
+  .collab-detail { min-height: 0; }
+  .collab-state-panel { padding-left: 1.2rem; padding-right: 1.2rem; }
+  .collab-conversation { padding-left: 1.2rem; padding-right: 1.2rem; }
+  .collab-comment { width: 92%; }
+}

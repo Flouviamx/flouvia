@@ -1,7 +1,7 @@
 ---
 // src/components/portal/RoadmapUI.astro
 import { useTranslations } from '../../i18n/utils';
-import { supabase } from '../../lib/supabase';
+import { getRoadmap, requirePortalIdentity } from '../../lib/portalDb';
 import PortalHeader from './PortalHeader.astro';
 
 interface Props {
@@ -10,14 +10,8 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 
-const user = await Astro.locals.currentUser();
-const email = user?.emailAddresses[0]?.emailAddress || "hola@flouvia.com";
-
-const { data: rows } = await supabase
-  .from('roadmap')
-  .select('*')
-  .eq('email_cliente', email)
-  .order('orden_index');
+const identity = await requirePortalIdentity(Astro.locals);
+const rows = await getRoadmap(identity.id);
 
 const items = (rows ?? []).map((r: any) => ({
   id:          r.id,
@@ -174,7 +168,7 @@ const doneCount = items.filter(i => i.status === 'done').length;
     .node-dot.active {
         background: #34c759;
         border-color: #2db34e;
-        animation: node-glow 2.5s ease-in-out infinite;
+        box-shadow: 0 0 0 4px rgba(52,199,89,0.1);
     }
     .node-dot.pending {
         background: #fff;
@@ -283,11 +277,6 @@ const doneCount = items.filter(i => i.status === 'done').length;
         0%, 100% { box-shadow: 0 0 0 0 rgba(52,199,89,0.55); transform: scale(1); }
         55%       { box-shadow: 0 0 0 5px rgba(52,199,89,0.0);  transform: scale(1.18); }
     }
-    @keyframes node-glow {
-        0%, 100% { box-shadow: 0 0 0 0 rgba(52,199,89,0.65); }
-        50%       { box-shadow: 0 0 0 10px rgba(52,199,89,0.0); }
-    }
-
     /* Responsive */
     @media (max-width: 640px) {
         .sprint-count-badge { width: 100%; justify-content: center; }
@@ -301,10 +290,10 @@ const doneCount = items.filter(i => i.status === 'done').length;
     import { gsap } from "gsap";
 
     document.addEventListener("DOMContentLoaded", () => {
-        gsap.set(".timeline-wrapper", { y: 24, opacity: 0, scale: 0.99 });
+        gsap.set(".timeline-wrapper", { y: 24, opacity: 0 });
 
         const tl = gsap.timeline();
-        tl.to(".timeline-wrapper", { y: 0, opacity: 1, scale: 1, duration: 1.1, ease: "expo.out" }, 0.3);
+        tl.to(".timeline-wrapper", { y: 0, opacity: 1, duration: 1.1, ease: "power2.out" }, 0.3);
 
         // Cards slide in from left with stagger
         const cards = document.querySelectorAll('.tl-card');
@@ -312,7 +301,7 @@ const doneCount = items.filter(i => i.status === 'done').length;
             gsap.set(cards, { x: -24, opacity: 0 });
             tl.to(cards, {
                 x: 0, opacity: 1,
-                duration: 0.75, stagger: 0.1, ease: "expo.out",
+                duration: 0.75, stagger: 0.1, ease: "power2.out",
             }, "-=0.7");
         }
 
@@ -322,17 +311,17 @@ const doneCount = items.filter(i => i.status === 'done').length;
             gsap.set(lines, { scaleY: 0, transformOrigin: "top center" });
             tl.to(lines, {
                 scaleY: 1,
-                duration: 0.55, stagger: 0.1, ease: "expo.out",
+                duration: 0.55, stagger: 0.1, ease: "power2.out",
             }, "-=0.85");
         }
 
-        // Node dots pop in
+        // Node dots fade in
         const nodes = document.querySelectorAll('.node-dot');
         if (nodes.length > 0) {
-            gsap.set(nodes, { scale: 0, opacity: 0 });
+            gsap.set(nodes, { opacity: 0 });
             tl.to(nodes, {
-                scale: 1, opacity: 1,
-                duration: 0.4, stagger: 0.1, ease: "back.out(2)",
+                opacity: 1,
+                duration: 0.35, stagger: 0.1, ease: "power2.out",
             }, "-=0.85");
         }
     });

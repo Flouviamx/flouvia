@@ -1,0 +1,12 @@
+---
+export const prerender = false;
+import PortalLayout from '../../layouts/PortalLayout.astro';
+import CollaborationPage from '../../features/collaboration/CollaborationPage.astro';
+
+const { userId } = await Astro.locals.auth();
+if (!userId) return Astro.redirect('/en/login');
+---
+<PortalLayout title="Collaboration | Flouvia OS">
+  <CollaborationPage lang="en" />
+</PortalLayout>
+

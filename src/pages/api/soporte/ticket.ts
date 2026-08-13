@@ -1,7 +1,8 @@
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
-import { supabase } from '../../../lib/supabase';
+import { createTicket, requirePortalIdentity } from '../../../lib/portalDb';
+import { portalAccessErrorResponse } from '../../../lib/portalAccess';
 
 const MAKE_WEBHOOK = 'https://hook.us2.make.com/yxof110p9eswdp0eayr7qihrqx6778dd';
 
@@ -9,9 +10,9 @@ export const POST: APIRoute = async ({ locals, request }) => {
   const { userId } = await locals.auth();
   if (!userId) return new Response('Unauthorized', { status: 401 });
 
-  const user = await locals.currentUser();
-  const email = user?.emailAddresses[0]?.emailAddress;
-  if (!email) return new Response('No email', { status: 400 });
+  let identity;
+  try { identity = await requirePortalIdentity(locals); }
+  catch (error) { return portalAccessErrorResponse(error); }
 
   let body: Record<string, string>;
   try {
@@ -23,26 +24,18 @@ export const POST: APIRoute = async ({ locals, request }) => {
   const { category = '', subject = '', description = '', priority = 'normal' } = body;
   if (!subject.trim()) return new Response('Missing subject', { status: 422 });
 
-  // Generar ticket ref TK-NNN
-  const { count } = await supabase
-    .from('tickets')
-    .select('*', { count: 'exact', head: true })
-    .eq('email_cliente', email);
-
-  const num        = String((count ?? 0) + 1).padStart(3, '0');
-  const ticket_ref = `TK-${num}`;
-
-  const { error } = await supabase.from('tickets').insert({
-    email_cliente: email,
-    ticket_ref,
-    title:        subject.trim(),
-    category:     category || 'general',
-    descripcion:  description.trim(),
-    priority,
-    status:       'open',
-  });
-
-  if (error) return new Response('DB error', { status: 500 });
+  let ticket_ref: string;
+  try {
+    ticket_ref = await createTicket({
+      userId: identity.id,
+      title: subject.trim(),
+      category: category || 'general',
+      description: description.trim(),
+      priority,
+    });
+  } catch {
+    return new Response('DB error', { status: 500 });
+  }
 
   // Forward a Make (fire-and-forget)
   fetch(MAKE_WEBHOOK, {
@@ -50,8 +43,8 @@ export const POST: APIRoute = async ({ locals, request }) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       ticket_ref,
-      email,
-      nombre:      user?.firstName ?? '',
+      email:       identity.email,
+      nombre:      identity.displayName,
       category,
       subject:     subject.trim(),
       description: description.trim(),

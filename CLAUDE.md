@@ -6,6 +6,8 @@
 npm run dev      # servidor local (localhost:4321)
 npm run build    # build de producción
 npm run preview  # preview del build local
+npm run db:schema      # aplica migraciones Neon ordenadas
+npm run db:verify-ops  # verifica invariantes y lecturas de Ops (read-only)
 ```
 
 Node requerido: **>=22.12.0** (ver `.nvmrc`)
@@ -18,8 +20,8 @@ Node requerido: **>=22.12.0** (ver `.nvmrc`)
 |------|-----------|
 | Framework | Astro 6 (`output: 'server'`) |
 | Adapter | `@astrojs/vercel` — deploy en Vercel |
-| Auth | Clerk (`@clerk/astro`) |
-| DB / Storage | Supabase (PostgreSQL + Storage bucket `boveda`) |
+| Auth | UI propia + Clerk headless (`@clerk/astro`) |
+| DB / Storage | Neon PostgreSQL + Vercel Blob privado |
 | Animaciones | GSAP 3 + ScrollTrigger (SplitText eliminado) |
 | Tipografía | Inter (sans) — Instrument Serif ha sido eliminado (Julio 2026) |
 
@@ -104,6 +106,7 @@ src/pages/
 
   # Portal de cliente (rutas protegidas por Clerk)
   dashboard.astro          → /dashboard
+  colaboracion.astro       → /colaboracion — asuntos, comentarios y notas internas
   facturacion.astro        → /facturacion
   boveda.astro             → /boveda
   boveda-upload.astro      → /boveda-upload
@@ -113,10 +116,20 @@ src/pages/
   entorno.astro            → /entorno
   privacidad-portal.astro  → /privacidad-portal
 
+  # Centro de operación — ops.flouvia.com (solo equipo Flouvia)
+  ops.astro                    → /ops — resumen operativo real
+  ops/bandeja.astro            → /ops/bandeja — asuntos y conversación
+  ops/clientes.astro           → /ops/clientes — directorio de workspaces
+  ops/clientes/[workspaceId].astro → Cliente 360 y edición controlada
+
   # API routes
   pages/api/boveda/upload.ts      → POST /api/boveda/upload
   pages/api/client/deploys.ts     → GET  /api/client/deploys
   pages/api/soporte/ticket.ts     → POST /api/soporte/ticket
+  pages/api/collaboration/threads.ts  → GET/POST/PATCH asuntos compartidos
+  pages/api/collaboration/comments.ts → POST comentarios compartidos/internos
+  pages/api/ops/overview.ts            → GET resumen operativo
+  pages/api/ops/workspaces/[workspaceId].ts → GET/PATCH Cliente 360
 ```
 
 Las rutas `/en/*` son el espejo en inglés — cada página portal tiene su mirror en `src/pages/en/`.
@@ -159,82 +172,80 @@ const enUrl = lang === 'es' ? '/en' + pathname : pathname;
 
 **Doble capa de defensa:**
 1. **Clerk Dashboard** (configurar manualmente — Restrictions → Sign-ups → "Restricted"). Sin esto, cualquiera puede crear cuenta vía OAuth.
-2. **Middleware** (`src/middleware.ts`) verifica que el email del user esté en `clerkClient.invitations.getInvitationList({ status: 'accepted', query: email })`. Si no, redirect a `/portal/acceso-restringido?signout=1`.
+2. **Autorización de recurso** (`src/lib/portalAccess.ts`) verifica junto a cada página/API privada que el email tenga una invitación aceptada. El middleware solo incorpora Clerk a `Astro.locals`; no depende de una lista frágil de rutas.
 
 **Optimización:** Tras la primera verificación exitosa, el middleware setea `user.publicMetadata.flouvia_invited = true` y futuras requests usan ese flag (fast path) sin volver a llamar al API de invitations.
 
 **Sign-out automático:** La página `acceso-restringido` detecta el query `?signout=1` y ejecuta `window.Clerk.signOut()` para limpiar la sesión zombie.
 
-**Rutas protegidas:** Todas las rutas root-level (`/dashboard`, `/facturacion`, `/boveda`, `/soporte`, `/roadmap`, `/calendario`, `/entorno`, `/boveda-upload`, `/privacidad-portal`) + sus mirrors `/en/*`.
+**Rutas protegidas:** Todas las rutas root-level (`/dashboard`, `/colaboracion`, `/facturacion`, `/boveda`, `/soporte`, `/roadmap`, `/calendario`, `/entorno`, `/boveda-upload`, `/privacidad-portal`) + sus mirrors `/en/*`.
 
 **Flow de redirects:**
 - No autenticado en ruta protegida → `/login` (o `/en/login`)
-- Autenticado pero sin invitación → `/portal/acceso-restringido?signout=1` → auto-logout
+- Autenticado pero sin invitación → `/acceso-restringido?signout=1` (o `/en/access-denied`) → auto-logout
 
-**Rutas SSO callback (Clerk routing="path"):** Como `<SignIn>` usa `routing="path"`, deben existir páginas en `/login/sso-callback` y `/en/login/sso-callback` que rendericen el mismo componente. Sin ellas → 404 al completar OAuth.
+**UI propia:** `CustomSignIn.tsx`, `CustomOAuthCallback.tsx` y `CustomUserMenu.tsx` implementan la experiencia completa. No se renderizan embeds de Clerk. Clerk queda como proveedor headless para identidad, OAuth, MFA, recuperación y sesiones.
 
 **API routes:**
 - `const { userId } = await locals.auth()`
 - Email: `const user = await locals.currentUser(); user.emailAddresses[0].emailAddress`
 
-**Cliente principal:** El `email_cliente` (email de Clerk en lowercase) es la PK que relaciona todos los datos del portal en Supabase.
+**Cliente principal:** `app_users.id` es un UUID interno estable. `clerk_user_id` es solo el vínculo externo; el email es un atributo editable y nunca una foreign key.
+
+### Autorización de Ops
+
+- La autenticación sigue siendo Clerk headless; la autorización vive server-side en `src/features/ops/operatorAccess.ts`.
+- Una cuenta necesita correo verificado del equipo y una membresía activa en `ops_memberships`. No basta ocultar botones en React.
+- Roles actuales: `owner`, `operator`, `finance`, `collaborator`; cada mutación exige una capability explícita (`clients:write`, `inbox:write`, etc.).
+- Toda API de escritura valida host de Ops, `Origin`, sesión, capability, payload con Zod y rate limit.
+- Una sesión anónima en `/ops/*` se redirige a `/login`; una cuenta ajena al equipo nunca recibe el snapshot de Ops.
 
 ---
 
-## Base de datos — Supabase
+## Base de datos — Neon
 
-**Cliente:** `src/lib/supabase.ts`
-- Usa `SUPABASE_SERVICE_ROLE_KEY` (server-side únicamente, bypassa RLS)
-- Fallback a `SUPABASE_ANON_KEY` en dev local
+**Cliente:** `src/lib/neon.ts`; repositorio de queries: `src/lib/portalDb.ts`.
+- Acepta `DATABASE_URL` o `FLOUVIA_DATABASE_URL` (nombre inyectado por Vercel Marketplace).
+- Solo se usa server-side.
+- Toda query privada recibe el `user_id` interno obtenido desde la sesión autorizada.
 
 **Tablas:**
 
 | Tabla | Descripción |
 |-------|-------------|
-| `perfiles` | Un registro por cliente. PK: `email_cliente` |
-| `proyectos` | Proyectos activos del cliente. Incluye `vercel_project_id` |
-| `finanzas_config` | Config de facturación (1 por cliente) |
-| `facturas` | Historial de facturas |
-| `boveda_archivos` | Metadata de archivos en Storage |
-| `roadmap` | Hitos del proyecto |
-| `tickets` | Tickets de soporte del portal (ver SQL abajo) |
-| `notificaciones` | Notificaciones para el cliente (ver SQL abajo) |
+| `app_users` | Identidad interna estable; `role` distingue `flouvia_admin` y `client` |
+| `profiles` | Perfil de cada cliente, PK/FK `user_id` |
+| `projects` | Proyectos activos, incluye `vercel_project_id` |
+| `finance_configs` | Configuración de facturación (1 por cliente) |
+| `invoices` | Historial de facturas |
+| `vault_files` | Metadata de archivos guardados en Blob privado |
+| `roadmap_items` | Hitos del proyecto |
+| `tickets` / `ticket_counters` | Tickets y numeración atómica por cliente |
+| `notifications` / `announcements` | Notificaciones privadas y anuncios globales |
+| `changelog` | Historial público del portal |
+| `push_subscriptions` | Suscripciones Web Push por cliente |
+| `collaboration_threads` | Asuntos compartidos, prioridad, estado y pin por workspace |
+| `collaboration_comments` | Comentarios `shared` y notas `internal` visibles solo para Flouvia |
+| `workspaces` | Tenant estable del cliente; desacopla los datos de una persona/email |
+| `workspace_members` | Relación usuario↔workspace con membresía activa/revocada |
+| `ops_memberships` | Rol interno de cada operador y fecha de revocación |
+| `ops_audit_events` | Bitácora append-only de mutaciones administrativas |
+| `ops_idempotency_keys` | Base para comandos reintentables sin efectos duplicados |
 
-**SQL — tabla tickets:**
-```sql
-create table tickets (
-  id          uuid        default gen_random_uuid() primary key,
-  email_cliente text      not null,
-  ticket_ref  text        not null,
-  title       text        not null,
-  category    text        not null default 'general',
-  descripcion text,
-  priority    text        not null default 'normal',
-  status      text        not null default 'open',
-  created_at  timestamptz default now()
-);
-create index on tickets(email_cliente, created_at desc);
-```
+**Storage:** Vercel Blob privado. Los archivos se guardan bajo `boveda/{user_id}/...`; la descarga pasa por `/api/boveda/download?id=...`, valida sesión + propiedad y transmite el archivo sin exponer una URL pública.
 
-**SQL — tabla notificaciones:**
-```sql
-create table notificaciones (
-  id          uuid        default gen_random_uuid() primary key,
-  email_cliente text      not null,
-  tipo        text        not null,  -- 'deploy'|'milestone'|'invoice'|'announcement'|'alert'
-  titulo      text        not null,
-  mensaje     text,
-  leida       boolean     default false,
-  created_at  timestamptz default now()
-);
-create index on notificaciones(email_cliente, leida, created_at desc);
-```
+**Schema:** migraciones ordenadas en `neon/migrations/`. Aplicar todas con `npm run db:schema`.
 
-**Patrón RLS:** Todas las tablas usan `email_cliente = current_setting('app.email_cliente', TRUE)`. El backend setea este valor antes de cada query.
+### Ops como consola administrativa
 
-**Storage:** Bucket `boveda` — los archivos se guardan en `{email}/{timestamp}_{filename}`. Se sirven con signed URLs generadas en tiempo de lectura (no URLs públicas).
+La primera vertical está en `src/features/ops/` y separa `repository → service → API → UI`:
 
-**Schema completo:** `supabase/schema.sql`
+- `/ops`: métricas, cola de atención, clientes recientes y actividad auditada con datos de Neon.
+- `/ops/clientes`: directorio por workspace, no por email.
+- `/ops/clientes/[workspaceId]`: vista 360 con perfil, proyectos, roadmap, finanzas, tickets, asuntos y actividad; el perfil se edita con control optimista por `version` y motivo obligatorio.
+- `/ops/bandeja`: conversación compartida; cambios de estado, pins, mensajes y notas internas escriben auditoría en la misma transacción SQL.
+- Las tablas tenant conservan temporalmente `user_id` por compatibilidad, pero ya incluyen `workspace_id`; el código nuevo de Ops debe preferir `workspace_id`.
+- Borrado administrativo futuro debe ser archivado/soft delete. `ops_audit_events` bloquea `UPDATE` y `DELETE` mediante trigger.
 
 ---
 
@@ -258,15 +269,14 @@ create index on notificaciones(email_cliente, leida, created_at desc);
 ### Make (webhooks)
 Hay **dos webhooks distintos**:
 - **Soporte** (portal): `https://hook.us2.make.com/yxof110p9eswdp0eayr7qihrqx6778dd`
-  - Trigger: formulario de soporte enviado. Flow: form → `POST /api/soporte/ticket` → Supabase + Make en paralelo.
-  - Make puede escribir a Supabase para actualizar status de tickets o publicar notificaciones.
+  - Trigger: formulario de soporte enviado. Flow: form → `POST /api/soporte/ticket` → Neon + Make en paralelo.
 - **Contacto** (`PlantillaContacto.astro`): `https://hook.us2.make.com/ov4rrddtdx739hnl7dp2mks216171q8m`
   - Trigger: solicitud del formulario por pasos. Fire-and-forget desde el cliente (no pasa por API route).
   - Payload completo y caveat de `data-value` en la sección "Página de Contacto".
 
 ### Stripe
-- **Integración:** solo Customer Portal (URL en `finanzas_config.stripe_portal_url`)
-- **Card data:** `card_brand`, `card_last4`, `card_exp` en `finanzas_config`
+- **Integración:** solo Customer Portal (URL en `finance_configs.stripe_portal_url`)
+- **Card data:** `card_brand`, `card_last4`, `card_exp` en `finance_configs`
 - **No hay Stripe SDK** en el proyecto — todo es link externo al portal de Stripe
 
 ---
@@ -294,19 +304,26 @@ interface Props {
 
 **Usado en:** BovedaUI, BovedaUploadUI, CalendarioUI, EntornoUI, FacturacionUI, RoadmapUI, SoporteUI, PrivacidadPortalUI
 
-**GSAP de entrada:** back-arrow (blur + x), badge (blur + x), título (y), subtítulo (y) — DOMContentLoaded, no ScrollTrigger.
+**Entrada:** fade + subida de 10px por CSS, 280ms, sin blur ni scale.
+
+### Shell de aplicación
+- `PortalNavbar.astro`: barra translúcida tipo app con navegación segmentada; en móvil usa tab bar inferior.
+- `PortalFooter.astro`: pie utilitario claro, sin consola, watermark ni lenguaje VIP.
+- El único acento de acción es `#0071e3`; no hay glows que sigan el cursor ni hover magnético.
+- El chip `Equipo Flouvia` / `Cliente` hace explícito el rol de la sesión.
 
 ### Componentes del portal
 
 | Archivo | Página | Notas clave |
 |---------|--------|-------------|
 | `DashboardUI.astro` | /dashboard | Bento grid. Fetch paralelo: proyecto, finanzas, roadmap, archivos, tickets, notificaciones, deploys Vercel. Health score computado server-side. Activity feed cross-portal. |
+| `CollaborationApp.tsx` | /colaboracion | Asuntos, importancia y comentarios compartidos. Flouvia controla estado/pin y puede escribir notas internas. Polling visible cada 20s + optimistic UI. |
 | `EntornoUI.astro` | /entorno | Vercel deploys reales + PSI vitals reales + activity log derivado de deploys. Refresh button en `topbar-right`. |
-| `BovedaUI.astro` | /boveda | Signed URLs (1h expiry). Upload button en `title-right`. |
+| `BovedaUI.astro` | /boveda | Descargas autenticadas desde Blob privado. Upload button en `title-right`. |
 | `BovedaUploadUI.astro` | /boveda-upload | `backHref` va a `/boveda`, no `/dashboard`. |
 | `FacturacionUI.astro` | /facturacion | Money counter GSAP. Stripe Portal link. |
 | `RoadmapUI.astro` | /roadmap | Sprint count badge en `title-right`. |
-| `SoporteUI.astro` | /soporte | Tickets leídos de Supabase (tabla `tickets`). Form → `/api/soporte/ticket`. Date strip en `topbar-left`. |
+| `SoporteUI.astro` | /soporte | Tickets leídos de Neon (tabla `tickets`). Form → `/api/soporte/ticket`. Date strip en `topbar-left`. |
 | `CalendarioUI.astro` | /calendario | Calendly embed. PortalHeader sin `title` (solo topbar). |
 | `PrivacidadPortalUI.astro` | /privacidad-portal | Política de datos del portal. Auth-protected. Link desde PortalFooter. |
 | `LoginUI.astro` | /login · /portal/login · /en/login | Rediseñada mayo 2026. Ver sección "Página de Login" abajo. |
@@ -326,26 +343,18 @@ interface Props {
   sin fondo. Estética Aesop/Stripe, no dashboard.
 - **Layout split:** `grid-template-columns: 1.05fr 0.95fr`. Izquierda = bloque de marca.
   Derecha = formulario borderless.
-- **Watermark:** "Acceso" / "Access" en serif italic, `26vw`, `rgba(0,0,0,0.025)`, `bottom-right`,
-  mismo patrón que el resto del sitio.
 
 ### Bloque de marca (izquierda)
 - Eyebrow (clave `login.eyebrow`): "ENTORNO PRIVADO" / "PRIVATE ENVIRONMENT".
 - H1 100% Inter bold sin palabra-acento serif (regla de una sola tipografía en headings).
-- Badge de exclusividad: "ACCESO POR INVITACIÓN" + nota de escasez "Menos de **8** clientes al año"
-  (el `8` en `.editorial` serif italic — OK porque es número, no heading).
-- Badge de seguridad: "ENCRIPTACIÓN END-TO-END" / "END-TO-END ENCRYPTION" con dot verde pulsante.
+- Nota neutral de acceso seguro para cuentas autorizadas; no usar mensajes de escasez, VIP o exclusividad.
+- Badge de sesión segura con indicador verde estático.
 
-### Maquillaje profundo de Clerk (`<style is:global>`)
-- **Deben ir en `<style is:global>`** porque el DOM de Clerk no lleva `data-astro-cid`
-  (ver sección "Bugs conocidos").
-- Variables `appearance`: `colorBackground: "transparent"`, `colorInputBackground: "transparent"`,
-  `borderRadius: "0px"` (los radios los controlamos nosotros por elemento).
-- Botones sociales: `border-radius: 12px`, hairline `rgba(0,0,0,0.1)`, hover eleva `translateY(-2px)`.
-- Divisor "o": hairline difuminada con `linear-gradient` (patrón footer/tech del home).
-- Labels: uppercase, weight 700, letterspaced (estilo eyebrow del sitio).
-- Botón primario: navy `#0a192f`, `border-radius: 12px`, sombra luxe, hover `translateY(-3px)`
-  con `var(--ease-spring)`.
+### UI de autenticación propia
+- `CustomSignIn.tsx` controla email/password, Google OAuth, MFA, recuperación de contraseña y aceptación de invitación con los stores headless de Clerk.
+- `CustomOAuthCallback.tsx` completa OAuth sin montar componentes visuales de Clerk.
+- `CustomUserMenu.tsx` reemplaza el avatar/menú embebido.
+- `custom-auth.css` y `custom-user-menu.css` son la única capa visual de auth.
 
 ### Animación de entrada
 - Gate `.js-anim .login-anim { opacity: 0 }` en `<style is:global>` (PortalLayout añade `.js-anim`
@@ -364,7 +373,7 @@ interface Props {
 ## API Routes del portal
 
 ### `POST /api/soporte/ticket`
-Guarda ticket en Supabase y reenvía a Make.
+Guarda ticket en Neon y reenvía a Make.
 - Auth: `locals.auth()` — requiere sesión Clerk
 - Body: `{ category, subject, description, priority }`
 - Genera `ticket_ref` (TK-001, TK-002…) basado en count del cliente
@@ -377,17 +386,23 @@ Obtiene deployments reales de Vercel para el cliente autenticado.
 - Devuelve: `{ deploys: [{ sha, msg, branch, env, status, url, duration, when }] }`
 
 ### `POST /api/boveda/upload`
-Upload de archivos al bucket `boveda` de Supabase Storage.
+Upload directo autenticado al store privado de Vercel Blob; la metadata se guarda en Neon.
 - Rate limit: 10 subidas/minuto por usuario (in-memory)
+
+### Colaboración
+- `GET /api/collaboration/threads?workspaceId=` devuelve el snapshot del workspace autorizado.
+- `POST /api/collaboration/threads` permite a ambos roles crear asuntos en su workspace.
+- `PATCH /api/collaboration/threads` es solo `flouvia_admin`: cambia estado o pin.
+- `POST /api/collaboration/comments` permite comentarios compartidos; `visibility: internal` es solo Flouvia.
+- El cliente nunca puede seleccionar otro workspace ni recibir comentarios internos.
 
 ---
 
 ## Variables de entorno (.env)
 
 ```
-SUPABASE_URL=
-SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=    # SSR only — nunca al browser
+DATABASE_URL=                 # o FLOUVIA_DATABASE_URL, SSR only
+BLOB_READ_WRITE_TOKEN=        # store privado, SSR only
 PUBLIC_CLERK_PUBLISHABLE_KEY=
 CLERK_SECRET_KEY=
 CLERK_WEBHOOK_SECRET=
@@ -424,8 +439,8 @@ Color: verde (#10b981) ≥ 85, ámbar (#f59e0b) ≥ 65, rojo (#ef4444) < 65.
 
 Mezcla eventos de 3 fuentes, ordenados por fecha descendente, máx 7 items:
 - **Deploys** (Vercel API) — dot verde/rojo/ámbar según estado
-- **Tickets** (Supabase `tickets`) — dot azul/verde/ámbar según status
-- **Uploads** (Supabase `boveda_archivos`) — dot púrpura
+- **Tickets** (Neon `tickets`) — dot azul/verde/ámbar según status
+- **Uploads** (Neon `vault_files`) — dot púrpura
 
 ---
 

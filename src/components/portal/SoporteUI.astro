@@ -1,7 +1,7 @@
 ---
 // src/components/portal/SoporteUI.astro
 import { useTranslations } from '../../i18n/utils';
-import { supabase } from '../../lib/supabase';
+import { getTickets, requirePortalIdentity } from '../../lib/portalDb';
 import PortalHeader from './PortalHeader.astro';
 
 interface Props {
@@ -11,8 +11,9 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 
 const user = await Astro.locals.currentUser();
+const identity = await requirePortalIdentity(Astro.locals);
 const firstName = user?.firstName || "";
-const email = user?.emailAddresses[0]?.emailAddress || "hola@flouvia.com";
+const email = identity.email;
 
 const dateOptions: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };
 const today = new Date().toLocaleDateString(lang === 'en' ? 'en-US' : 'es-MX', dateOptions);
@@ -53,12 +54,7 @@ const categories = [
 
 const WA_NUMBER = '521234567890'; // ← actualiza con tu número real
 
-const { data: ticketRows } = await supabase
-  .from('tickets')
-  .select('ticket_ref, title, status, created_at, rating')
-  .eq('email_cliente', email)
-  .order('created_at', { ascending: false })
-  .limit(8);
+const ticketRows = await getTickets(identity.id, 8);
 
 const formatTicketDate = (iso: string) =>
   new Date(iso).toLocaleDateString(lang === 'en' ? 'en-US' : 'es-MX', { day: '2-digit', month: 'short' });
@@ -94,7 +90,6 @@ const recentTickets = (ticketRows ?? []).map((r: any) => ({
 
       <!-- SLA CARD -->
       <div class="os-card sp-card-sla" id="sp-sla">
-        <div class="os-spotlight" aria-hidden="true"></div>
         <div class="os-card-in">
 
           <div class="sp-card-top">
@@ -144,12 +139,11 @@ const recentTickets = (ticketRows ?? []).map((r: any) => ({
 
       <!-- FORM CARD — Genius Bar -->
       <div class="os-card sp-card-form" id="sp-form-card">
-        <div class="os-spotlight" aria-hidden="true"></div>
         <div class="os-card-in">
 
           <div class="sp-card-top">
             <span class="sp-ey">{t('support.form.label')}</span>
-            <span class="sp-vip-badge">VIP</span>
+            <span class="sp-channel-badge">{lang === 'en' ? 'Direct' : 'Directo'}</span>
           </div>
 
           <form class="sp-form" id="supportForm" novalidate>
@@ -225,7 +219,6 @@ const recentTickets = (ticketRows ?? []).map((r: any) => ({
 
       <!-- TICKETS RECIENTES -->
       <div class="os-card sp-card-tickets" id="sp-tickets">
-        <div class="os-spotlight" aria-hidden="true"></div>
         <div class="os-card-in">
           <div class="sp-card-top">
             <span class="sp-ey">{t('support.tickets.label')}</span>
@@ -341,14 +334,6 @@ const recentTickets = (ticketRows ?? []).map((r: any) => ({
 }
 .os-card:hover { box-shadow: var(--shadow-up); border-color: rgba(0,0,0,0.1); transform: translateY(-3px); }
 
-.os-spotlight {
-    position: absolute; width: 320px; height: 320px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(0,85,204,0.05) 0%, transparent 70%);
-    pointer-events: none; transform: translate(-50%,-50%);
-    top: 0; left: 0; opacity: 0; transition: opacity .4s;
-}
-.os-card:hover .os-spotlight { opacity: 1; }
-
 .os-card-in { padding: 1.9rem 2rem; display: flex; flex-direction: column; height: 100%; }
 .sp-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.4rem; gap: 0.8rem; flex-wrap: wrap; }
 .sp-ey { font-size: 0.63rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #6e7d96; }
@@ -356,7 +341,7 @@ const recentTickets = (ticketRows ?? []).map((r: any) => ({
 /* Pills */
 .sp-pill { font-size: 0.67rem; font-weight: 700; padding: 5px 12px; border-radius: 100px; }
 .sp-pill-ok { background: rgba(16,185,129,0.09); color: #0d9966; border: 1px solid rgba(16,185,129,0.2); }
-.sp-vip-badge { font-size: 0.62rem; font-weight: 800; background: var(--text); color: #fff; padding: 5px 10px; border-radius: 100px; letter-spacing: 0.06em; }
+.sp-channel-badge { font-size: 0.62rem; font-weight: 650; background: rgba(118,118,128,.1); color: #6e6e73; padding: 5px 10px; border-radius: 100px; letter-spacing: 0.02em; }
 
 /* ═══ SLA ═══ */
 .sp-metrics { display: flex; align-items: center; gap: 1.4rem; margin: 0 0 1.6rem; }
@@ -576,40 +561,18 @@ const recentTickets = (ticketRows ?? []).map((r: any) => ({
 
   document.addEventListener("DOMContentLoaded", () => {
 
-    const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+    const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
 
     // Cards stagger
     const cards = ["#sp-sla", "#sp-form-card", "#sp-tickets"];
-    gsap.set(cards, { y: 30, opacity: 0, scale: 0.98 });
-    tl.to(cards, { y: 0, opacity: 1, scale: 1, duration: 1.0, stagger: 0.07 }, 0.5);
+    gsap.set(cards, { y: 30, opacity: 0 });
+    tl.to(cards, { y: 0, opacity: 1, duration: 1.0, stagger: 0.07 }, 0.5);
 
     // Ticket rows stagger
     gsap.set(".sp-ticket-row", { opacity: 0, x: -10 });
-    tl.to(".sp-ticket-row", { opacity: 1, x: 0, duration: 0.45, stagger: 0.06, ease: "expo.out" }, 0.9);
+    tl.to(".sp-ticket-row", { opacity: 1, x: 0, duration: 0.45, stagger: 0.06, ease: "power2.out" }, 0.9);
 
-    // Spotlight per card
-    document.querySelectorAll<HTMLElement>(".os-card").forEach(card => {
-        const spot = card.querySelector<HTMLElement>(".os-spotlight");
-        if (!spot) return;
-        card.addEventListener("mousemove", (e: MouseEvent) => {
-            const r = card.getBoundingClientRect();
-            gsap.to(spot, { x: e.clientX - r.left, y: e.clientY - r.top, duration: 0.55, ease: "power2.out" });
-        });
-    });
-
-    // Magnetic submit
     const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement | null;
-    if (submitBtn) {
-        submitBtn.addEventListener("mousemove", (e: MouseEvent) => {
-            const r = submitBtn.getBoundingClientRect();
-            const x = (e.clientX - r.left - r.width / 2) * 0.22;
-            const y = (e.clientY - r.top - r.height / 2) * 0.22;
-            gsap.to(submitBtn, { x, y, duration: 0.4, ease: "power2.out" });
-        });
-        submitBtn.addEventListener("mouseleave", () => {
-            gsap.to(submitBtn, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.4)" });
-        });
-    }
 
     // ── LÓGICA DEL FORMULARIO (igual que antes) ──
     const catBtns = document.querySelectorAll<HTMLButtonElement>(".sp-cat-btn");
@@ -642,7 +605,7 @@ const recentTickets = (ticketRows ?? []).map((r: any) => ({
             const container = btn.closest(".sp-rating");
             if (!container || !val || !ref) return;
 
-            btn.style.transform = "scale(1.4)";
+            btn.style.opacity = "0.45";
             await new Promise(r => setTimeout(r, 80));
 
             try {
@@ -655,7 +618,7 @@ const recentTickets = (ticketRows ?? []).map((r: any) => ({
 
             const emoji = val === 1 ? "😐" : val === 2 ? "😊" : "🤩";
             container.innerHTML = `<span class="sp-rated-done" style="font-size:1rem">${emoji}</span>`;
-            gsap.fromTo(container, { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2)" });
+            gsap.fromTo(container, { y: 6, opacity: 0 }, { y: 0, opacity: 1, duration: 0.32, ease: "power2.out" });
         });
     });
 
@@ -694,7 +657,7 @@ const recentTickets = (ticketRows ?? []).map((r: any) => ({
                         if (refEl) refEl.textContent = ticketRef;
                     }
                     formSuccess.classList.add("visible");
-                    gsap.fromTo(formSuccess, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" });
+                    gsap.fromTo(formSuccess, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" });
                 }
             }
         });

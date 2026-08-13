@@ -1,12 +1,17 @@
 ---
 export const prerender = false;
 import PortalLayout from '../../../layouts/PortalLayout.astro';
-import { SignIn } from '@clerk/astro/components';
+import CustomOAuthCallback from '../../../components/portal/CustomOAuthCallback';
 ---
 
-<PortalLayout title="Access | Flouvia">
+<PortalLayout title="Access | Flouvia" public>
     <div class="callback-wrapper">
-        <SignIn routing="path" path="/en/login" />
+        <CustomOAuthCallback
+            lang="en"
+            loginPath="/en/login"
+            redirectPath="/en/dashboard"
+            client:load
+        />
     </div>
 </PortalLayout>
 
@@ -15,7 +20,7 @@ import { SignIn } from '@clerk/astro/components';
         display: flex;
         align-items: center;
         justify-content: center;
-        min-height: 100vh;
+        min-height: calc(100vh - 140px);
         background: var(--color-bg-soft, #fcfcfc);
     }
 </style>

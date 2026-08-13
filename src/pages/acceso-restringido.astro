@@ -1,0 +1,17 @@
+---
+export const prerender = false;
+import AccessUnavailable from './portal/acceso-restringido.astro';
+
+const hostname = (Astro.request.headers.get('host') || Astro.url.hostname)
+  .split(':')[0]
+  .toLowerCase();
+const isOps = hostname === 'ops.flouvia.com' || Astro.url.searchParams.has('ops');
+
+// This file is the actual public route. Redirect here instead of inside the
+// nested UI component so Astro/Vercel can preserve the 302 response.
+if (isOps) {
+  return Astro.redirect('/login?switch=1&reason=account', 302);
+}
+---
+
+<AccessUnavailable />

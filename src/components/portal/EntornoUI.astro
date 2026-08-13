@@ -1,7 +1,7 @@
 ---
 // src/components/portal/EntornoUI.astro
 import { useTranslations } from '../../i18n/utils';
-import { supabase } from '../../lib/supabase';
+import { getProject, requirePortalIdentity } from '../../lib/portalDb';
 import PortalHeader from './PortalHeader.astro';
 
 interface Props {
@@ -10,14 +10,8 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 
-const user = await Astro.locals.currentUser();
-const email = user?.emailAddresses[0]?.emailAddress || "hola@flouvia.com";
-
-const { data: proyecto } = await supabase
-  .from('proyectos')
-  .select('*, vercel_project_id')
-  .eq('email_cliente', email)
-  .single();
+const identity = await requirePortalIdentity(Astro.locals);
+const proyecto = await getProject(identity.id);
 
 const data = {
   name:     proyecto?.nombre_proyecto ?? (lang === 'en' ? "Global B2B Platform" : "Plataforma B2B Global"),
@@ -26,7 +20,7 @@ const data = {
   uptime:   proyecto?.uptime          ?? "99.98%",
   liveUrl:  proyecto?.live_url        ?? "",
   deadline: proyecto?.deadline        ?? "—",
-  stack:    proyecto?.stack           ?? "Next.js · Vercel · Supabase",
+  stack:    proyecto?.stack           ?? "Astro · Vercel · Neon",
   region:   proyecto?.region          ?? "US East",
   latency:  proyecto?.latencia        ?? "62 ms",
 };
@@ -196,7 +190,6 @@ if (!activity.length) {
 
       <!-- LIVE PREVIEW BROWSER -->
       <div class="env-card env-preview-card" id="card-preview">
-        <div class="env-spotlight" aria-hidden="true"></div>
 
         <!-- Browser chrome -->
         <div class="env-browser">
@@ -247,7 +240,6 @@ if (!activity.length) {
 
       <!-- STATUS PANEL -->
       <div class="env-card env-status-card" id="card-status">
-        <div class="env-spotlight" aria-hidden="true"></div>
 
         <span class="env-ey">{t('entorno.status.label')}</span>
         <h2 class="env-project-name">{data.name}</h2>
@@ -336,7 +328,6 @@ if (!activity.length) {
 
       <!-- DEPLOY HISTORY -->
       <div class="env-card env-deploy-card" id="card-deploys">
-        <div class="env-spotlight" aria-hidden="true"></div>
         <div class="env-card-head">
           <span class="env-ey">{t('entorno.deploy.label')}</span>
           <span class="env-count-pill">{deploys.length || '—'}</span>
@@ -380,7 +371,6 @@ if (!activity.length) {
 
       <!-- REGION STATUS -->
       <div class="env-card env-region-card" id="card-regions">
-        <div class="env-spotlight" aria-hidden="true"></div>
         <div class="env-card-head">
           <span class="env-ey">{t('entorno.region.label')}</span>
           <span class="env-count-pill">{regions.length}</span>
@@ -410,7 +400,6 @@ if (!activity.length) {
 
     <!-- ROW 4: Activity Log -->
     <div class="env-card env-activity-card" id="card-activity">
-      <div class="env-spotlight" aria-hidden="true"></div>
       <div class="env-card-head">
         <span class="env-ey">
           <span class="env-terminal-prompt">$</span>
@@ -487,15 +476,6 @@ if (!activity.length) {
 }
 .env-card:hover { box-shadow: var(--shadow-up); transform: translateY(-3px); border-color: rgba(0,85,204,0.1); }
 
-.env-spotlight {
-  position: absolute; width: 380px; height: 380px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,85,204,0.06) 0%, transparent 70%);
-  pointer-events: none; transform: translate(-50%,-50%);
-  top: 0; left: 0; opacity: 0; transition: opacity .4s; z-index: 0;
-}
-.env-card:hover .env-spotlight { opacity: 1; }
-.env-card > *:not(.env-spotlight) { position: relative; z-index: 1; }
-
 .env-ey {
   display: flex; align-items: center; gap: 8px;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -518,7 +498,6 @@ if (!activity.length) {
 
 /* ── BROWSER (PREVIEW CARD) ── */
 .env-preview-card { padding: 0; }
-.env-preview-card > .env-spotlight { z-index: 0; }
 .env-browser {
   position: relative; z-index: 1;
   display: flex; flex-direction: column; height: 100%;
@@ -878,9 +857,6 @@ if (!activity.length) {
   border-color: rgba(0,85,204,0.3);
   box-shadow: 0 0 0 1px rgba(0,85,204,0.15), 0 16px 36px rgba(0,0,0,0.3);
 }
-.env-activity-card .env-spotlight {
-  background: radial-gradient(circle, rgba(0,85,204,0.18) 0%, transparent 70%);
-}
 .env-activity-card .env-ey { color: rgba(255,255,255,0.5); }
 .env-terminal-prompt { color: var(--green); font-weight: 800; }
 
@@ -955,18 +931,17 @@ if (!activity.length) {
 <script>
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SplitText } from "gsap/SplitText";
 
-gsap.registerPlugin(ScrollTrigger, SplitText);
+gsap.registerPlugin(ScrollTrigger);
 
 document.addEventListener("DOMContentLoaded", () => {
   /* ── ENTRANCE TIMELINE ── */
-  const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+  const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
 
   /* ── ROW 1 CARDS ── */
-  gsap.set(["#card-preview", "#card-status"], { y: 28, opacity: 0, scale: 0.985 });
+  gsap.set(["#card-preview", "#card-status"], { y: 28, opacity: 0 });
   tl.to(["#card-preview", "#card-status"], {
-    y: 0, opacity: 1, scale: 1, duration: 1.0, stagger: 0.08, ease: "expo.out"
+    y: 0, opacity: 1, duration: 1.0, stagger: 0.08, ease: "power2.out"
   }, 0.55);
 
   // Mini progress
@@ -976,7 +951,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const target = parseInt(fillEl.getAttribute("data-target") || "0") || 0;
     const obj = { val: 0 };
     tl.to(obj, {
-      val: target, duration: 1.8, ease: "expo.out",
+      val: target, duration: 1.8, ease: "power2.out",
       onUpdate() {
         const v = Math.round(obj.val);
         fillEl.style.width = v + "%";
@@ -993,11 +968,11 @@ document.addEventListener("DOMContentLoaded", () => {
       start: "top 85%",
       once: true,
       onEnter: () => {
-        gsap.to(vitalsRow, { opacity: 1, duration: 0.6, ease: "expo.out" });
+        gsap.to(vitalsRow, { opacity: 1, duration: 0.6, ease: "power2.out" });
         const cards = vitalsRow.querySelectorAll<HTMLElement>(".env-vital-card");
         gsap.fromTo(cards,
-          { y: 22, opacity: 0, scale: 0.96 },
-          { y: 0, opacity: 1, scale: 1, duration: 0.85, stagger: 0.08, ease: "expo.out" }
+          { y: 22, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.85, stagger: 0.08, ease: "power2.out" }
         );
 
         // Animate numbers
@@ -1008,7 +983,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const decimals = parseInt(numEl.getAttribute("data-decimals") || "0");
           const obj = { val: 0 };
           gsap.to(obj, {
-            val: target, duration: 1.6, ease: "expo.out", delay: 0.3,
+            val: target, duration: 1.6, ease: "power2.out", delay: 0.3,
             onUpdate() {
               numEl.textContent = decimals > 0 ? obj.val.toFixed(decimals) : Math.round(obj.val).toString();
             }
@@ -1019,7 +994,7 @@ document.addEventListener("DOMContentLoaded", () => {
         vitalsRow.querySelectorAll<SVGPathElement>(".env-spark-path").forEach((p, i) => {
           const len = p.getTotalLength();
           gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
-          gsap.to(p, { strokeDashoffset: 0, duration: 1.6, ease: "expo.out", delay: 0.4 + i * 0.08 });
+          gsap.to(p, { strokeDashoffset: 0, duration: 1.6, ease: "power2.out", delay: 0.4 + i * 0.08 });
         });
       }
     });
@@ -1034,7 +1009,7 @@ document.addEventListener("DOMContentLoaded", () => {
       start: "top 85%",
       once: true,
       onEnter: () => {
-        gsap.fromTo(card, { y: 24, opacity: 0, scale: 0.985 }, { y: 0, opacity: 1, scale: 1, duration: 0.9, ease: "expo.out", delay: idx * 0.05 });
+        gsap.fromTo(card, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: "power2.out", delay: idx * 0.05 });
 
         // Stagger inner rows
         const rows = card.querySelectorAll<HTMLElement>(".env-deploy-row, .env-region-row, .env-log-row");
@@ -1042,16 +1017,6 @@ document.addEventListener("DOMContentLoaded", () => {
           gsap.delayedCall(0.25 + i * 0.06 + idx * 0.05, () => r.classList.add("in"));
         });
       }
-    });
-  });
-
-  /* ── SPOTLIGHT ── */
-  document.querySelectorAll<HTMLElement>(".env-card").forEach(card => {
-    const spot = card.querySelector<HTMLElement>(".env-spotlight");
-    if (!spot) return;
-    card.addEventListener("mousemove", (e: MouseEvent) => {
-      const r = card.getBoundingClientRect();
-      gsap.to(spot, { x: e.clientX - r.left, y: e.clientY - r.top, duration: 0.5, ease: "power2.out" });
     });
   });
 

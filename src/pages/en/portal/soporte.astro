@@ -8,6 +8,6 @@ const { userId } = await Astro.locals.auth();
 if (!userId) return Astro.redirect('https://os.flouvia.com/en/login');
 ---
 
-<PortalLayout title="VIP Support | Flouvia OS">
+<PortalLayout title="Support | Flouvia OS">
     <SoporteUI lang="en" />
 </PortalLayout>

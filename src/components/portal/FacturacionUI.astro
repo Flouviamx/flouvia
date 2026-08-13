@@ -1,7 +1,7 @@
 ---
 // src/components/portal/FacturacionUI.astro
 import { useTranslations } from '../../i18n/utils';
-import { supabase } from '../../lib/supabase';
+import { getFinanceConfig, getInvoices, getProfile, requirePortalIdentity } from '../../lib/portalDb';
 import PortalHeader from './PortalHeader.astro';
 
 interface Props {
@@ -11,7 +11,7 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 
 const user = await Astro.locals.currentUser();
-const email = user?.emailAddresses[0]?.emailAddress || "hola@flouvia.com";
+const identity = await requirePortalIdentity(Astro.locals);
 
 const formatDate = (iso: string | null) => {
   if (!iso) return "—";
@@ -22,10 +22,10 @@ const formatCurrency = (amount: number, currency: string) =>
   new Intl.NumberFormat('en-US', { style: 'currency', currency, minimumFractionDigits: 2 }).format(amount);
 
 // Queries en paralelo
-const [{ data: perfil }, { data: finanza }, { data: facturaRows }] = await Promise.all([
-  supabase.from('perfiles').select('plan_activo').eq('email_cliente', email).single(),
-  supabase.from('finanzas_config').select('*').eq('email_cliente', email).single(),
-  supabase.from('facturas').select('*').eq('email_cliente', email).order('fecha', { ascending: false }),
+const [perfil, finanza, facturaRows] = await Promise.all([
+  getProfile(identity.id),
+  getFinanceConfig(identity.id),
+  getInvoices(identity.id),
 ]);
 
 const data = {
@@ -64,8 +64,6 @@ const data = {
 
       <!-- Card hero (span 7) -->
       <div class="os-card card-hero">
-        <div class="os-spotlight" aria-hidden="true"></div>
-
         <div class="hero-eyebrow">
           <span class="eyebrow-label">{t('fact.plan')}</span>
           <span class="plan-badge">
@@ -110,8 +108,6 @@ const data = {
 
       <!-- Card CC (span 5) -->
       <div class="os-card card-cc">
-        <div class="os-spotlight" aria-hidden="true"></div>
-
         <span class="eyebrow-label">{t('fact.method')}</span>
 
         <div class="apple-card-visual">
@@ -133,8 +129,6 @@ const data = {
 
       <!-- Card history (span 12) -->
       <div class="os-card card-history">
-        <div class="os-spotlight" aria-hidden="true"></div>
-
         <span class="eyebrow-label eyebrow-label--history">{t('fact.history')}</span>
 
         <div class="inv-table" role="list">
@@ -238,31 +232,6 @@ const data = {
   .os-card:hover {
     box-shadow: var(--shadow-up);
     transform: translateY(-3px);
-  }
-
-  /* Spotlight glow */
-  .os-spotlight {
-    position: absolute;
-    width: 360px;
-    height: 360px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(0,85,204,0.07) 0%, transparent 70%);
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    transition: opacity 0.3s;
-    top: 0;
-    left: 0;
-    z-index: 0;
-  }
-  .os-card:hover .os-spotlight {
-    opacity: 1;
-  }
-
-  /* Ensure card children sit above spotlight */
-  .os-card > *:not(.os-spotlight) {
-    position: relative;
-    z-index: 1;
   }
 
   /* =====================================================
@@ -670,13 +639,13 @@ const data = {
   import { gsap } from "gsap";
 
   document.addEventListener("DOMContentLoaded", () => {
-    const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+    const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
 
     // Cards stagger
-    gsap.set(".os-card", { y: 32, opacity: 0, scale: 0.98 });
+    gsap.set(".os-card", { y: 32, opacity: 0 });
     tl.to(".os-card", {
-      y: 0, opacity: 1, scale: 1,
-      duration: 1.0, stagger: 0.07, ease: "expo.out",
+      y: 0, opacity: 1,
+      duration: 1.0, stagger: 0.07, ease: "power2.out",
     }, 0.45);
 
     // Money counter
@@ -687,7 +656,7 @@ const data = {
       tl.to(obj, {
         val: target,
         duration: 2.2,
-        ease: "expo.out",
+        ease: "power2.out",
         onUpdate() {
           moneyEl.textContent = obj.val.toLocaleString("en-US", {
             minimumFractionDigits: 2,
@@ -701,23 +670,8 @@ const data = {
     gsap.set(".inv-row", { opacity: 0, x: -12 });
     tl.to(".inv-row", {
       opacity: 1, x: 0,
-      duration: 0.55, stagger: 0.06, ease: "expo.out",
+      duration: 0.55, stagger: 0.06, ease: "power2.out",
     }, 1.0);
-
-    // Spotlight per card
-    document.querySelectorAll(".os-card").forEach(card => {
-      const spot = card.querySelector(".os-spotlight");
-      if (!spot) return;
-      card.addEventListener("mousemove", (e) => {
-        const r = card.getBoundingClientRect();
-        gsap.to(spot, {
-          x: (e as MouseEvent).clientX - r.left,
-          y: (e as MouseEvent).clientY - r.top,
-          duration: 0.5,
-          ease: "power2.out",
-        });
-      });
-    });
 
   });
 </script>

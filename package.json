@@ -9,24 +9,34 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "db:schema": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/apply-neon-schema.mjs",
+    "db:verify-collaboration": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/run-collaboration-verification.mjs",
+    "db:verify-ops": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/run-ops-foundation-verification.mjs"
   },
   "dependencies": {
-    "@astrojs/react": "^6.0.1",
-    "@astrojs/vercel": "^10.0.6",
-    "@clerk/astro": "^3.0.19",
+    "@astrojs/react": "^6.0.2",
+    "@astrojs/vercel": "^10.0.8",
+    "@clerk/astro": "^3.4.20",
+    "@neondatabase/serverless": "^1.1.0",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
-    "@supabase/supabase-js": "^2.105.1",
+    "@tanstack/react-query": "^5.101.4",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@types/three": "^0.185.1",
-    "astro": "6.1.2",
+    "@vercel/blob": "^2.8.0",
+    "astro": "^6.4.8",
     "gsap": "^3.15.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "svix": "^1.92.2",
     "three": "^0.185.1",
-    "web-push": "^3.6.7"
+    "web-push": "^3.6.7",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^6.0.3"
   }
 }

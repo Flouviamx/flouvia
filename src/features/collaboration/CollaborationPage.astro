@@ -1,0 +1,44 @@
+---
+import PortalHeader from '../../components/portal/PortalHeader.astro';
+import { requirePortalIdentity } from '../../lib/portalDb';
+import CollaborationApp from './CollaborationApp';
+import { getCollaborationSnapshot } from './collaboration.service';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const identity = await requirePortalIdentity(Astro.locals);
+const snapshot = await getCollaborationSnapshot(identity);
+---
+
+<section class="collaboration-page">
+  <div class="collaboration-container">
+    <PortalHeader
+      title={lang === 'en' ? 'Shared work' : 'Trabajo compartido'}
+      subtitle={lang === 'en'
+        ? 'Decisions, context, and next steps in one conversation.'
+        : 'Decisiones, contexto y siguientes pasos en una sola conversación.'}
+      backHref={lang === 'en' ? '/en/dashboard' : '/dashboard'}
+      {lang}
+    />
+    <CollaborationApp initialSnapshot={snapshot} {lang} client:load />
+  </div>
+</section>
+
+<style>
+  .collaboration-page {
+    min-height: 100dvh;
+    padding: 5.5rem 0 7rem;
+    background: #ffffff;
+  }
+  .collaboration-container {
+    width: min(1240px, 90%);
+    margin: 0 auto;
+  }
+  @media (max-width: 720px) {
+    .collaboration-page { padding: 2.8rem 0 6.5rem; }
+    .collaboration-container { width: min(100% - 1.25rem, 1240px); }
+  }
+</style>

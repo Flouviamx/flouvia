@@ -2,16 +2,47 @@
 // src/layouts/PortalLayout.astro
 import PortalNavbar from '../components/PortalNavbar.astro';
 import PortalFooter from '../components/PortalFooter.astro';
+import { isOperatorHost, requireOperatorIdentity, type OperatorIdentity } from '../features/ops/operatorAccess';
+import { isPortalAccessError } from '../lib/portalAccess';
+import { requirePortalIdentity, type PortalIdentity } from '../lib/portalDb';
 
 interface Props {
 	title: string;
+	public?: boolean;
+	mode?: 'os' | 'ops';
 }
 
-const { title } = Astro.props;
+const { title, public: isPublic = false, mode = 'os' } = Astro.props;
+const isEnglish = Astro.url.pathname.startsWith('/en/');
+const requestHost = (Astro.request.headers.get('host') || Astro.url.hostname).split(':')[0].toLowerCase();
+const product = mode === 'ops' || requestHost === 'ops.flouvia.com' ? 'OPS' : 'OS';
+let portalIdentity: PortalIdentity | OperatorIdentity | null = null;
+
+if (!isPublic) {
+	Astro.response.headers.set('Cache-Control', 'private, no-store');
+	Astro.response.headers.set('Content-Security-Policy', "frame-ancestors 'none'");
+	Astro.response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+	Astro.response.headers.set('Referrer-Policy', 'same-origin');
+	Astro.response.headers.set('X-Content-Type-Options', 'nosniff');
+	Astro.response.headers.set('X-Frame-Options', 'DENY');
+	if (product === 'OPS' && !isOperatorHost(requestHost)) {
+		return Astro.redirect('https://ops.flouvia.com/', 302);
+	}
+	try {
+		portalIdentity = product === 'OPS'
+			? await requireOperatorIdentity(Astro.locals)
+			: await requirePortalIdentity(Astro.locals);
+	} catch (error) {
+		if (isPortalAccessError(error) && error.status === 401) {
+			return Astro.redirect(isEnglish ? '/en/login' : '/login', 302);
+		}
+		return Astro.redirect(isEnglish ? '/en/access-denied?signout=1' : `/acceso-restringido?signout=1${product === 'OPS' ? '&ops=1' : ''}`, 302);
+	}
+}
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={isEnglish ? 'en' : 'es'}>
 	<head>
 		<meta charset="UTF-8" />
 
@@ -32,6 +63,7 @@ const { title } = Astro.props;
 		</script>
 
 		<meta name="description" content="Portal de Clientes Flouvia" />
+		<meta name="robots" content="noindex, nofollow" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 		<!-- Favicon -->
@@ -45,24 +77,28 @@ const { title } = Astro.props;
 		<meta name="theme-color" content="#0a192f" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-title" content="Flouvia Portal" />
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
 		<title>{title}</title>
 
 	</head>
 	<body>
-        <PortalNavbar />
+		<PortalNavbar
+			authenticated={!isPublic && Boolean(portalIdentity)}
+			{product}
+			minimal={isPublic && product === 'OPS'}
+		/>
 
 		<main class="portal-main">
 			<slot />
 		</main>
-		<PortalFooter />
+		<PortalFooter {product} />
 	</body>
 </html>
 
 <style is:global>
     /* ============================================================
-       TU CSS GLOBAL COMPLETO (Recuperado y Blindado)
+       Flouvia OS — application shell
        ============================================================ */
     *, *::before, *::after { box-sizing: border-box; }
 
@@ -83,44 +119,43 @@ const { title } = Astro.props;
         -webkit-tap-highlight-color: transparent;
     }
 
-    ::selection { background: #0a192f; color: #ffffff; }
+    ::selection { background: rgba(0, 113, 227, 0.2); color: #1d1d1f; }
 
     :root {
         --color-bg: #ffffff;
         --color-bg-soft: #fcfcfc;
-        --color-blue-icy: #f4f6f9;
+        --color-blue-icy: #f2f6fb;
         --color-blue-deep: #0a192f;
-        --color-glass-blue: rgba(10, 25, 47, 0.85);
+        --color-glass-blue: rgba(10, 25, 47, 0.88);
 
-        --color-text: #050505;
-        --color-text-muted: #555555;
+        --color-text: #1d1d1f;
+        --color-text-muted: #6e6e73;
         --color-border: rgba(0, 0, 0, 0.08);
 
-        --font-sans: 'Inter', system-ui, sans-serif;
-        --font-serif: 'Instrument Serif', serif;
+        --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
 
         --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
-        --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+        --ease-spring: cubic-bezier(0.25, 0.1, 0.25, 1);
         --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
 
         /* Tus físicas de la Navbar para que coincidan */
         --ease-pro: cubic-bezier(0.19, 1, 0.22, 1);
-        --ease-morph: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+        --ease-morph: cubic-bezier(0.25, 0.1, 0.25, 1);
     }
 
     body {
-        background-color: var(--color-bg);
+        background-color: #ffffff;
         color: var(--color-text);
         font-family: var(--font-sans);
         margin: 0;
-        min-height: 100vh;
+        min-height: 100dvh;
         display: flex;
         flex-direction: column;
     }
 
     .portal-main {
         flex-grow: 1;
-        padding-top: 140px; /* Ajuste para tu Navbar Elite */
+        padding-top: 140px;
         display: flex;
         flex-direction: column;
     }
@@ -128,32 +163,71 @@ const { title } = Astro.props;
     /* TUS CLASES DE IDENTIDAD */
     .flouvia-masterpiece { width: 100%; position: relative; overflow-x: clip; }
     .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; }
-    .editorial { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: #222; }
+    .editorial { font-family: var(--font-sans); font-style: normal; font-weight: 650; color: #222; }
     .eyebrow { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
 
     /* ANIMACIONES */
     .reveal-blur {
-        opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(8px);
-        animation: reveal 1s var(--ease-spring) forwards; animation-delay: var(--delay, 0s);
+        opacity: 0; transform: translateY(10px);
+        animation: reveal 0.32s var(--ease-spring) forwards; animation-delay: var(--delay, 0s);
     }
     .reveal-fade {
-        opacity: 0; transform: translateY(30px) scale(0.98);
-        animation: revealFade 1s var(--ease-spring) forwards; animation-delay: var(--delay, 0s);
+        opacity: 0; transform: translateY(10px);
+        animation: revealFade 0.32s var(--ease-spring) forwards; animation-delay: var(--delay, 0s);
     }
 
     /* Forzamos que corran en el portal */
     .reveal-blur, .reveal-fade { animation-play-state: running !important; }
 
-    @keyframes reveal { to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
-    @keyframes revealFade { to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes reveal { to { opacity: 1; transform: translateY(0); } }
+    @keyframes revealFade { to { opacity: 1; transform: translateY(0); } }
 
     .btn-luxe {
-        position: relative; display: inline-flex; background: var(--color-text); color: #fff;
-        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem;
-        font-weight: 600; transition: all 0.5s var(--ease-spring); overflow: hidden; justify-content: center;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 10px 20px rgba(0,0,0,0.08);
+        position: relative; display: inline-flex; background: #0a192f; color: #fff;
+        padding: 14px 22px; border-radius: 15px; text-decoration: none; font-size: 0.84rem;
+        font-weight: 650; transition: transform 0.35s var(--ease-smooth), background 0.25s, box-shadow .35s var(--ease-smooth); overflow: hidden; justify-content: center;
+        box-shadow: 0 12px 26px -15px rgba(10,25,47,.7);
     }
-    .btn-luxe:hover { transform: translateY(-4px); box-shadow: 0 6px 12px rgba(0,0,0,0.08), 0 15px 30px rgba(0,0,0,0.15); }
+    .btn-luxe:hover { background: #102745; transform: translateY(-3px); box-shadow: 0 18px 32px -15px rgba(10,25,47,.75); }
+    .btn-luxe:active { transform: translateY(-1px); }
 
     .squircle { border-radius: 24px; transform: translateZ(0); overflow: hidden; }
+
+    /* Remove every cursor-following light from legacy portal screens. */
+    /* Shared Apple-style surface and tactile controls across legacy screens. */
+    .os-card, .bv-card, .up-card, .env-card {
+        border-color: rgba(0,0,0,.08) !important;
+        background-color: rgba(255,255,255,.94) !important;
+        box-shadow: 0 16px 44px -32px rgba(0,0,0,.3) !important;
+    }
+    .portal-main .os-page { background: transparent !important; }
+    .os-card:hover, .bv-card:hover, .up-card:hover, .env-card:hover, .tl-card:hover {
+        transform: none !important;
+        border-color: rgba(0,0,0,.1) !important;
+        box-shadow: 0 18px 48px -34px rgba(0,0,0,.34) !important;
+    }
+    .sp-submit, .up-submit-btn, .fact-manage-btn, .bv-upload-btn {
+        border-radius: 15px !important;
+        background: #0a192f !important;
+        color: #fff !important;
+        box-shadow: 0 12px 26px -15px rgba(10,25,47,.7) !important;
+        transition: transform .35s var(--ease-smooth), background .25s, box-shadow .35s var(--ease-smooth) !important;
+    }
+    .sp-submit:hover, .up-submit-btn:hover, .fact-manage-btn:hover, .bv-upload-btn:hover {
+        background: #102745 !important;
+        transform: translateY(-3px) !important;
+    }
+    .sp-submit:active, .up-submit-btn:active, .fact-manage-btn:active, .bv-upload-btn:active {
+        transform: translateY(-1px) !important;
+    }
+
+    :focus-visible { outline: 2px solid #0071e3; outline-offset: 2px; }
+
+    @media (max-width: 720px) {
+        .portal-main { padding-top: 96px; padding-bottom: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .reveal-blur, .reveal-fade { opacity: 1; transform: none; animation: none !important; }
+    }
 </style>

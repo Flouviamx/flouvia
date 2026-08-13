@@ -1,0 +1,78 @@
+.fl-user-menu { position: relative; display: flex; align-items: center; }
+.fl-user-trigger,
+.fl-user-placeholder {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+}
+.fl-user-placeholder { background: rgba(118, 118, 128, 0.12); }
+.fl-user-trigger {
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  background: #1d1d1f;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 2px 7px rgba(0, 0, 0, 0.16);
+  color: #fff;
+  cursor: pointer;
+  font: 750 0.66rem/1 Inter, system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  transition: transform 0.14s ease, background 0.16s ease;
+}
+.fl-user-trigger:hover { background: #3a3a3c; }
+.fl-user-trigger:active { transform: scale(.94); }
+.fl-user-trigger:focus-visible { outline: 2px solid #0071e3; outline-offset: 2px; }
+
+.fl-user-popover {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 246px;
+  padding: 0.65rem;
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(24px) saturate(1.5);
+  -webkit-backdrop-filter: blur(24px) saturate(1.5);
+  box-shadow: 0 20px 50px -24px rgba(0, 0, 0, 0.4), 0 5px 16px rgba(0, 0, 0, 0.08);
+  animation: fl-user-pop 0.18s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+  z-index: 30000;
+}
+@keyframes fl-user-pop {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fl-user-identity { display: grid; gap: 0.22rem; padding: 0.7rem 0.75rem 0.65rem; min-width: 0; }
+.fl-user-name,
+.fl-user-email { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fl-user-name { color: #1d1d1f; font: 700 0.85rem/1.25 -apple-system, BlinkMacSystemFont, Inter, system-ui, sans-serif; }
+.fl-user-email { color: #77797c; font: 500 0.68rem/1.3 Inter, system-ui, sans-serif; }
+.fl-user-separator { height: 1px; margin: 0.2rem 0.45rem; background: rgba(0, 0, 0, 0.07); }
+.fl-user-popover a,
+.fl-user-popover button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.72rem 0.75rem;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #36383b;
+  text-decoration: none;
+  cursor: pointer;
+  font: 600 0.76rem/1 Inter, system-ui, sans-serif;
+  text-align: left;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.fl-user-popover a:hover,
+.fl-user-popover button:hover { background: rgba(118, 118, 128, 0.1); color: #1d1d1f; }
+.fl-user-popover button:disabled { cursor: wait; opacity: 0.58; }
+
+@media (max-width: 1024px) {
+  .fl-user-popover { right: -2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fl-user-popover { animation: none; }
+  .fl-user-trigger { transition: none; }
+}

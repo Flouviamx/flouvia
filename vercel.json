@@ -1,5 +1,6 @@
 {
   "redirects": [
+    { "source": "/",               "has": [{ "type": "host", "value": "ops.flouvia.com" }], "destination": "/ops", "permanent": false },
     { "source": "/portal/login",    "destination": "/login",    "permanent": false },
     { "source": "/en/portal/login", "destination": "/en/login", "permanent": false },
     { "source": "/portal/:path*",   "destination": "/:path*",   "permanent": false },

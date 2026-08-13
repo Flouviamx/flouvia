@@ -3,258 +3,103 @@ export const prerender = false;
 import PortalLayout from '../../layouts/PortalLayout.astro';
 
 const needsSignout = Astro.url.searchParams.has('signout');
+const isOps = Astro.url.searchParams.has('ops');
+
+if (isOps) {
+  return Astro.redirect('/login?switch=1&reason=account', 302);
+}
 ---
 
-<PortalLayout title="Acceso Restringido | Flouvia OS">
-  <div class="denied-root">
-
-    <!-- Atmosphere -->
-    <div class="glow-orb glow-1" aria-hidden="true"></div>
-    <div class="glow-orb glow-2" aria-hidden="true"></div>
-
-    <!-- Logo top -->
-    <a href="/" class="denied-logo">
-      <img src="/imgs/logo-flouvia-2.svg" alt="Flouvia" />
-    </a>
-
-    <!-- Content -->
-    <div class="denied-content" id="ar-wrap" data-needs-signout={needsSignout ? '1' : null}>
-
-      <div class="denied-badge">
-        <span class="denied-dot"></span>
-        <span>Solo por invitación</span>
+<PortalLayout title={`Acceso reservado | Flouvia ${isOps ? 'Ops' : 'OS'}`} public mode={isOps ? 'ops' : 'os'}>
+  <section class:list={['access-root', { 'is-ops': isOps }]} id="ar-wrap" data-needs-signout={needsSignout ? '1' : null}>
+    <div class="access-inner">
+      <div class="access-message">
+        <span class="access-kicker">FLOUVIA {isOps ? 'OPS' : 'OS'}</span>
+        <h1>{isOps ? 'Esta cuenta no pertenece al equipo.' : 'Este espacio aún no está asignado.'}</h1>
+        <p>
+          {isOps
+            ? 'El centro de operación está reservado a cuentas verificadas con correo @flouvia.com. Tu sesión actual se cerrará de forma segura.'
+            : 'El portal solo está disponible para clientes autorizados. Podemos revisar tu invitación y dejar tu espacio listo.'}
+        </p>
+        <div class="access-system"><span></span>{isOps ? 'CONTROL DE ACCESO ACTIVO' : 'ENTORNO PRIVADO PROTEGIDO'}</div>
       </div>
 
-      <h1 class="denied-title">
-        Área<br />
-        <em class="denied-serif">exclusiva</em><br />
-        de clientes.
-      </h1>
-
-      <p class="denied-body">
-        Flouvia OS es un portal privado accesible únicamente por invitación directa de nuestro equipo.
-        Si ya eres cliente, revisa tu email. Si no, escríbenos.
-      </p>
-
-      <div class="denied-actions">
-        <a href="/" class="btn-home">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-          Ir a flouvia.com
-        </a>
-        <a href="mailto:hola@flouvia.com" class="btn-contact">
-          Escribirnos
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="19" x2="19" y2="5"/><polyline points="9 5 19 5 19 15"/></svg>
-        </a>
-      </div>
-
+      <aside class="access-panel">
+        <div class="access-panel-brand">
+          <img src="/imgs/logo-flouvia-3.svg" alt="Flouvia" />
+          <span>{isOps ? 'OPS' : 'OS'}</span>
+        </div>
+        <div class="access-lock" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        </div>
+        <h2>Acceso reservado</h2>
+        <p>{isOps ? 'Cambia a una cuenta del equipo Flouvia para continuar.' : 'Solicita que revisemos el correo de tu invitación.'}</p>
+        <div class="access-actions">
+          <a href={isOps ? '/login?switch=1' : 'mailto:hola@flouvia.com'} class="access-primary">
+            <span>{isOps ? 'Usar otra cuenta' : 'Revisar mi acceso'}</span><span aria-hidden="true">→</span>
+          </a>
+          <a href="https://flouvia.com/" class="access-secondary">Volver a flouvia.com</a>
+        </div>
+      </aside>
     </div>
-
-    <!-- Footer line -->
-    <div class="denied-footer">
-      <span class="footer-brand">Flouvia OS</span>
-      <span class="footer-sep">·</span>
-      <span class="footer-note">Portal privado · 2026</span>
-    </div>
-
-  </div>
+  </section>
 </PortalLayout>
 
 <style>
-  /* ── Full-bleed dark override ── */
-  :global(body) { background: #050b14; }
-
-  .denied-root {
-    position: fixed; inset: 0;
-    background: radial-gradient(ellipse at 20% 40%, #112240 0%, #0a192f 55%, #050b14 100%);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 2rem; overflow: hidden;
+  :global(body) { background: #fff; }
+  .access-root { min-height: calc(100dvh - 140px); display: flex; align-items: center; padding: 4.5rem 5% 6rem; background: #fff; color: #1d1d1f; }
+  .access-inner { width: min(1080px, 100%); margin: 0 auto; display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: clamp(4rem, 8vw, 8rem); }
+  .access-message { max-width: 560px; animation: access-in .7s cubic-bezier(.16,1,.3,1) both; }
+  .access-kicker { display: block; margin-bottom: 1.6rem; color: #8a8a8f; font-size: .62rem; font-weight: 750; letter-spacing: .18em; }
+  .access-message h1 { max-width: 9.5ch; margin: 0; color: #111113; font-size: clamp(2.8rem, 5.5vw, 5.1rem); font-weight: 760; line-height: .98; letter-spacing: -.06em; }
+  .access-message > p { max-width: 47ch; margin: 2rem 0 2.2rem; color: #68686d; font-size: 1rem; line-height: 1.65; }
+  .access-system { display: inline-flex; align-items: center; gap: 9px; color: #7c7c81; font-size: .61rem; font-weight: 700; letter-spacing: .13em; }
+  .access-system span { width: 7px; height: 7px; border-radius: 50%; background: #13b981; box-shadow: 0 0 0 5px rgba(19,185,129,.08); }
+  .access-panel { padding: clamp(2rem, 4vw, 3.25rem); border-radius: 30px; background: #f5f5f7; box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 30px 75px -55px rgba(10,25,47,.45); animation: access-in .7s .08s cubic-bezier(.16,1,.3,1) both; }
+  .access-panel-brand { display: flex; align-items: center; gap: 15px; margin-bottom: 3.5rem; }
+  .access-panel-brand img { width: 112px; height: auto; }
+  .access-panel-brand > span { padding-left: 15px; border-left: 1px solid rgba(10,25,47,.15); color: #6e6e73; font-size: .72rem; font-weight: 700; }
+  .access-lock { width: 48px; height: 48px; display: grid; place-items: center; margin-bottom: 1.45rem; border-radius: 15px; color: #0a192f; background: rgba(10,25,47,.075); }
+  .access-lock svg { width: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .access-panel h2 { margin: 0 0 .7rem; color: #1d1d1f; font-size: clamp(1.55rem, 2.7vw, 2.15rem); font-weight: 730; letter-spacing: -.045em; }
+  .access-panel > p { margin: 0 0 2rem; color: #747478; font-size: .9rem; line-height: 1.55; }
+  .access-actions { display: grid; gap: .65rem; }
+  .access-actions a { min-height: 50px; display: inline-flex; align-items: center; justify-content: center; border-radius: 15px; text-decoration: none; font-size: .82rem; font-weight: 650; transition: transform .35s cubic-bezier(.16,1,.3,1), background .25s, box-shadow .35s cubic-bezier(.16,1,.3,1); }
+  .access-actions a:active { transform: scale(.98); }
+  .access-primary { justify-content: space-between !important; padding: 0 1.15rem; color: #fff; background: #0a192f; box-shadow: 0 14px 28px -18px rgba(10,25,47,.75); }
+  .access-primary:hover { transform: translateY(-3px); background: #102745; box-shadow: 0 19px 34px -18px rgba(10,25,47,.8); }
+  .access-secondary { color: #3a3a3c; background: rgba(118,118,128,.09); }
+  .access-secondary:hover { background: rgba(118,118,128,.14); }
+  @keyframes access-in { from { opacity: 0; transform: translateY(14px); } }
+  @media (max-width: 860px) {
+    .access-root { align-items: flex-start; padding-top: 2.5rem; }
+    .access-inner { grid-template-columns: 1fr; gap: 3.2rem; }
+    .access-message h1 { max-width: 11ch; }
+    .access-panel { width: min(100%, 520px); }
   }
-
-  /* ── Atmospheric glows ── */
-  .glow-orb {
-    position: absolute; border-radius: 50%;
-    pointer-events: none; filter: blur(80px);
+  @media (max-width: 560px) {
+    .access-root { padding: 2rem 18px 4rem; }
+    .access-message h1 { font-size: clamp(2.55rem, 13vw, 3.5rem); }
+    .access-panel { padding: 1.6rem; border-radius: 24px; }
+    .access-panel-brand { margin-bottom: 2.5rem; }
   }
-  .glow-1 {
-    width: 500px; height: 500px;
-    background: rgba(17,34,64,0.7);
-    top: -120px; left: -80px;
-  }
-  .glow-2 {
-    width: 340px; height: 340px;
-    background: rgba(10,25,47,0.5);
-    bottom: -80px; right: -60px;
-  }
-
-  /* ── Watermark ── */
-  .watermark {
-    position: absolute; right: -2vw; bottom: -4vw;
-    font-family: 'Instrument Serif', serif; font-style: italic;
-    font-size: clamp(14rem, 22vw, 28rem);
-    color: rgba(255,255,255,0.025);
-    line-height: 1; pointer-events: none; user-select: none;
-    letter-spacing: -0.04em;
-  }
-
-  /* ── Logo ── */
-  .denied-logo {
-    position: absolute; top: 2.4rem; left: 3rem;
-    opacity: 0.85; transition: opacity 0.3s;
-    z-index: 2;
-  }
-  .denied-logo:hover { opacity: 1; }
-  .denied-logo img { height: 36px; width: auto; filter: brightness(0) invert(1); }
-
-  /* ── Main content ── */
-  .denied-content {
-    position: relative; z-index: 2;
-    max-width: 520px; width: 100%;
-    text-align: left;
-  }
-
-  /* Badge */
-  .denied-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.6rem; font-weight: 600; letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.4);
-    border: 1px solid rgba(255,255,255,0.1);
-    background: rgba(255,255,255,0.04);
-    border-radius: 100px; padding: 7px 16px;
-    margin-bottom: 2.8rem;
-    backdrop-filter: blur(8px);
-  }
-  .denied-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: #ef4444; flex-shrink: 0;
-    animation: pulse-dot 2.4s ease-in-out infinite;
-  }
-
-  /* Headline */
-  .denied-title {
-    font-size: clamp(3rem, 7vw, 5.8rem);
-    font-weight: 600; letter-spacing: -0.04em;
-    line-height: 1.04; color: #fff;
-    margin: 0 0 1.8rem;
-  }
-  .denied-serif {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic; font-weight: 400;
-    color: rgba(255,255,255,0.7);
-    letter-spacing: -0.02em;
-  }
-
-  /* Body */
-  .denied-body {
-    font-size: 0.98rem; line-height: 1.75;
-    color: rgba(255,255,255,0.38);
-    max-width: 420px; margin: 0 0 3rem;
-  }
-
-  /* CTAs */
-  .denied-actions {
-    display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
-  }
-
-  .btn-home {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(255,255,255,0.92); color: #0a0e1a;
-    padding: 13px 26px; border-radius: 100px;
-    font-size: 0.88rem; font-weight: 650; text-decoration: none;
-    letter-spacing: -0.01em;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.5) inset, 0 12px 32px rgba(0,0,0,0.3);
-    transition: background 0.3s, transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s;
-  }
-  .btn-home:hover {
-    background: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 1px 0 rgba(255,255,255,0.5) inset, 0 18px 48px rgba(0,0,0,0.4);
-  }
-  .btn-home svg { flex-shrink: 0; transition: transform 0.3s cubic-bezier(0.16,1,0.3,1); }
-  .btn-home:hover svg { transform: translateX(-3px); }
-
-  .btn-contact {
-    display: inline-flex; align-items: center; gap: 8px;
-    color: rgba(255,255,255,0.5);
-    font-size: 0.88rem; font-weight: 500; text-decoration: none;
-    letter-spacing: 0.01em;
-    transition: color 0.3s;
-    padding: 13px 4px;
-  }
-  .btn-contact:hover { color: rgba(255,255,255,0.9); }
-  .btn-contact svg { transition: transform 0.3s cubic-bezier(0.16,1,0.3,1); }
-  .btn-contact:hover svg { transform: translate(2px,-2px); }
-
-  /* Footer */
-  .denied-footer {
-    position: absolute; bottom: 2.2rem; left: 3rem; right: 3rem;
-    display: flex; align-items: center; gap: 0.6rem;
-    z-index: 2;
-  }
-  .footer-brand {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em;
-    color: rgba(255,255,255,0.25);
-  }
-  .footer-sep { color: rgba(255,255,255,0.12); font-size: 0.65rem; }
-  .footer-note {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem; font-weight: 400; letter-spacing: 0.08em;
-    color: rgba(255,255,255,0.18);
-  }
-
-  /* ── Keyframes ── */
-  @keyframes pulse-dot {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.5); }
-    60%       { box-shadow: 0 0 0 5px rgba(239,68,68,0); }
-  }
-
-  /* ── Mobile ── */
-  @media (max-width: 640px) {
-    .denied-logo { top: 1.6rem; left: 1.6rem; }
-    .denied-footer { left: 1.6rem; right: 1.6rem; }
-    .denied-title { font-size: clamp(2.8rem, 14vw, 4rem); }
-    .watermark { font-size: 50vw; right: -5vw; bottom: -2vw; }
-  }
+  @media (prefers-reduced-motion: reduce) { .access-message, .access-panel { animation: none; } }
 </style>
 
 <script>
-  import { gsap } from 'gsap';
-
   document.addEventListener('DOMContentLoaded', () => {
-    const ease = 'expo.out';
-    const ir = { immediateRender: false } as const;
-
-    // Entrance stagger
-    gsap.from('.denied-badge',   { ...ir, opacity: 0, y: 16, duration: 0.9, ease, delay: 0.15 });
-    gsap.from('.denied-title',   { ...ir, opacity: 0, y: 24, duration: 1.1, ease, delay: 0.28 });
-    gsap.from('.denied-body',    { ...ir, opacity: 0, y: 16, duration: 1.0, ease, delay: 0.42 });
-    gsap.from('.denied-actions', { ...ir, opacity: 0, y: 14, duration: 0.9, ease, delay: 0.54 });
-    gsap.from('.denied-logo',    { ...ir, opacity: 0, y: -10, duration: 0.8, ease, delay: 0.1 });
-    gsap.from('.denied-footer',  { ...ir, opacity: 0, duration: 1.2, ease, delay: 0.8 });
-
-    // Sign-out silencioso SIN navegación (Clerk por defecto redirige a signInUrl
-    // si no le pasamos callback). Limpiamos el query param sin recargar la página.
     const wrap = document.getElementById('ar-wrap');
-    if (wrap?.dataset.needsSignout === '1') {
-      const cleanQuery = () => history.replaceState({}, '', window.location.pathname);
-
-      const tryLogout = () => {
-        const Clerk = (window as any).Clerk;
-        if (!Clerk?.loaded || typeof Clerk.signOut !== 'function') return false;
-
-        // El callback como primer argumento le dice a Clerk: no navegues, yo manejo el flow.
-        Clerk.signOut(() => { cleanQuery(); }).catch(() => { cleanQuery(); });
-        return true;
-      };
-
-      if (!tryLogout()) {
-        const interval = setInterval(() => { if (tryLogout()) clearInterval(interval); }, 120);
-        setTimeout(() => clearInterval(interval), 6000);
-      }
+    if (wrap?.dataset.needsSignout !== '1') return;
+    const cleanQuery = () => history.replaceState({}, '', window.location.pathname);
+    const tryLogout = () => {
+      const Clerk = (window as any).Clerk;
+      if (!Clerk?.loaded || typeof Clerk.signOut !== 'function') return false;
+      Clerk.signOut(() => cleanQuery()).catch(cleanQuery);
+      return true;
+    };
+    if (!tryLogout()) {
+      const interval = setInterval(() => { if (tryLogout()) clearInterval(interval); }, 120);
+      setTimeout(() => clearInterval(interval), 6000);
     }
   });
 </script>
-</PortalLayout>

@@ -1,0 +1,30 @@
+---
+export const prerender = false;
+
+import PortalLayout from '../../layouts/PortalLayout.astro';
+import OpsDashboard from '../../features/ops/OpsDashboard';
+import { isOperatorHost, requireOperatorIdentity } from '../../features/ops/operatorAccess';
+import { getOperatorCollaborationSnapshot } from '../../features/collaboration/collaboration.service';
+import { isPortalAccessError } from '../../lib/portalAccess';
+
+if (!isOperatorHost(Astro.url.hostname)) {
+  return Astro.redirect('https://ops.flouvia.com/', 302);
+}
+
+let identity;
+try {
+  identity = await requireOperatorIdentity(Astro.locals);
+} catch (error) {
+  if (isPortalAccessError(error) && error.status === 401) {
+    return Astro.redirect('/login', 302);
+  }
+  return Astro.redirect('/acceso-restringido?signout=1&ops=1', 302);
+}
+
+const snapshot = await getOperatorCollaborationSnapshot(identity);
+const requestedClientId = Astro.url.searchParams.get('client') ?? 'all';
+---
+
+<PortalLayout title="Bandeja | Flouvia Ops" mode="ops">
+  <OpsDashboard initialSnapshot={snapshot} initialClientId={requestedClientId} client:load />
+</PortalLayout>

@@ -1,7 +1,7 @@
 ---
 // src/components/portal/BovedaUI.astro
 import { useTranslations } from '../../i18n/utils';
-import { supabase } from '../../lib/supabase';
+import { getVaultFiles, requirePortalIdentity } from '../../lib/portalDb';
 import PortalHeader from './PortalHeader.astro';
 
 interface Props {
@@ -10,8 +10,7 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 
-const user = await Astro.locals.currentUser();
-const email = user?.emailAddresses[0]?.emailAddress || "hola@flouvia.com";
+const identity = await requirePortalIdentity(Astro.locals);
 
 const formatDate = (iso: string | null) => {
   if (!iso) return "—";
@@ -26,33 +25,16 @@ const catMap: Record<string, string> = {
   general:      'general',
 };
 
-const { data: rows } = await supabase
-  .from('boveda_archivos')
-  .select('*')
-  .eq('email_cliente', email)
-  .order('created_at', { ascending: false });
+const rows = await getVaultFiles(identity.id);
 
-// Generate signed URLs server-side (1 hour TTL).
-// url_descarga is a storage path for new uploads, or a legacy URL for seed data.
-const isPath = (v: string) => v && !v.startsWith('http') && v !== '#';
-
-const files = await Promise.all((rows ?? []).map(async (a: any) => {
-  let url = a.url_descarga ?? '#';
-  if (isPath(url)) {
-    const { data: signed } = await supabase.storage
-      .from('boveda')
-      .createSignedUrl(url, 3600); // expires in 1 hour
-    url = signed?.signedUrl ?? '#';
-  }
-  return {
+const files = rows.map((a: any) => ({
     id:       a.id,
     name:     a.nombre,
     category: catMap[a.categoria] ?? 'general',
     type:     a.tipo,
     size:     a.size ?? "",
     date:     formatDate(a.created_at),
-    url,
-  };
+    url:      `/api/boveda/download?id=${encodeURIComponent(a.id)}`,
 }));
 ---
 
@@ -74,8 +56,6 @@ const files = await Promise.all((rows ?? []).map(async (a: any) => {
 
         <!-- FINDER CARD -->
         <div class="bv-card" id="bv-card">
-            <div class="os-spotlight" aria-hidden="true"></div>
-
             <!-- Toolbar estilo macOS Finder -->
             <div class="bv-toolbar">
                 <div class="bv-tabs">
@@ -179,14 +159,6 @@ const files = await Promise.all((rows ?? []).map(async (a: any) => {
     transition: box-shadow .5s var(--ease), border-color .5s var(--ease);
 }
 .bv-card:hover { box-shadow: var(--shadow-up); border-color: rgba(0,0,0,0.09); }
-
-.os-spotlight {
-    position: absolute; width: 400px; height: 400px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(0,85,204,0.055) 0%, transparent 70%);
-    pointer-events: none; transform: translate(-50%,-50%);
-    top: 0; left: 0; opacity: 0; transition: opacity .4s; z-index: 0;
-}
-.bv-card:hover .os-spotlight { opacity: 1; }
 
 /* Toolbar */
 .bv-toolbar {
@@ -339,30 +311,18 @@ const files = await Promise.all((rows ?? []).map(async (a: any) => {
 
 <script>
     import { gsap } from "gsap";
-    import { SplitText } from "gsap/SplitText";
-    gsap.registerPlugin(SplitText);
 
     document.addEventListener("DOMContentLoaded", () => {
 
-        const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+        const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
 
         // Card Finder (header animado por PortalHeader)
-        tl.to("#bv-card", { opacity: 1, y: 0, scale: 1, duration: 1.0 }, 0.55);
-        gsap.set("#bv-card", { y: 28, scale: 0.985 });
+        tl.to("#bv-card", { opacity: 1, y: 0, duration: 1.0 }, 0.55);
+        gsap.set("#bv-card", { y: 28 });
 
         // Filas de archivos — stagger tipo Finder
         gsap.set(".bv-row-wrap", { opacity: 0, x: -10 });
-        tl.to(".bv-row-wrap", { opacity: 1, x: 0, duration: 0.5, stagger: 0.05, ease: "expo.out" }, 0.75);
-
-        // Spotlight
-        const card = document.getElementById("bv-card");
-        const spot = card?.querySelector<HTMLElement>(".os-spotlight");
-        if (card && spot) {
-            card.addEventListener("mousemove", (e: MouseEvent) => {
-                const r = card.getBoundingClientRect();
-                gsap.to(spot, { x: e.clientX - r.left, y: e.clientY - r.top, duration: 0.55, ease: "power2.out" });
-            });
-        }
+        tl.to(".bv-row-wrap", { opacity: 1, x: 0, duration: 0.5, stagger: 0.05, ease: "power2.out" }, 0.75);
 
         // ── FILTRO DE TABS ──
         const tabs = document.querySelectorAll<HTMLButtonElement>('.bv-tab');
@@ -390,7 +350,7 @@ const files = await Promise.all((rows ?? []).map(async (a: any) => {
 
                 if (toShow.length > 0) {
                     gsap.set(toShow, { display: 'block', opacity: 0, x: -8 });
-                    gsap.to(toShow, { opacity: 1, x: 0, duration: 0.4, stagger: 0.04, ease: "expo.out", clearProps: "x" });
+                    gsap.to(toShow, { opacity: 1, x: 0, duration: 0.4, stagger: 0.04, ease: "power2.out", clearProps: "x" });
                 }
 
                 if (emptyState) emptyState.style.display = toShow.length === 0 ? 'flex' : 'none';

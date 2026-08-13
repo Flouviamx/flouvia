@@ -8,7 +8,7 @@
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
-import { supabase } from '../../../lib/supabase';
+import { deletePushSubscription, getPushSubscriptions } from '../../../lib/portalDb';
 import { sendPush } from '../../../lib/webpush';
 
 export const POST: APIRoute = async ({ request }) => {
@@ -17,7 +17,10 @@ export const POST: APIRoute = async ({ request }) => {
   catch { return new Response('Bad JSON', { status: 400 }); }
 
   const adminSecret = import.meta.env.ADMIN_SECRET;
-  if (adminSecret && body?.adminSecret !== adminSecret) {
+  if (!adminSecret) {
+    return new Response('Push notifications are not configured', { status: 503 });
+  }
+  if (body?.adminSecret !== adminSecret) {
     return new Response('Forbidden', { status: 403 });
   }
 
@@ -26,14 +29,7 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response('title and body required', { status: 400 });
   }
 
-  // Fetch subscriptions — by email or all
-  let query = supabase
-    .from('push_subscriptions')
-    .select('endpoint, p256dh, auth, email_cliente');
-
-  if (email) query = query.eq('email_cliente', email.toLowerCase());
-
-  const { data: subs } = await query;
+  const subs = await getPushSubscriptions(email);
   if (!subs?.length) {
     return new Response(JSON.stringify({ ok: true, sent: 0 }), {
       headers: { 'Content-Type': 'application/json' },
@@ -53,7 +49,7 @@ export const POST: APIRoute = async ({ request }) => {
   if (expired.length) {
     await Promise.all(
       expired.map(({ sub }) =>
-        supabase.from('push_subscriptions').delete().eq('endpoint', sub.endpoint)
+        deletePushSubscription(sub.endpoint)
       )
     );
   }

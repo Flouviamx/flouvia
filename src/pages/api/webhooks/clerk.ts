@@ -2,7 +2,7 @@ export const prerender = false;
 
 import type { APIRoute } from 'astro';
 import { Webhook } from 'svix';
-import { createClient } from '@supabase/supabase-js';
+import { disableAppUser, upsertAppUser } from '../../../lib/portalDb';
 
 interface ClerkEmailAddress {
   id: string;
@@ -13,6 +13,8 @@ interface ClerkUserCreatedData {
   id: string;
   email_addresses: ClerkEmailAddress[];
   primary_email_address_id: string;
+  first_name?: string | null;
+  last_name?: string | null;
 }
 
 interface ClerkWebhookEvent {
@@ -21,13 +23,6 @@ interface ClerkWebhookEvent {
 }
 
 export const POST: APIRoute = async ({ request }) => {
-  // ── 0. Inicializar cliente Supabase (lazy — la key no siempre está disponible) ──
-  const serviceKey = import.meta.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!serviceKey) {
-    return new Response(JSON.stringify({ error: 'Supabase service role key not configured' }), { status: 500 });
-  }
-  const supabaseAdmin = createClient(import.meta.env.SUPABASE_URL, serviceKey);
-
   // ── 1. Extraer headers de firma Svix ──
   const svixId        = request.headers.get('svix-id');
   const svixTimestamp = request.headers.get('svix-timestamp');
@@ -57,9 +52,19 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(JSON.stringify({ error: 'Invalid webhook signature' }), { status: 401 });
   }
 
-  // ── 3. Solo procesar user.created ──
-  if (event.type !== 'user.created') {
+  // ── 3. Procesar únicamente el ciclo de vida de usuarios ──
+  if (!['user.created', 'user.updated', 'user.deleted'].includes(event.type)) {
     return new Response(JSON.stringify({ ok: true, skipped: true }), { status: 200 });
+  }
+
+  if (event.type === 'user.deleted') {
+    try {
+      await disableAppUser(event.data.id);
+      return new Response(JSON.stringify({ ok: true }), { status: 200 });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown database error';
+      return new Response(JSON.stringify({ error: message }), { status: 500 });
+    }
   }
 
   // ── 4. Extraer clerk_id y email principal ──
@@ -73,39 +78,20 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(JSON.stringify({ error: 'No email found in event' }), { status: 422 });
   }
 
-  // ── 5 & 6. Upsert en tabla perfiles ──
+  // ── 5. Upsert de identidad interna, desacoplada de Clerk ──
   try {
-    const { data: existing } = await supabaseAdmin
-      .from('perfiles')
-      .select('id')
-      .eq('email_cliente', primaryEmail)
-      .single();
-
-    if (existing) {
-      // Registro encontrado → actualizar solo clerk_id
-      const { error } = await supabaseAdmin
-        .from('perfiles')
-        .update({ clerk_id: clerkId })
-        .eq('email_cliente', primaryEmail);
-
-      if (error) throw error;
-    } else {
-      // No existe → insertar fila nueva (id es UUID auto-generado)
-      const { error } = await supabaseAdmin
-        .from('perfiles')
-        .insert({
-          email_cliente:  primaryEmail,
-          clerk_id:       clerkId,
-          nombre_empresa: 'Nuevo Cliente',
-        });
-
-      if (error) throw error;
-    }
+    await upsertAppUser({
+      id: clerkId,
+      firstName: event.data.first_name,
+      lastName: event.data.last_name,
+      fullName: `${event.data.first_name || ''} ${event.data.last_name || ''}`.trim(),
+      emailAddresses: [{ emailAddress: primaryEmail }],
+    });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown database error';
     return new Response(JSON.stringify({ error: message }), { status: 500 });
   }
 
-  // ── 7. Respuesta exitosa ──
+  // ── 6. Respuesta exitosa ──
   return new Response(JSON.stringify({ ok: true }), { status: 200 });
 };

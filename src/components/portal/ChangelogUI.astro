@@ -14,20 +14,13 @@
 //   );
 //   create index on changelog(published_at desc);
 
-import { supabase } from '../../lib/supabase';
+import { getChangelog } from '../../lib/portalDb';
 import PortalHeader from './PortalHeader.astro';
 
 interface Props { lang: 'es' | 'en'; }
 const { lang } = Astro.props;
 
-const { data: entries } = await supabase
-  .from('changelog')
-  .select('*')
-  .eq('published', true)
-  .order('published_at', { ascending: false })
-  .limit(40);
-
-const rows = entries ?? [];
+const rows = await getChangelog(40);
 
 const TAG_LABELS: Record<string, { es: string; en: string; color: string }> = {
   deploy:  { es: 'Deploy',       en: 'Deploy',      color: '#10b981' },
@@ -260,12 +253,12 @@ const t = {
 <script>
 import { gsap } from 'gsap';
 document.addEventListener('DOMContentLoaded', () => {
-  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+  const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
 
   // Nodes
   const nodes = document.querySelectorAll('.cl-node');
-  gsap.set(nodes, { scale: 0, opacity: 0 });
-  tl.to(nodes, { scale: 1, opacity: 1, duration: 0.45, stagger: 0.06, ease: 'back.out(2)' }, 0.45);
+  gsap.set(nodes, { opacity: 0 });
+  tl.to(nodes, { opacity: 1, duration: 0.35, stagger: 0.06 }, 0.45);
 
   // Lines
   const lines = document.querySelectorAll('.cl-line');

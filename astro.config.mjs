@@ -10,6 +10,10 @@ export default defineConfig({
   output: 'server',
 
   integrations: [clerk({
+    // Headless Clerk: Flouvia renders every auth surface itself.
+    prefetchUI: false,
+    signInUrl: '/login',
+    signUpUrl: '/login',
     afterSignOutUrl: 'https://flouvia.com/',
   }), react()],
 

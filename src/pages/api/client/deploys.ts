@@ -1,20 +1,16 @@
 export const prerender = false;
 import type { APIRoute } from 'astro';
-import { supabase } from '../../../lib/supabase';
+import { getProject, requirePortalIdentity } from '../../../lib/portalDb';
+import { portalAccessErrorResponse } from '../../../lib/portalAccess';
 
 export const GET: APIRoute = async ({ locals }) => {
   const { userId } = await locals.auth();
   if (!userId) return new Response('Unauthorized', { status: 401 });
 
-  const user = await locals.currentUser();
-  const email = user?.emailAddresses[0]?.emailAddress;
-  if (!email) return new Response('No email', { status: 400 });
-
-  const { data: proyecto } = await supabase
-    .from('proyectos')
-    .select('vercel_project_id')
-    .eq('email_cliente', email)
-    .single();
+  let identity;
+  try { identity = await requirePortalIdentity(locals); }
+  catch (error) { return portalAccessErrorResponse(error); }
+  const proyecto = await getProject(identity.id);
 
   const projectId = proyecto?.vercel_project_id;
   if (!projectId) return Response.json({ deploys: [] });
