@@ -1,0 +1,135 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<Layout title="404: Page not found — Flouvia" description="This route does not exist.">
+    <Navbar />
+    
+    <main class="flouvia-masterpiece not-found-page">
+        <section class="hero-404 fluid-target" data-bg-color="#ffffff" data-shader-color="#cbd5e1" data-no-grain data-shader-intensity="0.4" data-interactive>
+            <div class="container hero-container" style="z-index: 1;">
+                <div class="hero-content">
+                    <div class="hero-text-zone">
+                        <p class="eyebrow hero-anim" style="display: block !important;">ERROR 404</p>
+                        <h1 class="hero-title hero-anim">
+                            <span class="title-bold">This route</span> <span class="title-bold">does not exist.</span>
+                        </h1>
+                    </div>
+
+                    <div class="hero-bottom hero-anim">
+                        <p class="hero-desc">
+                            The page you are looking for has been moved or is no longer available. We invite you to learn more about what we offer.
+                        </p>
+                        <div class="hero-action">
+                            <a href="/en/servicios" class="btn-luxe">
+                                <span>Explore services</span>
+                                <span class="btn-arrow" aria-hidden="true">→</span>
+                                <div class="btn-shimmer"></div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <Footer ctaTitleEs="Escalemos tu operación hoy." ctaTitleEn="Let’s scale your operation today." ctaBtnEs="Iniciar un proyecto" ctaBtnEn="Start a project" />
+</Layout>
+
+<style is:global>
+    :root {
+        --color-bg: #ffffff;
+        --color-bg-soft: #fcfcfc; 
+        --color-blue-icy: #f4f6f9; 
+        --color-blue-deep: #0a192f;
+        --color-glass-blue: rgba(10, 25, 47, 0.85);
+        
+        --color-text: #050505;
+        --color-text-muted: #555556;
+        --color-border: rgba(0, 0, 0, 0.08); 
+        
+        --font-sans: 'Inter', system-ui, sans-serif;
+        
+        --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
+        --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+        --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    body { background-color: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); margin: 0; }
+
+    /* Buttons (Ported from Inicio) */
+    .btn-luxe {
+        position: relative; display: inline-flex; background: var(--color-text); color: #fff;
+        padding: 16px 38px; border-radius: 100px; text-decoration: none; font-size: 0.9rem;
+        font-weight: 600; overflow: hidden; justify-content: center;
+        transition: transform 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 10px 20px rgba(0,0,0,0.08);
+        align-items: center; gap: 10px; will-change: transform;
+    }
+    .btn-luxe span { position: relative; z-index: 2; }
+    .btn-arrow { position: relative; z-index: 2; display: inline-block; transition: transform 0.6s var(--ease-smooth); }
+    .btn-luxe:hover .btn-arrow { transform: translateX(4px); }
+    .btn-shimmer { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent); transform: skewX(-20deg); transition: 0s; z-index: 1;}
+    .btn-luxe:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(0,0,0,0.12), 0 24px 48px rgba(0,0,0,0.16); }
+    .btn-luxe:active { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+    .btn-luxe:hover .btn-shimmer { left: 150%; transition: left 0.9s var(--ease-smooth); }
+    
+    /* JS Reveal */
+    .js-anim .hero-anim { opacity: 0; }
+</style>
+
+<style>
+    /* Masterpiece & Layout */
+    .not-found-page { width: 100%; position: relative; overflow-x: clip; }
+    .hero-404 { padding: 12rem 0 8rem 0; min-height: 85svh; display: flex; align-items: center; background: var(--color-bg); position: relative;}
+    .hero-container { max-width: 1200px; margin: 0 auto; padding: 0 5%; position: relative; width: 100%; }
+    
+    .hero-content { display: flex; flex-direction: column; }
+    .hero-text-zone { transition: transform 0.1s ease-out, opacity 0.1s ease-out; }
+    .hero-title { font-size: clamp(2.2rem, 4vw, 3.8rem); line-height: 1.14; font-weight: 800; letter-spacing: -1.2px; margin-bottom: 2.75rem; color: #050505; max-width: 880px; }
+    .title-bold { display: inline; color: #050505; }
+
+    .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 4rem; border-top: 1px solid var(--color-border); padding-top: 2rem; }
+    .hero-desc { font-size: 1.1rem; color: var(--color-text-muted); max-width: 480px; line-height: 1.55; margin: 0; }
+
+    .eyebrow { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1.5rem; display: block !important; }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .hero-bottom { flex-direction: column; align-items: flex-start; gap: 2rem; }
+    }
+
+    @media (max-width: 768px) {
+        .hero-404 { padding-top: 10rem; padding-bottom: 4rem; text-align: center; }
+        .hero-content { display: flex; flex-direction: column; align-items: center; }
+        .hero-title { display: flex; flex-direction: column; gap: 0.2rem; margin-bottom: 2.5rem; max-width: 100%; }
+        .title-bold { display: block; font-size: clamp(2rem, 7.6vw, 2.85rem); font-weight: 800; letter-spacing: -1px; line-height: 1.12; margin-bottom: 0; }
+        .hero-bottom { flex-direction: column; align-items: center; gap: 2.5rem; text-align: center; border-top: none; padding-top: 0;}
+        .hero-desc { font-size: 1.1rem; padding: 0 5%; max-width: 95%; margin: 0 auto; line-height: 1.6;}
+        .hero-action { width: 100%; padding: 0 5%; }
+        .btn-luxe { width: 100%; padding: 18px 0; font-size: 1.05rem; display: flex; justify-content: center; }
+    }
+</style>
+
+<script>
+    import { gsap } from 'gsap';
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!document.documentElement.classList.contains('js-anim')) return;
+        
+        const els = gsap.utils.toArray('.hero-anim');
+        if (els.length) {
+            gsap.set(els, { opacity: 0, y: 14 });
+            gsap.to(els, {
+                opacity: 1, 
+                y: 0, 
+                duration: 0.9, 
+                ease: 'power2.out',
+                stagger: 0.09, 
+                delay: 0.1
+            });
+        }
+    });
+</script>
