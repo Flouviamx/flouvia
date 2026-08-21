@@ -136,8 +136,8 @@ export const casos: CaseStudy[] = [
       es: 'Construimos el storefront de Ago Fitness en modo headless: Shopify como backend de comercio (catálogo, checkout, inventario) vía Storefront API, con todo el frontend hecho a la medida en Next.js — sin las limitaciones de un theme.',
       en: 'We built the Ago Fitness storefront headless: Shopify as the commerce backend (catalog, checkout, inventory) via the Storefront API, with the entire frontend custom-built in Next.js — without the limitations of a theme.',
     },
-    liveUrl:    'https://ago-fitness.vercel.app/',
-    liveDomain: 'ago-fitness.vercel.app',
+    liveUrl:    'https://agofitnessco.com',
+    liveDomain: 'agofitnessco.com',
     image: '/imgs/logo-ago-fitness.png',
     metrics: [
       { val: '92/100', label: { es: 'Performance',      en: 'Performance' } },
