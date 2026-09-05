@@ -24,6 +24,13 @@
 > badge `active-dot` (Cord, El Zarco, shwcs); los de `dev-dot` ("Fase de lanzamiento": Ago Fitness,
 > Masuma) no suman.
 
+> **Trimestre de la slot-card es automático.** `slot-eyebrow` y `slot-desc` toman el label de
+> `src/lib/quarter.ts` (`quarterLabel()`), que adelanta 1 mes (sep → Q4, dic → Q1, etc.). Se
+> resuelve en build y un `<script is:inline>` reescribe los `[data-quarter]` en cliente para las
+> visitas entre deploys. No hardcodear "Q3"/"Q4" aquí. Las claves `about.cta.badge` /
+> `about.hero.status` / `about.cta.avail` en `i18n/ui.ts` traen "Q3" pero están sin uso (ningún
+> componente las renderiza).
+
 > **`liveUrl`/`liveDomain` son opcionales** (caso previo a despliegue). Si faltan, `PlantillaCaso.astro`
 > oculta el chip de dominio en el breadcrumb y el botón "Visitar sitio", y muestra `.cs-soon-chip`
 > ("En fase de lanzamiento"). Al desplegar, se añaden ambos campos y aparecen los enlaces.
