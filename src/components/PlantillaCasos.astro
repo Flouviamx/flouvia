@@ -27,7 +27,7 @@ const isEn = lang === 'en';
                     <div class="hero-text-zone" id="hero-parallax">
 
                         <p class="eyebrow hero-anim">
-                            {isEn ? 'DOCUMENTED RESULTS — 2 ACTIVE SYSTEMS' : 'RESULTADOS DOCUMENTADOS — 2 SISTEMAS ACTIVOS'}
+                            {isEn ? 'DOCUMENTED RESULTS — 3 ACTIVE SYSTEMS' : 'RESULTADOS DOCUMENTADOS — 3 SISTEMAS ACTIVOS'}
                         </p>
                         <h1 class="hero-title hero-anim">
                             <span class="title-bold">{isEn ? 'Operations that had a problem.' : 'Operaciones que tenían un problema.'}</span> <span class="title-bold">{isEn ? 'Systems that solved it.' : 'Sistemas que lo resolvieron.'}</span>
@@ -112,11 +112,49 @@ const isEn = lang === 'en';
                         </div>
                     </a>
 
+                    <a href="/casos/masuma" class="case-card">
+                        <div class="case-visual">
+                            <div class="case-img squircle fluid-target" style="background: var(--color-blue-deep); display: flex; align-items: center; justify-content: center;" data-shader-color="#fde68a">
+                                <img src="/imgs/logo-masuma.png" alt="Masuma" style="width: 170px; height: auto; opacity: 1; position: relative; z-index: 1;" />
+                            </div>
+                            <span class="active-badge"><span class="dev-dot" aria-hidden="true"></span>{isEn ? 'Launch phase' : 'Fase de lanzamiento'}</span>
+                        </div>
+                        <div class="case-info">
+                            <h2 class="case-brand">Masuma</h2>
+                            <p class="case-desc">{isEn ? 'Corporate site built with Astro and Tailwind — civil works, maintenance, cleaning and supply unified into one offering, fully static.' : 'Sitio corporativo construido con Astro y Tailwind — obra civil, mantenimiento, limpieza y suministro unificados en una sola oferta, 100% estático.'}</p>
+
+
+                            <div class="case-read-more">
+                                <span>{isEn ? 'Read Case Study' : 'Conocer más'}</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="/casos/shwcs" class="case-card">
+                        <div class="case-visual">
+                            <div class="case-img squircle fluid-target" style="background: var(--color-blue-deep); display: flex; align-items: center; justify-content: center;" data-shader-color="#c7d2fe">
+                                <img src="/imgs/logo-shwcs.png" alt="shwcs" style="width: 180px; height: auto; opacity: 1; position: relative; z-index: 1;" />
+                            </div>
+                            <span class="active-badge"><span class="active-dot" aria-hidden="true"></span>{isEn ? 'Active system' : 'Sistema activo'}</span>
+                        </div>
+                        <div class="case-info">
+                            <h2 class="case-brand">shwcs</h2>
+                            <p class="case-desc">{isEn ? 'B2B discovery platform: solutions published with editorial review, semantic search with pgvector, and consent-based contact. Built with Next.js 15 and Neon.' : 'Plataforma de descubrimiento B2B: soluciones publicadas con revisión editorial, búsqueda semántica con pgvector y contacto con consentimiento. Construida con Next.js 15 y Neon.'}</p>
+
+
+                            <div class="case-read-more">
+                                <span>{isEn ? 'Read Case Study' : 'Conocer más'}</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
+                        </div>
+                    </a>
+
                     <a href="/contacto" class="case-card slot-card">
                         <div class="slot-inner">
-                            <span class="slot-eyebrow">{isEn ? 'Q3 — 1 SLOT' : 'Q3 — 1 SLOT'}</span>
+                            <span class="slot-eyebrow">{isEn ? 'Q4 — 1 SLOT' : 'Q4 — 1 SLOT'}</span>
                             <h2 class="slot-title">{isEn ? 'Your project here.' : 'Tu proyecto aquí.'}</h2>
-                            <p class="slot-desc">{isEn ? 'We\'re currently evaluating projects for Q3. The next case could be yours.' : 'Actualmente evaluando proyectos para Q3. El siguiente caso podría ser el tuyo.'}</p>
+                            <p class="slot-desc">{isEn ? 'We\'re currently evaluating projects for Q4. The next case could be yours.' : 'Actualmente evaluando proyectos para Q4. El siguiente caso podría ser el tuyo.'}</p>
                             <div class="slot-action">
                                 <span>{isEn ? 'See if I qualify' : 'Ver si califico'}</span>
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>

@@ -16,6 +16,18 @@
 > Instrument Serif italic (se eliminó JetBrains Mono — ni siquiera se cargaba). Títulos 100%
 > Inter bold (sin acento serif).
 
+> **Cards del listing son manuales.** `PlantillaCasos.astro` no itera `casos.ts`: cada tarjeta
+> (Cord, El Zarco, Ago Fitness, Masuma, shwcs) está escrita a mano con su copy ES/EN. Al añadir un
+> caso hay que agregar su objeto en `casos.ts` (genera el detalle `/casos/{slug}`) **y** su tarjeta
+> en `PlantillaCasos.astro`. El mismo caso vive además, a mano, en el carrusel del home
+> (`Inicio.astro`, `.carousel-track`). El eyebrow "N SISTEMAS ACTIVOS" cuenta solo los casos con
+> badge `active-dot` (Cord, El Zarco, shwcs); los de `dev-dot` ("Fase de lanzamiento": Ago Fitness,
+> Masuma) no suman.
+
+> **`liveUrl`/`liveDomain` son opcionales** (caso previo a despliegue). Si faltan, `PlantillaCaso.astro`
+> oculta el chip de dominio en el breadcrumb y el botón "Visitar sitio", y muestra `.cs-soon-chip`
+> ("En fase de lanzamiento"). Al desplegar, se añaden ambos campos y aparecen los enlaces.
+
 ### Listing — `/casos` (`PlantillaCasos.astro`, sirve ES y `/en/casos`)
 - **Hero** estándar home: status pill + eyebrow "RESULTADOS DOCUMENTADOS — 2 SISTEMAS ACTIVOS"
   + H1 bold "Lo que construimos. / Lo que midió." + CTA `#case-grid` "Explorar casos ↓".

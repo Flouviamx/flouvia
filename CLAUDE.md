@@ -112,6 +112,8 @@ La matriz completa de dependencias está en [`docs/README.md`](./docs/README.md)
 | Persistencia | `src/lib/portalDb.ts`, `src/features/ops/`, `neon/migrations/` |
 | Precios de Cord | `~/Desktop/flouvia-cord/docs/negocio-billing.md` |
 | Slugs públicos de Cord | `~/Desktop/flouvia-cord/src/lib/producto.ts`, `desarrolladores.ts` |
+| Caso Masuma (repo hermano) | `~/Desktop/Masuma` — sitio corporativo Astro, previo a despliegue |
+| Caso shwcs (repo hermano) | `~/Desktop/shwcs` — plataforma B2B Next.js en `shwcs.site` |
 
 ## Validación mínima
 

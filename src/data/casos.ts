@@ -9,8 +9,9 @@ export interface CaseStudy {
   category: { es: string; en: string };
   tagline:  { es: string; en: string };
   desc:     { es: string; en: string };
-  liveUrl:  string;
-  liveDomain: string;
+  // Opcionales: un caso previo a despliegue no tiene sitio en vivo todavía.
+  liveUrl?:  string;
+  liveDomain?: string;
   image:    string;
   metrics:  Array<{ val: string; label: { es: string; en: string } }>;
   challenge: { es: string; en: string };
@@ -191,6 +192,161 @@ export const casos: CaseStudy[] = [
       eyebrow: { es: '¿QUIERES UN E-COMMERCE ASÍ DE CUIDADO?', en: 'WANT AN E-COMMERCE THIS CAREFULLY BUILT?' },
       title:   { es: 'Construimos tu tienda sin las limitaciones de un theme.', en: 'We build your store without theme limitations.' },
       sub:     { es: 'Si tu marca necesita un e-commerce a la altura de tu producto, hablemos. Comienza con un diagnóstico sin costo.', en: 'If your brand needs an e-commerce that matches your product, let\'s talk. Start with a free diagnosis.' },
+    },
+  },
+
+  {
+    slug:  'masuma',
+    num:   '04',
+    brand: 'Masuma',
+    category: {
+      es: 'Sitio Corporativo',
+      en: 'Corporate Website',
+    },
+    tagline: {
+      es: 'De cuatro líneas de servicio dispersas a un sitio corporativo que las presenta como una sola oferta integral.',
+      en: 'From four scattered service lines to a corporate site that presents them as a single integrated offering.',
+    },
+    desc: {
+      es: 'Construimos el sitio corporativo de Masuma (Mantenimientos y Suministros Azteca) con Astro y Tailwind: obra civil, mantenimiento integral, limpieza y suministro presentados como una sola oferta, con portafolio de proyectos y captación de contacto.',
+      en: 'We built the corporate site for Masuma (Mantenimientos y Suministros Azteca) with Astro and Tailwind: civil works, integral maintenance, cleaning and supply presented as a single offering, with a project portfolio and lead capture.',
+    },
+    image: '/imgs/logo-masuma.png',
+    metrics: [
+      { val: '100%',   label: { es: 'Estático (SSG)',        en: 'Static (SSG)' } },
+      { val: '~29 KB', label: { es: 'JavaScript (gzip)',     en: 'JavaScript (gzip)' } },
+      { val: '4',      label: { es: 'Áreas de servicio',     en: 'Service areas' } },
+      { val: '9',      label: { es: 'Clientes de referencia', en: 'Reference clients' } },
+    ],
+    challenge: {
+      es: 'Masuma opera cuatro líneas de negocio muy distintas —obra civil, mantenimiento integral, limpieza especializada y suministro de insumos— para clientes corporativos e industriales. Sin un sitio propio, cada propuesta se explicaba desde cero y la trayectoria con clientes como Pemex, Teleperformance o Enerflex no era visible para un prospecto nuevo.',
+      en: 'Masuma runs four very different business lines —civil works, integral maintenance, specialized cleaning and supply of materials— for corporate and industrial clients. Without its own site, every proposal was explained from scratch and its track record with clients like Pemex, Teleperformance or Enerflex was invisible to a new prospect.',
+    },
+    solutionPoints: [
+      { es: 'Sitio corporativo estático construido con Astro y Tailwind: HTML servido desde CDN, sin capa de servidor.', en: 'Static corporate site built with Astro and Tailwind: HTML served from a CDN, with no server layer.' },
+      { es: 'Página de servicios que unifica las cuatro líneas en una sola narrativa de "solución integral, un solo contrato".', en: 'Services page that unifies the four lines into a single "integrated solution, one contract" narrative.' },
+      { es: 'Portafolio de proyectos por tipo de intervención (oficinas, call center, áreas de descanso, remodelación) con galería de obra real.', en: 'Project portfolio by intervention type (offices, call center, break areas, remodeling) with a gallery of real work.' },
+      { es: 'Muro de clientes e instituciones para trasladar la trayectoria a un prospecto nuevo desde el primer scroll.', en: 'Wall of clients and institutions to convey the track record to a new prospect from the first scroll.' },
+      { es: 'Formulario de contacto único como cierre de cada sección, sin dispersar la intención en varios flujos.', en: 'Single contact form closing every section, without scattering intent across multiple flows.' },
+      { es: 'Animación de entrada con GSAP que respeta prefers-reduced-motion.', en: 'Entrance animation with GSAP that respects prefers-reduced-motion.' },
+    ],
+    stack: ['Astro', 'Tailwind CSS', 'GSAP'],
+    resultsNote: {
+      es: 'Sitio construido y en revisión, previo a despliegue. Las cifras describen el alcance y la arquitectura entregados, medidos contra el build de producción real; las métricas de rendimiento (Lighthouse) y de negocio se agregarán cuando el sitio esté en producción.',
+      en: 'Site built and under review, pre-deployment. The figures describe the delivered scope and architecture, measured against the real production build; performance (Lighthouse) and business metrics will be added once the site is live.',
+    },
+    results: [
+      {
+        val: '100%',
+        label: { es: 'Sitio estático',        en: 'Fully static site' },
+        desc:  { es: 'Cada página se genera como HTML plano con Astro y se sirve desde CDN. No hay base de datos ni API que consultar en cada visita: el primer render no depende de un servidor y la superficie de ataque es mínima.', en: 'Every page is generated as flat HTML with Astro and served from a CDN. There is no database or API to query on each visit: the first render does not depend on a server and the attack surface is minimal.' },
+      },
+      {
+        val: '~29 KB',
+        label: { es: 'JavaScript enviado',    en: 'JavaScript shipped' },
+        desc:  { es: 'El JS que llega al navegador se limita a ~29 KB comprimidos (carrusel del hero y navegación con GSAP). El resto es HTML y CSS: ningún framework hidratando componentes que no lo necesitan.', en: 'The JS reaching the browser is limited to ~29 KB gzipped (hero carousel and navigation with GSAP). The rest is HTML and CSS: no framework hydrating components that do not need it.' },
+      },
+      {
+        val: '4 → 1',
+        label: { es: 'Líneas en una narrativa', en: 'Lines into one narrative' },
+        desc:  { es: 'Obra civil, mantenimiento, limpieza y suministro pasan de cuatro discursos sueltos a una sola oferta de "un proveedor, un contrato", con un único formulario de contacto. Un prospecto entiende el alcance completo sin salir de la página.', en: 'Civil works, maintenance, cleaning and supply go from four separate pitches to a single "one provider, one contract" offering, with a single contact form. A prospect grasps the full scope without leaving the page.' },
+      },
+    ],
+    seoTitle: {
+      es: 'Masuma: Sitio Corporativo con Astro y Tailwind | Flouvia CDMX',
+      en: 'Masuma: Corporate Website with Astro and Tailwind | Flouvia',
+    },
+    seoDesc: {
+      es: 'Caso de estudio: sitio corporativo de Masuma (obra civil, mantenimiento, limpieza y suministro) construido con Astro y Tailwind — 100% estático, ~29 KB de JavaScript, portafolio de proyectos y muro de clientes.',
+      en: 'Case study: corporate website for Masuma (civil works, maintenance, cleaning and supply) built with Astro and Tailwind — fully static, ~29 KB of JavaScript, project portfolio and client wall.',
+    },
+    datePublished: '2026-09-05',
+    dateModified:  '2026-09-05',
+    cta: {
+      eyebrow: { es: '¿TU OPERACIÓN NO SE EXPLICA SOLA?', en: 'DOES YOUR OPERATION FAIL TO EXPLAIN ITSELF?' },
+      title:   { es: 'Ordenamos tu oferta en un sitio que vende por ti.', en: 'We frame your offering in a site that sells for you.' },
+      sub:     { es: 'Si tu empresa tiene varias líneas de servicio y cada propuesta arranca de cero, construimos el sitio que las unifica. Comienza con un diagnóstico sin costo.', en: 'If your company runs several service lines and every proposal starts from scratch, we build the site that unifies them. Start with a free diagnosis.' },
+    },
+  },
+
+  {
+    slug:  'shwcs',
+    num:   '05',
+    brand: 'shwcs',
+    category: {
+      es: 'Plataforma B2B',
+      en: 'B2B Platform',
+    },
+    tagline: {
+      es: 'De un catálogo disperso de proveedores a una plataforma editorial donde cada solución se explica y se conecta con quien la opera.',
+      en: 'From a scattered vendor catalog to an editorial platform where every solution is explained and connected to whoever runs it.',
+    },
+    desc: {
+      es: 'Construimos shwcs, una plataforma de descubrimiento B2B: publicación de soluciones con revisión editorial, biblioteca personal para guardar y comparar, solicitudes de contacto con consentimiento y respuesta desde la cuenta propietaria. Next.js 15, Neon PostgreSQL y búsqueda semántica con pgvector.',
+      en: 'We built shwcs, a B2B discovery platform: solution publishing with editorial review, a personal library to save and compare, consent-based contact requests, and replies from the owner account. Next.js 15, Neon PostgreSQL, and semantic search with pgvector.',
+    },
+    liveUrl:    'https://shwcs.site',
+    liveDomain: 'shwcs.site',
+    image: '/imgs/logo-shwcs.png',
+    metrics: [
+      { val: '2',        label: { es: 'Locales (ES/EN)',       en: 'Locales (ES/EN)' } },
+      { val: '3',        label: { es: 'Tipos de listado',      en: 'Listing types' } },
+      { val: '100%',     label: { es: 'Revisión editorial',    en: 'Editorially reviewed' } },
+      { val: 'pgvector', label: { es: 'Búsqueda semántica',    en: 'Semantic search' } },
+    ],
+    challenge: {
+      es: 'El software, las agencias y los servicios B2B mexicanos viven dispersos en directorios sin criterio: listados sin contexto, sin saber qué resuelve cada opción ni cómo llegar a quien la opera. Faltaba un lugar donde cada solución se explique y el contacto ocurra con consentimiento, no por scraping de correos.',
+      en: 'Mexican B2B software, agencies and services live scattered across directories with no criteria: listings without context, no idea what each option solves or how to reach whoever runs it. There was no place where every solution is explained and contact happens with consent, not through email scraping.',
+    },
+    solutionPoints: [
+      { es: 'Plataforma Next.js 15 (App Router) con enrutamiento por locale y contenido espejo ES/EN.', en: 'Next.js 15 (App Router) platform with locale routing and mirrored ES/EN content.' },
+      { es: 'Publicación de soluciones con revisión editorial antes de entrar al catálogo.', en: 'Solution publishing with editorial review before entering the catalog.' },
+      { es: 'Biblioteca personal: guardar, comparar y organizar opciones.', en: 'Personal library: save, compare and organize options.' },
+      { es: 'Solicitudes de contacto con consentimiento explícito; el dueño responde desde su propia cuenta.', en: 'Contact requests with explicit consent; the owner replies from their own account.' },
+      { es: 'Búsqueda semántica con pgvector: relaciona soluciones por lo que resuelven, no solo por keyword.', en: 'Semantic search with pgvector: relates solutions by what they solve, not just by keyword.' },
+      { es: 'Persistencia en Neon PostgreSQL con Drizzle ORM; archivos en Vercel Blob privado.', en: 'Persistence in Neon PostgreSQL with Drizzle ORM; files in private Vercel Blob.' },
+    ],
+    stack: ['Next.js', 'PostgreSQL (Neon)', 'Drizzle ORM', 'pgvector', 'Vercel Blob', 'AI SDK'],
+    resultsNote: {
+      es: 'Plataforma en operación con catálogo inicial (incluye Cord y Flouvia como publicaciones con propietario). Las cifras describen la arquitectura y el alcance entregados; las métricas de tráfico y de activación de proveedores se agregarán conforme crezca el catálogo.',
+      en: 'Platform in operation with an initial catalog (includes Cord and Flouvia as owned listings). The figures describe the delivered architecture and scope; traffic and vendor-activation metrics will be added as the catalog grows.',
+    },
+    results: [
+      {
+        val: '2',
+        label: { es: 'Locales con contenido espejo', en: 'Mirrored content locales' },
+        desc:  { es: 'Español e inglés servidos desde un enrutamiento por locale, sin duplicar plantillas: el catálogo, las fichas y los flujos de contacto se mantienen alineados en ambos idiomas.', en: 'Spanish and English served from locale routing, without duplicating templates: the catalog, listings and contact flows stay aligned in both languages.' },
+      },
+      {
+        val: 'Opt-in',
+        label: { es: 'Contacto con consentimiento', en: 'Consent-based contact' },
+        desc:  { es: 'Un prospecto solicita contacto de forma explícita y el propietario responde desde su cuenta. No hay correos expuestos ni scraping: el dato se comparte solo cuando ambas partes lo aceptan.', en: 'A prospect requests contact explicitly and the owner replies from their account. No exposed emails, no scraping: the data is shared only when both sides agree.' },
+      },
+      {
+        val: 'pgvector',
+        label: { es: 'Descubrimiento semántico', en: 'Semantic discovery' },
+        desc:  { es: 'Los embeddings viven en Postgres (pgvector), así que relacionar soluciones por lo que resuelven no requiere un servicio de búsqueda aparte ni sincronizar un índice externo.', en: 'Embeddings live in Postgres (pgvector), so relating solutions by what they solve needs no separate search service and no external index to sync.' },
+      },
+    ],
+    seoTitle: {
+      es: 'shwcs: Plataforma de Descubrimiento B2B con Next.js y Neon | Flouvia CDMX',
+      en: 'shwcs: B2B Discovery Platform with Next.js and Neon | Flouvia',
+    },
+    seoDesc: {
+      es: 'Caso de estudio: construimos shwcs, plataforma de descubrimiento de software, agencias y servicios B2B — Next.js 15, Neon PostgreSQL, búsqueda semántica con pgvector y contacto con consentimiento.',
+      en: 'Case study: we built shwcs, a discovery platform for B2B software, agencies and services — Next.js 15, Neon PostgreSQL, semantic search with pgvector, and consent-based contact.',
+    },
+    about: {
+      name: 'shwcs',
+      description: 'Plataforma de descubrimiento de software, agencias y servicios B2B mexicanos',
+      url: 'https://shwcs.site',
+    },
+    datePublished: '2026-09-05',
+    dateModified:  '2026-09-05',
+    cta: {
+      eyebrow: { es: '¿TIENES UN PRODUCTO QUE NADIE ENCUENTRA?', en: 'HAVE A PRODUCT NOBODY CAN FIND?' },
+      title:   { es: 'Construimos la plataforma donde tu categoría se descubre.', en: 'We build the platform where your category gets discovered.' },
+      sub:     { es: 'Marketplace, directorio con criterio o catálogo con búsqueda semántica: si tu negocio vive de que te encuentren, lo diseñamos y lo construimos. Comienza con un diagnóstico sin costo.', en: 'A marketplace, a curated directory, or a catalog with semantic search: if your business lives on being found, we design and build it. Start with a free diagnosis.' },
     },
   },
 

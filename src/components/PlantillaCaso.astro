@@ -71,10 +71,12 @@ const breadcrumbSchema = {
             </a>
             <span class="cs-bread-sep">/</span>
             <span class="cs-bread-num">{caso.num}</span>
-            <a href={caso.liveUrl} target="_blank" rel="noopener" class="cs-site-chip">
-              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              {caso.liveDomain}
-            </a>
+            {caso.liveUrl && (
+              <a href={caso.liveUrl} target="_blank" rel="noopener" class="cs-site-chip">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                {caso.liveDomain}
+              </a>
+            )}
           </div>
 
           <!-- Hero text -->
@@ -87,13 +89,19 @@ const breadcrumbSchema = {
 
           <div class="hero-bottom hero-anim" id="cs-hero-bottom">
             <p class="hero-desc">{t(caso.desc)}</p>
-            <div class="hero-action">
-              <a href={caso.liveUrl} target="_blank" rel="noopener" class="btn-luxe">
-                <span>{isEn ? 'Visit live site' : 'Visitar sitio'}</span>
-                <span class="btn-arrow" aria-hidden="true">→</span>
-                <div class="btn-shimmer"></div>
-              </a>
-            </div>
+            {caso.liveUrl ? (
+              <div class="hero-action">
+                <a href={caso.liveUrl} target="_blank" rel="noopener" class="btn-luxe">
+                  <span>{isEn ? 'Visit live site' : 'Visitar sitio'}</span>
+                  <span class="btn-arrow" aria-hidden="true">→</span>
+                  <div class="btn-shimmer"></div>
+                </a>
+              </div>
+            ) : (
+              <div class="hero-action">
+                <span class="cs-soon-chip">{isEn ? 'In launch phase' : 'En fase de lanzamiento'}</span>
+              </div>
+            )}
           </div>
 
         </div>
@@ -285,6 +293,20 @@ const breadcrumbSchema = {
   margin-left: auto;
 }
 .cs-site-chip:hover { background: var(--color-blue-deep); color: #fff; border-color: var(--color-blue-deep); }
+
+/* Chip para caso previo a despliegue (sin sitio en vivo todavía) */
+.cs-soon-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-sans); font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: #b45309; background: rgba(245,158,11,0.08);
+  border: 1px solid rgba(245,158,11,0.28); border-radius: 100px;
+  padding: 9px 18px;
+}
+.cs-soon-chip::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: #f59e0b; box-shadow: 0 0 8px rgba(245,158,11,0.6);
+}
 
 /* Hero text */
 .eyebrow { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; color: #888; text-transform: uppercase; margin-bottom: 1rem; }
