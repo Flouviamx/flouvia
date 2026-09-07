@@ -7,6 +7,9 @@
     { "source": "/en/portal/:path*","destination": "/en/:path*","permanent": false }
   ],
   "rewrites": [
+    { "source": "/relay-fv/static/:path(.*)", "destination": "https://us-assets.i.posthog.com/static/:path" },
+    { "source": "/relay-fv/array/:path(.*)",  "destination": "https://us-assets.i.posthog.com/array/:path" },
+    { "source": "/relay-fv/:path(.*)",        "destination": "https://us.i.posthog.com/:path" },
     { "source": "/dashboard",      "destination": "/portal/dashboard" },
     { "source": "/facturacion",    "destination": "/portal/facturacion" },
     { "source": "/boveda",         "destination": "/portal/boveda" },

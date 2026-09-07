@@ -37,7 +37,11 @@
   Solo metadata no sensible (categoría, extensión, tamaño, prioridad, rating) — nunca nombres de
   archivo ni contenido.
 - **Env:** `PUBLIC_POSTHOG_PROJECT_TOKEN` (token público `phc_…`) y `PUBLIC_POSTHOG_HOST`
-  (`https://us.i.posthog.com`). Hay que añadirlas también en Vercel.
+  (`https://us.i.posthog.com`). Configuradas en `.env` y en Vercel (Production/Preview/Development).
+- **Reverse proxy:** los eventos salen same-origin por `/relay-fv/*` (rewrite en `vercel.json`
+  hacia `us.i.posthog.com` y `us-assets.i.posthog.com`). El SDK usa `api_host: '/relay-fv'` y
+  `ui_host: 'https://us.posthog.com'`. Esquiva bloqueadores; el tráfico de replay pasa por Vercel.
+- **Proyecto PostHog:** org y proyecto "Flouvia" (id `597277`). El SaaS Cord tiene su propio proyecto.
 
 ### Google PageSpeed Insights (PSI)
 - **Endpoint:** `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url={url}&strategy=mobile&category=performance`
