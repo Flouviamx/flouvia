@@ -1,5 +1,7 @@
 ---
 import { getLangFromUrl } from '../i18n/utils';
+import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
 
 interface Props {
     title: string;
@@ -118,7 +120,9 @@ const ogLocale  = lang === 'en' ? 'en_US' : 'es_MX';
         <title>{title}</title>
     </head>
     <body>
-        <slot /> 
+        <slot />
+        <Analytics />
+        <SpeedInsights />
     </body>
 </html>
 

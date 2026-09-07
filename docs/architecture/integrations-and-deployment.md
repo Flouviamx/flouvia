@@ -18,6 +18,14 @@
 - **Pattern:** siempre `AbortSignal.timeout(5000)` — nunca bloquear el render
 - **Fallback:** array vacío si timeout o error
 
+### Vercel Web Analytics + Speed Insights
+- **Paquetes:** `@vercel/analytics`, `@vercel/speed-insights` (componentes Astro, sin island React)
+- **Montaje:** `<Analytics />` + `<SpeedInsights />` al final del `<body>` en `Layout.astro`;
+  en `PortalLayout.astro` va `<SpeedInsights />` siempre y `<Analytics />` solo si `product !== 'OPS'`
+  (Ops es tráfico interno y no debe contar en Web Analytics).
+- **Sin cookies ni PII.** Los scripts se sirven same-origin desde `/_vercel/insights/*` y `/_vercel/speed-insights/*`.
+- **Requiere activar** Web Analytics y Speed Insights en el dashboard de Vercel del proyecto; sin eso los endpoints devuelven 404 y no fluyen datos.
+
 ### Google PageSpeed Insights (PSI)
 - **Endpoint:** `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url={url}&strategy=mobile&category=performance`
 - **Auth:** ninguna — API pública gratuita

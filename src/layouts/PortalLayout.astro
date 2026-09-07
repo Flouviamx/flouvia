@@ -5,6 +5,8 @@ import PortalFooter from '../components/PortalFooter.astro';
 import { isOperatorHost, requireOperatorIdentity, type OperatorIdentity } from '../features/ops/operatorAccess';
 import { isPortalAccessError } from '../lib/portalAccess';
 import { requirePortalIdentity, type PortalIdentity } from '../lib/portalDb';
+import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
 
 interface Props {
 	title: string;
@@ -93,6 +95,9 @@ if (!isPublic) {
 			<slot />
 		</main>
 		<PortalFooter {product} />
+		{/* Web Analytics solo en el portal de clientes: Ops es tráfico interno y no debe contar. */}
+		{product !== 'OPS' && <Analytics />}
+		<SpeedInsights />
 	</body>
 </html>
 
