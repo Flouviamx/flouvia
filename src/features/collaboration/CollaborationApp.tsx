@@ -17,6 +17,12 @@ import './collaboration.css';
 type Lang = 'es' | 'en';
 type Filter = 'active' | 'all' | 'resolved';
 
+type PostHogCapture = (event: string, properties?: Record<string, unknown>) => void;
+
+function capture(event: string, properties?: Record<string, unknown>) {
+  (window as Window & { posthog?: { capture: PostHogCapture } }).posthog?.capture(event, properties);
+}
+
 interface Props {
   initialSnapshot: CollaborationSnapshot;
   lang: Lang;
@@ -253,6 +259,9 @@ export default function CollaborationApp({ initialSnapshot, lang }: Props) {
           isImportant: form.get('important') === 'on',
         }),
       });
+      capture('collaboration_thread_created', {
+        is_important: form.get('important') === 'on',
+      });
       setComposerOpen(false);
       await refresh(snapshot.workspace.id, true);
     } catch (cause) {
@@ -312,6 +321,7 @@ export default function CollaborationApp({ initialSnapshot, lang }: Props) {
         body: JSON.stringify({ threadId: selected.id, body, visibility }),
       });
       setError('');
+      capture('collaboration_comment_created', { visibility });
       await refresh(snapshot.workspace.id, true);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : c.genericError);

@@ -56,6 +56,8 @@ export default function CustomUserMenu({ lang, product = 'OS' }: Props) {
     if (!clerk || busy) return;
     setBusy(true);
     try {
+      // Clear the persisted identity before Clerk redirects to the signed-out page.
+      (window as Window & { posthog?: { reset: () => void } }).posthog?.reset();
       await clerk.signOut({ redirectUrl: home });
     } finally {
       setBusy(false);

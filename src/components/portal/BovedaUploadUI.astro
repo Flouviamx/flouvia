@@ -735,6 +735,11 @@ document.addEventListener("DOMContentLoaded", () => {
         successEl.style.display = "flex";
         gsap.from(successEl, { opacity: 0, y: 6, duration: 0.45, ease: "power2.out" });
       }
+      (window as Window & { posthog?: { capture: (event: string, properties?: Record<string, unknown>) => void } }).posthog?.capture("vault_file_uploaded", {
+        category,
+        file_extension: (file.name.split(".").pop() || "unknown").toLowerCase(),
+        file_size_bytes: file.size,
+      });
       if (progressEl) {
         gsap.delayedCall(0.6, () => { progressEl.style.display = "none"; });
       }

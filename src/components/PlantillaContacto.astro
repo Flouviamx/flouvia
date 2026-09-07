@@ -1402,6 +1402,12 @@ const contactSchema = {
                 fuente:       'flouvia.com/contacto',
             };
 
+            (window as Window & { posthog?: { capture: (event: string, properties?: Record<string, unknown>) => void } }).posthog?.capture('contact_form_submitted', {
+                business_type: branch,
+                urgency: payload.urgencia,
+                has_diagnostic: Object.keys(diagnostico).length > 0,
+            });
+
             fetch('https://hook.us2.make.com/ov4rrddtdx739hnl7dp2mks216171q8m', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

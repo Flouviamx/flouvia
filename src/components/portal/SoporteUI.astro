@@ -609,11 +609,16 @@ const recentTickets = (ticketRows ?? []).map((r: any) => ({
             await new Promise(r => setTimeout(r, 80));
 
             try {
-                await fetch("/api/soporte/rating", {
+                const response = await fetch("/api/soporte/rating", {
                     method: "PATCH",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ ticket_ref: ref, rating: val }),
                 });
+                if (response.ok) {
+                    (window as Window & { posthog?: { capture: (event: string, properties?: Record<string, unknown>) => void } }).posthog?.capture("support_ticket_rated", {
+                        rating: val,
+                    });
+                }
             } catch { /* fail silently */ }
 
             const emoji = val === 1 ? "😐" : val === 2 ? "😊" : "🤩";
@@ -644,6 +649,10 @@ const recentTickets = (ticketRows ?? []).map((r: any) => ({
             if (res.ok) {
                 const json = await res.json();
                 ticketRef = json.ticket_ref ?? "";
+                (window as Window & { posthog?: { capture: (event: string, properties?: Record<string, unknown>) => void } }).posthog?.capture("support_ticket_submitted", {
+                    category,
+                    priority,
+                });
             }
         } catch { /* fail silently */ }
 

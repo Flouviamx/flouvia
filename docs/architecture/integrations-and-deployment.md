@@ -26,6 +26,19 @@
 - **Sin cookies ni PII.** Los scripts se sirven same-origin desde `/_vercel/insights/*` y `/_vercel/speed-insights/*`.
 - **Requiere activar** Web Analytics y Speed Insights en el dashboard de Vercel del proyecto; sin eso los endpoints devuelven 404 y no fluyen datos.
 
+### PostHog (product analytics)
+- **Paquete:** `posthog-js` cargado vía snippet inline en `src/components/posthog.astro`.
+- **Montaje:** `<PostHog />` en el `<head>` de `Layout.astro` (sitio público, anónimo) y de
+  `PortalLayout.astro` **solo si `product !== 'OPS'`** — Ops no se instrumenta.
+- **Identify:** en el portal se llama `posthog.identify()` con `id` interno + email/nombre/rol
+  como person properties; `posthog.reset()` en signout (`CustomUserMenu.tsx`).
+- **Eventos custom:** `contact_form_submitted`, `vault_file_uploaded`, `support_ticket_submitted`,
+  `support_ticket_rated`, `collaboration_thread_created`, `collaboration_comment_created`.
+  Solo metadata no sensible (categoría, extensión, tamaño, prioridad, rating) — nunca nombres de
+  archivo ni contenido.
+- **Env:** `PUBLIC_POSTHOG_PROJECT_TOKEN` (token público `phc_…`) y `PUBLIC_POSTHOG_HOST`
+  (`https://us.i.posthog.com`). Hay que añadirlas también en Vercel.
+
 ### Google PageSpeed Insights (PSI)
 - **Endpoint:** `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url={url}&strategy=mobile&category=performance`
 - **Auth:** ninguna — API pública gratuita

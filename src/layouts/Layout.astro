@@ -2,6 +2,7 @@
 import { getLangFromUrl } from '../i18n/utils';
 import Analytics from '@vercel/analytics/astro';
 import SpeedInsights from '@vercel/speed-insights/astro';
+import PostHog from '../components/posthog.astro';
 
 interface Props {
     title: string;
@@ -118,6 +119,7 @@ const ogLocale  = lang === 'en' ? 'en_US' : 'es_MX';
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         
         <title>{title}</title>
+        <PostHog />
     </head>
     <body>
         <slot />
