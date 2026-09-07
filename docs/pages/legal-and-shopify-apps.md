@@ -32,10 +32,10 @@
 | 01 | Identidad del Responsable / Data Controller |
 | 02 | Datos Personales Recabados / Personal Data Collected |
 | 03 | Finalidades del Tratamiento / Purposes of Processing |
-| 04 | Transferencias de Datos / Data Transfers — incluye **Shopify Inc.** |
+| 04 | Transferencias de Datos / Data Transfers — incluye **Shopify Inc.**, **PostHog Inc.** (analítica de producto + grabación de sesión) y **Vercel Inc.** (analítica web/rendimiento); nota de transferencia a EE. UU. |
 | 05 | **Shopify Partner, Aplicaciones y Datos de Tiendas** ← nueva |
 | 06 | Derechos ARCO / Your Rights |
-| 07 | Uso de Cookies / Cookies |
+| 07 | Uso de Cookies / Cookies — cookies técnicas + analíticas de **PostHog** (vía proxy `/relay-fv`); se respeta Do Not Track. Ya **no** menciona Google Analytics. |
 | 08 | Cambios al Aviso / Changes |
 | 09 | Contacto / Contact |
 
@@ -49,7 +49,12 @@
 
 **Términos de servicio:** mantienen 9 secciones sin cambios de numeración.
 
-**Fecha de última actualización:** 8 de junio de 2026 / June 8, 2026.
+**Aviso de cookies:** `src/components/CookieNotice.astro` — barra inferior discreta (opción mínima,
+sin bloqueo de carga), solo en el sitio público vía `Layout.astro`. Se descarta con "Entendido" /
+"Got it" y recuerda la elección en `localStorage` (`flouvia-cookie-notice-v1`). Responsive: se
+apila a ancho completo en ≤560px con `env(safe-area-inset-bottom)`. Respeta `prefers-reduced-motion`.
+
+**Fecha de última actualización:** 6 de septiembre de 2026 / September 6, 2026.
 
 ---
 

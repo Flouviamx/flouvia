@@ -4,7 +4,7 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 
-const updated = '8 de junio de 2026';
+const updated = '6 de septiembre de 2026';
 ---
 
 <Layout title="Aviso de Privacidad — Flouvia" description="Aviso de privacidad de Flouvia: cómo recolectamos, tratamos y protegemos tus datos personales.">
@@ -69,7 +69,7 @@ const updated = '8 de junio de 2026';
               <li><strong>Contacto:</strong> correo electrónico, número de teléfono / WhatsApp.</li>
               <li><strong>Profesionales:</strong> empresa, cargo, sector de industria.</li>
               <li><strong>Financieros:</strong> información de facturación necesaria para la prestación de servicios (RFC, dirección fiscal).</li>
-              <li><strong>Navegación:</strong> dirección IP, tipo de dispositivo, páginas visitadas, duración de la sesión (a través de cookies y herramientas de analítica).</li>
+              <li><strong>Navegación y uso:</strong> dirección IP (usada para geolocalización aproximada), tipo de dispositivo y navegador, páginas visitadas, duración y recorrido de la sesión, interacciones con la interfaz (clics, desplazamiento), errores técnicos y grabaciones de la sesión de navegación con el contenido sensible enmascarado. Estos datos se recaban mediante cookies y herramientas de analítica y se tratan de forma agregada para medir y mejorar el sitio.</li>
             </ul>
             <p>No recabamos datos personales sensibles en el sentido de la LFPDPPP.</p>
           </div>
@@ -96,12 +96,13 @@ const updated = '8 de junio de 2026';
             <ul class="legal-list">
               <li><strong>Clerk Inc.</strong> — gestión de autenticación del portal de clientes.</li>
               <li><strong>Neon, Inc.</strong> — alojamiento de la base de datos del portal.</li>
-              <li><strong>Vercel Inc.</strong> — alojamiento del sitio y almacenamiento privado de archivos.</li>
+              <li><strong>Vercel Inc.</strong> (EE. UU.) — alojamiento del sitio, almacenamiento privado de archivos y analítica web y de rendimiento (mediciones agregadas y sin cookies).</li>
+              <li><strong>PostHog Inc.</strong> (EE. UU.) — analítica de producto, medición de uso, seguimiento de errores y grabación de sesión, para entender cómo se usan el sitio y el portal y mejorarlos. El tráfico se enruta a través de un subdominio propio de Flouvia.</li>
               <li><strong>Stripe Inc.</strong> — procesamiento de pagos.</li>
               <li><strong>Shopify Inc.</strong> — plataforma de comercio sobre la que desarrollamos e instalamos aplicaciones e integraciones (ver sección 5).</li>
-              <li><strong>Google LLC</strong> — servicios de analítica (Google Analytics 4) y comunicación.</li>
+              <li><strong>Google LLC</strong> (EE. UU.) — servicios de correo electrónico y comunicación corporativa.</li>
             </ul>
-            <p>Dichas transferencias se realizan bajo contratos que garantizan el mismo nivel de protección exigido por la LFPDPPP. No vendemos ni cedemos sus datos a terceros con fines comerciales propios.</p>
+            <p>Algunos de estos proveedores están ubicados en Estados Unidos, por lo que ciertos datos pueden transferirse y almacenarse fuera de México. Dichas transferencias se realizan bajo contratos que garantizan el mismo nivel de protección exigido por la LFPDPPP. No vendemos ni cedemos sus datos a terceros con fines comerciales propios.</p>
           </div>
 
           <div class="legal-section" id="shopify">
@@ -135,8 +136,9 @@ const updated = '8 de junio de 2026';
 
           <div class="legal-section" id="cookies">
             <h2 class="section-title"><span class="section-num">07</span>Uso de Cookies</h2>
-            <p>Nuestro sitio utiliza cookies técnicas (necesarias para el funcionamiento) y analíticas (para medir el rendimiento). Puede configurar su navegador para bloquear o eliminar cookies; sin embargo, algunas funcionalidades del sitio pueden verse afectadas.</p>
-            <p>Las cookies utilizadas por herramientas de terceros (Google Analytics) pueden transferir datos a servidores ubicados fuera de México, de conformidad con los términos de privacidad de dichos proveedores.</p>
+            <p>Nuestro sitio utiliza <strong>cookies técnicas</strong>, necesarias para el funcionamiento y la seguridad (por ejemplo, para mantener la sesión iniciada en el Portal de Clientes), y <strong>cookies analíticas</strong>, que nos permiten medir el rendimiento y entender cómo se usa el sitio.</p>
+            <p>Las cookies analíticas las genera <strong>PostHog</strong>, nuestra herramienta de analítica de producto. Registran un identificador de visitante y de sesión, las páginas vistas y las interacciones con la interfaz. El tráfico se enruta a través de un subdominio propio de Flouvia y los datos se almacenan en servidores de PostHog Inc. en Estados Unidos. La analítica web de Vercel no utiliza cookies.</p>
+            <p>Puede configurar su navegador para bloquear o eliminar cookies; algunas funcionalidades del sitio pueden verse afectadas. También puede oponerse a la analítica activando la opción «No rastrear» (Do Not Track) de su navegador, que respetamos, o escribiéndonos a <a href="mailto:hola@flouvia.com">hola@flouvia.com</a>.</p>
           </div>
 
           <div class="legal-section" id="cambios">

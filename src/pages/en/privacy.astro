@@ -4,7 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
 
-const updated = 'June 8, 2026';
+const updated = 'September 6, 2026';
 ---
 
 <Layout title="Privacy Notice — Flouvia" description="Flouvia privacy notice: how we collect, process and protect your personal data.">
@@ -69,7 +69,7 @@ const updated = 'June 8, 2026';
               <li><strong>Contact:</strong> email address, phone / WhatsApp number.</li>
               <li><strong>Professional:</strong> company name, job title, industry sector.</li>
               <li><strong>Financial:</strong> billing information required to provide services (tax ID, fiscal address).</li>
-              <li><strong>Browsing:</strong> IP address, device type, pages visited, session duration (via cookies and analytics tools).</li>
+              <li><strong>Browsing and usage:</strong> IP address (used for approximate geolocation), device and browser type, pages visited, session duration and navigation path, interface interactions (clicks, scrolling), technical errors, and recordings of the browsing session with sensitive content masked. This data is collected via cookies and analytics tools and is processed in aggregate to measure and improve the site.</li>
             </ul>
             <p>We do not collect sensitive personal data as defined by the LFPDPPP.</p>
           </div>
@@ -96,12 +96,13 @@ const updated = 'June 8, 2026';
             <ul class="legal-list">
               <li><strong>Clerk Inc.</strong> — authentication management for the client portal.</li>
               <li><strong>Neon, Inc.</strong> — client portal database hosting.</li>
-              <li><strong>Vercel Inc.</strong> — site hosting and private file storage.</li>
+              <li><strong>Vercel Inc.</strong> (USA) — site hosting, private file storage, and web and performance analytics (aggregated, cookieless measurements).</li>
+              <li><strong>PostHog Inc.</strong> (USA) — product analytics, usage measurement, error tracking, and session recording, to understand how the site and portal are used and improve them. Traffic is routed through a Flouvia-owned subdomain.</li>
               <li><strong>Stripe Inc.</strong> — payment processing.</li>
               <li><strong>Shopify Inc.</strong> — commerce platform on which we develop and install apps and integrations (see section 5).</li>
-              <li><strong>Google LLC</strong> — analytics services (Google Analytics 4) and communications.</li>
+              <li><strong>Google LLC</strong> (USA) — email and corporate communication services.</li>
             </ul>
-            <p>These transfers are made under agreements that guarantee the same level of protection required by the LFPDPPP. We do not sell or transfer your data to third parties for their own commercial purposes.</p>
+            <p>Some of these providers are located in the United States, so certain data may be transferred to and stored outside Mexico. These transfers are made under agreements that guarantee the same level of protection required by the LFPDPPP. We do not sell or transfer your data to third parties for their own commercial purposes.</p>
           </div>
 
           <div class="legal-section" id="shopify">
@@ -135,8 +136,9 @@ const updated = 'June 8, 2026';
 
           <div class="legal-section" id="cookies">
             <h2 class="section-title"><span class="section-num">07</span>Cookies</h2>
-            <p>Our site uses technical cookies (necessary for functionality) and analytics cookies (to measure performance). You may configure your browser to block or delete cookies; however, some site features may be affected.</p>
-            <p>Cookies used by third-party tools (Google Analytics) may transfer data to servers located outside Mexico, in accordance with the privacy terms of those providers.</p>
+            <p>Our site uses <strong>technical cookies</strong>, necessary for functionality and security (for example, to keep you signed in to the Client Portal), and <strong>analytics cookies</strong>, which let us measure performance and understand how the site is used.</p>
+            <p>The analytics cookies are set by <strong>PostHog</strong>, our product analytics tool. They store a visitor and session identifier, the pages viewed, and interface interactions. Traffic is routed through a Flouvia-owned subdomain and the data is stored on PostHog Inc. servers in the United States. Vercel's web analytics does not use cookies.</p>
+            <p>You can configure your browser to block or delete cookies; some site features may be affected. You can also opt out of analytics by enabling your browser's "Do Not Track" setting, which we honor, or by writing to us at <a href="mailto:hola@flouvia.com">hola@flouvia.com</a>.</p>
           </div>
 
           <div class="legal-section" id="changes">
