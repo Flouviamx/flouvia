@@ -119,7 +119,7 @@ const ogLocale  = lang === 'en' ? 'en_US' : 'es_MX';
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         
         <title>{title}</title>
-        <PostHog />
+        <PostHog surface="public" locale={lang} />
     </head>
     <body>
         <slot />

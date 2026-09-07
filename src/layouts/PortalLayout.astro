@@ -86,6 +86,8 @@ if (!isPublic) {
 		{/* PostHog solo en el portal de clientes: Ops es superficie interna y no se instrumenta. */}
 		{product !== 'OPS' && (
 			<PostHog
+				surface="portal"
+				locale={isEnglish ? 'en' : 'es'}
 				distinctId={portalIdentity?.id}
 				personEmail={portalIdentity?.email}
 				personName={portalIdentity?.displayName}

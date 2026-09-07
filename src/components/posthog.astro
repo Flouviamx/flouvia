@@ -5,11 +5,15 @@ interface Props {
   personEmail?: string;
   personName?: string;
   personRole?: string;
+  /** Superficie desde la que carga: sitio público o portal de clientes. */
+  surface?: 'public' | 'portal';
+  /** Idioma activo de la página (es | en). */
+  locale?: string;
 }
 
-const { distinctId, personEmail, personName, personRole } = Astro.props;
+const { distinctId, personEmail, personName, personRole, surface = 'public', locale = 'es' } = Astro.props;
 ---
-<script is:inline define:vars={{ apiKey: import.meta.env.PUBLIC_POSTHOG_PROJECT_TOKEN, apiHost: import.meta.env.PUBLIC_POSTHOG_HOST, isDevelopment: import.meta.env.DEV, distinctId, personEmail, personName, personRole }}>
+<script is:inline define:vars={{ apiKey: import.meta.env.PUBLIC_POSTHOG_PROJECT_TOKEN, apiHost: import.meta.env.PUBLIC_POSTHOG_HOST, isDevelopment: import.meta.env.DEV, distinctId, personEmail, personName, personRole, surface, locale }}>
   if (!apiKey || !apiHost) {
     if (isDevelopment) {
       const missingVariable = !apiKey
@@ -29,6 +33,9 @@ const { distinctId, personEmail, personName, personRole } = Astro.props;
       },
       tracing_headers: [window.location.hostname],
     });
+
+    // Super properties: se adjuntan a todos los eventos para segmentar la agencia.
+    window.posthog.register({ surface: surface, app_locale: locale });
 
     if (distinctId) {
       const personProperties = {
