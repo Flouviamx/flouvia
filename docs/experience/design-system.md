@@ -26,6 +26,31 @@
 
 ---
 
+## Infraestructura de estilos (sep 2026)
+
+**`src/styles/base.css`** — fuente única del reset, los tokens `:root` y la
+tipografía del `<body>` (`font-family: var(--font-sans)`, `background`, `color`,
+`::selection`, `[class*="eyebrow"] { display:none }`, `html.lang-restoring body`).
+Se importa **una sola vez** en `src/layouts/Layout.astro`. Antes, ~31 plantillas
+repetían este bloque en su propio `<style is:global>` con valores idénticos; ahora
+una superficie nueva no necesita repetirlo. Las plantillas antiguas todavía lo
+llevan — se limpia de forma oportunista al tocar cada archivo (valores iguales →
+sin cambio visual).
+
+**`src/styles/tailwind.css`** — Tailwind v4 en modo **aditivo**: se importan solo
+`tailwindcss/theme.css` + `tailwindcss/utilities.css` en `@layer`, **NO** Preflight,
+para no alterar el reset ni el CSS a mano existente. Plugin `@tailwindcss/vite` en
+`astro.config.mjs`. El bloque `@theme` expone los tokens Flouvia como escala
+(`bg-navy`, `text-ink`, `text-ink-muted`, `bg-bg`, `font-serif`, `ease-smooth`…) —
+mantener sincronizado con `base.css`.
+
+**Regla:** superficie nueva → utilidades de Tailwind. Superficie existente → CSS a
+mano; se migra solo si ya se edita por otra razón. Liquid Glass (backdrop-filter,
+sombras inset en capas, shimmer) y todo el movimiento (GSAP) siguen en CSS/JS a
+mano — Tailwind no los sustituye.
+
+---
+
 ---
 
 ## Estética — reglas del proyecto

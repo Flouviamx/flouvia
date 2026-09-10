@@ -1,0 +1,39 @@
+/* ============================================================================
+   Flouvia — Tailwind v4 en modo ADITIVO
+   ----------------------------------------------------------------------------
+   Se cargan SOLO el theme y las utilidades: NO se importa Preflight, para no
+   tocar el reset ni el CSS a mano de las ~125 superficies ya existentes.
+   El reset del proyecto vive en base.css.
+
+   Regla del proyecto:
+   - Superficies NUEVAS  → utilidades de Tailwind.
+   - Superficies EXISTENTES → se quedan con su CSS a mano; se migran solo si ya
+     se están editando por otra razón.
+   - Liquid Glass (backdrop-filter, sombras inset en capas, shimmer) y todo el
+     movimiento (GSAP) siguen en CSS/JS a mano — Tailwind no los reemplaza.
+   ========================================================================== */
+
+@layer theme, base, components, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+/* Tokens Flouvia expuestos como escala de Tailwind (genera bg-navy, text-ink,
+   font-serif, ease-smooth, etc.). Mantener sincronizado con base.css /
+   docs/experience/design-system.md. */
+@theme {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', serif;
+
+  --color-bg: #ffffff;
+  --color-bg-soft: #fcfcfc;
+  --color-icy: #f4f6f9;
+  --color-navy: #0a192f;
+  --color-navy-deep: #061121;
+  --color-ink: #050505;
+  --color-ink-muted: #555556;
+
+  --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+}

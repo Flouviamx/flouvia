@@ -1,0 +1,78 @@
+/* ============================================================================
+   Flouvia — base global
+   Tokens + reset + tipografía del <body>. Se importa UNA sola vez en
+   src/layouts/Layout.astro. Cada superficie pública lo hereda:
+   las plantillas NUEVAS ya no necesitan su propio <style is:global>.
+   (Las plantillas antiguas aún lo repiten; se limpia de forma oportunista
+   al tocar cada archivo — los valores son idénticos, no hay cambio visual.)
+   Fuente de verdad de los tokens: docs/experience/design-system.md
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  /* ── Color ── */
+  --color-bg: #ffffff;
+  --color-bg-soft: #fcfcfc;
+  --color-blue-icy: #f4f6f9;
+  --color-blue-deep: #0a192f; /* navy principal */
+  --color-navy-deep: #061121;
+  --color-text: #050505;
+  --color-text-muted: #555556;
+  --color-border: rgba(0, 0, 0, 0.08);
+
+  /* ── Tipografía ── */
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', serif;
+
+  /* ── Easings ── */
+  --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html,
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+}
+
+::selection {
+  background: var(--color-blue-deep);
+  color: #ffffff;
+}
+
+/* Eyebrows ocultos globalmente (decisión de diseño — ver design-system.md).
+   Los del Footer también quedan ocultos por esta regla; si se necesitan visibles
+   se maneja con un override propio en el componente. NO cambiar sin verificar. */
+[class*='eyebrow'] {
+  display: none !important;
+}
+
+/* Cambio de idioma: oculta el <body> antes del paint para restaurar el scroll
+   sin mostrar el salto desde arriba. El Navbar lo revela tras posicionar. */
+html.lang-restoring body {
+  opacity: 0;
+}

@@ -5,6 +5,12 @@ import SpeedInsights from '@vercel/speed-insights/astro';
 import PostHog from '../components/posthog.astro';
 import CookieNotice from '../components/CookieNotice.astro';
 
+// Base global de Flouvia — tokens + reset + tipografía del <body>. Cargada aquí
+// UNA vez para todo el sitio; las plantillas nuevas ya no repiten <style is:global>.
+import '../styles/base.css';
+// Tailwind v4 aditivo (theme + utilidades, sin Preflight) — ver el archivo.
+import '../styles/tailwind.css';
+
 interface Props {
     title: string;
     description?: string;
@@ -130,34 +136,5 @@ const ogLocale  = lang === 'en' ? 'en_US' : 'es_MX';
     </body>
 </html>
 
-<style is:global>
-    /* Reset ultra limpio. El diseño pesado lo maneja tu index.astro */
-    *, *::before, *::after {
-        box-sizing: border-box;
-    }
-
-    [class*="eyebrow"] {
-        display: none !important;
-    }
-
-    /* Cambio de idioma: oculta el body antes del paint para restaurar el scroll sin
-       mostrar el salto desde arriba. El navbar lo revela tras posicionar (o el failsafe). */
-    html.lang-restoring body { opacity: 0; }
-    
-    html, body {
-        width: 100%; 
-        margin: 0;
-        padding: 0;
-        position: relative;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-rendering: optimizeLegibility;
-        -webkit-tap-highlight-color: transparent;
-        background-color: #ffffff;
-    }
-
-    ::selection { 
-        background: #0a192f; 
-        color: #ffffff; 
-    }
-</style>
+<!-- El reset, los tokens y la tipografía del <body> viven ahora en
+     src/styles/base.css (importado en el frontmatter). -->
