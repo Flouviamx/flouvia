@@ -49,10 +49,13 @@
 
 **Términos de servicio:** mantienen 9 secciones sin cambios de numeración.
 
-**Aviso de cookies:** `src/components/CookieNotice.astro` — barra inferior discreta (opción mínima,
-sin bloqueo de carga), solo en el sitio público vía `Layout.astro`. Se descarta con "Entendido" /
-"Got it" y recuerda la elección en `localStorage` (`flouvia-cookie-notice-v1`). Responsive: se
-apila a ancho completo en ≤560px con `env(safe-area-inset-bottom)`. Respeta `prefers-reduced-motion`.
+**Aviso de cookies:** `src/components/CookieNotice.astro` — pill inferior centrado (opción mínima,
+sin bloqueo de carga), solo en el sitio público vía `Layout.astro`. Estilo Liquid Glass alineado
+con el `Navbar`: vidrio translúcido con `backdrop-filter`, eyebrow "Cookies" en microtipografía
+Inter, shimmer sweep en hover y botón navy (`#0a192f`) con flecha, clon del `.btn-contact`. Se
+descarta con "Entendido" / "Got it" y recuerda la elección en `localStorage`
+(`flouvia-cookie-notice-v1`). Responsive: se apila a ancho completo en ≤560px con
+`env(safe-area-inset-bottom)`. Entrada fade + subida leve; respeta `prefers-reduced-motion`.
 
 **Fecha de última actualización:** 6 de septiembre de 2026 / September 6, 2026.
 
