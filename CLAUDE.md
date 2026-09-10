@@ -34,6 +34,7 @@ Runtime requerido: Node `>=22.12.0`; la versión del repositorio está en `.nvmr
 | Framework | Astro 6, `output: 'server'` |
 | Deploy | Vercel con `@astrojs/vercel` |
 | UI | Astro + islands React cuando existe estado real |
+| Estilos | Tailwind v4 aditivo (sin Preflight) para superficies nuevas; CSS a mano existente intacto; Liquid Glass y motion siempre en CSS/GSAP |
 | Auth | UI propia sobre Clerk headless |
 | Datos | Neon PostgreSQL |
 | Archivos | Vercel Blob privado |
@@ -71,6 +72,7 @@ Runtime requerido: Node `>=22.12.0`; la versión del repositorio está en `.nvmr
 ### Forma de trabajo
 
 - Reutiliza componentes y fuentes de verdad existentes antes de crear variantes.
+- Estilos: superficie nueva → utilidades de Tailwind sobre los tokens de `src/styles/tailwind.css`. Superficie existente → conserva su CSS a mano; migra solo si ya la editas por otra razón y sin cambio visual. El reset y los tokens del `:root` viven en `src/styles/base.css` (importado una vez en `Layout.astro`); no vuelvas a copiar `<style is:global>` con reset/tokens en cada plantilla.
 - No dupliques markup entre ES y EN cuando ya existe una plantilla compartida.
 - No cambies contratos externos, schemas, payloads o permisos sin actualizar su documentación.
 - Mantén los cambios enfocados; no reformatees archivos ajenos a la tarea.
@@ -86,6 +88,8 @@ Runtime requerido: Node `>=22.12.0`; la versión del repositorio está en `.nvmr
 | Portal de clientes, login, dashboard y Ops | [`docs/products/portal-and-ops.md`](./docs/products/portal-and-ops.md) |
 | Tokens, tipografía y decisiones visuales | [`docs/experience/design-system.md`](./docs/experience/design-system.md) |
 | GSAP, ScrollTrigger, anti-FOUC, reduced motion y WebGL | [`docs/experience/motion.md`](./docs/experience/motion.md) |
+| Ediciones — versionado del estilo por año y ritual de congelado | [`docs/experience/editions.md`](./docs/experience/editions.md) |
+| Edición 2027 — brief, rama `edition/2027` y cutover del 1 ene 2027 | [`docs/experience/edition-2027.md`](./docs/experience/edition-2027.md) |
 | Home, Navbar, Footer, componentes y bugs conocidos | [`docs/experience/public-shell.md`](./docs/experience/public-shell.md) |
 | Blog | [`docs/pages/blog.md`](./docs/pages/blog.md) |
 | Contacto | [`docs/pages/contact.md`](./docs/pages/contact.md) |
@@ -102,6 +106,8 @@ La matriz completa de dependencias está en [`docs/README.md`](./docs/README.md)
 |---|---|
 | Scripts y versiones | `package.json`, `.nvmrc` |
 | Configuración Astro/Vercel | `astro.config.mjs` |
+| Tokens CSS, reset y tipografía base | `src/styles/base.css` |
+| Escala de Tailwind (theme) | `src/styles/tailwind.css` |
 | Rutas | `src/pages/` |
 | Traducciones | `src/i18n/ui.ts`, `src/i18n/utils.ts` |
 | Casos | `src/data/casos.ts` |

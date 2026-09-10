@@ -1,0 +1,212 @@
+---
+// src/components/PlantillaEdiciones.astro — ÍNDICE de ediciones.
+// Archivo del estilo visual de Flouvia: cada año se rediseña el sitio desde cero
+// y la versión anterior se congela. Cada fila enlaza a su detalle
+// (/ediciones/{slug} · /en/editions/{slug}). Datos: src/data/ediciones.ts
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { EDITIONS } from '../data/ediciones';
+import type { EditionStatus } from '../data/ediciones';
+
+import { getLangFromUrl } from '../i18n/utils';
+const lang = getLangFromUrl(Astro.url);
+const isEn = lang === 'en';
+
+const base = isEn ? '/en/editions' : '/ediciones';
+
+const t = {
+    metaTitle: isEn ? 'Editions — Design archive | Flouvia' : 'Ediciones — Archivo de diseño | Flouvia',
+    metaDesc: isEn
+        ? 'Every year Flouvia rebuilds the visual language of its site. Each edition is dated, named and frozen.'
+        : 'Cada año Flouvia reconstruye el lenguaje visual de su sitio. Cada edición se fecha, se nombra y se congela.',
+    kicker: isEn ? 'DESIGN ARCHIVE' : 'ARCHIVO DE DISEÑO',
+    title: isEn ? 'Editions' : 'Ediciones',
+    lede: isEn
+        ? 'Once a year we redraw the site from scratch — type, motion, color, structure. Each pass is dated, named and frozen. This is the record.'
+        : 'Una vez al año rediseñamos el sitio desde cero — tipografía, movimiento, color, estructura. Cada versión se fecha, se nombra y se congela. Este es el registro.',
+    open: isEn ? 'Open' : 'Abrir',
+    live: isEn ? 'You are here' : 'Estás aquí',
+};
+
+const statusLabel = (s: EditionStatus) =>
+    s === 'current'
+        ? isEn ? 'Current' : 'Vigente'
+        : s === 'upcoming'
+          ? isEn ? 'Next' : 'Próxima'
+          : isEn ? 'Archived' : 'Archivada';
+
+const SITE = 'https://flouvia.com';
+const collectionSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': `${SITE}${base}#collection`,
+    name: t.metaTitle,
+    description: t.metaDesc,
+    url: `${SITE}${base}`,
+    inLanguage: isEn ? 'en' : 'es',
+    hasPart: EDITIONS.map((ed) => ({
+        '@type': 'CreativeWork',
+        name: `${ed.year} — ${isEn ? ed.name.en : ed.name.es}`,
+        url: `${SITE}${base}/${ed.slug}`,
+    })),
+};
+---
+
+<Layout title={t.metaTitle} description={t.metaDesc}>
+    <Navbar />
+
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionSchema)} />
+
+    <main class="editions">
+        <section class="ed-hero">
+            <div class="container">
+                <header class="ed-head">
+                    <p class="ed-kicker">{t.kicker}</p>
+                    <h1 class="ed-title">{t.title}</h1>
+                    <p class="ed-lede">{t.lede}</p>
+                </header>
+            </div>
+        </section>
+
+        <section class="ed-archive">
+            <div class="container">
+                <ol class="ed-list">
+                    {EDITIONS.map((ed) => (
+                        <li class:list={['ed-row', `is-${ed.status}`]}>
+                            <a class="ed-row-link" href={`${base}/${ed.slug}`} aria-label={`${ed.year} — ${isEn ? ed.name.en : ed.name.es}`}>
+                                <span class="ed-row-year">
+                                    <span class="ed-year">{ed.year}</span>
+                                    <span class="ed-status" style={`--accent:${ed.accent}`}>{statusLabel(ed.status)}</span>
+                                </span>
+
+                                <span class="ed-row-body">
+                                    <span class="ed-name">{isEn ? ed.name.en : ed.name.es}</span>
+                                    <span class="ed-note">{isEn ? ed.summary.en : ed.summary.es}</span>
+                                </span>
+
+                                <span class="ed-row-action">
+                                    {ed.status === 'current' && <span class="ed-live">{t.live}</span>}
+                                    <span class="ed-open">
+                                        <span>{t.open}</span>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                                    </span>
+                                </span>
+                            </a>
+                        </li>
+                    ))}
+                </ol>
+            </div>
+        </section>
+    </main>
+
+    <Footer />
+</Layout>
+
+<!-- Reset, tokens y tipografía del <body> → src/styles/base.css (vía Layout.astro). -->
+<style>
+    :root {
+        --ed-ease: cubic-bezier(0.16, 1, 0.3, 1);
+        --ed-navy: #0a192f;
+        --ed-line: rgba(10, 25, 47, 0.12);
+        --ed-muted: rgba(10, 25, 47, 0.55);
+    }
+
+    .editions { background: #ffffff; color: var(--ed-navy); }
+    .container { width: 100%; max-width: 1080px; margin: 0 auto; padding: 0 6%; }
+
+    /* ── Hero — centrado a viewport para librar el navbar fijo ── */
+    .ed-hero {
+        min-height: 78svh;
+        display: flex;
+        align-items: center;
+        padding: 11rem 0 4rem;
+    }
+    .ed-head { max-width: 620px; }
+    .ed-kicker {
+        font-size: 0.65rem; font-weight: 800; letter-spacing: 3px;
+        text-transform: uppercase; color: rgba(10, 25, 47, 0.4); margin: 0 0 1.5rem;
+    }
+    .ed-title {
+        font-size: clamp(2.6rem, 6vw, 4.2rem); font-weight: 800;
+        letter-spacing: -0.03em; line-height: 1.02; margin: 0 0 1.5rem;
+        color: var(--ed-navy);
+    }
+    .ed-lede {
+        font-size: clamp(1rem, 1.4vw, 1.15rem); line-height: 1.65;
+        color: var(--ed-muted); margin: 0; max-width: 52ch;
+    }
+
+    /* ── Lista de ediciones ── */
+    .ed-archive { padding: 0 0 7rem; }
+    .ed-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ed-line); }
+    .ed-row { border-bottom: 1px solid var(--ed-line); }
+    .ed-row.is-upcoming { opacity: 0.62; }
+
+    .ed-row-link {
+        display: grid;
+        grid-template-columns: 160px 1fr auto;
+        gap: 2rem;
+        align-items: start;
+        padding: 2.5rem 0.5rem;
+        text-decoration: none;
+        color: inherit;
+        transition: background 0.35s var(--ed-ease), padding 0.35s var(--ed-ease);
+    }
+    .ed-row-link:hover {
+        background: rgba(10, 25, 47, 0.025);
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .ed-row-year { display: flex; flex-direction: column; gap: 0.6rem; }
+    .ed-year {
+        font-size: 1.5rem; font-weight: 600; letter-spacing: 0.5px;
+        font-variant-numeric: tabular-nums; color: var(--ed-navy);
+    }
+    .ed-status {
+        font-size: 0.6rem; font-weight: 800; letter-spacing: 2px;
+        text-transform: uppercase; color: var(--accent, rgba(10, 25, 47, 0.4));
+        width: max-content;
+    }
+
+    .ed-row-body { display: block; }
+    .ed-name {
+        display: block;
+        font-size: 1.25rem; font-weight: 700; letter-spacing: -0.01em;
+        margin: 0 0 0.6rem; color: var(--ed-navy);
+    }
+    .ed-note {
+        display: block;
+        font-size: 0.95rem; line-height: 1.6;
+        color: var(--ed-muted); max-width: 46ch;
+    }
+
+    .ed-row-action { display: flex; align-items: center; gap: 1.25rem; }
+    .ed-live {
+        font-size: 0.62rem; font-weight: 800; letter-spacing: 2px;
+        text-transform: uppercase; color: rgba(10, 25, 47, 0.35);
+        white-space: nowrap;
+    }
+    .ed-open {
+        display: inline-flex; align-items: center; gap: 8px;
+        color: rgba(10, 25, 47, 0.55);
+        font-size: 0.8rem; font-weight: 600; letter-spacing: 0.3px;
+        white-space: nowrap;
+        transition: color 0.35s var(--ed-ease);
+    }
+    .ed-open svg { width: 13px; height: 13px; transition: transform 0.4s var(--ed-ease); }
+    .ed-row-link:hover .ed-open { color: var(--ed-navy); }
+    .ed-row-link:hover .ed-open svg { transform: translate(2px, -2px); }
+
+    @media (max-width: 720px) {
+        .ed-hero { min-height: 0; padding: 9rem 0 3rem; }
+        .ed-row-link {
+            grid-template-columns: 1fr;
+            gap: 0.9rem;
+            padding: 2rem 0.5rem;
+        }
+        .ed-row-link:hover { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .ed-row-year { flex-direction: row; align-items: baseline; gap: 0.9rem; }
+    }
+</style>

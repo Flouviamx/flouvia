@@ -1,0 +1,169 @@
+---
+// src/components/PlantillaEdicion.astro — DETALLE de una edición.
+// Lo montan /ediciones/[slug].astro y /en/editions/[slug].astro.
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import type { Edition } from '../data/ediciones';
+import { getLangFromUrl } from '../i18n/utils';
+
+interface Props {
+    edition: Edition;
+}
+const { edition } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const isEn = lang === 'en';
+const indexHref = isEn ? '/en/editions' : '/ediciones';
+
+const name = isEn ? edition.name.en : edition.name.es;
+const summary = isEn ? edition.summary.en : edition.summary.es;
+const body = isEn ? edition.body.en : edition.body.es;
+const traits = isEn ? edition.traits.en : edition.traits.es;
+
+const t = {
+    metaTitle: `${edition.year} · ${name} — ${isEn ? 'Editions' : 'Ediciones'} | Flouvia`,
+    back: isEn ? 'All editions' : 'Todas las ediciones',
+    kicker: isEn ? 'EDITION' : 'EDICIÓN',
+    traitsLabel: isEn ? 'Traits' : 'Rasgos',
+    statusLabel:
+        edition.status === 'current'
+            ? isEn ? 'Current edition' : 'Edición vigente'
+            : edition.status === 'upcoming'
+              ? isEn ? 'Next edition — in design' : 'Próxima edición — en diseño'
+              : isEn ? 'Archived edition' : 'Edición archivada',
+    viewSite: isEn ? 'View the live site' : 'Ver el sitio en vivo',
+    openSnapshot: isEn ? 'Open snapshot' : 'Abrir snapshot',
+    noSnapshot: isEn ? 'Navigable snapshot in preparation.' : 'Snapshot navegable en preparación.',
+};
+---
+
+<Layout title={t.metaTitle} description={summary} noindex={edition.status === 'upcoming'}>
+    <Navbar />
+
+    <main class="edition">
+        <div class="container">
+            <a class="ed-back" href={indexHref}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                <span>{t.back}</span>
+            </a>
+
+            <header class="ed-detail-head">
+                <p class="ed-kicker">{t.kicker}</p>
+                <h1 class="ed-year">{edition.year}</h1>
+                <p class="ed-name">{name}</p>
+                <p class="ed-status" style={`--accent:${edition.accent}`}>{t.statusLabel}</p>
+            </header>
+
+            <div class="ed-detail-body">
+                <p class="ed-summary">{summary}</p>
+                <p class="ed-longbody">{body}</p>
+
+                <div class="ed-traits">
+                    <p class="ed-traits-label">{t.traitsLabel}</p>
+                    <ul class="ed-chips">
+                        {traits.map((tr) => <li class="ed-chip">{tr}</li>)}
+                    </ul>
+                </div>
+
+                <div class="ed-detail-cta">
+                    {edition.status === 'current' && (
+                        <a class="ed-btn" href={isEn ? '/en/' : '/'}>
+                            <span>{t.viewSite}</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                        </a>
+                    )}
+                    {edition.status === 'archive' && edition.snapshotUrl && (
+                        <a class="ed-btn" href={edition.snapshotUrl} target="_blank" rel="noopener noreferrer">
+                            <span>{t.openSnapshot}</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                        </a>
+                    )}
+                    {edition.status === 'archive' && !edition.snapshotUrl && (
+                        <p class="ed-pending">{t.noSnapshot}</p>
+                    )}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <Footer />
+</Layout>
+
+<!-- Reset, tokens y tipografía del <body> → src/styles/base.css (vía Layout.astro). -->
+<style>
+    :root {
+        --ed-ease: cubic-bezier(0.16, 1, 0.3, 1);
+        --ed-navy: #0a192f;
+        --ed-line: rgba(10, 25, 47, 0.12);
+        --ed-muted: rgba(10, 25, 47, 0.55);
+    }
+
+    .edition { background: #ffffff; color: var(--ed-navy); padding: 11rem 0 7rem; }
+    .container { width: 100%; max-width: 760px; margin: 0 auto; padding: 0 6%; }
+
+    .ed-back {
+        display: inline-flex; align-items: center; gap: 8px;
+        text-decoration: none; color: rgba(10, 25, 47, 0.5);
+        font-size: 0.78rem; font-weight: 700; letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-bottom: clamp(2.5rem, 6vw, 4rem);
+        transition: color 0.35s var(--ed-ease);
+    }
+    .ed-back svg { width: 14px; height: 14px; transition: transform 0.4s var(--ed-ease); }
+    .ed-back:hover { color: var(--ed-navy); }
+    .ed-back:hover svg { transform: translateX(-3px); }
+
+    .ed-detail-head { border-bottom: 1px solid var(--ed-line); padding-bottom: 2.5rem; margin-bottom: 2.5rem; }
+    .ed-kicker {
+        font-size: 0.65rem; font-weight: 800; letter-spacing: 3px;
+        text-transform: uppercase; color: rgba(10, 25, 47, 0.4); margin: 0 0 1rem;
+    }
+    .ed-year {
+        font-size: clamp(3rem, 9vw, 5.5rem); font-weight: 800;
+        letter-spacing: -0.03em; line-height: 1; margin: 0;
+        font-variant-numeric: tabular-nums; color: var(--ed-navy);
+    }
+    .ed-name {
+        font-size: clamp(1.3rem, 2.4vw, 1.7rem); font-weight: 700;
+        letter-spacing: -0.01em; margin: 0.75rem 0 0; color: var(--ed-navy);
+    }
+    .ed-status {
+        font-size: 0.62rem; font-weight: 800; letter-spacing: 2px;
+        text-transform: uppercase; color: var(--accent, rgba(10, 25, 47, 0.4));
+        margin: 1.25rem 0 0;
+    }
+
+    .ed-summary { font-size: 1.15rem; line-height: 1.6; color: var(--ed-navy); margin: 0 0 1.25rem; font-weight: 500; }
+    .ed-longbody { font-size: 1rem; line-height: 1.7; color: var(--ed-muted); margin: 0 0 2.5rem; }
+
+    .ed-traits { border-top: 1px solid var(--ed-line); padding-top: 2rem; margin-bottom: 2.5rem; }
+    .ed-traits-label {
+        font-size: 0.6rem; font-weight: 800; letter-spacing: 2px;
+        text-transform: uppercase; color: rgba(10, 25, 47, 0.4); margin: 0 0 1rem;
+    }
+    .ed-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.6rem; }
+    .ed-chip {
+        font-size: 0.8rem; font-weight: 600; color: rgba(10, 25, 47, 0.7);
+        border: 1px solid var(--ed-line); border-radius: 100px;
+        padding: 0.45rem 0.9rem;
+    }
+
+    .ed-detail-cta { min-height: 1px; }
+    .ed-btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: var(--ed-navy); color: #fff;
+        text-decoration: none; font-size: 0.85rem; font-weight: 600;
+        padding: 0.85rem 1.4rem; border-radius: 100px;
+        transition: transform 0.4s var(--ed-ease), box-shadow 0.4s var(--ed-ease);
+        box-shadow: 0 4px 16px rgba(10, 25, 47, 0.18);
+    }
+    .ed-btn svg { width: 13px; height: 13px; transition: transform 0.4s var(--ed-ease); }
+    .ed-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(10, 25, 47, 0.26); }
+    .ed-btn:hover svg { transform: translate(2px, -2px); }
+    .ed-pending { font-size: 0.9rem; color: rgba(10, 25, 47, 0.45); margin: 0; font-style: italic; }
+
+    @media (max-width: 720px) {
+        .edition { padding: 9rem 0 5rem; }
+    }
+</style>

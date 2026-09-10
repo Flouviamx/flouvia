@@ -1,0 +1,14 @@
+---
+export const prerender = true;
+import { EDITIONS, getEdition } from '../../../data/ediciones';
+import PlantillaEdicion from '../../../components/PlantillaEdicion.astro';
+
+export function getStaticPaths() {
+    return EDITIONS.map((e) => ({ params: { slug: e.slug } }));
+}
+
+const { slug } = Astro.params;
+const edition = getEdition(slug!);
+if (!edition) return Astro.redirect('/en/editions');
+---
+<PlantillaEdicion edition={edition} />

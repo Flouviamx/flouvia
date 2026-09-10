@@ -43,7 +43,16 @@ const isEn = lang === 'en';
 
         <div class="footer-meta-row">
             <p class="footer-eyebrow">{isEn ? 'STUDIO · MEXICO CITY' : 'ESTUDIO · CIUDAD DE MÉXICO'}</p>
-            <p class="footer-edition"><span class="edition-num">2026</span><span class="edition-divider">·</span><span class="edition-label">{isEn ? 'Edition' : 'Edición'}</span></p>
+            <a
+                class="footer-edition"
+                href={isEn ? '/en/editions' : '/ediciones'}
+                aria-label={isEn ? 'Site editions — 2026 edition' : 'Ediciones del sitio — edición 2026'}
+            >
+                <span class="edition-label">{isEn ? 'Edition' : 'Edición'}</span>
+                <span class="edition-rule" aria-hidden="true"></span>
+                <span class="edition-num">2026</span>
+                <svg class="edition-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
         </div>
 
         <div class="footer-grid">
@@ -57,8 +66,8 @@ const isEn = lang === 'en';
 
                 <p class="description">
                     {isEn
-                        ? 'Boutique firm based in Mexico City. We build Shopify Plus stores, private B2B portals and automations for brands with established operations. By application — fewer than 8 active clients a year.'
-                        : 'Firma boutique con sede en CDMX. Construimos tiendas Shopify Plus, portales B2B privados y automatizaciones para marcas con operación establecida. Proyectos por aplicación — menos de 8 clientes activos al año.'}
+                        ? 'Boutique firm based in Mexico City. We build Shopify Plus stores, private B2B portals and automations for brands with established operations. Projects by application.'
+                        : 'Firma boutique con sede en CDMX. Construimos tiendas Shopify Plus, portales B2B privados y automatizaciones para marcas con operación establecida. Proyectos por aplicación.'}
                 </p>
 
 
@@ -68,7 +77,6 @@ const isEn = lang === 'en';
 
                 <div class="nav-col">
                     <div class="col-head">
-                        <span class="col-num">01</span>
                         <h4 class="col-title">{isEn ? 'Work' : 'Trabajo'}</h4>
                     </div>
                     <nav class="nav-links">
@@ -97,12 +105,15 @@ const isEn = lang === 'en';
 
                 <div class="nav-col">
                     <div class="col-head">
-                        <span class="col-num">02</span>
                         <h4 class="col-title">{isEn ? 'The Firm' : 'La Firma'}</h4>
                     </div>
                     <nav class="nav-links">
                         <a href={isEn ? '/en/nosotros' : '/nosotros'} class="link-item">
                             <span>{isEn ? 'About' : 'Nosotros'}</span>
+                            <span class="link-arrow">→</span>
+                        </a>
+                        <a href={isEn ? '/en/editions' : '/ediciones'} class="link-item">
+                            <span>{isEn ? 'Editions' : 'Ediciones'}</span>
                             <span class="link-arrow">→</span>
                         </a>
                         <a href={isEn ? '/en/login' : '/login'} class="link-item">
@@ -114,7 +125,6 @@ const isEn = lang === 'en';
 
                 <div class="nav-col contact-col">
                     <div class="col-head">
-                        <span class="col-num">03</span>
                         <h4 class="col-title">{isEn ? 'Contact' : 'Contacto'}</h4>
                     </div>
 
@@ -267,14 +277,37 @@ const isEn = lang === 'en';
         font-size: 0.65rem; font-weight: 800; letter-spacing: 3px;
         color: rgba(255,255,255,0.45); text-transform: uppercase; margin: 0;
     }
+    /* ── Edition mark — editorial, discreta, enlaza al archivo de ediciones ── */
     .footer-edition {
-        display: inline-flex; align-items: baseline; gap: 0.55rem;
-        font-weight: 400;
-        color: rgba(255,255,255,0.65); margin: 0; line-height: 1;
+        display: inline-flex; align-items: center; gap: 0.7rem;
+        margin: 0; line-height: 1; text-decoration: none;
+        color: rgba(255,255,255,0.7);
     }
-    .edition-num { font-size: 1.05rem; }
-    .edition-divider { color: rgba(255,255,255,0.3); font-size: 1rem; }
-    .edition-label { font-size: 1.05rem; color: rgba(255,255,255,0.45); }
+    .edition-label {
+        font-size: 0.65rem; font-weight: 800; letter-spacing: 3px;
+        text-transform: uppercase; color: rgba(255,255,255,0.45);
+        transition: color 0.4s var(--ease-apple);
+    }
+    .edition-rule {
+        width: 22px; height: 1px; background: rgba(255,255,255,0.2);
+        transition: width 0.5s var(--ease-spring), background 0.4s var(--ease-apple);
+    }
+    .edition-num {
+        font-size: 0.95rem; font-weight: 500; letter-spacing: 1px;
+        font-variant-numeric: tabular-nums;
+        color: rgba(255,255,255,0.72);
+        transition: color 0.4s var(--ease-apple);
+    }
+    .edition-arrow {
+        width: 12px; height: 12px; color: #fff;
+        opacity: 0; transform: translate(-4px, 2px);
+        transition: opacity 0.5s var(--ease-spring), transform 0.5s var(--ease-spring);
+    }
+    .footer-edition:hover .edition-label { color: rgba(255,255,255,0.7); }
+    .footer-edition:hover .edition-rule { width: 30px; background: rgba(255,255,255,0.4); }
+    .footer-edition:hover .edition-num { color: #fff; }
+    .footer-edition:hover .edition-arrow { opacity: 1; transform: translate(0, 0); }
+    .footer-edition:active { transform: scale(0.98); transition: 0.1s; }
 
     /* ==========================================================
        1. GRID EDITORIAL
@@ -310,18 +343,6 @@ const isEn = lang === 'en';
         max-width: 90%;
     }
 
-    /* ── Status badge — "Aceptando proyectos Q3" ── */
-    .footer-status-badge {
-        display: inline-flex; align-items: center; gap: 9px;
-        background: rgba(255,255,255,0.03); padding: 7px 14px; border-radius: 100px;
-        border: 1px solid rgba(255,255,255,0.06);
-        width: max-content;
-    }
-    .footer-status-badge .status-text {
-        letter-spacing: 1.2px; font-weight: 700;
-        color: #94a3b8; font-size: 0.65rem; text-transform: uppercase;
-    }
-
     /* ── Bloque derecho: nav columns ── */
     .navigation-columns {
         display: grid; grid-template-columns: 1fr 1fr 1.7fr; gap: 2.5rem;
@@ -331,16 +352,13 @@ const isEn = lang === 'en';
     .nav-col { display: flex; flex-direction: column; }
 
     .col-head {
-        display: flex; align-items: baseline; gap: 0.7rem;
+        display: flex; align-items: center;
         margin-bottom: 2.25rem;
     }
-    .col-num {
-        font-weight: 400;
-        font-size: 1.05rem; color: rgba(255,255,255,0.3); line-height: 1;
-    }
     .col-title {
-        font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px;
-        color: rgba(255,255,255,0.55); margin: 0;
+        font-size: 0.7rem; font-weight: 800; letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.5); margin: 0;
     }
 
     .nav-links { display: flex; flex-direction: column; gap: 1.1rem; }
@@ -477,9 +495,10 @@ const isEn = lang === 'en';
         .footer-premium { padding-bottom: 2rem; }
         .top-hairline { margin-bottom: 2.5rem; }
         .footer-meta-row { margin-bottom: 3.5rem; padding-top: 0.5rem; }
-        .footer-edition { gap: 0.4rem; }
-        .edition-num { font-size: 0.9rem; }
-        .edition-label { font-size: 0.9rem; }
+        .footer-edition { gap: 0.55rem; }
+        .edition-label { font-size: 0.6rem; letter-spacing: 2.5px; }
+        .edition-rule { width: 16px; }
+        .edition-num { font-size: 0.88rem; }
 
         .footer-logo-svg { width: 110px; margin-bottom: 2rem; }
         .footer-statement { font-size: 1.55rem; line-height: 1.2; margin-bottom: 1.25rem; }
@@ -527,7 +546,7 @@ const isEn = lang === 'en';
 
         const fadeSel = [
             '.footer-unified-cta', '.footer-eyebrow', '.footer-edition', '.footer-logo-svg', '.footer-statement',
-            '.description', '.footer-status-badge', '.nav-col', '.footer-bottom > *',
+            '.description', '.nav-col', '.footer-bottom > *',
         ].map(s => '.footer-premium ' + s).join(', ');
 
         // Estado inicial oculto
@@ -549,7 +568,6 @@ const isEn = lang === 'en';
                     .to('.footer-premium .footer-logo-svg', { opacity: 1, y: 0, duration: 1.0, clearProps: 'transform,opacity' }, 0.24)
                     .to('.footer-premium .footer-statement', { opacity: 1, y: 0, duration: 1.0, clearProps: 'transform,opacity' }, 0.32)
                     .to('.footer-premium .description',     { opacity: 1, y: 0, duration: 0.9, clearProps: 'transform,opacity' }, 0.42)
-                    .to('.footer-premium .footer-status-badge', { opacity: 1, y: 0, duration: 0.9, clearProps: 'transform,opacity' }, 0.5)
                     .to('.footer-premium .nav-col',         { opacity: 1, y: 0, duration: 0.9, stagger: 0.09, clearProps: 'transform,opacity' }, 0.4)
                     .to('.footer-premium .footer-divider',  { scaleX: 1, duration: 1.0 }, 0.75)
                     .to('.footer-premium .footer-bottom > *', { opacity: 1, y: 0, duration: 0.85, stagger: 0.07, clearProps: 'transform,opacity' }, 0.85);

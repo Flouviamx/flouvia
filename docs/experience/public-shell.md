@@ -11,7 +11,7 @@
 
 ```
 Hero (white)        — clamp(1.9rem, 3.6vw, 3.4rem) title (reducido), fade en carga,
-                      cabe completo en 100svh. Status pill "Aceptando proyectos Q3".
+                      cabe completo en 100svh.
 Tech (white)        — Tira de logos minimalista: 8 logos grises (.strip-logo) en
                       grid 4-col centrado, sin tarjetas ni hover navy. Header centrado.
 Casos (dark navy)   — Carrusel horizontal scroll-snap, Ken Burns (scale) en hover
@@ -19,9 +19,10 @@ Servicios (white)   — Lista vertical de 4 rows, números 2rem sans-serif (01, 
 Protocolo (gray)    — Sticky 2-col + timeline track con gradient + step counter
 CTA (gray + dark)   — Card oscura con mouse-tracking glow
 Footer (dark navy)  — Watermark "Flouvia" 26vw. Grid 5fr/7fr: columna de marca
-                      (logo, tagline sans, descripción-entity, status badge) +
-                      3 nav cols (01 TRABAJO · 02 LA FIRMA · 03 CONTACTO).
-                      El correo es el CTA protagonista (en 03). Ver Footer pattern.
+                      (logo, tagline sans, descripción-entity) +
+                      3 nav cols (TRABAJO · LA FIRMA · CONTACTO — sin numeración).
+                      El correo es el CTA protagonista (en CONTACTO). "Edición 2026"
+                      del meta-row enlaza a /ediciones. Ver Footer pattern.
 ```
 
 > **Eliminado (mayo 2026):** la "proof-strip" (filas El Zarco −67% / Setnpet +42%
@@ -64,18 +65,23 @@ Footer (dark navy)  — Watermark "Flouvia" 26vw. Grid 5fr/7fr: columna de marca
 **Estructura (de arriba a abajo):**
 1. `.top-hairline` — línea con gradient que desvanece a los lados.
 2. `.footer-watermark` — `Flouvia` en serif italic, `26vw`, `rgba(255,255,255,0.025)`.
-3. `.footer-meta-row` — eyebrow ("ESTUDIO · CIUDAD DE MÉXICO") + edición ("2026 · Edición", número en serif italic).
+3. `.footer-meta-row` — eyebrow ("ESTUDIO · CIUDAD DE MÉXICO") + **`.footer-edition`**:
+   ahora es un `<a>` a `/ediciones` (`/en/editions`). Micro-label "EDICIÓN" (mayúsculas,
+   `letter-spacing 3px`) + `.edition-rule` (hairline de 22px que crece en hover) +
+   `.edition-num` "2026" (sans, `tabular-nums`) + `.edition-arrow` ↗ que aparece en
+   hover. Ya NO usa serif italic ni el separador `·`.
 4. `.footer-grid` (`grid-template-columns: 5fr 7fr; gap: 6rem`):
    - **`.brand-column`** (izquierda): logo SVG → **tagline** (`.footer-statement`,
      `clamp(1.7rem, 2.2vw, 2.3rem)`, **100% sans/Inter — SIN palabra-accent serif**;
      el usuario rechazó "B2B" en serif italic) → **descripción** (texto tipo
-     *entity definition* para AI SEO, incluye escasez "menos de 8 clientes activos al
-     año") → **`.footer-status-badge`** (punto verde `pulse-server` + "ACEPTANDO
-     PROYECTOS Q3").
-   - **`.navigation-columns`** (derecha, `grid-template-columns: 1fr 1fr 1.7fr; gap: 2.5rem`):
-     - `01 TRABAJO` → Servicios · Casos · Blog
-     - `02 LA FIRMA` → Nosotros · Portal de Clientes (`/login`)
-     - `03 CONTACTO` (`.contact-col`, más ancha) → `.contact-location`
+     *entity definition* para AI SEO; termina en "Proyectos por aplicación." — sin
+     cifras de cupo ni escasez, se removieron sep 2026).
+   - **`.navigation-columns`** (derecha, `grid-template-columns: 1fr 1fr 1.7fr; gap: 2.5rem`).
+     Los `.col-num` `01 02 03` se ELIMINARON (sep 2026); ahora `.col-title` va solo,
+     en MAYÚSCULAS con `letter-spacing 2.5px` (estilo etiqueta-sistema).
+     - `TRABAJO` → Servicios · Casos · Apps · Cord · Blog
+     - `LA FIRMA` → Nosotros · **Ediciones** (`/ediciones`) · Portal de Clientes (`/login`)
+     - `CONTACTO` (`.contact-col`, más ancha) → `.contact-location`
        ("CDMX — Operación global") + **`.minimal-email-link` = correo protagonista**
        (`hola@flouvia.com`, `clamp(1.4rem, 1.9vw, 1.8rem)`, weight 600, subrayado +
        flecha SVG animada) + `.contact-note` ("Respuesta en menos de 24 h.").
@@ -85,24 +91,25 @@ Footer (dark navy)  — Watermark "Flouvia" 26vw. Grid 5fr/7fr: columna de marca
    circulares compactos) · `.legal-right` (Privacidad · Términos).
 
 **Tipografía — casing unificado (regla del proyecto):**
-- **Etiquetas-sistema en MAYÚSCULAS:** eyebrow, `01 02 03` col-titles, status badge.
+- **Etiquetas-sistema en MAYÚSCULAS:** eyebrow, col-titles (ya sin `01 02 03`), edition label.
 - **Links en Title Case:** Servicios, Casos, Blog, Nosotros, Portal de Clientes
   (hardcodeados con ternario `isEn ?`, **NO** `t()` — las claves `nav.*` devuelven
   mayúsculas y romperían el casing). Por eso `useTranslations`/`t` ya no se importa aquí.
-- Numeración `01 02 03` y el "2026" de edición: sans-serif. El "Flouvia" del copyright: serif italic.
+- El "2026" de edición: sans-serif (`tabular-nums`). El "Flouvia" del copyright: serif italic.
 
 **Hairlines:** `linear-gradient(to right, transparent, rgba(255,255,255,0.18) 20%, ... 80%, transparent)` — bordes desvanecen.
 
 **Animación de entrada:** master timeline con `defaults: { ease: 'power2.out' }`
 (sutil, NO `expo.out`), patrón anti-parpadeo (`gsap.set` oculta + `gsap.to` revela
 una vez en `onEnter`, `ScrollTrigger once:true`, `start: 'top 88%'`). `fadeSel`
-incluye: eyebrow, edition, logo, statement, description, **footer-status-badge**,
+incluye: eyebrow, edition, logo, statement, description,
 nav-col (stagger), footer-bottom > * (stagger). Hairline y divider animan `scaleX`.
 Reduced-motion → return temprano, todo visible.
 
-**Scarcity placeholders (actualizar por trimestre):** el status badge "ACEPTANDO
-PROYECTOS Q3" y la descripción "menos de 8 clientes activos al año" son valores
-hardcodeados — revisar cada trimestre.
+**Sin escasez ni trimestres (sep 2026):** se removieron el `.footer-status-badge`
+("ACEPTANDO PROYECTOS Q3"), la cifra "menos de 8 clientes/proyectos al año" en toda
+la copy y SEO, la línea del topbar del Navbar, la `slot-card` con `[data-quarter]` de
+`/casos` y `src/lib/quarter.ts`. No reintroducir señales de cupo por trimestre.
 
 > **Eliminado en el rediseño (mayo 2026):** la columna `/03 Redes` con links de texto
 > (las redes pasaron a íconos en `.footer-bottom`); el botón destacado "Aplicar a un

@@ -47,6 +47,23 @@ src/pages/
   casos.astro              → /casos
   contacto.astro           → /contacto
   nosotros.astro           → /nosotros
+  ediciones.astro          → /ediciones (prerender:true) — ÍNDICE del archivo del
+                              estilo visual del sitio. Cada año se rediseña Flouvia
+                              desde cero; la versión anterior se congela en un deploy
+                              inmutable propio. 2026 es el punto de partida (no hay
+                              ediciones previas). Render: <PlantillaEdiciones />.
+  ediciones/[slug].astro   → /ediciones/{2026,2027,…} (prerender:true, getStaticPaths
+                              desde EDITIONS) — DETALLE de una edición. Render:
+                              <PlantillaEdicion edition={…} />. Ediciones 'upcoming'
+                              van con noindex.
+  en/editions.astro        → /en/editions — espejo EN del índice.
+  en/editions/[slug].astro → /en/editions/{slug} — espejo EN del detalle.
+                              Fuente de verdad del contenido: src/data/ediciones.ts
+                              (año, nombre, status upcoming|current|archive, tag,
+                              frozenAt, snapshotUrl). Arquitectura y ritual de
+                              congelado: docs/experience/editions.md. Enlazada desde
+                              el Footer ("Edición 2026" del meta-row y columna "La
+                              Firma"). Estética propia en CSS a mano (sin Tailwind).
 
   # Producto público — Cord (prerender:true; repo hermano ~/Desktop/flouvia-cord)
   cord.astro               → /cord — landing de venta del SaaS público de Flouvia.
