@@ -15,12 +15,12 @@
 
 ### Estructura (3 secciones)
 ```
-Hero (white, 100svh)   — mismo estándar que la home: status pill de escasez + eyebrow +
+Hero (white, 100svh)   — mismo estándar que la home: eyebrow +
                          H1 bold (una sola tipografía, sin serif) + hero-bottom (desc + CTA scroll).
                          CTA "Iniciar solicitud ↓" hace scroll a #form-zone.
 Trust strip (NAVY)     — `Resultados` (gris, full-width) — grid de 2-4 métricas destacadas bajo la sección
                          "Evidencia". 3 métricas reales (−67% El Zarco · +42% / 3× Cord) en
-                         serif italic BLANCO + nota de escasez. Sin testimonio (no inventar).
+                         serif italic BLANCO. Sin testimonio (no inventar).
 Executive contact      — grid 320px/1fr: sidebar sticky + formulario por pasos (#form-zone).
                          Watermark serif "Aplica" muy faint detrás; overflow:clip.
 ```
@@ -40,8 +40,8 @@ La sección se rediseñó (mayo 2026) para igualar la estética del home tras fe
 - **Watermarks** serif italic gigantes y faint: "Evidencia" (navy, blanco 0.035) y "Aplica" (form, navy 0.022).
 
 ### Hero
-- Status pill (`.hero-status`) = escasez explícita: **"2 CUPOS DISPONIBLES · Q3" / "2 SLOTS OPEN · Q3"**
-  (placeholder por trimestre — ver [[flouvia-scarcity-placeholders]]).
+- Sin status pill de cupo/trimestre (removido sep 2026). La `.hero-status` CSS
+  quedó como código muerto — no reintroducir el elemento.
 - Eyebrow: "PROCESO DE APLICACIÓN" / "APPLICATION PROCESS".
 - H1: "Aplica. / Evaluamos el fit." — **bold sans en ambos versos** (regla de una sola tipografía).
 - Animación: gate `.js-anim .hero-anim{opacity:0}` + timeline GSAP `power2.out` (igual que `Inicio.astro`),
@@ -54,9 +54,10 @@ de vidrio esmerilado** (mismo lenguaje iOS del navbar) con secciones separadas p
   `linear-gradient(180deg, rgba(255,255,255,.74), rgba(248,250,252,.55))`, rim+specular+sombra profunda
   vía `box-shadow` (inset edge `rgba(10,25,47,.05)` para definirse sobre blanco). `overflow:hidden`.
 - **Secciones** (`.ec-block`, padding `1.4rem 1.55rem`, hairline entre cada una vía `+ ::before`):
-  (1) pill de escasez "2 cupos · Q3"; (2) **QUIÉN APLICA** ✓/✕ (`.criteria`); (3) **EL PROCESO** (✓
-  respondemos <24h · ✓ leemos a mano); (4) **LA FIRMA** (escasez "Menos de **8** al año" con el 8 en
-  serif italic `.ec-firm-num` + "CDMX · Operación global"); (5) **LÍNEA DIRECTA** (correo con flecha).
+  (1) **QUIÉN APLICA** ✓/✕ (`.criteria`); (2) **EL PROCESO** (✓ respondemos <24h · ✓ leemos a
+  mano); (3) **LA FIRMA** (`.ec-firm` "Estudio boutique de ingeniería" + "CDMX · Operación
+  global" — sin la cifra "Menos de 8 al año", removida sep 2026); (4) **LÍNEA DIRECTA** (correo
+  con flecha).
 - Reloj CDMX en vivo y los íconos de redes siguen **eliminados** (redes ya están en el footer). Sin
   elemento humano (firma/foto).
 - **Reveal**: la tarjeta entra como **una sola pieza** (`reveal('.ec-sidebar')`), no bloque por bloque.

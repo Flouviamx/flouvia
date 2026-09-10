@@ -5,13 +5,8 @@ import Navbar from './Navbar.astro';
 import Footer from './Footer.astro';
 
 import { getLangFromUrl } from '../i18n/utils';
-import { quarterLabel } from '../lib/quarter';
 const lang = getLangFromUrl(Astro.url);
 const isEn = lang === 'en';
-
-// Trimestre activo (se adelanta 1 mes). Build-time; el script inline lo corrige
-// en cliente para visitas entre deploys.
-const q = quarterLabel();
 ---
 
 <Layout
@@ -157,9 +152,9 @@ const q = quarterLabel();
 
                     <a href="/contacto" class="case-card slot-card">
                         <div class="slot-inner">
-                            <span class="slot-eyebrow" data-quarter>{`${q} — 1 SLOT`}</span>
+                            <span class="slot-eyebrow">{isEn ? 'NEW PROJECT' : 'NUEVO PROYECTO'}</span>
                             <h2 class="slot-title">{isEn ? 'Your project here.' : 'Tu proyecto aquí.'}</h2>
-                            <p class="slot-desc" data-quarter>{isEn ? `We're currently evaluating projects for ${q}. The next case could be yours.` : `Actualmente evaluando proyectos para ${q}. El siguiente caso podría ser el tuyo.`}</p>
+                            <p class="slot-desc">{isEn ? 'The next case study could be yours.' : 'El siguiente caso de estudio podría ser el tuyo.'}</p>
                             <div class="slot-action">
                                 <span>{isEn ? 'See if I qualify' : 'Ver si califico'}</span>
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -174,18 +169,6 @@ const q = quarterLabel();
 
 
     </main>
-
-    {/* Corrige el trimestre en visitas entre deploys (build ya trae el valor correcto). */}
-    <script is:inline>
-      (function () {
-        var m = new Date().getMonth() + 1;               // adelanto de 1 mes
-        var label = 'Q' + (Math.floor((m % 12) / 3) + 1);
-        var els = document.querySelectorAll('[data-quarter]');
-        for (var i = 0; i < els.length; i++) {
-          els[i].textContent = els[i].textContent.replace(/Q[1-4]/g, label);
-        }
-      })();
-    </script>
 
     <Footer ctaTitleEs="Tú podrías ser nuestro próximo caso de éxito." ctaTitleEn="You could be our next success story." ctaBtnEs="Empezar proyecto" ctaBtnEn="Start a project" />
 </Layout>

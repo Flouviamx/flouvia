@@ -10,7 +10,8 @@
 ## Página de Casos
 
 > Rediseñada mayo 2026: unificada con la estética/animación del home y reescrita con eje de
-> escasez + AI SEO ([[flouvia-brand-voice]], [[flouvia-scarcity-placeholders]]). Animación =
+> AI SEO ([[flouvia-brand-voice]]). El eje de escasez/cupo por trimestre se removió (sep 2026).
+> Animación =
 > estándar único del sitio (gate `.js-anim`, helper `reveal()` `power2.out`, `robustRefresh`,
 > reduced-motion). **Sin SplitText, sin `expo.out`/`back.out`, sin blur/scale.** Números en
 > Instrument Serif italic (se eliminó JetBrains Mono — ni siquiera se cargaba). Títulos 100%
@@ -24,12 +25,10 @@
 > badge `active-dot` (Cord, El Zarco, shwcs); los de `dev-dot` ("Fase de lanzamiento": Ago Fitness,
 > Masuma) no suman.
 
-> **Trimestre de la slot-card es automático.** `slot-eyebrow` y `slot-desc` toman el label de
-> `src/lib/quarter.ts` (`quarterLabel()`), que adelanta 1 mes (sep → Q4, dic → Q1, etc.). Se
-> resuelve en build y un `<script is:inline>` reescribe los `[data-quarter]` en cliente para las
-> visitas entre deploys. No hardcodear "Q3"/"Q4" aquí. Las claves `about.cta.badge` /
-> `about.hero.status` / `about.cta.avail` en `i18n/ui.ts` traen "Q3" pero están sin uso (ningún
-> componente las renderiza).
+> **Sin trimestres (sep 2026).** Se removió `src/lib/quarter.ts`, el `[data-quarter]`
+> de la `slot-card` y el `<script is:inline>` que lo corregía. El `slot-eyebrow` ahora
+> es fijo ("NUEVO PROYECTO" / "NEW PROJECT") y el `slot-desc` no menciona cupo ni
+> trimestre. No reintroducir señales de cupo por trimestre.
 
 > **`liveUrl`/`liveDomain` son opcionales** (caso previo a despliegue). Si faltan, `PlantillaCaso.astro`
 > oculta el chip de dominio en el breadcrumb y el botón "Visitar sitio", y muestra `.cs-soon-chip`

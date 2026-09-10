@@ -24,16 +24,17 @@ Manifiesto (white)        — Grid 2 col: imagen (parallax leve) + texto sticky.
                             grande + 2 párrafos con consecuencia para el cliente.
 ADN / Principios (white)  — 3 tarjetas monolith: 01 Transparencia · 02 Código de Autor ·
                             03 ROI. Watermark editorial /01/02/03 dentro de la tarjeta.
-Resultados (white)        — 4 métricas ESTÁTICAS con fuente visible. NO hay contadores JS.
+Resultados (white)        — métricas ESTÁTICAS con fuente visible. NO hay contadores JS.
                             Valores: +42% CR (Cord), −67% tiempo (El Zarco), +25% AOV
-                            (El Zarco), <8 proyectos/año. Fuente citable por AI.
+                            (El Zarco). Sin la métrica de cupo "<8 proyectos/año" (removida
+                            sep 2026). Fuente citable por AI.
 ¿Por qué Flouvia? (navy)  — Bandita slim (padding ~1.5rem). Título compacto izquierda +
                             divisor + texto filtro-cliente + botón derecha. Una sola fila.
 Testimonios (white)       — Carrusel horizontal. Cada tarjeta: métrica ancla (serif italic)
                             + quote + autor con .t-role + .t-context (empresa, industria,
                             ciudad). Avatares en navy sólido con inicial.
-CTA final (navy)          — Escasez: "2 proyectos disponibles este trimestre" + badge
-                            "● ACEPTANDO PROYECTOS Q3 · 2 cupos". CTA "Solicitar diagnóstico".
+CTA final (navy)          — Título de invitación (sin cifras de cupo ni trimestre) +
+                            CTA "Solicitar diagnóstico".
 ```
 
 ### Schema JSON-LD
@@ -66,10 +67,9 @@ Actualizar `mentions` si se agregan nuevos casos de estudio.
   (`.m-watermark`), métrica ancla de testimonios (`.t-metric`).
 - JetBrains Mono eliminado de esta página.
 
-### Scarcity placeholders (actualizar por trimestre)
-- `about.hero.status` — "ACEPTANDO PROYECTOS Q3"
-- `about.cta.badge` — "EL SIGUIENTE NIVEL — Q3"
-- `about.cta.avail` — "ACEPTANDO PROYECTOS Q3 · 2 cupos disponibles"
-- `about.cta.title` — "2 proyectos disponibles este trimestre."
+### Escasez / trimestres — removido (sep 2026)
+Se quitaron las claves `about.hero.status` y `about.cta.avail`, la cifra "menos de
+8 proyectos al año" de `about.entity` y las menciones a "Q3"/"trimestre" en
+`about.cta.badge` / `about.cta.title`. No reintroducir señales de cupo por trimestre.
 
 ---

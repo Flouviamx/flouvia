@@ -41,12 +41,11 @@ cta: {                       // CTA contextual al cierre — distinto por artíc
 ```
 
 ### Listing — `/blog` y `/en/blog`
-- **Hero estándar home**: status pill "ACEPTANDO PROYECTOS Q3" + eyebrow "INGENIERÍA APLICADA — PERSPECTIVAS DE LA FIRMA" + H1 bold 100% Inter + desc + post-count pill.
+- **Hero estándar home**: eyebrow "INGENIERÍA APLICADA — PERSPECTIVAS DE LA FIRMA" + H1 bold 100% Inter + desc + post-count pill. (Sin status pill de cupo/trimestre — removido sep 2026.)
 - **Gate `.js-anim .blog-anim { opacity:0 }`** en `<style is:global>` + timeline GSAP `power2.out` en carga (igual patrón que home). Reveal de featured card, post cards y CTA con helper `reveal()`.
-- **CTA reescrito**: eyebrow "¿LEES ESTO Y RECONOCES TU OPERACIÓN?" + badge "● 2 proyectos disponibles Q3". Elimina el viejo "Listo para escalar tu ¿operación?" (typo + copy genérico).
+- **CTA reescrito**: eyebrow "¿LEES ESTO Y RECONOCES TU OPERACIÓN?" (sin badge de cupo/trimestre). Elimina el viejo "Listo para escalar tu ¿operación?" (typo + copy genérico).
 - **Schema `Blog`** (JSON-LD) inyectado en la página con `blogPost[]` que lista todos los artículos.
 - Title SEO: "Blog de Ingeniería E-commerce y B2B | Flouvia — CDMX".
-- Scarcity placeholders (actualizar por trimestre): hero status pill + CTA badge → ver [[flouvia-scarcity-placeholders]].
 
 #### Barra de filtros — Liquid Glass segmented control (mayo 2026)
 Las pills de categoría (Todos / B2B / E-commerce / Automatización) usan el mismo lenguaje visual que el navbar:
