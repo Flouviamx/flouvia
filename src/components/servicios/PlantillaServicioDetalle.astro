@@ -115,7 +115,7 @@ const whyMap: Record<string, Array<{title: string, desc: string}>> = {
     { title: isEn ? 'Authenticated portals' : 'Portales autenticados',
       desc:  isEn ? 'Private B2B systems with role-based access and protected catalogs.' : 'Sistemas B2B privados con acceso por roles y catálogos protegidos.' },
     { title: isEn ? 'ERP-native integration' : 'Integración nativa ERP',
-      desc:  isEn ? 'Bi-directional connection with SAP, NetSuite or Microsoft Dynamics.' : 'Conexión bidireccional con SAP, NetSuite o Microsoft Dynamics.' },
+      desc:  isEn ? 'Two-way connection with your ERP, whatever platform your operation runs on.' : 'Conexión bidireccional con tu ERP, sea cual sea la plataforma de tu operación.' },
     { title: isEn ? 'Dynamic pricing engine' : 'Motor de precios dinámicos',
       desc:  isEn ? 'Volume rules, net terms, automated credit allocation per distributor.' : 'Reglas de volumen, net terms, asignación de crédito por distribuidor.' },
   ],
@@ -123,7 +123,7 @@ const whyMap: Record<string, Array<{title: string, desc: string}>> = {
     { title: isEn ? 'Real-time orchestration' : 'Orquestación en tiempo real',
       desc:  isEn ? 'Webhooks and APIs that move data the moment events happen.' : 'Webhooks y APIs que mueven datos en el momento exacto del evento.' },
     { title: isEn ? 'Centralized command' : 'Comando centralizado',
-      desc:  isEn ? 'Airtable as your operational source of truth, connected everywhere.' : 'Airtable como fuente única de verdad operativa, conectada a todo.' },
+      desc:  isEn ? 'A robust operational database as your single source of truth, connected everywhere.' : 'Una base de datos operativa robusta como fuente única de verdad, conectada a todo.' },
     { title: isEn ? 'Zero manual entry' : 'Cero captura manual',
       desc:  isEn ? 'Your team focuses on growth — the systems handle the data.' : 'Tu equipo se enfoca en crecer — los sistemas manejan los datos.' },
   ],
@@ -132,7 +132,7 @@ const whyMap: Record<string, Array<{title: string, desc: string}>> = {
       desc:  isEn ? 'Heatmaps, session recordings, and friction maps based on real user data.' : 'Heatmaps, grabaciones y mapas de fricción con data real de usuarios.' },
     { title: isEn ? 'Continuous A/B testing' : 'A/B testing continuo',
       desc:  isEn ? 'Iterative experiments on critical conversion paths every sprint.' : 'Experimentos iterativos en rutas críticas de conversión cada sprint.' },
-    { title: isEn ? 'Klaviyo-grade retention' : 'Retención nivel Klaviyo',
+    { title: isEn ? 'Enterprise-grade retention' : 'Retención de nivel enterprise',
       desc:  isEn ? 'Engineered automation flows to maximize repeat purchase and LTV.' : 'Flujos de automatización para maximizar recompra y LTV.' },
   ],
 };
@@ -257,10 +257,10 @@ const pageTitle = `${title.replace('.', '')} | Flouvia`;
 
         <div class="protocol-timeline">
           <div class="timeline-track"></div>
+          <div class="timeline-fill" aria-hidden="true"></div>
 
           {steps.map((step, i) => (
             <div class="protocol-step reveal-blur" data-step={i} style={`--delay: ${0.1 + i * 0.1}s`}>
-              <div class="step-node"><div class="node-core"></div></div>
               <div class="step-content">
                 <h4>{stepTitles[i]}</h4>
                 <p>{step}</p>
@@ -586,38 +586,38 @@ const pageTitle = `${title.replace('.', '')} | Flouvia`;
   }
   .sd-pp-of { font-size: 1rem; font-weight: 600; color: var(--color-text-muted); }
 
-  .protocol-timeline { position: relative; }
+  /* ── Timeline: línea fina fija + relleno navy que baja con el scroll ── */
+  .protocol-timeline { position: relative; padding-left: 2rem; }
   .timeline-track {
-    position: absolute; left: 9px; top: 8px; bottom: 8px;
-    width: 1px; background: var(--color-border); z-index: 0;
+    position: absolute; left: 0; top: 4px; bottom: 4px;
+    width: 2px; border-radius: 2px;
+    background: rgba(10,25,47,0.1); z-index: 0;
+  }
+  .timeline-fill {
+    position: absolute; left: 0; top: 4px; bottom: 4px;
+    width: 2px; border-radius: 2px;
+    background: linear-gradient(to bottom,
+      var(--color-blue-deep) 0%,
+      var(--color-blue-deep) 88%,
+      rgba(10,25,47,0.35) 100%);
+    transform: scaleY(0);
+    transform-origin: top center;
+    z-index: 1;
   }
 
   .protocol-step {
-    display: flex; gap: 2.2rem; align-items: flex-start;
+    display: block;
     padding: 1.6rem 0;
     position: relative; z-index: 1;
     cursor: default;
-    transition: transform 0.4s var(--ease-smooth);
   }
   .protocol-step:first-child { padding-top: 0; }
   .protocol-step:last-child  { padding-bottom: 0; }
 
-  .step-node {
-    width: 20px; height: 20px; border-radius: 50%;
-    background: var(--color-bg-soft);
-    border: 1px solid var(--color-border);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; margin-top: 4px;
-    transition: all 0.5s var(--ease-spring);
+  @media (prefers-reduced-motion: reduce) {
+    .protocol-step { transition: none; }
+    .timeline-fill { transform: scaleY(1); }
   }
-  .node-core {
-    width: 6px; height: 6px; border-radius: 50%; background: transparent;
-    transition: all 0.5s var(--ease-spring);
-  }
-  .protocol-step:hover .step-node { border-color: var(--color-blue-deep); transform: scale(1.2); }
-  .protocol-step:hover .node-core { background: var(--color-blue-deep); }
-  .protocol-step.is-active .step-node { border-color: var(--color-blue-deep); transform: scale(1.25); box-shadow: 0 0 0 6px rgba(10,25,47,0.06); }
-  .protocol-step.is-active .node-core { background: var(--color-blue-deep); }
 
   .step-content {
     position: relative; flex: 1;
@@ -890,11 +890,11 @@ const pageTitle = `${title.replace('.', '')} | Flouvia`;
       });
     }
 
-    /* ───── PROTOCOL TIMELINE — track draw + step active state ───── */
-    const track = document.querySelector<HTMLElement>('.timeline-track');
-    if (track && !reduced) {
-      gsap.set(track, { transformOrigin: 'top center', scaleY: 0 });
-      gsap.to(track, {
+    /* ───── PROTOCOL TIMELINE — el relleno navy baja por la línea con el scroll ───── */
+    const timelineFill = document.querySelector<HTMLElement>('.timeline-fill');
+    if (timelineFill && !reduced) {
+      gsap.set(timelineFill, { transformOrigin: 'top center', scaleY: 0 });
+      gsap.to(timelineFill, {
         scaleY: 1, ease: 'none',
         scrollTrigger: {
           trigger: '.protocol-timeline',
@@ -913,14 +913,6 @@ const pageTitle = `${title.replace('.', '')} | Flouvia`;
           duration: 0.85, ease: 'power3.out', delay: i * 0.04,
           scrollTrigger: { trigger: step, start: 'top 88%' },
         });
-        const node = step.querySelector('.step-node');
-        if (node) {
-          gsap.from(node, {
-            scale: 0, rotate: 180,
-            duration: 0.7, ease: 'back.out(2.4)', delay: i * 0.04 + 0.12,
-            scrollTrigger: { trigger: step, start: 'top 88%' },
-          });
-        }
       }
 
       ScrollTrigger.create({

@@ -62,17 +62,13 @@ const t = useTranslations(lang);
                 <div class="tech-stack">
                     <div class="logo-strip" id="logo-strip">
                         <img src="/imgs/Logo-Shopify.png" alt="Shopify Plus" class="strip-logo" />
-                        <img src="/imgs/Logo-Aritable.png" alt="Airtable" class="strip-logo" />
-                        <img src="/imgs/Logo-make.png" alt="Make" class="strip-logo" />
                         <img src="/imgs/Logo-next.png" alt="Next.js" class="strip-logo" />
-                        <img src="/imgs/Logo-sanity.png" alt="Sanity" class="strip-logo" />
                         <img src="/imgs/Logo-vercel.png" alt="Vercel" class="strip-logo" />
                         <img src="/imgs/Logo-stripe.png" alt="Stripe" class="strip-logo" />
-                        <img src="/imgs/Logo-klaviyo.png" alt="Klaviyo" class="strip-logo" />
                     </div>
                     <div class="stack-meta">
-                        <span class="stack-count">08</span>
-                        <span class="stack-label">{lang === 'en' ? 'tools in production' : 'herramientas en producción'}</span>
+                        <span class="stack-count">04</span>
+                        <span class="stack-label">{lang === 'en' ? 'platforms we build on' : 'plataformas base'}</span>
                     </div>
                 </div>
             </div>
@@ -239,9 +235,9 @@ const t = useTranslations(lang);
 
                 <div class="protocol-timeline">
                     <div class="timeline-track"></div>
+                    <div class="timeline-fill" aria-hidden="true"></div>
 
                     <div class="protocol-step" style="--delay: 0.1s;">
-                        <div class="step-node"><div class="node-core"></div></div>
                         <div class="step-content">
                             <h4>{lang === 'en' ? 'Audit & Diagnostics' : 'Auditoría y Diagnóstico'}</h4>
                             <p>{lang === 'en' ? 'We analyze the current infrastructure to identify operational and conversion bottlenecks, plotting a precise friction map.' : 'Analizamos la infraestructura actual para identificar cuellos de botella en la operación y conversión, trazando un mapa de fricción preciso.'}</p>
@@ -249,7 +245,6 @@ const t = useTranslations(lang);
                     </div>
 
                     <div class="protocol-step" style="--delay: 0.2s;">
-                        <div class="step-node"><div class="node-core"></div></div>
                         <div class="step-content">
                             <h4>{lang === 'en' ? 'System Architecture' : 'Arquitectura del Sistema'}</h4>
                             <p>{lang === 'en' ? 'We design the database logic, API connections, and UX/UI experience aimed at maximizing the average order value.' : 'Diseñamos la lógica de base de datos, conexiones API y experiencia de usuario (UX/UI) orientada a maximizar el valor promedio del pedido.'}</p>
@@ -257,7 +252,6 @@ const t = useTranslations(lang);
                     </div>
 
                     <div class="protocol-step" style="--delay: 0.3s;">
-                        <div class="step-node"><div class="node-core"></div></div>
                         <div class="step-content">
                             <h4>{lang === 'en' ? 'Full-Stack Development' : 'Desarrollo Full-Stack'}</h4>
                             <p>{lang === 'en' ? 'We write clean, optimized code, assemble the ecosystem, and connect data automation tools so they operate independently.' : 'Escribimos código limpio y optimizado, montamos el ecosistema y conectamos las herramientas de automatización de datos para que operen solas.'}</p>
@@ -265,7 +259,6 @@ const t = useTranslations(lang);
                     </div>
 
                     <div class="protocol-step" style="--delay: 0.4s;">
-                        <div class="step-node"><div class="node-core"></div></div>
                         <div class="step-content">
                             <h4>{lang === 'en' ? 'Deployment & Scaling' : 'Despliegue y Escalado'}</h4>
                             <p>{lang === 'en' ? 'Production launch with active server and latency monitoring. We leave the systems ready to scale without breaking.' : 'Lanzamiento a producción con monitoreo activo de servidores y latencia. Dejamos los sistemas listos para que escale sin romper la infraestructura.'}</p>
@@ -332,6 +325,8 @@ const t = useTranslations(lang);
        puesta por un script inline antes del paint). GSAP lo revela. Sin JS o con
        reduced-motion, queda visible por defecto → nunca hay "pantalla en blanco". */
     .js-anim .hero-anim { opacity: 0; }
+    /* el relleno de la timeline parte en 0 solo si GSAP lo va a animar */
+    .js-anim .timeline-fill { transform: scaleY(0); }
 
     .btn-luxe {
         position: relative; display: inline-flex; background: var(--color-text); color: #fff;
@@ -634,47 +629,40 @@ const t = useTranslations(lang);
         background: linear-gradient(to right, var(--color-blue-deep), #1a3a6e);
     }
 
-    /* Active step state — driven by JS */
-    .protocol-step.is-active .step-node {
-        border-color: var(--color-blue-deep);
-        box-shadow: 0 0 0 6px rgba(10,25,47,0.06), 0 0 0 14px rgba(10,25,47,0.025);
-    }
-    .protocol-step.is-active .node-core { background: var(--color-blue-deep); transform: scale(1.4); }
+    /* Active step state — driven by JS. */
     .protocol-step.is-active .watermark-num { color: rgba(10,25,47,0.5); }
     .protocol-step.is-active h4 { color: var(--color-blue-deep); }
 
     .protocol-timeline {
         position: relative; display: flex; flex-direction: column;
         gap: 7rem;
-        padding-left: 2.5rem;
+        padding-left: 2.25rem;
     }
 
+    /* ── Timeline: línea fina fija + relleno navy que baja con el scroll ── */
     .timeline-track {
-        position: absolute; top: 12px; bottom: 12px;
-        left: calc(2.5rem + 13px);
-        width: 1px;
+        position: absolute; top: 4px; bottom: 4px;
+        left: 0;
+        width: 2px; border-radius: 2px;
+        background: rgba(10,25,47,0.1);
+        z-index: 1;
+    }
+    .timeline-fill {
+        position: absolute; top: 4px; bottom: 4px;
+        left: 0;
+        width: 2px; border-radius: 2px;
         background: linear-gradient(to bottom,
             var(--color-blue-deep) 0%,
-            var(--color-blue-deep) 30%,
-            rgba(10,25,47,0.2) 70%,
-            rgba(10,25,47,0.05) 100%);
-        z-index: 1;
+            var(--color-blue-deep) 88%,
+            rgba(10,25,47,0.35) 100%);
+        transform: scaleY(1);
+        transform-origin: top center;
+        z-index: 2;
     }
 
     .protocol-step {
-        position: relative; z-index: 2; display: flex; align-items: flex-start; gap: 3.5rem;
-        cursor: default; transition: transform 0.5s var(--ease-smooth);
-    }
-
-    .step-node {
-        width: 28px; height: 28px; border-radius: 50%; background: var(--color-bg-soft);
-        border: 1.5px solid rgba(10,25,47,0.18); display: flex; align-items: center; justify-content: center;
-        flex-shrink: 0; transition: all 0.55s var(--ease-spring), box-shadow 0.55s ease;
-        position: relative;
-    }
-    .node-core {
-        width: 8px; height: 8px; border-radius: 50%;
-        background: transparent; transition: all 0.55s var(--ease-spring);
+        position: relative; z-index: 2; display: block;
+        cursor: default;
     }
 
     .step-content { position: relative; padding-top: 2px; min-height: 80px; }
@@ -697,14 +685,13 @@ const t = useTranslations(lang);
         max-width: 480px; line-height: 1.65;
     }
 
-    .protocol-step:hover { transform: translateX(8px); }
-    .protocol-step:hover .step-node {
-        border-color: var(--color-blue-deep); transform: scale(1.2);
-        box-shadow: 0 0 0 6px rgba(10,25,47,0.06), 0 0 0 12px rgba(10,25,47,0.025);
-    }
-    .protocol-step:hover .node-core { background: var(--color-blue-deep); transform: scale(1.4); }
-    .protocol-step:hover .watermark-num { color: rgba(10,25,47,0.45); transform: translateX(6px); }
+    .protocol-step:hover .watermark-num { color: rgba(10,25,47,0.45); }
     .protocol-step:hover h4 { color: var(--color-blue-deep); }
+
+    @media (prefers-reduced-motion: reduce) {
+        .protocol-step, .watermark-num, .step-content h4 { transition: none; }
+        .timeline-fill { transform: scaleY(1); }
+    }
 
     /* ==========================================================
        6. CTA
@@ -753,8 +740,7 @@ const t = useTranslations(lang);
         .desktop-only { display: none; }
         .protocol-grid { grid-template-columns: 1fr; gap: 3rem; }
         .protocol-sticky-col { position: relative; top: 0; padding-right: 0; height: auto; }
-        .protocol-timeline { padding-left: 0; gap: 3rem; }
-        .timeline-track { left: 11px; } 
+        .protocol-timeline { padding-left: 1.75rem; gap: 3rem; }
     }
 
 
@@ -842,9 +828,6 @@ const t = useTranslations(lang);
         /* PROTOCOLO */
         .protocol-section { padding: 4rem 0 5rem; }
         .protocol-timeline { gap: 2.5rem; }
-        .protocol-step { gap: 1.5rem; }
-        .protocol-step:hover { transform: translateX(0); }
-        .step-node { width: 20px; height: 20px; }
         .watermark-num { font-size: 1.9rem; top: -2rem; left: 0; }
         .step-content h4 { font-size: 1.3rem; }
         .step-content p { font-size: 1rem; }
@@ -987,11 +970,11 @@ const t = useTranslations(lang);
             });
             reveal('.proto-progress', { trigger: '.protocol-section', y: 14, dur: 1.0, delay: 0.3, start: 'top 78%' });
 
-            /* PROTOCOLO — el track se dibuja con el scroll */
-            const timelineTrack = document.querySelector('.timeline-track');
-            if (timelineTrack) {
-                gsap.set(timelineTrack, { transformOrigin: 'top center', scaleY: 0 });
-                gsap.to(timelineTrack, {
+            /* PROTOCOLO — el relleno navy baja por la línea con el scroll */
+            const timelineFill = document.querySelector('.timeline-fill');
+            if (timelineFill) {
+                gsap.set(timelineFill, { transformOrigin: 'top center', scaleY: 0 });
+                gsap.to(timelineFill, {
                     scaleY: 1, ease: 'none',
                     scrollTrigger: { trigger: '.protocol-section', start: 'top 60%', end: 'bottom 75%', scrub: 0.6 },
                 });
@@ -1083,10 +1066,10 @@ const t = useTranslations(lang);
             });
             reveal('.proto-progress', { trigger: '.protocol-section', y: 14, dur: 0.9, delay: 0.3, start: 'top 84%' });
 
-            const mTrack = document.querySelector('.timeline-track');
-            if (mTrack) {
-                gsap.set(mTrack, { transformOrigin: 'top center', scaleY: 0 });
-                gsap.to(mTrack, {
+            const mFill = document.querySelector('.timeline-fill');
+            if (mFill) {
+                gsap.set(mFill, { transformOrigin: 'top center', scaleY: 0 });
+                gsap.to(mFill, {
                     scaleY: 1, ease: 'none',
                     scrollTrigger: { trigger: '.protocol-section', start: 'top 70%', end: 'bottom 85%', scrub: 0.8 },
                 });
