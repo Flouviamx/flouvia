@@ -19,22 +19,22 @@ const ACC_BG_HEX = ['#061122', '#0a192f', '#112646', '#17335d', '#1c3d6e', '#224
 // ── Schema Service (uno por servicio) — citable por AI Overviews ──
 const services = isEn ? [
     { anchor: 'ecommerce',  name: 'E-commerce Engineering — Shopify Plus', serviceType: 'E-commerce Engineering',
-      description: 'Transactional store builds on Shopify Plus. Headless architecture with Next.js and Hydrogen, native themes, checkout engineering, and migrations from Magento or VTEX without SEO loss.' },
+      description: 'Transactional store builds on Shopify Plus — the platform we recommend to our clients. Headless architecture with Next.js and Hydrogen, native themes, checkout engineering, and platform migrations without SEO loss.' },
     { anchor: 'b2b',        name: 'B2B Digital Architecture', serviceType: 'B2B E-commerce',
       description: 'Private B2B portals on Shopify Plus with role-based access, dynamic pricing, SKU quick-order, and native two-way ERP integration.' },
     { anchor: 'automation', name: 'Business Automation', serviceType: 'Business Process Automation',
-      description: 'E-commerce operations automation: native ERP integration (SAP, NetSuite, Dynamics), workflow orchestration with Make, and data centralization in Airtable.' },
+      description: 'E-commerce operations automation: native two-way ERP integration, workflow orchestration, and data centralized in a robust database we build and operate in-house — no external apps.' },
     { anchor: 'cro',        name: 'Conversion Rate Optimization (CRO)', serviceType: 'Conversion Rate Optimization',
-      description: 'Data-driven conversion optimization: forensic UX audit, A/B testing, heatmaps, and Klaviyo retention flows. Average increases of +34% in conversion rate.' },
+      description: 'Data-driven conversion optimization: forensic UX audit, A/B testing, heatmaps, and engineered retention flows. Average increases of +34% in conversion rate.' },
 ] : [
     { anchor: 'ecommerce',  name: 'E-commerce Engineering — Shopify Plus', serviceType: 'E-commerce Engineering',
-      description: 'Construcción de tiendas transaccionales en Shopify Plus. Arquitectura headless con Next.js y Hydrogen, themes nativos, checkout engineering y migraciones desde Magento o VTEX sin pérdida de SEO.' },
+      description: 'Construcción de tiendas transaccionales en Shopify Plus — la plataforma que recomendamos a nuestros clientes. Arquitectura headless con Next.js y Hydrogen, themes nativos, checkout engineering y migraciones de plataforma sin pérdida de SEO.' },
     { anchor: 'b2b',        name: 'B2B Digital Architecture', serviceType: 'B2B E-commerce',
       description: 'Portales B2B privados sobre Shopify Plus con acceso por rol, precios dinámicos, quick-order por SKU e integración ERP nativa bidireccional.' },
     { anchor: 'automation', name: 'Business Automation', serviceType: 'Business Process Automation',
-      description: 'Automatización de operaciones e-commerce: integración ERP nativa (SAP, NetSuite, Dynamics), orquestación de flujos con Make y centralización de datos en Airtable.' },
+      description: 'Automatización de operaciones e-commerce: integración ERP nativa bidireccional, orquestación de flujos y datos centralizados en una base de datos robusta que construimos y operamos nosotros — sin apps externas.' },
     { anchor: 'cro',        name: 'Conversion Rate Optimization (CRO)', serviceType: 'Conversion Rate Optimization',
-      description: 'Optimización de conversión basada en datos: auditoría UX forense, A/B testing, heatmaps y flujos de retención en Klaviyo. Incrementos promedio de +34% en tasa de conversión.' },
+      description: 'Optimización de conversión basada en datos: auditoría UX forense, A/B testing, heatmaps y flujos de retención a medida. Incrementos promedio de +34% en tasa de conversión.' },
 ];
 
 const serviceSchemas = services.map((s) => ({
@@ -58,14 +58,14 @@ const faqs = isEn ? [
     { q: 'When do I need Shopify Plus instead of standard Shopify?',
       a: 'Shopify Plus is necessary when your operation exceeds $500k USD a year, you need a custom checkout, native ERP integrations, B2B portals with differentiated pricing, or advanced flow automation. For smaller operations, standard Shopify can be enough.' },
     { q: 'How long does it take to build a B2B portal on Shopify Plus?',
-      a: 'A B2B portal with role-based access, dynamic pricing, and a protected catalog takes 8 to 14 weeks. With native ERP integration (SAP, NetSuite, Dynamics), it’s 12 to 16 weeks. Timing depends on the complexity of the business rules and available APIs.' },
+      a: 'A B2B portal with role-based access, dynamic pricing, and a protected catalog takes 8 to 14 weeks. With native two-way ERP integration, it’s 12 to 16 weeks. Timing depends on the complexity of the business rules and available APIs.' },
     { q: 'Do you work with companies outside Mexico?',
       a: 'Yes. Flouvia operates with clients in Mexico and the United States. The operation is 100% remote and digital. We handle projects in both markets with teams in CDMX as the development hub.' },
     { q: 'What is CRO and how does it improve my e-commerce?',
       a: 'CRO (Conversion Rate Optimization) is the process of analyzing your users’ real behavior — heatmaps, session recordings, A/B tests — to identify where you lose sales and build data-backed improvements. In our projects we’ve achieved average increases of +34% in conversion rate.' },
     { q: 'Do you provide maintenance after delivering the project?',
       a: 'Yes. We offer technical maintenance and post-launch support plans that include latency monitoring, security updates, and CRO iterations. The systems we build are made to evolve, not to stay static.' },
-    { q: 'How do you integrate Shopify Plus with an ERP like SAP or NetSuite?',
+    { q: 'How do you integrate Shopify Plus with your corporate ERP?',
       a: 'We build bespoke two-way API connectors — we don’t use generic ones. The integration syncs inventory, orders, pricing, and customers in real time between Shopify Plus and the ERP. Integration takes 6 to 10 weeks depending on flow complexity.' },
 ] : [
     { q: '¿Cuánto cuesta un proyecto de e-commerce con Flouvia?',
@@ -73,14 +73,14 @@ const faqs = isEn ? [
     { q: '¿Cuándo necesito Shopify Plus en lugar de Shopify estándar?',
       a: 'Shopify Plus es necesario cuando tu operación supera los $500k USD anuales, necesitas checkout personalizado, integraciones ERP nativas, portales B2B con precios diferenciados, o automatizaciones avanzadas de flujo. Para operaciones menores, Shopify estándar puede ser suficiente.' },
     { q: '¿Cuánto tiempo tarda construir un portal B2B en Shopify Plus?',
-      a: 'Un portal B2B con acceso por rol, precios dinámicos y catálogo protegido tarda entre 8 y 14 semanas. Con integración ERP nativa (SAP, NetSuite, Dynamics), el plazo es de 12 a 16 semanas. El tiempo depende de la complejidad de las reglas de negocio y las APIs disponibles.' },
+      a: 'Un portal B2B con acceso por rol, precios dinámicos y catálogo protegido tarda entre 8 y 14 semanas. Con integración ERP nativa bidireccional, el plazo es de 12 a 16 semanas. El tiempo depende de la complejidad de las reglas de negocio y las APIs disponibles.' },
     { q: '¿Trabajan con empresas fuera de México?',
       a: 'Sí. Flouvia opera con clientes en México y Estados Unidos. La operación es 100% remota y digital. Manejamos proyectos en ambos mercados con equipos en CDMX como hub de desarrollo.' },
     { q: '¿Qué es CRO y cómo mejora mi e-commerce?',
       a: 'CRO (Conversion Rate Optimization) es el proceso de analizar el comportamiento real de tus usuarios — heatmaps, grabaciones de sesión, A/B tests — para identificar dónde pierdes ventas y construir mejoras con datos. En nuestros proyectos hemos logrado incrementos promedio de +34% en tasa de conversión.' },
     { q: '¿Hacen mantenimiento después de entregar el proyecto?',
       a: 'Sí. Ofrecemos esquemas de mantenimiento técnico y soporte post-lanzamiento que incluyen monitoreo de latencia, actualizaciones de seguridad e iteraciones de CRO. Los sistemas que construimos están hechos para evolucionar, no para quedarse estáticos.' },
-    { q: '¿Cómo integran Shopify Plus con un ERP como SAP o NetSuite?',
+    { q: '¿Cómo integran Shopify Plus con tu ERP corporativo?',
       a: 'Desarrollamos conectores API bidireccionales a medida — no usamos conectores genéricos. La integración sincroniza inventario, pedidos, precios y clientes en tiempo real entre Shopify Plus y el ERP. El proceso de integración toma entre 6 y 10 semanas dependiendo de la complejidad de los flujos.' },
 ];
 
