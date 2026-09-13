@@ -89,13 +89,20 @@ src/pages/
 
   # Componentes de /cord — src/components/cord/ (jul 2026)
   CordPricing.astro         → tarjetas de los 5 planes reales, con aurora CSS viajera.
-  CordFaqAccordion.astro    → acordeón de FAQ PORTADO 1:1 desde
+  CordFaqAccordion.astro    → acordeón de FAQ. Estructura portada de
                               flouvia-cord/src/components/landing/FaqAccordion.astro
-                              (mismo patrón: ícono +/− que rota, grid-template-rows
-                              para la altura, uno-a-la-vez). En cord.astro/en/cord.astro
-                              el array `FAQS` es la ÚNICA fuente — alimenta tanto el
-                              acordeón visible como el `FAQPage` del JSON-LD; nunca
-                              hardcodear las preguntas por separado en el schema.
+                              (grid-template-rows para la altura, uno-a-la-vez), pero el
+                              ESTILO diverge (sep 2026): items como cards redondeadas con
+                              lift sutil (sombra, sin scale) al abrir. Una sola curva
+                              suave sin overshoot (`--cf-ease`, alias de `--ease-smooth`)
+                              para todo — altura, ícono, texto. El `+` → `−` NO rota: la
+                              barra vertical se retrae al centro (`scaleY(0)`) y deja el
+                              trazo horizontal. Sin rebote/spring en ningún lado —
+                              probado y descartado por el owner (sep 2026), no
+                              reintroducir. En cord.astro/en/cord.astro el array `FAQS`
+                              es la ÚNICA fuente — alimenta el acordeón visible y el
+                              `FAQPage` del JSON-LD; nunca hardcodear las preguntas en
+                              el schema.
   CapCard.jsx (React)       → tarjeta del grid "capacidades adicionales"; maneja su
                               propio estado de hover/foco y monta <CapAuroraBg active=.../>
                               como fondo — el texto pasa a blanco vía la clase `.is-active`
