@@ -14,10 +14,6 @@ const updated = '8 de junio de 2026';
 
     <section class="legal-hero">
       <div class="container">
-        <div class="legal-status hero-anim">
-          <span class="legal-status-dot" aria-hidden="true"></span>
-          <span>DOCUMENTO VIGENTE</span>
-        </div>
         <p class="legal-eyebrow hero-anim">DOCUMENTO LEGAL</p>
         <h1 class="legal-title hero-anim">Términos de Servicio.</h1>
         <div class="legal-meta hero-anim">
@@ -177,10 +173,6 @@ const updated = '8 de junio de 2026';
 <style>
 .legal-page { width: 100%; overflow-x: clip; }
 .legal-hero { padding: 13rem 0 5rem; background: var(--color-bg); border-bottom: 1px solid var(--color-border); }
-.legal-status { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 100px; border: 1px solid rgba(16,185,129,0.22); background: rgba(16,185,129,0.04); width: max-content; margin-bottom: 1.6rem; }
-.legal-status span { font-size: 0.7rem; color: #059669; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-.legal-status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: legal-status-pulse 2s infinite; }
-@keyframes legal-status-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 .legal-eyebrow { font-size: 0.6rem; font-weight: 800; letter-spacing: 4px; color: #aaa; text-transform: uppercase; margin: 0 0 1.5rem; }
 .legal-title { font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 800; letter-spacing: -3px; line-height: 0.95; margin: 0 0 2.5rem; color: var(--color-text); }
 .legal-meta { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; font-size: 0.8rem; color: var(--color-text-muted); font-weight: 500; }
@@ -231,8 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (heroAnim.length) {
       gsap.set(heroAnim, { opacity: 0, y: 14 });
       gsap.timeline({ defaults: { ease: 'power2.out' } })
-        .to('.legal-status',  { opacity: 1, y: 0, duration: 0.9 }, 0)
-        .to('.legal-eyebrow', { opacity: 1, y: 0, duration: 0.9 }, 0.08)
+        .to('.legal-eyebrow', { opacity: 1, y: 0, duration: 0.9 }, 0)
         .to('.legal-title',   { opacity: 1, y: 0, duration: 1.0 }, 0.18)
         .to('.legal-meta',    { opacity: 1, y: 0, duration: 0.9 }, 0.34);
     }
