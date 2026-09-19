@@ -194,10 +194,10 @@ const schemaOrg = {
             <div class="container hero-container" style="z-index: 1;">
                 <div class="hero-content">
                     <div class="hero-text-zone" id="hero-parallax">
-                        <div class="hero-status hero-anim" id="hero-status">
+                        <a href="https://cordhq.app" target="_blank" rel="noopener noreferrer" class="hero-status hero-anim" id="hero-status" style="text-decoration: none; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease;">
                             <span class="hero-status-dot" aria-hidden="true"></span>
                             <span>AVAILABLE FOR ANY BUSINESS</span>
-                        </div>
+                        </a>
                         <p class="eyebrow hero-anim">
                             A PUBLIC PRODUCT BY FLOUVIA
                         </p>
@@ -360,7 +360,8 @@ const schemaOrg = {
     .text-center { text-align: center; }
 
     /* HERO STATUS */
-    .hero-status { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 100px; border: 1px solid rgba(16,185,129,0.22); background: rgba(16,185,129,0.04); width: max-content; margin-bottom: 1.6rem; }
+    .hero-status { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 100px; border: 1px solid rgba(16,185,129,0.22); background: rgba(16,185,129,0.04); width: max-content; margin-bottom: 1.6rem; text-decoration: none; transition: transform 0.2s ease, background 0.2s ease; cursor: pointer; }
+    .hero-status:hover { transform: translateY(-1px); background: rgba(16,185,129,0.08); }
     .hero-status span { font-size: 0.7rem; color: #059669; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
     .hero-status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.6); animation: hero-status-pulse 2s infinite; }
     @keyframes hero-status-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
